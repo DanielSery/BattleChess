@@ -18,11 +18,11 @@ public partial class GameBoardControl
         if (e.Data.GetDataPresent("figureData"))
         {
             var figureBlueprint = (FigureBlueprint)e.Data.GetData("figureData");
-            Image image = (Image) sender;
-            ITileViewModel tileViewModel = (ITileViewModel) image.DataContext;
+            var image = (Image) sender;
+            var tileViewModel = (ITileViewModel) image.DataContext;
 
-            ItemsControl itemsControl = FindAnchestor<ItemsControl>((DependencyObject)e.OriginalSource);
-            BoardViewModel boardView = (BoardViewModel) itemsControl.DataContext;
+            var itemsControl = FindAnchestor<ItemsControl>((DependencyObject)e.OriginalSource);
+            var boardView = (BoardViewModel) itemsControl.DataContext;
 
             boardView.CreateFigure(tileViewModel, figureBlueprint);
         }

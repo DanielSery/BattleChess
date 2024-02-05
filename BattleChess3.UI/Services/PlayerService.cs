@@ -6,7 +6,7 @@ namespace BattleChess3.UI.Services;
 public class PlayerService : IPlayerService
 {
     private readonly IDictionary<int, Player> _players = new Dictionary<int, Player>();
-    private int _currentPlayerId = 0;
+    private int _currentPlayerId;
 
     public int PlayersCount => _players.Count - 1;
 

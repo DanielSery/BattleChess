@@ -13,7 +13,7 @@ public class FigureService : IFigureService
     private readonly FileSystemWatcher _watcher;
 
     private IFigureGroup[] _figureGroups = Array.Empty<IFigureGroup>();
-    private Dictionary<string, IFigureType> _figuresDictionary = new Dictionary<string, IFigureType>();
+    private Dictionary<string, IFigureType> _figuresDictionary = new();
 
     public event EventHandler<IList<IFigureGroup>>? FigureGroupsChanged;
 
@@ -39,12 +39,7 @@ public class FigureService : IFigureService
         _watcher.IncludeSubdirectories = true;
         _watcher.EnableRaisingEvents = true;
 
-        Task.Run(() => ReloadFigures());
-    }
-
-    public IList<IFigureGroup> GetCurrentMaps()
-    {
-        return _figureGroups;
+        Task.Run(ReloadFigures);
     }
 
     private void OnChanged(object sender, FileSystemEventArgs e)
@@ -55,14 +50,14 @@ public class FigureService : IFigureService
     private void ReloadFigures()
     {
         _figureGroups = Directory.GetFiles(".", "*Figures.dll")
-                                .Select(path => Assembly.LoadFile(Path.GetFullPath(path)))
-                                .SelectMany(assembly => assembly.GetTypes())
-                                .Where(type => type.GetInterfaces().Any(x => x == typeof(IFigureGroup)))
-                                .Select(type => (IFigureGroup)Activator.CreateInstance(type)!)
-                                .ToArray();
+            .Select(path => Assembly.LoadFile(Path.GetFullPath(path)))
+            .SelectMany(assembly => assembly.GetTypes())
+            .Where(type => type.GetInterfaces().Any(x => x == typeof(IFigureGroup)))
+            .Select(type => (IFigureGroup)Activator.CreateInstance(type)!)
+            .ToArray();
 
         _figuresDictionary = _figureGroups.SelectMany(group => group.FigureTypes)
-                                         .ToDictionary(figure => figure.UnitName, figure => figure);
+            .ToDictionary(figure => figure.UnitName, figure => figure);
         FigureGroupsChanged?.Invoke(this, _figureGroups);
     }
 

@@ -1,92 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using BattleChess3.Core.Model;
+﻿using BattleChess3.Core.Model;
 using BattleChess3.Core.Model.Figures;
-using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.CrossFireFigures.Localization;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Bomber : IFigureType
+public class Bomber : ICrossFireFigureType
 {
     public static readonly Bomber Instance = new();
-    public string ShownName => CurrentLocalization.Instance[$"{nameof(Bomber)}_Name"];
-    public string Description => CurrentLocalization.Instance[$"{nameof(Bomber)}_Description"];
-    public string UnitName => $"{nameof(CrossFireFigureGroup)}.{nameof(Bomber)}";
-    public FigureTypes UnitType => FigureTypes.Foot;
-    public double FullHp => 100;
-    public double Attack => 100;
-    public int Cost => 1;
 
-    public Dictionary<int, Uri> ImageUris { get; } = new Dictionary<int, Uri>
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
-        {1, new Uri($"pack://application:,,,/BattleChess3.CrossFireFigures;component/Images/{nameof(Bomber)}1.png", UriKind.Absolute)},
-        {2, new Uri($"pack://application:,,,/BattleChess3.CrossFireFigures;component/Images/{nameof(Bomber)}2.png", UriKind.Absolute)},
-    };
+        var movement = targetTile.Position - unitTile.Position;
+        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;
 
-    public double AttackCalculation(IFigureType figureType)
-        => figureType.DefenceCalculation(this);
-
-    public double DefenceCalculation(IFigureType figureType)
-        => figureType.Attack;
-
-    public bool CanAttack(ITile unitTile, ITile targetTile, ITile[] board)
-        => CrossFireActionHelper.CanKill(unitTile, targetTile);
-
-    public void AttackAction(ITile unitTile, ITile targetTile, ITile[] board)
-    {
-        foreach (var explosionPosition in _bombChain)
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
-            if (!(targetTile.Position + explosionPosition).InBoard())
-                continue;
-
-            var explosionTile = board[targetTile.Position + explosionPosition];
-            unitTile.KillFigureWithoutMove(explosionTile);
-        }
-    }
-    public bool CanMove(ITile unitTile, ITile targetTile, ITile[] board)
-        => targetTile.IsEmpty();
-
-    public void MoveAction(ITile unitTile, ITile targetTile, ITile[] board)
-    {
-        foreach (var explosionPosition in _bombChain)
-        {
-            if (!(targetTile.Position + explosionPosition).InBoard())
-                continue;
-
-            var explosionTile = board[targetTile.Position + explosionPosition];
-            unitTile.KillFigureWithoutMove(explosionTile);
+            return new FigureAction(FigureActionTypes.Move, () =>
+            {
+                targetTile.Figure = unitTile.Figure;
+                unitTile.Figure = new Figure(Player.Neutral, Empty.Instance);
+                
+                TryDestroyTile(board, targetTile.Position + (1, -1));
+                TryDestroyTile(board, targetTile.Position + (1, 0));
+                TryDestroyTile(board, targetTile.Position + (1, 1));
+                TryDestroyTile(board, targetTile.Position + (0, -1));
+                TryDestroyTile(board, targetTile.Position + (0, 1));
+                TryDestroyTile(board, targetTile.Position + (-1, -1));
+                TryDestroyTile(board, targetTile.Position + (-1, 0));
+                TryDestroyTile(board, targetTile.Position + (-1, 1));
+            });
         }
 
-        unitTile.MoveToTile(targetTile);
+        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
+            return new FigureAction(FigureActionTypes.Attack, () =>
+            {
+                TryDestroyTile(board, targetTile.Position + (1, -1));
+                TryDestroyTile(board, targetTile.Position + (1, 0));
+                TryDestroyTile(board, targetTile.Position + (1, 1));
+                TryDestroyTile(board, targetTile.Position + (0, -1));
+                TryDestroyTile(board, targetTile.Position + (0, 1));
+                TryDestroyTile(board, targetTile.Position + (-1, -1));
+                TryDestroyTile(board, targetTile.Position + (-1, 0));
+                TryDestroyTile(board, targetTile.Position + (-1, 1));
+            });
+        }
+
+        return FigureAction.None;
     }
 
-    private readonly Position[][] _moveChain =
+    private static void TryDestroyTile(ITile[] board, Position targetPosition)
     {
-        new Position[] {(2, -2)},
-        new Position[] {(2, 0)},
-        new Position[] {(2, 2)},
-        new Position[] {(-2, -2)},
-        new Position[] {(-2, 0)},
-        new Position[] {(-2, 2)},
-        new Position[] {(0, -2)},
-        new Position[] {(0, 2)},
-    };
-    public Position[][] GetMoveChains(Position position, ITile[] board) => _moveChain;
-    
-    private readonly Position[] _bombChain =
-    {
-        (1, -1),
-        (1, 0),
-        (1, 1),
-        (0, 1),
-        (0, -1),
-        (-1, -1),
-        (-1, 0),
-        (-1, 1),
-    };
+        if (!targetPosition.IsInBoard())
+            return;
 
-    private readonly Position[][] _attackChain = { };
-    public Position[][] GetAttackChains(Position position, ITile[] board) => _attackChain;
+        board[targetPosition].Die();
+    }
+
+    private int[] Actions { get; } = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 8, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    };
 }

@@ -7,36 +7,13 @@ public class NoneFigure : IFigureType
 {
     public static NoneFigure Instance { get; } = new();
     
-    public string ShownName { get; } = string.Empty;
-    public string Description { get; } = string.Empty;
-    public string UnitName { get; } = string.Empty;
-    public FigureTypes UnitType { get; } = FigureTypes.Nothing;
-    public double FullHp { get; } = 0;
-    public double Attack { get; } = 0;
-    public int Cost { get; } = 0;
-    public Dictionary<int, Uri> ImageUris { get; } = new Dictionary<int, Uri>();
-
-    public bool CanAttack(ITile from, ITile to, ITile[] board)
-        => false;
-
-    public void AttackAction(ITile from, ITile to, ITile[] board)
+    public string DisplayName => string.Empty;
+    public string Description => string.Empty;
+    public string UnitName => string.Empty;
+    public IDictionary<int, Uri> ImageUris { get; } = new Dictionary<int, Uri>();
+    
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
+        return FigureAction.None;
     }
-
-    public bool CanMove(ITile from, ITile tile, ITile[] board)
-        => false;
-
-    public void MoveAction(ITile from, ITile to, ITile[] board)
-    {
-    }
-
-    public Position[][] GetMoveChains(Position from, ITile[] board) => Array.Empty<Position[]>();
-
-    public Position[][] GetAttackChains(Position from, ITile[] board) => Array.Empty<Position[]>();
-
-    public double AttackCalculation(IFigureType figureType)
-        => 0;
-
-    public double DefenceCalculation(IFigureType figureType)
-        => 0;
 }

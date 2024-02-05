@@ -13,19 +13,19 @@ public class ThemeModel
     public static readonly ThemeModel None = new();
 
     public string Name { get; }
-    public ImageSource Preview { get; }
-    public ResourceDictionary ResourceDictionary { get; } = new ResourceDictionary();
+    public ImageSource? Preview { get; }
+    public ResourceDictionary ResourceDictionary { get; } = new();
 
-    public ThemeModel()
+    private ThemeModel()
     {
         Name = string.Empty;
-        Preview = (ImageSource) ResourceDictionary["Preview"];
+        Preview = (ImageSource?) ResourceDictionary["Preview"];
     }
 
     public ThemeModel(string assemblyPath)
     {
         LoadResources(assemblyPath);
-        Preview = (ImageSource) ResourceDictionary["Preview"];
+        Preview = (ImageSource?) ResourceDictionary["Preview"];
 
         Name = Path.GetFileNameWithoutExtension(assemblyPath);
     }
@@ -34,22 +34,28 @@ public class ThemeModel
     {
         var assembly = Assembly.LoadFile(assemblyPath);
         var stream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".g.resources");
-        if (stream == null) return;
+        if (stream == null)
+            return;
+        
         var resourceReader = new ResourceReader(stream);
-
         foreach (DictionaryEntry? resource in resourceReader)
         {
-            if (!(resource is { } entry)) return;
-            string keyName = entry.Key.ToString() ?? string.Empty;
-            if (!keyName.EndsWith(".baml", StringComparison.OrdinalIgnoreCase)) continue;
+            if (resource is not { } entry)
+                return;
+            
+            var keyName = entry.Key.ToString() ?? string.Empty;
+            if (!keyName.EndsWith(".baml", StringComparison.OrdinalIgnoreCase))
+                continue;
 
-            Uri uri = new Uri("/" + assembly.GetName().Name + ";component/" + keyName.Replace(".baml", ".xaml"),
+            var uri = new Uri("/" + assembly.GetName().Name + ";component/" + keyName.Replace(".baml", ".xaml"),
                 UriKind.Relative);
-            ResourceDictionary dictionary = (ResourceDictionary) Application.LoadComponent(uri);
-            foreach (object? keyObject in dictionary.Keys)
+            var dictionary = (ResourceDictionary) Application.LoadComponent(uri);
+            foreach (var keyObject in dictionary.Keys)
             {
-                if (!(keyObject is { } key)) return;
-                ResourceDictionary[key] = dictionary[key];
+                if (keyObject is null)
+                    return;
+                
+                ResourceDictionary[keyObject] = dictionary[keyObject];
             }
         }
     }

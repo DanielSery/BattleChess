@@ -14,10 +14,12 @@ public readonly struct Position
         Y = y;
     }
 
-    public bool InBoard() => X >= 0 
+    public bool IsInBoard() => X >= 0 
                           && Y >= 0
                           && X < Constants.BoardLength 
                           && Y < Constants.BoardLength;
+
+    public bool IsOutsideBoard() => !IsInBoard();
     public static bool operator ==(Position left, Position right)
         => left.X == right.X && left.Y == right.Y;
 
@@ -25,34 +27,38 @@ public readonly struct Position
         => left.X != right.X || left.Y != right.Y;
     
     public static Position operator +(Position left, Position right)
-        => new Position(left.X + right.X, left.Y + right.Y);
+        => new(left.X + right.X, left.Y + right.Y);
     
     public static Position operator -(Position left, Position right)
-        => new Position(left.X - right.X, left.Y - right.Y);
+        => new(left.X - right.X, left.Y - right.Y);
     
     public static Position operator *(Position left, Position right)
-        => new Position(left.X * right.X, left.Y * right.Y);
+        => new(left.X * right.X, left.Y * right.Y);
     
     public static Position operator *(Position left, int right)
-        => new Position(left.X * right, left.Y * right);
+        => new(left.X * right, left.Y * right);
+
+    public static Position operator *(int left, Position right)
+        => new(left * right.X, left * right.Y);
     
     public static implicit operator int(Position position) 
         => position.Y * Constants.BoardLength + position.X;
     
     public static implicit operator Position(int i) 
-        => new Position(i % Constants.BoardLength, i / Constants.BoardLength);
+        => new(i % Constants.BoardLength, i / Constants.BoardLength);
     
     public static implicit operator Position((int x, int y) pos) 
-        => new Position(pos.x, pos.y);
+        => new(pos.x, pos.y);
 
+    public static implicit operator (int, int)(Position position)
+        => (position.X, position.Y);
 
     public override bool Equals(object? obj)
     {
-        if (!(obj is Position pos)) return false;
-        return Equals(pos);
+        return obj is Position pos && Equals(pos);
     }
-    
-    public bool Equals(Position other) => X == other.X && Y == other.Y;
+
+    private bool Equals(Position other) => X == other.X && Y == other.Y;
 
     public override int GetHashCode()
     {
@@ -71,6 +77,12 @@ public readonly struct Position
            0 => new Position(Constants.BoardLength - Y - 1, X),
            _ => throw new System.ArgumentOutOfRangeException(),
        };
+    
+    public void Deconstruct(out int x, out int y)
+    {
+        x = X;
+        y = Y;
+    }
 
     public override string ToString() => $"({X},{Y})";
 }

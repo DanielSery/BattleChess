@@ -11,7 +11,7 @@
                   ItemsSource="{Binding Board}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="{Binding Bo}"/>
+                <UniformGrid Columns="{Binding BoardWidth}"/>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>

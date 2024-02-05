@@ -8,9 +8,9 @@ using GalaSoft.MvvmLight;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class ThemesViewModel : ViewModelBase, IDisposable
+public sealed class ThemesViewModel : ViewModelBase, IDisposable
 {
-    public readonly IThemeService _themesService;
+    private readonly IThemeService _themesService;
 
     private ThemeModel _selectedTheme = ThemeModel.None;
     public ThemeModel SelectedTheme
@@ -18,15 +18,13 @@ public class ThemesViewModel : ViewModelBase, IDisposable
         get => _selectedTheme;
         set
         {
-            if (value is null)
-                value = ThemeModel.None;
-
             Set(ref _selectedTheme, value);
             foreach (var keyObject in value.ResourceDictionary.Keys)
             {
-                if (!(keyObject is { } key))
+                if (keyObject is not { })
                     return;
-                Application.Current.Resources[key] = value.ResourceDictionary[key];
+                
+                Application.Current.Resources[keyObject] = value.ResourceDictionary[keyObject];
             }
         }
     }
@@ -35,10 +33,10 @@ public class ThemesViewModel : ViewModelBase, IDisposable
     public IList<ThemeModel> Themes
     {
         get => _themes;
-        set
+        private set
         {
             Set(ref _themes, value);
-            if (!_themes.Any(x => x.Name == _selectedTheme.Name))
+            if (_themes.All(x => x.Name != _selectedTheme.Name))
             {
                 SelectedTheme = _themes.FirstOrDefault(x => x.Name.Contains("Paper")) ??
                     _themes.FirstOrDefault() ??

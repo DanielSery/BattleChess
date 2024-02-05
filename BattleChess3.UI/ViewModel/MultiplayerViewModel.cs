@@ -10,14 +10,14 @@ using System.Windows;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class MultiplayerViewModel : ViewModelBase
+public sealed class MultiplayerViewModel : ViewModelBase
 {
     private readonly BoardViewModel _boardViewModel;
     private readonly IMultiplayerService _multiplayerService;
     private readonly IPlayerService _playerService;
 
     public bool IsConnected => _multiplayerService.IsHost || _multiplayerService.IsGuest;
-    public bool CanConnect => !_multiplayerService.IsHost && !_multiplayerService.IsGuest;
+    public bool CanConnect => _multiplayerService is { IsHost: false, IsGuest: false };
 
     private string _apiKey = CurrentLocalization.Instance["MultiplayerService_ApiKey"];
     public string ApiKey
@@ -26,10 +26,10 @@ public class MultiplayerViewModel : ViewModelBase
         set => Set(ref _apiKey, value);
     }
 
-    public RelayCommand HostCommand { get; private set; }
-    public RelayCommand JoinCommand { get; private set; }
-    public RelayCommand StopCommand { get; private set; }
-    public RelayCommand PasteKeyCommand { get; private set; }
+    public RelayCommand HostCommand { get; }
+    public RelayCommand JoinCommand { get; }
+    public RelayCommand StopCommand { get; }
+    public RelayCommand PasteKeyCommand { get; }
 
     public MultiplayerViewModel(
         BoardViewModel boardViewModel,
@@ -73,10 +73,9 @@ public class MultiplayerViewModel : ViewModelBase
 
     private void RemoteRequestedClickTile(object? sender, Position e)
     {
-        if (!e.InBoard())
-            _boardViewModel.AutomaticClickAtTile(NoneTileViewModel.Instance);
-        else
-            _boardViewModel.AutomaticClickAtTile(_boardViewModel.Board[e]);
+        _boardViewModel.AutomaticClickAtTile(!e.IsInBoard() 
+            ? NoneTileViewModel.Instance 
+            : _boardViewModel.Board[e]);
     }
 
     public void SetKey(string key)
@@ -109,7 +108,6 @@ public class MultiplayerViewModel : ViewModelBase
         {
             Figures = _boardViewModel.Board.Select(x => new FigureBlueprint
             {
-                Hp = x.Figure.Hp,
                 PlayerId = x.Figure.Owner.Id,
                 UnitName = x.Figure.UnitName
             }).ToArray(),

@@ -2,7 +2,9 @@
 using BattleChess3.Core.Utilities;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,12 +13,12 @@ using System.Windows;
 
 namespace BattleChess3.UI.Services;
 
-public class MultiplayerService : IMultiplayerService
+public sealed class MultiplayerService : IMultiplayerService
 {
-    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly HttpClient _httpClient = new();
     private readonly Timer _timer;
 
-    private Queue<MessageWithType> _scheduledMessages = new Queue<MessageWithType>();
+    private readonly Queue<MessageWithType> _scheduledMessages = new();
     private string _chatId = string.Empty;
     private string _apiKey = string.Empty;
     private string _lastMessage = string.Empty;
@@ -41,20 +43,20 @@ public class MultiplayerService : IMultiplayerService
         _timer.Elapsed += TimerOnElapsed;
     }
 
-    private readonly Regex regex = new Regex("(.*)(@.*)");
+    private readonly Regex _regex = new("(.*)(@.*)");
 
     public void Host(string key, MapBlueprint map, Position selectedPosition)
     {
         if (IsConnected)
             return;
 
-        var matches = regex.Matches(key);
+        var matches = _regex.Matches(key);
         _apiKey = matches[0].Groups[1].Value;
         _chatId = matches[0].Groups[2].Value;
         _sendingBlocked = false;
 
         IsHost = true;
-        GetUpdatesMessage()
+        GetUpdatesMessageAsync()
             .ContinueWith(_ =>
             {
                 LoadMap(map);
@@ -68,13 +70,13 @@ public class MultiplayerService : IMultiplayerService
         if (IsConnected)
             return;
 
-        var matches = regex.Matches(key);
+        var matches = _regex.Matches(key);
         _apiKey = matches[0].Groups[1].Value;
         _chatId = matches[0].Groups[2].Value;
         _sendingBlocked = false;
 
         IsGuest = true;
-        GetUpdatesMessage()
+        GetUpdatesMessageAsync()
             .ContinueWith(_ =>
             {
                 _timer.Start();
@@ -122,7 +124,7 @@ public class MultiplayerService : IMultiplayerService
         }
     }
 
-    public void ConfirmReceive()
+    private void ConfirmReceive()
     {
         if (!IsConnected)
             return;
@@ -154,15 +156,15 @@ public class MultiplayerService : IMultiplayerService
 
         if (messages.Length > 0)
         {
-            SendMessage(messages);
+            SendMessageAsync(messages);
         }
         else
         {
-            GetUpdatesMessage();
+            GetUpdatesMessageAsync();
         }
     }
 
-    private Task SendMessage(MessageWithType[] messages)
+    private Task SendMessageAsync(IEnumerable messages)
     {
         if (!IsConnected)
             return Task.CompletedTask;
@@ -181,7 +183,7 @@ public class MultiplayerService : IMultiplayerService
             });
     }
 
-    private Task GetUpdatesMessage()
+    private Task GetUpdatesMessageAsync()
     {
         if (!IsConnected)
             return Task.CompletedTask;
@@ -201,18 +203,24 @@ public class MultiplayerService : IMultiplayerService
 
                     _lastMessage = stringContent;
                     var content = JsonConvert.DeserializeObject<Root>(stringContent);
-                    var text = content.result[0]?.channel_post?.text;
+                    if (content?.result is null)
+                        return;
+                    
+                    var text = content.result[0].channel_post?.text;
                     if (string.IsNullOrEmpty(text))
                         return;
 
                     var messageText = CompressionHelper.Decompress(text);
                     var messagesWithType = JsonConvert.DeserializeObject<MessageWithType[]>(messageText);
+                    if (messagesWithType is null)
+                        return;
 
                     foreach (var item in messagesWithType)
                         HandleMessage(item);
+                    
                     ConfirmReceive();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     MessageBox.Show("Failed to process remote data.");
                     throw;
@@ -224,13 +232,25 @@ public class MultiplayerService : IMultiplayerService
     {
         if (messageWithType.message_type == nameof(Position))
         {
-            var position = JsonConvert.DeserializeObject<Position>(messageWithType.message);
+            if (messageWithType.message is null)
+                return;
+            
+            var response = JsonConvert.DeserializeObject<Position?>(messageWithType.message);
+            if (response is not { } position)
+                return;
+            
             Application.Current.Dispatcher.Invoke(() => RequestClickTile?.Invoke(this, position));
         }
         else if (messageWithType.message_type == nameof(MapBlueprint))
         {
-            var mapBlueprint = JsonConvert.DeserializeObject<MapBlueprint>(messageWithType.message);
-            Application.Current.Dispatcher.Invoke(() => RequestLoadMap?.Invoke(this, mapBlueprint));
+            if (messageWithType.message is null)
+                return;
+            
+            var response = JsonConvert.DeserializeObject<MapBlueprint?>(messageWithType.message);
+            if (response is null)
+                return;
+            
+            Application.Current.Dispatcher.Invoke(() => RequestLoadMap?.Invoke(this, response));
         }
         else if (messageWithType.message_type == nameof(Confirm))
         {
@@ -238,32 +258,41 @@ public class MultiplayerService : IMultiplayerService
         }
     }
 
-    public class Confirm { }
+    private abstract class Confirm { }
 
-    public class MessageWithType
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+    private class MessageWithType
     {
-        public string message_type { get; set; }
-        public string message { get; set; }
+        public string? message_type { get; set; }
+        public string? message { get; set; }
     }
 
-    public class ChannelPost
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+    public abstract class ChannelPost
     {
         public long message_id { get; set; }
-        public object sender_chat { get; set; }
-        public object chat { get; set; }
+        public object? sender_chat { get; set; }
+        public object? chat { get; set; }
         public long date { get; set; }
-        public string text { get; set; }
+        public string? text { get; set; }
     }
 
-    public class RequestResult
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+    public abstract class RequestResult
     {
         public long update_id { get; set; }
-        public ChannelPost channel_post { get; set; }
+        public ChannelPost? channel_post { get; set; }
     }
 
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
     public class Root
     {
         public bool ok { get; set; }
-        public List<RequestResult> result { get; set; }
+        public List<RequestResult>? result { get; set; }
     }
 }

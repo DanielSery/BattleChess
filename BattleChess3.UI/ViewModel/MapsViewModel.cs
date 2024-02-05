@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class MapsViewModel : ViewModelBase, IDisposable
+public sealed class MapsViewModel : ViewModelBase, IDisposable
 {
     private readonly IMapService _mapService;
     private readonly IPlayerService _playerService;
@@ -18,22 +18,16 @@ public class MapsViewModel : ViewModelBase, IDisposable
     public MapBlueprint SelectedMap
     {
         get => _selectedMap;
-        set
-        {
-            if (value == null)
-                value = MapBlueprint.None;
-
-            Set(ref _selectedMap, value);
-        }
+        set => Set(ref _selectedMap, value);
     }
 
     private IList<MapBlueprint> _maps = Array.Empty<MapBlueprint>();
     public IList<MapBlueprint> Maps
     {
         get => _maps;
-        set
+        private set
         {
-            if (!value.Any(x => x.MapPath == _selectedMap.MapPath))
+            if (value.All(x => x.MapPath != _selectedMap.MapPath))
             {
                 SelectedMap = value.FirstOrDefault()
                     ?? MapBlueprint.None;
@@ -53,26 +47,25 @@ public class MapsViewModel : ViewModelBase, IDisposable
         _mapService.MapsChanged += OnMapsChanged;
     }
 
-    public void OnMapsChanged(object? sender, IList<MapBlueprint> maps)
+    private void OnMapsChanged(object? sender, IList<MapBlueprint> maps)
     {
         Maps = new ObservableCollection<MapBlueprint>(maps);
     }
 
     internal void DeleteSelectedMap()
     {
-        if (SelectedMap is null)
-            return;
-
-        _mapService.Delete(SelectedMap);
+        if (SelectedMap != MapBlueprint.None)
+        {
+            _mapService.Delete(SelectedMap);
+        }
     }
 
-    internal void SaveSelectedMap(string identifier, ITile[] board)
+    internal void SaveSelectedMap(string identifier, IEnumerable<ITile> board)
     {
         var map = new MapBlueprint
         {
             Figures = board.Select(x => new FigureBlueprint
             {
-                Hp = x.Figure.Hp,
                 PlayerId = x.Figure.Owner.Id,
                 UnitName = x.Figure.UnitName
             }).ToArray(),

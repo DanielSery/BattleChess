@@ -7,6 +7,7 @@ namespace BattleChess3.UI.ViewModel;
 public class TileViewModel : ViewModelBase, ITileViewModel
 {
     public Position Position { get; }
+    public Position AbsolutePosition => Position;
 
     private bool _isMouseOver;
     public bool IsMouseOver
@@ -22,18 +23,38 @@ public class TileViewModel : ViewModelBase, ITileViewModel
         set => Set(ref _isSelected, value);
     }
 
+    private bool _isPossibleAttack;
+    public bool IsPossibleAttack
+    {
+        get => _isPossibleAttack;
+        private set => Set(ref _isPossibleAttack, value);
+    }
+
     private bool _isPossibleMove;
     public bool IsPossibleMove
     {
         get => _isPossibleMove;
-        set => Set(ref _isPossibleMove, value);
+        private set => Set(ref _isPossibleMove, value);
     }
 
-    private bool _isPossibleAction;
-    public bool IsPossibleAttack
+    private bool _isPossibleSpecial;
+    public bool IsPossibleSpecial
     {
-        get => _isPossibleAction;
-        set => Set(ref _isPossibleAction, value);
+        get => _isPossibleSpecial;
+        private set => Set(ref _isPossibleSpecial, value);
+    } 
+
+    private FigureAction _possibleAction = FigureAction.None;
+    public FigureAction PossibleAction
+    {
+        get => _possibleAction;
+        set
+        {
+            Set(ref _possibleAction, value);
+            IsPossibleAttack = value.ActionType == FigureActionTypes.Attack;
+            IsPossibleMove = value.ActionType == FigureActionTypes.Move;
+            IsPossibleSpecial = value.ActionType == FigureActionTypes.Special;
+        }
     }
 
     private Figure _figure = Figure.None;

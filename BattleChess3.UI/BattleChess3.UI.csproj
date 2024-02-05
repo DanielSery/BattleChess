@@ -14,12 +14,9 @@
       <ProjectReference Include="..\FigureSets\BattleChess3.ChessFigures\BattleChess3.ChessFigures.csproj" />
       <ProjectReference Include="..\FigureSets\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj" />
       <ProjectReference Include="..\FigureSets\BattleChess3.DefaultFigures\BattleChess3.DefaultFigures.csproj" />
-      <ProjectReference Include="..\FigureSets\BattleChess3.HobbitFigures\BattleChess3.HobbitFigures.csproj" />
       <ProjectReference Include="..\FigureSets\BattleChess3.LordOfTheRingsFigures\BattleChess3.LordOfTheRingsFigures.csproj" />
-      <ProjectReference Include="..\FigureSets\BattleChess3.SilmarillionFigures\BattleChess3.SilmarillionFigures.csproj" />
       <ProjectReference Include="..\Themes\BattleChess3.MinasTirithTheme\BattleChess3.MinasTirithTheme.csproj" />
       <ProjectReference Include="..\Themes\BattleChess3.PaperTheme\BattleChess3.PaperTheme.csproj" />
-      <ProjectReference Include="..\Themes\BattleChess3.PixarTheme\BattleChess3.PixarTheme.csproj" />
       <ProjectReference Include="..\Themes\BattleChess3.RivendellTheme\BattleChess3.RivendellTheme.csproj" />
       <ProjectReference Include="..\Themes\BattleChess3.ValinorTheme\BattleChess3.ValinorTheme.csproj" />
     </ItemGroup>
@@ -37,11 +34,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="5.2.0" />
-      <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.0.0" />
-      <PackageReference Include="CommonServiceLocator" Version="2.0.5" />
+      <PackageReference Include="Autofac" Version="8.0.0" />
+      <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
+      <PackageReference Include="CommonServiceLocator" Version="2.0.7" />
       <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>

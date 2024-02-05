@@ -126,7 +126,7 @@
   <data name="Bishop_Description" xml:space="preserve">
     <value>Bishop
 
-Attack + Movement:
+Move + Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -144,9 +144,7 @@ Attack + Movement:
   <data name="King_Description" xml:space="preserve">
     <value>King
 
-Special: Can castle with rook
-
-Attack + Movement:
+Move + Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -156,6 +154,8 @@ Attack + Movement:
 ⬜⬜⬛⬛⬛⬜⬜⬜
 ⬜⬜⬛▣⬛⬜⬜⬜
 ⬜⬜⬛⬛⬛⬜⬜⬜
+
+Special: Can castle with rook
 </value>
   </data>
   <data name="Knight_Name" xml:space="preserve">
@@ -164,7 +164,7 @@ Attack + Movement:
   <data name="Knight_Description" xml:space="preserve">
     <value>Knight
 
-Attack + Movement:
+Move + Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -182,8 +182,25 @@ Attack + Movement:
   <data name="Pawn_Description" xml:space="preserve">
     <value>Pawn
 
-Special: If initial position, can move further
-Special: If on last tile, changes to Queen
+Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 
 Attack:
 
@@ -195,26 +212,9 @@ Attack:
 ⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬜⬜▣⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-
-Movement:
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
+      
+Special: If initial position, can move further
+Special: If on last tile, changes to Queen
 </value>
   </data>
   <data name="Queen_Name" xml:space="preserve">
@@ -223,7 +223,7 @@ Movement:
   <data name="Queen_Description" xml:space="preserve">
     <value>Queen
 
-Attack + Movement:
+Move + Attack:
 
 ⬜⬜⬜⬛⬜⬜⬜⬛
 ⬛⬜⬜⬛⬜⬜⬛⬜
@@ -241,7 +241,7 @@ Attack + Movement:
   <data name="Rook_Description" xml:space="preserve">
     <value>Rook
 
-Attack + Movement:
+Move + Attack:
 
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜

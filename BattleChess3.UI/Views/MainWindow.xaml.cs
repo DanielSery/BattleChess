@@ -1,5 +1,4 @@
-﻿using BattleChess3.UI.Utilities;
-using BattleChess3.UI.ViewModel;
+﻿using BattleChess3.UI.ViewModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,7 +67,7 @@ public partial class MainWindow
     public void SaveBoardPreview(string fileName)
     {
         var dpi = VisualTreeHelper.GetDpi(_lastBoardControl);
-        RenderTargetBitmap bmp = new RenderTargetBitmap(
+        var bmp = new RenderTargetBitmap(
             (int)_lastBoardControl.ActualWidth, 
             (int)_lastBoardControl.ActualHeight,
             96,
@@ -78,7 +77,7 @@ public partial class MainWindow
         bmp.Render(_lastBoardControl);
 
         var encoder = new PngBitmapEncoder();
-        BitmapFrame frame = BitmapFrame.Create(bmp);
+        var frame = BitmapFrame.Create(bmp);
         encoder.Frames.Add(frame);
 
         using var stream = File.Create(fileName);

@@ -59,7 +59,7 @@ public class MapService : ViewModelBase, IMapService
             .Where(path => File.Exists(Path.GetFullPath(path)))
             .Select(path =>
             {
-                string text = File.ReadAllText(Path.GetFullPath(path));
+                var text = File.ReadAllText(Path.GetFullPath(path));
                 text = CompressionHelper.Decompress(text);
                 return JsonConvert.DeserializeObject<MapBlueprint>(text);
             })
@@ -67,9 +67,9 @@ public class MapService : ViewModelBase, IMapService
             .ToArray();
 
         Directory.GetFiles("Resources/Maps", "*.png")
-            .Select(x => Path.GetFileNameWithoutExtension(x))
+            .Select(Path.GetFileNameWithoutExtension)
             .Except(Directory.GetFiles("Resources/Maps", "*.map")
-                .Select(x => Path.GetFileNameWithoutExtension(x)))
+                .Select(Path.GetFileNameWithoutExtension))
             .ToList()
             .ForEach(x =>
             {
@@ -88,7 +88,7 @@ public class MapService : ViewModelBase, IMapService
 
     public void Save(MapBlueprint map)
     {
-        string text = JsonConvert.SerializeObject(map);
+        var text = JsonConvert.SerializeObject(map);
         text = CompressionHelper.Compress(text);
         File.WriteAllText(map.MapPath, text);
     }
@@ -97,7 +97,7 @@ public class MapService : ViewModelBase, IMapService
     {
         try
         {
-            using FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            using var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
             stream.Close();
         }
         catch (IOException)

@@ -92,9 +92,9 @@ public class MainWindowViewModel : ViewModelBase
         if (!GameTabEnabled)
             return;
 
-        var indentifier = DateTime.Now.Ticks.ToString();
-        RequestSavePreview?.Invoke(this, indentifier);
-        MapsViewModel.SaveSelectedMap(indentifier, BoardViewModel.Board);
+        var identifier = DateTime.Now.Ticks.ToString();
+        RequestSavePreview?.Invoke(this, identifier);
+        MapsViewModel.SaveSelectedMap(identifier, BoardViewModel.Board);
     }
 
     private void DeleteGame()

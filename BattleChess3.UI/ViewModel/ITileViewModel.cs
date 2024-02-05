@@ -1,4 +1,5 @@
 ﻿using BattleChess3.Core.Model;
+using BattleChess3.Core.Model.Figures;
 
 namespace BattleChess3.UI.ViewModel
 {
@@ -7,7 +8,6 @@ namespace BattleChess3.UI.ViewModel
     /// </summary>
     public interface ITileViewModel : ITile
     {
-
         /// <summary>
         /// Gets if mouse is over tile
         /// </summary>
@@ -17,15 +17,16 @@ namespace BattleChess3.UI.ViewModel
         /// Gets if tile is selected
         /// </summary>
         bool IsSelected { get; set; }
-
+        
+        bool IsPossibleAttack { get; }
+        
+        bool IsPossibleMove { get; }
+        
+        bool IsPossibleSpecial { get; }
+        
         /// <summary>
-        /// Gets if is possible to move at this tile
+        /// Gets possible figure action.
         /// </summary>
-        bool IsPossibleMove { get; set; }
-
-        /// <summary>
-        /// Gets if is possible to attack this tile
-        /// </summary>
-        bool IsPossibleAttack { get; set; }
+        FigureAction PossibleAction { get; set; }
     }
 }

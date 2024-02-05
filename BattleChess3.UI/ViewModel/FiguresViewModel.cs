@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class FiguresViewModel : ViewModelBase, IDisposable
+public sealed class FiguresViewModel : ViewModelBase, IDisposable
 {
     private readonly IFigureService _figureService;
 
@@ -16,23 +16,17 @@ public class FiguresViewModel : ViewModelBase, IDisposable
     public IFigureGroup SelectedFigureGroup
     {
         get => _selectedFigureGroup;
-        set
-        {
-            if (value is null)
-                value = EmptyFigureGroup.Instance;
-
-            Set(ref _selectedFigureGroup, value);
-        }
+        private set => Set(ref _selectedFigureGroup, value);
     }
 
     private IList<IFigureGroup> _figureGroups = Array.Empty<IFigureGroup>();
     public IList<IFigureGroup> FigureGroups
     {
         get => _figureGroups;
-        set
+        private set
         {
             Set(ref _figureGroups, value);
-            if (!_figureGroups.Any(x => x.ShownName == _selectedFigureGroup.ShownName))
+            if (_figureGroups.All(x => x.DisplayName != _selectedFigureGroup.DisplayName))
             {
                 SelectedFigureGroup = _figureGroups.FirstOrDefault()
                     ?? EmptyFigureGroup.Instance;
@@ -45,17 +39,22 @@ public class FiguresViewModel : ViewModelBase, IDisposable
     public FiguresViewModel(IFigureService figureService)
     {
         _figureService = figureService;
-        FigureGroups = _figureService.GetFigureGroups();
+        FigureGroups = _figureService
+            .GetFigureGroups()
+            .Select<IFigureGroup, IFigureGroup>(x => new FigureGroupViewModel(x))
+            .ToArray();
         _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
 
         SelectFigureGroupCommand = new RelayCommand<IFigureGroup>(group => SelectedFigureGroup = group);
     }
 
-    public void OnFigureGroupsChanged(object? sender, IList<IFigureGroup> groups)
+    private void OnFigureGroupsChanged(object? sender, IList<IFigureGroup> groups)
     {
-        FigureGroups = groups;
+        FigureGroups = groups
+            .Select<IFigureGroup, IFigureGroup>(x => new FigureGroupViewModel(x))
+            .ToArray();
     }
-
+    
     public void Dispose()
     {
         _figureService.FigureGroupsChanged -= OnFigureGroupsChanged;
