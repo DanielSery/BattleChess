@@ -5,7 +5,7 @@ namespace BattleChess3.CrossFireFigures;
 
 public class CrossFireFigureGroup : IFigureGroup
 {
-    public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrossFireFigureGroup)}_Name"];
+    public string ShownName => CurrentLocalization.Instance[$"{nameof(CrossFireFigureGroup)}_Name"];
 
     public IFigureType[] FigureTypes => new IFigureType[]
     {

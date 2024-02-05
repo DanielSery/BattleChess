@@ -10,11 +10,6 @@ public interface ITile
     Position Position { get; }
     
     /// <summary>
-    /// Absolute position of tile in board.
-    /// </summary>
-    Position AbsolutePosition { get; }
-    
-    /// <summary>
     /// Current figure on tile
     /// </summary>
     Figure Figure { get; set; }

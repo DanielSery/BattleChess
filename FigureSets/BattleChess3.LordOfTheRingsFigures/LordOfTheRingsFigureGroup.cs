@@ -5,7 +5,7 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class LordOfTheRingsFigureGroup : IFigureGroup
 {
-    public string DisplayName => CurrentLocalization.Instance[$"{nameof(LordOfTheRingsFigureGroup)}_Name"];
+    public string ShownName => CurrentLocalization.Instance[$"{nameof(LordOfTheRingsFigureGroup)}_Name"];
 
     public IFigureType[] FigureTypes => new IFigureType[]
     {

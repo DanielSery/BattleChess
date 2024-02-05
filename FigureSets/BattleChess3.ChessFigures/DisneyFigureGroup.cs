@@ -5,7 +5,7 @@ namespace BattleChess3.ChessFigures;
 
 public class DisneyFigureGroup : IFigureGroup
 {
-    public string DisplayName => CurrentLocalization.Instance[$"{nameof(DisneyFigureGroup)}_Name"];
+    public string ShownName => CurrentLocalization.Instance[$"{nameof(DisneyFigureGroup)}_Name"];
 
     public IFigureType[] FigureTypes => new IFigureType[]
     {

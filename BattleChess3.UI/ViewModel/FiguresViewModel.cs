@@ -26,7 +26,7 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
         private set
         {
             Set(ref _figureGroups, value);
-            if (_figureGroups.All(x => x.DisplayName != _selectedFigureGroup.DisplayName))
+            if (_figureGroups.All(x => x.ShownName != _selectedFigureGroup.ShownName))
             {
                 SelectedFigureGroup = _figureGroups.FirstOrDefault()
                     ?? EmptyFigureGroup.Instance;
@@ -39,10 +39,7 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
     public FiguresViewModel(IFigureService figureService)
     {
         _figureService = figureService;
-        FigureGroups = _figureService
-            .GetFigureGroups()
-            .Select<IFigureGroup, IFigureGroup>(x => new FigureGroupViewModel(x))
-            .ToArray();
+        FigureGroups = _figureService.GetFigureGroups();
         _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
 
         SelectFigureGroupCommand = new RelayCommand<IFigureGroup>(group => SelectedFigureGroup = group);
@@ -50,11 +47,9 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
 
     private void OnFigureGroupsChanged(object? sender, IList<IFigureGroup> groups)
     {
-        FigureGroups = groups
-            .Select<IFigureGroup, IFigureGroup>(x => new FigureGroupViewModel(x))
-            .ToArray();
+        FigureGroups = groups;
     }
-    
+
     public void Dispose()
     {
         _figureService.FigureGroupsChanged -= OnFigureGroupsChanged;

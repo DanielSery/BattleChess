@@ -8,7 +8,6 @@ namespace BattleChess3.Core.Model
         private readonly Player _player;
 
         public Position Position => _innerTile.Position.GetPlayerPOVPosition(_player);
-        public Position AbsolutePosition => _innerTile.Position;
 
         public Figure Figure
         {

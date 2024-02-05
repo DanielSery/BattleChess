@@ -100,7 +100,7 @@ namespace BattleChess3.ChessFigures.Localization {
         ///   Looks up a localized string similar to 
         ///King
         ///
-        ///In chess, the king (♔,♚) is the most important piece. The object of the game is to give presents to the opponent&apos;s king in such a way that escape is not possible (checkmate). If a player&apos;s king is threatened with capture, it is said to be in check, and the player must remove the threat of capture on the next move. If this cannot be done, the king is said to be in checkmate, resulting in a loss for that player. Although the king is the most important piece, it is usually the weakest piece in the ga [rest of string was truncated]&quotj.
+        ///In chess, the king (♔,♚) is the most important piece. The object of the game is to give presents to the opponent&apos;s king in such a way that escape is not possible (checkmate). If a player&apos;s king is threatened with capture, it is said to be in check, and the player must remove the threat of capture on the next move. If this cannot be done, the king is said to be in checkmate, resulting in a loss for that player. Although the king is the most important piece, it is usually the weakest piece in the ga [rest of string was truncated]&quot;;.
         /// </summary>
         public static string King_Description {
             get {
@@ -143,7 +143,7 @@ namespace BattleChess3.ChessFigures.Localization {
         ///   Looks up a localized string similar to 
         ///Pawn
         ///
-        ///The pawn (♙,♟) is the most numerous piece in the game of chess, and in most circumstances, also the weakest. It historically represents infantry, or more particularly, armed peasants or pikemen. Each player begins a game with eight pawns, one on each square of the rank immediately in front of the other pieces. (The white pawns start on a2, b2, c2, ..., h2; the black pawns start on a7, b7, c7, ..., h7.). Individual pawns are referred to by the file on which they stand.For example, one speaks of \&quot;W [rest of string was truncated]&quotj.
+        ///The pawn (♙,♟) is the most numerous piece in the game of chess, and in most circumstances, also the weakest. It historically represents infantry, or more particularly, armed peasants or pikemen. Each player begins a game with eight pawns, one on each square of the rank immediately in front of the other pieces. (The white pawns start on a2, b2, c2, ..., h2; the black pawns start on a7, b7, c7, ..., h7.). Individual pawns are referred to by the file on which they stand.For example, one speaks of \&quot;W [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Pawn_Description {
             get {
@@ -164,7 +164,7 @@ namespace BattleChess3.ChessFigures.Localization {
         ///   Looks up a localized string similar to 
         ///Queen
         ///
-        ///The queen (♕,♛) is the most powerful piece in the game of chess, able to move any number of squares vertically, horizontally or diagonally. Each player starts the game with one queen, placed in the middle of the first rank next to the king. Because the queen is the strongest piece, a pawn is promoted to a queen in the vast majority of cases. In the game shatranj, the ancestor of chess that included only male figures, the closest thing to the queen was the “vizier”, a weak piece only able to move  [rest of string was truncated]&quotj.
+        ///The queen (♕,♛) is the most powerful piece in the game of chess, able to move any number of squares vertically, horizontally or diagonally. Each player starts the game with one queen, placed in the middle of the first rank next to the king. Because the queen is the strongest piece, a pawn is promoted to a queen in the vast majority of cases. In the game shatranj, the ancestor of chess that included only male figures, the closest thing to the queen was the “vizier”, a weak piece only able to move  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Queen_Description {
             get {

@@ -34,33 +34,14 @@ public class Pawn : IChessFigureType
 
             checkedMovement += movementUnit;
         }
-        
+
         if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
         {
-            if (targetTile.Position.Y == 7)
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, Queen.Instance));
-                    unitTile.Die();
-                });
-            }
-            
             return unitTile.CreateMoveAction(targetTile);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
         {
-            if (targetTile.Position.Y == 7)
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    targetTile.Die();
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, Queen.Instance));
-                    unitTile.Die();
-                });
-            }
-            
             return unitTile.CreateKillWithMove(targetTile);
         }
 

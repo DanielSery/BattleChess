@@ -23,7 +23,6 @@ public sealed class BoardViewModel : ViewModelBase
         {
             _selectedTile.IsSelected = false;
             Set(ref _selectedTile, value);
-            RaisePropertyChanged(nameof(InfoTile));
             value.IsSelected = true;
         }
     }
@@ -36,15 +35,9 @@ public sealed class BoardViewModel : ViewModelBase
         {
             _mouseOnTile.IsMouseOver = false;
             Set(ref _mouseOnTile, value);
-            RaisePropertyChanged(nameof(InfoTile));
             value.IsMouseOver = true;
         }
     }
-
-    public ITileViewModel InfoTile =>
-        SelectedTile is not NoneTileViewModel
-            ? SelectedTile
-            : MouseOnTile;
 
     private int _boardWidth = 8;
     public int BoardWidth

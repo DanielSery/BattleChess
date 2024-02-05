@@ -9,7 +9,7 @@
              Background="{DynamicResource TextBoxBrush}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Border DataContext="{Binding InfoTile.Figure}">
+        <Border DataContext="{Binding MouseOnTile.Figure}">
             <TextBlock Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"
                    Style="{DynamicResource TextBlockStyle}"
                    HorizontalAlignment="Left" VerticalAlignment="Top"

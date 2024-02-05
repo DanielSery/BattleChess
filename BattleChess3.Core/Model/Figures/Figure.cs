@@ -14,7 +14,7 @@ public class Figure : IFigureType
     public string DisplayName => FigureType.DisplayName;
     public string Description => FigureType.Description;
     public string UnitName => FigureType.UnitName;
-    public IDictionary<int, Uri> ImageUris => FigureType.ImageUris;
+    public Dictionary<int, Uri> ImageUris => FigureType.ImageUris;
 
     public Figure(Player owner, IFigureType figureType)
     {

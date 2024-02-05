@@ -18,6 +18,7 @@
     
     <ImageBrush x:Key="ChessTileMouseOnBackground" ImageSource="pack://application:,,,/BattleChess3.PixarTheme;component/Images/ChessTileMouseOn.png"/>
     <ImageBrush x:Key="ChessTileSelectedBackground" ImageSource="pack://application:,,,/BattleChess3.PixarTheme;component/Images/ChessTileSelected.png"/>
+    <ImageBrush x:Key="ChessTileSpecialBackground" ImageSource="pack://application:,,,/BattleChess3.PixarTheme;component/Images/ChessTileSpecial.png"/>
     <ImageBrush x:Key="ChessTileCanGoBackground" ImageSource="pack://application:,,,/BattleChess3.PixarTheme;component/Images/ChessTileCanGo.png"/>
     <ImageBrush x:Key="ChessTileDangeredBackground" ImageSource="pack://application:,,,/BattleChess3.PixarTheme;component/Images/ChessTileDangered.png"/>
     
@@ -165,6 +166,9 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsPossibleMove}" Value="True">
                 <Setter Property="Background" Value="{StaticResource ChessTileCanGoBackground}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsPossibleSpecial}" Value="True">
+                <Setter Property="Background" Value="{StaticResource ChessTileSpecialBackground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsPossibleAttack}" Value="True">
                 <Setter Property="Background" Value="{StaticResource ChessTileDangeredBackground}"/>

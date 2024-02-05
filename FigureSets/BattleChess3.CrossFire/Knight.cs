@@ -13,7 +13,7 @@ public class Knight : ICrossFireFigureType
     public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;
+        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;;
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
@@ -29,7 +29,7 @@ public class Knight : ICrossFireFigureType
         return FigureAction.None;
     }
 
-    private static void AttackAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public void AttackAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var move = targetTile.Position - unitTile.Position;
 

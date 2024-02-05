@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BattleChess3.Core.Model;
+﻿using BattleChess3.Core.Model;
 using BattleChess3.Core.Model.Figures;
 using BattleChess3.DefaultFigures.Utilities;
 
@@ -24,7 +22,7 @@ public class Builder : ICrossFireFigureType
         return FigureAction.None;
     }
 
-    private void MoveAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public void MoveAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var move = targetTile.Position - unitTile.Position;
         MoveFiguresOutsideShield(unitTile, move, board);
@@ -60,9 +58,18 @@ public class Builder : ICrossFireFigureType
         }
     }
 
-    private static void MoveFiguresOutsideShield(ITile sourceTile, Position move, ITile[] board)
+    private void MoveFiguresOutsideShield(ITile sourceTile, Position move, ITile[] board)
     {
-        var movedPositions = GetMovedPositions(move);
+        Position[] movedPositions;
+        if (move == new Position(0, 1))
+            movedPositions = _upMovedPositions;
+        else if (move == new Position(1, 0))
+            movedPositions = _rightMovedPositions;
+        else if (move == new Position(0, -1))
+            movedPositions = _bottomMovedPositions;
+        else
+            movedPositions = _leftMovedPositions;
+
         foreach (var movedPosition in movedPositions)
         {
             if (!(sourceTile.Position + movedPosition).IsInBoard())
@@ -70,6 +77,7 @@ public class Builder : ICrossFireFigureType
 
             var movedTile = board[sourceTile.Position + movedPosition];
             if (movedTile.IsEmpty() ||
+                movedTile.Figure.Owner.Equals(sourceTile.Figure.Owner) ||
                 movedTile.Figure.UnitName == Wall.Instance.UnitName)
                 continue;
 
@@ -92,17 +100,41 @@ public class Builder : ICrossFireFigureType
         }
     }
 
-    private static IEnumerable<Position> GetMovedPositions(Position move)
+    private readonly Position[] _upMovedPositions =
     {
-        return move switch
-        {
-            (0, 1) => new Position[] { new(-2, 2), new(-1, 3), new(0, 3), new(1, 3), new(2, 2) },
-            (1, 0) => new Position[] { new(2, -2), new(3, -1), new(3, 0), new(3, 1), new(2, 2) },
-            (0, -1) => new Position[] { new(-2, -2), new(-1, -3), new(0, -3), new(1, -3), new(2, -2) },
-            (-1, 0) => new Position[] { new(-2, -2), new(-3, -1), new(-3, 0), new(-3, 1), new(-2, 2) },
-            _ => throw new ArgumentException($"Unexpected move of Builder {move}")
-        };
-    }
+        new(-2, 2),
+        new(-1, 3),
+        new(0, 3),
+        new(1, 3),
+        new(2, 2),
+    };
+
+    private readonly Position[] _rightMovedPositions =
+    {
+        new(2, -2),
+        new(3, -1),
+        new(3, 0),
+        new(3, 1),
+        new(2, 2),
+    };
+
+    private readonly Position[] _bottomMovedPositions =
+    {
+        new(-2, -2),
+        new(-1, -3),
+        new(0, -3),
+        new(1, -3),
+        new(2, -2),
+    };
+
+    private readonly Position[] _leftMovedPositions =
+    {
+        new(-2, -2),
+        new(-3, -1),
+        new(-3, 0),
+        new(-3, 1),
+        new(-2, 2),
+    };
 
     private readonly Position[] _shieldPositions =
     {
