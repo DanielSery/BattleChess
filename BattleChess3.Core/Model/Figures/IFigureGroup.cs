@@ -5,7 +5,7 @@ public interface IFigureGroup
     /// <summary>
     /// Shown name of figure group
     /// </summary>
-    string ShownName { get; }
+    string DisplayName { get; }
     
     /// <summary>
     /// Figure types of group

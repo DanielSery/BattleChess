@@ -5,7 +5,7 @@ namespace BattleChess3.DefaultFigures;
 
 public class DefaultFigureGroup : IFigureGroup
 {
-    public string ShownName => CurrentLocalization.Instance[$"{nameof(DefaultFigureGroup)}_Name"];
+    public string DisplayName => CurrentLocalization.Instance[$"{nameof(DefaultFigureGroup)}_Name"];
 
     public IFigureType[] FigureTypes => new IFigureType[]
     {

@@ -6,11 +6,8 @@ using BattleChess3.Core.Model.Figures;
 using BattleChess3.Core.Utilities;
 using BattleChess3.CrossFireFigures;
 using BattleChess3.DefaultFigures;
-using BattleChess3.HobbitFigures;
 using BattleChess3.LordOfTheRingsFigures;
-using BattleChess3.SilmarillionFigures;
 using Newtonsoft.Json;
-using Helper = BattleChess3.HobbitFigures.Helper;
 using Knight = BattleChess3.ChessFigures.Knight;
 
 namespace BattleChess3.UI.Utilities;
@@ -55,48 +52,6 @@ public static class MapCreator
                 },
             MapPath = $"Resources/Maps/LOTR_{new Random().Next()}.map",
             PreviewPath = $"/Resources/Maps/LOTR_{new Random().Next()}.png",
-            StartingPlayer = 1,
-        });
-    }
-
-    public static void CreateHobbitMap()
-    {
-        CreateMap(new MapBlueprint
-        {
-            Figures = new FigureBlueprint[]
-                {
-                    (2, MinorWizard.Instance), (2, Warrior.Instance), (2, Helper.Instance), (2, RingBearer.Instance), (2, Leader.Instance), (2, Helper.Instance), (2, Warrior.Instance), (2, MinorWizard.Instance),
-                    (2, Soldier.Instance), (2, Soldier.Instance), (2, Soldier.Instance), (2, Soldier.Instance), (2, Soldier.Instance), (2, Soldier.Instance), (2, Soldier.Instance), (2, Soldier.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (1, Soldier.Instance), (1, Soldier.Instance), (1, Soldier.Instance), (1, Soldier.Instance), (1, Soldier.Instance), (1, Soldier.Instance), (1, Soldier.Instance), (1, Soldier.Instance),
-                    (1, MinorWizard.Instance), (1, Warrior.Instance), (1, Helper.Instance), (1, RingBearer.Instance), (1, Leader.Instance), (1, Helper.Instance), (1, Warrior.Instance), (1, MinorWizard.Instance),
-                },
-            MapPath = $"Resources/Maps/Hobbit_{new Random().Next()}.map",
-            PreviewPath = $"/Resources/Maps/Hobbit_{new Random().Next()}.png",
-            StartingPlayer = 1,
-        });
-    }
-
-    public static void CreateSilmarillionMap()
-    {
-        CreateMap(new MapBlueprint
-        {
-            Figures = new FigureBlueprint[]
-                {
-                    (2, UlmoAncalagon.Instance), (2, IrmoUngoliant.Instance), (2, NiennaBalrog.Instance), (2, YavannaGlaurung.Instance), (2, ManweMelkor.Instance), (2, AuleGothmog.Instance), (2, VardaSauron.Instance), (2, OromeCarcharoth.Instance),
-                    (2, ElfOrc.Instance), (2, ElfOrc.Instance), (2, ElfOrc.Instance), (2, ElfOrc.Instance), (2, ElfOrc.Instance), (2, ElfOrc.Instance), (2, ElfOrc.Instance), (2, ElfOrc.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance), (0, Empty.Instance),
-                    (1, ElfOrc.Instance), (1, ElfOrc.Instance), (1, ElfOrc.Instance), (1, ElfOrc.Instance), (1, ElfOrc.Instance), (1, ElfOrc.Instance), (1, ElfOrc.Instance), (1, ElfOrc.Instance),
-                    (1, UlmoAncalagon.Instance), (1, IrmoUngoliant.Instance), (1, NiennaBalrog.Instance), (1, YavannaGlaurung.Instance), (1, ManweMelkor.Instance), (1, AuleGothmog.Instance), (1, VardaSauron.Instance), (1, OromeCarcharoth.Instance),
-                },
-            MapPath = $"Resources/Maps/Silmarillion_{new Random().Next()}.map",
-            PreviewPath = $"/Resources/Maps/Silmarillion_{new Random().Next()}.png",
             StartingPlayer = 1,
         });
     }

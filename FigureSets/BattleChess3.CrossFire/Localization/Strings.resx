@@ -119,11 +119,17 @@
   </resheader>
   <data name="Archer_Description" xml:space="preserve">
     <value>Archer
+      
+Move:
 
-Info: Good for taking control
-Good vs: Ninja, Knight, Spy
-Bad vs: Builder
-Special: Does not move with attack
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛▣⬛⬜⬜
 
 Attack:
 
@@ -135,17 +141,11 @@ Attack:
 ⬜⬜⬜▣⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-
-Move:
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛▣⬛⬜⬜
+      
+Info: Good for taking control
+Good vs: Ninja, Knight, Spy
+Bad vs: Builder
+Special: Does not move with attack
 </value>
   </data>
   <data name="Archer_Name" xml:space="preserve">
@@ -153,13 +153,6 @@ Move:
   </data>
   <data name="Bomber_Description" xml:space="preserve">
     <value>Bomber
-
-Info: Hard to use, high reward
-Good vs: Ninja, Spy
-Bad vs: Builder, Archer, Knight
-Special: When move, near tiles are destroyed
-
-Attack: Cannot directly attack
 
 Move:
 
@@ -171,6 +164,13 @@ Move:
 ⬛⬜▣▩⬛▩⬜⬜
 ⬜⬜⬜▩▩▩⬜⬜
 ⬛⬜⬛⬜⬛⬜⬜⬜
+      
+Attack: Cannot directly attack
+      
+Info: Hard to use, high reward
+Good vs: Ninja, Spy
+Bad vs: Builder, Archer, Knight
+Special: When move, near tiles are destroyed
 </value>
   </data>
   <data name="Bomber_Name" xml:space="preserve">
@@ -178,14 +178,6 @@ Move:
   </data>
   <data name="Builder_Description" xml:space="preserve">
     <value>Builder
-
-Info: Defensive unit
-Good vs: Archer, Spy
-Bad vs: Ninja, Knight
-Special: Creates shield around itself
-Special: Moving shield pushes units away
-
-Attack: Cannot directly attack
 
 Move:
 
@@ -208,6 +200,14 @@ Shield:
 ⬜▦⬜▣⬜▦⬜⬜
 ⬜▦⬜⬜⬜▦⬜⬜
 ⬜⬜▦▦▦⬜⬜⬜
+      
+Attack: Cannot directly attack
+      
+Info: Defensive unit
+Good vs: Archer, Spy
+Bad vs: Ninja, Knight
+Special: Creates shield around itself
+Special: Moving shield pushes units away
 </value>
   </data>
   <data name="Builder_Name" xml:space="preserve">
@@ -219,23 +219,7 @@ Shield:
   <data name="Knight_Description" xml:space="preserve">
     <value>Knight
 
-Info: All round good
-Good vs: Builder, Spy, Ninja
-Bad vs: Archer
-
-Attack: Max 3 tiles to each direction 
-Attack: Kills all units to get to target
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬛⬜⬜⬛⬜⬜
-⬛⬜⬛⬜⬛⬜⬜⬜
-⬜⬛⬛⬛⬜⬜⬜⬜
-⬛⬛▣⬛⬛⬛⬛⬜
-⬜⬛⬛⬛⬜⬜⬜⬜
-⬛⬜⬛⬜⬛⬜⬜⬜
-
-Movement: As chess knight
+Move: As chess knight
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -245,6 +229,21 @@ Movement: As chess knight
 ⬜⬜▣⬜⬜⬜⬜⬜
 ⬛⬜⬜⬜⬛⬜⬜⬜
 ⬜⬛⬜⬛⬜⬜⬜⬜
+
+Attack: Kills all units to tile
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬛⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬛⬛⬜⬜⬜⬜
+⬛⬛▣⬛⬛⬛⬛⬜
+⬜⬛⬛⬛⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+      
+Info: All round good
+Good vs: Builder, Spy, Ninja
+Bad vs: Archer
 </value>
   </data>
   <data name="Knight_Name" xml:space="preserve">
@@ -253,11 +252,25 @@ Movement: As chess knight
   <data name="Ninja_Description" xml:space="preserve">
     <value>Ninja
 
-Info: Basic unit
-Good vs: Builder
-Bad vs: Spy, Archer, Knight, Bomber
-Special: Can jump over object
-Special: On last tile turns into Bomber
+Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▦⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 
 Attack:
 
@@ -278,26 +291,12 @@ Attack:
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬛▣⬛⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
-
-Movement:
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬛▦⬛⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
+      
+Info: Basic unit
+Good vs: Builder
+Bad vs: Spy, Archer, Knight, Bomber
+Special: Can jump over object
+Special: On last tile turns into Bomber
 </value>
   </data>
   <data name="Ninja_Name" xml:space="preserve">
@@ -306,12 +305,7 @@ Movement:
   <data name="Spy_Description" xml:space="preserve">
     <value>Spy
 
-Info: Strategic unit
-Good vs: Builder, Ninja
-Bad vs: Archer, Knight, Bomber
-Special: Can swap with allied unit
-
-Attack + Movement: As chess king
+Move + Attack: As chess king
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -321,6 +315,11 @@ Attack + Movement: As chess king
 ⬜⬜⬛⬛⬛⬜⬜⬜
 ⬜⬜⬛▣⬛⬜⬜⬜
 ⬜⬜⬛⬛⬛⬜⬜⬜
+
+Info: Strategic unit
+Good vs: Builder, Ninja
+Bad vs: Archer, Knight, Bomber
+Special: Can swap with allied unit
 </value>
   </data>
   <data name="Spy_Name" xml:space="preserve">

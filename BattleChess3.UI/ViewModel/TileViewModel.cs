@@ -7,6 +7,7 @@ namespace BattleChess3.UI.ViewModel;
 public class TileViewModel : ViewModelBase, ITileViewModel
 {
     public Position Position { get; }
+    public Position AbsolutePosition => Position;
 
     private bool _isMouseOver;
     public bool IsMouseOver

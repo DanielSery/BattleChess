@@ -71,7 +71,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///            
         ///Aragorn II, the son of Arathorn II and Gilraen, also known as Elessar and Strider, was the 16th Chieftain of the Dúnedain of the North; later crowned King Elessar Telcontar (March 1, 2931 - FO 120 or SR 1541), the 26th King of Arnor, and the 35th King of Gondor and first High King of Gondor and Arnor since the short reign of Isildur. He was a great warrior, and as Isildur&apos;s heir he bore the shards of Narsil, reforged and renamed Andúril, in the War of the Ring.
         ///            
-        ///Sauron [rest of string was truncated]&quot;;.
+        ///Sauron [rest of string was truncated]&quotj.
         /// </summary>
         public static string AragornSauron_Description {
             get {
@@ -96,7 +96,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///            
         ///Gollum
         ///
-        ///Gollum, originally known as Sméago [rest of string was truncated]&quot;;.
+        ///Gollum, originally known as Sméago [rest of string was truncated]&quotj.
         /// </summary>
         public static string FrodoGollum_Description {
             get {
@@ -117,7 +117,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///   Looks up a localized string similar to 
         ///Gandalf
         ///   
-        ///Gandalf (Norse; IPA: [gand:alf] - \&quot;Elf of the Wand\&quot; or \&quot;Wand-elf\&quot;) the Grey, later known as Gandalf the White, and originally named Olórin (Quenya; IPA: [oˈloːrin] - \&quot;Dreamer\&quot; or \&quot;Of Dreams\&quot;), was an Istar (wizard), sent by the West in the Third Age to combat the threat of Sauron. He joined Thorin and his company to reclaim the Lonely Mountain from Smaug, convoked the Fellowship of the Ring to destroy the One Ring, and led the Free Peoples in the final campaign of the War of the Ring [rest of string was truncated]&quot;;.
+        ///Gandalf (Norse; IPA: [gand:alf] - \&quot;Elf of the Wand\&quot; or \&quot;Wand-elf\&quot;) the Grey, later known as Gandalf the White, and originally named Olórin (Quenya; IPA: [oˈloːrin] - \&quot;Dreamer\&quot; or \&quot;Of Dreams\&quot;), was an Istar (wizard), sent by the West in the Third Age to combat the threat of Sauron. He joined Thorin and his company to reclaim the Lonely Mountain from Smaug, convoked the Fellowship of the Ring to destroy the One Ring, and led the Free Peoples in the final campaign of the War of the Ring [rest of string was truncated]&quotj.
         /// </summary>
         public static string GandalfWitchKing_Description {
             get {
@@ -142,7 +142,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///            
         ///The Nazgûl
         ///
-        ///The Nazgûl (also known as Ringwraiths, The Nine, The Fallen Kings, Black Riders, Nunbolg, or Ulairi in Quenya) w [rest of string was truncated]&quot;;.
+        ///The Nazgûl (also known as Ringwraiths, The Nine, The Fallen Kings, Black Riders, Nunbolg, or Ulairi in Quenya) w [rest of string was truncated]&quotj.
         /// </summary>
         public static string GimliNazgul_Description {
             get {
@@ -163,7 +163,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///   Looks up a localized string similar to 
         ///Legolas
         ///
-        ///Legolas was a Sindarin elf who was part of the Fellowship of the Ring in the Third Age. As he was the son of the Elvenking Thranduil of Mirkwood, Legolas was Prince of the Woodland Realm (Mirkwood), a messenger, and a master bowman. With his keen eyesight, sensitive hearing, and excellent bowmanship, Legolas was a valuable resource to the other members of the Fellowship. He was well-known for becoming friends with the dwarf Gimli, despite their long-held differences. It is not known whether Leg [rest of string was truncated]&quot;;.
+        ///Legolas was a Sindarin elf who was part of the Fellowship of the Ring in the Third Age. As he was the son of the Elvenking Thranduil of Mirkwood, Legolas was Prince of the Woodland Realm (Mirkwood), a messenger, and a master bowman. With his keen eyesight, sensitive hearing, and excellent bowmanship, Legolas was a valuable resource to the other members of the Fellowship. He was well-known for becoming friends with the dwarf Gimli, despite their long-held differences. It is not known whether Leg [rest of string was truncated]&quotj.
         /// </summary>
         public static string LegolasNazgul_Description {
             get {
@@ -197,7 +197,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///
         ///Troll
         ///            
-        ///Trolls were a very large and monstrous (ranging from between 10-18 feet tall), and for the most part unintelligent (references ar [rest of string was truncated]&quot;;.
+        ///Trolls were a very large and monstrous (ranging from between 10-18 feet tall), and for the most part unintelligent (references ar [rest of string was truncated]&quotj.
         /// </summary>
         public static string MerryTroll_Description {
             get {
@@ -248,7 +248,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///
         ///Saruman
         ///            
-        ///Saruman (Quenya; IPA: [&apos;saruman] - \&quot;Man Of Skill\&quot;), also known as Saruman the White was an Istar (wizard), who lived in Middle-earth during [rest of string was truncated]&quot;;.
+        ///Saruman (Quenya; IPA: [&apos;saruman] - \&quot;Man Of Skill\&quot;), also known as Saruman the White was an Istar (wizard), who lived in Middle-earth during [rest of string was truncated]&quotj.
         /// </summary>
         public static string SamSaruman_Description {
             get {
@@ -269,7 +269,7 @@ namespace BattleChess3.LordOfTheRingsFigures.Localization {
         ///   Looks up a localized string similar to 
         ///The Guards of the Citadel
         ///   
-        ///The Guards of the Citadel, sometimes referred to as the Guards of the Tower of Gondor, were the warriors responsible for guarding the upmost level of Minas Tirith, especially the courtyard that held the fountain and the White Tree of Gondor, and gave way the thronehall. They served as personal bodyguards to the Kings of Gondor, and later to the Stewards of Gondor until King Aragorn II Elessar&apos;s coronation. They were mainly a stationary guard unit, rather than a mobile force [rest of string was truncated]&quot;;.
+        ///The Guards of the Citadel, sometimes referred to as the Guards of the Tower of Gondor, were the warriors responsible for guarding the upmost level of Minas Tirith, especially the courtyard that held the fountain and the White Tree of Gondor, and gave way the thronehall. They served as personal bodyguards to the Kings of Gondor, and later to the Stewards of Gondor until King Aragorn II Elessar&apos;s coronation. They were mainly a stationary guard unit, rather than a mobile force [rest of string was truncated]&quotj.
         /// </summary>
         public static string SoldierOrc_Description {
             get {

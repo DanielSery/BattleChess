@@ -50,6 +50,8 @@ public readonly struct Position
     public static implicit operator Position((int x, int y) pos) 
         => new(pos.x, pos.y);
 
+    public static implicit operator (int, int)(Position position)
+        => (position.X, position.Y);
 
     public override bool Equals(object? obj)
     {
@@ -75,6 +77,12 @@ public readonly struct Position
            0 => new Position(Constants.BoardLength - Y - 1, X),
            _ => throw new System.ArgumentOutOfRangeException(),
        };
+    
+    public void Deconstruct(out int x, out int y)
+    {
+        x = X;
+        y = Y;
+    }
 
     public override string ToString() => $"({X},{Y})";
 }

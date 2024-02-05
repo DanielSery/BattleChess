@@ -10,7 +10,7 @@ public class NoneFigure : IFigureType
     public string DisplayName => string.Empty;
     public string Description => string.Empty;
     public string UnitName => string.Empty;
-    public Dictionary<int, Uri> ImageUris { get; } = new();
+    public IDictionary<int, Uri> ImageUris { get; } = new Dictionary<int, Uri>();
     
     public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {

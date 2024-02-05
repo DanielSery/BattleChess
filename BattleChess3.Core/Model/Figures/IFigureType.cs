@@ -23,7 +23,7 @@ public interface IFigureType : IEquatable<IFigureType>
     /// <summary>
     /// Images of player with id
     /// </summary>
-    Dictionary<int, Uri> ImageUris { get; }
+    IDictionary<int, Uri> ImageUris { get; }
 
     /// <summary>
     /// Gets possible action on tile.

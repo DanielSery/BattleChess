@@ -8,6 +8,7 @@ public class NoneTileViewModel : ITileViewModel
     public static readonly NoneTileViewModel Instance = new();
     
     public Position Position => Position.None;
+    public Position AbsolutePosition => Position.None;
     public Figure Figure { get; set; } = Figure.None;
     public bool IsMouseOver { get; set; }
     public bool IsSelected { get; set; }

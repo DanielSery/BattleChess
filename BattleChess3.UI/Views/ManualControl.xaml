@@ -16,7 +16,7 @@
                       ItemsSource="{Binding FigureGroups}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding ShownName}"
+                    <Button Content="{Binding DisplayName}"
                             Command="{Binding DataContext.SelectFigureGroupCommand, 
                                 RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                             CommandParameter="{Binding}"
