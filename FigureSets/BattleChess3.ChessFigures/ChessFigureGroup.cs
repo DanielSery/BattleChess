@@ -14,6 +14,6 @@ public class ChessFigureGroup : IFigureGroup
         Rook.Instance,
         Bishop.Instance,
         Knight.Instance,
-        Pawn.Instance,
+        Pawn.Instance
     };
 }

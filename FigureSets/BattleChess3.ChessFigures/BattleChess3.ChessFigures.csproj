@@ -8,13 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Images\**" />
-        <Resource Include="Images\**" />
+        <None Remove="Images\**"/>
+        <Resource Include="Images\**"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\BattleChess3.Core\BattleChess3.Core.csproj" />
-        <ProjectReference Include="..\BattleChess3.DefaultFigures\BattleChess3.DefaultFigures.csproj" />
+        <ProjectReference Include="..\..\BattleChess3.Core\BattleChess3.Core.csproj"/>
+        <ProjectReference Include="..\BattleChess3.DefaultFigures\BattleChess3.DefaultFigures.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

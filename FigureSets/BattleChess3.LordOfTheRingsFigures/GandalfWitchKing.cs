@@ -6,7 +6,8 @@ public class GandalfWitchKing : ILordOfTheRingsFigureType, IFigureTypeWithDiffer
 {
     public static readonly GandalfWitchKing Instance = new();
 
-    int[] IFigureTypeWithDifferentMoves.Actions { get; } = {
+    int[] IFigureTypeWithDifferentMoves.Actions { get; } =
+    {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -21,6 +22,6 @@ public class GandalfWitchKing : ILordOfTheRingsFigureType, IFigureTypeWithDiffer
         0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 }

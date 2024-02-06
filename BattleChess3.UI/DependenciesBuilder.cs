@@ -13,7 +13,7 @@ public class DependenciesBuilder
         if (!ServiceLocator.IsLocationProviderSet)
             SetUpServiceLocator();
     }
-    
+
     public static void Cleanup()
     {
         // clean up resources
@@ -22,36 +22,36 @@ public class DependenciesBuilder
     private static void SetUpServiceLocator()
     {
         var builder = new ContainerBuilder();
-        
+
         builder.RegisterType<ThemeService>()
-               .As<IThemeService>()
-               .SingleInstance();
+            .As<IThemeService>()
+            .SingleInstance();
         builder.RegisterType<MapService>()
-               .As<IMapService>()
-               .SingleInstance();
+            .As<IMapService>()
+            .SingleInstance();
         builder.RegisterType<FigureService>()
-               .As<IFigureService>()
-               .SingleInstance();
+            .As<IFigureService>()
+            .SingleInstance();
         builder.RegisterType<PlayerService>()
-               .As<IPlayerService>()
-               .SingleInstance();
+            .As<IPlayerService>()
+            .SingleInstance();
         builder.RegisterType<MultiplayerService>()
-               .As<IMultiplayerService>()
-               .SingleInstance();
+            .As<IMultiplayerService>()
+            .SingleInstance();
 
         builder.RegisterType<MapsViewModel>()
-               .SingleInstance();
+            .SingleInstance();
         builder.RegisterType<BoardViewModel>()
-               .SingleInstance();
+            .SingleInstance();
         builder.RegisterType<ThemesViewModel>()
-               .SingleInstance();
+            .SingleInstance();
         builder.RegisterType<FiguresViewModel>()
-               .SingleInstance();
+            .SingleInstance();
         builder.RegisterType<MultiplayerViewModel>()
-               .SingleInstance();
+            .SingleInstance();
         builder.RegisterType<MainWindowViewModel>()
-               .SingleInstance();
-        
+            .SingleInstance();
+
 
         var locator = new AutofacServiceLocator(builder.Build());
         ServiceLocator.SetLocatorProvider(() => locator);

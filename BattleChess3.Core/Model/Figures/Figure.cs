@@ -3,7 +3,13 @@
 public class Figure : IFigureType
 {
     public static readonly Figure None = new(Player.Neutral, NoneFigure.Instance);
-    
+
+    public Figure(Player owner, IFigureType figureType)
+    {
+        Owner = owner;
+        FigureType = figureType;
+    }
+
     public Player Owner { get; }
     public IFigureType FigureType { get; set; }
     public Uri ImageUri => FigureType.ImageUris[Owner.Id];
@@ -13,14 +19,13 @@ public class Figure : IFigureType
     public string UnitName => FigureType.UnitName;
     public IDictionary<int, Uri> ImageUris => FigureType.ImageUris;
 
-    public Figure(Player owner, IFigureType figureType)
+    public FigureAction GetPossibleAction(ITile from, ITile to, ITile[] board)
     {
-        Owner = owner;
-        FigureType = figureType;
+        return FigureType.GetPossibleAction(from, to, board);
     }
 
-    public FigureAction GetPossibleAction(ITile from, ITile to, ITile[] board)
-        => FigureType.GetPossibleAction(from, to, board);
-    
-    public override string ToString() => $"{FigureType.DisplayName}:{Owner.Id}";
+    public override string ToString()
+    {
+        return $"{FigureType.DisplayName}:{Owner.Id}";
+    }
 }

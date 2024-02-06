@@ -9,31 +9,8 @@ public class Spy : ICrossFireFigureType
 {
     public static readonly Spy Instance = new();
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    private int[] Actions { get; } =
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;
-
-        if (targetTile.IsOwnedByYou(unitTile))
-        {
-            return new FigureAction(FigureActionTypes.Special, 
-                () => unitTile.SwapTiles(targetTile));
-        }
-
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
-        {
-            return unitTile.CreateMoveAction(targetTile);
-        }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            return unitTile.CreateKillWithMove(targetTile);
-        }
-
-        return FigureAction.None;
-    }
-
-    private int[] Actions { get; } = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -48,6 +25,23 @@ public class Spy : ICrossFireFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
+
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    {
+        var movement = targetTile.Position - unitTile.Position;
+        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
+
+        if (targetTile.IsOwnedByYou(unitTile))
+            return new FigureAction(FigureActionTypes.Special,
+                () => unitTile.SwapTiles(targetTile));
+
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
+
+        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+            return unitTile.CreateKillWithMove(targetTile);
+
+        return FigureAction.None;
+    }
 }

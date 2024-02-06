@@ -9,21 +9,35 @@ public class Knight : ICrossFireFigureType
 {
     public static readonly Knight Instance = new();
 
+    private int[] Actions { get; } =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 2, 2, 2, 8, 2, 2, 2, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+
     public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;
+        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
-        {
-            return unitTile.CreateMoveAction(targetTile);
-        }
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
             return new FigureAction(FigureActionTypes.Attack, () =>
                 AttackAction(unitTile, targetTile, board));
-        }
 
         return FigureAction.None;
     }
@@ -39,7 +53,7 @@ public class Knight : ICrossFireFigureType
             unitTile.MoveToTile(targetTile);
         }
         else if (Math.Abs(move.X) <= 2 &&
-            Math.Abs(move.Y) <= 2)
+                 Math.Abs(move.Y) <= 2)
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
             board[unitTile.Position + smallMove].Die();
@@ -55,22 +69,4 @@ public class Knight : ICrossFireFigureType
             unitTile.MoveToTile(targetTile);
         }
     }
-
-    private int[] Actions { get; } = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 2, 2, 8, 2, 2, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    };
 }

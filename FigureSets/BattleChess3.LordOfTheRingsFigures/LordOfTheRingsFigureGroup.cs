@@ -17,6 +17,6 @@ public class LordOfTheRingsFigureGroup : IFigureGroup
         MerryTroll.Instance,
         PipinTroll.Instance,
         SoldierOrc.Instance,
-        SamSaruman.Instance,
+        SamSaruman.Instance
     };
 }

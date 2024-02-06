@@ -1,11 +1,10 @@
-﻿
+﻿using System.Windows;
 using BattleChess3.Core.Model;
 using BattleChess3.Core.Model.Figures;
 using BattleChess3.UI.Services;
 using BattleChess3.UI.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System.Windows;
 
 namespace BattleChess3.UI.ViewModel;
 
@@ -15,20 +14,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
     private readonly IMultiplayerService _multiplayerService;
     private readonly IPlayerService _playerService;
 
-    public bool IsConnected => _multiplayerService.IsHost || _multiplayerService.IsGuest;
-    public bool CanConnect => _multiplayerService is { IsHost: false, IsGuest: false };
-
     private string _apiKey = CurrentLocalization.Instance["MultiplayerService_ApiKey"];
-    public string ApiKey
-    {
-        get => _apiKey;
-        set => Set(ref _apiKey, value);
-    }
-
-    public RelayCommand HostCommand { get; }
-    public RelayCommand JoinCommand { get; }
-    public RelayCommand StopCommand { get; }
-    public RelayCommand PasteKeyCommand { get; }
 
     public MultiplayerViewModel(
         BoardViewModel boardViewModel,
@@ -46,6 +32,20 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
         SubscribeToEvents();
     }
+
+    public bool IsConnected => _multiplayerService.IsHost || _multiplayerService.IsGuest;
+    public bool CanConnect => _multiplayerService is { IsHost: false, IsGuest: false };
+
+    public string ApiKey
+    {
+        get => _apiKey;
+        set => Set(ref _apiKey, value);
+    }
+
+    public RelayCommand HostCommand { get; }
+    public RelayCommand JoinCommand { get; }
+    public RelayCommand StopCommand { get; }
+    public RelayCommand PasteKeyCommand { get; }
 
     private void SubscribeToEvents()
     {
@@ -72,8 +72,8 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
     private void RemoteRequestedClickTile(object? sender, Position e)
     {
-        _boardViewModel.AutomaticClickAtTile(!e.IsInBoard() 
-            ? NoneTileViewModel.Instance 
+        _boardViewModel.AutomaticClickAtTile(!e.IsInBoard()
+            ? NoneTileViewModel.Instance
             : _boardViewModel.Board[e]);
     }
 
@@ -110,7 +110,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
                 PlayerId = x.Figure.Owner.Id,
                 UnitName = x.Figure.UnitName
             }).ToArray(),
-            StartingPlayer = _playerService.CurrentPlayer.Id,
+            StartingPlayer = _playerService.CurrentPlayer.Id
         };
 
         _multiplayerService.Host(_apiKey, map, _boardViewModel.SelectedTile.Position);

@@ -6,7 +6,8 @@ public class Rook : IChessFigureType, IFigureTypeWithChainedMoves
 {
     public static readonly Rook Instance = new();
 
-    int[] IFigureTypeWithChainedMoves.Actions { get; } = {
+    int[] IFigureTypeWithChainedMoves.Actions { get; } =
+    {
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
@@ -21,6 +22,6 @@ public class Rook : IChessFigureType, IFigureTypeWithChainedMoves
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0
     };
 }

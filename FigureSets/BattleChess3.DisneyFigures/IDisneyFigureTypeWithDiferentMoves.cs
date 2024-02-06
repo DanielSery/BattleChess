@@ -1,7 +1,9 @@
 ﻿#region Copyright FEI Company 2024
+
 // All rights are reserved. Reproduction or transmission in whole or in part, in
 // any form or by any means, electronic, mechanical or otherwise, is prohibited
 // without the prior written consent of the copyright owner.
+
 #endregion
 
 using BattleChess3.Core.Model;
@@ -14,7 +16,7 @@ namespace BattleChess3.DisneyFigures;
 public interface IDisneyFigureTypeWithDifferentMoves : IFigureType
 {
     /// <summary>
-    /// 15 x 15 field
+    ///     15 x 15 field
     ///     0 - no action
     ///     1 - possible move
     ///     2 - possible attack
@@ -22,21 +24,15 @@ public interface IDisneyFigureTypeWithDifferentMoves : IFigureType
     ///     8 - the unit
     /// </summary>
     protected int[] Actions { get; }
-    
+
     FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;
+        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
-        {
-            return unitTile.CreateMoveAction(targetTile);
-        }
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
 
-        if (!targetTile.IsEmpty() && (Actions[targetPosition] & 2) == 2)
-        {
-            return unitTile.CreateKillWithMove(targetTile);
-        }
+        if (!targetTile.IsEmpty() && (Actions[targetPosition] & 2) == 2) return unitTile.CreateKillWithMove(targetTile);
 
         return FigureAction.None;
     }

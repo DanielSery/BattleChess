@@ -8,16 +8,52 @@ public class Builder : ICrossFireFigureType
 {
     public static readonly Builder Instance = new();
 
+    private readonly Position[] _shieldPositions =
+    {
+        new(-2, 1),
+        new(-2, 0),
+        new(-2, -1),
+
+        new(2, 1),
+        new(2, 0),
+        new(2, -1),
+
+        new(1, -2),
+        new(0, -2),
+        new(-1, -2),
+
+        new(1, 2),
+        new(0, 2),
+        new(-1, 2)
+    };
+
+    private int[] Actions { get; } =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 1, 8, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+
     public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;
+        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
-        {
             return new FigureAction(FigureActionTypes.Move, () =>
                 MoveAction(unitTile, targetTile, board));
-        }
 
         return FigureAction.None;
     }
@@ -40,9 +76,7 @@ public class Builder : ICrossFireFigureType
             var shieldTile = board[sourceTile.Position + shieldPosition];
             if (shieldTile.Figure.UnitName == Wall.Instance.UnitName &&
                 shieldTile.Figure.Owner.Equals(sourceTile.Figure.Owner))
-            {
                 shieldTile.Die();
-            }
         }
 
         foreach (var shieldPosition in _shieldPositions)
@@ -51,10 +85,7 @@ public class Builder : ICrossFireFigureType
                 continue;
 
             var shieldTile = board[sourceTile.Position + shieldPosition + move];
-            if (shieldTile.IsEmpty())
-            {
-                shieldTile.CreateFigure(new Figure(sourceTile.Figure.Owner, Wall.Instance));
-            }
+            if (shieldTile.IsEmpty()) shieldTile.CreateFigure(new Figure(sourceTile.Figure.Owner, Wall.Instance));
         }
     }
 
@@ -101,41 +132,4 @@ public class Builder : ICrossFireFigureType
             _ => throw new ArgumentException($"Unexpected move of Builder {move}")
         };
     }
-
-    private readonly Position[] _shieldPositions =
-    {
-        new(-2, 1),
-        new(-2, 0),
-        new(-2, -1),
-
-        new(2, 1),
-        new(2, 0),
-        new(2, -1),
-
-        new(1, -2),
-        new(0, -2),
-        new(-1, -2),
-
-        new(1, 2),
-        new(0, 2),
-        new(-1, 2),
-    };
-
-    private int[] Actions { get; } = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 1, 8, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    };
 }

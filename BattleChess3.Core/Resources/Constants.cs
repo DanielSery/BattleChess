@@ -1,8 +1,7 @@
-﻿namespace BattleChess3.Core.Resources
+﻿namespace BattleChess3.Core.Resources;
+
+public class Constants
 {
-    public class Constants
-    {
-        public const int BoardLength = 8;
-        public const int BoardSize = 64;
-    }
+    public const int BoardLength = 8;
+    public const int BoardSize = 64;
 }

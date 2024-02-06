@@ -1,7 +1,9 @@
 ﻿#region Copyright FEI Company 2024
+
 // All rights are reserved. Reproduction or transmission in whole or in part, in
 // any form or by any means, electronic, mechanical or otherwise, is prohibited
 // without the prior written consent of the copyright owner.
+
 #endregion
 
 using BattleChess3.Core.Model;
@@ -16,7 +18,7 @@ public class FigureViewModel : IFigureType
     public FigureViewModel(IFigureType figureType)
     {
         _getActionsFunc = figureType.GetPossibleAction;
-        
+
         DisplayName = figureType.DisplayName;
         Description = figureType.Description;
         UnitName = figureType.UnitName;
@@ -27,7 +29,7 @@ public class FigureViewModel : IFigureType
     public string Description { get; }
     public string UnitName { get; }
     public IDictionary<int, Uri> ImageUris { get; }
-    
+
     public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         return _getActionsFunc.Invoke(unitTile, targetTile, board);

@@ -14,51 +14,83 @@ public readonly struct Position
         Y = y;
     }
 
-    public bool IsInBoard() => X >= 0 
-                          && Y >= 0
-                          && X < Constants.BoardLength 
-                          && Y < Constants.BoardLength;
+    public bool IsInBoard()
+    {
+        return X >= 0
+               && Y >= 0
+               && X < Constants.BoardLength
+               && Y < Constants.BoardLength;
+    }
 
-    public bool IsOutsideBoard() => !IsInBoard();
+    public bool IsOutsideBoard()
+    {
+        return !IsInBoard();
+    }
+
     public static bool operator ==(Position left, Position right)
-        => left.X == right.X && left.Y == right.Y;
+    {
+        return left.X == right.X && left.Y == right.Y;
+    }
 
     public static bool operator !=(Position left, Position right)
-        => left.X != right.X || left.Y != right.Y;
-    
+    {
+        return left.X != right.X || left.Y != right.Y;
+    }
+
     public static Position operator +(Position left, Position right)
-        => new(left.X + right.X, left.Y + right.Y);
-    
+    {
+        return new Position(left.X + right.X, left.Y + right.Y);
+    }
+
     public static Position operator -(Position left, Position right)
-        => new(left.X - right.X, left.Y - right.Y);
-    
+    {
+        return new Position(left.X - right.X, left.Y - right.Y);
+    }
+
     public static Position operator *(Position left, Position right)
-        => new(left.X * right.X, left.Y * right.Y);
-    
+    {
+        return new Position(left.X * right.X, left.Y * right.Y);
+    }
+
     public static Position operator *(Position left, int right)
-        => new(left.X * right, left.Y * right);
+    {
+        return new Position(left.X * right, left.Y * right);
+    }
 
     public static Position operator *(int left, Position right)
-        => new(left * right.X, left * right.Y);
-    
-    public static implicit operator int(Position position) 
-        => position.Y * Constants.BoardLength + position.X;
-    
-    public static implicit operator Position(int i) 
-        => new(i % Constants.BoardLength, i / Constants.BoardLength);
-    
-    public static implicit operator Position((int x, int y) pos) 
-        => new(pos.x, pos.y);
+    {
+        return new Position(left * right.X, left * right.Y);
+    }
+
+    public static implicit operator int(Position position)
+    {
+        return position.Y * Constants.BoardLength + position.X;
+    }
+
+    public static implicit operator Position(int i)
+    {
+        return new Position(i % Constants.BoardLength, i / Constants.BoardLength);
+    }
+
+    public static implicit operator Position((int x, int y) pos)
+    {
+        return new Position(pos.x, pos.y);
+    }
 
     public static implicit operator (int, int)(Position position)
-        => (position.X, position.Y);
+    {
+        return (position.X, position.Y);
+    }
 
     public override bool Equals(object? obj)
     {
         return obj is Position pos && Equals(pos);
     }
 
-    private bool Equals(Position other) => X == other.X && Y == other.Y;
+    private bool Equals(Position other)
+    {
+        return X == other.X && Y == other.Y;
+    }
 
     public override int GetHashCode()
     {
@@ -69,20 +101,25 @@ public readonly struct Position
     }
 
     public Position GetPlayerPOVPosition(in Player currentPlayer)
-       => (currentPlayer.Id % 4) switch
-       {
-           1 => new Position(X, Constants.BoardLength - Y - 1),
-           2 => new Position(X, Y),
-           3 => new Position(Y, X),
-           0 => new Position(Constants.BoardLength - Y - 1, X),
-           _ => throw new System.ArgumentOutOfRangeException(),
-       };
-    
+    {
+        return (currentPlayer.Id % 4) switch
+        {
+            1 => new Position(X, Constants.BoardLength - Y - 1),
+            2 => new Position(X, Y),
+            3 => new Position(Y, X),
+            0 => new Position(Constants.BoardLength - Y - 1, X),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
     public void Deconstruct(out int x, out int y)
     {
         x = X;
         y = Y;
     }
 
-    public override string ToString() => $"({X},{Y})";
+    public override string ToString()
+    {
+        return $"({X},{Y})";
+    }
 }

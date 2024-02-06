@@ -8,30 +8,6 @@ namespace BattleChess3.CrossFireFigures;
 public class Ninja : ICrossFireFigureType
 {
     public static readonly Ninja Instance = new();
-    
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
-    {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = (7 - movement.X) + (7 - movement.Y) * 15;
-
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
-        {
-            if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
-                return FigureAction.None;
-            
-            return unitTile.CreateMoveAction(targetTile);
-        }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
-                return FigureAction.None;
-
-            return unitTile.CreateKillWithMove(targetTile);
-        }
-
-        return FigureAction.None;
-    }
 
     private int[] Actions { get; } =
     {
@@ -49,6 +25,30 @@ public class Ninja : ICrossFireFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
+
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    {
+        var movement = targetTile.Position - unitTile.Position;
+        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
+
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
+            if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
+                return FigureAction.None;
+
+            return unitTile.CreateMoveAction(targetTile);
+        }
+
+        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
+            if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
+                return FigureAction.None;
+
+            return unitTile.CreateKillWithMove(targetTile);
+        }
+
+        return FigureAction.None;
+    }
 }

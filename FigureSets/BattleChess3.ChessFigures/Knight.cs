@@ -6,7 +6,8 @@ public class Knight : IChessFigureType, IFigureTypeWithDifferentMoves
 {
     public static readonly Knight Instance = new();
 
-    int[] IFigureTypeWithDifferentMoves.Actions { get; } = {
+    int[] IFigureTypeWithDifferentMoves.Actions { get; } =
+    {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -21,6 +22,6 @@ public class Knight : IChessFigureType, IFigureTypeWithDifferentMoves
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 }

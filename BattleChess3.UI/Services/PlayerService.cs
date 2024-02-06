@@ -10,12 +10,10 @@ public class PlayerService : IPlayerService
     public int PlayersCount => _players.Count - 1;
 
     public Player CurrentPlayer => GetPlayer(_currentPlayerId);
+
     public Player GetPlayer(int id)
     {
-        if (_players.TryGetValue(id, out var player))
-        {
-            return player;
-        }
+        if (_players.TryGetValue(id, out var player)) return player;
 
         _players[id] = new Player(id);
         return _players[id];

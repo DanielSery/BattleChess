@@ -3,12 +3,12 @@
 public interface IFigureGroup
 {
     /// <summary>
-    /// Shown name of figure group
+    ///     Shown name of figure group
     /// </summary>
     string DisplayName { get; }
-    
+
     /// <summary>
-    /// Figure types of group
+    ///     Figure types of group
     /// </summary>
     IFigureType[] FigureTypes { get; }
 }

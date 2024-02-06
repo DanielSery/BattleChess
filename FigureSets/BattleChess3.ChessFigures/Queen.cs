@@ -6,7 +6,8 @@ public class Queen : IChessFigureType, IFigureTypeWithChainedMoves
 {
     public static readonly Queen Instance = new();
 
-    int[] IFigureTypeWithChainedMoves.Actions { get; } = {
+    int[] IFigureTypeWithChainedMoves.Actions { get; } =
+    {
         3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3,
         0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0,
         0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0,
@@ -21,6 +22,6 @@ public class Queen : IChessFigureType, IFigureTypeWithChainedMoves
         0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0,
         0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0,
         0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0,
-        3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3,
+        3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3
     };
 }

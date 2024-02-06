@@ -1,26 +1,31 @@
 ﻿using System.IO.Compression;
 using System.Text;
 
-namespace BattleChess3.Core.Utilities
+namespace BattleChess3.Core.Utilities;
+
+public static class CompressionHelper
 {
-    public static class CompressionHelper
+    public static string Compress(string s)
     {
-        public static string Compress(string s)
+        using var memoryStream1 = new MemoryStream(Encoding.UTF8.GetBytes(s));
+        using var memoryStream2 = new MemoryStream();
+        using (var gzipStream = new GZipStream(memoryStream2, CompressionMode.Compress))
         {
-            using var memoryStream1 = new MemoryStream(Encoding.UTF8.GetBytes(s));
-            using var memoryStream2 = new MemoryStream();
-            using (var gzipStream = new GZipStream(memoryStream2, CompressionMode.Compress))
-                memoryStream1.CopyTo(gzipStream);
-            return Convert.ToHexString(memoryStream2.ToArray());
+            memoryStream1.CopyTo(gzipStream);
         }
 
-        public static string Decompress(string s)
+        return Convert.ToHexString(memoryStream2.ToArray());
+    }
+
+    public static string Decompress(string s)
+    {
+        using var memoryStream1 = new MemoryStream(Convert.FromHexString(s));
+        using var memoryStream2 = new MemoryStream();
+        using (var gzipStream = new GZipStream(memoryStream1, CompressionMode.Decompress))
         {
-            using var memoryStream1 = new MemoryStream(Convert.FromHexString(s));
-            using var memoryStream2 = new MemoryStream();
-            using (var gzipStream = new GZipStream(memoryStream1, CompressionMode.Decompress))
-                gzipStream.CopyTo(memoryStream2);
-            return Encoding.UTF8.GetString(memoryStream2.ToArray());
+            gzipStream.CopyTo(memoryStream2);
         }
+
+        return Encoding.UTF8.GetString(memoryStream2.ToArray());
     }
 }

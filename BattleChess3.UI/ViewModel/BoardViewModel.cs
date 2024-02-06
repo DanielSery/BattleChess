@@ -12,7 +12,25 @@ public sealed class BoardViewModel : ViewModelBase
     private readonly IFigureService _figureService;
     private readonly IPlayerService _playerService;
 
+    private int _boardWidth = 8;
+
+    private ITileViewModel _mouseOnTile = NoneTileViewModel.Instance;
+
     private ITileViewModel _selectedTile = NoneTileViewModel.Instance;
+
+
+    public BoardViewModel(
+        IFigureService figureService,
+        IPlayerService playerService)
+    {
+        _figureService = figureService;
+        _playerService = playerService;
+
+        ClickedCommand = new RelayCommand<ITileViewModel>(ClickedAtTile);
+        MouseEnterCommand = new RelayCommand<ITileViewModel>(MouseEnterTile);
+        MouseExitCommand = new RelayCommand<ITileViewModel>(MouseExitTile);
+    }
+
     public ITileViewModel SelectedTile
     {
         get => _selectedTile;
@@ -25,7 +43,6 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private ITileViewModel _mouseOnTile = NoneTileViewModel.Instance;
     public ITileViewModel MouseOnTile
     {
         get => _mouseOnTile;
@@ -43,7 +60,6 @@ public sealed class BoardViewModel : ViewModelBase
             ? SelectedTile
             : MouseOnTile;
 
-    private int _boardWidth = 8;
     public int BoardWidth
     {
         get => _boardWidth;
@@ -53,7 +69,7 @@ public sealed class BoardViewModel : ViewModelBase
     public ITileViewModel[] Board { get; } = Enumerable.Range(0, Constants.BoardSize)
         .Select<int, ITileViewModel>(position => new TileViewModel(position))
         .ToArray();
-    
+
     public RelayCommand<ITileViewModel> ClickedCommand { get; }
     public RelayCommand<ITileViewModel> MouseEnterCommand { get; }
     public RelayCommand<ITileViewModel> MouseExitCommand { get; }
@@ -62,19 +78,6 @@ public sealed class BoardViewModel : ViewModelBase
     public event EventHandler<Position>? RequestClickTile;
     public event EventHandler<MapBlueprint>? RequestLoadMap;
 
-
-    public BoardViewModel(
-        IFigureService figureService,
-        IPlayerService playerService)
-    {
-        _figureService = figureService;
-        _playerService = playerService;
-
-        ClickedCommand = new RelayCommand<ITileViewModel>(ClickedAtTile);
-        MouseEnterCommand = new RelayCommand<ITileViewModel>(MouseEnterTile);
-        MouseExitCommand = new RelayCommand<ITileViewModel>(MouseExitTile);
-    }
-    
     public void ManualLoadMap(MapBlueprint map)
     {
         AutomaticLoadMap(map);
@@ -127,10 +130,7 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void SetPossibleActions(ITileViewModel clickedTile)
     {
-        foreach (var tile in Board)
-        {
-            tile.PossibleAction = FigureAction.None;
-        }
+        foreach (var tile in Board) tile.PossibleAction = FigureAction.None;
 
         if (_playerService.CurrentPlayer != SelectedTile.Figure.Owner)
             return;
@@ -148,7 +148,8 @@ public sealed class BoardViewModel : ViewModelBase
                 continue;
 
             var targetTile = tile.GetPovTile(_playerService.CurrentPlayer);
-            Board[tile.Position].PossibleAction = clickedTile.Figure.GetPossibleAction(povClickedTile, targetTile, povBoard);
+            Board[tile.Position].PossibleAction =
+                clickedTile.Figure.GetPossibleAction(povClickedTile, targetTile, povBoard);
         }
     }
 
@@ -167,13 +168,12 @@ public sealed class BoardViewModel : ViewModelBase
     }
 
     private void MouseEnterTile(ITileViewModel tile)
-        => MouseOnTile = tile;
+    {
+        MouseOnTile = tile;
+    }
 
     private void MouseExitTile(ITileViewModel tile)
     {
-        if (MouseOnTile == tile)
-        {
-            MouseOnTile = NoneTileViewModel.Instance;
-        }
+        if (MouseOnTile == tile) MouseOnTile = NoneTileViewModel.Instance;
     }
 }

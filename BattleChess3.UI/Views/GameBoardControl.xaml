@@ -11,7 +11,7 @@
                   ItemsSource="{Binding Board}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="{Binding BoardWidth}"/>
+                <UniformGrid Columns="{Binding BoardWidth}" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
@@ -22,10 +22,10 @@
                         d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
                         MouseEnter="Button_MouseEnter"
                         MouseLeave="Button_MouseLeave">
-                    <Image Source="{Binding Figure.ImageUri}" 
+                    <Image Source="{Binding Figure.ImageUri}"
                            Drop="Image_Drop"
                            DragEnter="Image_DragEnter"
-                           AllowDrop="True"/>
+                           AllowDrop="True" />
                 </Button>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

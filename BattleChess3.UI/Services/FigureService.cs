@@ -11,20 +11,18 @@ public class FigureService : IFigureService
     private IFigureGroup[] _figureGroups = Array.Empty<IFigureGroup>();
     private Dictionary<string, IFigureType> _figuresDictionary = new();
 
-    public event EventHandler<IList<IFigureGroup>>? FigureGroupsChanged;
-
     public FigureService()
     {
         _watcher = new FileSystemWatcher(".");
 
         _watcher.NotifyFilter = NotifyFilters.Attributes
-                             | NotifyFilters.CreationTime
-                             | NotifyFilters.DirectoryName
-                             | NotifyFilters.FileName
-                             | NotifyFilters.LastAccess
-                             | NotifyFilters.LastWrite
-                             | NotifyFilters.Security
-                             | NotifyFilters.Size;
+                                | NotifyFilters.CreationTime
+                                | NotifyFilters.DirectoryName
+                                | NotifyFilters.FileName
+                                | NotifyFilters.LastAccess
+                                | NotifyFilters.LastWrite
+                                | NotifyFilters.Security
+                                | NotifyFilters.Size;
 
         _watcher.Changed += OnChanged;
         _watcher.Created += OnChanged;
@@ -36,6 +34,18 @@ public class FigureService : IFigureService
         _watcher.EnableRaisingEvents = true;
 
         Task.Run(ReloadFigures);
+    }
+
+    public event EventHandler<IList<IFigureGroup>>? FigureGroupsChanged;
+
+    public IList<IFigureGroup> GetFigureGroups()
+    {
+        return _figureGroups;
+    }
+
+    public IFigureType GetFigureFromName(string text)
+    {
+        return _figuresDictionary[text];
     }
 
     private void OnChanged(object sender, FileSystemEventArgs e)
@@ -56,10 +66,4 @@ public class FigureService : IFigureService
             .ToDictionary(figure => figure.UnitName, figure => figure);
         FigureGroupsChanged?.Invoke(this, _figureGroups);
     }
-
-    public IList<IFigureGroup> GetFigureGroups()
-        => _figureGroups;
-
-    public IFigureType GetFigureFromName(string text)
-        => _figuresDictionary[text];
 }

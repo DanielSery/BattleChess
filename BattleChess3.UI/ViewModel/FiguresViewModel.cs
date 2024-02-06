@@ -9,29 +9,9 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
 {
     private readonly IFigureService _figureService;
 
-    private IFigureGroup _selectedFigureGroup = EmptyFigureGroup.Instance;
-    public IFigureGroup SelectedFigureGroup
-    {
-        get => _selectedFigureGroup;
-        private set => Set(ref _selectedFigureGroup, value);
-    }
-
     private IList<IFigureGroup> _figureGroups = Array.Empty<IFigureGroup>();
-    public IList<IFigureGroup> FigureGroups
-    {
-        get => _figureGroups;
-        private set
-        {
-            Set(ref _figureGroups, value);
-            if (_figureGroups.All(x => x.DisplayName != _selectedFigureGroup.DisplayName))
-            {
-                SelectedFigureGroup = _figureGroups.FirstOrDefault()
-                    ?? EmptyFigureGroup.Instance;
-            }
-        }
-    }
 
-    public RelayCommand<IFigureGroup> SelectFigureGroupCommand { get; }
+    private IFigureGroup _selectedFigureGroup = EmptyFigureGroup.Instance;
 
     public FiguresViewModel(IFigureService figureService)
     {
@@ -45,15 +25,35 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
         SelectFigureGroupCommand = new RelayCommand<IFigureGroup>(group => SelectedFigureGroup = group);
     }
 
+    public IFigureGroup SelectedFigureGroup
+    {
+        get => _selectedFigureGroup;
+        private set => Set(ref _selectedFigureGroup, value);
+    }
+
+    public IList<IFigureGroup> FigureGroups
+    {
+        get => _figureGroups;
+        private set
+        {
+            Set(ref _figureGroups, value);
+            if (_figureGroups.All(x => x.DisplayName != _selectedFigureGroup.DisplayName))
+                SelectedFigureGroup = _figureGroups.FirstOrDefault()
+                                      ?? EmptyFigureGroup.Instance;
+        }
+    }
+
+    public RelayCommand<IFigureGroup> SelectFigureGroupCommand { get; }
+
+    public void Dispose()
+    {
+        _figureService.FigureGroupsChanged -= OnFigureGroupsChanged;
+    }
+
     private void OnFigureGroupsChanged(object? sender, IList<IFigureGroup> groups)
     {
         FigureGroups = groups
             .Select<IFigureGroup, IFigureGroup>(x => new FigureGroupViewModel(x))
             .ToArray();
-    }
-    
-    public void Dispose()
-    {
-        _figureService.FigureGroupsChanged -= OnFigureGroupsChanged;
     }
 }

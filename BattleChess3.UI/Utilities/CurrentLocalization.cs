@@ -7,13 +7,17 @@ namespace BattleChess3.UI.Utilities;
 
 internal class CurrentLocalization : LocalizationSourceBase
 {
-    public static LocalizationSourceBase Instance { get; } = new CurrentLocalization();
     private CurrentLocalization()
     {
         Sources.Add(this);
     }
 
-    protected override ResourceManager ResManager() => Strings.ResourceManager;
+    public static LocalizationSourceBase Instance { get; } = new CurrentLocalization();
+
+    protected override ResourceManager ResManager()
+    {
+        return Strings.ResourceManager;
+    }
 }
 
 internal class LocExtension : Binding

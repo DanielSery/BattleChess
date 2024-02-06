@@ -1,17 +1,16 @@
-﻿using BattleChess3.UI.ViewModel;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using BattleChess3.UI.ViewModel;
 
 namespace BattleChess3.UI.Views;
 
 public partial class MainWindow
 {
     private GameBoardControl _lastBoardControl;
-    public MainWindowViewModel? ViewModel { get; private set; }
 
     public MainWindow()
     {
@@ -32,6 +31,8 @@ public partial class MainWindow
         GameBoard.RequestBringIntoView += GameBoard_RequestBringIntoView;
     }
 
+    public MainWindowViewModel? ViewModel { get; private set; }
+
     private void GameBoard_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
     {
         _lastBoardControl = GameBoard;
@@ -44,18 +45,15 @@ public partial class MainWindow
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        ViewModel = (MainWindowViewModel) DataContext;
+        ViewModel = (MainWindowViewModel)DataContext;
         ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
     }
 
     private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if (ViewModel is not null)
-        {
-            ViewModel.RequestSavePreview -= ViewModel_RequestSavePreview;
-        }
+        if (ViewModel is not null) ViewModel.RequestSavePreview -= ViewModel_RequestSavePreview;
 
-        ViewModel = (MainWindowViewModel) DataContext;
+        ViewModel = (MainWindowViewModel)DataContext;
         ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
     }
 
@@ -68,10 +66,10 @@ public partial class MainWindow
     {
         var dpi = VisualTreeHelper.GetDpi(_lastBoardControl);
         var bmp = new RenderTargetBitmap(
-            (int)_lastBoardControl.ActualWidth, 
+            (int)_lastBoardControl.ActualWidth,
             (int)_lastBoardControl.ActualHeight,
             96,
-            96, 
+            96,
             PixelFormats.Pbgra32);
 
         bmp.Render(_lastBoardControl);

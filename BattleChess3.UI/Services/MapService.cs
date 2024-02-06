@@ -12,20 +12,18 @@ public class MapService : ViewModelBase, IMapService
 
     private MapBlueprint[] _maps = Array.Empty<MapBlueprint>();
 
-    public event EventHandler<IList<MapBlueprint>>? MapsChanged;
-
     public MapService()
     {
         _watcher = new FileSystemWatcher("Resources/Maps");
 
         _watcher.NotifyFilter = NotifyFilters.Attributes
-                             | NotifyFilters.CreationTime
-                             | NotifyFilters.DirectoryName
-                             | NotifyFilters.FileName
-                             | NotifyFilters.LastAccess
-                             | NotifyFilters.LastWrite
-                             | NotifyFilters.Security
-                             | NotifyFilters.Size;
+                                | NotifyFilters.CreationTime
+                                | NotifyFilters.DirectoryName
+                                | NotifyFilters.FileName
+                                | NotifyFilters.LastAccess
+                                | NotifyFilters.LastWrite
+                                | NotifyFilters.Security
+                                | NotifyFilters.Size;
 
         _watcher.Changed += OnChanged;
         _watcher.Created += OnChanged;
@@ -39,9 +37,23 @@ public class MapService : ViewModelBase, IMapService
         Task.Run(() => ReloadMaps());
     }
 
+    public event EventHandler<IList<MapBlueprint>>? MapsChanged;
+
     public IList<MapBlueprint> GetCurrentMaps()
     {
         return _maps;
+    }
+
+    public void Delete(MapBlueprint selectedMap)
+    {
+        File.Delete(selectedMap.MapPath);
+    }
+
+    public void Save(MapBlueprint map)
+    {
+        var text = JsonConvert.SerializeObject(map);
+        text = CompressionHelper.Compress(text);
+        File.WriteAllText(map.MapPath, text);
     }
 
     private void OnChanged(object sender, FileSystemEventArgs e)
@@ -75,18 +87,6 @@ public class MapService : ViewModelBase, IMapService
             });
 
         MapsChanged?.Invoke(this, _maps);
-    }
-
-    public void Delete(MapBlueprint selectedMap)
-    {
-        File.Delete(selectedMap.MapPath);
-    }
-
-    public void Save(MapBlueprint map)
-    {
-        var text = JsonConvert.SerializeObject(map);
-        text = CompressionHelper.Compress(text);
-        File.WriteAllText(map.MapPath, text);
     }
 
     protected virtual bool IsFileLocked(FileInfo file)

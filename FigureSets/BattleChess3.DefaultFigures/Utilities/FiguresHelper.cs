@@ -6,17 +6,25 @@ namespace BattleChess3.DefaultFigures.Utilities;
 public static class FiguresHelper
 {
     public static bool IsEmpty(this ITile figureType)
-        => figureType.Figure.FigureType.Equals(Empty.Instance);
+    {
+        return figureType.Figure.FigureType.Equals(Empty.Instance);
+    }
 
     public static bool IsWater(this ITile figureType)
-        => figureType.Figure.FigureType.Equals(Water.Instance);
+    {
+        return figureType.Figure.FigureType.Equals(Water.Instance);
+    }
 
     public static bool IsOwnedByYou(this ITile checkedTile, ITile yoursTile)
-        => checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
+    {
+        return checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
+    }
 
-    public static bool IsOwnedByEnemy(this ITile checkedTile, ITile yoursTile) =>
-        !checkedTile.Figure.Owner.Equals(Player.Neutral) &&
-        !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
+    public static bool IsOwnedByEnemy(this ITile checkedTile, ITile yoursTile)
+    {
+        return !checkedTile.Figure.Owner.Equals(Player.Neutral) &&
+               !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
+    }
 
     public static void CreateFigure(this ITile tile, Figure createdFigure)
     {

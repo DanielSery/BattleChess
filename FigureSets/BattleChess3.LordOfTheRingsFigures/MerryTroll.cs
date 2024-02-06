@@ -5,8 +5,9 @@ namespace BattleChess3.LordOfTheRingsFigures;
 public class MerryTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentMoves
 {
     public static readonly MerryTroll Instance = new();
-    
-    int[] IFigureTypeWithDifferentMoves.Actions { get; } = {
+
+    int[] IFigureTypeWithDifferentMoves.Actions { get; } =
+    {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -21,6 +22,6 @@ public class MerryTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentMov
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 }

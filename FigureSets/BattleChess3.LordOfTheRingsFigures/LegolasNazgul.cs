@@ -5,8 +5,9 @@ namespace BattleChess3.LordOfTheRingsFigures;
 public class LegolasNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedMoves
 {
     public static readonly LegolasNazgul Instance = new();
-    
-    int[] IFigureTypeWithChainedMoves.Actions { get; } = {
+
+    int[] IFigureTypeWithChainedMoves.Actions { get; } =
+    {
         1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1,
         0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0,
         0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0,
@@ -21,6 +22,6 @@ public class LegolasNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedMo
         0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0,
         0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0,
         0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0,
-        1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1
     };
 }

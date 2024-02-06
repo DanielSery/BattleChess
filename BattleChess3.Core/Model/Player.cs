@@ -5,22 +5,25 @@ namespace BattleChess3.Core.Model;
 public class Player : IEquatable<Player>
 {
     public static readonly Player Neutral = new(0);
-    
-    public int Id { get; }
-    public List<Figure> Figures { get; } = new();
 
     public Player(int id)
     {
         Id = id;
     }
 
-    public override string ToString() => $"Player{Id}";
+    public int Id { get; }
+    public List<Figure> Figures { get; } = new();
 
     public bool Equals(Player? other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
         return Id == other.Id;
+    }
+
+    public override string ToString()
+    {
+        return $"Player{Id}";
     }
 
     public override bool Equals(object? obj)

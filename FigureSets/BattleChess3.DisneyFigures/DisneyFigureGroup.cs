@@ -14,6 +14,6 @@ public class DisneyFigureGroup : IFigureGroup
         DisneyRook.Instance,
         DisneyBishop.Instance,
         DisneyKnight.Instance,
-        DisneyPawn.Instance,
+        DisneyPawn.Instance
     };
 }

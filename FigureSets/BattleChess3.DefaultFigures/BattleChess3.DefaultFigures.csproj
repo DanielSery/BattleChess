@@ -8,18 +8,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Images\**" />
-        <Resource Include="Images\**" />
+        <None Remove="Images\**"/>
+        <Resource Include="Images\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\BattleChess3.Core\BattleChess3.Core.csproj" />
+        <ProjectReference Include="..\..\BattleChess3.Core\BattleChess3.Core.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Localization\Strings.Designer.cs">
-        <DependentUpon>Strings.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Localization\Strings.Designer.cs">
+            <DependentUpon>Strings.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

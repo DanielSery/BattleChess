@@ -5,28 +5,31 @@ namespace BattleChess3.Core.Model;
 public interface ITile
 {
     /// <summary>
-    /// Position of tile in board
+    ///     Position of tile in board
     /// </summary>
     Position Position { get; }
-    
+
     /// <summary>
-    /// Absolute position of tile in board.
+    ///     Absolute position of tile in board.
     /// </summary>
     Position AbsolutePosition { get; }
-    
+
     /// <summary>
-    /// Current figure on tile
+    ///     Current figure on tile
     /// </summary>
     Figure Figure { get; set; }
 
     /// <summary>
-    /// Gets tile with position according to players point of view.
+    ///     Gets tile with position according to players point of view.
     /// </summary>
     ITile GetPovTile(Player player);
 
     /// <summary>
-    /// ToString for debugging
+    ///     ToString for debugging
     /// </summary>
     /// <returns></returns>
-    string? ToString() => $"{Position}:{Figure}";
+    string? ToString()
+    {
+        return $"{Position}:{Figure}";
+    }
 }

@@ -5,8 +5,9 @@ namespace BattleChess3.CrossFireFigures;
 public class Archer : ICrossFireFigureType, IFigureTypeWithChainedRangeAttack
 {
     public static readonly Archer Instance = new();
-    
-    int[] IFigureTypeWithChainedRangeAttack.Actions { get; } = {
+
+    int[] IFigureTypeWithChainedRangeAttack.Actions { get; } =
+    {
         2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2,
         0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0,
         0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0,
@@ -21,6 +22,6 @@ public class Archer : ICrossFireFigureType, IFigureTypeWithChainedRangeAttack
         0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0,
         0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0,
         0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0,
-        2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2
     };
 }

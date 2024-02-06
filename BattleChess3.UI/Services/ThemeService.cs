@@ -1,58 +1,57 @@
-﻿using BattleChess3.UI.Model;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
+using BattleChess3.UI.Model;
 
-namespace BattleChess3.UI.Services
+namespace BattleChess3.UI.Services;
+
+public class ThemeService : IThemeService
 {
-    public class ThemeService : IThemeService
+    private readonly FileSystemWatcher _watcher;
+
+    private ThemeModel[] _themes = Array.Empty<ThemeModel>();
+
+    public ThemeService()
     {
-        private readonly FileSystemWatcher _watcher;
+        _watcher = new FileSystemWatcher(".");
 
-        private ThemeModel[] _themes = Array.Empty<ThemeModel>();
+        _watcher.NotifyFilter = NotifyFilters.Attributes
+                                | NotifyFilters.CreationTime
+                                | NotifyFilters.DirectoryName
+                                | NotifyFilters.FileName
+                                | NotifyFilters.LastAccess
+                                | NotifyFilters.LastWrite
+                                | NotifyFilters.Security
+                                | NotifyFilters.Size;
 
-        public event EventHandler<IList<ThemeModel>>? ThemesChanged;
+        _watcher.Changed += OnChanged;
+        _watcher.Created += OnChanged;
+        _watcher.Deleted += OnChanged;
+        _watcher.Renamed += OnChanged;
 
-        public ThemeService()
-        {
-            _watcher = new FileSystemWatcher(".");
+        _watcher.Filter = "*Theme.dll";
+        _watcher.IncludeSubdirectories = true;
+        _watcher.EnableRaisingEvents = true;
 
-            _watcher.NotifyFilter = NotifyFilters.Attributes
-                                 | NotifyFilters.CreationTime
-                                 | NotifyFilters.DirectoryName
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.Security
-                                 | NotifyFilters.Size;
+        Application.Current.Dispatcher.Invoke(ReloadThemes);
+    }
 
-            _watcher.Changed += OnChanged;
-            _watcher.Created += OnChanged;
-            _watcher.Deleted += OnChanged;
-            _watcher.Renamed += OnChanged;
+    public event EventHandler<IList<ThemeModel>>? ThemesChanged;
 
-            _watcher.Filter = "*Theme.dll";
-            _watcher.IncludeSubdirectories = true;
-            _watcher.EnableRaisingEvents = true;
+    public IList<ThemeModel> GetCurrentThemes()
+    {
+        return _themes;
+    }
 
-            Application.Current.Dispatcher.Invoke(ReloadThemes);
-        }
+    private void OnChanged(object sender, FileSystemEventArgs e)
+    {
+        Application.Current.Dispatcher.Invoke(ReloadThemes);
+    }
 
-        public IList<ThemeModel> GetCurrentThemes()
-        {
-            return _themes;
-        }
-
-        private void OnChanged(object sender, FileSystemEventArgs e)
-        {
-            Application.Current.Dispatcher.Invoke(ReloadThemes);
-        }
-
-        private void ReloadThemes()
-        {
-            _themes = Directory.GetFiles(".", "*Theme.dll")
-                .Select(path => new ThemeModel(Path.GetFullPath(path)))
-                .ToArray();
-            ThemesChanged?.Invoke(this, _themes);
-        }
+    private void ReloadThemes()
+    {
+        _themes = Directory.GetFiles(".", "*Theme.dll")
+            .Select(path => new ThemeModel(Path.GetFullPath(path)))
+            .ToArray();
+        ThemesChanged?.Invoke(this, _themes);
     }
 }
