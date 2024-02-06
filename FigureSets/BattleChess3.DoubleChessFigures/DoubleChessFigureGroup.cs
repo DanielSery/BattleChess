@@ -89,10 +89,10 @@ public class DoubleChessFigureGroup : IFigureGroup
         new[]
         {
             King, KingQueen, KingRook, KingKnight, KingBishop, KingPawn,
-            QueenQueen, QueenRook, QueenKnight, QueenBishop, QueenPawn,
-            RookRook, RookKnight, RookBishop, RookPawn,
-            KnightKnight, KnightBishop, KingPawn,
-            BishopBishop, BishopPawn,
-            PawnPawn
+            Queen, QueenQueen, QueenRook, QueenKnight, QueenBishop, QueenPawn,
+            Rook, RookRook, RookKnight, RookBishop, RookPawn,
+            Knight, KnightKnight, KnightBishop, KnightPawn,
+            Bishop, BishopBishop, BishopPawn,
+            Pawn, PawnPawn
         };
 }

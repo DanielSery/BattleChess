@@ -11,7 +11,7 @@ public class Figure : IFigureType
     }
 
     public Player Owner { get; }
-    public IFigureType FigureType { get; set; }
+    public IFigureType FigureType { get; }
     public Uri ImageUri => FigureType.ImageUris[Owner.Id];
 
     public string DisplayName => FigureType.DisplayName;

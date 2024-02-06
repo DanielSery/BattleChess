@@ -5,14 +5,14 @@ namespace BattleChess3.DefaultFigures.Utilities;
 
 public static class FiguresHelper
 {
-    public static bool IsEmpty(this ITile figureType)
+    public static bool IsEmpty(this ITile tile)
     {
-        return figureType.Figure.FigureType is Empty;
+        return tile.Figure.FigureType.Equals(DefaultFigureGroup.Empty);
     }
 
-    public static bool IsWater(this ITile figureType)
+    public static bool IsWater(this ITile tile)
     {
-        return figureType.Figure.FigureType is Water;
+        return tile.Figure.FigureType.Equals(DefaultFigureGroup.Water);
     }
 
     public static bool IsOwnedByYou(this ITile checkedTile, ITile yoursTile)
