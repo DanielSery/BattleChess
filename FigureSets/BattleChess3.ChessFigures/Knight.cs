@@ -4,8 +4,6 @@ namespace BattleChess3.ChessFigures;
 
 public class Knight : IChessFigureType, IFigureTypeWithDifferentMoves
 {
-    public static readonly Knight Instance = new();
-
     int[] IFigureTypeWithDifferentMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

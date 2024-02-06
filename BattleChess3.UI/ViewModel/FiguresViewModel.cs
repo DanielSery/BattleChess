@@ -38,8 +38,10 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
         {
             Set(ref _figureGroups, value);
             if (_figureGroups.All(x => x.DisplayName != _selectedFigureGroup.DisplayName))
+            {
                 SelectedFigureGroup = _figureGroups.FirstOrDefault()
                                       ?? EmptyFigureGroup.Instance;
+            }
         }
     }
 

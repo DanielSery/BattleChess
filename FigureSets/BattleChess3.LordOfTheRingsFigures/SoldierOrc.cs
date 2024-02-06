@@ -7,8 +7,6 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class SoldierOrc : ILordOfTheRingsFigureType
 {
-    public static readonly SoldierOrc Instance = new();
-
     private int[] StartingActions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -63,19 +61,28 @@ public class SoldierOrc : ILordOfTheRingsFigureType
         for (var i = 0; i < 7; i++)
         {
             if (checkedMovement == movement)
+            {
                 break;
+            }
 
             var position = unitTile.Position + checkedMovement;
             if (position.IsOutsideBoard() || !board[position].IsEmpty())
+            {
                 return FigureAction.None;
+            }
 
             checkedMovement += movementUnit;
         }
 
-        if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
+        if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
+        {
+            return unitTile.CreateMoveAction(targetTile);
+        }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
+        {
             return unitTile.CreateKillWithMove(targetTile);
+        }
 
         return FigureAction.None;
     }

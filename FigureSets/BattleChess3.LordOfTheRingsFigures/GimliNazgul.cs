@@ -4,8 +4,6 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class GimliNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedMoves
 {
-    public static readonly GimliNazgul Instance = new();
-
     int[] IFigureTypeWithChainedMoves.Actions { get; } =
     {
         1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1,

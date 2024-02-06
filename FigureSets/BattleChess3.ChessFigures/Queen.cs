@@ -4,8 +4,6 @@ namespace BattleChess3.ChessFigures;
 
 public class Queen : IChessFigureType, IFigureTypeWithChainedMoves
 {
-    public static readonly Queen Instance = new();
-
     int[] IFigureTypeWithChainedMoves.Actions { get; } =
     {
         3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3,

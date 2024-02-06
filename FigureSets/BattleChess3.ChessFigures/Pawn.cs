@@ -7,8 +7,6 @@ namespace BattleChess3.ChessFigures;
 
 public class Pawn : IChessFigureType
 {
-    public static readonly Pawn Instance = new();
-
     private int[] StartingActions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -63,11 +61,15 @@ public class Pawn : IChessFigureType
         for (var i = 0; i < 7; i++)
         {
             if (checkedMovement == movement)
+            {
                 break;
+            }
 
             var position = unitTile.Position + checkedMovement;
             if (position.IsOutsideBoard() || !board[position].IsEmpty())
+            {
                 return FigureAction.None;
+            }
 
             checkedMovement += movementUnit;
         }
@@ -75,11 +77,13 @@ public class Pawn : IChessFigureType
         if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
         {
             if (targetTile.Position.Y == 7)
+            {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, Queen.Instance));
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, ChessFigureGroup.Queen));
                     unitTile.Die();
                 });
+            }
 
             return unitTile.CreateMoveAction(targetTile);
         }
@@ -87,12 +91,14 @@ public class Pawn : IChessFigureType
         if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
         {
             if (targetTile.Position.Y == 7)
+            {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
                     targetTile.Die();
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, Queen.Instance));
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, ChessFigureGroup.Queen));
                     unitTile.Die();
                 });
+            }
 
             return unitTile.CreateKillWithMove(targetTile);
         }

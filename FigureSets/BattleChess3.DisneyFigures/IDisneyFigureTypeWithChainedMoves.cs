@@ -5,7 +5,7 @@ using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.DisneyFigures;
 
-public interface IDisneyFigureTypeWithChainedMoves : IFigureType
+internal interface IDisneyFigureTypeWithChainedMoves : IFigureType
 {
     /// <summary>
     ///     15 x 15 field
@@ -27,18 +27,28 @@ public interface IDisneyFigureTypeWithChainedMoves : IFigureType
         for (var i = 0; i < 7; i++)
         {
             if (checkedMovement == movement)
+            {
                 break;
+            }
 
             var position = unitTile.Position + checkedMovement;
             if (position.IsOutsideBoard() || !board[position].IsEmpty())
+            {
                 return FigureAction.None;
+            }
 
             checkedMovement += movementUnit;
         }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
+            return unitTile.CreateMoveAction(targetTile);
+        }
 
-        if (!targetTile.IsEmpty() && (Actions[targetPosition] & 2) == 2) return unitTile.CreateKillWithMove(targetTile);
+        if (!targetTile.IsEmpty() && (Actions[targetPosition] & 2) == 2)
+        {
+            return unitTile.CreateKillWithMove(targetTile);
+        }
 
         return FigureAction.None;
     }

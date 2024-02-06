@@ -18,7 +18,9 @@ public abstract class LocalizationSourceBase : INotifyPropertyChanged
         {
             _currentCulture = value;
             foreach (var source in Sources)
+            {
                 source.PropertyChanged?.Invoke(source, new PropertyChangedEventArgs(string.Empty));
+            }
         }
     }
 

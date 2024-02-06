@@ -2,8 +2,6 @@
 
 public class DisneyBishop : IDisneyFigureGroup, IDisneyFigureTypeWithChainedMoves
 {
-    public static readonly DisneyBishop Instance = new();
-
     int[] IDisneyFigureTypeWithChainedMoves.Actions { get; } =
     {
         3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,

@@ -53,7 +53,11 @@ public partial class EditorControl
     {
         do
         {
-            if (current is T) return (T)current;
+            if (current is T)
+            {
+                return (T)current;
+            }
+
             current = VisualTreeHelper.GetParent(current);
         } while (current != null);
 

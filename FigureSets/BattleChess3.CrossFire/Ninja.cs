@@ -7,8 +7,6 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Ninja : ICrossFireFigureType
 {
-    public static readonly Ninja Instance = new();
-
     private int[] Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -36,7 +34,9 @@ public class Ninja : ICrossFireFigureType
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
             if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
+            {
                 return FigureAction.None;
+            }
 
             return unitTile.CreateMoveAction(targetTile);
         }
@@ -44,7 +44,9 @@ public class Ninja : ICrossFireFigureType
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
         {
             if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
+            {
                 return FigureAction.None;
+            }
 
             return unitTile.CreateKillWithMove(targetTile);
         }

@@ -30,7 +30,9 @@ public sealed class ThemesViewModel : ViewModelBase, IDisposable
             foreach (var keyObject in value.ResourceDictionary.Keys)
             {
                 if (keyObject is null)
+                {
                     return;
+                }
 
                 Application.Current.Resources[keyObject] = value.ResourceDictionary[keyObject];
             }
@@ -44,9 +46,11 @@ public sealed class ThemesViewModel : ViewModelBase, IDisposable
         {
             Set(ref _themes, value);
             if (_themes.All(x => x.Name != _selectedTheme.Name))
+            {
                 SelectedTheme = _themes.FirstOrDefault(x => x.Name.Contains("Paper")) ??
                                 _themes.FirstOrDefault() ??
                                 ThemeModel.None;
+            }
         }
     }
 

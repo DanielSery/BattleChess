@@ -47,7 +47,9 @@ public sealed class MultiplayerService : IMultiplayerService
     public void Host(string key, MapBlueprint map, Position selectedPosition)
     {
         if (IsConnected)
+        {
             return;
+        }
 
         var matches = _regex.Matches(key);
         _apiKey = matches[0].Groups[1].Value;
@@ -67,7 +69,9 @@ public sealed class MultiplayerService : IMultiplayerService
     public void Join(string key)
     {
         if (IsConnected)
+        {
             return;
+        }
 
         var matches = _regex.Matches(key);
         _apiKey = matches[0].Groups[1].Value;
@@ -82,7 +86,9 @@ public sealed class MultiplayerService : IMultiplayerService
     public void Stop()
     {
         if (!IsConnected)
+        {
             return;
+        }
 
         IsHost = false;
         IsGuest = false;
@@ -92,7 +98,9 @@ public sealed class MultiplayerService : IMultiplayerService
     public void LoadMap(MapBlueprint map)
     {
         if (!IsConnected)
+        {
             return;
+        }
 
         lock (_scheduledMessages)
         {
@@ -108,7 +116,9 @@ public sealed class MultiplayerService : IMultiplayerService
     public void ClickOnPosition(Position position)
     {
         if (!IsConnected)
+        {
             return;
+        }
 
         lock (_scheduledMessages)
         {
@@ -123,7 +133,9 @@ public sealed class MultiplayerService : IMultiplayerService
     private void ConfirmReceive()
     {
         if (!IsConnected)
+        {
             return;
+        }
 
         lock (_scheduledMessages)
         {
@@ -137,7 +149,9 @@ public sealed class MultiplayerService : IMultiplayerService
     private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
         if (!IsConnected)
+        {
             return;
+        }
 
         var messages = Array.Empty<MessageWithType>();
         lock (_scheduledMessages)
@@ -151,15 +165,21 @@ public sealed class MultiplayerService : IMultiplayerService
         }
 
         if (messages.Length > 0)
+        {
             SendMessageAsync(messages);
+        }
         else
+        {
             GetUpdatesMessageAsync();
+        }
     }
 
     private Task SendMessageAsync(IEnumerable messages)
     {
         if (!IsConnected)
+        {
             return Task.CompletedTask;
+        }
 
         var serializedMessage = JsonConvert.SerializeObject(messages);
         var compressed = CompressionHelper.Compress(serializedMessage);
@@ -168,14 +188,19 @@ public sealed class MultiplayerService : IMultiplayerService
         return _httpClient.GetAsync(request)
             .ContinueWith(x =>
             {
-                if (x.IsFaulted || !x.Result.IsSuccessStatusCode) MessageBox.Show("Failed to send data.");
+                if (x.IsFaulted || !x.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Failed to send data.");
+                }
             });
     }
 
     private Task GetUpdatesMessageAsync()
     {
         if (!IsConnected)
+        {
             return Task.CompletedTask;
+        }
 
         var request = $"https://api.telegram.org/bot{_apiKey}/getUpdates?chat_id={_chatId}&offset={-1}";
         return _httpClient.GetAsync(request)
@@ -184,28 +209,40 @@ public sealed class MultiplayerService : IMultiplayerService
                 try
                 {
                     if (x.IsFaulted || !x.Result.IsSuccessStatusCode)
+                    {
                         MessageBox.Show("Failed to recieve remote data.");
+                    }
 
                     var stringContent = await x.Result.Content.ReadAsStringAsync();
                     if (_lastMessage == stringContent)
+                    {
                         return;
+                    }
 
                     _lastMessage = stringContent;
                     var content = JsonConvert.DeserializeObject<Root>(stringContent);
                     if (content?.result is null)
+                    {
                         return;
+                    }
 
                     var text = content.result[0].channel_post?.text;
                     if (string.IsNullOrEmpty(text))
+                    {
                         return;
+                    }
 
                     var messageText = CompressionHelper.Decompress(text);
                     var messagesWithType = JsonConvert.DeserializeObject<MessageWithType[]>(messageText);
                     if (messagesWithType is null)
+                    {
                         return;
+                    }
 
                     foreach (var item in messagesWithType)
+                    {
                         HandleMessage(item);
+                    }
 
                     ConfirmReceive();
                 }
@@ -222,22 +259,30 @@ public sealed class MultiplayerService : IMultiplayerService
         if (messageWithType.message_type == nameof(Position))
         {
             if (messageWithType.message is null)
+            {
                 return;
+            }
 
             var response = JsonConvert.DeserializeObject<Position?>(messageWithType.message);
             if (response is not { } position)
+            {
                 return;
+            }
 
             Application.Current.Dispatcher.Invoke(() => RequestClickTile?.Invoke(this, position));
         }
         else if (messageWithType.message_type == nameof(MapBlueprint))
         {
             if (messageWithType.message is null)
+            {
                 return;
+            }
 
             var response = JsonConvert.DeserializeObject<MapBlueprint?>(messageWithType.message);
             if (response is null)
+            {
                 return;
+            }
 
             Application.Current.Dispatcher.Invoke(() => RequestLoadMap?.Invoke(this, response));
         }

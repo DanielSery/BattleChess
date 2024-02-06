@@ -2,8 +2,6 @@
 
 public class DisneyKnight : IDisneyFigureGroup, IDisneyFigureTypeWithDifferentMoves
 {
-    public static readonly DisneyKnight Instance = new();
-
     int[] IDisneyFigureTypeWithDifferentMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

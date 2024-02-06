@@ -2,8 +2,6 @@
 
 public class SingleBishop : IDoubleChessFigureTypeWithChainedMoves
 {
-    public static readonly SingleBishop Instance = new();
-
     int[] IDoubleChessFigureTypeWithChainedMoves.Actions { get; } =
     {
         3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,

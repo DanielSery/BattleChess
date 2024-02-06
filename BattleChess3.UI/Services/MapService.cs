@@ -83,7 +83,9 @@ public class MapService : ViewModelBase, IMapService
             {
                 var fileName = Path.GetFullPath($"Resources/Maps/{x}.png");
                 if (!IsFileLocked(new FileInfo(fileName)))
+                {
                     File.Delete(fileName);
+                }
             });
 
         MapsChanged?.Invoke(this, _maps);

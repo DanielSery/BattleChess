@@ -7,8 +7,6 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Spy : ICrossFireFigureType
 {
-    public static readonly Spy Instance = new();
-
     private int[] Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -34,13 +32,20 @@ public class Spy : ICrossFireFigureType
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
 
         if (targetTile.IsOwnedByYou(unitTile))
+        {
             return new FigureAction(FigureActionTypes.Special,
                 () => unitTile.SwapTiles(targetTile));
+        }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
+            return unitTile.CreateMoveAction(targetTile);
+        }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
             return unitTile.CreateKillWithMove(targetTile);
+        }
 
         return FigureAction.None;
     }

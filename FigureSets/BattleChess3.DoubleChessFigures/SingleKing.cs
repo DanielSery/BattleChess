@@ -7,8 +7,6 @@ namespace BattleChess3.DoubleChessFigures;
 
 public class SingleKing : IDoubleChessFigureType
 {
-    public static readonly SingleKing Instance = new();
-
     private int[] Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -38,34 +36,45 @@ public class SingleKing : IDoubleChessFigureType
             targetTile.Position.Y == 0)
         {
             if (targetTile.AbsolutePosition.X == 0 &&
-                targetTile.Figure.FigureType.Equals(SingleRook.Instance) &&
+                targetTile.Figure.FigureType.Equals(DoubleChessFigureGroup.Rook) &&
                 board[new Position(1, 0)].IsEmpty() &&
                 board[new Position(2, 0)].IsEmpty() &&
                 board[new Position(3, 0)].IsEmpty())
+            {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
                     unitTile.MoveToTile(board[new Position(2, 0)]);
                     targetTile.MoveToTile(board[new Position(3, 0)]);
                 });
+            }
 
             if (targetTile.AbsolutePosition.X == 7 &&
-                targetTile.Figure.FigureType.Equals(SingleRook.Instance) &&
+                targetTile.Figure.FigureType.Equals(DoubleChessFigureGroup.Rook) &&
                 board[new Position(5, 0)].IsEmpty() &&
                 board[new Position(6, 0)].IsEmpty())
+            {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
                     unitTile.MoveToTile(board[new Position(6, 0)]);
                     targetTile.MoveToTile(board[new Position(5, 0)]);
                 });
+            }
         }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
+            return unitTile.CreateMoveAction(targetTile);
+        }
 
         if (targetTile.IsOwnedByYou(unitTile) && (Actions[targetPosition] & 1) == 1)
+        {
             return (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile);
+        }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
             return unitTile.CreateKillWithMove(targetTile);
+        }
 
         return FigureAction.None;
     }

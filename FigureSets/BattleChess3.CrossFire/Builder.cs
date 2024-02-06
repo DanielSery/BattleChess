@@ -6,8 +6,6 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Builder : ICrossFireFigureType
 {
-    public static readonly Builder Instance = new();
-
     private readonly Position[] _shieldPositions =
     {
         new(-2, 1),
@@ -52,8 +50,10 @@ public class Builder : ICrossFireFigureType
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
             return new FigureAction(FigureActionTypes.Move, () =>
                 MoveAction(unitTile, targetTile, board));
+        }
 
         return FigureAction.None;
     }
@@ -71,21 +71,30 @@ public class Builder : ICrossFireFigureType
         foreach (var shieldPosition in _shieldPositions)
         {
             if (!(sourceTile.Position + shieldPosition).IsInBoard())
+            {
                 continue;
+            }
 
             var shieldTile = board[sourceTile.Position + shieldPosition];
-            if (shieldTile.Figure.UnitName == Wall.Instance.UnitName &&
+            if (shieldTile.Figure.FigureType is Wall &&
                 shieldTile.Figure.Owner.Equals(sourceTile.Figure.Owner))
+            {
                 shieldTile.Die();
+            }
         }
 
         foreach (var shieldPosition in _shieldPositions)
         {
             if (!(sourceTile.Position + shieldPosition + move).IsInBoard())
+            {
                 continue;
+            }
 
             var shieldTile = board[sourceTile.Position + shieldPosition + move];
-            if (shieldTile.IsEmpty()) shieldTile.CreateFigure(new Figure(sourceTile.Figure.Owner, Wall.Instance));
+            if (shieldTile.IsEmpty())
+            {
+                shieldTile.CreateFigure(new Figure(sourceTile.Figure.Owner, CrossFireFigureGroup.Wall));
+            }
         }
     }
 
@@ -95,12 +104,16 @@ public class Builder : ICrossFireFigureType
         foreach (var movedPosition in movedPositions)
         {
             if (!(sourceTile.Position + movedPosition).IsInBoard())
+            {
                 continue;
+            }
 
             var movedTile = board[sourceTile.Position + movedPosition];
             if (movedTile.IsEmpty() ||
-                movedTile.Figure.UnitName == Wall.Instance.UnitName)
+                movedTile.Figure.FigureType is Wall)
+            {
                 continue;
+            }
 
             if (!(sourceTile.Position + movedPosition + move).IsInBoard())
             {

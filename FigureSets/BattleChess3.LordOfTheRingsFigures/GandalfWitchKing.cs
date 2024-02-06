@@ -4,8 +4,6 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class GandalfWitchKing : ILordOfTheRingsFigureType, IFigureTypeWithDifferentMoves
 {
-    public static readonly GandalfWitchKing Instance = new();
-
     int[] IFigureTypeWithDifferentMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

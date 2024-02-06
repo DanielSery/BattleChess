@@ -13,7 +13,10 @@ public class PlayerService : IPlayerService
 
     public Player GetPlayer(int id)
     {
-        if (_players.TryGetValue(id, out var player)) return player;
+        if (_players.TryGetValue(id, out var player))
+        {
+            return player;
+        }
 
         _players[id] = new Player(id);
         return _players[id];
@@ -32,7 +35,9 @@ public class PlayerService : IPlayerService
             NextPlayer();
 
             if (CurrentPlayer.Figures.Count > 0)
+            {
                 break;
+            }
         }
     }
 
@@ -40,6 +45,8 @@ public class PlayerService : IPlayerService
     {
         _currentPlayerId = (_currentPlayerId + 1) % _players.Count;
         if (_currentPlayerId == 0)
+        {
             _currentPlayerId = 1;
+        }
     }
 }

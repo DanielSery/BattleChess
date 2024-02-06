@@ -34,17 +34,23 @@ public class ThemeModel
         var assembly = Assembly.LoadFile(assemblyPath);
         var stream = assembly.GetManifestResourceStream(assembly.GetName().Name + ".g.resources");
         if (stream == null)
+        {
             return;
+        }
 
         var resourceReader = new ResourceReader(stream);
         foreach (DictionaryEntry? resource in resourceReader)
         {
             if (resource is not { } entry)
+            {
                 return;
+            }
 
             var keyName = entry.Key.ToString() ?? string.Empty;
             if (!keyName.EndsWith(".baml", StringComparison.OrdinalIgnoreCase))
+            {
                 continue;
+            }
 
             var uri = new Uri("/" + assembly.GetName().Name + ";component/" + keyName.Replace(".baml", ".xaml"),
                 UriKind.Relative);
@@ -52,7 +58,9 @@ public class ThemeModel
             foreach (var keyObject in dictionary.Keys)
             {
                 if (keyObject is null)
+                {
                     return;
+                }
 
                 ResourceDictionary[keyObject] = dictionary[keyObject];
             }

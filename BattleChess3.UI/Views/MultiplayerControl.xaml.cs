@@ -19,13 +19,17 @@ public partial class MultiplayerControl : UserControl
     private void Button_Drop(object sender, DragEventArgs e)
     {
         if (!(e.Data.GetData("text") is MemoryStream ms))
+        {
             return;
+        }
 
         var text = Encoding.ASCII.GetString(ms.ToArray());
         var viewModel = DataContext as MultiplayerViewModel;
 
         if (viewModel is null)
+        {
             return;
+        }
 
         viewModel.SetKey(text);
     }

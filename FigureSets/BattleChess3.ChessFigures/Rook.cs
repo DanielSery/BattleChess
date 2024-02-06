@@ -4,8 +4,6 @@ namespace BattleChess3.ChessFigures;
 
 public class Rook : IChessFigureType, IFigureTypeWithChainedMoves
 {
-    public static readonly Rook Instance = new();
-
     int[] IFigureTypeWithChainedMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,

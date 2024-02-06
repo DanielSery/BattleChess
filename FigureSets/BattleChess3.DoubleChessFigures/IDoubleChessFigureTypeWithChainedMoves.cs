@@ -13,7 +13,7 @@ using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.DoubleChessFigures;
 
-public interface IDoubleChessFigureTypeWithChainedMoves : IDoubleChessFigureType
+internal interface IDoubleChessFigureTypeWithChainedMoves : IDoubleChessFigureType
 {
     /// <summary>
     ///     15 x 15 field
@@ -35,23 +35,33 @@ public interface IDoubleChessFigureTypeWithChainedMoves : IDoubleChessFigureType
         for (var i = 0; i < 7; i++)
         {
             if (checkedMovement == movement)
+            {
                 break;
+            }
 
             var position = unitTile.Position + checkedMovement;
             if (position.IsOutsideBoard() || !board[position].IsEmpty())
+            {
                 return FigureAction.None;
+            }
 
             checkedMovement += movementUnit;
         }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) 
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
             return unitTile.CreateMoveAction(targetTile);
+        }
 
         if (targetTile.IsOwnedByYou(unitTile) && (Actions[targetPosition] & 1) == 1)
+        {
             return CreateMergeAction(unitTile, targetTile);
+        }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
             return unitTile.CreateKillWithMove(targetTile);
+        }
 
         return FigureAction.None;
     }

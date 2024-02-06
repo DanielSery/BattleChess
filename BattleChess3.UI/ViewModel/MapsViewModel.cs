@@ -38,8 +38,11 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
         private set
         {
             if (value.All(x => x.MapPath != _selectedMap.MapPath))
+            {
                 SelectedMap = value.FirstOrDefault()
                               ?? MapBlueprint.None;
+            }
+
             Set(ref _maps, value);
         }
     }
@@ -56,7 +59,10 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
 
     internal void DeleteSelectedMap()
     {
-        if (SelectedMap != MapBlueprint.None) _mapService.Delete(SelectedMap);
+        if (SelectedMap != MapBlueprint.None)
+        {
+            _mapService.Delete(SelectedMap);
+        }
     }
 
     internal void SaveSelectedMap(string identifier, IEnumerable<ITile> board)

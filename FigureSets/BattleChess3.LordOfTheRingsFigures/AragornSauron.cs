@@ -7,8 +7,6 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class AragornSauron : ILordOfTheRingsFigureType
 {
-    public static AragornSauron Instance = new();
-
     private int[] Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -33,11 +31,16 @@ public class AragornSauron : ILordOfTheRingsFigureType
         var movement = targetTile.Position - unitTile.Position;
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
+            return unitTile.CreateMoveAction(targetTile);
+        }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
             return new FigureAction(FigureActionTypes.Attack, () =>
                 AttackAction(unitTile, targetTile, board));
+        }
 
         return FigureAction.None;
     }

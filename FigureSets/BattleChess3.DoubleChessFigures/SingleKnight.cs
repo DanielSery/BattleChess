@@ -2,8 +2,6 @@
 
 public class SingleKnight : IDoubleChessFigureTypeWithDifferentMoves
 {
-    public static readonly SingleKnight Instance = new();
-
     int[] IDoubleChessFigureTypeWithDifferentMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

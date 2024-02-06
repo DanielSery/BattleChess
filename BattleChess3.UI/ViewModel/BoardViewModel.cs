@@ -90,7 +90,9 @@ public sealed class BoardViewModel : ViewModelBase
         _playerService.InitializePlayers(map.StartingPlayer);
 
         for (var i = 0; i < Constants.BoardSize; i++)
+        {
             CreateFigure(Board[i], map.Figures[i]);
+        }
     }
 
     public void CreateFigure(ITileViewModel tile, FigureBlueprint figureBlueprint)
@@ -130,10 +132,15 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void SetPossibleActions(ITileViewModel clickedTile)
     {
-        foreach (var tile in Board) tile.PossibleAction = FigureAction.None;
+        foreach (var tile in Board)
+        {
+            tile.PossibleAction = FigureAction.None;
+        }
 
         if (_playerService.CurrentPlayer != SelectedTile.Figure.Owner)
+        {
             return;
+        }
 
         SetPossibleActions((ITile)clickedTile);
     }
@@ -145,7 +152,9 @@ public sealed class BoardViewModel : ViewModelBase
         foreach (var tile in povBoard)
         {
             if (clickedTile.Position == tile.Position)
+            {
                 continue;
+            }
 
             var targetTile = tile.GetPovTile(_playerService.CurrentPlayer);
             Board[tile.Position].PossibleAction =
@@ -174,6 +183,9 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void MouseExitTile(ITileViewModel tile)
     {
-        if (MouseOnTile == tile) MouseOnTile = NoneTileViewModel.Instance;
+        if (MouseOnTile == tile)
+        {
+            MouseOnTile = NoneTileViewModel.Instance;
+        }
     }
 }

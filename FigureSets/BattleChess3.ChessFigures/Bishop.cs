@@ -4,8 +4,6 @@ namespace BattleChess3.ChessFigures;
 
 public class Bishop : IChessFigureType, IFigureTypeWithChainedMoves
 {
-    public static readonly Bishop Instance = new();
-
     int[] IFigureTypeWithChainedMoves.Actions { get; } =
     {
         3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,

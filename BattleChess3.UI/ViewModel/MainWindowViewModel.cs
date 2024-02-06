@@ -94,7 +94,9 @@ public class MainWindowViewModel : ViewModelBase
     private void SaveGame()
     {
         if (!GameTabEnabled)
+        {
             return;
+        }
 
         var identifier = DateTime.Now.Ticks.ToString();
         RequestSavePreview?.Invoke(this, identifier);

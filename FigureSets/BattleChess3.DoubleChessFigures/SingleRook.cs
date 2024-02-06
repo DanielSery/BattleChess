@@ -2,8 +2,6 @@
 
 public class SingleRook : IDoubleChessFigureTypeWithChainedMoves
 {
-    public static readonly SingleRook Instance = new();
-
     int[] IDoubleChessFigureTypeWithChainedMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,

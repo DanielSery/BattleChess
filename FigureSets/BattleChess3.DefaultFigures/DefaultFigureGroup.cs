@@ -7,11 +7,17 @@ public class DefaultFigureGroup : IFigureGroup
 {
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(DefaultFigureGroup)}_Name"];
 
-    public IFigureType[] FigureTypes => new IFigureType[]
-    {
-        Palm.Instance,
-        Empty.Instance,
-        Stone.Instance,
-        Water.Instance
-    };
+    public static readonly IFigureType Palm = new Palm();
+    public static readonly IFigureType Empty = new Empty();
+    public static readonly IFigureType Stone = new Stone();
+    public static readonly IFigureType Water = new Water();
+    
+    public IFigureType[] FigureTypes =>
+        new[]
+        {
+            Palm,
+            Empty,
+            Stone,
+            Water
+        };
 }

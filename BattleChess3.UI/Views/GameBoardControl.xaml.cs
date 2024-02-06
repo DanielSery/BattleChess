@@ -33,7 +33,9 @@ public partial class GameBoardControl
     {
         if (!e.Data.GetDataPresent("figureData") ||
             sender == e.Source)
+        {
             e.Effects = DragDropEffects.Copy;
+        }
     }
 
     private void Button_MouseEnter(object sender, MouseEventArgs e)
@@ -59,7 +61,11 @@ public partial class GameBoardControl
     {
         do
         {
-            if (current is T) return (T)current;
+            if (current is T)
+            {
+                return (T)current;
+            }
+
             current = VisualTreeHelper.GetParent(current);
         } while (current != null);
 

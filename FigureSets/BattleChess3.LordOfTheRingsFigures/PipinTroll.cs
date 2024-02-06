@@ -4,8 +4,6 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class PipinTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentMoves
 {
-    public static readonly PipinTroll Instance = new();
-
     int[] IFigureTypeWithDifferentMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -7,12 +7,12 @@ public static class FiguresHelper
 {
     public static bool IsEmpty(this ITile figureType)
     {
-        return figureType.Figure.FigureType.Equals(Empty.Instance);
+        return figureType.Figure.FigureType is Empty;
     }
 
     public static bool IsWater(this ITile figureType)
     {
-        return figureType.Figure.FigureType.Equals(Water.Instance);
+        return figureType.Figure.FigureType is Water;
     }
 
     public static bool IsOwnedByYou(this ITile checkedTile, ITile yoursTile)
@@ -35,13 +35,13 @@ public static class FiguresHelper
     public static void Die(this ITile tile)
     {
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(Player.Neutral, Empty.Instance);
+        tile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
     }
 
     public static void MoveToTile(this ITile from, ITile to)
     {
         to.Figure = from.Figure;
-        from.Figure = new Figure(Player.Neutral, Empty.Instance);
+        from.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
     }
 
     public static void SwapTiles(this ITile first, ITile second)

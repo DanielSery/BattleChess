@@ -7,8 +7,6 @@ namespace BattleChess3.DoubleChessFigures;
 
 public class SinglePawn : IDoubleChessFigureType
 {
-    public static readonly SinglePawn Instance = new();
-
     private int[] StartingActions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -63,11 +61,15 @@ public class SinglePawn : IDoubleChessFigureType
         for (var i = 0; i < 7; i++)
         {
             if (checkedMovement == movement)
+            {
                 break;
+            }
 
             var position = unitTile.Position + checkedMovement;
             if (position.IsOutsideBoard() || !board[position].IsEmpty())
+            {
                 return FigureAction.None;
+            }
 
             checkedMovement += movementUnit;
         }
@@ -75,11 +77,13 @@ public class SinglePawn : IDoubleChessFigureType
         if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
         {
             if (targetTile.Position.Y == 7)
+            {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, SingleQueen.Instance));
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DoubleChessFigureGroup.Queen));
                     unitTile.Die();
                 });
+            }
 
             return unitTile.CreateMoveAction(targetTile);
         }
@@ -87,13 +91,15 @@ public class SinglePawn : IDoubleChessFigureType
         if (targetTile.IsOwnedByYou(unitTile) && (actions[targetPosition] & 1) == 1)
         {
             if (targetTile.Position.Y == 7)
+            {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
                     var owner = unitTile.Figure.Owner;
                     unitTile.Die();
-                    unitTile.CreateFigure(new Figure(owner, SingleQueen.Instance));
+                    unitTile.CreateFigure(new Figure(owner, DoubleChessFigureGroup.Queen));
                     (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile).Action.Invoke();
                 });
+            }
 
             return (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile);
         }
@@ -101,12 +107,14 @@ public class SinglePawn : IDoubleChessFigureType
         if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
         {
             if (targetTile.Position.Y == 7)
+            {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
                     targetTile.Die();
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, SingleQueen.Instance));
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DoubleChessFigureGroup.Queen));
                     unitTile.Die();
                 });
+            }
 
             return unitTile.CreateKillWithMove(targetTile);
         }

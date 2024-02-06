@@ -11,9 +11,9 @@ using BattleChess3.Core.Model.Figures;
 using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 
-namespace BattleChess3.DoubleChessFigures;
+namespace BattleChess3.ChessFigures;
 
-internal interface IDoubleChessFigureTypeWithDifferentMoves : IDoubleChessFigureType
+internal interface IFigureTypeWithChainedMoves : IFigureType
 {
     /// <summary>
     ///     15 x 15 field
@@ -28,16 +28,29 @@ internal interface IDoubleChessFigureTypeWithDifferentMoves : IDoubleChessFigure
     FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var movement = targetTile.Position - unitTile.Position;
+        var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
+        var checkedMovement = movementUnit;
+
+        for (var i = 0; i < 7; i++)
+        {
+            if (checkedMovement == movement)
+            {
+                break;
+            }
+
+            var position = unitTile.Position + checkedMovement;
+            if (position.IsOutsideBoard() || !board[position].IsEmpty())
+            {
+                return FigureAction.None;
+            }
+
+            checkedMovement += movementUnit;
+        }
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
             return unitTile.CreateMoveAction(targetTile);
-        }
-
-        if (targetTile.IsOwnedByYou(unitTile) && (Actions[targetPosition] & 1) == 1)
-        {
-            return CreateMergeAction(unitTile, targetTile);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)

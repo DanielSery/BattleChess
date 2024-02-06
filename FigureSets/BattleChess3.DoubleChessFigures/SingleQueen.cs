@@ -2,8 +2,6 @@
 
 public class SingleQueen : IDoubleChessFigureTypeWithChainedMoves
 {
-    public static readonly SingleQueen Instance = new();
-
     int[] IDoubleChessFigureTypeWithChainedMoves.Actions { get; } =
     {
         3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3,

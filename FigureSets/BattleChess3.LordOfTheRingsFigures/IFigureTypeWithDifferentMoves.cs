@@ -11,9 +11,9 @@ using BattleChess3.Core.Model.Figures;
 using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 
-namespace BattleChess3.DoubleChessFigures;
+namespace BattleChess3.LordOfTheRingsFigures;
 
-internal interface IDoubleChessFigureTypeWithDifferentMoves : IDoubleChessFigureType
+internal interface IFigureTypeWithDifferentMoves : IFigureType
 {
     /// <summary>
     ///     15 x 15 field
@@ -33,11 +33,6 @@ internal interface IDoubleChessFigureTypeWithDifferentMoves : IDoubleChessFigure
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
             return unitTile.CreateMoveAction(targetTile);
-        }
-
-        if (targetTile.IsOwnedByYou(unitTile) && (Actions[targetPosition] & 1) == 1)
-        {
-            return CreateMergeAction(unitTile, targetTile);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)

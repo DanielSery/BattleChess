@@ -51,7 +51,10 @@ public partial class MainWindow
 
     private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if (ViewModel is not null) ViewModel.RequestSavePreview -= ViewModel_RequestSavePreview;
+        if (ViewModel is not null)
+        {
+            ViewModel.RequestSavePreview -= ViewModel_RequestSavePreview;
+        }
 
         ViewModel = (MainWindowViewModel)DataContext;
         ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;

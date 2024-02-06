@@ -13,7 +13,7 @@ using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.DisneyFigures;
 
-public interface IDisneyFigureTypeWithDifferentMoves : IFigureType
+internal interface IDisneyFigureTypeWithDifferentMoves : IFigureType
 {
     /// <summary>
     ///     15 x 15 field
@@ -30,9 +30,15 @@ public interface IDisneyFigureTypeWithDifferentMoves : IFigureType
         var movement = targetTile.Position - unitTile.Position;
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1) return unitTile.CreateMoveAction(targetTile);
+        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        {
+            return unitTile.CreateMoveAction(targetTile);
+        }
 
-        if (!targetTile.IsEmpty() && (Actions[targetPosition] & 2) == 2) return unitTile.CreateKillWithMove(targetTile);
+        if (!targetTile.IsEmpty() && (Actions[targetPosition] & 2) == 2)
+        {
+            return unitTile.CreateKillWithMove(targetTile);
+        }
 
         return FigureAction.None;
     }

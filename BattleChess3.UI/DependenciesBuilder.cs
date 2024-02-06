@@ -11,7 +11,9 @@ public class DependenciesBuilder
     public static void Initialize()
     {
         if (!ServiceLocator.IsLocationProviderSet)
+        {
             SetUpServiceLocator();
+        }
     }
 
     public static void Cleanup()
