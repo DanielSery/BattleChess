@@ -2,9 +2,6 @@
 using BattleChess3.UI.Services;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BattleChess3.UI.ViewModel;
 

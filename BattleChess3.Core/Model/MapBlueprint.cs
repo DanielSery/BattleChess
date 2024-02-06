@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using BattleChess3.Core.Model.Figures;
+﻿using BattleChess3.Core.Model.Figures;
 
 namespace BattleChess3.Core.Model;
 

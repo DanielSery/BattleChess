@@ -2,10 +2,7 @@
 using BattleChess3.Core.Model.Figures;
 using BattleChess3.UI.Services;
 using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace BattleChess3.UI.ViewModel;
 

@@ -1,6 +1,4 @@
 ﻿using BattleChess3.UI.Model;
-using System;
-using System.Collections.Generic;
 
 namespace BattleChess3.UI.Services;
 

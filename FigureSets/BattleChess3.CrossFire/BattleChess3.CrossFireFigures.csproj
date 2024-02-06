@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>BattleChess3.CrossFireFigures</RootNamespace>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>

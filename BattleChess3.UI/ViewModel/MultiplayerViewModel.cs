@@ -5,7 +5,6 @@ using BattleChess3.UI.Services;
 using BattleChess3.UI.Utilities;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System.Linq;
 using System.Windows;
 
 namespace BattleChess3.UI.ViewModel;

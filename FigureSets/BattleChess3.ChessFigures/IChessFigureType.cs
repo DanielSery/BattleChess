@@ -4,8 +4,6 @@
 // without the prior written consent of the copyright owner.
 #endregion
 
-using System;
-using System.Collections.Generic;
 using BattleChess3.ChessFigures.Localization;
 using BattleChess3.Core.Model.Figures;
 
@@ -13,7 +11,7 @@ namespace BattleChess3.ChessFigures;
 
 public interface IChessFigureType : IFigureType
 {
-    string IFigureType.UnitName => $"{nameof(DisneyFigureGroup)}.{GetType().Name}";
+    string IFigureType.UnitName => $"{nameof(ChessFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_Name"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];
 

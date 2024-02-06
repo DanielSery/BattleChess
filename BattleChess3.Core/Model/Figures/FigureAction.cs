@@ -4,8 +4,6 @@
 // without the prior written consent of the copyright owner.
 #endregion
 
-using System;
-
 namespace BattleChess3.Core.Model.Figures;
 
 public class FigureAction

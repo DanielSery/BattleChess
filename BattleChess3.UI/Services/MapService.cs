@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using BattleChess3.Core.Model;
 using BattleChess3.Core.Utilities;
 using GalaSoft.MvvmLight;

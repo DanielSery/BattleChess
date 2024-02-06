@@ -1,15 +1,13 @@
 ﻿using BattleChess3.Core.Model;
 using BattleChess3.Core.Utilities;
 using Newtonsoft.Json;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using Timer = System.Timers.Timer;
 
 namespace BattleChess3.UI.Services;
 

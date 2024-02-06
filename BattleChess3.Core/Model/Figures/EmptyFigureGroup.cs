@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BattleChess3.Core.Model.Figures;
+﻿namespace BattleChess3.Core.Model.Figures;
 
 public class EmptyFigureGroup : IFigureGroup
 {

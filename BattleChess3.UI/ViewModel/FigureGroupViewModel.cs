@@ -4,7 +4,6 @@
 // without the prior written consent of the copyright owner.
 #endregion
 
-using System.Linq;
 using BattleChess3.Core.Model.Figures;
 
 namespace BattleChess3.UI.ViewModel;

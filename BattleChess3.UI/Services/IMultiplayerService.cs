@@ -1,5 +1,4 @@
 ﻿using BattleChess3.Core.Model;
-using System;
 
 namespace BattleChess3.UI.Services;
 

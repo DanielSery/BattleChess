@@ -5,6 +5,7 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>BattleChess3</AssemblyName>
         <ApplicationIcon>morgoth.ico</ApplicationIcon>
     </PropertyGroup>
@@ -14,6 +15,7 @@
       <ProjectReference Include="..\FigureSets\BattleChess3.ChessFigures\BattleChess3.ChessFigures.csproj" />
       <ProjectReference Include="..\FigureSets\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj" />
       <ProjectReference Include="..\FigureSets\BattleChess3.DefaultFigures\BattleChess3.DefaultFigures.csproj" />
+      <ProjectReference Include="..\FigureSets\BattleChess3.DisneyFigures\BattleChess3.DisneyFigures.csproj" />
       <ProjectReference Include="..\FigureSets\BattleChess3.LordOfTheRingsFigures\BattleChess3.LordOfTheRingsFigures.csproj" />
       <ProjectReference Include="..\Themes\BattleChess3.MinasTirithTheme\BattleChess3.MinasTirithTheme.csproj" />
       <ProjectReference Include="..\Themes\BattleChess3.PaperTheme\BattleChess3.PaperTheme.csproj" />

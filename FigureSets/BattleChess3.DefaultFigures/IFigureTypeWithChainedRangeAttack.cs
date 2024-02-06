@@ -4,7 +4,6 @@
 // without the prior written consent of the copyright owner.
 #endregion
 
-using System;
 using BattleChess3.Core.Model;
 using BattleChess3.Core.Model.Figures;
 using BattleChess3.DefaultFigures.Utilities;

@@ -1,5 +1,4 @@
-﻿using System;
-using BattleChess3.Core.Model;
+﻿using BattleChess3.Core.Model;
 using BattleChess3.Core.Model.Figures;
 using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;

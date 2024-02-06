@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BattleChess3.Core.Model.Figures;
+﻿namespace BattleChess3.Core.Model.Figures;
 
 public interface IFigureType : IEquatable<IFigureType>
 {
