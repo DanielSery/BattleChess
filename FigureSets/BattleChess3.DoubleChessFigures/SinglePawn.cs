@@ -97,7 +97,8 @@ public class SinglePawn : IDoubleChessFigureType
                     var owner = unitTile.Figure.Owner;
                     unitTile.Die();
                     unitTile.CreateFigure(new Figure(owner, DoubleChessFigureGroup.Queen));
-                    (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile).Action.Invoke();
+                    (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile)
+                        .Action.Invoke();
                 });
             }
 

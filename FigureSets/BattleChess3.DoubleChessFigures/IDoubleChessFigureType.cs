@@ -28,7 +28,7 @@ internal interface IDoubleChessFigureType : IFigureType
 
     FigureAction CreateMergeAction(ITile tile1, ITile tile2)
     {
-        var figure1 = tile1.Figure.FigureType;
+        var figure1 = this;
         var figure2 = tile2.Figure.FigureType;
         switch (figure1)
         {
