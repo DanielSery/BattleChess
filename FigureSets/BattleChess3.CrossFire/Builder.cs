@@ -63,7 +63,7 @@ public class Builder : ICrossFireFigureType
         var move = targetTile.Position - unitTile.Position;
         MoveFiguresOutsideShield(unitTile, move, board);
         MoveShield(unitTile, move, board);
-        unitTile.MoveToTile(targetTile);
+        unitTile.MoveToTile(targetTile, board);
     }
 
     private void MoveShield(ITile sourceTile, Position move, ITile[] board)
@@ -79,7 +79,7 @@ public class Builder : ICrossFireFigureType
             if (shieldTile.Figure.FigureType is Wall &&
                 shieldTile.Figure.Owner.Equals(sourceTile.Figure.Owner))
             {
-                shieldTile.Die();
+                shieldTile.Die(board);
             }
         }
 
@@ -93,7 +93,7 @@ public class Builder : ICrossFireFigureType
             var shieldTile = board[sourceTile.Position + shieldPosition + move];
             if (shieldTile.IsEmpty())
             {
-                shieldTile.CreateFigure(new Figure(sourceTile.Figure.Owner, CrossFireFigureGroup.Wall));
+                shieldTile.CreateFigure(new Figure(sourceTile.Figure.Owner, CrossFireFigureGroup.Wall), board);
             }
         }
     }
@@ -117,19 +117,19 @@ public class Builder : ICrossFireFigureType
 
             if (!(sourceTile.Position + movedPosition + move).IsInBoard())
             {
-                movedTile.Die();
+                movedTile.Die(board);
                 continue;
             }
 
             var moveTargetTile = board[sourceTile.Position + movedPosition + move];
             if (moveTargetTile.IsEmpty())
             {
-                movedTile.MoveToTile(moveTargetTile);
+                movedTile.MoveToTile(moveTargetTile, board);
             }
             else
             {
-                moveTargetTile.Die();
-                movedTile.MoveToTile(moveTargetTile);
+                moveTargetTile.Die(board);
+                movedTile.MoveToTile(moveTargetTile, board);
             }
         }
     }

@@ -43,8 +43,8 @@ public class SingleKing : IDoubleChessFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    unitTile.MoveToTile(board[new Position(2, 0)]);
-                    targetTile.MoveToTile(board[new Position(3, 0)]);
+                    unitTile.MoveToTile(board[new Position(2, 0)], board);
+                    targetTile.MoveToTile(board[new Position(3, 0)], board);
                 });
             }
 
@@ -55,25 +55,25 @@ public class SingleKing : IDoubleChessFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    unitTile.MoveToTile(board[new Position(6, 0)]);
-                    targetTile.MoveToTile(board[new Position(5, 0)]);
+                    unitTile.MoveToTile(board[new Position(6, 0)], board);
+                    targetTile.MoveToTile(board[new Position(5, 0)], board);
                 });
             }
         }
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (targetTile.IsOwnedByYou(unitTile) && (Actions[targetPosition] & 1) == 1)
         {
-            return (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile);
+            return (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile, board);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
         {
-            return unitTile.CreateKillWithMove(targetTile);
+            return unitTile.CreateKillWithMove(targetTile, board);
         }
 
         return FigureAction.None;

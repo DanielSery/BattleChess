@@ -10,7 +10,7 @@ public class DoubleChessFigureGroup : IFigureGroup
 
     public static readonly IFigureType KingQueen =
         new CombinedChessFigureType<SingleKing, SingleQueen>(nameof(KingQueen));
-
+    
     public static readonly IFigureType KingRook =
         new CombinedChessFigureType<SingleKing, SingleRook>(nameof(KingRook));
 

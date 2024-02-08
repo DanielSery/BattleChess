@@ -74,6 +74,6 @@ public class Bomber : ICrossFireFigureType
             return;
         }
 
-        board[targetPosition].Die();
+        board[targetPosition].Die(board);
     }
 }

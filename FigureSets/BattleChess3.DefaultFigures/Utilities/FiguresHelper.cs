@@ -26,22 +26,27 @@ public static class FiguresHelper
                !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
     }
 
-    public static void CreateFigure(this ITile tile, Figure createdFigure)
+    public static void CreateFigure(this ITile tile, Figure createdFigure, ITile[] board)
     {
         tile.Figure = createdFigure;
         tile.Figure.Owner.Figures.Add(tile.Figure);
+        tile.Figure.FigureType.OnCreated(board);
     }
 
-    public static void Die(this ITile tile)
+    public static void Die(this ITile tile, ITile[] board)
     {
+        tile.Figure.FigureType.OnDying(tile, board); 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
         tile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
+        tile.Figure.FigureType.OnDied(tile, board);
     }
 
-    public static void MoveToTile(this ITile from, ITile to)
+    public static void MoveToTile(this ITile from, ITile to, ITile[] board)
     {
+        from.Figure.FigureType.OnMoving(from, to, board);
         to.Figure = from.Figure;
         from.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
+        from.Figure.FigureType.OnMoved(from, to, board);
     }
 
     public static void SwapTiles(this ITile first, ITile second)

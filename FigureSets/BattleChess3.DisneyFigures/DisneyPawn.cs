@@ -80,12 +80,12 @@ public class DisneyPawn : IDisneyFigureGroup
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DisneyFigureGroup.DisneyQueen));
-                    unitTile.Die();
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DisneyFigureGroup.DisneyQueen), board);
+                    unitTile.Die(board);
                 });
             }
 
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (!targetTile.IsEmpty() && (actions[targetPosition] & 2) == 2)
@@ -94,13 +94,13 @@ public class DisneyPawn : IDisneyFigureGroup
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.Die();
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DisneyFigureGroup.DisneyQueen));
-                    unitTile.Die();
+                    targetTile.Die(board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DisneyFigureGroup.DisneyQueen), board);
+                    unitTile.Die(board);
                 });
             }
 
-            return unitTile.CreateKillWithMove(targetTile);
+            return unitTile.CreateKillWithMove(targetTile, board);
         }
 
         return FigureAction.None;

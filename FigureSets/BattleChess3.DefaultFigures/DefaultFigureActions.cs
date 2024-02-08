@@ -6,27 +6,27 @@ namespace BattleChess3.DefaultFigures;
 
 public static class DefaultFigureActions
 {
-    public static FigureAction CreateAddFigureAction(this ITile targetTile, Figure createdFigure)
+    public static FigureAction CreateAddFigureAction(this ITile targetTile, Figure createdFigure, ITile[] board)
     {
-        return new FigureAction(FigureActionTypes.Special, () => targetTile.CreateFigure(createdFigure));
+        return new FigureAction(FigureActionTypes.Special, () => targetTile.CreateFigure(createdFigure, board));
     }
 
-    public static FigureAction CreateMoveAction(this ITile unitTile, ITile targetTile)
+    public static FigureAction CreateMoveAction(this ITile unitTile, ITile targetTile, ITile[] board)
     {
-        return new FigureAction(FigureActionTypes.Move, () => unitTile.MoveToTile(targetTile));
+        return new FigureAction(FigureActionTypes.Move, () => unitTile.MoveToTile(targetTile, board));
     }
 
-    public static FigureAction CreateKillWithoutMove(this ITile unitTile, ITile targetTile)
+    public static FigureAction CreateKillWithoutMove(this ITile unitTile, ITile targetTile, ITile[] board)
     {
-        return new FigureAction(FigureActionTypes.Attack, targetTile.Die);
+        return new FigureAction(FigureActionTypes.Attack, () => targetTile.Die(board));
     }
 
-    public static FigureAction CreateKillWithMove(this ITile unitTile, ITile targetTile)
+    public static FigureAction CreateKillWithMove(this ITile unitTile, ITile targetTile, ITile[] board)
     {
         return new FigureAction(FigureActionTypes.Attack, () =>
         {
-            targetTile.Die();
-            unitTile.MoveToTile(targetTile);
+            targetTile.Die(board);
+            unitTile.MoveToTile(targetTile, board);
         });
     }
 

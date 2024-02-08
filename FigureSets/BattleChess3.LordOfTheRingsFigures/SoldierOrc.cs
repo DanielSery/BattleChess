@@ -76,12 +76,12 @@ public class SoldierOrc : ILordOfTheRingsFigureType
 
         if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
         {
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
         {
-            return unitTile.CreateKillWithMove(targetTile);
+            return unitTile.CreateKillWithMove(targetTile, board);
         }
 
         return FigureAction.None;

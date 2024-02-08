@@ -42,12 +42,12 @@ internal interface IFigureTypeWithChainedRangeAttack : IFigureType
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
         {
-            return unitTile.CreateKillWithoutMove(targetTile);
+            return unitTile.CreateKillWithoutMove(targetTile, board);
         }
 
         return FigureAction.None;

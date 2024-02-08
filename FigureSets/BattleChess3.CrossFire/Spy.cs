@@ -39,12 +39,12 @@ public class Spy : ICrossFireFigureType
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
         {
-            return unitTile.CreateKillWithMove(targetTile);
+            return unitTile.CreateKillWithMove(targetTile, board);
         }
 
         return FigureAction.None;

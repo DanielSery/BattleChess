@@ -33,7 +33,7 @@ public class Knight : ICrossFireFigureType
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
         {
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
@@ -52,24 +52,24 @@ public class Knight : ICrossFireFigureType
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
         {
-            targetTile.Die();
-            unitTile.MoveToTile(targetTile);
+            targetTile.Die(board);
+            unitTile.MoveToTile(targetTile, board);
         }
         else if (Math.Abs(move.X) <= 2 &&
                  Math.Abs(move.Y) <= 2)
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            board[unitTile.Position + smallMove].Die();
-            targetTile.Die();
-            unitTile.MoveToTile(targetTile);
+            board[unitTile.Position + smallMove].Die(board);
+            targetTile.Die(board);
+            unitTile.MoveToTile(targetTile, board);
         }
         else
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            board[unitTile.Position + smallMove].Die();
-            board[unitTile.Position + 2 * smallMove].Die();
-            targetTile.Die();
-            unitTile.MoveToTile(targetTile);
+            board[unitTile.Position + smallMove].Die(board);
+            board[unitTile.Position + 2 * smallMove].Die(board);
+            targetTile.Die(board);
+            unitTile.MoveToTile(targetTile, board);
         }
     }
 }

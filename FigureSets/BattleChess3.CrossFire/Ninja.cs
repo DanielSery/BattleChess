@@ -38,7 +38,7 @@ public class Ninja : ICrossFireFigureType
                 return FigureAction.None;
             }
 
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
@@ -48,7 +48,7 @@ public class Ninja : ICrossFireFigureType
                 return FigureAction.None;
             }
 
-            return unitTile.CreateKillWithMove(targetTile);
+            return unitTile.CreateKillWithMove(targetTile, board);
         }
 
         return FigureAction.None;

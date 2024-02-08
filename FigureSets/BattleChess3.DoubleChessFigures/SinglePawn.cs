@@ -80,12 +80,12 @@ public class SinglePawn : IDoubleChessFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DoubleChessFigureGroup.Queen));
-                    unitTile.Die();
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DoubleChessFigureGroup.Queen), board);
+                    unitTile.Die(board);
                 });
             }
 
-            return unitTile.CreateMoveAction(targetTile);
+            return unitTile.CreateMoveAction(targetTile, board);
         }
 
         if (targetTile.IsOwnedByYou(unitTile) && (actions[targetPosition] & 1) == 1)
@@ -95,14 +95,14 @@ public class SinglePawn : IDoubleChessFigureType
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
                     var owner = unitTile.Figure.Owner;
-                    unitTile.Die();
-                    unitTile.CreateFigure(new Figure(owner, DoubleChessFigureGroup.Queen));
-                    (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile)
+                    unitTile.Die(board);
+                    unitTile.CreateFigure(new Figure(owner, DoubleChessFigureGroup.Queen), board);
+                    (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile, board)
                         .Action.Invoke();
                 });
             }
 
-            return (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile);
+            return (this as IDoubleChessFigureType).CreateMergeAction(unitTile, targetTile, board);
         }
 
         if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
@@ -111,13 +111,13 @@ public class SinglePawn : IDoubleChessFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.Die();
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DoubleChessFigureGroup.Queen));
-                    unitTile.Die();
+                    targetTile.Die(board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DoubleChessFigureGroup.Queen), board);
+                    unitTile.Die(board);
                 });
             }
 
-            return unitTile.CreateKillWithMove(targetTile);
+            return unitTile.CreateKillWithMove(targetTile, board);
         }
 
         return FigureAction.None;

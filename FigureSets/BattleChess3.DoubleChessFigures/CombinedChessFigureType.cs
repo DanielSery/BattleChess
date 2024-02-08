@@ -39,10 +39,10 @@ public class CombinedChessFigureType<T1, T2> : IFigureType
             return new FigureAction(firstUnitAction.ActionType, () =>
             {
                 var owner = unitTile.Figure.Owner;
-                unitTile.Die();
-                unitTile.CreateFigure(new Figure(owner, _firstFigure));
+                unitTile.Die(board);
+                unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
                 firstUnitAction.Action.Invoke();
-                unitTile.CreateFigure(new Figure(owner, _secondFigure));
+                unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
             });
         }
 
@@ -52,10 +52,10 @@ public class CombinedChessFigureType<T1, T2> : IFigureType
             return new FigureAction(secondUnitAction.ActionType, () =>
             {
                 var owner = unitTile.Figure.Owner;
-                unitTile.Die();
-                unitTile.CreateFigure(new Figure(owner, _secondFigure));
+                unitTile.Die(board);
+                unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
                 secondUnitAction.Action.Invoke();
-                unitTile.CreateFigure(new Figure(owner, _firstFigure));
+                unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
             });
         }
 
