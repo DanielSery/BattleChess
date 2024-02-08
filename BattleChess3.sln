@@ -28,9 +28,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.PixarTheme", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.CrossFireFigures", "FigureSets\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj", "{6342F138-8B23-498B-ACD6-E75FC3342BF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.DisneyFigures", "FigureSets\BattleChess3.DisneyFigures\BattleChess3.DisneyFigures.csproj", "{D185C649-137B-4B87-9261-DF0F4A110A71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.SpyFigures", "FigureSets\BattleChess3.SpyFigures\BattleChess3.SpyFigures.csproj", "{D185C649-137B-4B87-9261-DF0F4A110A71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.DoubleChessFigures", "FigureSets\BattleChess3.DoubleChessFigures\BattleChess3.DoubleChessFigures.csproj", "{0AE307D1-03E9-4CB5-8950-737F370EA202}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.ExplodingChessFigures", "FigureSets\BattleChess3.ExplodingChessFigures\BattleChess3.ExplodingChessFigures.csproj", "{9FD72853-4EDE-4613-9AC7-95473D6E720F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,10 @@ Global
 		{0AE307D1-03E9-4CB5-8950-737F370EA202}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AE307D1-03E9-4CB5-8950-737F370EA202}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AE307D1-03E9-4CB5-8950-737F370EA202}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD72853-4EDE-4613-9AC7-95473D6E720F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD72853-4EDE-4613-9AC7-95473D6E720F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD72853-4EDE-4613-9AC7-95473D6E720F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD72853-4EDE-4613-9AC7-95473D6E720F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{6342F138-8B23-498B-ACD6-E75FC3342BF2} = {F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}
 		{D185C649-137B-4B87-9261-DF0F4A110A71} = {F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}
 		{0AE307D1-03E9-4CB5-8950-737F370EA202} = {F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}
+		{9FD72853-4EDE-4613-9AC7-95473D6E720F} = {F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0A17059C-17CB-4FA9-BE6E-9BA95510BEFE}

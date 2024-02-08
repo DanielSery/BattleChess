@@ -37,7 +37,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
         get => _maps;
         private set
         {
-            if (value.All(x => x.MapPath != _selectedMap.MapPath))
+            if (value.All(x => x.MapPath != _selectedMap?.MapPath))
             {
                 SelectedMap = value.FirstOrDefault()
                               ?? MapBlueprint.None;
