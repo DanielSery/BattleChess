@@ -128,8 +128,7 @@ public class Builder : ICrossFireFigureType
             }
             else
             {
-                moveTargetTile.Die(board);
-                movedTile.MoveToTile(moveTargetTile, board);
+                movedTile.KillWithMove(moveTargetTile, board);
             }
         }
     }

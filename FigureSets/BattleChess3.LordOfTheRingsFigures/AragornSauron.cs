@@ -45,31 +45,43 @@ public class AragornSauron : ILordOfTheRingsFigureType
         return FigureAction.None;
     }
 
-    private static void AttackAction(ITile unitTile, ITile targetTile, ITile[] board)
+    private void AttackAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var move = targetTile.Position - unitTile.Position;
 
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
         {
-            targetTile.Die(board);
-            unitTile.MoveToTile(targetTile, board);
+            unitTile.KillWithMove(targetTile, board);
         }
         else if (Math.Abs(move.X) <= 2 &&
                  Math.Abs(move.Y) <= 2)
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            board[unitTile.Position + smallMove].Die(board);
-            targetTile.Die(board);
-            unitTile.MoveToTile(targetTile, board);
+            var sourcePosition = unitTile.Position;
+            
+            unitTile.KillWithMove(board[sourcePosition + smallMove], board);
+            unitTile = board[sourcePosition + smallMove];
+            if (!unitTile.Figure.FigureType.Equals(this))
+                return;
+           
+            unitTile.KillWithMove(targetTile, board); 
         }
         else
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            board[unitTile.Position + smallMove].Die(board);
-            board[unitTile.Position + 2 * smallMove].Die(board);
-            targetTile.Die(board);
-            unitTile.MoveToTile(targetTile, board);
+            var sourcePosition = unitTile.Position;
+            
+            unitTile.KillWithMove(board[sourcePosition + smallMove], board);
+            unitTile = board[sourcePosition + smallMove];
+            if (!unitTile.Figure.FigureType.Equals(this))
+                return;
+            
+            unitTile.KillWithMove(board[sourcePosition + 2 * smallMove], board);
+            unitTile = board[sourcePosition + 2 * smallMove];
+            if (!unitTile.Figure.FigureType.Equals(this))
+                return;
+            unitTile.KillWithMove(targetTile, board);
         }
     }
 }

@@ -19,6 +19,7 @@
         <ProjectReference Include="..\FigureSets\BattleChess3.SpyFigures\BattleChess3.SpyFigures.csproj" />
         <ProjectReference Include="..\FigureSets\BattleChess3.DoubleChessFigures\BattleChess3.DoubleChessFigures.csproj"/>
         <ProjectReference Include="..\FigureSets\BattleChess3.LordOfTheRingsFigures\BattleChess3.LordOfTheRingsFigures.csproj"/>
+        <ProjectReference Include="..\FigureSets\BattleChess3.StarWarsFigures\BattleChess3.StarWarsFigures.csproj" />
         <ProjectReference Include="..\Themes\BattleChess3.MinasTirithTheme\BattleChess3.MinasTirithTheme.csproj"/>
         <ProjectReference Include="..\Themes\BattleChess3.PaperTheme\BattleChess3.PaperTheme.csproj"/>
         <ProjectReference Include="..\Themes\BattleChess3.RivendellTheme\BattleChess3.RivendellTheme.csproj"/>

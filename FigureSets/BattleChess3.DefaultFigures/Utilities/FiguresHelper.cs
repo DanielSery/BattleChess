@@ -51,6 +51,22 @@ public static class FiguresHelper
         figureType.OnMoved(from, to, board);
     }
 
+    public static void KillWithMove(this ITile from, ITile to, ITile[] board)
+    {
+        var movedFigure = from.Figure.FigureType; 
+        var killedFigure = to.Figure.FigureType;
+        
+        movedFigure.OnMoving(from, to, board);
+        killedFigure.OnDying(to, board);
+        
+        to.Figure.Owner.Figures.Remove(to.Figure);
+        to.Figure = from.Figure;
+        from.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
+        
+        movedFigure.OnMoved(from, to, board);
+        killedFigure.OnDied(to, board);
+    }
+
     public static void SwapTiles(this ITile first, ITile second)
     {
         (second.Figure, first.Figure) = (first.Figure, second.Figure);

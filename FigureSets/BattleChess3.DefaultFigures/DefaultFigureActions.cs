@@ -25,8 +25,7 @@ public static class DefaultFigureActions
     {
         return new FigureAction(FigureActionTypes.Attack, () =>
         {
-            targetTile.Die(board);
-            unitTile.MoveToTile(targetTile, board);
+            unitTile.KillWithMove(targetTile, board);
         });
     }
 
