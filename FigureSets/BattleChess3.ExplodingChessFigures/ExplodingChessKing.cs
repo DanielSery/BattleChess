@@ -26,7 +26,7 @@ public class ExplodingChessKing : IExplodingChessFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
@@ -37,26 +37,26 @@ public class ExplodingChessKing : IExplodingChessFigureType
         {
             if (targetTile.AbsolutePosition.X == 0 &&
                 targetTile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
-                board[new Position(1, 0)].IsEmpty() &&
-                board[new Position(2, 0)].IsEmpty() &&
-                board[new Position(3, 0)].IsEmpty())
+                board[(1, 0)].IsEmpty() &&
+                board[(2, 0)].IsEmpty() &&
+                board[(3, 0)].IsEmpty())
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    unitTile.MoveToTile(board[new Position(2, 0)], board);
-                    targetTile.MoveToTile(board[new Position(3, 0)], board);
+                    unitTile.MoveToTile(board[(2, 0)], board);
+                    targetTile.MoveToTile(board[(3, 0)], board);
                 });
             }
 
             if (targetTile.AbsolutePosition.X == 7 &&
                 targetTile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
-                board[new Position(5, 0)].IsEmpty() &&
-                board[new Position(6, 0)].IsEmpty())
+                board[(5, 0)].IsEmpty() &&
+                board[(6, 0)].IsEmpty())
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    unitTile.MoveToTile(board[new Position(6, 0)], board);
-                    targetTile.MoveToTile(board[new Position(5, 0)], board);
+                    unitTile.MoveToTile(board[(6, 0)], board);
+                    targetTile.MoveToTile(board[(5, 0)], board);
                 });
             }
         }

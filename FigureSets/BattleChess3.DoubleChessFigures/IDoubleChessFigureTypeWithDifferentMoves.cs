@@ -17,7 +17,7 @@ internal interface IDoubleChessFigureTypeWithDifferentMoves : IDoubleChessFigure
     /// </summary>
     protected int[] Actions { get; }
 
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;

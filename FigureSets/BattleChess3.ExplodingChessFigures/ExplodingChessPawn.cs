@@ -45,13 +45,13 @@ public class ExplodingChessPawn : IExplodingChessFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         return CreateFigureAction(unitTile, targetTile, board,
             unitTile.Position.Y == 1 ? StartingActions : NormalActions);
     }
 
-    private static FigureAction CreateFigureAction(ITile unitTile, ITile targetTile, ITile[] board, int[] actions)
+    private static FigureAction CreateFigureAction(ITile unitTile, ITile targetTile, IBoard board, int[] actions)
     {
         var movement = targetTile.Position - unitTile.Position;
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));

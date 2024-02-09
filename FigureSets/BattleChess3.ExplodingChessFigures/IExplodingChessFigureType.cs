@@ -18,20 +18,20 @@ internal interface IExplodingChessFigureType : IFigureType
             { 2, new Uri($"pack://application:,,,/BattleChess3.ExplodingChessFigures;component/Images/{GetType().Name}2.png", UriKind.Absolute) }
         };
 
-    void IFigureType.OnDied(ITile unitTile, ITile[] board)
+    void IFigureType.OnDied(ITile unitTile, IBoard board)
     {
-        SilentDie(board, unitTile.Position + new Position(-1, -1));
-        SilentDie(board, unitTile.Position + new Position(-1, 0));
-        SilentDie(board, unitTile.Position + new Position(-1, 1));
-        SilentDie(board, unitTile.Position + new Position(0, -1));
-        SilentDie(board, unitTile.Position + new Position(0, 0));
-        SilentDie(board, unitTile.Position + new Position(0, 1));
-        SilentDie(board, unitTile.Position + new Position(1, -1));
-        SilentDie(board, unitTile.Position + new Position(1, 0));
-        SilentDie(board, unitTile.Position + new Position(1, 1));
+        SilentDie(board, unitTile.Position + (-1, -1));
+        SilentDie(board, unitTile.Position + (-1, 0));
+        SilentDie(board, unitTile.Position + (-1, 1));
+        SilentDie(board, unitTile.Position + (0, -1));
+        SilentDie(board, unitTile.Position + (0, 0));
+        SilentDie(board, unitTile.Position + (0, 1));
+        SilentDie(board, unitTile.Position + (1, -1));
+        SilentDie(board, unitTile.Position + (1, 0));
+        SilentDie(board, unitTile.Position + (1, 1));
     }
 
-    private static void SilentDie(ITile[] board, Position position)
+    private static void SilentDie(IBoard board, Position position)
     {
         if (position.IsOutsideBoard())
             return;

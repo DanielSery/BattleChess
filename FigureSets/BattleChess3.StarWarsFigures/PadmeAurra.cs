@@ -13,30 +13,25 @@ public class PadmeAurra : IStarWarsFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 2, 0, 2, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 3, 0, 3, 0, 2, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 3, 0, 3, 0, 2, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 2, 0, 2, 0, 1, 0, 0, 0, 0,
+        0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
     
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
         var checkedMovement = movementUnit;
-        
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            return unitTile.CreateKillWithoutMove(targetTile, board);
-        }
 
         for (var i = 0; i < 7; i++)
         {
@@ -59,6 +54,11 @@ public class PadmeAurra : IStarWarsFigureType
             }
 
             checkedMovement += movementUnit;
+        }
+        
+        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
+            return unitTile.CreateKillWithoutMove(targetTile, board);
         }
 
         if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)

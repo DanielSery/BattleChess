@@ -26,14 +26,14 @@ public static class FiguresHelper
                !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
     }
 
-    public static void CreateFigure(this ITile tile, Figure createdFigure, ITile[] board)
+    public static void CreateFigure(this ITile tile, Figure createdFigure, IBoard board)
     {
         tile.Figure = createdFigure;
         tile.Figure.Owner.Figures.Add(tile.Figure);
         tile.Figure.FigureType.OnCreated(board);
     }
 
-    public static void Die(this ITile tile, ITile[] board)
+    public static void Die(this ITile tile, IBoard board)
     {
         var figureType = tile.Figure.FigureType;
         figureType.OnDying(tile, board); 
@@ -42,7 +42,7 @@ public static class FiguresHelper
         figureType.OnDied(tile, board);
     }
 
-    public static void MoveToTile(this ITile from, ITile to, ITile[] board)
+    public static void MoveToTile(this ITile from, ITile to, IBoard board)
     {
         var figureType = from.Figure.FigureType; 
         figureType.OnMoving(from, to, board);
@@ -51,7 +51,7 @@ public static class FiguresHelper
         figureType.OnMoved(from, to, board);
     }
 
-    public static void KillWithoutMove(this ITile from, ITile to, ITile[] board)
+    public static void KillWithoutMove(this ITile from, ITile to, IBoard board)
     {
         var attackingFigure = from.Figure.FigureType; 
         var killedFigure = to.Figure.FigureType;
@@ -66,7 +66,7 @@ public static class FiguresHelper
         attackingFigure.OnAttacked(from, to, board);
     }
 
-    public static void KillWithMove(this ITile from, ITile to, ITile[] board)
+    public static void KillWithMove(this ITile from, ITile to, IBoard board)
     {
         var attackingFigure = from.Figure.FigureType; 
         var killedFigure = to.Figure.FigureType;

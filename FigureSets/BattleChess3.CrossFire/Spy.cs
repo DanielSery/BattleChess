@@ -26,7 +26,7 @@ public class Spy : ICrossFireFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;

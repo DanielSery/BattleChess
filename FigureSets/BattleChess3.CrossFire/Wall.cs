@@ -5,7 +5,7 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Wall : ICrossFireFigureType
 {
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         return FigureAction.None;
     }

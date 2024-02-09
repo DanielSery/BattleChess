@@ -31,7 +31,7 @@ public class CombinedChessFigureType<T1, T2> : IFigureType
             { 2, new Uri($"pack://application:,,,/BattleChess3.DoubleChessFigures;component/Images/{_unitName}2.png", UriKind.Absolute) }
         };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var firstUnitAction = _firstFigure.GetPossibleAction(unitTile, targetTile, board);
         if (firstUnitAction.ActionType != FigureActionTypes.None)

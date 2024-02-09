@@ -18,7 +18,7 @@ internal interface IDoubleChessFigureType : IFigureType
             { 2, new Uri($"pack://application:,,,/BattleChess3.DoubleChessFigures;component/Images/{GetType().Name}2.png", UriKind.Absolute) }
         };
 
-    FigureAction CreateMergeAction(ITile tile1, ITile tile2, ITile[] board)
+    FigureAction CreateMergeAction(ITile tile1, ITile tile2, IBoard board)
     {
         var figure1 = this;
         var figure2 = tile2.Figure.FigureType;
@@ -84,7 +84,7 @@ internal interface IDoubleChessFigureType : IFigureType
         }
     }
 
-    FigureAction CreateMergeAction(ITile tile1, ITile tile2, IFigureType figureType, ITile[] board)
+    FigureAction CreateMergeAction(ITile tile1, ITile tile2, IFigureType figureType, IBoard board)
     {
         return new FigureAction(FigureActionTypes.Special, () =>
         {

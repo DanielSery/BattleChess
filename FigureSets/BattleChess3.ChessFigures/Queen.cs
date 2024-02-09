@@ -1,6 +1,4 @@
-﻿using BattleChess3.DefaultFigures;
-
-namespace BattleChess3.ChessFigures;
+﻿namespace BattleChess3.ChessFigures;
 
 public class Queen : IChessFigureType, IFigureTypeWithChainedMoves
 {

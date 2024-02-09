@@ -17,7 +17,7 @@ internal interface IFigureTypeWithChainedRangedAttack : IFigureType
     /// </summary>
     protected int[] Actions { get; }
 
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));

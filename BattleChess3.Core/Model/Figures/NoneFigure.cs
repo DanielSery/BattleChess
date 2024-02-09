@@ -9,7 +9,7 @@ public class NoneFigure : IFigureType
     public string UnitName => string.Empty;
     public IDictionary<int, Uri> ImageUris { get; } = new Dictionary<int, Uri>();
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         return FigureAction.None;
     }

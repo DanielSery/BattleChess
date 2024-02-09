@@ -14,9 +14,9 @@ public class AhsokaVentress : IStarWarsFigureType, IFigureTypeWithDifferentMoves
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 3, 0, 1, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 3, 8, 3, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 8, 0, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 3, 0, 1, 0, 3, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -25,26 +25,26 @@ public class AhsokaVentress : IStarWarsFigureType, IFigureTypeWithDifferentMoves
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    void IFigureType.OnMoved(ITile unitTile, ITile targetTile, ITile[] board)
+    void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {
-            TryDestroyTile(targetTile, board, new Position(1, 0));
-            TryDestroyTile(targetTile, board, new Position(-1, 0));
-            TryDestroyTile(targetTile, board, new Position(0, 1));
-            TryDestroyTile(targetTile, board, new Position(0, -1));
+            TryDestroyTile(targetTile, board, (1, 0));
+            TryDestroyTile(targetTile, board, (-1, 0));
+            TryDestroyTile(targetTile, board, (0, 1));
+            TryDestroyTile(targetTile, board, (0, -1));
         }
         else
         {
-            TryDestroyTile(targetTile, board, new Position(1, -1));
-            TryDestroyTile(targetTile, board, new Position(-1, 1));
-            TryDestroyTile(targetTile, board, new Position(1, 1));
-            TryDestroyTile(targetTile, board, new Position(-1, -1));
+            TryDestroyTile(targetTile, board, (1, -1));
+            TryDestroyTile(targetTile, board, (-1, 1));
+            TryDestroyTile(targetTile, board, (1, 1));
+            TryDestroyTile(targetTile, board, (-1, -1));
         }
     }
 
-    private static void TryDestroyTile(ITile unitTile, ITile[] board, Position positionDiff)
+    private static void TryDestroyTile(ITile unitTile, IBoard board, Position positionDiff)
     {
         var targetPosition = unitTile.Position + positionDiff;
         if (!targetPosition.IsInBoard())

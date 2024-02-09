@@ -1,6 +1,4 @@
-﻿using BattleChess3.DefaultFigures;
-
-namespace BattleChess3.LordOfTheRingsFigures;
+﻿namespace BattleChess3.LordOfTheRingsFigures;
 
 public class MerryTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentMoves
 {

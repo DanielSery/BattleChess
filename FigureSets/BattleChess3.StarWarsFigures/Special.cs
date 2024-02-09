@@ -44,7 +44,7 @@ public class Special : IStarWarsFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
@@ -58,7 +58,7 @@ public class Special : IStarWarsFigureType
         return FigureAction.None;
     }
 
-    private void MoveAction(ITile unitTile, ITile targetTile, ITile[] board)
+    private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var move = targetTile.Position - unitTile.Position;
         MoveFiguresOutsideShield(unitTile, move, board);
@@ -66,7 +66,7 @@ public class Special : IStarWarsFigureType
         unitTile.MoveToTile(targetTile, board);
     }
 
-    private void MoveShield(ITile sourceTile, Position move, ITile[] board)
+    private void MoveShield(ITile sourceTile, Position move, IBoard board)
     {
         foreach (var shieldPosition in _shieldPositions)
         {
@@ -98,7 +98,7 @@ public class Special : IStarWarsFigureType
         }
     }
 
-    private static void MoveFiguresOutsideShield(ITile sourceTile, Position move, ITile[] board)
+    private static void MoveFiguresOutsideShield(ITile sourceTile, Position move, IBoard board)
     {
         var movedPositions = GetMovedPositions(move);
         foreach (var movedPosition in movedPositions)

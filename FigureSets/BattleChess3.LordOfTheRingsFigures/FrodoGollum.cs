@@ -26,7 +26,7 @@ public class FrodoGollum : ILordOfTheRingsFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));

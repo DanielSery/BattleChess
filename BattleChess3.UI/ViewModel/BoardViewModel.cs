@@ -137,7 +137,7 @@ public sealed class BoardViewModel : ViewModelBase
             tile.PossibleAction = FigureAction.None;
         }
 
-        if (_playerService.CurrentPlayer != SelectedTile.Figure.Owner)
+        if (!_playerService.CurrentPlayer.Equals(SelectedTile.Figure.Owner))
         {
             return;
         }
@@ -162,7 +162,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private static ITile[] GetPlayerPOVBoard(Player player, IReadOnlyList<ITile> board)
+    private static IBoard GetPlayerPOVBoard(Player player, IReadOnlyList<ITile> board)
     {
         var povBoard = new ITile[Constants.BoardSize];
 
@@ -173,7 +173,7 @@ public sealed class BoardViewModel : ViewModelBase
             povBoard[position.GetPlayerPOVPosition(player)] = board[position];
         }
 
-        return povBoard;
+        return new Board(povBoard);
     }
 
     private void MouseEnterTile(ITileViewModel tile)

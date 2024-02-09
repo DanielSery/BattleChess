@@ -7,15 +7,15 @@ namespace BattleChess3.StarWarsFigures;
 
 public class Soldiers : IStarWarsFigureType 
 {
-    private int[] Actions { get; } =
+    private int[] StartingActions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 2, 0, 3, 0, 2, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -26,7 +26,33 @@ public class Soldiers : IStarWarsFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    private int[] NormalActions { get; } =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+
+
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    {
+        return CreateFigureAction(unitTile, targetTile, board,
+            unitTile.Position.Y == 1 ? StartingActions : NormalActions);
+    }
+
+    private static FigureAction CreateFigureAction(ITile unitTile, ITile targetTile, IBoard board, int[] actions)
     {
         var movement = targetTile.Position - unitTile.Position;
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
@@ -56,7 +82,7 @@ public class Soldiers : IStarWarsFigureType
             checkedMovement += movementUnit;
         }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
         {
             if (targetTile.Position.Y == 7)
             {
@@ -70,7 +96,7 @@ public class Soldiers : IStarWarsFigureType
             return unitTile.CreateMoveAction(targetTile, board);
         }
 
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
         {
             if (targetTile.Position.Y == 7)
             {
@@ -87,7 +113,7 @@ public class Soldiers : IStarWarsFigureType
 
         if (targetTile.IsOwnedByYou(unitTile) &&
             targetTile.Figure.FigureType is Bomb &&
-            (Actions[targetPosition] & 1) == 1)
+            (actions[targetPosition] & 1) == 1)
         {
             return new FigureAction(FigureActionTypes.Move, () =>
             {

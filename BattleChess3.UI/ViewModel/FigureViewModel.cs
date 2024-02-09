@@ -5,7 +5,7 @@ namespace BattleChess3.UI.ViewModel;
 
 public class FigureViewModel : IFigureType
 {
-    private readonly Func<ITile, ITile, ITile[], FigureAction> _getActionsFunc;
+    private readonly Func<ITile, ITile, IBoard, FigureAction> _getActionsFunc;
 
     public FigureViewModel(IFigureType figureType)
     {
@@ -22,7 +22,7 @@ public class FigureViewModel : IFigureType
     public string UnitName { get; }
     public IDictionary<int, Uri> ImageUris { get; }
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         return _getActionsFunc.Invoke(unitTile, targetTile, board);
     }

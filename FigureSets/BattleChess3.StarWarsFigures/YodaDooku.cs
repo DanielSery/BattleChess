@@ -26,7 +26,7 @@ public class YodaDooku : IStarWarsFigureType
         2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2
     };
 
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
@@ -95,7 +95,7 @@ public class YodaDooku : IStarWarsFigureType
             var movedTile = board[foundUnitPosition];
             if (movedTile.Figure.FigureType is Bomb)
             {
-                return new FigureAction(FigureActionTypes.Attack, () =>
+                return new FigureAction(FigureActionTypes.Special, () =>
                 {
                     var figureType = movedTile.Figure.FigureType;
                     movedTile.Figure.Owner.Figures.Remove(targetTile.Figure);

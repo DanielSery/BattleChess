@@ -19,7 +19,7 @@ public class Figure : IFigureType
     public string UnitName => FigureType.UnitName;
     public IDictionary<int, Uri> ImageUris => FigureType.ImageUris;
 
-    public FigureAction GetPossibleAction(ITile from, ITile to, ITile[] board)
+    public FigureAction GetPossibleAction(ITile from, ITile to, IBoard board)
     {
         return FigureType.GetPossibleAction(from, to, board);
     }
