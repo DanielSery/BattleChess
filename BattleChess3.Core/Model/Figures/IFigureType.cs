@@ -35,6 +35,14 @@ public interface IFigureType : IEquatable<IFigureType>
     /// </summary>
     FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board);
 
+    void OnAttacking(ITile unitTile, ITile targetTile, ITile[] board)
+    {
+    }
+
+    void OnAttacked(ITile unitTile, ITile targetTile, ITile[] board)
+    {
+    }
+
     void OnDying(ITile tile, ITile[] board)
     {
     }

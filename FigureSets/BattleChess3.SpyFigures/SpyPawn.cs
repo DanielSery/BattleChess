@@ -94,7 +94,7 @@ public class SpyPawn : ISpyFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.Die(board);
+                    unitTile.KillWithoutMove(targetTile, board);
                     targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, SpyFigureGroup.SpyQueen), board);
                     unitTile.Die(board);
                 });

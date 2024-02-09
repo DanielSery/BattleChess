@@ -5,7 +5,7 @@ using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.StarWarsFigures;
 
-internal interface IStarWarsFigureTypeWithChainedMoves : IFigureType
+internal interface IFigureTypeWithChainedRangedAttack : IFigureType
 {
     /// <summary>
     ///     15 x 15 field
@@ -30,9 +30,16 @@ internal interface IStarWarsFigureTypeWithChainedMoves : IFigureType
             {
                 break;
             }
-
+            
             var position = unitTile.Position + checkedMovement;
-            if (position.IsOutsideBoard() || !board[position].IsEmpty())
+            if (position.IsOutsideBoard())
+            {
+                return FigureAction.None;
+            }
+
+            var isYoursBomb = board[position].Figure.FigureType is Bomb &&
+                              board[position].IsOwnedByYou(unitTile);
+            if (!board[position].IsEmpty() && !isYoursBomb)
             {
                 return FigureAction.None;
             }
@@ -45,9 +52,20 @@ internal interface IStarWarsFigureTypeWithChainedMoves : IFigureType
             return unitTile.CreateMoveAction(targetTile, board);
         }
 
+        if (targetTile.IsOwnedByYou(unitTile) &&
+            targetTile.Figure.FigureType is Bomb &&
+            (Actions[targetPosition] & 1) == 1)
+        {
+            return new FigureAction(FigureActionTypes.Move, () =>
+            {
+                targetTile.Die(board);
+                unitTile.MoveToTile(targetTile, board);
+            });
+        }
+
         if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
         {
-            return unitTile.CreateKillWithMove(targetTile, board);
+            return unitTile.CreateKillWithoutMove(targetTile, board);
         }
 
         return FigureAction.None;

@@ -182,10 +182,10 @@ Move + Attack:
 ⬜⬜⬜⬜⬜⬜⬜⬜
 </value>
   </data>
-    <data name="MaceDooku_Name" xml:space="preserve">
+    <data name="YodaDooku_Name" xml:space="preserve">
     <value>Pawn</value>
   </data>
-    <data name="MaceDooku_Description" xml:space="preserve">
+    <data name="YodaDooku_Description" xml:space="preserve">
     <value>Pawn
 
 Move:

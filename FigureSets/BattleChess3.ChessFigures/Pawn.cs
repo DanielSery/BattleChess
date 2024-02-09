@@ -94,7 +94,7 @@ public class Pawn : IChessFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.Die(board);
+                    unitTile.KillWithoutMove(targetTile, board);
                     targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, ChessFigureGroup.Queen), board);
                     unitTile.Die(board);
                 });

@@ -94,7 +94,7 @@ public class ExplodingChessPawn : IExplodingChessFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.Die(board);
+                    unitTile.KillWithoutMove(targetTile, board);
                     targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, ExplodingChessFigureGroup.ExplodingQueen), board);
                     unitTile.Die(board);
                 });

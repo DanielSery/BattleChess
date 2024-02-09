@@ -18,7 +18,7 @@ public static class DefaultFigureActions
 
     public static FigureAction CreateKillWithoutMove(this ITile unitTile, ITile targetTile, ITile[] board)
     {
-        return new FigureAction(FigureActionTypes.Attack, () => targetTile.Die(board));
+        return new FigureAction(FigureActionTypes.Attack, () => unitTile.KillWithoutMove(targetTile, board));
     }
 
     public static FigureAction CreateKillWithMove(this ITile unitTile, ITile targetTile, ITile[] board)

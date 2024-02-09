@@ -5,20 +5,20 @@ using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.StarWarsFigures;
 
-public class AnakinGrievus : IStarWarsFigureType
+public class AnakinGrievus : IStarWarsFigureType, IFigureTypeWithDifferentMoves
 {
-    private int[] Actions { get; } =
+    int[] IFigureTypeWithDifferentMoves.Actions { get; } =
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 8, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 3, 0, 1, 0, 3, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 3, 8, 3, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 3, 0, 1, 0, 3, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -26,51 +26,38 @@ public class AnakinGrievus : IStarWarsFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
+    void IFigureType.OnMoved(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-
-        if (unitTile.Position.Y == 0 &&
-            unitTile.AbsolutePosition.X == 4 &&
-            targetTile.Position.Y == 0)
+        if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {
-            if (targetTile.AbsolutePosition.X == 0 &&
-                targetTile.Figure.FigureType.Equals(StarWarsFigureGroup.MaceDooku) &&
-                board[new Position(1, 0)].IsEmpty() &&
-                board[new Position(2, 0)].IsEmpty() &&
-                board[new Position(3, 0)].IsEmpty())
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    unitTile.MoveToTile(board[new Position(2, 0)], board);
-                    targetTile.MoveToTile(board[new Position(3, 0)], board);
-                });
-            }
+            TryDestroyTile(targetTile, board, new Position(1, 0));
+            TryDestroyTile(targetTile, board, new Position(-1, 0));
+            TryDestroyTile(targetTile, board, new Position(0, 1));
+            TryDestroyTile(targetTile, board, new Position(0, -1));
+        }
+        else
+        {
+            TryDestroyTile(targetTile, board, new Position(1, -1));
+            TryDestroyTile(targetTile, board, new Position(-1, 1));
+            TryDestroyTile(targetTile, board, new Position(1, 1));
+            TryDestroyTile(targetTile, board, new Position(-1, -1));
+        }
+    }
 
-            if (targetTile.AbsolutePosition.X == 7 &&
-                targetTile.Figure.FigureType.Equals(StarWarsFigureGroup.MaceDooku) &&
-                board[new Position(5, 0)].IsEmpty() &&
-                board[new Position(6, 0)].IsEmpty())
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    unitTile.MoveToTile(board[new Position(6, 0)], board);
-                    targetTile.MoveToTile(board[new Position(5, 0)], board);
-                });
-            }
+    private static void TryDestroyTile(ITile unitTile, ITile[] board, Position positionDiff)
+    {
+        var targetPosition = unitTile.Position + positionDiff;
+        if (!targetPosition.IsInBoard())
+        {
+            return;
         }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        var target = board[targetPosition];
+        if (!target.IsEmpty() &&
+            !unitTile.Figure.Owner.Equals(target.Figure.Owner))
         {
-            return unitTile.CreateMoveAction(targetTile, board);
+            unitTile.KillWithoutMove(board[targetPosition], board);
         }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            return unitTile.CreateKillWithMove(targetTile, board);
-        }
-
-        return FigureAction.None;
     }
 }

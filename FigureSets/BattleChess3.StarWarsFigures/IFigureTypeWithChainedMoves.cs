@@ -5,38 +5,24 @@ using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.StarWarsFigures;
 
-public class CodyBane : IStarWarsFigureType
+internal interface IFigureTypeWithChainedMoves : IFigureType
 {
-    private int[] Actions { get; } =
-    {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 2, 0, 2, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 3, 0, 3, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 3, 0, 3, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 2, 0, 2, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-    
+    /// <summary>
+    ///     15 x 15 field
+    ///     0 - no action
+    ///     1 - possible move
+    ///     2 - possible attack
+    ///     3 - possible move + attack
+    ///     8 - the unit
+    /// </summary>
+    protected int[] Actions { get; }
+
     FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, ITile[] board)
     {
         var movement = targetTile.Position - unitTile.Position;
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
         var checkedMovement = movementUnit;
-        
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            return unitTile.CreateKillWithoutMove(targetTile, board);
-        }
 
         for (var i = 0; i < 7; i++)
         {
@@ -75,6 +61,11 @@ public class CodyBane : IStarWarsFigureType
                 targetTile.Die(board);
                 unitTile.MoveToTile(targetTile, board);
             });
+        }
+
+        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        {
+            return unitTile.CreateKillWithMove(targetTile, board);
         }
 
         return FigureAction.None;

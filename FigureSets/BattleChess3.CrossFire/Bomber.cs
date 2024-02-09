@@ -38,14 +38,14 @@ public class Bomber : ICrossFireFigureType
                 targetTile.Figure = unitTile.Figure;
                 unitTile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
 
-                TryDestroyTile(board, targetTile.Position + (1, -1));
-                TryDestroyTile(board, targetTile.Position + (1, 0));
-                TryDestroyTile(board, targetTile.Position + (1, 1));
-                TryDestroyTile(board, targetTile.Position + (0, -1));
-                TryDestroyTile(board, targetTile.Position + (0, 1));
-                TryDestroyTile(board, targetTile.Position + (-1, -1));
-                TryDestroyTile(board, targetTile.Position + (-1, 0));
-                TryDestroyTile(board, targetTile.Position + (-1, 1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (1, -1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (1, 0));
+                TryDestroyTile(unitTile, board, targetTile.Position + (1, 1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (0, -1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (0, 1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (-1, -1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 0));
+                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 1));
             });
         }
 
@@ -53,27 +53,27 @@ public class Bomber : ICrossFireFigureType
         {
             return new FigureAction(FigureActionTypes.Attack, () =>
             {
-                TryDestroyTile(board, targetTile.Position + (1, -1));
-                TryDestroyTile(board, targetTile.Position + (1, 0));
-                TryDestroyTile(board, targetTile.Position + (1, 1));
-                TryDestroyTile(board, targetTile.Position + (0, -1));
-                TryDestroyTile(board, targetTile.Position + (0, 1));
-                TryDestroyTile(board, targetTile.Position + (-1, -1));
-                TryDestroyTile(board, targetTile.Position + (-1, 0));
-                TryDestroyTile(board, targetTile.Position + (-1, 1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (1, -1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (1, 0));
+                TryDestroyTile(unitTile, board, targetTile.Position + (1, 1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (0, -1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (0, 1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (-1, -1));
+                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 0));
+                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 1));
             });
         }
 
         return FigureAction.None;
     }
 
-    private static void TryDestroyTile(ITile[] board, Position targetPosition)
+    private static void TryDestroyTile(ITile unitTile, ITile[] board, Position targetPosition)
     {
         if (!targetPosition.IsInBoard())
         {
             return;
         }
 
-        board[targetPosition].Die(board);
+        unitTile.KillWithoutMove(board[targetPosition], board);
     }
 }

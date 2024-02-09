@@ -170,59 +170,6 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pawn
-        ///
-        ///Move:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///
-        ///Attack:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///      
-        ///Special: If initial position, can move further
-        ///Special: If on last tile, changes to Queen
-        ///.
-        /// </summary>
-        internal static string MaceDooku_Description {
-            get {
-                return ResourceManager.GetString("MaceDooku_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pawn.
-        /// </summary>
-        internal static string MaceDooku_Name {
-            get {
-                return ResourceManager.GetString("MaceDooku_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Queen
         ///
         ///Move + Attack:
@@ -324,6 +271,59 @@ namespace BattleChess3.StarWarsFigures.Localization {
         internal static string StarWarsFigureGroup_Name {
             get {
                 return ResourceManager.GetString("StarWarsFigureGroup_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pawn
+        ///
+        ///Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///      
+        ///Special: If initial position, can move further
+        ///Special: If on last tile, changes to Queen
+        ///.
+        /// </summary>
+        internal static string YodaDooku_Description {
+            get {
+                return ResourceManager.GetString("YodaDooku_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pawn.
+        /// </summary>
+        internal static string YodaDooku_Name {
+            get {
+                return ResourceManager.GetString("YodaDooku_Name", resourceCulture);
             }
         }
     }

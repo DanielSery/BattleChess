@@ -24,6 +24,7 @@ internal interface IExplodingChessFigureType : IFigureType
         SilentDie(board, unitTile.Position + new Position(-1, 0));
         SilentDie(board, unitTile.Position + new Position(-1, 1));
         SilentDie(board, unitTile.Position + new Position(0, -1));
+        SilentDie(board, unitTile.Position + new Position(0, 0));
         SilentDie(board, unitTile.Position + new Position(0, 1));
         SilentDie(board, unitTile.Position + new Position(1, -1));
         SilentDie(board, unitTile.Position + new Position(1, 0));

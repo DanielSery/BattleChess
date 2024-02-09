@@ -10,11 +10,11 @@ public class StarWarsFigureGroup : IFigureGroup
     public static readonly IFigureType AhsokaVentress = new AhsokaVentress();
     public static readonly IFigureType AnakinGrievus = new AnakinGrievus();
     public static readonly IFigureType CodyBane = new CodyBane();
-    public static readonly IFigureType MaceDooku = new MaceDooku();
+    public static readonly IFigureType MaceDooku = new YodaDooku();
     public static readonly IFigureType ObiwanPalpatine = new ObiwanPalpatine();
     public static readonly IFigureType PadmeAurra = new PadmeAurra();
-    public static readonly IFigureType Shield = new Bomb();
-    public static readonly IFigureType Shielded = new Special();
+    public static readonly IFigureType Bomb = new Bomb();
+    public static readonly IFigureType Special = new Special();
     public static readonly IFigureType Soldiers = new Soldiers();
 
     public IFigureType[] FigureTypes =>
@@ -26,8 +26,8 @@ public class StarWarsFigureGroup : IFigureGroup
             MaceDooku,
             ObiwanPalpatine,
             PadmeAurra,
-            Shield,
-            Shielded,
+            Bomb,
+            Special,
             Soldiers
         };
 }

@@ -111,7 +111,7 @@ public class SinglePawn : IDoubleChessFigureType
             {
                 return new FigureAction(FigureActionTypes.Special, () =>
                 {
-                    targetTile.Die(board);
+                    unitTile.KillWithoutMove(targetTile, board);
                     targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, DoubleChessFigureGroup.Queen), board);
                     unitTile.Die(board);
                 });
