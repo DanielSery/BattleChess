@@ -36,15 +36,22 @@ public class ObiwanPalpatine : IStarWarsFigureType
             return new FigureAction(FigureActionTypes.Special,
                 () => unitTile.SwapTiles(targetTile));
         }
-
-        if (targetTile.IsOwnedByYou(unitTile) &&
-            targetTile.Figure.FigureType is Bomb &&
+        
+        if (targetTile.Figure.FigureType is Bomb &&
             (Actions[targetPosition] & 1) == 1)
         {
+            if (targetTile.IsOwnedByYou(unitTile))
+            {
+                return new FigureAction(FigureActionTypes.Move, () =>
+                {
+                    targetTile.Die(board);
+                    unitTile.MoveToTile(targetTile, board);
+                });
+            }
+
             return new FigureAction(FigureActionTypes.Move, () =>
             {
-                targetTile.Die(board);
-                unitTile.MoveToTile(targetTile, board);
+                unitTile.KillWithMove(targetTile, board);
             });
         }
 

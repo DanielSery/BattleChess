@@ -15,9 +15,9 @@ public class PadmeAurra : IStarWarsFigureType
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 1, 8, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -46,9 +46,7 @@ public class PadmeAurra : IStarWarsFigureType
                 return FigureAction.None;
             }
 
-            var isYoursBomb = board[position].Figure.FigureType is Bomb &&
-                              board[position].IsOwnedByYou(unitTile);
-            if (!board[position].IsEmpty() && !isYoursBomb)
+            if (!board[position].IsEmpty())
             {
                 return FigureAction.None;
             }
@@ -65,15 +63,22 @@ public class PadmeAurra : IStarWarsFigureType
         {
             return unitTile.CreateMoveAction(targetTile, board);
         }
-
-        if (targetTile.IsOwnedByYou(unitTile) &&
-            targetTile.Figure.FigureType is Bomb &&
+        
+        if (targetTile.Figure.FigureType is Bomb &&
             (Actions[targetPosition] & 1) == 1)
         {
+            if (targetTile.IsOwnedByYou(unitTile))
+            {
+                return new FigureAction(FigureActionTypes.Move, () =>
+                {
+                    targetTile.Die(board);
+                    unitTile.MoveToTile(targetTile, board);
+                });
+            }
+
             return new FigureAction(FigureActionTypes.Move, () =>
             {
-                targetTile.Die(board);
-                unitTile.MoveToTile(targetTile, board);
+                unitTile.KillWithMove(targetTile, board);
             });
         }
 

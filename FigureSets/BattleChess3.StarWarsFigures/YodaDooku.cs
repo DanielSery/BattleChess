@@ -15,9 +15,9 @@ public class YodaDooku : IStarWarsFigureType
         0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0,
         0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
-        2, 2, 2, 2, 2, 2, 2, 8, 2, 2, 2, 2, 2, 2, 2,
-        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 0, 0, 0, 0,
+        2, 2, 2, 2, 2, 2, 3, 8, 3, 2, 2, 2, 2, 2, 2,
+        0, 0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
         0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0,
@@ -32,15 +32,22 @@ public class YodaDooku : IStarWarsFigureType
         var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
         var checkedMovement = movementUnit;
-
-        if (targetTile.IsOwnedByYou(unitTile) &&
-            targetTile.Figure.FigureType is Bomb &&
+        
+        if (targetTile.Figure.FigureType is Bomb &&
             (Actions[targetPosition] & 1) == 1)
         {
+            if (targetTile.IsOwnedByYou(unitTile))
+            {
+                return new FigureAction(FigureActionTypes.Move, () =>
+                {
+                    targetTile.Die(board);
+                    unitTile.MoveToTile(targetTile, board);
+                });
+            }
+
             return new FigureAction(FigureActionTypes.Move, () =>
             {
-                targetTile.Die(board);
-                unitTile.MoveToTile(targetTile, board);
+                unitTile.KillWithMove(targetTile, board);
             });
         }
 
@@ -110,17 +117,6 @@ public class YodaDooku : IStarWarsFigureType
                     targetTile.SwapTiles(board[foundUnitPosition]);
                 });
             }
-        }
-        
-        if (targetTile.IsOwnedByYou(unitTile) &&
-            targetTile.Figure.FigureType is Bomb &&
-            (Actions[targetPosition] & 1) == 1)
-        {
-            return new FigureAction(FigureActionTypes.Move, () =>
-            {
-                targetTile.Die(board);
-                unitTile.MoveToTile(targetTile, board);
-            });
         }
 
         return FigureAction.None;

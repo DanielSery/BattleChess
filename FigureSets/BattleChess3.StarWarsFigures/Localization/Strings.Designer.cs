@@ -60,18 +60,29 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bishop
+        ///   Looks up a localized string similar to Ahsoka / Ventress
         ///
-        ///Move + Attack:
+        ///Move: Kills multiple in shape based on move direction
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬛
-        ///⬛⬜⬜⬜⬜⬜⬛⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬛⬜▣⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜
+        ///
+        ///Attack: Kills multiple in shape based on move direction
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜▩⬜⬜⬜
+        ///⬛⬜⬜▩⬛▩⬜⬜
+        ///⬜⬜⬜⬜▩⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
         ///.
         /// </summary>
         internal static string AhsokaVentress_Description {
@@ -81,7 +92,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bishop.
+        ///   Looks up a localized string similar to Ahsoka / Ventress.
         /// </summary>
         internal static string AhsokaVentress_Name {
             get {
@@ -90,20 +101,29 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to King
+        ///   Looks up a localized string similar to Anakin / Grievus
+        ///            
+        ///Move: Kills multiple in shape based on move direction
         ///
-        ///Move + Attack:
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬛⬜▣⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜
+        ///
+        ///Attack: Kills multiple in shape based on move direction
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜▩⬜⬜⬜
+        ///⬛⬜⬜▩⬛▩⬜⬜
+        ///⬜⬜⬜⬜▩⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///
-        ///Special: Can castle with rook
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
         ///.
         /// </summary>
         internal static string AnakinGrievus_Description {
@@ -113,7 +133,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to King.
+        ///   Looks up a localized string similar to Anakin / Grievus.
         /// </summary>
         internal static string AnakinGrievus_Name {
             get {
@@ -122,7 +142,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a.
+        ///   Looks up a localized string similar to Bomb.
         /// </summary>
         internal static string Bomb_Description {
             get {
@@ -131,7 +151,10 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a.
+        ///   Looks up a localized string similar to Bomb
+        ///
+        ///Special: When killed, destroys the unit which is on the tile
+        ///Special: Friendly units can safely dispose the bomb.
         /// </summary>
         internal static string Bomb_Name {
             get {
@@ -140,19 +163,31 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Knight
+        ///   Looks up a localized string similar to Cody / Cad Bane
         ///
-        ///Move + Attack:
+        ///Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
         ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///
+        ///Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///.
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///
+        ///Special: Kills from distance and do not move on that tile.
         /// </summary>
         internal static string CodyBane_Description {
             get {
@@ -161,7 +196,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Knight.
+        ///   Looks up a localized string similar to Cody / Cad Bane.
         /// </summary>
         internal static string CodyBane_Name {
             get {
@@ -170,18 +205,36 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queen
+        ///   Looks up a localized string similar to Obiwan / Palpatine
         ///
-        ///Move + Attack:
+        ///Move:
         ///
-        ///⬜⬜⬜⬛⬜⬜⬜⬛
-        ///⬛⬜⬜⬛⬜⬜⬛⬜
-        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬛⬜⬜
-        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///A
+        ///
+        ///ttack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬛⬜▣⬜⬛⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///
+        ///Special: Can swap with any friendly unit
+        ///
+        ///Special: On attack turns enemy to ally
         ///.
         /// </summary>
         internal static string ObiwanPalpatine_Description {
@@ -191,7 +244,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queen.
+        ///   Looks up a localized string similar to Obiwan / Palpatine.
         /// </summary>
         internal static string ObiwanPalpatine_Name {
             get {
@@ -200,19 +253,31 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rook
+        ///   Looks up a localized string similar to Padme / Aurra
         ///
-        ///Move + Attack:
+        ///Move:
         ///
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬛⬛⬛▣⬛⬛⬛⬛
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///
+        ///Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///
+        ///Special: Kills from distance and do not move on that tile.
         /// </summary>
         internal static string PadmeAurra_Description {
             get {
@@ -221,7 +286,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rook.
+        ///   Looks up a localized string similar to Padme / Aurra.
         /// </summary>
         internal static string PadmeAurra_Name {
             get {
@@ -230,7 +295,42 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a.
+        ///   Looks up a localized string similar to Clones / Droids
+        ///
+        ///Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///      
+        ///Special: If initial position, can move further
+        ///Special: If on last tile, changes to Obiwan / Palpatine
+        ///.
         /// </summary>
         internal static string Soldiers_Description {
             get {
@@ -239,7 +339,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a.
+        ///   Looks up a localized string similar to Clones / Droids.
         /// </summary>
         internal static string Soldiers_Name {
             get {
@@ -248,7 +348,34 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a.
+        ///   Looks up a localized string similar to Special forces
+        ///
+        ///Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///Mine field:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜▦▦▦▦▦⬜⬜
+        ///⬜▦⬜⬜⬜▦⬜⬜
+        ///⬜▦⬜▣⬜▦⬜⬜
+        ///⬜▦⬜⬜⬜▦⬜⬜
+        ///⬜▦▦▦▦▦⬜⬜
+        ///      
+        ///Attack: Cannot directly attack
+        ///      
+        ///Special: Creates mine field around itself
+        ///.
         /// </summary>
         internal static string Special_Description {
             get {
@@ -257,7 +384,7 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a.
+        ///   Looks up a localized string similar to Special forces.
         /// </summary>
         internal static string Special_Name {
             get {
@@ -275,41 +402,32 @@ namespace BattleChess3.StarWarsFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pawn
+        ///   Looks up a localized string similar to Yoda / Dooku
         ///
         ///Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///
-        ///Attack:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///      
-        ///Special: If initial position, can move further
-        ///Special: If on last tile, changes to Queen
+        ///
+        ///Force push/pull:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬛
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///
+        ///
+        ///Special: Can force push / pull
         ///.
         /// </summary>
         internal static string YodaDooku_Description {

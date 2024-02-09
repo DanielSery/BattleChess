@@ -127,109 +127,111 @@
         <value>Star wars</value>
     </data>
     <data name="AhsokaVentress_Name" xml:space="preserve">
-    <value>Bishop</value>
-  </data>
+        <value>Ahsoka / Ventress</value>
+    </data>
     <data name="AhsokaVentress_Description" xml:space="preserve">
-    <value>Bishop
+        <value>Ahsoka / Ventress
 
-Move + Attack:
+Move: Kills multiple in shape based on move direction
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬛
+⬜▩⬜▩⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+⬜▩⬜▩⬜⬜⬜⬜
+⬛⬜▣⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+
+Attack: Kills multiple in shape based on move direction
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜▩⬜⬜⬜
+⬛⬜⬜▩⬛▩⬜⬜
+⬜⬜⬜⬜▩⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+</value>
+    </data>
+    <data name="AnakinGrievus_Name" xml:space="preserve">
+        <value>Anakin / Grievus</value>
+    </data>
+    <data name="AnakinGrievus_Description" xml:space="preserve">
+        <value>Anakin / Grievus
+            
+Move: Kills multiple in shape based on move direction
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜▩⬜▩⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+⬜▩⬜▩⬜⬜⬜⬜
+⬛⬜▣⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+
+Attack: Kills multiple in shape based on move direction
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜▩⬜⬜⬜
+⬛⬜⬜▩⬛▩⬜⬜
+⬜⬜⬜⬜▩⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+</value>
+    </data>
+    <data name="CodyBane_Name" xml:space="preserve">
+        <value>Cody / Cad Bane</value>
+    </data>
+    <data name="CodyBane_Description" xml:space="preserve">
+        <value>Cody / Cad Bane
+
+Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+
+Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
 ⬛⬜⬜⬜⬜⬜⬛⬜
 ⬜⬛⬜⬜⬜⬛⬜⬜
 ⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬜⬜▣⬜⬜⬜⬜
 ⬜⬜⬛⬜⬛⬜⬜⬜
-</value>
-  </data>
-    <data name="AnakinGrievus_Name" xml:space="preserve">
-    <value>King</value>
-  </data>
-    <data name="AnakinGrievus_Description" xml:space="preserve">
-    <value>King
-
-Move + Attack:
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬛⬛⬛⬜⬜⬜
-⬜⬜⬛▣⬛⬜⬜⬜
-⬜⬜⬛⬛⬛⬜⬜⬜
-
-Special: Can castle with rook
-</value>
-  </data>
-    <data name="CodyBane_Name" xml:space="preserve">
-    <value>Knight</value>
-  </data>
-    <data name="CodyBane_Description" xml:space="preserve">
-    <value>Knight
-
-Move + Attack:
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬛⬜⬜⬜⬛⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬛⬜⬜⬜⬛⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-</value>
-  </data>
+⬛⬜⬜⬜⬜⬜⬛⬜
+
+Special: Kills from distance and do not move on that tile</value>
+    </data>
     <data name="YodaDooku_Name" xml:space="preserve">
     <value>Pawn</value>
   </data>
     <data name="YodaDooku_Description" xml:space="preserve">
-    <value>Pawn
+        <value>Yoda / Dooku
 
 Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-
-Attack:
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-      
-Special: If initial position, can move further
-Special: If on last tile, changes to Queen
-</value>
-  </data>
-    <data name="ObiwanPalpatine_Name" xml:space="preserve">
-    <value>Queen</value>
-  </data>
-    <data name="ObiwanPalpatine_Description" xml:space="preserve">
-    <value>Queen
 
-Move + Attack:
+Force push/pull:
 
 ⬜⬜⬜⬛⬜⬜⬜⬛
 ⬛⬜⬜⬛⬜⬜⬛⬜
@@ -239,42 +241,158 @@ Move + Attack:
 ⬜⬜⬛⬛⬛⬜⬜⬜
 ⬜⬛⬜⬛⬜⬛⬜⬜
 ⬛⬜⬜⬛⬜⬜⬛⬜
+
+
+Special: Can force push / pull
 </value>
-  </data>
+    </data>
+    <data name="ObiwanPalpatine_Name" xml:space="preserve">
+        <value>Obiwan / Palpatine</value>
+    </data>
+    <data name="ObiwanPalpatine_Description" xml:space="preserve">
+        <value>Obiwan / Palpatine
+
+Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+A
+
+ttack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬛⬜▣⬜⬛⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+
+Special: Can swap with any friendly unit
+
+Special: On attack turns enemy to ally
+</value>
+    </data>
     <data name="PadmeAurra_Name" xml:space="preserve">
-    <value>Rook</value>
-  </data>
+        <value>Padme / Aurra</value>
+    </data>
     <data name="PadmeAurra_Description" xml:space="preserve">
-    <value>Rook
+        <value>Padme / Aurra
 
-Move + Attack:
+Move:
 
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬛⬛⬛▣⬛⬛⬛⬛
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-</value>
-  </data>
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+
+Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+
+Special: Kills from distance and do not move on that tile</value>
+    </data>
     <data name="Bomb_Name" xml:space="preserve">
-        <value>a</value>
+        <value>Bomb
+
+Special: When killed, destroys the unit which is on the tile
+Special: Friendly units can safely dispose the bomb</value>
     </data>
     <data name="Bomb_Description" xml:space="preserve">
-        <value>a</value>
+        <value>Bomb</value>
     </data>
     <data name="Special_Name" xml:space="preserve">
-        <value>a</value>
+        <value>Special forces</value>
     </data>
     <data name="Special_Description" xml:space="preserve">
-        <value>a</value>
+        <value>Special forces
+
+Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+Mine field:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜▦▦▦▦▦⬜⬜
+⬜▦⬜⬜⬜▦⬜⬜
+⬜▦⬜▣⬜▦⬜⬜
+⬜▦⬜⬜⬜▦⬜⬜
+⬜▦▦▦▦▦⬜⬜
+      
+Attack: Cannot directly attack
+      
+Special: Creates mine field around itself
+</value>
     </data>
     <data name="Soldiers_Name" xml:space="preserve">
-        <value>a</value>
+        <value>Clones / Droids</value>
     </data>
     <data name="Soldiers_Description" xml:space="preserve">
-        <value>a</value>
+        <value>Clones / Droids
+
+Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+      
+Special: If initial position, can move further
+Special: If on last tile, changes to Obiwan / Palpatine
+</value>
     </data>
 </root>

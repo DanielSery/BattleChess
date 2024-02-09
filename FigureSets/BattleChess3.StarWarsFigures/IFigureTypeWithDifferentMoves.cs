@@ -21,15 +21,22 @@ internal interface IFigureTypeWithDifferentMoves : IFigureType
     {
         var movement = targetTile.Position - unitTile.Position;
         var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-
-        if (targetTile.IsOwnedByYou(unitTile) &&
-            targetTile.Figure.FigureType is Bomb &&
+        
+        if (targetTile.Figure.FigureType is Bomb &&
             (Actions[targetPosition] & 1) == 1)
         {
+            if (targetTile.IsOwnedByYou(unitTile))
+            {
+                return new FigureAction(FigureActionTypes.Move, () =>
+                {
+                    targetTile.Die(board);
+                    unitTile.MoveToTile(targetTile, board);
+                });
+            }
+
             return new FigureAction(FigureActionTypes.Move, () =>
             {
-                targetTile.Die(board);
-                unitTile.MoveToTile(targetTile, board);
+                unitTile.KillWithMove(targetTile, board);
             });
         }
 
