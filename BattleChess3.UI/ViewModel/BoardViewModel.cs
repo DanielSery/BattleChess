@@ -50,6 +50,13 @@ public sealed class BoardViewModel : ViewModelBase
         {
             _mouseOnTile.IsMouseOver = false;
             Set(ref _mouseOnTile, value);
+            
+            if (_selectedTile.Equals(NoneTileViewModel.Instance))
+            {                
+                ClearPossibleActions();
+                SetPossibleActions(value);
+            }
+            
             RaisePropertyChanged(nameof(InfoTile));
             value.IsMouseOver = true;
         }
@@ -127,28 +134,26 @@ public sealed class BoardViewModel : ViewModelBase
             SelectedTile = NoneTileViewModel.Instance;
         }
 
-        SetPossibleActions(clickedTile);
+        ClearPossibleActions();
+        if (_playerService.CurrentPlayer.Equals(clickedTile.Figure.Owner))
+        {
+            SetPossibleActions(clickedTile);
+        }
     }
 
-    private void SetPossibleActions(ITileViewModel clickedTile)
+
+    private void ClearPossibleActions()
     {
         foreach (var tile in Board)
         {
             tile.PossibleAction = FigureAction.None;
         }
-
-        if (!_playerService.CurrentPlayer.Equals(SelectedTile.Figure.Owner))
-        {
-            return;
-        }
-
-        SetPossibleActions((ITile)clickedTile);
     }
 
     private void SetPossibleActions(ITile clickedTile)
     {
-        var povBoard = GetPlayerPOVBoard(_playerService.CurrentPlayer, Board);
-        var povClickedTile = clickedTile.GetPovTile(_playerService.CurrentPlayer);
+        var povBoard = GetPlayerPOVBoard(clickedTile.Figure.Owner, Board);
+        var povClickedTile = clickedTile.GetPovTile(clickedTile.Figure.Owner);
         foreach (var tile in povBoard)
         {
             if (clickedTile.Position == tile.Position)
@@ -156,7 +161,7 @@ public sealed class BoardViewModel : ViewModelBase
                 continue;
             }
 
-            var targetTile = tile.GetPovTile(_playerService.CurrentPlayer);
+            var targetTile = tile.GetPovTile(clickedTile.Figure.Owner);
             Board[tile.Position].PossibleAction =
                 clickedTile.Figure.GetPossibleAction(povClickedTile, targetTile, povBoard);
         }

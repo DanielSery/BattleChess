@@ -27,7 +27,7 @@ internal interface IExplodingChessFigureTypeWithDifferentMoves : IFigureType
             return unitTile.CreateMoveAction(targetTile, board);
         }
 
-        if (!targetTile.IsEmpty() && (Actions[targetPosition] & 2) == 2)
+        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
         {
             return unitTile.CreateKillWithMove(targetTile, board);
         }

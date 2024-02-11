@@ -88,7 +88,7 @@ public class ExplodingChessPawn : IExplodingChessFigureType
             return unitTile.CreateMoveAction(targetTile, board);
         }
 
-        if (!targetTile.IsEmpty() && (actions[targetPosition] & 2) == 2)
+        if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
         {
             if (targetTile.Position.Y == 7)
             {
