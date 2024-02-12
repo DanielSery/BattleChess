@@ -3,9 +3,9 @@ using BattleChess3.Core.Model.Figures;
 using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 
-namespace BattleChess3.ExplodingChessFigures;
+namespace BattleChess3.DoubleChessFigures;
 
-internal interface IExplodingChessFigureTypeWithDifferentAttackMoves : IFigureType
+internal interface IDoubleChessFigureTypeWithDifferentAttackMoves : IDoubleChessFigureType
 {
     protected Position[] AttackMovePositions { get; }
 
@@ -25,6 +25,12 @@ internal interface IExplodingChessFigureTypeWithDifferentAttackMoves : IFigureTy
             if (targetTile.IsOwnedByEnemy(unitTile))
             {
                 yield return unitTile.CreateKillWithMove(targetTile, board);
+            }
+
+            if (targetTile.IsOwnedByYou(unitTile) &&
+                TryCreateMergeAction(unitTile, targetTile, board, out var mergeAction))
+            {
+                yield return mergeAction;
             }
         }
     }

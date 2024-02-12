@@ -7,70 +7,69 @@ namespace BattleChess3.ExplodingChessFigures;
 
 public class ExplodingChessKing : IExplodingChessFigureType
 {
-    private int[] Actions { get; } =
+    private readonly Position[] _attackMovePositions = 
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 8, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-1, -1), (-1, 0), (-1, 1),
+        (0, -1), (0, 1),
+        (1, -1), (1, 0), (1, 1)
     };
-
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-
-        if (unitTile.Position.Y == 0 &&
-            unitTile.AbsolutePosition.X == 4 &&
-            targetTile.Position.Y == 0)
+        foreach (var movement in _attackMovePositions)
         {
-            if (targetTile.AbsolutePosition.X == 0 &&
-                targetTile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
-                board[(1, 0)].IsEmpty() &&
-                board[(2, 0)].IsEmpty() &&
-                board[(3, 0)].IsEmpty())
+            var position = unitTile.Position + movement;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsEmpty())
             {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    unitTile.MoveToTile(board[(2, 0)], board);
-                    targetTile.MoveToTile(board[(3, 0)], board);
-                });
+                yield return unitTile.CreateMoveAction(targetTile, board);
             }
 
-            if (targetTile.AbsolutePosition.X == 7 &&
-                targetTile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
-                board[(5, 0)].IsEmpty() &&
-                board[(6, 0)].IsEmpty())
+            if (targetTile.IsOwnedByEnemy(unitTile))
             {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    unitTile.MoveToTile(board[(6, 0)], board);
-                    targetTile.MoveToTile(board[(5, 0)], board);
-                });
+                yield return unitTile.CreateKillWithMove(targetTile, board);
             }
         }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        if (unitTile.Position.Y != 0 ||
+            unitTile.AbsolutePosition.X != 4)
         {
-            return unitTile.CreateMoveAction(targetTile, board);
+            yield break;
+        }
+        
+        var rook1Tile = board.GetAbsoluteTile((0, 0));
+        if (rook1Tile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
+            board.GetAbsoluteTile((1, 0)).IsEmpty() &&
+            board.GetAbsoluteTile((2, 0)).IsEmpty() &&
+            board.GetAbsoluteTile((3, 0)).IsEmpty())
+        {
+            yield return new FigureAction(
+                FigureActionTypes.Special, 
+                unitTile.AbsolutePosition,
+                rook1Tile.AbsolutePosition,
+                () =>
+                {
+                    unitTile.MoveToTile(board.GetAbsoluteTile((2, 0)), board);
+                    rook1Tile.MoveToTile(board.GetAbsoluteTile((3, 0)), board);
+                });
         }
 
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        var rook2Tile = board.GetAbsoluteTile((7, 0));
+        if (rook2Tile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
+            board.GetAbsoluteTile((5, 0)).IsEmpty() &&
+            board.GetAbsoluteTile((6, 0)).IsEmpty())
         {
-            return unitTile.CreateKillWithMove(targetTile, board);
+            yield return new FigureAction(
+                FigureActionTypes.Special,
+                unitTile.AbsolutePosition,
+                rook2Tile.AbsolutePosition,
+                () =>
+                {
+                    unitTile.MoveToTile(board.GetAbsoluteTile((6, 0)), board);
+                    rook2Tile.MoveToTile(board.GetAbsoluteTile((5, 0)), board);
+                });
         }
-
-        return FigureAction.None;
     }
 }

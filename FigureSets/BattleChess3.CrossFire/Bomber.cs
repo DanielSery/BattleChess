@@ -7,73 +7,47 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Bomber : ICrossFireFigureType
 {
-    private int[] Actions { get; } =
+    private readonly Position[] _positions = 
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 8, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-2, -2), (-2, 0), (-2, 2),
+        (0, -2), (0, 2),
+        (2, -2), (2, 0), (2, 2)
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        foreach (var movement in _positions)
         {
-            return new FigureAction(FigureActionTypes.Move, () =>
+            var position = unitTile.Position + movement;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsEmpty())
             {
-                targetTile.Figure = unitTile.Figure;
-                unitTile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
-
-                TryDestroyTile(unitTile, board, targetTile.Position + (1, -1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (1, 0));
-                TryDestroyTile(unitTile, board, targetTile.Position + (1, 1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (0, -1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (0, 1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (-1, -1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 0));
-                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 1));
-            });
+                yield return unitTile.CreateMoveAction(targetTile, board);
+            }
         }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            return new FigureAction(FigureActionTypes.Attack, () =>
-            {
-                TryDestroyTile(unitTile, board, targetTile.Position + (1, -1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (1, 0));
-                TryDestroyTile(unitTile, board, targetTile.Position + (1, 1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (0, -1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (0, 1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (-1, -1));
-                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 0));
-                TryDestroyTile(unitTile, board, targetTile.Position + (-1, 1));
-            });
-        }
-
-        return FigureAction.None;
     }
 
-    private static void TryDestroyTile(ITile unitTile, IBoard board, Position targetPosition)
+    void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
     {
-        if (!targetPosition.IsInBoard())
-        {
-            return;
-        }
+        SilentDie(board, targetTile.Position + (-1, -1));
+        SilentDie(board, targetTile.Position + (-1, 0));
+        SilentDie(board, targetTile.Position + (-1, 1));
+        SilentDie(board, targetTile.Position + (0, -1));
+        SilentDie(board, targetTile.Position + (0, 0));
+        SilentDie(board, targetTile.Position + (0, 1));
+        SilentDie(board, targetTile.Position + (1, -1));
+        SilentDie(board, targetTile.Position + (1, 0));
+        SilentDie(board, targetTile.Position + (1, 1));
+    }
 
-        unitTile.KillWithoutMove(board[targetPosition], board);
+    private static void SilentDie(IBoard board, Position position)
+    {
+        if (!board.TryGetPovTile(position, out var tile))
+            return;
+
+        tile.Figure.Owner.Figures.Remove(tile.Figure);
+        tile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
     }
 }

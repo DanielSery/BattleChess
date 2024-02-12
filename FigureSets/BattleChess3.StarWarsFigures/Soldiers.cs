@@ -7,128 +7,149 @@ namespace BattleChess3.StarWarsFigures;
 
 public class Soldiers : IStarWarsFigureType 
 {
-    private int[] StartingActions { get; } =
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
+        if (TryGetAttackAction(unitTile, board, (1, 1), out var attackAction1))
+        {
+            yield return attackAction1;
+        }
+        else if (TryGetMoveAction(unitTile, board, (1, 1), out var moveAction1))
+        {
+            yield return moveAction1;
+        }
 
-    private int[] NormalActions { get; } =
-    {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
+        if (TryGetAttackAction(unitTile, board, (-1, 1), out var attackAction2))
+        {
+            yield return attackAction2;
+        }
+        else if (TryGetMoveAction(unitTile, board, (-1, 1), out var moveAction2))
+        {
+            yield return moveAction2;
+        }
+        
+        if (TryGetMoveAction(unitTile, board, (0, -1), out var moveAction3))
+        {
+            yield return moveAction3;
+        }
 
+        if (TryGetMoveAction(unitTile, board, (0, 1), out var moveAction4))
+        {
+            yield return moveAction4;
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
-    {
-        return CreateFigureAction(unitTile, targetTile, board,
-            unitTile.Position.Y == 1 ? StartingActions : NormalActions);
+            if (TryGetAttackAction(unitTile, board, (0, 2), out var attackAction3))
+            {
+                yield return attackAction3;
+            }
+        }
+        else
+        {
+            yield break;
+        }
+
+        if (unitTile.Position.Y == 1 &&
+            TryGetMoveAction(unitTile, board, (0, 2), out var moveAction5))
+        {
+            yield return moveAction5;
+        }
     }
 
-    private static FigureAction CreateFigureAction(ITile unitTile, ITile targetTile, IBoard board, int[] actions)
+    private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-        var checkedMovement = movementUnit;
-
-        for (var i = 0; i < 7; i++)
+        var attackPosition = unitTile.Position + relativePosition;
+        if (!board.TryGetPovTile(attackPosition, out var targetTile) ||
+            (!targetTile.IsOwnedByEnemy(unitTile) && targetTile.Figure.FigureType is not Bomb))
         {
-            if (checkedMovement == movement)
-            {
-                break;
-            }
-            
-            var position = unitTile.Position + checkedMovement;
-            if (position.IsOutsideBoard())
-            {
-                return FigureAction.None;
-            }
-
-            var isYoursBomb = board[position].Figure.FigureType is Bomb &&
-                              board[position].IsOwnedByYou(unitTile);
-            if (!board[position].IsEmpty() && !isYoursBomb)
-            {
-                return FigureAction.None;
-            }
-
-            checkedMovement += movementUnit;
+            action = FigureAction.None;
+            return false;
         }
 
-        if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
+        if (attackPosition.Y == 7)
         {
-            if (targetTile.Position.Y == 7)
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, StarWarsFigureGroup.ObiwanPalpatine), board);
-                    unitTile.Die(board);
-                });
-            }
-
-            return unitTile.CreateMoveAction(targetTile, board);
-        }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
-        {
-            if (targetTile.Position.Y == 7)
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
+            action = new FigureAction(
+                FigureActionTypes.Special,
+                unitTile.AbsolutePosition,
+                targetTile.AbsolutePosition,
+                () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
                     targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, StarWarsFigureGroup.ObiwanPalpatine), board);
                     unitTile.Die(board);
                 });
-            }
-
-            return unitTile.CreateKillWithMove(targetTile, board);
+            return true;
         }
-        
-        if (targetTile.Figure.FigureType is Bomb &&
-            (actions[targetPosition] & 1) == 1)
+
+        action = unitTile.CreateKillWithMove(targetTile, board);
+        return true;
+    }
+
+    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+            !targetTile.IsEmpty())
         {
-            if (targetTile.IsOwnedByYou(unitTile))
-            {
-                return new FigureAction(FigureActionTypes.Move, () =>
+            return TryGetMoveToBombAction(unitTile, board, relativePosition, out action);
+        }
+
+        if (movePosition.Y == 7)
+        {
+            action = new FigureAction(
+                FigureActionTypes.Special,
+                unitTile.AbsolutePosition,
+                targetTile.AbsolutePosition,
+                () =>
+                {
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, StarWarsFigureGroup.ObiwanPalpatine), board);
+                    unitTile.Die(board);
+                });
+            return true;
+        }
+
+        action = unitTile.CreateMoveAction(targetTile, board);
+        return true;
+    }
+
+    private static bool TryGetMoveToBombAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+            targetTile.Figure.FigureType is not Bomb ||
+            !targetTile.IsOwnedByYou(unitTile))
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        if (movePosition.Y == 7)
+        {
+            action = new FigureAction(
+                FigureActionTypes.Special,
+                unitTile.AbsolutePosition,
+                targetTile.AbsolutePosition,
+                () =>
                 {
                     targetTile.Die(board);
-                    unitTile.MoveToTile(targetTile, board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, StarWarsFigureGroup.ObiwanPalpatine), board);
+                    unitTile.Die(board);
                 });
-            }
-
-            return new FigureAction(FigureActionTypes.Move, () =>
-            {
-                unitTile.KillWithMove(targetTile, board);
-            });
+            return true;
         }
 
-        return FigureAction.None;
+        action = new FigureAction(
+            FigureActionTypes.Move,
+            unitTile.AbsolutePosition,
+            targetTile.AbsolutePosition,
+            () =>
+            {
+                targetTile.Die(board);
+                unitTile.MoveToTile(targetTile, board);
+            });
+        return true;
+    }
+    
+    private static bool IsEmptyTile(ITile unitTile, IBoard board, Position relativePosition)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        return board.TryGetPovTile(movePosition, out var targetTile) && targetTile.IsEmpty();
     }
 }

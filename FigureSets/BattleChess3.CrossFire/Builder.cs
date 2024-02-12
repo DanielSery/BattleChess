@@ -6,64 +6,41 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Builder : ICrossFireFigureType
 {
+    private readonly Position[] _movePosition =
+    {
+        (-1, 0), (1, 0), (0, -1), (0, 1)
+    };
+    
     private readonly Position[] _shieldPositions =
     {
-        new(-2, 1),
-        new(-2, 0),
-        new(-2, -1),
-
-        new(2, 1),
-        new(2, 0),
-        new(2, -1),
-
-        new(1, -2),
-        new(0, -2),
-        new(-1, -2),
-
-        new(1, 2),
-        new(0, 2),
-        new(-1, 2)
+        (-2, 1), (-2, 0), (-2, -1),
+        (2, 1), (2, 0), (2, -1),
+        (1, -2), (0, -2), (-1, -2),
+        (1, 2), (0, 2), (-1, 2)
     };
-
-    private int[] Actions { get; } =
+    
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 1, 8, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
-    {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        foreach (var movement in _movePosition)
         {
-            return new FigureAction(FigureActionTypes.Move, () =>
-                MoveAction(unitTile, targetTile, board));
+            var position = unitTile.Position + movement;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsEmpty())
+            {
+                yield return new FigureAction(
+                    FigureActionTypes.Move, 
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () =>
+                    {
+                        MoveFiguresOutsideShield(unitTile, movement, board);
+                        MoveShield(unitTile, movement, board);
+                        unitTile.MoveToTile(targetTile, board);
+                    });
+            }
         }
-
-        return FigureAction.None;
-    }
-
-    private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
-    {
-        var move = targetTile.Position - unitTile.Position;
-        MoveFiguresOutsideShield(unitTile, move, board);
-        MoveShield(unitTile, move, board);
-        unitTile.MoveToTile(targetTile, board);
     }
 
     private void MoveShield(ITile sourceTile, Position move, IBoard board)
@@ -137,10 +114,10 @@ public class Builder : ICrossFireFigureType
     {
         return move switch
         {
-            (0, 1) => new Position[] { new(-2, 2), new(-1, 3), new(0, 3), new(1, 3), new(2, 2) },
-            (1, 0) => new Position[] { new(2, -2), new(3, -1), new(3, 0), new(3, 1), new(2, 2) },
-            (0, -1) => new Position[] { new(-2, -2), new(-1, -3), new(0, -3), new(1, -3), new(2, -2) },
-            (-1, 0) => new Position[] { new(-2, -2), new(-3, -1), new(-3, 0), new(-3, 1), new(-2, 2) },
+            (0, 1) => new Position[] { (-2, 2), (-1, 3), (0, 3), (1, 3), (2, 2) },
+            (1, 0) => new Position[] { (2, -2), (3, -1), (3, 0), (3, 1), (2, 2) },
+            (0, -1) => new Position[] { (-2, -2), (-1, -3), (0, -3), (1, -3), (2, -2) },
+            (-1, 0) => new Position[] { (-2, -2), (-3, -1), (-3, 0), (-3, 1), (-2, 2) },
             _ => throw new ArgumentException($"Unexpected move of Builder {move}")
         };
     }

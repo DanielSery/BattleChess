@@ -6,88 +6,55 @@ namespace BattleChess3.StarWarsFigures;
 
 public class Special : IStarWarsFigureType
 {
+    private readonly Position[] _movePosition =
+    {
+        (-1, 0), (1, 0), (0, -1), (0, 1)
+    };
+    
     private readonly Position[] _shieldPositions =
     {
-        new(-2, 2),
-        new(-2, 1),
-        new(-2, 0),
-        new(-2, -1),
-        new(-2, -2),
-
-        new(2, 2),
-        new(2, 1),
-        new(2, 0),
-        new(2, -1),
-        new(2, -2),
-
-        new(2, -2),
-        new(1, -2),
-        new(0, -2),
-        new(-1, -2),
-        new(-2, -2),
-
-        new(2, 2),
-        new(1, 2),
-        new(0, 2),
-        new(-1, 2),
-        new(-2, 2)
+        new(-2, 2), new(-2, 1), new(-2, 0), new(-2, -1), new(-2, -2),
+        new(2, 2), new(2, 1), new(2, 0), new(2, -1), new(2, -2),
+        new(2, -2), new(1, -2), new(0, -2), new(-1, -2), new(-2, -2),
+        new(2, 2), new(1, 2), new(0, 2), new(-1, 2), new(-2, 2)
     };
-
-    private int[] Actions { get; } =
+    
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 1, 8, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
-
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
-    {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-        
-        if (targetTile.Figure.FigureType is Bomb &&
-            (Actions[targetPosition] & 1) == 1)
+        foreach (var movement in _movePosition)
         {
-            if (targetTile.IsOwnedByYou(unitTile))
+            var position = unitTile.Position + movement;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsEmpty())
             {
-                return new FigureAction(FigureActionTypes.Move, () =>
-                {
-                    var move = targetTile.Position - unitTile.Position;
-                    targetTile.Die(board);
-                    MoveShield(unitTile, move, board);
-                    unitTile.MoveToTile(targetTile, board);
-                });
+                yield return new FigureAction(
+                    FigureActionTypes.Move, 
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () =>
+                    {
+                        MoveShield(unitTile, movement, board);
+                        unitTile.MoveToTile(targetTile, board);
+                    });
             }
 
-            return new FigureAction(FigureActionTypes.Move, () =>
+            if (targetTile.Figure.FigureType is Bomb &&
+                targetTile.IsOwnedByYou(unitTile))
             {
-                unitTile.KillWithMove(targetTile, board);
-            });
+                yield return new FigureAction(
+                    FigureActionTypes.Move,
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () =>
+                    {
+                        targetTile.Die(board);
+                        MoveShield(unitTile, movement, board);
+                        unitTile.MoveToTile(targetTile, board);
+                    });
+            }
         }
-
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
-        {
-            return new FigureAction(FigureActionTypes.Move, () =>
-            {
-                var move = targetTile.Position - unitTile.Position;
-                MoveShield(unitTile, move, board);
-                unitTile.MoveToTile(targetTile, board);
-            });
-        }
-
-        return FigureAction.None;
     }
 
     private void MoveShield(ITile sourceTile, Position move, IBoard board)

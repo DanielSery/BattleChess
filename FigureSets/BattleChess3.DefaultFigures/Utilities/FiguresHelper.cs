@@ -58,11 +58,13 @@ public static class FiguresHelper
         
         attackingFigure.OnAttacking(from, to, board);
         killedFigure.OnDying(to, board);
+        killedFigure.OnBeingAttacked(to, from, board);
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
         
         killedFigure.OnDied(to, board);
+        killedFigure.OnKilled(to, from, board);
         attackingFigure.OnAttacked(from, to, board);
     }
 
@@ -74,6 +76,7 @@ public static class FiguresHelper
         attackingFigure.OnMoving(from, to, board);
         attackingFigure.OnAttacking(from, to, board);
         killedFigure.OnDying(to, board);
+        killedFigure.OnBeingAttacked(to, from, board);
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = from.Figure;
@@ -81,6 +84,7 @@ public static class FiguresHelper
         
         attackingFigure.OnMoved(from, to, board);
         killedFigure.OnDied(to, board);
+        killedFigure.OnKilled(to, from, board);
         attackingFigure.OnAttacked(from, to, board);
     }
 

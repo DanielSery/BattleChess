@@ -2,12 +2,12 @@
 
 namespace BattleChess3.Core.Model;
 
-public class PlayedTile : ITile
+public class PovTile : ITile
 {
     private readonly ITile _innerTile;
     private readonly Player _player;
 
-    public PlayedTile(ITile innerTile, Player player)
+    public PovTile(ITile innerTile, Player player)
     {
         _innerTile = innerTile;
         _player = player;
@@ -24,6 +24,6 @@ public class PlayedTile : ITile
 
     public ITile GetPovTile(Player player)
     {
-        return new PlayedTile(this, player);
+        return new PovTile(this, player);
     }
 }

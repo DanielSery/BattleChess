@@ -7,42 +7,55 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Knight : ICrossFireFigureType
 {
-    private int[] Actions { get; } =
+    private readonly Position[] _movePositions = 
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 2, 2, 8, 2, 2, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-2, -1), (-2, 1),
+        (-1, -2), (-1, 2),
+        (1, -2), (1, 2),
+        (2, -1), (2, 1)
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    private readonly Position[] _attackPositions =
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
+        (-3, -3), (-2, -2), (-1, -1),
+        (-3, 0), (-2, 0), (-1, 0),
+        (-3, 3), (-2, 2), (-1, 1),
+        (0, -3), (0, -2), (0, -1),
+        (0, 3), (0, 2), (0, 1),
+        (3, -3), (2, -2), (1, -1),
+        (3, 0), (2, 0), (1, 0),
+        (3, 3), (2, 2), (1, 1),
+    };
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        foreach (var movementPosition in _movePositions)
         {
-            return unitTile.CreateMoveAction(targetTile, board);
+            var position = unitTile.Position + movementPosition;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsEmpty())
+            {
+                yield return unitTile.CreateMoveAction(targetTile, board);
+            }
         }
 
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        foreach (var attackPosition in _attackPositions)
         {
-            return new FigureAction(FigureActionTypes.Attack, () =>
-                AttackAction(unitTile, targetTile, board));
+            var position = unitTile.Position + attackPosition;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsOwnedByEnemy(unitTile))
+            {
+                yield return new FigureAction(
+                    FigureActionTypes.Attack, 
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () => AttackAction(unitTile, targetTile, board));
+            }
         }
-
-        return FigureAction.None;
     }
 
     private void AttackAction(ITile unitTile, ITile targetTile, IBoard board)

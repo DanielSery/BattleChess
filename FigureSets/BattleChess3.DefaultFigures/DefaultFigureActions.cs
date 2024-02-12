@@ -8,34 +8,58 @@ public static class DefaultFigureActions
 {
     public static FigureAction CreateAddFigureAction(this ITile targetTile, Figure createdFigure, IBoard board)
     {
-        return new FigureAction(FigureActionTypes.Special, () => targetTile.CreateFigure(createdFigure, board));
+        return new FigureAction(
+            FigureActionTypes.Special, 
+            targetTile.AbsolutePosition,
+            targetTile.AbsolutePosition,
+            () => targetTile.CreateFigure(createdFigure, board));
     }
 
     public static FigureAction CreateMoveAction(this ITile unitTile, ITile targetTile, IBoard board)
     {
-        return new FigureAction(FigureActionTypes.Move, () => unitTile.MoveToTile(targetTile, board));
+        return new FigureAction(
+            FigureActionTypes.Move, 
+            unitTile.AbsolutePosition,
+            targetTile.AbsolutePosition,
+            () => unitTile.MoveToTile(targetTile, board));
     }
 
     public static FigureAction CreateKillWithoutMove(this ITile unitTile, ITile targetTile, IBoard board)
     {
-        return new FigureAction(FigureActionTypes.Attack, () => unitTile.KillWithoutMove(targetTile, board));
+        return new FigureAction(
+            FigureActionTypes.Attack, 
+            unitTile.AbsolutePosition,
+            targetTile.AbsolutePosition,
+            () => unitTile.KillWithoutMove(targetTile, board));
     }
 
     public static FigureAction CreateKillWithMove(this ITile unitTile, ITile targetTile, IBoard board)
     {
-        return new FigureAction(FigureActionTypes.Attack, () =>
-        {
-            unitTile.KillWithMove(targetTile, board);
-        });
+        return new FigureAction(
+            FigureActionTypes.Attack, 
+            unitTile.AbsolutePosition,
+            targetTile.AbsolutePosition,
+            () =>
+            {
+                unitTile.KillWithMove(targetTile, board);
+            });
     }
 
     public static FigureAction CreateSwapFigures(this ITile unitTile, ITile targetTile)
     {
-        return new FigureAction(FigureActionTypes.Special, () => unitTile.SwapTiles(targetTile));
+        return new FigureAction(
+            FigureActionTypes.Special, 
+            unitTile.AbsolutePosition,
+            targetTile.AbsolutePosition,
+            () => unitTile.SwapTiles(targetTile));
     }
 
     public static FigureAction CreatePassTurn(this ITile tile)
     {
-        return new FigureAction(FigureActionTypes.Special, () => { });
+        return new FigureAction(
+            FigureActionTypes.Special, 
+            tile.AbsolutePosition,
+            tile.AbsolutePosition,
+            () => { });
     }
 }

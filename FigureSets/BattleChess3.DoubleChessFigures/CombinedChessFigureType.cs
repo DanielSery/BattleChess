@@ -31,34 +31,24 @@ public class CombinedChessFigureType<T1, T2> : IFigureType
             { 2, new Uri($"pack://application:,,,/BattleChess3.DoubleChessFigures;component/Images/{_unitName}2.png", UriKind.Absolute) }
         };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        var firstUnitAction = _firstFigure.GetPossibleAction(unitTile, targetTile, board);
-        if (firstUnitAction.ActionType != FigureActionTypes.None)
-        {
-            return new FigureAction(firstUnitAction.ActionType, () =>
+        return _firstFigure.GetPossibleActions(unitTile, board)
+            .Concat(_secondFigure.GetPossibleActions(unitTile, board))
+            .DistinctBy(x => x.TargetPosition)
+            .Select(x =>
             {
-                var owner = unitTile.Figure.Owner;
-                unitTile.Die(board);
-                unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
-                firstUnitAction.Action.Invoke();
-                unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
+                return new FigureAction(
+                    x.ActionType,
+                    x.SourcePosition,
+                    x.TargetPosition, () =>
+                    {
+                        var owner = unitTile.Figure.Owner;
+                        unitTile.Die(board);
+                        unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
+                        x.Action.Invoke();
+                        unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
+                    });
             });
-        }
-
-        var secondUnitAction = _secondFigure.GetPossibleAction(unitTile, targetTile, board);
-        if (secondUnitAction.ActionType != FigureActionTypes.None)
-        {
-            return new FigureAction(secondUnitAction.ActionType, () =>
-            {
-                var owner = unitTile.Figure.Owner;
-                unitTile.Die(board);
-                unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
-                secondUnitAction.Action.Invoke();
-                unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
-            });
-        }
-
-        return new FigureAction(FigureActionTypes.None, () => { });
     }
 }

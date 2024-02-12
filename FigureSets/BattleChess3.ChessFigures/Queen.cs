@@ -1,23 +1,13 @@
-﻿namespace BattleChess3.ChessFigures;
+﻿using BattleChess3.Core.Model;
 
-public class Queen : IChessFigureType, IFigureTypeWithChainedMoves
+namespace BattleChess3.ChessFigures;
+
+public class Queen : IChessFigureType, IFigureTypeWithChainedAttackMoves
 {
-    int[] IFigureTypeWithChainedMoves.Actions { get; } =
+    Position[] IFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
     {
-        3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3,
-        0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0,
-        0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0,
-        0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0,
-        0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0,
-        3, 3, 3, 3, 3, 3, 3, 8, 3, 3, 3, 3, 3, 3, 3,
-        0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 3, 0, 0, 0, 0,
-        0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0,
-        0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0,
-        0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0,
-        3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3
+        (-1, -1), (-1, 0), (-1, 1),
+        (0, -1), (0, 1),
+        (1, -1), (1, 0), (1, 1)
     };
 }

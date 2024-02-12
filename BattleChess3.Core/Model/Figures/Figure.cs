@@ -19,9 +19,9 @@ public class Figure : IFigureType
     public string UnitName => FigureType.UnitName;
     public IDictionary<int, Uri> ImageUris => FigureType.ImageUris;
 
-    public FigureAction GetPossibleAction(ITile from, ITile to, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        return FigureType.GetPossibleAction(from, to, board);
+        return FigureType.GetPossibleActions(unitTile, board);
     }
 
     public override string ToString()

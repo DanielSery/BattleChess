@@ -1,23 +1,11 @@
-﻿namespace BattleChess3.ExplodingChessFigures;
+﻿using BattleChess3.Core.Model;
 
-public class ExplodingChessRook : IExplodingChessFigureType, IExplodingChessFigureTypeWithChainedMoves
+namespace BattleChess3.ExplodingChessFigures;
+
+public class ExplodingChessRook : IExplodingChessFigureType, IExplodingChessFigureTypeWithChainedAttackMoves
 {
-    int[] IExplodingChessFigureTypeWithChainedMoves.Actions { get; } =
+    Position[] IExplodingChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } = 
     {
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        3, 3, 3, 3, 3, 3, 3, 8, 3, 3, 3, 3, 3, 3, 3,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0
+        (-1, 0), (1, 0), (0, -1), (0, 1),
     };
 }

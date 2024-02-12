@@ -1,23 +1,14 @@
-﻿namespace BattleChess3.DoubleChessFigures;
+﻿using BattleChess3.Core.Model;
 
-public class SingleKnight : IDoubleChessFigureTypeWithDifferentMoves
+namespace BattleChess3.DoubleChessFigures;
+
+public class SingleKnight : IDoubleChessFigureTypeWithDifferentAttackMoves
 {
-    int[] IDoubleChessFigureTypeWithDifferentMoves.Actions { get; } =
+    Position[] IDoubleChessFigureTypeWithDifferentAttackMoves.AttackMovePositions { get; } = 
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-2, -1), (-2, 1),
+        (-1, -2), (-1, 2),
+        (1, -2), (1, 2),
+        (2, -1), (2, 1)
     };
 }

@@ -7,102 +7,88 @@ namespace BattleChess3.ExplodingChessFigures;
 
 public class ExplodingChessPawn : IExplodingChessFigureType
 {
-    private int[] StartingActions { get; } =
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
+        if (TryGetAttackAction(unitTile, board, (1, 1), out var attackAction1))
+        {
+            yield return attackAction1;
+        }
 
-    private int[] NormalActions { get; } =
-    {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    };
+        if (TryGetAttackAction(unitTile, board, (-1, 1), out var attackAction2))
+        {
+            yield return attackAction2;
+        }
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
-    {
-        return CreateFigureAction(unitTile, targetTile, board,
-            unitTile.Position.Y == 1 ? StartingActions : NormalActions);
+        if (TryGetMoveAction(unitTile, board, (0, 1), out var moveAction1))
+        {
+            yield return moveAction1;
+        }
+        else
+        {
+            yield break;
+        }
+
+        if (unitTile.Position.Y == 1 &&
+            TryGetMoveAction(unitTile, board, (0, 2), out var moveAction2))
+        {
+            yield return moveAction2;
+        }
     }
 
-    private static FigureAction CreateFigureAction(ITile unitTile, ITile targetTile, IBoard board, int[] actions)
+    private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-        var checkedMovement = movementUnit;
-
-        for (var i = 0; i < 7; i++)
+        var attackPosition = unitTile.Position + relativePosition;
+        if (!board.TryGetPovTile(attackPosition, out var targetTile) ||
+            !targetTile.IsOwnedByEnemy(unitTile))
         {
-            if (checkedMovement == movement)
-            {
-                break;
-            }
-
-            var position = unitTile.Position + checkedMovement;
-            if (position.IsOutsideBoard() || !board[position].IsEmpty())
-            {
-                return FigureAction.None;
-            }
-
-            checkedMovement += movementUnit;
+            action = FigureAction.None;
+            return false;
         }
 
-        if (targetTile.IsEmpty() && (actions[targetPosition] & 1) == 1)
+        if (attackPosition.Y == 7)
         {
-            if (targetTile.Position.Y == 7)
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
-                {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, ExplodingChessFigureGroup.ExplodingQueen), board);
-                    unitTile.Die(board);
-                });
-            }
-
-            return unitTile.CreateMoveAction(targetTile, board);
-        }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (actions[targetPosition] & 2) == 2)
-        {
-            if (targetTile.Position.Y == 7)
-            {
-                return new FigureAction(FigureActionTypes.Special, () =>
+            action = new FigureAction(
+                FigureActionTypes.Special,
+                unitTile.AbsolutePosition,
+                targetTile.AbsolutePosition,
+                () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
                     targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, ExplodingChessFigureGroup.ExplodingQueen), board);
                     unitTile.Die(board);
                 });
-            }
-
-            return unitTile.CreateKillWithMove(targetTile, board);
+            return true;
         }
 
-        return FigureAction.None;
+        action = unitTile.CreateKillWithMove(targetTile, board);
+        return true;
+    }
+
+    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+            !targetTile.IsEmpty())
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        if (movePosition.Y == 7)
+        {
+            action = new FigureAction(
+                FigureActionTypes.Special,
+                unitTile.AbsolutePosition,
+                targetTile.AbsolutePosition,
+                () =>
+                {
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, ExplodingChessFigureGroup.ExplodingQueen), board);
+                    unitTile.Die(board);
+                });
+            return true;
+        }
+
+        action = unitTile.CreateMoveAction(targetTile, board);
+        return true;
     }
 }

@@ -154,31 +154,27 @@ public sealed class BoardViewModel : ViewModelBase
     {
         var povBoard = GetPlayerPOVBoard(clickedTile.Figure.Owner, Board);
         var povClickedTile = clickedTile.GetPovTile(clickedTile.Figure.Owner);
-        foreach (var tile in povBoard)
+        var possibleActions = clickedTile.Figure.GetPossibleActions(povClickedTile, povBoard);
+        
+        foreach (var possibleAction in possibleActions)
         {
-            if (clickedTile.Position == tile.Position)
-            {
-                continue;
-            }
-
-            var targetTile = tile.GetPovTile(clickedTile.Figure.Owner);
-            Board[tile.Position].PossibleAction =
-                clickedTile.Figure.GetPossibleAction(povClickedTile, targetTile, povBoard);
+            Board[possibleAction.TargetPosition].PossibleAction = possibleAction;
         }
     }
 
     private static IBoard GetPlayerPOVBoard(Player player, IReadOnlyList<ITile> board)
     {
         var povBoard = new ITile[Constants.BoardSize];
+        var absoluteBoard = board.Select(x => x.GetPovTile(player)).ToArray();
 
         for (var i = 0; i < Constants.BoardLength; i++)
         for (var j = 0; j < Constants.BoardLength; j++)
         {
             var position = new Position(j, i);
-            povBoard[position.GetPlayerPOVPosition(player)] = board[position];
+            povBoard[position.GetPlayerPOVPosition(player)] = absoluteBoard[position];
         }
 
-        return new Board(povBoard);
+        return new Board(absoluteBoard, povBoard);
     }
 
     private void MouseEnterTile(ITileViewModel tile)

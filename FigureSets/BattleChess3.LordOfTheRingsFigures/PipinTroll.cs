@@ -1,23 +1,20 @@
-﻿namespace BattleChess3.LordOfTheRingsFigures;
+﻿using BattleChess3.Core.Model;
 
-public class PipinTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentMoves
+namespace BattleChess3.LordOfTheRingsFigures;
+
+public class PipinTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentAttacksAndMoves
 {
-    int[] IFigureTypeWithDifferentMoves.Actions { get; } =
+    Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 1, 8, 1, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-1, 0), (1, 0), (0, -1), (0, 1)
+    };
+
+    Position[] IFigureTypeWithDifferentAttacksAndMoves.AttackPositions { get; } =
+    {
+        (-2, 0),
+        (-1, -1), (-1, 1),
+        (0, -2), (0, 2),
+        (1, -1), (1, 1),
+        (2, 0)
     };
 }

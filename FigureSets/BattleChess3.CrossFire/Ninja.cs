@@ -7,50 +7,54 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Ninja : ICrossFireFigureType
 {
-    private int[] Actions { get; } =
+    private readonly Position[] _attackPositions =
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 2, 8, 2, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-1, 0), (1, 0), (0, -1), (0, 1)
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        foreach (var attackPosition in _attackPositions)
         {
-            if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
+            var position = unitTile.Position + attackPosition;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsOwnedByEnemy(unitTile))
             {
-                return FigureAction.None;
+                yield return unitTile.CreateKillWithMove(targetTile, board);
             }
-
-            return unitTile.CreateMoveAction(targetTile, board);
         }
 
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
+        if (TryGetMoveAction(unitTile, board, (-1, 1), out var move1Action))
         {
-            if (movement.Y == 2 && board[unitTile.Position + (0, 1)].IsEmpty())
-            {
-                return FigureAction.None;
-            }
-
-            return unitTile.CreateKillWithMove(targetTile, board);
+            yield return move1Action;
         }
 
-        return FigureAction.None;
+        if (TryGetMoveAction(unitTile, board, (1, 1), out var move2Action))
+        {
+            yield return move2Action;
+        }
+
+        if (board.TryGetPovTile(unitTile.Position + (0, 1), out var tileBefore) &&
+            !tileBefore.IsEmpty() &&
+            TryGetMoveAction(unitTile, board, (0, 2), out var move3Action))
+        {
+            yield return move3Action;
+        }
+    }
+
+    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+            !targetTile.IsEmpty())
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = unitTile.CreateMoveAction(targetTile, board);
+        return true;
     }
 }

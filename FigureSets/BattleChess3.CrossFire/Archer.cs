@@ -1,23 +1,63 @@
-﻿namespace BattleChess3.CrossFireFigures;
+﻿using BattleChess3.Core.Model;
+using BattleChess3.Core.Model.Figures;
+using BattleChess3.DefaultFigures;
+using BattleChess3.DefaultFigures.Utilities;
 
-public class Archer : ICrossFireFigureType, IFigureTypeWithChainedRangeAttack
+namespace BattleChess3.CrossFireFigures;
+
+public class Archer : ICrossFireFigureType
 {
-    int[] IFigureTypeWithChainedRangeAttack.Actions { get; } =
+    private readonly Position[] _directions = 
     {
-        2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2,
-        0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0,
-        0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0,
-        0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 1, 8, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
-        0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0,
-        0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0,
-        0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0,
-        2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2
+        (-1, -1), (-1, 1),
+        (0, -1), (0, 1),
+        (1, -1), (1, 1)
     };
+
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        foreach (var direction in _directions)
+        {
+            for (var i = 1; i < 8; i++)
+            {
+                var position = unitTile.Position + direction * i;
+                if (!board.TryGetPovTile(position, out var targetTile))
+                    break;
+                
+                if (targetTile.IsOwnedByEnemy(unitTile))
+                {
+                    yield return unitTile.CreateKillWithMove(targetTile, board);
+                }
+
+                if (!targetTile.IsEmpty())
+                {
+                    break;
+                }
+            }
+        }
+        
+        if (TryGetMoveAction(unitTile, board, (-1, 0), out var move1Action))
+        {
+            yield return move1Action;
+        }
+        
+        if (TryGetMoveAction(unitTile, board, (1, 0), out var move2Action))
+        {
+            yield return move2Action;
+        }
+    }
+
+    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+            !targetTile.IsEmpty())
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = unitTile.CreateMoveAction(targetTile, board);
+        return true;
+    }
 }

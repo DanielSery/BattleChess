@@ -5,8 +5,8 @@ namespace BattleChess3.DefaultFigures;
 
 public class Empty : IDefaultFigureType
 {
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        return FigureAction.None;
+        return Array.Empty<FigureAction>();
     }
 }

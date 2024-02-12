@@ -78,6 +78,6 @@ public class TileViewModel : ViewModelBase, ITileViewModel
 
     public ITile GetPovTile(Player player)
     {
-        return new PlayedTile(this, player);
+        return new PovTile(this, player);
     }
 }

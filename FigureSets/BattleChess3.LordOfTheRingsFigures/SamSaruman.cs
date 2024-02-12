@@ -7,64 +7,61 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class SamSaruman : ILordOfTheRingsFigureType
 {
-    private int[] Actions { get; } =
+    private readonly Position[] _movePositions =
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 1, 8, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-1, 0), (1, 0), (0, -1), (0, 1)
     };
 
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    private readonly Position[] _attackDirections =
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var movementUnit = new Position(Math.Sign(movement.X), Math.Sign(movement.Y));
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
-        var checkedMovement = movementUnit;
+        (-1, -1), (-1, 1), (1, -1), (1, 1)
+    };
 
-        if (targetTile.IsOwnedByYou(unitTile))
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        foreach (var movement in _movePositions)
         {
-            return new FigureAction(FigureActionTypes.Special,
-                () => unitTile.SwapTiles(targetTile));
-        }
-
-        for (var i = 0; i < 7; i++)
-        {
-            if (checkedMovement == movement)
+            var position = unitTile.Position + movement;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsEmpty())
             {
-                break;
+                yield return unitTile.CreateMoveAction(targetTile, board);
             }
-
-            var position = unitTile.Position + checkedMovement;
-            if (position.IsOutsideBoard() || !board[position].IsEmpty())
+        }
+        
+        foreach (var direction in _attackDirections)
+        {
+            for (var i = 1; i <= 2; i++)
             {
-                return FigureAction.None;
+                var position = unitTile.Position + direction * i;
+                if (!board.TryGetPovTile(position, out var targetTile))
+                    break;
+                
+                if (targetTile.IsOwnedByEnemy(unitTile))
+                {
+                    yield return unitTile.CreateKillWithMove(targetTile, board);
+                }
+
+                if (!targetTile.IsEmpty())
+                {
+                    break;
+                }
             }
-
-            checkedMovement += movementUnit;
         }
-
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        
+        foreach (var targetTile in board)
         {
-            return unitTile.CreateMoveAction(targetTile, board);
+            if (targetTile.IsOwnedByYou(unitTile) &&
+                targetTile.Figure != unitTile.Figure)
+            {
+                yield return new FigureAction(
+                    FigureActionTypes.Special,
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () => unitTile.SwapTiles(targetTile));
+            }
         }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            return unitTile.CreateKillWithMove(targetTile, board);
-        }
-
-        return FigureAction.None;
     }
 }

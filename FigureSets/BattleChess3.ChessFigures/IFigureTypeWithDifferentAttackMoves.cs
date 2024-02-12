@@ -3,9 +3,9 @@ using BattleChess3.Core.Model.Figures;
 using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 
-namespace BattleChess3.ExplodingChessFigures;
+namespace BattleChess3.ChessFigures;
 
-internal interface IExplodingChessFigureTypeWithDifferentAttackMoves : IFigureType
+internal interface IFigureTypeWithDifferentAttackMoves : IFigureType
 {
     protected Position[] AttackMovePositions { get; }
 

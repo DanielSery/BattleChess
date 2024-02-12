@@ -1,18 +1,43 @@
 ﻿using BattleChess3.Core.Model;
 using BattleChess3.Core.Model.Figures;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 
 namespace BattleChess3.StarWarsFigures;
 
 public class Bomb : IStarWarsFigureType
 {
-    public FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        return FigureAction.None;
+        return Array.Empty<FigureAction>();
     }
 
-    void IFigureType.OnDied(ITile unitTile, IBoard board)
+    void IFigureType.OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)
+    {
+        if (!attackingTile.Figure.Owner.Equals(unitTile.Figure.Owner))
+            return;
+        
+        SilentDie(board, unitTile.Position + (-1, -1));
+        SilentDie(board, unitTile.Position + (-1, 0));
+        SilentDie(board, unitTile.Position + (-1, 1));
+        SilentDie(board, unitTile.Position + (0, -1));
+        SilentDie(board, unitTile.Position + (0, 1));
+        SilentDie(board, unitTile.Position + (1, -1));
+        SilentDie(board, unitTile.Position + (1, 0));
+        SilentDie(board, unitTile.Position + (1, 1));
+    }
+
+    void IFigureType.OnKilled(ITile unitTile, ITile attackingTile, IBoard board)
     {
         unitTile.Die(board);
+    }
+
+    private static void SilentDie(IBoard board, Position position)
+    {
+        if (!board.TryGetPovTile(position, out var tile))
+            return;
+
+        tile.Figure.Owner.Figures.Remove(tile.Figure);
+        tile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
     }
 }

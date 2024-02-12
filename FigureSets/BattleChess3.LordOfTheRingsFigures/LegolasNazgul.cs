@@ -1,23 +1,20 @@
-﻿namespace BattleChess3.LordOfTheRingsFigures;
+﻿using BattleChess3.Core.Model;
 
-public class LegolasNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedMoves
+namespace BattleChess3.LordOfTheRingsFigures;
+
+public class LegolasNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedAttacksAndMoves
 {
-    int[] IFigureTypeWithChainedMoves.Actions { get; } =
+    Position[] IFigureTypeWithChainedAttacksAndMoves.MoveDirections { get; } =
     {
-        1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1,
-        0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0,
-        0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0,
-        0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0,
-        2, 2, 2, 2, 2, 2, 2, 8, 2, 2, 2, 2, 2, 2, 2,
-        0, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0,
-        0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0,
-        0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0,
-        1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1
+        (-1, -1), (-1, 1),
+        (1, -1), (1, 1)
+    };
+
+    Position[] IFigureTypeWithChainedAttacksAndMoves.AttackDirections { get; } =
+    {
+        (-1, 0),
+        (1, 0),
+        (0, -1),
+        (0, 1)
     };
 }

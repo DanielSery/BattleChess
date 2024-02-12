@@ -33,13 +33,21 @@ public interface IFigureType : IEquatable<IFigureType>
     /// <summary>
     ///     Gets possible action on tile.
     /// </summary>
-    FigureAction GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board);
+    IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board);
 
     void OnAttacking(ITile unitTile, ITile targetTile, IBoard board)
     {
     }
 
     void OnAttacked(ITile unitTile, ITile targetTile, IBoard board)
+    {
+    }
+
+    void OnBeingAttacked(ITile tile, ITile attackingTile, IBoard board)
+    {
+    }
+
+    void OnKilled(ITile tile, ITile attackingTile, IBoard board)
     {
     }
 

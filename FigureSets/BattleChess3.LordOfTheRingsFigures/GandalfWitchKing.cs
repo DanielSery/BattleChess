@@ -1,23 +1,27 @@
-﻿namespace BattleChess3.LordOfTheRingsFigures;
+﻿using BattleChess3.Core.Model;
 
-public class GandalfWitchKing : ILordOfTheRingsFigureType, IFigureTypeWithDifferentMoves
+namespace BattleChess3.LordOfTheRingsFigures;
+
+public class GandalfWitchKing : ILordOfTheRingsFigureType, IFigureTypeWithDifferentAttacksAndMoves
 {
-    int[] IFigureTypeWithDifferentMoves.Actions { get; } =
+    Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 1, 0, 0, 3, 1, 3, 0, 0, 1, 0, 0, 0,
-        0, 0, 0, 0, 1, 3, 1, 0, 1, 3, 1, 0, 0, 0, 0,
-        0, 0, 0, 1, 0, 1, 0, 8, 0, 1, 0, 1, 0, 0, 0,
-        0, 0, 0, 0, 1, 3, 1, 0, 1, 3, 1, 0, 0, 0, 0,
-        0, 0, 0, 1, 0, 0, 3, 1, 3, 0, 0, 1, 0, 0, 0,
-        0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-4, -2), (-4, 0), (-4, 2),
+        (-3, -3), (-3, -1), (-3, 1), (-3, 3),
+        (-2, -4), (-2, 0), (-2, 4),
+        (-1, -3), (-1, -1), (-1, 1), (-1, 3),
+        (0, -4), (0, -2), (0, 2), (0, 4),
+        (1, -3), (1, -1), (1, 1), (1, 3),
+        (2, -4), (2, 0), (2, 4),
+        (3, -3), (3, -1), (3, 1), (3, 3),
+        (4, -2), (4, 0), (4, 2)
+    };
+
+    Position[] IFigureTypeWithDifferentAttacksAndMoves.AttackPositions { get; } =
+    {
+        (-2, -1), (-2, 1),
+        (-1, -2), (-1, 2),
+        (1, -2), (1, 2),
+        (2, -1), (2, 1)
     };
 }

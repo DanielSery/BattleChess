@@ -7,69 +7,82 @@ namespace BattleChess3.StarWarsFigures;
 
 public class ObiwanPalpatine : IStarWarsFigureType
 {
-    private int[] Actions { get; } =
+    private readonly Position[] _movementPositions = 
     {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 1, 8, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        (-1, -1), (-1, 0), (-1, 1),
+        (0, -1), (0, 1),
+        (1, -1), (1, 0), (1, 1)
     };
 
-    FigureAction IFigureType.GetPossibleAction(ITile unitTile, ITile targetTile, IBoard board)
+    private readonly Position[] _attackPositions = 
     {
-        var movement = targetTile.Position - unitTile.Position;
-        var targetPosition = 7 - movement.X + (7 - movement.Y) * 15;
+        (-2, -1), (-2, 0), (-2, 1),
+        (-1, -2), (-1, 2),
+        (0, -2), (0, 2),
+        (1, -2), (1, 2),
+        (2, -1), (2, 0), (2, 1)
+    };
 
-        if (targetTile.IsOwnedByYou(unitTile))
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        foreach (var movementPosition in _movementPositions)
         {
-            return new FigureAction(FigureActionTypes.Special,
-                () => unitTile.SwapTiles(targetTile));
-        }
-        
-        if (targetTile.Figure.FigureType is Bomb &&
-            (Actions[targetPosition] & 1) == 1)
-        {
-            if (targetTile.IsOwnedByYou(unitTile))
+            var position = unitTile.Position + movementPosition;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsEmpty())
             {
-                return new FigureAction(FigureActionTypes.Move, () =>
-                {
-                    targetTile.Die(board);
-                    unitTile.MoveToTile(targetTile, board);
-                });
+                yield return unitTile.CreateMoveAction(targetTile, board);
             }
 
-            return new FigureAction(FigureActionTypes.Move, () =>
+            if (targetTile.Figure.FigureType is Bomb &&
+                targetTile.IsOwnedByYou(unitTile))
             {
-                unitTile.KillWithMove(targetTile, board);
-            });
+                yield return new FigureAction(
+                    FigureActionTypes.Move,
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () =>
+                    {
+                        targetTile.Die(board);
+                        unitTile.MoveToTile(targetTile, board);
+                    });
+            }
         }
 
-        if (targetTile.IsEmpty() && (Actions[targetPosition] & 1) == 1)
+        foreach (var attackPosition in _attackPositions)
         {
-            return unitTile.CreateMoveAction(targetTile, board);
-        }
-
-        if (targetTile.IsOwnedByEnemy(unitTile) && (Actions[targetPosition] & 2) == 2)
-        {
-            return new FigureAction(FigureActionTypes.Attack, () =>
+            var position = unitTile.Position + attackPosition;
+            if (!board.TryGetPovTile(position, out var targetTile))
+                continue;
+            
+            if (targetTile.IsOwnedByEnemy(unitTile))
             {
-                var figureType = targetTile.Figure.FigureType;
-                targetTile.Figure.Owner.Figures.Remove(targetTile.Figure);
-                targetTile.Figure = new Figure(unitTile.Figure.Owner, figureType);
-            });
+                yield return new FigureAction(
+                    FigureActionTypes.Attack,
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () =>
+                    {
+                        var figureType = targetTile.Figure.FigureType;
+                        targetTile.Figure.Owner.Figures.Remove(targetTile.Figure);
+                        targetTile.Figure = new Figure(unitTile.Figure.Owner, figureType);
+                    });
+            }
         }
 
-        return FigureAction.None;
+        foreach (var targetTile in board)
+        {
+            if (targetTile.IsOwnedByYou(unitTile) &&
+                targetTile.Figure != unitTile.Figure)
+            {
+                yield return new FigureAction(
+                    FigureActionTypes.Special,
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () => unitTile.SwapTiles(targetTile));
+            }
+        }
     }
 }
