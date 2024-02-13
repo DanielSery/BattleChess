@@ -17,7 +17,7 @@ internal interface IFigureTypeWithChainedAttacksAndMoves : IFigureType
             for (var i = 1; i < 8; i++)
             {
                 var position = unitTile.Position + direction * i;
-                if (!board.TryGetPovTile(position, out var targetTile))
+                if (!board.TryGetTile(position, out var targetTile))
                     break;
                 
                 if (targetTile.IsOwnedByEnemy(unitTile))
@@ -37,7 +37,7 @@ internal interface IFigureTypeWithChainedAttacksAndMoves : IFigureType
             for (var i = 1; i < 8; i++)
             {
                 var position = unitTile.Position + direction * i;
-                if (!board.TryGetPovTile(position, out var targetTile))
+                if (!board.TryGetTile(position, out var targetTile))
                     break;
                 
                 if (targetTile.IsEmpty())

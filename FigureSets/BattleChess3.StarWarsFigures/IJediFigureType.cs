@@ -25,7 +25,7 @@ internal interface IJediFigureType : IFigureType
         foreach (var movementPosition in MovementPositions)
         {
             var position = unitTile.Position + movementPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())
@@ -51,7 +51,7 @@ internal interface IJediFigureType : IFigureType
         foreach (var attackPosition in AttackPositions)
         {
             var position = unitTile.Position + attackPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsOwnedByEnemy(unitTile))
@@ -88,7 +88,7 @@ internal interface IJediFigureType : IFigureType
 
     private static void TryDestroyTile(ITile unitTile, IBoard board, Position positionDiff)
     {
-        if (!board.TryGetPovTile(unitTile.Position + positionDiff, out var targetTile))
+        if (!board.TryGetTile(unitTile.Position + positionDiff, out var targetTile))
             return;
 
         if (!targetTile.IsEmpty() &&

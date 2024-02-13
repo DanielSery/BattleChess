@@ -56,7 +56,7 @@ public class Soldiers : IStarWarsFigureType
     private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var attackPosition = unitTile.Position + relativePosition;
-        if (!board.TryGetPovTile(attackPosition, out var targetTile) ||
+        if (!board.TryGetTile(attackPosition, out var targetTile) ||
             (!targetTile.IsOwnedByEnemy(unitTile) && targetTile.Figure.FigureType is not Bomb))
         {
             action = FigureAction.None;
@@ -85,7 +85,7 @@ public class Soldiers : IStarWarsFigureType
     private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
             !targetTile.IsEmpty())
         {
             return TryGetMoveToBombAction(unitTile, board, relativePosition, out action);
@@ -112,7 +112,7 @@ public class Soldiers : IStarWarsFigureType
     private static bool TryGetMoveToBombAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
             targetTile.Figure.FigureType is not Bomb ||
             !targetTile.IsOwnedByYou(unitTile))
         {
@@ -150,6 +150,6 @@ public class Soldiers : IStarWarsFigureType
     private static bool IsEmptyTile(ITile unitTile, IBoard board, Position relativePosition)
     {
         var movePosition = unitTile.Position + relativePosition;
-        return board.TryGetPovTile(movePosition, out var targetTile) && targetTile.IsEmpty();
+        return board.TryGetTile(movePosition, out var targetTile) && targetTile.IsEmpty();
     }
 }

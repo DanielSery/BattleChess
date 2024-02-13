@@ -32,7 +32,7 @@ public class Knight : ICrossFireFigureType
         foreach (var movementPosition in _movePositions)
         {
             var position = unitTile.Position + movementPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())
@@ -44,7 +44,7 @@ public class Knight : ICrossFireFigureType
         foreach (var attackPosition in _attackPositions)
         {
             var position = unitTile.Position + attackPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsOwnedByEnemy(unitTile))

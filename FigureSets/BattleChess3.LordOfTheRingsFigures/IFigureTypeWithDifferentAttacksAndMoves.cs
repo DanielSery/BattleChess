@@ -16,7 +16,7 @@ internal interface IFigureTypeWithDifferentAttacksAndMoves : IFigureType
         foreach (var movementPosition in MovePositions)
         {
             var position = unitTile.Position + movementPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())
@@ -28,7 +28,7 @@ internal interface IFigureTypeWithDifferentAttacksAndMoves : IFigureType
         foreach (var attackPosition in AttackPositions)
         {
             var position = unitTile.Position + attackPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsOwnedByEnemy(unitTile))

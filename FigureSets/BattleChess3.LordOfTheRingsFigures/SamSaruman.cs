@@ -22,7 +22,7 @@ public class SamSaruman : ILordOfTheRingsFigureType
         foreach (var movement in _movePositions)
         {
             var position = unitTile.Position + movement;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())
@@ -36,7 +36,7 @@ public class SamSaruman : ILordOfTheRingsFigureType
             for (var i = 1; i <= 2; i++)
             {
                 var position = unitTile.Position + direction * i;
-                if (!board.TryGetPovTile(position, out var targetTile))
+                if (!board.TryGetTile(position, out var targetTile))
                     break;
                 
                 if (targetTile.IsOwnedByEnemy(unitTile))

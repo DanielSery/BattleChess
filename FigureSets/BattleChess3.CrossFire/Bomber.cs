@@ -19,7 +19,7 @@ public class Bomber : ICrossFireFigureType
         foreach (var movement in _positions)
         {
             var position = unitTile.Position + movement;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())
@@ -44,7 +44,7 @@ public class Bomber : ICrossFireFigureType
 
     private static void SilentDie(IBoard board, Position position)
     {
-        if (!board.TryGetPovTile(position, out var tile))
+        if (!board.TryGetTile(position, out var tile))
             return;
 
         tile.Figure.Owner.Figures.Remove(tile.Figure);

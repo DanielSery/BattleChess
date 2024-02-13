@@ -19,7 +19,7 @@ public class ExplodingChessKing : IExplodingChessFigureType
         foreach (var movement in _attackMovePositions)
         {
             var position = unitTile.Position + movement;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())
@@ -39,36 +39,36 @@ public class ExplodingChessKing : IExplodingChessFigureType
             yield break;
         }
         
-        var rook1Tile = board.GetAbsoluteTile((0, 0));
+        var rook1Tile = board[0, 0];
         if (rook1Tile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
-            board.GetAbsoluteTile((1, 0)).IsEmpty() &&
-            board.GetAbsoluteTile((2, 0)).IsEmpty() &&
-            board.GetAbsoluteTile((3, 0)).IsEmpty())
+            board[1, 0].IsEmpty() &&
+            board[2, 0].IsEmpty() &&
+            board[3, 0].IsEmpty())
         {
             yield return new FigureAction(
                 FigureActionTypes.Special, 
                 unitTile.AbsolutePosition,
-                rook1Tile.AbsolutePosition,
+                board[2, 0].AbsolutePosition,
                 () =>
                 {
-                    unitTile.MoveToTile(board.GetAbsoluteTile((2, 0)), board);
-                    rook1Tile.MoveToTile(board.GetAbsoluteTile((3, 0)), board);
+                    unitTile.MoveToTile(board[2, 0], board);
+                    rook1Tile.MoveToTile(board[3, 0], board);
                 });
         }
 
-        var rook2Tile = board.GetAbsoluteTile((7, 0));
+        var rook2Tile = board[7, 0];
         if (rook2Tile.Figure.FigureType.Equals(ExplodingChessFigureGroup.ExplodingRook) &&
-            board.GetAbsoluteTile((5, 0)).IsEmpty() &&
-            board.GetAbsoluteTile((6, 0)).IsEmpty())
+            board[5, 0].IsEmpty() &&
+            board[6, 0].IsEmpty())
         {
             yield return new FigureAction(
                 FigureActionTypes.Special,
                 unitTile.AbsolutePosition,
-                rook2Tile.AbsolutePosition,
+                board[6, 0].AbsolutePosition,
                 () =>
                 {
-                    unitTile.MoveToTile(board.GetAbsoluteTile((6, 0)), board);
-                    rook2Tile.MoveToTile(board.GetAbsoluteTile((5, 0)), board);
+                    unitTile.MoveToTile(board[6, 0], board);
+                    rook2Tile.MoveToTile(board[5, 0], board);
                 });
         }
     }

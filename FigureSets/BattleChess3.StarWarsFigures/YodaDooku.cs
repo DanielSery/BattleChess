@@ -26,7 +26,7 @@ public class YodaDooku : IStarWarsFigureType
         foreach (var movementPosition in _movementPositions)
         {
             var position = unitTile.Position + movementPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())
@@ -55,7 +55,7 @@ public class YodaDooku : IStarWarsFigureType
             for (var i = 1; i < 8; i++)
             {
                 var position = unitTile.Position + direction * i;
-                if (!board.TryGetPovTile(position, out var targetTile))
+                if (!board.TryGetTile(position, out var targetTile))
                     break;
 
                 if (!targetTile.IsEmpty())
@@ -73,7 +73,7 @@ public class YodaDooku : IStarWarsFigureType
             for (var i = 1; i < 8; i++)
             {
                 var position = unitTile.Position + direction * i;
-                if (!board.TryGetPovTile(position, out var targetTile))
+                if (!board.TryGetTile(position, out var targetTile))
                     break;
 
                 if (targetTile.IsEmpty())

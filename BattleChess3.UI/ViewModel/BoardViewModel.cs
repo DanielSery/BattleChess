@@ -135,10 +135,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
 
         ClearPossibleActions();
-        if (_playerService.CurrentPlayer.Equals(clickedTile.Figure.Owner))
-        {
-            SetPossibleActions(clickedTile);
-        }
+        SetPossibleActions(clickedTile);
     }
 
 
@@ -152,6 +149,9 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void SetPossibleActions(ITile clickedTile)
     {
+        if (!_playerService.CurrentPlayer.Equals(clickedTile.Figure.Owner))
+            return;
+        
         var povBoard = GetPlayerPOVBoard(clickedTile.Figure.Owner, Board);
         var povClickedTile = clickedTile.GetPovTile(clickedTile.Figure.Owner);
         var possibleActions = clickedTile.Figure.GetPossibleActions(povClickedTile, povBoard);
@@ -174,7 +174,7 @@ public sealed class BoardViewModel : ViewModelBase
             povBoard[position.GetPlayerPOVPosition(player)] = absoluteBoard[position];
         }
 
-        return new Board(absoluteBoard, povBoard);
+        return new Board(povBoard);
     }
 
     private void MouseEnterTile(ITileViewModel tile)

@@ -24,7 +24,7 @@ public class Special : IStarWarsFigureType
         foreach (var movement in _movePosition)
         {
             var position = unitTile.Position + movement;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())

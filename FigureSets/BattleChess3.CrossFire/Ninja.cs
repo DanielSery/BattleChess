@@ -17,7 +17,7 @@ public class Ninja : ICrossFireFigureType
         foreach (var attackPosition in _attackPositions)
         {
             var position = unitTile.Position + attackPosition;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsOwnedByEnemy(unitTile))
@@ -36,7 +36,7 @@ public class Ninja : ICrossFireFigureType
             yield return move2Action;
         }
 
-        if (board.TryGetPovTile(unitTile.Position + (0, 1), out var tileBefore) &&
+        if (board.TryGetTile(unitTile.Position + (0, 1), out var tileBefore) &&
             !tileBefore.IsEmpty() &&
             TryGetMoveAction(unitTile, board, (0, 2), out var move3Action))
         {
@@ -47,7 +47,7 @@ public class Ninja : ICrossFireFigureType
     private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
             !targetTile.IsEmpty())
         {
             action = FigureAction.None;

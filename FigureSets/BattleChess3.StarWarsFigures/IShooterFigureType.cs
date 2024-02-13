@@ -25,7 +25,7 @@ internal interface IShooterFigureType : IFigureType
             for (var i = 1; i <= 3; i++)
             {
                 var position = unitTile.Position + direction * i;
-                if (!board.TryGetPovTile(position, out var targetTile))
+                if (!board.TryGetTile(position, out var targetTile))
                     break;
                 
                 if (targetTile.IsOwnedByEnemy(unitTile))
@@ -53,7 +53,7 @@ internal interface IShooterFigureType : IFigureType
         foreach (var movement in MovePositions)
         {
             var position = unitTile.Position + movement;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())

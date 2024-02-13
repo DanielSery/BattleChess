@@ -19,7 +19,7 @@ public class Spy : ICrossFireFigureType
         foreach (var movement in _attackMovePositions)
         {
             var position = unitTile.Position + movement;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())

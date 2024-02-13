@@ -21,7 +21,7 @@ public class Archer : ICrossFireFigureType
             for (var i = 1; i < 8; i++)
             {
                 var position = unitTile.Position + direction * i;
-                if (!board.TryGetPovTile(position, out var targetTile))
+                if (!board.TryGetTile(position, out var targetTile))
                     break;
                 
                 if (targetTile.IsOwnedByEnemy(unitTile))
@@ -50,7 +50,7 @@ public class Archer : ICrossFireFigureType
     private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
             !targetTile.IsEmpty())
         {
             action = FigureAction.None;

@@ -8,11 +8,11 @@ namespace BattleChess3.Core.Model;
 
 public interface IBoard : IReadOnlyList<ITile>
 {
-    ITile GetAbsoluteTile(Position position);
-
-    ITile GetPovTile(Position position);
+    ITile this[Position position] { get; }
     
-    bool TryGetAbsoluteTile(Position position, out ITile tile);
+    ITile this[int x, int y] { get; }
     
-    bool TryGetPovTile(Position position, out ITile tile);
+    bool TryGetTile(Position position, out ITile tile);
+    
+    bool TryGetTile(int x, int y, out ITile tile);
 }

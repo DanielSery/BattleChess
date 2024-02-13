@@ -14,7 +14,7 @@ internal interface ISpyFigureTypeWithDifferentAttackMoves : IFigureType
         foreach (var movement in AttackMovePositions)
         {
             var position = unitTile.Position + movement;
-            if (!board.TryGetPovTile(position, out var targetTile))
+            if (!board.TryGetTile(position, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())

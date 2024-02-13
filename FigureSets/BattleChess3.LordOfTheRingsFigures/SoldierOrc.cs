@@ -46,7 +46,7 @@ public class SoldierOrc : ILordOfTheRingsFigureType
     private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var attackPosition = unitTile.Position + relativePosition;
-        if (!board.TryGetPovTile(attackPosition, out var targetTile) ||
+        if (!board.TryGetTile(attackPosition, out var targetTile) ||
             !targetTile.IsOwnedByEnemy(unitTile))
         {
             action = FigureAction.None;
@@ -75,7 +75,7 @@ public class SoldierOrc : ILordOfTheRingsFigureType
     private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetPovTile(movePosition, out var targetTile) ||
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
             !targetTile.IsEmpty())
         {
             action = FigureAction.None;

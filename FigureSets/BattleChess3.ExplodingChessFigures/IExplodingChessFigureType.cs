@@ -33,7 +33,7 @@ internal interface IExplodingChessFigureType : IFigureType
 
     private static void SilentDie(IBoard board, Position position)
     {
-        if (!board.TryGetPovTile(position, out var tile))
+        if (!board.TryGetTile(position, out var tile))
             return;
 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
