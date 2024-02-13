@@ -1,5 +1,5 @@
-﻿using BattleChess3.Core.Model.Figures;
-using BattleChess3.UI.Services;
+﻿using BattleChess3.Game.Figures;
+using BattleChess3.Maps;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 

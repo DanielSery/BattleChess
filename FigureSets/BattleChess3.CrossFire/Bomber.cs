@@ -1,7 +1,8 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures;
+﻿using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.CrossFireFigures;
 

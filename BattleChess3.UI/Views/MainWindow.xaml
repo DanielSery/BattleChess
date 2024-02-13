@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:BattleChess3.UI.Views"
         xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
-        xmlns:util="clr-namespace:BattleChess3.UI.Utilities"
+        xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
         mc:Ignorable="d"
-        Title="{util:Loc MainWindow_Title}" Height="800" Width="1000" MinHeight="600" MinWidth="1000"
+        Title="{localization:Loc MainWindow_Title}" Height="800" Width="1000" MinHeight="600" MinWidth="1000"
         DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.MainWindowViewModel}}"
         Style="{DynamicResource MainWindowStyle}">
     <TabControl>
-        <TabItem Header="{util:Loc MainWindow_Menu_Header}"
+        <TabItem Header="{localization:Loc MainWindow_Menu_Header}"
                  IsSelected="{Binding MenuTabSelected}">
             <DockPanel>
                 <Viewbox DockPanel.Dock="Left" Stretch="Uniform"
@@ -20,30 +20,30 @@
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding NewGameCommand}"
-                                Content="{util:Loc MainWindow_NewGame}" />
+                                Content="{localization:Loc MainWindow_NewGame}" />
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding SaveGameCommand}"
-                                Content="{util:Loc MainWindow_SaveGame}" />
+                                Content="{localization:Loc MainWindow_SaveGame}" />
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding DeleteGameCommand}"
-                                Content="{util:Loc MainWindow_DeleteGame}" />
+                                Content="{localization:Loc MainWindow_DeleteGame}" />
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding SelectOptionsCommand}"
-                                Content="{util:Loc MainWindow_Options}" />
+                                Content="{localization:Loc MainWindow_Options}" />
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding CloseApplicationCommand}"
-                                Content="{util:Loc MainWindow_Quit}" />
+                                Content="{localization:Loc MainWindow_Quit}" />
                     </DockPanel>
                 </Viewbox>
                 <views:MapsControl MinWidth="500"
                                    DataContext="{Binding MapsViewModel}" />
             </DockPanel>
         </TabItem>
-        <TabItem Header="{util:Loc MainWindow_Game_Header}"
+        <TabItem Header="{localization:Loc MainWindow_Game_Header}"
                  IsSelected="{Binding GameTabSelected}"
                  IsEnabled="{Binding GameTabEnabled}">
             <DockPanel LastChildFill="True">
@@ -61,7 +61,7 @@
                 </Border>
             </DockPanel>
         </TabItem>
-        <TabItem Header="{util:Loc MainWindow_Editor_Header}"
+        <TabItem Header="{localization:Loc MainWindow_Editor_Header}"
                  IsSelected="{Binding EditorTabSelected}"
                  IsEnabled="{Binding GameTabEnabled}">
             <DockPanel LastChildFill="True">
@@ -76,11 +76,11 @@
                 </Border>
             </DockPanel>
         </TabItem>
-        <TabItem Header="{util:Loc MainWindow_Options_Header}"
+        <TabItem Header="{localization:Loc MainWindow_Options_Header}"
                  IsSelected="{Binding OptionsTabSelected}">
             <views:StylesControl />
         </TabItem>
-        <TabItem Header="{util:Loc MainWindow_Manual_Header}"
+        <TabItem Header="{localization:Loc MainWindow_Manual_Header}"
                  IsSelected="{Binding ManualTabSelected}">
             <views:ManualControl />
         </TabItem>

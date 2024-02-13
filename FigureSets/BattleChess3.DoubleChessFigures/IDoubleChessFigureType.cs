@@ -1,7 +1,7 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures.Utilities;
+﻿using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.DoubleChessFigures.Localization;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.DoubleChessFigures;
 
@@ -21,7 +21,7 @@ internal interface IDoubleChessFigureType : IFigureType
     bool TryCreateMergeAction(ITile tile1, ITile tile2, IBoard board, out FigureAction action)
     {
         var figure1 = this;
-        var figure2 = tile2.Figure.FigureType;
+        var figure2 = tile2.Figure.Type;
         
         action = figure1 switch
         {

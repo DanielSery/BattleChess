@@ -1,6 +1,5 @@
 ﻿using System.Windows;
-using BattleChess3.UI.Model;
-using BattleChess3.UI.Services;
+using BattleChess3.UI.Themes;
 using GalaSoft.MvvmLight;
 
 namespace BattleChess3.UI.ViewModel;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.UI.Services;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Players;
+using BattleChess3.Maps;
 using GalaSoft.MvvmLight;
 
 namespace BattleChess3.UI.ViewModel;
@@ -37,7 +37,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
         get => _maps;
         private set
         {
-            if (value.All(x => x.MapPath != _selectedMap?.MapPath))
+            if (value.All(x => x.MapPath != _selectedMap.MapPath))
             {
                 SelectedMap = value.FirstOrDefault()
                               ?? MapBlueprint.None;

@@ -1,4 +1,4 @@
-﻿using BattleChess3.Core.Model;
+﻿using BattleChess3.Game.Board;
 
 namespace BattleChess3.LordOfTheRingsFigures;
 

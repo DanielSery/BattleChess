@@ -10,7 +10,7 @@ namespace BattleChess3.UI.Views;
 
 public partial class MainWindow
 {
-    private GameBoardControl _lastBoardControl;
+    private GameBoardControl? _lastBoardControl;
 
     public MainWindow()
     {
@@ -71,8 +71,8 @@ public partial class MainWindow
         var bmp = new RenderTargetBitmap(
             (int)_lastBoardControl.ActualWidth,
             (int)_lastBoardControl.ActualHeight,
-            96,
-            96,
+            dpi.PixelsPerInchX,
+            dpi.PixelsPerInchY,
             PixelFormats.Pbgra32);
 
         bmp.Render(_lastBoardControl);

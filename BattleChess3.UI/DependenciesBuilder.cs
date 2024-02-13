@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using Autofac.Extras.CommonServiceLocator;
-using BattleChess3.UI.Services;
+using BattleChess3.Game.Players;
+using BattleChess3.Maps;
+using BattleChess3.Multiplayer;
+using BattleChess3.UI.Themes;
 using BattleChess3.UI.ViewModel;
 using CommonServiceLocator;
 
@@ -33,6 +36,9 @@ public class DependenciesBuilder
             .SingleInstance();
         builder.RegisterType<FigureService>()
             .As<IFigureService>()
+            .SingleInstance();
+        builder.RegisterType<MapLoader>()
+            .As<IMapLoader>()
             .SingleInstance();
         builder.RegisterType<PlayerService>()
             .As<IPlayerService>()

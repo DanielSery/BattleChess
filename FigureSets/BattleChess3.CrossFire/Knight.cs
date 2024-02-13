@@ -1,7 +1,7 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures;
+﻿using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
@@ -75,7 +75,7 @@ public class Knight : ICrossFireFigureType
             
             unitTile.KillWithMove(board[sourcePosition + smallMove], board);
             unitTile = board[sourcePosition + smallMove];
-            if (!unitTile.Figure.FigureType.Equals(this))
+            if (!unitTile.Figure.Type.Equals(this))
                 return;
            
             unitTile.KillWithMove(targetTile, board); 
@@ -87,12 +87,12 @@ public class Knight : ICrossFireFigureType
             
             unitTile.KillWithMove(board[sourcePosition + smallMove], board);
             unitTile = board[sourcePosition + smallMove];
-            if (!unitTile.Figure.FigureType.Equals(this))
+            if (!unitTile.Figure.Type.Equals(this))
                 return;
             
             unitTile.KillWithMove(board[sourcePosition + 2 * smallMove], board);
             unitTile = board[sourcePosition + 2 * smallMove];
-            if (!unitTile.Figure.FigureType.Equals(this))
+            if (!unitTile.Figure.Type.Equals(this))
                 return;
             
             unitTile.KillWithMove(targetTile, board);

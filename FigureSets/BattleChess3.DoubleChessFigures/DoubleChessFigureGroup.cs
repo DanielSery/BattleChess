@@ -1,5 +1,5 @@
-﻿using BattleChess3.Core.Model.Figures;
-using BattleChess3.DoubleChessFigures.Localization;
+﻿using BattleChess3.DoubleChessFigures.Localization;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.DoubleChessFigures;
 

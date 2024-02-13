@@ -1,7 +1,7 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures;
+﻿using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.StarWarsFigures;
 
@@ -34,7 +34,7 @@ public class YodaDooku : IStarWarsFigureType
                 yield return unitTile.CreateMoveAction(targetTile, board);
             }
 
-            if (targetTile.Figure.FigureType is Bomb &&
+            if (targetTile.Figure.Type is Bomb &&
                 targetTile.IsOwnedByYou(unitTile))
             {
                 yield return new FigureAction(

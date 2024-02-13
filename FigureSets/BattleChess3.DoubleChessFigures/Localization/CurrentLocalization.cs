@@ -1,5 +1,5 @@
 ﻿using System.Resources;
-using BattleChess3.Core.Utilities;
+using BattleChess3.Game.Localization;
 
 namespace BattleChess3.DoubleChessFigures.Localization;
 

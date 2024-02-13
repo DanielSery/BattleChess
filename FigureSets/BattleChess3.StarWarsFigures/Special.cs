@@ -1,6 +1,6 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures.Utilities;
+﻿using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.StarWarsFigures;
 
@@ -40,7 +40,7 @@ public class Special : IStarWarsFigureType
                     });
             }
 
-            if (targetTile.Figure.FigureType is Bomb &&
+            if (targetTile.Figure.Type is Bomb &&
                 targetTile.IsOwnedByYou(unitTile))
             {
                 yield return new FigureAction(
@@ -67,7 +67,7 @@ public class Special : IStarWarsFigureType
             }
 
             var shieldTile = board[sourceTile.Position + shieldPosition];
-            if (shieldTile.Figure.FigureType is Bomb &&
+            if (shieldTile.Figure.Type is Bomb &&
                 shieldTile.Figure.Owner.Equals(sourceTile.Figure.Owner))
             {
                 shieldTile.Die(board);

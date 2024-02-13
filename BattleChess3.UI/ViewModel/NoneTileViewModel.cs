@@ -1,24 +1,14 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
+﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class NoneTileViewModel : ITileViewModel
+public class NoneTileViewModel : TileViewModel
 {
     public static readonly NoneTileViewModel Instance = new();
 
-    public Position Position => Position.None;
-    public Position AbsolutePosition => Position.None;
-    public Figure Figure { get; set; } = Figure.None;
-    public bool IsMouseOver { get; set; }
-    public bool IsSelected { get; set; }
-    public bool IsPossibleAttack { get; set; }
-    public bool IsPossibleMove { get; set; }
-    public bool IsPossibleSpecial { get; set; }
-    public FigureAction PossibleAction { get; set; } = FigureAction.None;
-
-    public ITile GetPovTile(Player player)
+    public NoneTileViewModel() : base(new Position(-1, -1))
     {
-        return this;
     }
 }

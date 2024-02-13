@@ -1,6 +1,6 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures.Utilities;
+﻿using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
@@ -53,7 +53,7 @@ public class Builder : ICrossFireFigureType
             }
 
             var shieldTile = board[sourceTile.Position + shieldPosition];
-            if (shieldTile.Figure.FigureType is Wall &&
+            if (shieldTile.Figure.Type is Wall &&
                 shieldTile.Figure.Owner.Equals(sourceTile.Figure.Owner))
             {
                 shieldTile.Die(board);
@@ -87,7 +87,7 @@ public class Builder : ICrossFireFigureType
 
             var movedTile = board[sourceTile.Position + movedPosition];
             if (movedTile.IsEmpty() ||
-                movedTile.Figure.FigureType is Wall)
+                movedTile.Figure.Type is Wall)
             {
                 continue;
             }

@@ -1,7 +1,7 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures;
+﻿using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.StarWarsFigures;
 
@@ -57,7 +57,7 @@ public class Soldiers : IStarWarsFigureType
     {
         var attackPosition = unitTile.Position + relativePosition;
         if (!board.TryGetTile(attackPosition, out var targetTile) ||
-            (!targetTile.IsOwnedByEnemy(unitTile) && targetTile.Figure.FigureType is not Bomb))
+            (!targetTile.IsOwnedByEnemy(unitTile) && targetTile.Figure.Type is not Bomb))
         {
             action = FigureAction.None;
             return false;
@@ -113,7 +113,7 @@ public class Soldiers : IStarWarsFigureType
     {
         var movePosition = unitTile.Position + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
-            targetTile.Figure.FigureType is not Bomb ||
+            targetTile.Figure.Type is not Bomb ||
             !targetTile.IsOwnedByYou(unitTile))
         {
             action = FigureAction.None;
@@ -145,11 +145,5 @@ public class Soldiers : IStarWarsFigureType
                 unitTile.MoveToTile(targetTile, board);
             });
         return true;
-    }
-    
-    private static bool IsEmptyTile(ITile unitTile, IBoard board, Position relativePosition)
-    {
-        var movePosition = unitTile.Position + relativePosition;
-        return board.TryGetTile(movePosition, out var targetTile) && targetTile.IsEmpty();
     }
 }

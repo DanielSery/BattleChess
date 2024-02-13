@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using BattleChess3.UI.ViewModel;
 
 namespace BattleChess3.UI.Views;
@@ -9,7 +8,7 @@ namespace BattleChess3.UI.Views;
 /// <summary>
 ///     Interaction logic for MultiplayerControl.xaml
 /// </summary>
-public partial class MultiplayerControl : UserControl
+public partial class MultiplayerControl
 {
     public MultiplayerControl()
     {

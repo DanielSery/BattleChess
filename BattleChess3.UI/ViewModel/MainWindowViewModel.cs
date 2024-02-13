@@ -100,7 +100,7 @@ public class MainWindowViewModel : ViewModelBase
 
         var identifier = DateTime.Now.Ticks.ToString();
         RequestSavePreview?.Invoke(this, identifier);
-        MapsViewModel.SaveSelectedMap(identifier, BoardViewModel.Board);
+        MapsViewModel.SaveSelectedMap(identifier, BoardViewModel.Tiles);
     }
 
     private void DeleteGame()

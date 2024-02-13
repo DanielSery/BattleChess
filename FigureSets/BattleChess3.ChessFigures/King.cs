@@ -1,7 +1,7 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures;
+﻿using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.ChessFigures;
 
@@ -40,7 +40,7 @@ public class King : IChessFigureType
         }
         
         var rook1Tile = board[0, 0];
-        if (rook1Tile.Figure.FigureType.Equals(ChessFigureGroup.Rook) &&
+        if (rook1Tile.Figure.Type.Equals(ChessFigureGroup.Rook) &&
             board[1, 0].IsEmpty() &&
             board[2, 0].IsEmpty() &&
             board[3, 0].IsEmpty())
@@ -57,7 +57,7 @@ public class King : IChessFigureType
         }
 
         var rook2Tile = board[7, 0];
-        if (rook2Tile.Figure.FigureType.Equals(ChessFigureGroup.Rook) &&
+        if (rook2Tile.Figure.Type.Equals(ChessFigureGroup.Rook) &&
             board[5, 0].IsEmpty() &&
             board[6, 0].IsEmpty())
         {

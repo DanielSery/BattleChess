@@ -1,5 +1,5 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
+﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 

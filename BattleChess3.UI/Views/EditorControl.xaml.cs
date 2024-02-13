@@ -2,7 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using BattleChess3.Core.Model.Figures;
+using BattleChess3.Game.Figures;
+using BattleChess3.Maps;
 
 namespace BattleChess3.UI.Views;
 
@@ -48,16 +49,17 @@ public partial class EditorControl
         }
     }
 
-    private static T FindAnchestor<T>(DependencyObject current)
+    private static T? FindAnchestor<T>(DependencyObject parent)
         where T : DependencyObject
     {
+        var current = parent;
         do
         {
-            if (current is T)
+            if (current is T dependencyObject)
             {
-                return (T)current;
+                return dependencyObject;
             }
-
+            
             current = VisualTreeHelper.GetParent(current);
         } while (current != null);
 

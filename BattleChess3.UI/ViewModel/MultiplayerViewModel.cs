@@ -1,8 +1,9 @@
 ﻿using System.Windows;
-using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.UI.Services;
-using BattleChess3.UI.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Players;
+using BattleChess3.Maps;
+using BattleChess3.Multiplayer;
+using BattleChess3.UI.Localization;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -51,18 +52,24 @@ public sealed class MultiplayerViewModel : ViewModelBase
     {
         _multiplayerService.RequestClickTile += RemoteRequestedClickTile;
         _multiplayerService.RequestLoadMap += RemoteRequestedLoadMap;
+        _multiplayerService.RequestDisplayMessage += RemoteRequestedDisplayMessage;
         _boardViewModel.RequestClickTile += LocalRequestClickTile;
         _boardViewModel.RequestLoadMap += LocalRequestLoadMap;
     }
 
+    private void RemoteRequestedDisplayMessage(object? sender, string e)
+    {
+        Application.Current.Dispatcher.Invoke(() => MessageBox.Show(e));
+    }
+
     private void LocalRequestLoadMap(object? sender, MapBlueprint e)
     {
-        _multiplayerService.LoadMap(e);
+        Application.Current.Dispatcher.Invoke(() => _multiplayerService.LoadMap(e));
     }
 
     private void LocalRequestClickTile(object? sender, Position e)
     {
-        _multiplayerService.ClickOnPosition(e);
+        Application.Current.Dispatcher.Invoke(() => _multiplayerService.ClickOnPosition(e));
     }
 
     private void RemoteRequestedLoadMap(object? sender, MapBlueprint e)
@@ -74,7 +81,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
     {
         _boardViewModel.AutomaticClickAtTile(!e.IsInBoard()
             ? NoneTileViewModel.Instance
-            : _boardViewModel.Board[e]);
+            : _boardViewModel.Tiles[e]);
     }
 
     public void SetKey(string key)
@@ -105,7 +112,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
     {
         var map = new MapBlueprint
         {
-            Figures = _boardViewModel.Board.Select(x => new FigureBlueprint
+            Figures = _boardViewModel.Tiles.Select(x => new FigureBlueprint
             {
                 PlayerId = x.Figure.Owner.Id,
                 UnitName = x.Figure.UnitName

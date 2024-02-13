@@ -1,7 +1,7 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
-using BattleChess3.DefaultFigures;
+﻿using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.StarWarsFigures;
 
@@ -37,7 +37,7 @@ internal interface IShooterFigureType : IFigureType
                 {
                     yield return unitTile.CreateMoveAction(targetTile, board);
                 }
-                else if (targetTile.Figure.FigureType is Bomb &&
+                else if (targetTile.Figure.Type is Bomb &&
                          targetTile.IsOwnedByYou(unitTile))
                 {
                     yield return unitTile.CreateKillWithoutMove(targetTile, board);
@@ -60,7 +60,7 @@ internal interface IShooterFigureType : IFigureType
             {
                 yield return unitTile.CreateMoveAction(targetTile, board);
             }
-            else if (targetTile.Figure.FigureType is Bomb &&
+            else if (targetTile.Figure.Type is Bomb &&
                      targetTile.IsOwnedByYou(unitTile))
             {
                 yield return new FigureAction(

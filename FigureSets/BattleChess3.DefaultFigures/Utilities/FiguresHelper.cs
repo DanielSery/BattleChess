@@ -1,5 +1,6 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
+﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.DefaultFigures.Utilities;
 
@@ -7,12 +8,12 @@ public static class FiguresHelper
 {
     public static bool IsEmpty(this ITile tile)
     {
-        return tile.Figure.FigureType.Equals(DefaultFigureGroup.Empty);
+        return tile.Figure.Type.Equals(DefaultFigureGroup.Empty);
     }
 
     public static bool IsWater(this ITile tile)
     {
-        return tile.Figure.FigureType.Equals(DefaultFigureGroup.Water);
+        return tile.Figure.Type.Equals(DefaultFigureGroup.Water);
     }
 
     public static bool IsOwnedByYou(this ITile checkedTile, ITile yoursTile)
@@ -30,12 +31,12 @@ public static class FiguresHelper
     {
         tile.Figure = createdFigure;
         tile.Figure.Owner.Figures.Add(tile.Figure);
-        tile.Figure.FigureType.OnCreated(board);
+        tile.Figure.Type.OnCreated(board);
     }
 
     public static void Die(this ITile tile, IBoard board)
     {
-        var figureType = tile.Figure.FigureType;
+        var figureType = tile.Figure.Type;
         figureType.OnDying(tile, board); 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
         tile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
@@ -44,7 +45,7 @@ public static class FiguresHelper
 
     public static void MoveToTile(this ITile from, ITile to, IBoard board)
     {
-        var figureType = from.Figure.FigureType; 
+        var figureType = from.Figure.Type; 
         figureType.OnMoving(from, to, board);
         to.Figure = from.Figure;
         from.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
@@ -53,8 +54,8 @@ public static class FiguresHelper
 
     public static void KillWithoutMove(this ITile from, ITile to, IBoard board)
     {
-        var attackingFigure = from.Figure.FigureType; 
-        var killedFigure = to.Figure.FigureType;
+        var attackingFigure = from.Figure.Type; 
+        var killedFigure = to.Figure.Type;
         
         attackingFigure.OnAttacking(from, to, board);
         killedFigure.OnDying(to, board);
@@ -70,8 +71,8 @@ public static class FiguresHelper
 
     public static void KillWithMove(this ITile from, ITile to, IBoard board)
     {
-        var attackingFigure = from.Figure.FigureType; 
-        var killedFigure = to.Figure.FigureType;
+        var attackingFigure = from.Figure.Type; 
+        var killedFigure = to.Figure.Type;
         
         attackingFigure.OnMoving(from, to, board);
         attackingFigure.OnAttacking(from, to, board);

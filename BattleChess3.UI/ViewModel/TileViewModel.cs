@@ -1,10 +1,11 @@
-﻿using BattleChess3.Core.Model;
-using BattleChess3.Core.Model.Figures;
+﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 using GalaSoft.MvvmLight;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class TileViewModel : ViewModelBase, ITileViewModel
+public class TileViewModel : ViewModelBase, ITile
 {
     private Figure _figure = Figure.None;
 
