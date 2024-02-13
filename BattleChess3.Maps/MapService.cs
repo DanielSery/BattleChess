@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BattleChess3.Maps;
 
-public class MapService : IMapService
+internal class MapService : IMapService
 {
     private readonly FileSystemWatcher _watcher;
 
@@ -90,7 +90,7 @@ public class MapService : IMapService
         MapsChanged?.Invoke(this, _maps);
     }
 
-    protected virtual bool IsFileLocked(FileInfo file)
+    private static bool IsFileLocked(FileInfo file)
     {
         try
         {

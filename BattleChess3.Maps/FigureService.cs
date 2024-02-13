@@ -3,7 +3,7 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.Maps;
 
-public class FigureService : IFigureService
+internal class FigureService : IFigureService
 {
     private readonly FileSystemWatcher _watcher;
 

@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class MainWindowViewModel : ViewModelBase
+public sealed class MainWindowViewModel : ViewModelBase
 {
     private bool _editorTabSelected;
 

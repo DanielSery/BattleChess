@@ -3,7 +3,7 @@ using System.Text;
 
 namespace BattleChess3.Multiplayer.Utilities;
 
-public static class CompressionHelper
+internal static class CompressionHelper
 {
     public static string Compress(string s)
     {

@@ -10,7 +10,7 @@ using Timer = System.Timers.Timer;
 
 namespace BattleChess3.Multiplayer;
 
-public sealed class MultiplayerService : IMultiplayerService
+internal sealed class MultiplayerService : IMultiplayerService
 {
     private readonly HttpClient _httpClient = new();
 

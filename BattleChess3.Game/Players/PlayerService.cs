@@ -1,6 +1,6 @@
 ﻿namespace BattleChess3.Game.Players;
 
-public class PlayerService : IPlayerService
+internal class PlayerService : IPlayerService
 {
     private readonly IDictionary<int, Player> _players = new Dictionary<int, Player>();
     private int _currentPlayerId;

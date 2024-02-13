@@ -2,7 +2,7 @@
 
 namespace BattleChess3.UI.ViewModel;
 
-public class FigureGroupViewModel : IFigureGroup
+public sealed class FigureGroupViewModel : IFigureGroup
 {
     public FigureGroupViewModel(IFigureGroup figureGroup)
     {

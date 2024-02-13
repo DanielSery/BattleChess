@@ -3,7 +3,7 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class FigureViewModel : IFigureType
+public sealed class FigureViewModel : IFigureType
 {
     private readonly Func<ITile, IBoard, IEnumerable<FigureAction>> _getActionsFunc;
 

@@ -4,7 +4,7 @@ using BattleChess3.Game.Players;
 
 namespace BattleChess3.Maps;
 
-public class MapLoader : IMapLoader
+internal class MapLoader : IMapLoader
 {
     private readonly IPlayerService _playerService;
     private readonly IFigureService _figureService;

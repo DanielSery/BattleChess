@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace BattleChess3.UI.Themes;
 
-public class ThemeService : IThemeService
+internal class ThemeService : IThemeService
 {
     private readonly FileSystemWatcher _watcher;
 
