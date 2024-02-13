@@ -33,22 +33,34 @@ public class CombinedChessFigureType<T1, T2> : IFigureType
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        return _firstFigure.GetPossibleActions(unitTile, board)
-            .Concat(_secondFigure.GetPossibleActions(unitTile, board))
-            .DistinctBy(x => x.TargetPosition)
-            .Select(x =>
-            {
-                return new FigureAction(
-                    x.ActionType,
-                    x.SourcePosition,
-                    x.TargetPosition, () =>
-                    {
-                        var owner = unitTile.Figure.Owner;
-                        unitTile.Die(board);
-                        unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
-                        x.Action.Invoke();
-                        unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
-                    });
-            });
+        var firstFigureActions = _firstFigure.GetPossibleActions(unitTile, board)
+            .Select(x => new FigureAction(
+                x.ActionType,
+                x.SourcePosition,
+                x.TargetPosition, () =>
+                {
+                    var owner = unitTile.Figure.Owner;
+                    unitTile.Die(board);
+                    unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
+                    x.Action.Invoke();
+                    unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
+                }));
+        
+        var secondFigureActions = _secondFigure.GetPossibleActions(unitTile, board)
+            .Select(x => new FigureAction(
+                x.ActionType,
+                x.SourcePosition,
+                x.TargetPosition, () =>
+                {
+                    var owner = unitTile.Figure.Owner;
+                    unitTile.Die(board);
+                    unitTile.CreateFigure(new Figure(owner, _secondFigure), board);
+                    x.Action.Invoke();
+                    unitTile.CreateFigure(new Figure(owner, _firstFigure), board);
+                }));
+            
+        return firstFigureActions
+            .Concat(secondFigureActions)
+            .DistinctBy(x => x.TargetPosition);
     }
 }
