@@ -11,16 +11,19 @@ public sealed class BoardViewModel : ViewModelBase
 {
     private readonly IPlayerService _playerService;
     private readonly IMapLoader _mapLoader;
+    private readonly IFigureCreator _figureCreator;
 
     private TileViewModel _mouseOnTile = NoneTileViewModel.Instance;
     private TileViewModel _selectedTile = NoneTileViewModel.Instance;
 
     public BoardViewModel(
         IPlayerService playerService,
-        IMapLoader mapLoader)
+        IMapLoader mapLoader,
+        IFigureCreator figureCreator)
     {
         _playerService = playerService;
         _mapLoader = mapLoader;
+        _figureCreator = figureCreator;
 
         ClickedCommand = new RelayCommand<TileViewModel>(ClickedAtTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
@@ -95,9 +98,9 @@ public sealed class BoardViewModel : ViewModelBase
         _mapLoader.LoadMap(Board, map);
     }
 
-    public void CreateFigure(ITile tile, FigureBlueprint figureBlueprint)
+    public void CreateFigure(ITile tile, FigureIdentifier figureIdentifier)
     {
-        _mapLoader.CreateFigure(tile, figureBlueprint);
+        tile.Figure = _figureCreator.CreateFigure(figureIdentifier);
     }
 
     private void ClickedAtTile(TileViewModel clickedTile)

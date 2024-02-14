@@ -81,7 +81,7 @@ public class ObiwanPalpatine : IStarWarsFigureType
                     FigureActionTypes.Special,
                     unitTile.AbsolutePosition,
                     targetTile.AbsolutePosition,
-                    () => unitTile.SwapTiles(targetTile));
+                    () => unitTile.MoveToTile(targetTile, board));
             }
         }
     }

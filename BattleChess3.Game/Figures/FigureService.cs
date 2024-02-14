@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
-using BattleChess3.Game.Figures;
 
-namespace BattleChess3.Maps;
+namespace BattleChess3.Game.Figures;
 
 internal class FigureService : IFigureService
 {

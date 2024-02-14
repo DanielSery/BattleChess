@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using GalaSoft.MvvmLight;
@@ -69,7 +70,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
     {
         var map = new MapBlueprint
         {
-            Figures = board.Select(x => new FigureBlueprint
+            Figures = board.Select(x => new FigureIdentifier
             {
                 PlayerId = x.Figure.Owner.Id,
                 UnitName = x.Figure.UnitName

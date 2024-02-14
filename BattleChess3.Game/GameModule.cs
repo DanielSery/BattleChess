@@ -1,10 +1,5 @@
-﻿#region Copyright FEI Company 2024
-// All rights are reserved. Reproduction or transmission in whole or in part, in
-// any form or by any means, electronic, mechanical or otherwise, is prohibited
-// without the prior written consent of the copyright owner.
-#endregion
-
-using Autofac;
+﻿using Autofac;
+using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game;
@@ -15,6 +10,12 @@ public static class GameModule
     {
         builder.RegisterType<PlayerService>()
             .As<IPlayerService>()
+            .SingleInstance();
+        builder.RegisterType<FigureService>()
+            .As<IFigureService>()
+            .SingleInstance();
+        builder.RegisterType<FigureCreator>()
+            .As<IFigureCreator>()
             .SingleInstance();
     }
 }

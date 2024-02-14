@@ -42,7 +42,7 @@ public class Spy : ICrossFireFigureType
                     FigureActionTypes.Special,
                     unitTile.AbsolutePosition,
                     targetTile.AbsolutePosition,
-                    () => unitTile.SwapTiles(targetTile));
+                    () => unitTile.MoveToTile(targetTile, board));
             }
         }
     }

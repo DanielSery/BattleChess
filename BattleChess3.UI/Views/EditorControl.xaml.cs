@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using BattleChess3.Game.Figures;
-using BattleChess3.Maps;
 
 namespace BattleChess3.UI.Views;
 
@@ -42,7 +41,7 @@ public partial class EditorControl
             //// Find the data behind the ListViewItem
             var figureType = (IFigureType)itemsControl.DataContext;
             var imagePair = (KeyValuePair<int, Uri>)image.DataContext;
-            var dataObject = new DataObject("figureData", new FigureBlueprint(imagePair.Key, figureType));
+            var dataObject = new DataObject("figureData", new FigureIdentifier(imagePair.Key, figureType));
 
             //// Initialize the drag & drop operation
             DragDrop.DoDragDrop(image, dataObject, DragDropEffects.Move);

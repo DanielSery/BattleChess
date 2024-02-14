@@ -47,8 +47,7 @@ public static class FiguresHelper
     {
         var figureType = from.Figure.Type; 
         figureType.OnMoving(from, to, board);
-        to.Figure = from.Figure;
-        from.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
+        (to.Figure, from.Figure) = (from.Figure, to.Figure);
         figureType.OnMoved(from, to, board);
     }
 
@@ -87,10 +86,5 @@ public static class FiguresHelper
         killedFigure.OnDied(to, board);
         killedFigure.OnKilled(to, from, board);
         attackingFigure.OnAttacked(from, to, board);
-    }
-
-    public static void SwapTiles(this ITile first, ITile second)
-    {
-        (second.Figure, first.Figure) = (first.Figure, second.Figure);
     }
 }

@@ -45,15 +45,6 @@ public static class DefaultFigureActions
             });
     }
 
-    public static FigureAction CreateSwapFigures(this ITile unitTile, ITile targetTile)
-    {
-        return new FigureAction(
-            FigureActionTypes.Special, 
-            unitTile.AbsolutePosition,
-            targetTile.AbsolutePosition,
-            () => unitTile.SwapTiles(targetTile));
-    }
-
     public static FigureAction CreatePassTurn(this ITile tile)
     {
         return new FigureAction(

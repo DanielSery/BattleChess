@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
@@ -112,7 +113,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
     {
         var map = new MapBlueprint
         {
-            Figures = _boardViewModel.Tiles.Select(x => new FigureBlueprint
+            Figures = _boardViewModel.Tiles.Select(x => new FigureIdentifier
             {
                 PlayerId = x.Figure.Owner.Id,
                 UnitName = x.Figure.UnitName

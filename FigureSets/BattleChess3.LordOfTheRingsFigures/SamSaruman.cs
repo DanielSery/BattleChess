@@ -60,7 +60,7 @@ public class SamSaruman : ILordOfTheRingsFigureType
                     FigureActionTypes.Special,
                     unitTile.AbsolutePosition,
                     targetTile.AbsolutePosition,
-                    () => unitTile.SwapTiles(targetTile));
+                    () => unitTile.MoveToTile(targetTile, board));
             }
         }
     }

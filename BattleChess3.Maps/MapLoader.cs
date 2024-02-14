@@ -6,15 +6,15 @@ namespace BattleChess3.Maps;
 
 internal class MapLoader : IMapLoader
 {
+    private readonly IFigureCreator _figureCreator;
     private readonly IPlayerService _playerService;
-    private readonly IFigureService _figureService;
 
     public MapLoader(
         IPlayerService playerService,
-        IFigureService figureService)
+        IFigureCreator figureCreator)
     {
         _playerService = playerService;
-        _figureService = figureService;
+        _figureCreator = figureCreator;
     }
     
     public void LoadMap(IBoard board, MapBlueprint map)
@@ -23,16 +23,7 @@ internal class MapLoader : IMapLoader
 
         for (var i = 0; i < IBoard.TilesCount; i++)
         {
-            CreateFigure(board[i], map.Figures[i]);
+            board[i].Figure = _figureCreator.CreateFigure(map.Figures[i]);
         }
-    }
-
-    public void CreateFigure(ITile tile, FigureBlueprint figureBlueprint)
-    {
-        var figureType = _figureService.GetFigureFromName(figureBlueprint.UnitName);
-        var player = _playerService.GetPlayer(figureBlueprint.PlayerId);
-        var figure = new Figure(player, figureType);
-        player.Figures.Add(figure);
-        tile.Figure = figure;
     }
 }

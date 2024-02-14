@@ -1,6 +1,4 @@
-﻿using BattleChess3.Game.Figures;
-
-namespace BattleChess3.Maps;
+﻿namespace BattleChess3.Game.Figures;
 
 /// <summary>
 ///     Figure service is used loading figure dlls and resolving it's figures.

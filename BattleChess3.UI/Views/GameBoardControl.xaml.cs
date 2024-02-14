@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using BattleChess3.Maps;
+using BattleChess3.Game.Figures;
 using BattleChess3.UI.ViewModel;
 
 namespace BattleChess3.UI.Views;
@@ -18,7 +18,7 @@ public partial class GameBoardControl
     {
         if (e.Data.GetDataPresent("figureData"))
         {
-            var figureBlueprint = (FigureBlueprint)e.Data.GetData("figureData");
+            var figureBlueprint = (FigureIdentifier)e.Data.GetData("figureData");
             var image = (Image)sender;
             var tileViewModel = (TileViewModel)image.DataContext;
 

@@ -9,10 +9,19 @@ public class Figure : IFigureType
 
     public Figure(Player owner, IFigureType type)
     {
+        Id = Guid.NewGuid();
         Owner = owner;
         Type = type;
     }
 
+    public Figure(Guid id, Player owner, IFigureType type)
+    {
+        Id = id;
+        Owner = owner;
+        Type = type;
+    }
+
+    public Guid Id { get; }
     public Player Owner { get; }
     public IFigureType Type { get; }
     public Uri ImageUri => Type.ImageUris[Owner.Id];

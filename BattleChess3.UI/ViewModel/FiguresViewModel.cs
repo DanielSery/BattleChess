@@ -1,5 +1,4 @@
 ﻿using BattleChess3.Game.Figures;
-using BattleChess3.Maps;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
