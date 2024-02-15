@@ -23,4 +23,11 @@ internal class FigureCreator : IFigureCreator
         player.Figures.Add(figure);
         return figure;
     }
+
+    public Figure CreateEmptyFigure()
+    {
+        var figureIdentifier = new FigureIdentifier(0, IEmptyFigureType.EmptyUnitName);
+        var figureType = _figureService.GetFigureFromName(figureIdentifier.UnitName);
+        return new Figure(Player.Neutral, figureType);
+    }
 }

@@ -9,9 +9,11 @@ public class YodaDooku : IStarWarsFigureType
 {
     private readonly Position[] _movementPositions = 
     {
-        (-1, -1), (-1, 0), (-1, 1),
+        (-2, -1), (-2, 1),
+        (-1, -2), (-1, 0), (-1, 2),
         (0, -1), (0, 1),
-        (1, -1), (1, 0), (1, 1)
+        (1, -2), (1, 0), (1, 2),
+        (2, -1), (2, 1)
     };
     
     private readonly Position[] _attackDirections = 
@@ -76,9 +78,16 @@ public class YodaDooku : IStarWarsFigureType
                 if (!board.TryGetTile(position, out var targetTile))
                     break;
 
-                if (targetTile.IsEmpty())
+                if (targetTile.Position == movedTile.Position)
                 {
-                    yield return movedTile.CreateMoveAction(targetTile, board);
+                }
+                else if (targetTile.IsEmpty())
+                {
+                    yield return new FigureAction(
+                        FigureActionTypes.Special,
+                        unitTile.AbsolutePosition,
+                        targetTile.AbsolutePosition,
+                        () => movedTile.MoveToTile(targetTile, board));
                 }
                 else if (targetTile != NoneTile.Instance)
                 {

@@ -3,4 +3,6 @@
 public interface IFigureCreator
 {
     Figure CreateFigure(FigureIdentifier figureIdentifier);
+
+    Figure CreateEmptyFigure();
 }

@@ -9,6 +9,13 @@ public class FigureIdentifier
     {
     }
 
+    public FigureIdentifier(int playerId, string unitName)
+    {
+        FigureId = Guid.NewGuid();
+        PlayerId = playerId;
+        UnitName = unitName;
+    }
+
     public FigureIdentifier(Figure figure)
     {
         FigureId = figure.Id;
