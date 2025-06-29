@@ -222,7 +222,7 @@ internal sealed class MultiplayerService : IMultiplayerService
 
     private void Disconnect()
     {
-        if (!IsConnected)
+        if (!IsConnected || _gameId is null)
             return;
         
         const string deleteGamesSql = "DELETE FROM Games WHERE Id = @id";
@@ -235,7 +235,7 @@ internal sealed class MultiplayerService : IMultiplayerService
                 connection.Open();
             
                 using var cmd = new MySqlCommand(deleteGamesSql, connection);
-                cmd.Parameters.AddWithValue("@id", _gameId);
+                cmd.Parameters.AddWithValue("@id", unchecked((int)_gameId));
 
                 var rowsDeleted = cmd.ExecuteNonQuery();
                 Console.WriteLine($"Rows deleted: {rowsDeleted}");
@@ -255,7 +255,7 @@ internal sealed class MultiplayerService : IMultiplayerService
                 connection.Open();
             
                 using var cmd = new MySqlCommand(deleteTurnsSql, connection);
-                cmd.Parameters.AddWithValue("@gameId", _gameId);
+                cmd.Parameters.AddWithValue("@gameId", unchecked((int)_gameId));
 
                 var rowsDeleted = cmd.ExecuteNonQuery();
                 Console.WriteLine($"Rows deleted: {rowsDeleted}");

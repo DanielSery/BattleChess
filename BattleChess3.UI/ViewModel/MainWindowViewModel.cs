@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using BattleChess3.Maps;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -21,19 +22,25 @@ public sealed class MainWindowViewModel : ViewModelBase
         MapsViewModel mapsViewModel,
         BoardViewModel boardViewModel,
         FiguresViewModel figuresViewModel,
-        MultiplayerViewModel multiplayerViewModel)
+        MultiplayerViewModel multiplayerViewModel,
+        ThemesViewModel themesViewModel)
     {
         MapsViewModel = mapsViewModel;
         BoardViewModel = boardViewModel;
         FiguresViewModel = figuresViewModel;
         MultiplayerViewModel = multiplayerViewModel;
+        ThemesViewModel = themesViewModel;
 
         NewGameCommand = new RelayCommand(NewGame);
+        JoinGameCommand = new RelayCommand(JoinGame);
         SaveGameCommand = new RelayCommand(SaveGame);
         DeleteGameCommand = new RelayCommand(DeleteGame);
         SelectOptionsCommand = new RelayCommand(() => OptionsTabSelected = true);
         CloseApplicationCommand = new RelayCommand(CloseApplication);
+        
+        BoardViewModel.ManualLoadMap(MapBlueprint.Empty);
     }
+
 
     public bool MenuTabSelected
     {
@@ -45,12 +52,6 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         get => _gameTabSelected;
         set => SetTabSelected(out _gameTabSelected);
-    }
-
-    public bool GameTabEnabled
-    {
-        get => _gameTabEnabled;
-        set => Set(ref _gameTabEnabled, value);
     }
 
     public bool OptionsTabSelected
@@ -75,8 +76,10 @@ public sealed class MainWindowViewModel : ViewModelBase
     public BoardViewModel BoardViewModel { get; }
     public FiguresViewModel FiguresViewModel { get; }
     public MultiplayerViewModel MultiplayerViewModel { get; }
+    public ThemesViewModel ThemesViewModel { get; set; }
 
     public RelayCommand NewGameCommand { get; }
+    public RelayCommand JoinGameCommand { get; }
     public RelayCommand SaveGameCommand { get; }
     public RelayCommand DeleteGameCommand { get; }
     public RelayCommand SelectOptionsCommand { get; }
@@ -87,17 +90,17 @@ public sealed class MainWindowViewModel : ViewModelBase
     private void NewGame()
     {
         BoardViewModel.ManualLoadMap(MapsViewModel.SelectedMap);
-        GameTabEnabled = true;
+        GameTabSelected = true;
+    }
+
+    private void JoinGame()
+    {
+        MultiplayerViewModel.PasteAndJoinCommand.Execute(null);
         GameTabSelected = true;
     }
 
     private void SaveGame()
     {
-        if (!GameTabEnabled)
-        {
-            return;
-        }
-
         var identifier = DateTime.Now.Ticks.ToString();
         RequestSavePreview?.Invoke(this, identifier);
         MapsViewModel.SaveSelectedMap(identifier, BoardViewModel.Tiles);

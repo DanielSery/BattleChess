@@ -6,6 +6,12 @@ namespace BattleChess3.Maps;
 public class MapBlueprint
 {
     public static readonly MapBlueprint None = new();
+
+    public static readonly MapBlueprint Empty = new()
+    {
+        Figures = Enumerable.Range(0, 64).Select(x => new FigureIdentifier(0, 0)).ToArray()
+    };
+    
     public string MapPath { get; init; } = string.Empty;
     public string PreviewPath { get; init; } = string.Empty;
     public Uri? PreviewUri => string.IsNullOrEmpty(PreviewPath) ? null : new Uri(Path.GetFullPath(PreviewPath));

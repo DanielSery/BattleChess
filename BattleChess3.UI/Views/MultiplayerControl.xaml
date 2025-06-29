@@ -37,28 +37,19 @@
             Grid.Column="1" Grid.Row="0"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_HostButton}"
-            Command="{Binding HostCommand}"
-            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" />
+            Command="{Binding HostAndCopyCommand}"
+            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" />
         <Button
             Grid.Column="1" Grid.Row="1"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_JoinButton}"
-            Command="{Binding JoinCommand}"
-            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" />
+            Command="{Binding PasteAndJoinCommand}"
+            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" />
         <Button
-            Grid.Column="1" Grid.Row="0"
-            FontSize="25"
-            AllowDrop="True"
-            Drop="Button_Drop"
-            DragEnter="Button_DragEnter"
-            Content="{localization:Loc MultiplayerControl_CopyGameIdButton}"
-            Command="{Binding CopyKeyCommand}" 
-            Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" />
-        <Button
-            Grid.Column="1" Grid.Row="1"
+            Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_StopButton}"
             Command="{Binding StopCommand}"
-            Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" />
+            Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" />
     </Grid>
 </UserControl>

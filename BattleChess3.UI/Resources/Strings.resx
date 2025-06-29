@@ -126,6 +126,9 @@
     <data name="MainWindow_NewGame" xml:space="preserve">
     <value>New game</value>
   </data>
+    <data name="MainWindow_JoinGame" xml:space="preserve">
+    <value>Paste &amp; Join</value>
+  </data>
     <data name="MainWindow_SaveGame" xml:space="preserve">
     <value>Save game</value>
   </data>
@@ -172,10 +175,10 @@
     <value>Editor</value>
   </data>
     <data name="MultiplayerControl_HostButton" xml:space="preserve">
-    <value>Host</value>
+    <value>Host &amp; Copy</value>
   </data>
     <data name="MultiplayerControl_JoinButton" xml:space="preserve">
-    <value>Join</value>
+    <value>Paste &amp; Join</value>
   </data>
     <data name="MultiplayerControl_CopyGameIdButton" xml:space="preserve">
     <value>Copy</value>

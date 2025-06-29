@@ -23,16 +23,16 @@
                                 Content="{localization:Loc MainWindow_NewGame}" />
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
+                                Command="{Binding JoinGameCommand}"
+                                Content="{localization:Loc MainWindow_JoinGame}" />
+                        <Button Height="125" Width="300"
+                                DockPanel.Dock="Top"
                                 Command="{Binding SaveGameCommand}"
                                 Content="{localization:Loc MainWindow_SaveGame}" />
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding DeleteGameCommand}"
                                 Content="{localization:Loc MainWindow_DeleteGame}" />
-                        <Button Height="125" Width="300"
-                                DockPanel.Dock="Top"
-                                Command="{Binding SelectOptionsCommand}"
-                                Content="{localization:Loc MainWindow_Options}" />
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding CloseApplicationCommand}"
@@ -44,8 +44,7 @@
             </DockPanel>
         </TabItem>
         <TabItem Header="{localization:Loc MainWindow_Game_Header}"
-                 IsSelected="{Binding GameTabSelected}"
-                 IsEnabled="{Binding GameTabEnabled}">
+                 IsSelected="{Binding GameTabSelected}">
             <DockPanel LastChildFill="True">
                 <Border DockPanel.Dock="Left">
                     <views:GameBoardControl
@@ -62,8 +61,7 @@
             </DockPanel>
         </TabItem>
         <TabItem Header="{localization:Loc MainWindow_Editor_Header}"
-                 IsSelected="{Binding EditorTabSelected}"
-                 IsEnabled="{Binding GameTabEnabled}">
+                 IsSelected="{Binding EditorTabSelected}">
             <DockPanel LastChildFill="True">
                 <Border>
                     <views:GameBoardControl
@@ -75,10 +73,6 @@
                         DataContext="{Binding FiguresViewModel}" />
                 </Border>
             </DockPanel>
-        </TabItem>
-        <TabItem Header="{localization:Loc MainWindow_Options_Header}"
-                 IsSelected="{Binding OptionsTabSelected}">
-            <views:StylesControl />
         </TabItem>
         <TabItem Header="{localization:Loc MainWindow_Manual_Header}"
                  IsSelected="{Binding ManualTabSelected}">

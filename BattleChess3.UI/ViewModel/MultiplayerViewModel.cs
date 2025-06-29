@@ -25,10 +25,9 @@ public sealed class MultiplayerViewModel : ViewModelBase
         _multiplayerService = multiplayerService;
         _playerService = playerService;
 
-        HostCommand = new RelayCommand(HostGame, CanConnect);
-        JoinCommand = new RelayCommand(JoinGame, IsConnected);
-        StopCommand = new RelayCommand(StopMultiplayer, CanConnect);
-        CopyKeyCommand = new RelayCommand(CopyKey, CanConnect);
+        HostAndCopyCommand = new RelayCommand(HostGame, CanConnect);
+        PasteAndJoinCommand = new RelayCommand(JoinGame, CanConnect);
+        StopCommand = new RelayCommand(StopMultiplayer, IsConnected);
 
         SubscribeToEvents();
     }
@@ -42,10 +41,9 @@ public sealed class MultiplayerViewModel : ViewModelBase
         set => Set(ref _gameId, value);
     }
 
-    public RelayCommand HostCommand { get; }
-    public RelayCommand JoinCommand { get; }
+    public RelayCommand HostAndCopyCommand { get; }
+    public RelayCommand PasteAndJoinCommand { get; }
     public RelayCommand StopCommand { get; }
-    public RelayCommand CopyKeyCommand { get; }
 
     private void SubscribeToEvents()
     {
@@ -93,12 +91,6 @@ public sealed class MultiplayerViewModel : ViewModelBase
         RaiseCanExecuteChanged();
     }
 
-    private void CopyKey()
-    {
-        Clipboard.SetText(GameId?.ToString() ?? string.Empty);
-        RaiseCanExecuteChanged();
-    }
-
     private void StopMultiplayer()
     {
         _multiplayerService.Stop();
@@ -130,16 +122,16 @@ public sealed class MultiplayerViewModel : ViewModelBase
         var guid = Guid.NewGuid();
         var bytes = guid.ToByteArray();
         GameId = BitConverter.ToUInt32(bytes, 0);
+        Clipboard.SetText(GameId.ToString() ?? string.Empty);
         _multiplayerService.Host(GameId.Value, map);
         RaiseCanExecuteChanged();
     }
 
     private void RaiseCanExecuteChanged()
     {
-        HostCommand.RaiseCanExecuteChanged();
-        JoinCommand.RaiseCanExecuteChanged();
+        HostAndCopyCommand.RaiseCanExecuteChanged();
+        PasteAndJoinCommand.RaiseCanExecuteChanged();
         StopCommand.RaiseCanExecuteChanged();
-        CopyKeyCommand.RaiseCanExecuteChanged();
 
         RaisePropertyChanged(nameof(IsConnected));
         RaisePropertyChanged(nameof(CanConnect));
