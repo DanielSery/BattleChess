@@ -13,9 +13,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -23,40 +20,42 @@
         </Grid.RowDefinitions>
 
         <Border
-            Grid.Column="0" Grid.ColumnSpan="3"
+            Grid.Column="0"
             Grid.Row="0" Grid.RowSpan="2"
             AllowDrop="True"
             Drop="Button_Drop"
-            DragEnter="Button_DragEnter">
-            <TextBlock Text="{Binding ApiKey}"
+            DragEnter="Button_DragEnter"
+            Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" >
+            <TextBlock Text="{Binding GameId}"
                        Style="{DynamicResource TextBlockStyle}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
                        TextWrapping="Wrap"
                        MaxHeight="150" />
         </Border>
-        <Button
-            Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0"
-            FontSize="25"
-            AllowDrop="True"
-            Drop="Button_Drop"
-            DragEnter="Button_DragEnter"
-            Content="{localization:Loc MultiplayerControl_PasteKeyButton}"
-            Command="{Binding PasteKeyCommand}" />
 
         <Button
-            Grid.Column="3" Grid.Row="1"
+            Grid.Column="1" Grid.Row="0"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_HostButton}"
             Command="{Binding HostCommand}"
             Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" />
         <Button
-            Grid.Column="4" Grid.Row="1"
+            Grid.Column="1" Grid.Row="1"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_JoinButton}"
             Command="{Binding JoinCommand}"
             Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" />
         <Button
-            Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1"
+            Grid.Column="1" Grid.Row="0"
+            FontSize="25"
+            AllowDrop="True"
+            Drop="Button_Drop"
+            DragEnter="Button_DragEnter"
+            Content="{localization:Loc MultiplayerControl_CopyGameIdButton}"
+            Command="{Binding CopyKeyCommand}" 
+            Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}" />
+        <Button
+            Grid.Column="1" Grid.Row="1"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_StopButton}"
             Command="{Binding StopCommand}"

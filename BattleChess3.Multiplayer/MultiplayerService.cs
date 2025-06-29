@@ -1,38 +1,31 @@
-﻿using System.Collections;
-using System.Text.RegularExpressions;
-using System.Timers;
+﻿using System.Timers;
 using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 using BattleChess3.Maps;
-using BattleChess3.Multiplayer.Messaging;
-using BattleChess3.Multiplayer.Utilities;
-using Newtonsoft.Json;
+using MySql.Data.MySqlClient;
 using Timer = System.Timers.Timer;
 
 namespace BattleChess3.Multiplayer;
 
 internal sealed class MultiplayerService : IMultiplayerService
 {
-    private readonly HttpClient _httpClient = new();
-
-    private readonly Regex _regex = new("(.*)(@.*)");
-
-    private readonly Queue<MessageWithType> _scheduledMessages = new();
     private readonly Timer _timer;
-    private string _apiKey = string.Empty;
-    private string _chatId = string.Empty;
-    private string _lastMessage = string.Empty;
-    private bool _sendingBlocked;
+    private uint? _gameId;
+    private int _lastProcessedTurn;
+    private object _syncLock = new object();
 
     public MultiplayerService()
     {
         _timer = new Timer
         {
             AutoReset = true,
-            Interval = 1000,
+            Interval = 300,
             Enabled = true
         };
 
         _timer.Elapsed += TimerOnElapsed;
+        
+        AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
     }
 
     public bool IsConnected => IsHost || IsGuest;
@@ -40,255 +33,249 @@ internal sealed class MultiplayerService : IMultiplayerService
     public bool IsHost { get; private set; }
     public bool IsGuest { get; private set; }
 
-    public event EventHandler<Position>? RequestClickTile;
+    public event EventHandler<(Position, Position)>? RequestPlayMove;
     public event EventHandler<MapBlueprint>? RequestLoadMap;
     public event EventHandler<string>? RequestDisplayMessage; 
 
-    public void Host(string key, MapBlueprint map, Position selectedPosition)
+    public void Host(uint gameId, MapBlueprint map)
     {
         if (IsConnected)
-        {
             return;
+        
+        // Example values:
+        var startingPlayer = (byte)map.StartingPlayer;
+        var mapData = new byte[192];
+        
+        for (var i = 0; i < map.Figures.Length; i++)
+        {
+            var index = i * 3;
+            mapData[index] = (byte)map.Figures[i].PlayerId;
+            mapData[index + 1] = (byte)(map.Figures[i].UniqueUnitId / 256);
+            mapData[index + 2] = (byte)(map.Figures[i].UniqueUnitId % 256);
         }
 
-        var matches = _regex.Matches(key);
-        _apiKey = matches[0].Groups[1].Value;
-        _chatId = matches[0].Groups[2].Value;
-        _sendingBlocked = false;
+        // Insert SQL, exclude Id (auto-increment)
+        const string insertSql = "INSERT INTO Games (Id, StartingPlayer, Map) VALUES (@id, @startingPlayer, @map)";
 
-        IsHost = true;
-        GetUpdatesMessageAsync()
-            .ContinueWith(_ =>
+        lock (_syncLock)
+        {
+            try
             {
-                LoadMap(map);
-                ClickOnPosition(selectedPosition);
-                _timer.Start();
-            });
+                var connection = new MySqlConnection(DbSecrets.ConnectionString);
+                connection.Open();
+
+                using var cmd = new MySqlCommand(insertSql, connection);
+                cmd.Parameters.AddWithValue("@id", unchecked((int)gameId));
+                cmd.Parameters.AddWithValue("@startingPlayer", startingPlayer);
+                cmd.Parameters.AddWithValue("@map", mapData);
+
+                var rowsInserted = cmd.ExecuteNonQuery();
+                IsHost = true;
+                _gameId = gameId;
+                _lastProcessedTurn = 0;
+                Console.WriteLine($"Rows inserted: {rowsInserted}");
+            
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
     }
 
-    public void Join(string key)
+    public void Join(uint? gameId)
     {
-        if (IsConnected)
-        {
+        if (IsConnected || gameId is null)
             return;
+        
+        const string selectSql = "SELECT StartingPlayer, Map FROM Games WHERE Id = @id";
+
+        lock (_syncLock)
+        {
+            try
+            {
+                var connection = new MySqlConnection(DbSecrets.ConnectionString);
+                connection.Open();
+
+                using var cmd = new MySqlCommand(selectSql, connection);
+                cmd.Parameters.AddWithValue("@id", unchecked((int)gameId));
+
+                using var reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    var startingPlayer = reader.GetByte("StartingPlayer");
+
+                    // Map is binary(144), get bytes:
+                    var mapData = new byte[192];
+                    reader.GetBytes(reader.GetOrdinal("Map"), 0, mapData, 0, mapData.Length);
+
+                    var figures = new FigureIdentifier[64];
+                    for (var i = 0; i < figures.Length; i++)
+                    {
+                        var index = i * 3;
+                        figures[i] = new FigureIdentifier(mapData[index],
+                            mapData[index + 1] * 256 + mapData[index + 2]);
+                    }
+
+                    var joinedMap = new MapBlueprint
+                    {
+                        StartingPlayer = startingPlayer,
+                        Figures = figures
+                    };
+                    RequestLoadMap?.Invoke(this, joinedMap);
+                    Console.WriteLine("Requested load map.");
+                    IsGuest = true;
+                    _gameId = gameId;
+                    _lastProcessedTurn = 0;
+                }
+                else
+                {
+                    Console.WriteLine($"No row found with Id = {gameId}");
+                }
+            
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
-
-        var matches = _regex.Matches(key);
-        _apiKey = matches[0].Groups[1].Value;
-        _chatId = matches[0].Groups[2].Value;
-        _sendingBlocked = false;
-
-        IsGuest = true;
-        GetUpdatesMessageAsync()
-            .ContinueWith(_ => { _timer.Start(); });
     }
 
     public void Stop()
     {
-        if (!IsConnected)
-        {
-            return;
-        }
-
-        IsHost = false;
-        IsGuest = false;
-        _timer.Stop();
+        Disconnect();
     }
 
-    public void LoadMap(MapBlueprint map)
+    public void PlayedMove(Position from, Position to)
     {
-        if (!IsConnected)
-        {
+        if (!IsConnected || _gameId is null)
             return;
-        }
+        
+        // Insert SQL, exclude Id (auto-increment)
+        const string insertSql = "INSERT INTO Turns (GameId, FromPosition, ToPosition) VALUES (@gameId, @fromPosition, @toPosition)";
 
-        lock (_scheduledMessages)
+        lock (_syncLock)
         {
-            _scheduledMessages.Clear();
-            _scheduledMessages.Enqueue(new MessageWithType
+            try
             {
-                message = JsonConvert.SerializeObject(map),
-                message_type = nameof(MapBlueprint)
-            });
-        }
-    }
+                var connection = new MySqlConnection(DbSecrets.ConnectionString);
+                connection.Open();
 
-    public void ClickOnPosition(Position position)
-    {
-        if (!IsConnected)
-        {
-            return;
-        }
+                using var cmd = new MySqlCommand(insertSql, connection);
+                cmd.Parameters.AddWithValue("@gameId", unchecked((int)_gameId));
+                cmd.Parameters.AddWithValue("@fromPosition", (byte)from.Index);
+                cmd.Parameters.AddWithValue("@toPosition", (byte)to.Index);
 
-        lock (_scheduledMessages)
-        {
-            _scheduledMessages.Enqueue(new MessageWithType
+                var rowsInserted = cmd.ExecuteNonQuery();
+                _lastProcessedTurn = (int)cmd.LastInsertedId;
+                Console.WriteLine($"Rows inserted: {rowsInserted}");
+            
+                connection.Close();
+            }
+            catch (Exception ex)
             {
-                message = JsonConvert.SerializeObject(position),
-                message_type = nameof(Position)
-            });
-        }
-    }
-
-    private void ConfirmReceive()
-    {
-        if (!IsConnected)
-        {
-            return;
-        }
-
-        lock (_scheduledMessages)
-        {
-            _scheduledMessages.Enqueue(new MessageWithType
-            {
-                message_type = nameof(Confirm)
-            });
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
     }
 
     private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
-        if (!IsConnected)
-        {
+        if (!IsConnected || _gameId is null)
             return;
-        }
+        
+        const string selectSql = "SELECT Id, FromPosition, ToPosition FROM Turns WHERE GameId = @gameId AND Id > @lastProcessedTurn";
 
-        var messages = Array.Empty<MessageWithType>();
-        lock (_scheduledMessages)
+        lock (_syncLock)
         {
-            if (_scheduledMessages.Count > 0 && !_sendingBlocked)
+            try
             {
-                _sendingBlocked = true;
-                messages = _scheduledMessages.ToArray();
-                _scheduledMessages.Clear();
-            }
-        }
+                var connection = new MySqlConnection(DbSecrets.ConnectionString);
+                connection.Open();
 
-        if (messages.Length > 0)
-        {
-            SendMessageAsync(messages);
-        }
-        else
-        {
-            GetUpdatesMessageAsync();
+                using var cmd = new MySqlCommand(selectSql, connection);
+                cmd.Parameters.AddWithValue("@gameId", unchecked((int)_gameId));
+                cmd.Parameters.AddWithValue("@lastProcessedTurn", _lastProcessedTurn);
+
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    _lastProcessedTurn = reader.GetInt32("Id");
+                    var fromPosition = reader.GetInt16("FromPosition");
+                    var toPosition = reader.GetInt16("ToPosition");
+                    RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position>(fromPosition, toPosition));
+                    Console.WriteLine($"Requested move: {fromPosition} to {toPosition}");
+                }
+            
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
     }
 
-    private Task SendMessageAsync(IEnumerable messages)
+    private void Disconnect()
     {
         if (!IsConnected)
+            return;
+        
+        const string deleteGamesSql = "DELETE FROM Games WHERE Id = @id";
+
+        lock (_syncLock)
         {
-            return Task.CompletedTask;
-        }
-
-        var serializedMessage = JsonConvert.SerializeObject(messages);
-        var compressed = CompressionHelper.Compress(serializedMessage);
-        var request = $"https://api.telegram.org/bot{_apiKey}/sendMessage?chat_id={_chatId}&text={compressed}";
-
-        return _httpClient.GetAsync(request)
-            .ContinueWith(x =>
+            try
             {
-                if (x.IsFaulted || !x.Result.IsSuccessStatusCode)
-                {
-                    RequestDisplayMessage?.Invoke(this, "Failed to send data.");
-                }
-            });
+                var connection = new MySqlConnection(DbSecrets.ConnectionString);
+                connection.Open();
+            
+                using var cmd = new MySqlCommand(deleteGamesSql, connection);
+                cmd.Parameters.AddWithValue("@id", _gameId);
+
+                var rowsDeleted = cmd.ExecuteNonQuery();
+                Console.WriteLine($"Rows deleted: {rowsDeleted}");
+            
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        
+            const string deleteTurnsSql = "DELETE FROM Turns WHERE GameId = @gameId";
+
+            try
+            {
+                var connection = new MySqlConnection(DbSecrets.ConnectionString);
+                connection.Open();
+            
+                using var cmd = new MySqlCommand(deleteTurnsSql, connection);
+                cmd.Parameters.AddWithValue("@gameId", _gameId);
+
+                var rowsDeleted = cmd.ExecuteNonQuery();
+                Console.WriteLine($"Rows deleted: {rowsDeleted}");
+            
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        
+            IsHost = false;
+            IsGuest = false;
+            _gameId = null;
+        }
     }
 
-    private Task GetUpdatesMessageAsync()
+    private void CurrentDomainOnProcessExit(object? sender, EventArgs e)
     {
-        if (!IsConnected)
-        {
-            return Task.CompletedTask;
-        }
-
-        var request = $"https://api.telegram.org/bot{_apiKey}/getUpdates?chat_id={_chatId}&offset={-1}";
-        return _httpClient.GetAsync(request)
-            .ContinueWith(async x =>
-            {
-                try
-                {
-                    if (x.IsFaulted || !x.Result.IsSuccessStatusCode)
-                    {
-                        RequestDisplayMessage?.Invoke(this, "Failed to recieve remote data.");
-                    }
-
-                    var stringContent = await x.Result.Content.ReadAsStringAsync();
-                    if (_lastMessage == stringContent)
-                    {
-                        return;
-                    }
-
-                    _lastMessage = stringContent;
-                    var content = JsonConvert.DeserializeObject<Root>(stringContent);
-                    if (content?.result is null)
-                    {
-                        return;
-                    }
-
-                    var text = content.result[0].channel_post?.text;
-                    if (string.IsNullOrEmpty(text))
-                    {
-                        return;
-                    }
-
-                    var messageText = CompressionHelper.Decompress(text);
-                    var messagesWithType = JsonConvert.DeserializeObject<MessageWithType[]>(messageText);
-                    if (messagesWithType is null)
-                    {
-                        return;
-                    }
-
-                    foreach (var item in messagesWithType)
-                    {
-                        HandleMessage(item);
-                    }
-
-                    ConfirmReceive();
-                }
-                catch (Exception)
-                {
-                    RequestDisplayMessage?.Invoke(this, "Failed to process remote data.");
-                    throw;
-                }
-            });
-    }
-
-    private void HandleMessage(MessageWithType messageWithType)
-    {
-        if (messageWithType.message_type == nameof(Position))
-        {
-            if (messageWithType.message is null)
-            {
-                return;
-            }
-
-            var response = JsonConvert.DeserializeObject<Position?>(messageWithType.message);
-            if (response is not { } position)
-            {
-                return;
-            }
-
-            RequestClickTile?.Invoke(this, position);
-        }
-        else if (messageWithType.message_type == nameof(MapBlueprint))
-        {
-            if (messageWithType.message is null)
-            {
-                return;
-            }
-
-            var response = JsonConvert.DeserializeObject<MapBlueprint?>(messageWithType.message);
-            if (response is null)
-            {
-                return;
-            }
-
-            RequestLoadMap?.Invoke(this, response);
-        }
-        else if (messageWithType.message_type == nameof(Confirm))
-        {
-            _sendingBlocked = false;
-        }
+        AppDomain.CurrentDomain.ProcessExit -= CurrentDomainOnProcessExit;
+        Disconnect();
     }
 }

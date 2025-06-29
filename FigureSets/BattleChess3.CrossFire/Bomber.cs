@@ -38,7 +38,6 @@ public class Bomber : ICrossFireFigureType
         SilentDie(board, targetTile.Position + (-1, 0));
         SilentDie(board, targetTile.Position + (-1, 1));
         SilentDie(board, targetTile.Position + (0, -1));
-        SilentDie(board, targetTile.Position + (0, 0));
         SilentDie(board, targetTile.Position + (0, 1));
         SilentDie(board, targetTile.Position + (1, -1));
         SilentDie(board, targetTile.Position + (1, 0));

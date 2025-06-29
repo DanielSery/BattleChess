@@ -36,6 +36,6 @@ public class FigureIdentifier
 
     public override string ToString()
     {
-        return $"{UniqueUnitId}{PlayerId}";
+        return $"{UniqueUnitId} {PlayerId}";
     }
 }

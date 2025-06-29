@@ -4,7 +4,6 @@ using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
-using BattleChess3.UI.Localization;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -15,8 +14,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
     private readonly BoardViewModel _boardViewModel;
     private readonly IMultiplayerService _multiplayerService;
     private readonly IPlayerService _playerService;
-
-    private string _apiKey = CurrentLocalization.Instance["MultiplayerService_ApiKey"];
+    private uint? _gameId;
 
     public MultiplayerViewModel(
         BoardViewModel boardViewModel,
@@ -30,7 +28,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
         HostCommand = new RelayCommand(HostGame, CanConnect);
         JoinCommand = new RelayCommand(JoinGame, IsConnected);
         StopCommand = new RelayCommand(StopMultiplayer, CanConnect);
-        PasteKeyCommand = new RelayCommand(PasteKey, CanConnect);
+        CopyKeyCommand = new RelayCommand(CopyKey, CanConnect);
 
         SubscribeToEvents();
     }
@@ -38,23 +36,23 @@ public sealed class MultiplayerViewModel : ViewModelBase
     public bool IsConnected => _multiplayerService.IsHost || _multiplayerService.IsGuest;
     public bool CanConnect => _multiplayerService is { IsHost: false, IsGuest: false };
 
-    public string ApiKey
+    public uint? GameId
     {
-        get => _apiKey;
-        set => Set(ref _apiKey, value);
+        get => _gameId;
+        set => Set(ref _gameId, value);
     }
 
     public RelayCommand HostCommand { get; }
     public RelayCommand JoinCommand { get; }
     public RelayCommand StopCommand { get; }
-    public RelayCommand PasteKeyCommand { get; }
+    public RelayCommand CopyKeyCommand { get; }
 
     private void SubscribeToEvents()
     {
-        _multiplayerService.RequestClickTile += RemoteRequestedClickTile;
+        _multiplayerService.RequestPlayMove += MultiplayerServiceOnRequestPlayMove;
         _multiplayerService.RequestLoadMap += RemoteRequestedLoadMap;
         _multiplayerService.RequestDisplayMessage += RemoteRequestedDisplayMessage;
-        _boardViewModel.RequestClickTile += LocalRequestClickTile;
+        _boardViewModel.RequestMove += LocalRequestMove;
         _boardViewModel.RequestLoadMap += LocalRequestLoadMap;
     }
 
@@ -65,12 +63,16 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
     private void LocalRequestLoadMap(object? sender, MapBlueprint e)
     {
-        Application.Current.Dispatcher.Invoke(() => _multiplayerService.LoadMap(e));
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            _multiplayerService.Stop();
+            RaiseCanExecuteChanged();
+        });
     }
 
-    private void LocalRequestClickTile(object? sender, Position e)
+    private void LocalRequestMove(object? sender, (Position from, Position to) e)
     {
-        Application.Current.Dispatcher.Invoke(() => _multiplayerService.ClickOnPosition(e));
+        Application.Current.Dispatcher.Invoke(() => _multiplayerService.PlayedMove(e.from, e.to));
     }
 
     private void RemoteRequestedLoadMap(object? sender, MapBlueprint e)
@@ -78,22 +80,22 @@ public sealed class MultiplayerViewModel : ViewModelBase
         _boardViewModel.AutomaticLoadMap(e);
     }
 
-    private void RemoteRequestedClickTile(object? sender, Position e)
+    private void MultiplayerServiceOnRequestPlayMove(object? sender, (Position from, Position to) e)
     {
-        _boardViewModel.AutomaticClickAtTile(!e.IsInBoard()
-            ? NoneTileViewModel.Instance
-            : _boardViewModel.Tiles[e]);
+        _boardViewModel.RemotePlayTurn(
+            _boardViewModel.Tiles[e.from],
+            _boardViewModel.Tiles[e.to]);
     }
 
-    public void SetKey(string key)
+    public void SetGameId(uint gameId)
     {
-        ApiKey = key;
+        GameId = gameId;
         RaiseCanExecuteChanged();
     }
 
-    private void PasteKey()
+    private void CopyKey()
     {
-        ApiKey = Clipboard.GetText();
+        Clipboard.SetText(GameId?.ToString() ?? string.Empty);
         RaiseCanExecuteChanged();
     }
 
@@ -105,7 +107,11 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
     private void JoinGame()
     {
-        _multiplayerService.Join(_apiKey);
+        if (!uint.TryParse(Clipboard.GetText(), out var gameId))
+            return; 
+        
+        GameId = gameId;
+        _multiplayerService.Join(GameId);
         RaiseCanExecuteChanged();
     }
 
@@ -121,7 +127,10 @@ public sealed class MultiplayerViewModel : ViewModelBase
             StartingPlayer = _playerService.CurrentPlayer.Id
         };
 
-        _multiplayerService.Host(_apiKey, map, _boardViewModel.SelectedTile.Position);
+        var guid = Guid.NewGuid();
+        var bytes = guid.ToByteArray();
+        GameId = BitConverter.ToUInt32(bytes, 0);
+        _multiplayerService.Host(GameId.Value, map);
         RaiseCanExecuteChanged();
     }
 
@@ -130,7 +139,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
         HostCommand.RaiseCanExecuteChanged();
         JoinCommand.RaiseCanExecuteChanged();
         StopCommand.RaiseCanExecuteChanged();
-        PasteKeyCommand.RaiseCanExecuteChanged();
+        CopyKeyCommand.RaiseCanExecuteChanged();
 
         RaisePropertyChanged(nameof(IsConnected));
         RaisePropertyChanged(nameof(CanConnect));

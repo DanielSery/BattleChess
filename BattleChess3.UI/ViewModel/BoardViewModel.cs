@@ -84,7 +84,7 @@ public sealed class BoardViewModel : ViewModelBase
     public RelayCommand<TileViewModel> MouseExitCommand { get; }
 
 
-    public event EventHandler<Position>? RequestClickTile;
+    public event EventHandler<(Position, Position)>? RequestMove;
     public event EventHandler<MapBlueprint>? RequestLoadMap;
 
     public void ManualLoadMap(MapBlueprint map)
@@ -103,16 +103,25 @@ public sealed class BoardViewModel : ViewModelBase
         tile.Figure = _figureCreator.CreateFigure(figureIdentifier);
     }
 
-    private void ClickedAtTile(TileViewModel clickedTile)
+    public void RemotePlayTurn(TileViewModel fromTile, TileViewModel toTile)
     {
-        AutomaticClickAtTile(clickedTile);
-        RequestClickTile?.Invoke(this, clickedTile.Position);
+        SelectedTile = NoneTileViewModel.Instance;
+        ClearPossibleActions();
+        
+        SelectedTile = fromTile;
+        SetPossibleActions(fromTile);
+        
+        toTile.PossibleAction.Action.Invoke();
+        SelectedTile = NoneTileViewModel.Instance;
+        _playerService.NextTurn();
+        ClearPossibleActions();
     }
 
-    public void AutomaticClickAtTile(TileViewModel clickedTile)
+    public void ClickedAtTile(TileViewModel clickedTile)
     {
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
+            RequestMove?.Invoke(this, (SelectedTile.Position, clickedTile.Position));
             clickedTile.PossibleAction.Action.Invoke();
             SelectedTile = NoneTileViewModel.Instance;
             _playerService.NextTurn();

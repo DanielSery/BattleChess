@@ -177,8 +177,8 @@
     <data name="MultiplayerControl_JoinButton" xml:space="preserve">
     <value>Join</value>
   </data>
-    <data name="MultiplayerControl_PasteKeyButton" xml:space="preserve">
-    <value>Paste key</value>
+    <data name="MultiplayerControl_CopyGameIdButton" xml:space="preserve">
+    <value>Copy</value>
   </data>
     <data name="MultiplayerControl_StopButton" xml:space="preserve">
     <value>Stop</value>

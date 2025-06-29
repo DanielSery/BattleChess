@@ -30,7 +30,10 @@ public partial class MultiplayerControl
             return;
         }
 
-        viewModel.SetKey(text);
+        if (!uint.TryParse(text, out var gameId))
+            return;
+        
+        viewModel.SetGameId(gameId);
     }
 
     private void Button_DragEnter(object sender, DragEventArgs e)

@@ -7,6 +7,7 @@ public readonly struct Position
     public static readonly Position None = new(-1, -1);
     public int X { get; }
     public int Y { get; }
+    public int Index => this;
 
     public Position(int x, int y)
     {
