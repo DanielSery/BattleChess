@@ -7,6 +7,8 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class SamSaruman : ILordOfTheRingsFigureType
 {
+    int IFigureType.FigureId => 8;
+    
     private readonly Position[] _movePositions =
     {
         (-1, 0), (1, 0), (0, -1), (0, 1)

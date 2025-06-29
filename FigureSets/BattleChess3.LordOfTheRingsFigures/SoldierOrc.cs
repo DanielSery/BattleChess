@@ -7,6 +7,8 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class SoldierOrc : ILordOfTheRingsFigureType
 {
+    int IFigureType.FigureId => 9;
+    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         if (TryGetAttackAction(unitTile, board, (1, 1), out var attackAction1))

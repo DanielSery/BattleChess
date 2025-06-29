@@ -1,9 +1,12 @@
 ﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.LordOfTheRingsFigures;
 
 public class GandalfWitchKing : ILordOfTheRingsFigureType, IFigureTypeWithDifferentAttacksAndMoves
 {
+    int IFigureType.FigureId => 3;
+    
     Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
     {
         (-4, -2), (-4, 0), (-4, 2),

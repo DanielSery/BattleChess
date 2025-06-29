@@ -5,6 +5,21 @@ namespace BattleChess3.Game.Figures;
 public interface IFigureType : IEquatable<IFigureType>
 {
     /// <summary>
+    /// Gets figure id.
+    /// </summary>
+    int FigureId { get; }
+    
+    /// <summary>
+    /// Gets figure set id.
+    /// </summary>
+    int SetId { get; }
+
+    /// <summary>
+    /// Gets unique figure id
+    /// </summary>
+    int UniqueFigureId => SetId * 256 + FigureId;
+    
+    /// <summary>
     ///     Name shown in menus and helps
     /// </summary>
     string DisplayName { get; }
@@ -29,7 +44,7 @@ public interface IFigureType : IEquatable<IFigureType>
     /// </summary>
     bool IEquatable<IFigureType>.Equals(IFigureType? other)
     {
-        return UnitName == other?.UnitName;
+        return UniqueFigureId == other?.UniqueFigureId;
     }
 
     /// <summary>

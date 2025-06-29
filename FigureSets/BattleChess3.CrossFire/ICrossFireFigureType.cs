@@ -5,6 +5,8 @@ namespace BattleChess3.CrossFireFigures;
 
 internal interface ICrossFireFigureType : IFigureType
 {
+    int IFigureType.SetId => 2;
+    
     string IFigureType.UnitName => $"{nameof(CrossFireFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(DisplayName)}"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];

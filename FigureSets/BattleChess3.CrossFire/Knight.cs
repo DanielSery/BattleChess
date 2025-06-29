@@ -7,6 +7,8 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Knight : ICrossFireFigureType
 {
+    int IFigureType.FigureId => 5;
+    
     private readonly Position[] _movePositions = 
     {
         (-2, -1), (-2, 1),

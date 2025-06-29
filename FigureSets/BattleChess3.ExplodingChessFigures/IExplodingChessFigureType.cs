@@ -8,6 +8,7 @@ namespace BattleChess3.ExplodingChessFigures;
 
 internal interface IExplodingChessFigureType : IFigureType
 {
+    int IFigureType.SetId => 4;
     string IFigureType.UnitName => $"{nameof(ExplodingChessFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_Name"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];

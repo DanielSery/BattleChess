@@ -6,6 +6,8 @@ namespace BattleChess3.StarWarsFigures;
 
 public class Special : IStarWarsFigureType
 {
+    int IFigureType.FigureId => 8;
+    
     private readonly Position[] _movePosition =
     {
         (-1, 0), (1, 0), (0, -1), (0, 1)

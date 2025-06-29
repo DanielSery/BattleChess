@@ -7,6 +7,8 @@ namespace BattleChess3.DoubleChessFigures;
 
 public class SinglePawn : IDoubleChessFigureType
 {
+    int IFigureType.FigureId => 4;
+    
     private IDoubleChessFigureType DoubleChessFigureType => this;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

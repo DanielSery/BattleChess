@@ -8,6 +8,8 @@ namespace BattleChess3.StarWarsFigures;
 
 public class Bomb : IStarWarsFigureType
 {
+    int IFigureType.FigureId => 3;
+    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         return Array.Empty<FigureAction>();

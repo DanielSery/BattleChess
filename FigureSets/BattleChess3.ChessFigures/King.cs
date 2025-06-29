@@ -7,6 +7,8 @@ namespace BattleChess3.ChessFigures;
 
 public class King : IChessFigureType
 {
+    int IFigureType.FigureId => 6;
+    
     private readonly Position[] _attackMovePositions = 
     {
         (-1, -1), (-1, 0), (-1, 1),

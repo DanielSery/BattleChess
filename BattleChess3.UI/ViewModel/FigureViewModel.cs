@@ -11,12 +11,16 @@ public sealed class FigureViewModel : IFigureType
     {
         _getActionsFunc = figureType.GetPossibleActions;
 
+        FigureId = figureType.FigureId;
+        SetId = figureType.SetId;
         DisplayName = figureType.DisplayName;
         Description = figureType.Description;
         UnitName = figureType.UnitName;
         ImageUris = figureType.ImageUris;
     }
 
+    public int FigureId { get; }
+    public int SetId { get; }
     public string DisplayName { get; }
     public string Description { get; }
     public string UnitName { get; }

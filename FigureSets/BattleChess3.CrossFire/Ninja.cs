@@ -7,6 +7,8 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Ninja : ICrossFireFigureType
 {
+    int IFigureType.FigureId => 1;
+    
     private readonly Position[] _attackPositions =
     {
         (-1, 0), (1, 0), (0, -1), (0, 1)

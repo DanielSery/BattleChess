@@ -9,6 +9,9 @@ public class CombinedChessFigureType<T1, T2> : IFigureType
     where T1 : IFigureType, new()
     where T2 : IFigureType, new()
 {
+    int IFigureType.SetId => 3;
+    public int FigureId { get; }
+    
     private readonly T1 _firstFigure;
     private readonly T2 _secondFigure;
     private readonly string _unitName;
@@ -18,6 +21,7 @@ public class CombinedChessFigureType<T1, T2> : IFigureType
         _unitName = unitName;
         _firstFigure = new T1();
         _secondFigure = new T2();
+        FigureId = 8 + _firstFigure.FigureId * 8 + _secondFigure.FigureId;
     }
 
     public string UnitName => $"{nameof(DoubleChessFigureGroup)}.{_unitName}";

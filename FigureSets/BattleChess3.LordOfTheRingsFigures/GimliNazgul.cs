@@ -1,9 +1,12 @@
 ﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.LordOfTheRingsFigures;
 
 public class GimliNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedAttacksAndMoves
 {
+    int IFigureType.FigureId => 4;
+    
     Position[] IFigureTypeWithChainedAttacksAndMoves.MoveDirections { get; } =
     {
         (-1, -1), (-1, 1),

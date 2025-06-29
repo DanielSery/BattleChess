@@ -7,6 +7,8 @@ namespace BattleChess3.ChessFigures;
 
 public class Pawn : IChessFigureType
 {
+    int IFigureType.FigureId => 1;
+    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         if (TryGetAttackAction(unitTile, board, (1, 1), out var attackAction1))

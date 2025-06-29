@@ -1,9 +1,12 @@
 ﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
 
 namespace BattleChess3.LordOfTheRingsFigures;
 
 public class PipinTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentAttacksAndMoves
 {
+    int IFigureType.FigureId => 7;
+    
     Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
     {
         (-1, 0), (1, 0), (0, -1), (0, 1)

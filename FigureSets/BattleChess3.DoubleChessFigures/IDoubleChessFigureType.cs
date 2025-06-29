@@ -7,6 +7,7 @@ namespace BattleChess3.DoubleChessFigures;
 
 internal interface IDoubleChessFigureType : IFigureType
 {
+    int IFigureType.SetId => 3;
     string IFigureType.UnitName => $"{nameof(DoubleChessFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_Name"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];

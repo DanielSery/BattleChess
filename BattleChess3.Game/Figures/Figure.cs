@@ -26,6 +26,8 @@ public class Figure : IFigureType
     public IFigureType Type { get; }
     public Uri ImageUri => Type.ImageUris[Owner.Id];
 
+    public int FigureId => Type.FigureId;
+    public int SetId => Type.SetId;
     public string DisplayName => Type.DisplayName;
     public string Description => Type.Description;
     public string UnitName => Type.UnitName;

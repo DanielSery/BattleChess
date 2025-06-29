@@ -7,6 +7,8 @@ namespace BattleChess3.StarWarsFigures;
 
 public class ObiwanPalpatine : IStarWarsFigureType
 {
+    int IFigureType.FigureId => 5;
+    
     private readonly Position[] _movementPositions = 
     {
         (-1, -1), (-1, 0), (-1, 1),

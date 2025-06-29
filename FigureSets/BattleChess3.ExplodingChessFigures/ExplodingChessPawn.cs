@@ -7,6 +7,8 @@ namespace BattleChess3.ExplodingChessFigures;
 
 public class ExplodingChessPawn : IExplodingChessFigureType
 {
+    int IFigureType.FigureId => 4;
+    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         if (TryGetAttackAction(unitTile, board, (1, 1), out var attackAction1))

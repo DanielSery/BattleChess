@@ -8,6 +8,8 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Bomber : ICrossFireFigureType
 {
+    int IFigureType.FigureId => 3;
+    
     private readonly Position[] _positions = 
     {
         (-2, -2), (-2, 0), (-2, 2),

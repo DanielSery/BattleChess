@@ -5,6 +5,8 @@ namespace BattleChess3.DefaultFigures;
 
 internal interface IDefaultFigureType : IFigureType
 {
+    int IFigureType.SetId => 0;
+    
     string IFigureType.UnitName => $"{nameof(DefaultFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(DisplayName)}"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];

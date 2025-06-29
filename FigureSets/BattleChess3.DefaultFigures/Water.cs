@@ -5,6 +5,8 @@ namespace BattleChess3.DefaultFigures;
 
 public class Water : IDefaultFigureType
 {
+    int IFigureType.FigureId => 3;
+    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         return Array.Empty<FigureAction>();

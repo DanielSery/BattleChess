@@ -7,6 +7,8 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Archer : ICrossFireFigureType
 {
+    int IFigureType.FigureId => 2;
+    
     private readonly Position[] _directions = 
     {
         (-1, -1), (-1, 1),

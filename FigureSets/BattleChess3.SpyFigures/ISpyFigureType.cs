@@ -5,6 +5,7 @@ namespace BattleChess3.SpyFigures;
 
 internal interface ISpyFigureType : IFigureType
 {
+    int IFigureType.SetId => 6;
     string IFigureType.UnitName => $"{nameof(SpyFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_Name"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];

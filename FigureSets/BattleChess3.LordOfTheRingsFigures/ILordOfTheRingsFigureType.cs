@@ -5,6 +5,8 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 internal interface ILordOfTheRingsFigureType : IFigureType
 {
+    int IFigureType.SetId => 5;
+    
     string IFigureType.UnitName => $"{nameof(LordOfTheRingsFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(DisplayName)}"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];

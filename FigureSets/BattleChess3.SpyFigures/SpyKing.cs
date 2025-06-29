@@ -7,6 +7,8 @@ namespace BattleChess3.SpyFigures;
 
 public class SpyKing : ISpyFigureType
 {
+    int IFigureType.FigureId => 2;
+    
     private readonly Position[] _attackMovePositions = 
     {
         (-1, -1), (-1, 0), (-1, 1),

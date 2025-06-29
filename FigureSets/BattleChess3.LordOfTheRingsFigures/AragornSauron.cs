@@ -7,6 +7,8 @@ namespace BattleChess3.LordOfTheRingsFigures;
 
 public class AragornSauron : ILordOfTheRingsFigureType
 {
+    int IFigureType.FigureId => 1;
+    
     private readonly Position[] _movePositions = 
     {
         (-2, -1), (-2, 1),

@@ -2,6 +2,8 @@
 
 public interface IEmptyFigureType : IFigureType
 {
+    int IFigureType.SetId => 0;
+    
     /// <summary>
     /// Value selected for historical reasons
     /// </summary>

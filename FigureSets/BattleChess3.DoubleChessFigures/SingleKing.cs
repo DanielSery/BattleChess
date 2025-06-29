@@ -7,6 +7,8 @@ namespace BattleChess3.DoubleChessFigures;
 
 public class SingleKing : IDoubleChessFigureType
 {
+    int IFigureType.FigureId => 2;
+    
     private IDoubleChessFigureType DoubleChessFigureType => this;
     
     private readonly Position[] _attackMovePositions = 

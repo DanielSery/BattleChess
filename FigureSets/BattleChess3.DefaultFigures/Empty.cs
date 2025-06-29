@@ -6,6 +6,8 @@ namespace BattleChess3.DefaultFigures;
 
 public class Empty : IEmptyFigureType
 {
+    int IFigureType.FigureId => 0;
+    
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.Description)}"];
 

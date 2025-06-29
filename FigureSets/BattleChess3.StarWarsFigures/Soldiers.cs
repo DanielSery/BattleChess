@@ -7,6 +7,8 @@ namespace BattleChess3.StarWarsFigures;
 
 public class Soldiers : IStarWarsFigureType 
 {
+    int IFigureType.FigureId => 7;
+    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         if (TryGetAttackAction(unitTile, board, (1, 1), out var attackAction1))

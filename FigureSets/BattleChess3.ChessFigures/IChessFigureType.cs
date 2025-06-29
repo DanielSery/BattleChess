@@ -5,6 +5,7 @@ namespace BattleChess3.ChessFigures;
 
 internal interface IChessFigureType : IFigureType
 {
+    int IFigureType.SetId => 1;
     string IFigureType.UnitName => $"{nameof(ChessFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_Name"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];

@@ -6,6 +6,8 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Builder : ICrossFireFigureType
 {
+    int IFigureType.FigureId => 4;
+    
     private readonly Position[] _movePosition =
     {
         (-1, 0), (1, 0), (0, -1), (0, 1)

@@ -7,6 +7,8 @@ namespace BattleChess3.StarWarsFigures;
 
 public class YodaDooku : IStarWarsFigureType
 {
+    int IFigureType.FigureId => 9;
+    
     private readonly Position[] _movementPositions = 
     {
         (-2, -1), (-2, 1),
