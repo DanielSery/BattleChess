@@ -18,16 +18,15 @@ public class StarWarsFigureGroup : IFigureGroup
     public static readonly IFigureType Soldiers = new Soldiers();
 
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            AhsokaVentress,
-            AnakinGrievus,
-            CodyBane,
-            MaceDooku,
-            ObiwanPalpatine,
-            PadmeAurra,
-            Bomb,
-            Special,
-            Soldiers
-        };
+    [
+        AhsokaVentress,
+        AnakinGrievus,
+        CodyBane,
+        MaceDooku,
+        ObiwanPalpatine,
+        PadmeAurra,
+        Bomb,
+        Special,
+        Soldiers
+    ];
 }

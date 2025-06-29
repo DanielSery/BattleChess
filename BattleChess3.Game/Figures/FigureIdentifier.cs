@@ -9,33 +9,33 @@ public class FigureIdentifier
     {
     }
 
-    public FigureIdentifier(int playerId, string unitName)
+    public FigureIdentifier(int playerId, int uniqueUnitId)
     {
         FigureId = Guid.NewGuid();
         PlayerId = playerId;
-        UnitName = unitName;
+        UniqueUnitId = uniqueUnitId;
     }
 
     public FigureIdentifier(Figure figure)
     {
         FigureId = figure.Id;
         PlayerId = figure.Owner.Id;
-        UnitName = figure.UnitName;
+        UniqueUnitId = ((IFigureType)figure).UniqueFigureId;
     }
 
     public FigureIdentifier(int id, IFigureType figureType)
     {
         FigureId = Guid.NewGuid();
         PlayerId = id;
-        UnitName = figureType.UnitName;
+        UniqueUnitId = figureType.UniqueFigureId;
     }
 
     public Guid FigureId { get; set; }
     public int PlayerId { get; set; } = Player.Neutral.Id;
-    public string UnitName { get; set; } = NoneFigureType.Instance.UnitName;
+    public int UniqueUnitId { get; set; } = ((IFigureType)NoneFigureType.Instance).UniqueFigureId;
 
     public override string ToString()
     {
-        return $"{UnitName}{PlayerId}";
+        return $"{UniqueUnitId}{PlayerId}";
     }
 }

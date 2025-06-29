@@ -15,7 +15,6 @@ public sealed class FigureViewModel : IFigureType
         SetId = figureType.SetId;
         DisplayName = figureType.DisplayName;
         Description = figureType.Description;
-        UnitName = figureType.UnitName;
         ImageUris = figureType.ImageUris;
     }
 
@@ -23,7 +22,6 @@ public sealed class FigureViewModel : IFigureType
     public int SetId { get; }
     public string DisplayName { get; }
     public string Description { get; }
-    public string UnitName { get; }
     public IDictionary<int, Uri> ImageUris { get; }
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

@@ -7,8 +7,8 @@ public class ExplodingChessRook : IExplodingChessFigureType, IExplodingChessFigu
 {
     int IFigureType.FigureId => 6;
     
-    Position[] IExplodingChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } = 
-    {
-        (-1, 0), (1, 0), (0, -1), (0, 1),
-    };
+    Position[] IExplodingChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
+    [
+        (-1, 0), (1, 0), (0, -1), (0, 1)
+    ];
 }

@@ -10,14 +10,14 @@ public class SamSaruman : ILordOfTheRingsFigureType
     int IFigureType.FigureId => 8;
     
     private readonly Position[] _movePositions =
-    {
+    [
         (-1, 0), (1, 0), (0, -1), (0, 1)
-    };
+    ];
 
     private readonly Position[] _attackDirections =
-    {
+    [
         (-1, -1), (-1, 1), (1, -1), (1, 1)
-    };
+    ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {

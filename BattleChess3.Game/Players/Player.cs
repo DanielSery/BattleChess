@@ -12,7 +12,7 @@ public class Player : IEquatable<Player>
     }
 
     public int Id { get; }
-    public List<Figure> Figures { get; } = new();
+    public List<Figure> Figures { get; } = [];
 
     public bool Equals(Player? other)
     {

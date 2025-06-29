@@ -9,6 +9,6 @@ public class Palm : IDefaultFigureType
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        return Array.Empty<FigureAction>();
+        return [];
     }
 }

@@ -7,7 +7,7 @@ internal class ThemeService : IThemeService
 {
     private readonly FileSystemWatcher _watcher;
 
-    private ThemeModel[] _themes = Array.Empty<ThemeModel>();
+    private ThemeModel[] _themes = [];
 
     public ThemeService()
     {

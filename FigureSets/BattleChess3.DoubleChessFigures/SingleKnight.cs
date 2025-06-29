@@ -7,11 +7,11 @@ public class SingleKnight : IDoubleChessFigureTypeWithDifferentAttackMoves
 {
     int IFigureType.FigureId => 3;
     
-    Position[] IDoubleChessFigureTypeWithDifferentAttackMoves.AttackMovePositions { get; } = 
-    {
+    Position[] IDoubleChessFigureTypeWithDifferentAttackMoves.AttackMovePositions { get; } =
+    [
         (-2, -1), (-2, 1),
         (-1, -2), (-1, 2),
         (1, -2), (1, 2),
         (2, -1), (2, 1)
-    };
+    ];
 }

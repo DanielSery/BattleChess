@@ -7,8 +7,8 @@ public class SingleRook : IDoubleChessFigureTypeWithChainedAttackMoves
 {
     int IFigureType.FigureId => 6;
     
-    Position[] IDoubleChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } = 
-    {
-        (-1, 0), (1, 0), (0, -1), (0, 1),
-    };
+    Position[] IDoubleChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
+    [
+        (-1, 0), (1, 0), (0, -1), (0, 1)
+    ];
 }

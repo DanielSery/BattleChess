@@ -8,8 +8,8 @@ public class SingleBishop : IDoubleChessFigureTypeWithChainedAttackMoves
     int IFigureType.FigureId => 1;
     
     Position[] IDoubleChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 1),
         (1, -1), (1, 1)
-    };
+    ];
 }

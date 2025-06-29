@@ -8,16 +8,16 @@ public class LegolasNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedAt
     int IFigureType.FigureId => 5;
     
     Position[] IFigureTypeWithChainedAttacksAndMoves.MoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 1),
         (1, -1), (1, 1)
-    };
+    ];
 
     Position[] IFigureTypeWithChainedAttacksAndMoves.AttackDirections { get; } =
-    {
+    [
         (-1, 0),
         (1, 0),
         (0, -1),
         (0, 1)
-    };
+    ];
 }

@@ -8,15 +8,15 @@ public class FrodoGollum : ILordOfTheRingsFigureType, IFigureTypeWithDifferentAt
     int IFigureType.FigureId => 2;
     
     Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
-    {
+    [
         (-1, 0), (1, 0), (0, -1), (0, 1)
-    };
+    ];
 
     Position[] IFigureTypeWithDifferentAttacksAndMoves.AttackPositions { get; } =
-    {
+    [
         (-2, -2), (-1, -1),
         (-2, 2), (-1, 1),
         (2, -2), (1, -1),
-        (2, 2), (1, 1),
-    };
+        (2, 2), (1, 1)
+    ];
 }

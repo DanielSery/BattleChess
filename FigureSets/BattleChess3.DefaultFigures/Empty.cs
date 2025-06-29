@@ -4,9 +4,10 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.DefaultFigures;
 
-public class Empty : IEmptyFigureType
+public class Empty : IFigureType
 {
     int IFigureType.FigureId => 0;
+    int IFigureType.SetId => 0;
     
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.Description)}"];
@@ -19,6 +20,6 @@ public class Empty : IEmptyFigureType
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        return Array.Empty<FigureAction>();
+        return [];
     }
 }

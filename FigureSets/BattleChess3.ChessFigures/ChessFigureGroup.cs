@@ -15,13 +15,12 @@ public class ChessFigureGroup : IFigureGroup
     public static readonly IFigureType Pawn = new Pawn();
 
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            King,
-            Queen,
-            Rook,
-            Bishop,
-            Knight,
-            Pawn
-        };
+    [
+        King,
+        Queen,
+        Rook,
+        Bishop,
+        Knight,
+        Pawn
+    ];
 }

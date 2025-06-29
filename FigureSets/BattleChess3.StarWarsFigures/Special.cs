@@ -9,17 +9,17 @@ public class Special : IStarWarsFigureType
     int IFigureType.FigureId => 8;
     
     private readonly Position[] _movePosition =
-    {
+    [
         (-1, 0), (1, 0), (0, -1), (0, 1)
-    };
+    ];
     
     private readonly Position[] _shieldPositions =
-    {
+    [
         new(-2, 2), new(-2, 1), new(-2, 0), new(-2, -1), new(-2, -2),
         new(2, 2), new(2, 1), new(2, 0), new(2, -1), new(2, -2),
         new(2, -2), new(1, -2), new(0, -2), new(-1, -2), new(-2, -2),
         new(2, 2), new(1, 2), new(0, 2), new(-1, 2), new(-2, 2)
-    };
+    ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

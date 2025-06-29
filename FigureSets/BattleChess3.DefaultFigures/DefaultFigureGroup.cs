@@ -13,11 +13,10 @@ public class DefaultFigureGroup : IFigureGroup
     public static readonly IFigureType Water = new Water();
     
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            Palm,
-            Empty,
-            Stone,
-            Water
-        };
+    [
+        Palm,
+        Empty,
+        Stone,
+        Water
+    ];
 }

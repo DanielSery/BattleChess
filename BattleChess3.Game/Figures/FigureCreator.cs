@@ -17,7 +17,7 @@ internal class FigureCreator : IFigureCreator
 
     public Figure CreateFigure(FigureIdentifier figureIdentifier)
     {
-        var figureType = _figureService.GetFigureFromName(figureIdentifier.UnitName);
+        var figureType = _figureService.GetFigureByUniqueUnitId(figureIdentifier.UniqueUnitId);
         var player = _playerService.GetPlayer(figureIdentifier.PlayerId);
         var figure = new Figure(figureIdentifier.FigureId, player, figureType);
         player.Figures.Add(figure);
@@ -26,8 +26,8 @@ internal class FigureCreator : IFigureCreator
 
     public Figure CreateEmptyFigure()
     {
-        var figureIdentifier = new FigureIdentifier(0, IEmptyFigureType.EmptyUnitName);
-        var figureType = _figureService.GetFigureFromName(figureIdentifier.UnitName);
+        var figureIdentifier = new FigureIdentifier(0, 0);
+        var figureType = _figureService.GetFigureByUniqueUnitId(figureIdentifier.UniqueUnitId);
         return new Figure(Player.Neutral, figureType);
     }
 }

@@ -8,8 +8,8 @@ public class Bishop : IChessFigureType, IFigureTypeWithChainedAttackMoves
     int IFigureType.FigureId => 3;
     
     Position[] IFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 1),
-        (1, -1), (1, 1),
-    };
+        (1, -1), (1, 1)
+    ];
 }

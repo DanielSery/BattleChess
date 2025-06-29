@@ -12,7 +12,7 @@ public class Bomb : IStarWarsFigureType
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        return Array.Empty<FigureAction>();
+        return [];
     }
 
     void IFigureType.OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)

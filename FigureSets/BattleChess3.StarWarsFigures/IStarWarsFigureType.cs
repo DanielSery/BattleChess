@@ -6,7 +6,6 @@ namespace BattleChess3.StarWarsFigures;
 internal interface IStarWarsFigureType : IFigureType
 {
     int IFigureType.SetId => 7;
-    string IFigureType.UnitName => $"{nameof(StarWarsFigureGroup)}.{GetType().Name}";
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_Name"];
     string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(Description)}"];
 

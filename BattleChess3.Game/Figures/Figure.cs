@@ -30,7 +30,6 @@ public class Figure : IFigureType
     public int SetId => Type.SetId;
     public string DisplayName => Type.DisplayName;
     public string Description => Type.Description;
-    public string UnitName => Type.UnitName;
     public IDictionary<int, Uri> ImageUris => Type.ImageUris;
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

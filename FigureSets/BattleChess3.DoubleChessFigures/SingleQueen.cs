@@ -8,9 +8,9 @@ public class SingleQueen : IDoubleChessFigureTypeWithChainedAttackMoves
     int IFigureType.FigureId => 5;
     
     Position[] IDoubleChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 0), (-1, 1),
         (0, -1), (0, 1),
         (1, -1), (1, 0), (1, 1)
-    };
+    ];
 }

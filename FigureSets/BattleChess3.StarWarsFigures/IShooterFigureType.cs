@@ -7,16 +7,16 @@ namespace BattleChess3.StarWarsFigures;
 
 internal interface IShooterFigureType : IFigureType
 {
-    protected Position[] AttackDirections => new Position[]
-    {
+    protected Position[] AttackDirections =>
+    [
         (-1, -1), (-1, 1),
         (1, -1), (1, 1)
-    };
+    ];
 
-    protected Position[] MovePositions => new Position[]
-    {
+    protected Position[] MovePositions =>
+    [
         (-1, 0), (0, -1), (0, 1), (1, 0)
-    };
+    ];
     
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {

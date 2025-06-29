@@ -9,21 +9,21 @@ public class ObiwanPalpatine : IStarWarsFigureType
 {
     int IFigureType.FigureId => 5;
     
-    private readonly Position[] _movementPositions = 
-    {
+    private readonly Position[] _movementPositions =
+    [
         (-1, -1), (-1, 0), (-1, 1),
         (0, -1), (0, 1),
         (1, -1), (1, 0), (1, 1)
-    };
+    ];
 
-    private readonly Position[] _attackPositions = 
-    {
+    private readonly Position[] _attackPositions =
+    [
         (-2, -1), (-2, 0), (-2, 1),
         (-1, -2), (-1, 2),
         (0, -2), (0, 2),
         (1, -2), (1, 2),
         (2, -1), (2, 0), (2, 1)
-    };
+    ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {

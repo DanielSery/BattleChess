@@ -16,14 +16,13 @@ public class CrossFireFigureGroup : IFigureGroup
     public static readonly IFigureType Wall = new Wall();
 
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            Ninja,
-            Bomber,
-            Builder,
-            Knight,
-            Spy,
-            Archer,
-            Wall
-        };
+    [
+        Ninja,
+        Bomber,
+        Builder,
+        Knight,
+        Spy,
+        Archer,
+        Wall
+    ];
 }

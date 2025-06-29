@@ -6,7 +6,7 @@ namespace BattleChess3.Game.Localization;
 
 public abstract class LocalizationSourceBase : INotifyPropertyChanged
 {
-    protected static readonly List<LocalizationSourceBase> Sources = new();
+    protected static readonly List<LocalizationSourceBase> Sources = [];
     private static CultureInfo _currentCulture = CultureInfo.CurrentCulture;
 
     public string this[string key] => ResManager().GetString(key, CultureInfo.CurrentCulture) ?? string.Empty;

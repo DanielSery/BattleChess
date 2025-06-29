@@ -9,16 +9,16 @@ public class Knight : ICrossFireFigureType
 {
     int IFigureType.FigureId => 5;
     
-    private readonly Position[] _movePositions = 
-    {
+    private readonly Position[] _movePositions =
+    [
         (-2, -1), (-2, 1),
         (-1, -2), (-1, 2),
         (1, -2), (1, 2),
         (2, -1), (2, 1)
-    };
+    ];
 
     private readonly Position[] _attackPositions =
-    {
+    [
         (-3, -3), (-2, -2), (-1, -1),
         (-3, 0), (-2, 0), (-1, 0),
         (-3, 3), (-2, 2), (-1, 1),
@@ -26,8 +26,8 @@ public class Knight : ICrossFireFigureType
         (0, 3), (0, 2), (0, 1),
         (3, -3), (2, -2), (1, -1),
         (3, 0), (2, 0), (1, 0),
-        (3, 3), (2, 2), (1, 1),
-    };
+        (3, 3), (2, 2), (1, 1)
+    ];
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

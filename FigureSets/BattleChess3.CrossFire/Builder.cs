@@ -9,17 +9,17 @@ public class Builder : ICrossFireFigureType
     int IFigureType.FigureId => 4;
     
     private readonly Position[] _movePosition =
-    {
+    [
         (-1, 0), (1, 0), (0, -1), (0, 1)
-    };
+    ];
     
     private readonly Position[] _shieldPositions =
-    {
+    [
         (-2, 1), (-2, 0), (-2, -1),
         (2, 1), (2, 0), (2, -1),
         (1, -2), (0, -2), (-1, -2),
         (1, 2), (0, 2), (-1, 2)
-    };
+    ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

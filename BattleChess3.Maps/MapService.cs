@@ -7,7 +7,7 @@ internal class MapService : IMapService
 {
     private readonly FileSystemWatcher _watcher;
 
-    private MapBlueprint[] _maps = Array.Empty<MapBlueprint>();
+    private MapBlueprint[] _maps = [];
 
     public MapService()
     {

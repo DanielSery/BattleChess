@@ -9,12 +9,12 @@ public class King : IChessFigureType
 {
     int IFigureType.FigureId => 6;
     
-    private readonly Position[] _attackMovePositions = 
-    {
+    private readonly Position[] _attackMovePositions =
+    [
         (-1, -1), (-1, 0), (-1, 1),
         (0, -1), (0, 1),
         (1, -1), (1, 0), (1, 1)
-    };
+    ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

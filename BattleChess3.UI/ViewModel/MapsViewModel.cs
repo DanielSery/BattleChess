@@ -14,7 +14,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
 
     private IList<MapBlueprint> _maps = Array.Empty<MapBlueprint>();
 
-    private MapBlueprint _selectedMap = MapBlueprint.None;
+    private MapBlueprint? _selectedMap;
 
     public MapsViewModel(
         IMapService mapService,
@@ -27,7 +27,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
         _mapService.MapsChanged += OnMapsChanged;
     }
 
-    public MapBlueprint SelectedMap
+    public MapBlueprint? SelectedMap
     {
         get => _selectedMap;
         set => Set(ref _selectedMap, value);
@@ -38,7 +38,8 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
         get => _maps;
         private set
         {
-            if (value.All(x => x.MapPath != _selectedMap.MapPath))
+            if (_selectedMap is null ||
+                value.All(x => x.MapPath != _selectedMap.MapPath))
             {
                 SelectedMap = value.FirstOrDefault()
                               ?? MapBlueprint.None;
@@ -60,7 +61,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
 
     internal void DeleteSelectedMap()
     {
-        if (SelectedMap != MapBlueprint.None)
+        if (SelectedMap is not null)
         {
             _mapService.Delete(SelectedMap);
         }
@@ -73,7 +74,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
             Figures = board.Select(x => new FigureIdentifier
             {
                 PlayerId = x.Figure.Owner.Id,
-                UnitName = x.Figure.UnitName
+                UniqueUnitId = ((IFigureType)x.Figure).UniqueFigureId
             }).ToArray(),
             MapPath = $"Resources/Maps/{identifier}.map",
             PreviewPath = $"./Resources/Maps/{identifier}.png",

@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using BattleChess3.Game.Board;
+﻿using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 
 namespace BattleChess3.Game.History;
@@ -15,7 +14,7 @@ internal class HistoryService : IHistoryService
         _figureCreator = figureCreator;
     }
 
-    public IReadOnlyCollection<RecordedAction> RecordedActions => _recordedActions.ToImmutableArray();
+    public IReadOnlyCollection<RecordedAction> RecordedActions => [.._recordedActions];
     
     public void RecordAction(
         Position sourcePosition,

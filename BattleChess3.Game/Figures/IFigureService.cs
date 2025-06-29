@@ -18,5 +18,5 @@ public interface IFigureService
     /// <summary>
     ///     Gets figure type based on name of the figure.
     /// </summary>
-    IFigureType GetFigureFromName(string text);
+    IFigureType GetFigureByUniqueUnitId(int id);
 }

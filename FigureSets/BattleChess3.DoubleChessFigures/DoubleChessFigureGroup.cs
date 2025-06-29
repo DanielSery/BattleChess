@@ -86,13 +86,12 @@ public class DoubleChessFigureGroup : IFigureGroup
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(DoubleChessFigureGroup)}_Name"];
 
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            King, KingQueen, KingRook, KingKnight, KingBishop, KingPawn,
-            Queen, QueenQueen, QueenRook, QueenKnight, QueenBishop, QueenPawn,
-            Rook, RookRook, RookKnight, RookBishop, RookPawn,
-            Knight, KnightKnight, KnightBishop, KnightPawn,
-            Bishop, BishopBishop, BishopPawn,
-            Pawn, PawnPawn
-        };
+    [
+        King, KingQueen, KingRook, KingKnight, KingBishop, KingPawn,
+        Queen, QueenQueen, QueenRook, QueenKnight, QueenBishop, QueenPawn,
+        Rook, RookRook, RookKnight, RookBishop, RookPawn,
+        Knight, KnightKnight, KnightBishop, KnightPawn,
+        Bishop, BishopBishop, BishopPawn,
+        Pawn, PawnPawn
+    ];
 }

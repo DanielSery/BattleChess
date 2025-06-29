@@ -8,16 +8,16 @@ public class GimliNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedAtta
     int IFigureType.FigureId => 4;
     
     Position[] IFigureTypeWithChainedAttacksAndMoves.MoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 1),
         (1, -1), (1, 1)
-    };
+    ];
 
     Position[] IFigureTypeWithChainedAttacksAndMoves.AttackDirections { get; } =
-    {
+    [
         (-1, 0),
         (1, 0),
         (0, -1),
         (0, 1)
-    };
+    ];
 }

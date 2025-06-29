@@ -15,13 +15,12 @@ public class ExplodingChessFigureGroup : IFigureGroup
     public static readonly IFigureType ExplodingPawn = new ExplodingChessPawn();
 
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            ExplodingKing,
-            ExplodingQueen,
-            ExplodingRook,
-            ExplodingBishop,
-            ExplodingKnight,
-            ExplodingPawn
-        };
+    [
+        ExplodingKing,
+        ExplodingQueen,
+        ExplodingRook,
+        ExplodingBishop,
+        ExplodingKnight,
+        ExplodingPawn
+    ];
 }

@@ -8,9 +8,9 @@ public class ExplodingChessQueen : IExplodingChessFigureType, IExplodingChessFig
     int IFigureType.FigureId => 5;
     
     Position[] IExplodingChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 0), (-1, 1),
         (0, -1), (0, 1),
         (1, -1), (1, 0), (1, 1)
-    };
+    ];
 }

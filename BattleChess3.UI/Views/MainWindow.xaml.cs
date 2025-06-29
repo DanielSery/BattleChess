@@ -71,8 +71,8 @@ public partial class MainWindow
         var bmp = new RenderTargetBitmap(
             (int)_lastBoardControl.ActualWidth,
             (int)_lastBoardControl.ActualHeight,
-            dpi.PixelsPerInchX,
-            dpi.PixelsPerInchY,
+            dpi.PixelsPerInchX / dpi.DpiScaleX,
+            dpi.PixelsPerInchY / dpi.DpiScaleY,
             PixelFormats.Pbgra32);
 
         bmp.Render(_lastBoardControl);

@@ -7,18 +7,18 @@ namespace BattleChess3.StarWarsFigures;
 
 internal interface IJediFigureType : IFigureType
 {
-    Position[] MovementPositions => new Position[]
-    {
+    Position[] MovementPositions =>
+    [
         (-2, -2), (-2, 0), (-2, 1),
         (0, -2), (0, 2),
         (2, -2), (2, 0), (2, 2)
-    };
+    ];
 
-    Position[] AttackPositions => new Position[]
-    {
+    Position[] AttackPositions =>
+    [
         (-2, -2), (-2, 2),
         (2, -2), (2, 2)
-    };
+    ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {

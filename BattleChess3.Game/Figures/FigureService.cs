@@ -6,8 +6,8 @@ internal class FigureService : IFigureService
 {
     private readonly FileSystemWatcher _watcher;
 
-    private IFigureGroup[] _figureGroups = Array.Empty<IFigureGroup>();
-    private Dictionary<string, IFigureType> _figuresDictionary = new();
+    private IFigureGroup[] _figureGroups = [];
+    private Dictionary<int, IFigureType> _figuresDictionary = new();
 
     public FigureService()
     {
@@ -41,9 +41,9 @@ internal class FigureService : IFigureService
         return _figureGroups;
     }
 
-    public IFigureType GetFigureFromName(string text)
+    public IFigureType GetFigureByUniqueUnitId(int uniqueUnitId)
     {
-        return _figuresDictionary[text];
+        return _figuresDictionary[uniqueUnitId];
     }
 
     private void OnChanged(object sender, FileSystemEventArgs e)
@@ -61,7 +61,7 @@ internal class FigureService : IFigureService
             .ToArray();
 
         _figuresDictionary = _figureGroups.SelectMany(group => group.FigureTypes)
-            .ToDictionary(figure => figure.UnitName, figure => figure);
+            .ToDictionary(figure => figure.UniqueFigureId, figure => figure);
         FigureGroupsChanged?.Invoke(this, _figureGroups);
     }
 }

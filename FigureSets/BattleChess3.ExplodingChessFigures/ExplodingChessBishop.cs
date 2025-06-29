@@ -8,8 +8,8 @@ public class ExplodingChessBishop : IExplodingChessFigureType, IExplodingChessFi
     int IFigureType.FigureId => 1;
     
     Position[] IExplodingChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 1),
-        (1, -1), (1, 1),
-    };
+        (1, -1), (1, 1)
+    ];
 }

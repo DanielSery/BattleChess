@@ -8,9 +8,9 @@ public class Queen : IChessFigureType, IFigureTypeWithChainedAttackMoves
     int IFigureType.FigureId => 5;
     
     Position[] IFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
-    {
+    [
         (-1, -1), (-1, 0), (-1, 1),
         (0, -1), (0, 1),
         (1, -1), (1, 0), (1, 1)
-    };
+    ];
 }

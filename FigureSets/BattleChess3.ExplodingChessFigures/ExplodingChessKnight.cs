@@ -7,11 +7,11 @@ public class ExplodingChessKnight : IExplodingChessFigureType, IExplodingChessFi
 {
     int IFigureType.FigureId => 3;
     
-    Position[] IExplodingChessFigureTypeWithDifferentAttackMoves.AttackMovePositions { get; } = 
-    {
+    Position[] IExplodingChessFigureTypeWithDifferentAttackMoves.AttackMovePositions { get; } =
+    [
         (-2, -1), (-2, 1),
         (-1, -2), (-1, 2),
         (1, -2), (1, 2),
         (2, -1), (2, 1)
-    };
+    ];
 }

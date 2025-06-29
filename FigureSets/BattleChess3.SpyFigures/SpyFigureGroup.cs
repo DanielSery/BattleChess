@@ -15,13 +15,12 @@ public class SpyFigureGroup : IFigureGroup
     public static readonly IFigureType SpyPawn = new SpyPawn();
 
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            SpyKing,
-            SpyQueen,
-            SpyRook,
-            SpyBishop,
-            SpyKnight,
-            SpyPawn
-        };
+    [
+        SpyKing,
+        SpyQueen,
+        SpyRook,
+        SpyBishop,
+        SpyKnight,
+        SpyPawn
+    ];
 }

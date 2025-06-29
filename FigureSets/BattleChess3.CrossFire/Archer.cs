@@ -9,12 +9,12 @@ public class Archer : ICrossFireFigureType
 {
     int IFigureType.FigureId => 2;
     
-    private readonly Position[] _directions = 
-    {
+    private readonly Position[] _directions =
+    [
         (-1, -1), (-1, 1),
         (0, -1), (0, 1),
         (1, -1), (1, 1)
-    };
+    ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {

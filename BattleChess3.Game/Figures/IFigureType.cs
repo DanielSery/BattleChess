@@ -30,11 +30,6 @@ public interface IFigureType : IEquatable<IFigureType>
     string Description { get; }
 
     /// <summary>
-    ///     Gets name of unit
-    /// </summary>
-    string UnitName { get; }
-
-    /// <summary>
     ///     Images of player with id
     /// </summary>
     IDictionary<int, Uri> ImageUris { get; }

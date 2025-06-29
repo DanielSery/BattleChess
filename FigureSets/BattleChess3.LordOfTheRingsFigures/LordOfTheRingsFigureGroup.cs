@@ -17,16 +17,15 @@ public class LordOfTheRingsFigureGroup : IFigureGroup
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(LordOfTheRingsFigureGroup)}_Name"];
 
     public IFigureType[] FigureTypes =>
-        new[]
-        {
-            AragornSauron,
-            GandalfWitchKing,
-            FrodoGollum,
-            GimliNazgul,
-            LegolasNazgul,
-            MerryTroll,
-            PipinTroll,
-            SoldierOrc,
-            SamSaruman
-        };
+    [
+        AragornSauron,
+        GandalfWitchKing,
+        FrodoGollum,
+        GimliNazgul,
+        LegolasNazgul,
+        MerryTroll,
+        PipinTroll,
+        SoldierOrc,
+        SamSaruman
+    ];
 }

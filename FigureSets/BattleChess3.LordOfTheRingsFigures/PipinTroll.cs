@@ -8,16 +8,16 @@ public class PipinTroll : ILordOfTheRingsFigureType, IFigureTypeWithDifferentAtt
     int IFigureType.FigureId => 7;
     
     Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
-    {
+    [
         (-1, 0), (1, 0), (0, -1), (0, 1)
-    };
+    ];
 
     Position[] IFigureTypeWithDifferentAttacksAndMoves.AttackPositions { get; } =
-    {
+    [
         (-2, 0),
         (-1, -1), (-1, 1),
         (0, -2), (0, 2),
         (1, -1), (1, 1),
         (2, 0)
-    };
+    ];
 }
