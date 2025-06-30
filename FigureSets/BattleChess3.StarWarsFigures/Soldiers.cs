@@ -11,34 +11,34 @@ public class Soldiers : IStarWarsFigureType
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (TryGetAttackAction(unitTile, board, new(1, 1), out var attackAction1))
+        if (TryGetAttackAction(unitTile, board, new Position(1, 1), out var attackAction1))
         {
             yield return attackAction1;
         }
-        else if (TryGetMoveAction(unitTile, board, new(1, 1), out var moveAction1))
+        else if (TryGetMoveAction(unitTile, board, new Position(1, 1), out var moveAction1))
         {
             yield return moveAction1;
         }
 
-        if (TryGetAttackAction(unitTile, board, new(-1, 1), out var attackAction2))
+        if (TryGetAttackAction(unitTile, board, new Position(-1, 1), out var attackAction2))
         {
             yield return attackAction2;
         }
-        else if (TryGetMoveAction(unitTile, board, new(-1, 1), out var moveAction2))
+        else if (TryGetMoveAction(unitTile, board, new Position(-1, 1), out var moveAction2))
         {
             yield return moveAction2;
         }
         
-        if (TryGetMoveAction(unitTile, board, new(0, -1), out var moveAction3))
+        if (TryGetMoveAction(unitTile, board, new Position(0, -1), out var moveAction3))
         {
             yield return moveAction3;
         }
 
-        if (TryGetMoveAction(unitTile, board, new(0, 1), out var moveAction4))
+        if (TryGetMoveAction(unitTile, board, new Position(0, 1), out var moveAction4))
         {
             yield return moveAction4;
 
-            if (TryGetAttackAction(unitTile, board, new(0, 2), out var attackAction3))
+            if (TryGetAttackAction(unitTile, board, new Position(0, 2), out var attackAction3))
             {
                 yield return attackAction3;
             }
@@ -49,7 +49,7 @@ public class Soldiers : IStarWarsFigureType
         }
 
         if (unitTile.Position.Y == 1 &&
-            TryGetMoveAction(unitTile, board, new(0, 2), out var moveAction5))
+            TryGetMoveAction(unitTile, board, new Position(0, 2), out var moveAction5))
         {
             yield return moveAction5;
         }

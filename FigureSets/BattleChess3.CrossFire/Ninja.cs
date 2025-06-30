@@ -28,19 +28,19 @@ public class Ninja : ICrossFireFigureType
             }
         }
 
-        if (TryGetMoveAction(unitTile, board, new(-1, 1), out var move1Action))
+        if (TryGetMoveAction(unitTile, board, new Position(-1, 1), out var move1Action))
         {
             yield return move1Action;
         }
 
-        if (TryGetMoveAction(unitTile, board, new(1, 1), out var move2Action))
+        if (TryGetMoveAction(unitTile, board, new Position(1, 1), out var move2Action))
         {
             yield return move2Action;
         }
 
         if (board.TryGetTile(unitTile.Position + new Position(0, 1), out var tileBefore) &&
             !tileBefore.IsEmpty() &&
-            TryGetMoveAction(unitTile, board, new(0, 2), out var move3Action))
+            TryGetMoveAction(unitTile, board, new Position(0, 2), out var move3Action))
         {
             yield return move3Action;
         }

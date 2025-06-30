@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
+             xmlns:views="clr-namespace:BattleChess3.UI.Views"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="350"
              d:DataContext="{d:DesignInstance viewModel:MapsViewModel}">
@@ -20,7 +21,13 @@
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Image Width="300" Margin="10"
-                       Source="{Binding Path=PreviewUri}" />
+                       Source="{Binding Path=PreviewUri}">
+                    <Image.InputBindings>
+                        <MouseBinding
+                            Gesture="LeftDoubleClick" 
+                            Command="{Binding DataContext.NewGameCommand, RelativeSource={RelativeSource AncestorType=views:MainWindow}}" />
+                    </Image.InputBindings>
+                </Image>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>

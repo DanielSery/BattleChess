@@ -28,7 +28,7 @@ public class Archer : ICrossFireFigureType
                 
                 if (targetTile.IsOwnedByEnemy(unitTile))
                 {
-                    yield return unitTile.CreateKillWithMove(targetTile, board);
+                    yield return unitTile.CreateKillWithoutMove(targetTile, board);
                 }
 
                 if (!targetTile.IsEmpty())
@@ -38,12 +38,12 @@ public class Archer : ICrossFireFigureType
             }
         }
         
-        if (TryGetMoveAction(unitTile, board, new(-1, 0), out var move1Action))
+        if (TryGetMoveAction(unitTile, board, new Position(-1, 0), out var move1Action))
         {
             yield return move1Action;
         }
         
-        if (TryGetMoveAction(unitTile, board, new(1, 0), out var move2Action))
+        if (TryGetMoveAction(unitTile, board, new Position(1, 0), out var move2Action))
         {
             yield return move2Action;
         }

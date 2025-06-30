@@ -72,17 +72,17 @@ internal interface IJediFigureType : IFigureType
         var movement = targetTile.Position - unitTile.Position;
         if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {
-            TryDestroyTile(targetTile, board, new(1, 0));
-            TryDestroyTile(targetTile, board, new(-1, 0));
-            TryDestroyTile(targetTile, board, new(0, 1));
-            TryDestroyTile(targetTile, board, new(0, -1));
+            TryDestroyTile(targetTile, board, new Position(1, 0));
+            TryDestroyTile(targetTile, board, new Position(-1, 0));
+            TryDestroyTile(targetTile, board, new Position(0, 1));
+            TryDestroyTile(targetTile, board, new Position(0, -1));
         }
         else
         {
-            TryDestroyTile(targetTile, board, new(1, -1));
-            TryDestroyTile(targetTile, board, new(-1, 1));
-            TryDestroyTile(targetTile, board, new(1, 1));
-            TryDestroyTile(targetTile, board, new(-1, -1));
+            TryDestroyTile(targetTile, board, new Position(1, -1));
+            TryDestroyTile(targetTile, board, new Position(-1, 1));
+            TryDestroyTile(targetTile, board, new Position(1, 1));
+            TryDestroyTile(targetTile, board, new Position(-1, -1));
         }
     }
 
