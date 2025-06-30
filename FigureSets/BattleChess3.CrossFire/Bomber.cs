@@ -12,9 +12,9 @@ public class Bomber : ICrossFireFigureType
     
     private readonly Position[] _positions =
     [
-        (-2, -2), (-2, 0), (-2, 2),
-        (0, -2), (0, 2),
-        (2, -2), (2, 0), (2, 2)
+        new(-2, -2), new(-2, 0), new(-2, 2),
+        new(0, -2), new(0, 2),
+        new(2, -2), new(2, 0), new(2, 2)
     ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
@@ -34,14 +34,14 @@ public class Bomber : ICrossFireFigureType
 
     void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
     {
-        SilentDie(board, targetTile.Position + (-1, -1));
-        SilentDie(board, targetTile.Position + (-1, 0));
-        SilentDie(board, targetTile.Position + (-1, 1));
-        SilentDie(board, targetTile.Position + (0, -1));
-        SilentDie(board, targetTile.Position + (0, 1));
-        SilentDie(board, targetTile.Position + (1, -1));
-        SilentDie(board, targetTile.Position + (1, 0));
-        SilentDie(board, targetTile.Position + (1, 1));
+        SilentDie(board, targetTile.Position + new Position(-1, -1));
+        SilentDie(board, targetTile.Position + new Position(-1, 0));
+        SilentDie(board, targetTile.Position + new Position(-1, 1));
+        SilentDie(board, targetTile.Position + new Position(0, -1));
+        SilentDie(board, targetTile.Position + new Position(0, 1));
+        SilentDie(board, targetTile.Position + new Position(1, -1));
+        SilentDie(board, targetTile.Position + new Position(1, 0));
+        SilentDie(board, targetTile.Position + new Position(1, 1));
     }
 
     private static void SilentDie(IBoard board, Position position)

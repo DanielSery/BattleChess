@@ -9,7 +9,7 @@ public class SingleBishop : IDoubleChessFigureTypeWithChainedAttackMoves
     
     Position[] IDoubleChessFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
     [
-        (-1, -1), (-1, 1),
-        (1, -1), (1, 1)
+        new(-1, -1), new(-1, 1),
+        new(1, -1), new(1, 1)
     ];
 }

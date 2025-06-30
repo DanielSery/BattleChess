@@ -9,15 +9,15 @@ public class GimliNazgul : ILordOfTheRingsFigureType, IFigureTypeWithChainedAtta
     
     Position[] IFigureTypeWithChainedAttacksAndMoves.MoveDirections { get; } =
     [
-        (-1, -1), (-1, 1),
-        (1, -1), (1, 1)
+        new(-1, -1), new(-1, 1),
+        new(1, -1), new(1, 1)
     ];
 
     Position[] IFigureTypeWithChainedAttacksAndMoves.AttackDirections { get; } =
     [
-        (-1, 0),
-        (1, 0),
-        (0, -1),
-        (0, 1)
+        new(-1, 0),
+        new(1, 0),
+        new(0, -1),
+        new(0, 1)
     ];
 }

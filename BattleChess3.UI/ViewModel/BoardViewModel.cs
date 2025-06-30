@@ -30,7 +30,7 @@ public sealed class BoardViewModel : ViewModelBase
         MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
 
         Tiles = Enumerable.Range(0, IBoard.TilesCount)
-            .Select<int, TileViewModel>(position => new TileViewModel(position))
+            .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
             .ToArray();
         Board = new Board(Tiles.Cast<ITile>().ToArray());
     }
@@ -159,7 +159,7 @@ public sealed class BoardViewModel : ViewModelBase
         
         foreach (var possibleAction in possibleActions)
         {
-            Tiles[possibleAction.TargetPosition].PossibleAction = possibleAction;
+            Tiles[possibleAction.TargetPosition.Index].PossibleAction = possibleAction;
         }
     }
 
@@ -172,7 +172,7 @@ public sealed class BoardViewModel : ViewModelBase
         for (var j = 0; j < IBoard.Length; j++)
         {
             var position = new Position(j, i);
-            povBoard[position.GetPlayerPOVPosition(player)] = absoluteBoard[position];
+            povBoard[position.GetPlayerPOVPosition(player).Index] = absoluteBoard[position.Index];
         }
 
         return new Board(povBoard);

@@ -2,12 +2,12 @@
 
 namespace BattleChess3.Game.Board;
 
-public readonly struct Position
+public readonly struct Position : IEquatable<Position>
 {
     public static readonly Position None = new(-1, -1);
     public int X { get; }
     public int Y { get; }
-    public int Index => this;
+    public int Index => Y * IBoard.Length + X;
 
     public Position(int x, int y)
     {
@@ -21,11 +21,6 @@ public readonly struct Position
                && Y >= 0
                && X < IBoard.Length
                && Y < IBoard.Length;
-    }
-
-    public bool IsOutsideBoard()
-    {
-        return !IsInBoard();
     }
 
     public static bool operator ==(Position left, Position right)
@@ -63,32 +58,12 @@ public readonly struct Position
         return new Position(left * right.X, left * right.Y);
     }
 
-    public static implicit operator int(Position position)
-    {
-        return position.Y * IBoard.Length + position.X;
-    }
-
-    public static implicit operator Position(int i)
-    {
-        return new Position(i % IBoard.Length, i / IBoard.Length);
-    }
-
-    public static implicit operator Position((int x, int y) pos)
-    {
-        return new Position(pos.x, pos.y);
-    }
-
-    public static implicit operator (int, int)(Position position)
-    {
-        return (position.X, position.Y);
-    }
-
     public override bool Equals(object? obj)
     {
         return obj is Position pos && Equals(pos);
     }
 
-    private bool Equals(Position other)
+    public bool Equals(Position other)
     {
         return X == other.X && Y == other.Y;
     }
@@ -99,6 +74,11 @@ public readonly struct Position
         {
             return (X * 397) ^ Y;
         }
+    }
+
+    public static Position FromIndex(int index)
+    {
+        return new Position(index % IBoard.Length, index / IBoard.Length);
     }
 
     public Position GetPlayerPOVPosition(in Player currentPlayer)

@@ -10,15 +10,15 @@ public class Builder : ICrossFireFigureType
     
     private readonly Position[] _movePosition =
     [
-        (-1, 0), (1, 0), (0, -1), (0, 1)
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
     
     private readonly Position[] _shieldPositions =
     [
-        (-2, 1), (-2, 0), (-2, -1),
-        (2, 1), (2, 0), (2, -1),
-        (1, -2), (0, -2), (-1, -2),
-        (1, 2), (0, 2), (-1, 2)
+        new(-2, 1), new(-2, 0), new(-2, -1),
+        new(2, 1), new(2, 0), new(2, -1),
+        new(1, -2), new(0, -2), new(-1, -2),
+        new(1, 2), new(0, 2), new(-1, 2)
     ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
@@ -116,10 +116,10 @@ public class Builder : ICrossFireFigureType
     {
         return move switch
         {
-            (0, 1) => new Position[] { (-2, 2), (-1, 3), (0, 3), (1, 3), (2, 2) },
-            (1, 0) => new Position[] { (2, -2), (3, -1), (3, 0), (3, 1), (2, 2) },
-            (0, -1) => new Position[] { (-2, -2), (-1, -3), (0, -3), (1, -3), (2, -2) },
-            (-1, 0) => new Position[] { (-2, -2), (-3, -1), (-3, 0), (-3, 1), (-2, 2) },
+            (0, 1) => new Position[] { new(-2, 2), new(-1, 3), new(0, 3), new(1, 3), new(2, 2) },
+            (1, 0) => new Position[] { new(2, -2), new(3, -1), new(3, 0), new(3, 1), new(2, 2) },
+            (0, -1) => new Position[] { new(-2, -2), new(-1, -3), new(0, -3), new(1, -3), new(2, -2) },
+            (-1, 0) => new Position[] { new(-2, -2), new(-3, -1), new(-3, 0), new(-3, 1), new(-2, 2) },
             _ => throw new ArgumentException($"Unexpected move of Builder {move}")
         };
     }

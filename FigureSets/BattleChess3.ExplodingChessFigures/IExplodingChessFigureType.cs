@@ -21,15 +21,15 @@ internal interface IExplodingChessFigureType : IFigureType
 
     void IFigureType.OnDied(ITile unitTile, IBoard board)
     {
-        SilentDie(board, unitTile.Position + (-1, -1));
-        SilentDie(board, unitTile.Position + (-1, 0));
-        SilentDie(board, unitTile.Position + (-1, 1));
-        SilentDie(board, unitTile.Position + (0, -1));
-        SilentDie(board, unitTile.Position + (0, 0));
-        SilentDie(board, unitTile.Position + (0, 1));
-        SilentDie(board, unitTile.Position + (1, -1));
-        SilentDie(board, unitTile.Position + (1, 0));
-        SilentDie(board, unitTile.Position + (1, 1));
+        SilentDie(board, unitTile.Position + new Position(-1, -1));
+        SilentDie(board, unitTile.Position + new Position(-1, 0));
+        SilentDie(board, unitTile.Position + new Position(-1, 1));
+        SilentDie(board, unitTile.Position + new Position(0, -1));
+        SilentDie(board, unitTile.Position + new Position(0, 0));
+        SilentDie(board, unitTile.Position + new Position(0, 1));
+        SilentDie(board, unitTile.Position + new Position(1, -1));
+        SilentDie(board, unitTile.Position + new Position(1, 0));
+        SilentDie(board, unitTile.Position + new Position(1, 1));
     }
 
     private static void SilentDie(IBoard board, Position position)

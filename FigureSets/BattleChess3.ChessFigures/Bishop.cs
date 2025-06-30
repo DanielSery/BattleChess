@@ -9,7 +9,7 @@ public class Bishop : IChessFigureType, IFigureTypeWithChainedAttackMoves
     
     Position[] IFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
     [
-        (-1, -1), (-1, 1),
-        (1, -1), (1, 1)
+        new(-1, -1), new(-1, 1),
+        new(1, -1), new(1, 1)
     ];
 }

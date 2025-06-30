@@ -207,7 +207,9 @@ internal sealed class MultiplayerService : IMultiplayerService
                     _lastProcessedTurn = reader.GetInt32("Id");
                     var fromPosition = reader.GetInt16("FromPosition");
                     var toPosition = reader.GetInt16("ToPosition");
-                    RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position>(fromPosition, toPosition));
+                    RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position>(
+                        Position.FromIndex(fromPosition), 
+                        Position.FromIndex(toPosition)));
                     Console.WriteLine($"Requested move: {fromPosition} to {toPosition}");
                 }
             

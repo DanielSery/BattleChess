@@ -9,9 +9,9 @@ public class SingleKnight : IDoubleChessFigureTypeWithDifferentAttackMoves
     
     Position[] IDoubleChessFigureTypeWithDifferentAttackMoves.AttackMovePositions { get; } =
     [
-        (-2, -1), (-2, 1),
-        (-1, -2), (-1, 2),
-        (1, -2), (1, 2),
-        (2, -1), (2, 1)
+        new(-2, -1), new(-2, 1),
+        new(-1, -2), new(-1, 2),
+        new(1, -2), new(1, 2),
+        new(2, -1), new(2, 1)
     ];
 }

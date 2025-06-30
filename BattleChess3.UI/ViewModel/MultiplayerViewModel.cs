@@ -38,7 +38,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
     public uint? GameId
     {
         get => _gameId;
-        set => Set(ref _gameId, value);
+        private set => Set(ref _gameId, value);
     }
 
     public RelayCommand HostAndCopyCommand { get; }
@@ -81,8 +81,8 @@ public sealed class MultiplayerViewModel : ViewModelBase
     private void MultiplayerServiceOnRequestPlayMove(object? sender, (Position from, Position to) e)
     {
         _boardViewModel.RemotePlayTurn(
-            _boardViewModel.Tiles[e.from],
-            _boardViewModel.Tiles[e.to]);
+            _boardViewModel.Tiles[e.from.Index],
+            _boardViewModel.Tiles[e.to.Index]);
     }
 
     public void SetGameId(uint gameId)

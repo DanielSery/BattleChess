@@ -24,8 +24,8 @@ public class Board : IBoard
     public int Count => _tiles.Length;
 
     public ITile this[int index] => _tiles[index];
-    public ITile this[Position position] => _tiles[position];
-    public ITile this[int x, int y] => _tiles[new Position(x, y)];
+    public ITile this[Position position] => _tiles[position.Index];
+    public ITile this[int x, int y] => _tiles[new Position(x, y).Index];
 
     public bool TryGetTile(Position position, out ITile tile)
     {

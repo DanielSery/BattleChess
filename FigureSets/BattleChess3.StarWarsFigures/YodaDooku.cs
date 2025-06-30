@@ -11,18 +11,18 @@ public class YodaDooku : IStarWarsFigureType
     
     private readonly Position[] _movementPositions =
     [
-        (-2, -1), (-2, 1),
-        (-1, -2), (-1, 0), (-1, 2),
-        (0, -1), (0, 1),
-        (1, -2), (1, 0), (1, 2),
-        (2, -1), (2, 1)
+        new(-2, -1), new(-2, 1),
+        new(-1, -2), new(-1, 0), new(-1, 2),
+        new(0, -1), new(0, 1),
+        new(1, -2), new(1, 0), new(1, 2),
+        new(2, -1), new(2, 1)
     ];
     
     private readonly Position[] _attackDirections =
     [
-        (-1, -1), (-1, 0), (-1, 1),
-        (0, -1), (0, 1),
-        (1, -1), (1, 0), (1, 1)
+        new(-1, -1), new(-1, 0), new(-1, 1),
+        new(0, -1), new(0, 1),
+        new(1, -1), new(1, 0), new(1, 1)
     ];
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

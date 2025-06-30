@@ -11,9 +11,9 @@ public class Archer : ICrossFireFigureType
     
     private readonly Position[] _directions =
     [
-        (-1, -1), (-1, 1),
-        (0, -1), (0, 1),
-        (1, -1), (1, 1)
+        new(-1, -1), new(-1, 1),
+        new(0, -1), new(0, 1),
+        new(1, -1), new(1, 1)
     ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
@@ -38,12 +38,12 @@ public class Archer : ICrossFireFigureType
             }
         }
         
-        if (TryGetMoveAction(unitTile, board, (-1, 0), out var move1Action))
+        if (TryGetMoveAction(unitTile, board, new(-1, 0), out var move1Action))
         {
             yield return move1Action;
         }
         
-        if (TryGetMoveAction(unitTile, board, (1, 0), out var move2Action))
+        if (TryGetMoveAction(unitTile, board, new(1, 0), out var move2Action))
         {
             yield return move2Action;
         }

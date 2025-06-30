@@ -9,14 +9,14 @@ public class FrodoGollum : ILordOfTheRingsFigureType, IFigureTypeWithDifferentAt
     
     Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
     [
-        (-1, 0), (1, 0), (0, -1), (0, 1)
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
 
     Position[] IFigureTypeWithDifferentAttacksAndMoves.AttackPositions { get; } =
     [
-        (-2, -2), (-1, -1),
-        (-2, 2), (-1, 1),
-        (2, -2), (1, -1),
-        (2, 2), (1, 1)
+        new(-2, -2), new(-1, -1),
+        new(-2, 2), new(-1, 1),
+        new(2, -2), new(1, -1),
+        new(2, 2), new(1, 1)
     ];
 }

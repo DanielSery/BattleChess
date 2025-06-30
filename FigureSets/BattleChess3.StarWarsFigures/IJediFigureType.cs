@@ -9,15 +9,15 @@ internal interface IJediFigureType : IFigureType
 {
     Position[] MovementPositions =>
     [
-        (-2, -2), (-2, 0), (-2, 1),
-        (0, -2), (0, 2),
-        (2, -2), (2, 0), (2, 2)
+        new(-2, -2), new(-2, 0), new(-2, 1),
+        new(0, -2), new(0, 2),
+        new(2, -2), new(2, 0), new(2, 2)
     ];
 
     Position[] AttackPositions =>
     [
-        (-2, -2), (-2, 2),
-        (2, -2), (2, 2)
+        new(-2, -2), new(-2, 2),
+        new(2, -2), new(2, 2)
     ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
@@ -72,17 +72,17 @@ internal interface IJediFigureType : IFigureType
         var movement = targetTile.Position - unitTile.Position;
         if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {
-            TryDestroyTile(targetTile, board, (1, 0));
-            TryDestroyTile(targetTile, board, (-1, 0));
-            TryDestroyTile(targetTile, board, (0, 1));
-            TryDestroyTile(targetTile, board, (0, -1));
+            TryDestroyTile(targetTile, board, new(1, 0));
+            TryDestroyTile(targetTile, board, new(-1, 0));
+            TryDestroyTile(targetTile, board, new(0, 1));
+            TryDestroyTile(targetTile, board, new(0, -1));
         }
         else
         {
-            TryDestroyTile(targetTile, board, (1, -1));
-            TryDestroyTile(targetTile, board, (-1, 1));
-            TryDestroyTile(targetTile, board, (1, 1));
-            TryDestroyTile(targetTile, board, (-1, -1));
+            TryDestroyTile(targetTile, board, new(1, -1));
+            TryDestroyTile(targetTile, board, new(-1, 1));
+            TryDestroyTile(targetTile, board, new(1, 1));
+            TryDestroyTile(targetTile, board, new(-1, -1));
         }
     }
 

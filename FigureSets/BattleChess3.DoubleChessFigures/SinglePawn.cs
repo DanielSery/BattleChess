@@ -13,21 +13,21 @@ public class SinglePawn : IDoubleChessFigureType
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (TryGetAttackAction(unitTile, board, (1, 1), out var attackAction1))
+        if (TryGetAttackAction(unitTile, board, new(1, 1), out var attackAction1))
         {
             yield return attackAction1;
         }
 
-        if (TryGetAttackAction(unitTile, board, (-1, 1), out var attackAction2))
+        if (TryGetAttackAction(unitTile, board, new(-1, 1), out var attackAction2))
         {
             yield return attackAction2;
         }
 
-        if (TryGetMoveAction(unitTile, board, (0, 1), out var moveAction1))
+        if (TryGetMoveAction(unitTile, board, new(0, 1), out var moveAction1))
         {
             yield return moveAction1;
         }
-        else if (TryGetMergeAction(unitTile, board, (0, 1), out var mergeAction1))
+        else if (TryGetMergeAction(unitTile, board, new(0, 1), out var mergeAction1))
         {
             yield return mergeAction1;
             yield break;
@@ -42,11 +42,11 @@ public class SinglePawn : IDoubleChessFigureType
             yield break;
         }
         
-        if (TryGetMoveAction(unitTile, board, (0, 2), out var moveAction2))
+        if (TryGetMoveAction(unitTile, board, new(0, 2), out var moveAction2))
         {
             yield return moveAction2;
         }
-        else if (TryGetMergeAction(unitTile, board, (0, 2), out var mergeAction2))
+        else if (TryGetMergeAction(unitTile, board, new(0, 2), out var mergeAction2))
         {
             yield return mergeAction2;
         }

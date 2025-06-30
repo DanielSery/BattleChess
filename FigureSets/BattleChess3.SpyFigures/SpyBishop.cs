@@ -9,7 +9,7 @@ public class SpyBishop : ISpyFigureType, ISpyFigureTypeWithChainedAttackMoves
     
     Position[] ISpyFigureTypeWithChainedAttackMoves.AttackMoveDirections { get; } =
     [
-        (-1, -1), (-1, 1),
-        (1, -1), (1, 1)
+        new(-1, -1), new(-1, 1),
+        new(1, -1), new(1, 1)
     ];
 }

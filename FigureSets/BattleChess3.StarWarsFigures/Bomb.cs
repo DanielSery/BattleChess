@@ -20,14 +20,14 @@ public class Bomb : IStarWarsFigureType
         if (!attackingTile.Figure.Owner.Equals(unitTile.Figure.Owner))
             return;
         
-        SilentDie(board, unitTile.Position + (-1, -1));
-        SilentDie(board, unitTile.Position + (-1, 0));
-        SilentDie(board, unitTile.Position + (-1, 1));
-        SilentDie(board, unitTile.Position + (0, -1));
-        SilentDie(board, unitTile.Position + (0, 1));
-        SilentDie(board, unitTile.Position + (1, -1));
-        SilentDie(board, unitTile.Position + (1, 0));
-        SilentDie(board, unitTile.Position + (1, 1));
+        SilentDie(board, unitTile.Position + new Position(-1, -1));
+        SilentDie(board, unitTile.Position + new Position(-1, 0));
+        SilentDie(board, unitTile.Position + new Position(-1, 1));
+        SilentDie(board, unitTile.Position + new Position(0, -1));
+        SilentDie(board, unitTile.Position + new Position(0, 1));
+        SilentDie(board, unitTile.Position + new Position(1, -1));
+        SilentDie(board, unitTile.Position + new Position(1, 0));
+        SilentDie(board, unitTile.Position + new Position(1, 1));
     }
 
     void IFigureType.OnKilled(ITile unitTile, ITile attackingTile, IBoard board)

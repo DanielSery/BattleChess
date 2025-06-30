@@ -11,9 +11,9 @@ public class ExplodingChessKing : IExplodingChessFigureType
     
     private readonly Position[] _attackMovePositions =
     [
-        (-1, -1), (-1, 0), (-1, 1),
-        (0, -1), (0, 1),
-        (1, -1), (1, 0), (1, 1)
+        new(-1, -1), new(-1, 0), new(-1, 1),
+        new(0, -1), new(0, 1),
+        new(1, -1), new(1, 0), new(1, 1)
     ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
