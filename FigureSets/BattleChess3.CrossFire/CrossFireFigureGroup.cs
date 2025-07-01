@@ -7,22 +7,47 @@ public class CrossFireFigureGroup : IFigureGroup
 {
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrossFireFigureGroup)}_Name"];
 
-    public static readonly IFigureType Ninja = new Ninja();
-    public static readonly IFigureType Bomber = new OldWizzard();
-    public static readonly IFigureType Builder = new Builder();
-    public static readonly IFigureType Knight = new Knight();
-    public static readonly IFigureType Spy = new Trader();
-    public static readonly IFigureType Archer = new Archer();
     public static readonly IFigureType Wall = new Wall();
+    public static readonly IFigureType Explosives = new Explosives();
+    public static readonly IFigureType Knight = new Knight();
+    public static readonly IFigureType Trench = new Trench();
+    public static readonly IFigureType LegionarySword = new LegionarySword();
 
-    public IFigureType[] FigureTypes =>
+    public IFigureType[] FigureTypes { get; } =
     [
-        Ninja,
-        Bomber,
-        Builder,
+        new Ninja(),
+        new Crossbow(),
+        new OldWizzard(),
+        new Builder(),
+        new MountedKnight(),
+        new Trader(),
+        Wall,
+        new Barbarian(),
+        Explosives,
+        new Alchemist(),
+        new Bard(),
+        new Spartan(),
+        new Ranger(),
+        new YoungWizzard(),
+        new CamelRider(),
+        new Scout(),
+        new MountedArcher(),
+        new CamelArcher(),
         Knight,
-        Spy,
-        Archer,
-        Wall
+        new Chinese(),
+        new Warrior(),
+        LegionarySword,
+        new LegionaryPike(),
+        new King(),
+        new Queen(),
+        new Viking(),
+        new JapanArcher(),
+        new Archer(),
+        new Trench(),
+        new Miner(),
+        new Peasant(),
+        new Spearman(),
+        new Warhammer(),
+        new Gladiator()
     ];
 }

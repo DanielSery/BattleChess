@@ -3,9 +3,9 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Knight : IFigureTypeWithDifferentAttacksAndMoves, ICrossFireFigureType
+public class Chinese : IFigureTypeWithDifferentAttacksAndMoves, ICrossFireFigureType
 {
-    int IFigureType.FigureId => 19;
+    int IFigureType.FigureId => 20;
     
     Position[] IFigureTypeWithDifferentAttacksAndMoves.MovePositions { get; } =
     [
@@ -14,9 +14,10 @@ public class Knight : IFigureTypeWithDifferentAttacksAndMoves, ICrossFireFigureT
 
     Position[] IFigureTypeWithDifferentAttacksAndMoves.AttackPositions { get; } =
     [
-        new(-2, -2), new(-1, -1),
-        new(-2, 2), new(-1, 1),
-        new(2, -2), new(1, -1),
-        new(2, 2), new(1, 1)
+        new(-2, 0),
+        new(-1, -1), new(-1, 1),
+        new(0, -2), new(0, 2),
+        new(1, -1), new(1, 1),
+        new(2, 0)
     ];
 }

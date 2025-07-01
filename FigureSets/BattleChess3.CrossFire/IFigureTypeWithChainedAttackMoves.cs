@@ -5,37 +5,28 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Archer : ICrossFireFigureType
+internal interface IFigureTypeWithChainedAttackMoves : IFigureType
 {
-    int IFigureType.FigureId => 27;
-
-    protected Position[] AttackDirections =>
-    [
-        new(-1, 0), new(1, 0),
-        new(0, -1), new(0, 1)
-    ];
+    protected Position[] AttackMoveDirections { get; }
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var direction in AttackDirections)
+        foreach (var direction in AttackMoveDirections)
         {
-            for (var i = 1; i <= 3; i++)
+            for (var i = 1; i < 8; i++)
             {
                 var position = unitTile.Position + direction * i;
                 if (!board.TryGetTile(position, out var targetTile))
                     break;
-
+                
                 if (targetTile.IsOwnedByEnemy(unitTile))
                 {
-                    yield return unitTile.CreateKillWithoutMove(targetTile, board);
+                    yield return unitTile.CreateKillWithMove(targetTile, board);
                 }
-
+                
                 if (targetTile.IsEmpty())
                 {
-                    if (i <= 2)
-                    {
-                        yield return unitTile.CreateMoveAction(targetTile, board);
-                    }
+                    yield return unitTile.CreateMoveAction(targetTile, board);
                 }
                 else
                 {

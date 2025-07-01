@@ -1,0 +1,52 @@
+﻿using BattleChess3.DefaultFigures;
+using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
+
+namespace BattleChess3.CrossFireFigures;
+
+public class Explosives : ICrossFireFigureType
+{
+    int IFigureType.FigureId => 9;
+    
+    IDictionary<int, Uri> IFigureType.ImageUris =>
+        new Dictionary<int, Uri>
+        {
+            { 0, new Uri($"pack://application:,,,/BattleChess3.CrossFireFigures;component/Images/{GetType().Name}.png", UriKind.Absolute) },
+        };
+    
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        return [];
+    }
+
+    void IFigureType.OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)
+    {
+        if (!attackingTile.Figure.Owner.Equals(unitTile.Figure.Owner))
+            return;
+        
+        SilentDie(board, unitTile.Position + new Position(-1, -1));
+        SilentDie(board, unitTile.Position + new Position(-1, 0));
+        SilentDie(board, unitTile.Position + new Position(-1, 1));
+        SilentDie(board, unitTile.Position + new Position(0, -1));
+        SilentDie(board, unitTile.Position + new Position(0, 1));
+        SilentDie(board, unitTile.Position + new Position(1, -1));
+        SilentDie(board, unitTile.Position + new Position(1, 0));
+        SilentDie(board, unitTile.Position + new Position(1, 1));
+    }
+
+    void IFigureType.OnKilled(ITile unitTile, ITile attackingTile, IBoard board)
+    {
+        unitTile.Die(board);
+    }
+
+    private static void SilentDie(IBoard board, Position position)
+    {
+        if (!board.TryGetTile(position, out var tile))
+            return;
+
+        tile.Figure.Owner.Figures.Remove(tile.Figure);
+        tile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
+    }
+}

@@ -23,8 +23,18 @@ public static class FiguresHelper
 
     public static bool IsOwnedByEnemy(this ITile checkedTile, ITile yoursTile)
     {
-        return !checkedTile.Figure.Owner.Equals(Player.Neutral) &&
-               !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
+        if (checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner))
+        {
+            return false;
+        }
+        
+        if (!checkedTile.Figure.Owner.Equals(Player.Neutral) ||
+            !checkedTile.IsEmpty())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public static void CreateFigure(this ITile tile, Figure createdFigure, IBoard board)
