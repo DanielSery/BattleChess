@@ -81,5 +81,15 @@
       <Resource Include="Images\TabItem.png" />
       <Resource Include="Images\TabItemDisabled.png" />
       <Resource Include="Images\TabItemMouseOn.png" />
+      <None Remove="Images\Button1Background.jpg" />
+      <Resource Include="Images\Button1Background.jpg" />
+      <None Remove="Images\Button2Background.jpg" />
+      <Resource Include="Images\Button2Background.jpg" />
+      <None Remove="Images\Button3Background.jpg" />
+      <Resource Include="Images\Button3Background.jpg" />
+      <None Remove="Images\Button4Background.jpg" />
+      <Resource Include="Images\Button4Background.jpg" />
+      <None Remove="Images\Button5Background.jpg" />
+      <Resource Include="Images\Button5Background.jpg" />
     </ItemGroup>
 </Project>

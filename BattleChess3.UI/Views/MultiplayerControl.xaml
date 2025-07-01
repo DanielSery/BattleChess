@@ -29,7 +29,6 @@
             <TextBlock Text="{Binding GameId}"
                        Style="{DynamicResource TextBlockStyle}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                       TextWrapping="Wrap"
                        MaxHeight="150" />
         </Border>
 
@@ -38,18 +37,21 @@
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_HostButton}"
             Command="{Binding HostAndCopyCommand}"
-            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" />
+            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" 
+            Background="{DynamicResource Button1Background}"/>
         <Button
             Grid.Column="1" Grid.Row="1"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_JoinButton}"
             Command="{Binding PasteAndJoinCommand}"
-            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" />
+            Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" 
+            Background="{DynamicResource Button2Background}"/>
         <Button
             Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_StopButton}"
             Command="{Binding StopCommand}"
-            Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" />
+            Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" 
+            Background="{DynamicResource Button5Background}"/>
     </Grid>
 </UserControl>

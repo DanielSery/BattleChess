@@ -20,23 +20,28 @@
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding NewGameCommand}"
-                                Content="{localization:Loc MainWindow_NewGame}" />
+                                Content="{localization:Loc MainWindow_NewGame}" 
+                                Background="{DynamicResource Button1Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding JoinGameCommand}"
-                                Content="{localization:Loc MainWindow_JoinGame}" />
+                                Content="{localization:Loc MainWindow_JoinGame}" 
+                                Background="{DynamicResource Button2Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding SaveGameCommand}"
-                                Content="{localization:Loc MainWindow_SaveGame}" />
+                                Content="{localization:Loc MainWindow_SaveGame}" 
+                                Background="{DynamicResource Button3Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding DeleteGameCommand}"
-                                Content="{localization:Loc MainWindow_DeleteGame}" />
+                                Content="{localization:Loc MainWindow_DeleteGame}" 
+                                Background="{DynamicResource Button4Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding CloseApplicationCommand}"
-                                Content="{localization:Loc MainWindow_Quit}" />
+                                Content="{localization:Loc MainWindow_Quit}" 
+                                Background="{DynamicResource Button5Background}"/>
                     </DockPanel>
                 </Viewbox>
                 <views:MapsControl MinWidth="500"
