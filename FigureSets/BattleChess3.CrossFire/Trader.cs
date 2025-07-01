@@ -5,7 +5,7 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Spy : ICrossFireFigureType
+public class Trader : ICrossFireFigureType
 {
     int IFigureType.FigureId => 6;
     

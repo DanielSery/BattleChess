@@ -8,10 +8,10 @@ public class CrossFireFigureGroup : IFigureGroup
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrossFireFigureGroup)}_Name"];
 
     public static readonly IFigureType Ninja = new Ninja();
-    public static readonly IFigureType Bomber = new Bomber();
+    public static readonly IFigureType Bomber = new OldWizzard();
     public static readonly IFigureType Builder = new Builder();
     public static readonly IFigureType Knight = new Knight();
-    public static readonly IFigureType Spy = new Spy();
+    public static readonly IFigureType Spy = new Trader();
     public static readonly IFigureType Archer = new Archer();
     public static readonly IFigureType Wall = new Wall();
 

@@ -106,83 +106,6 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bomber
-        ///
-        ///Move:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬛⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▩▩▩⬜⬜
-        ///⬛⬜▣▩⬛▩⬜⬜
-        ///⬜⬜⬜▩▩▩⬜⬜
-        ///⬛⬜⬛⬜⬛⬜⬜⬜
-        ///      
-        ///Attack: Cannot directly attack
-        ///      
-        ///Info: Hard to use, high reward
-        ///Good vs: Ninja, Spy
-        ///Bad vs: Builder, Archer, Knight
-        ///Special: When move, near tiles are destroyed
-        ///.
-        /// </summary>
-        internal static string Bomber_Description {
-            get {
-                return ResourceManager.GetString("Bomber_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Bomber.
-        /// </summary>
-        internal static string Bomber_Name {
-            get {
-                return ResourceManager.GetString("Bomber_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Builder
-        ///
-        ///Move:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///
-        ///Shield:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜▦▦▦⬜⬜⬜
-        ///⬜▦⬜⬜⬜▦⬜⬜
-        ///⬜▦⬜▣⬜▦⬜⬜
-        ///⬜▦⬜⬜⬜▦⬜⬜
-        ///⬜⬜▦▦▦⬜⬜⬜
-        ///      
-        ///Attack: Cannot directly attack
-        ///      
-        ///Info: Defensive unit
-        ///Good vs: Archer, Spy
-        ///Bad vs: Ninja, Knight
-        ///Special: Creates shield around itself
-        ///Special: Moving shield pushes units away
-        ///.
-        /// </summary>
-        internal static string Builder_Description {
-            get {
-                return ResourceManager.GetString("Builder_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Builder.
         /// </summary>
         internal static string Builder_Name {
@@ -311,6 +234,55 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Builder
+        ///
+        ///Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///Shield:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬜▦⬜⬜⬜▦⬜⬜
+        ///⬜▦⬜▣⬜▦⬜⬜
+        ///⬜▦⬜⬜⬜▦⬜⬜
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///      
+        ///Attack: Cannot directly attack
+        ///      
+        ///Info: Defensive unit
+        ///Good vs: Archer, Spy
+        ///Bad vs: Ninja, Knight
+        ///Special: Creates shield around itself
+        ///Special: Moving shield pushes units away
+        ///.
+        /// </summary>
+        internal static string OldWizzard_Description {
+            get {
+                return ResourceManager.GetString("OldWizzard_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bomber.
+        /// </summary>
+        internal static string OldWizzard_Name {
+            get {
+                return ResourceManager.GetString("OldWizzard_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Spy
         ///
         ///Move + Attack: As chess king
@@ -330,18 +302,18 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///Special: Can swap with allied unit
         ///.
         /// </summary>
-        internal static string Spy_Description {
+        internal static string Trader_Description {
             get {
-                return ResourceManager.GetString("Spy_Description", resourceCulture);
+                return ResourceManager.GetString("Trader_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Spy.
         /// </summary>
-        internal static string Spy_Name {
+        internal static string Trader_Name {
             get {
-                return ResourceManager.GetString("Spy_Name", resourceCulture);
+                return ResourceManager.GetString("Trader_Name", resourceCulture);
             }
         }
         

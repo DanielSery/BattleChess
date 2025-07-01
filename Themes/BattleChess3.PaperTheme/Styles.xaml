@@ -7,9 +7,9 @@
                 ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/ApplicationBackground.jpg" />
 
     <SolidColorBrush x:Key="DefaultObjectForeground" Color="Black" />
-    <SolidColorBrush x:Key="DefaultObjectMouseOnForeground" Color="#0000AF" />
-    <SolidColorBrush x:Key="DefaultObjectSelectedForeground" Color="#1FAD00" />
-    <SolidColorBrush x:Key="DefaultObjectDisabledForeground" Color="#AD0B00" />
+    <SolidColorBrush x:Key="DefaultObjectMouseOnForeground" Color="#292944" />
+    <SolidColorBrush x:Key="DefaultObjectSelectedForeground" Color="#1C5945" />
+    <SolidColorBrush x:Key="DefaultObjectDisabledForeground" Color="#6D3651" />
 
     <ImageBrush x:Key="TabItemBackground"
                 ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/TabItem.png" />

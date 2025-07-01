@@ -148,7 +148,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private void SetPossibleActions(ITile clickedTile)
+    private void SetPossibleActions(TileViewModel clickedTile)
     {
         if (!_playerService.CurrentPlayer.Equals(clickedTile.Figure.Owner))
             return;

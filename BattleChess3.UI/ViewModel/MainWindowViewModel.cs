@@ -8,14 +8,9 @@ namespace BattleChess3.UI.ViewModel;
 public sealed class MainWindowViewModel : ViewModelBase
 {
     private bool _editorTabSelected;
-
-    private bool _gameTabEnabled;
-
     private bool _gameTabSelected;
-
     private bool _manualTabSelected;
     private bool _menuTabSelected;
-
     private bool _optionsTabSelected;
 
     public MainWindowViewModel(
@@ -89,7 +84,7 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private void NewGame()
     {
-        BoardViewModel.ManualLoadMap(MapsViewModel.SelectedMap);
+        BoardViewModel.ManualLoadMap(MapsViewModel.SelectedMap ?? MapBlueprint.Empty);
         GameTabSelected = true;
     }
 

@@ -157,7 +157,7 @@ Special: Does not move with attack
     <data name="Archer_Name" xml:space="preserve">
     <value>Archer</value>
   </data>
-    <data name="Bomber_Description" xml:space="preserve">
+    <data name="OldWizzard_Description" xml:space="preserve">
     <value>Bomber
 
 Move:
@@ -179,7 +179,7 @@ Bad vs: Builder, Archer, Knight
 Special: When move, near tiles are destroyed
 </value>
   </data>
-    <data name="Bomber_Name" xml:space="preserve">
+    <data name="OldWizzard_Name" xml:space="preserve">
     <value>Bomber</value>
   </data>
     <data name="Builder_Description" xml:space="preserve">
@@ -308,7 +308,7 @@ Special: On last tile turns into Bomber
     <data name="Ninja_Name" xml:space="preserve">
     <value>Ninja</value>
   </data>
-    <data name="Spy_Description" xml:space="preserve">
+    <data name="Trader_Description" xml:space="preserve">
     <value>Spy
 
 Move + Attack: As chess king
@@ -328,7 +328,7 @@ Bad vs: Archer, Knight, Bomber
 Special: Can swap with allied unit
 </value>
   </data>
-    <data name="Spy_Name" xml:space="preserve">
+    <data name="Trader_Name" xml:space="preserve">
     <value>Spy</value>
   </data>
     <data name="Wall_Description" xml:space="preserve">
