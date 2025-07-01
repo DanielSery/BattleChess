@@ -27,16 +27,14 @@ public class Cannon : ICrossFireFigureType
         if (TryGetAttackAction(unitTile, board, new Position(0, 2), out var attack1Action))
         {
             yield return attack1Action;
-            yield break;
         }
         
         if (TryGetAttackAction(unitTile, board, new Position(0, 3), out var attack2Action))
         {
             yield return attack2Action;
-            yield break;
         }
         
-        if (TryGetAttackAction(unitTile, board, new Position(0, 3), out var attack3Action))
+        if (TryGetAttackAction(unitTile, board, new Position(0, 4), out var attack3Action))
         {
             yield return attack3Action;
         }

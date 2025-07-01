@@ -12,12 +12,12 @@ public class Builder : ICrossFireFigureType
     
     private readonly Position[] _movePosition =
     [
-        new(-1, -1), new(1, -1), new(1, 1), new(-1, 1)
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
     
     private readonly Position[] _shieldPositions =
     [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
+        new(-1, -1), new(1, -1), new(1, 1), new(-1, 1)
     ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
@@ -31,7 +31,7 @@ public class Builder : ICrossFireFigureType
         foreach (var targetTile in _shieldPositions.GetRelativeTiles(board, unitTile))
         {
             if (targetTile.IsEmpty())
-                yield return unitTile.CreateNewFigureAction(unitTile.Figure.Owner, CrossFireFigureGroup.Wall, board);
+                yield return unitTile.CreateNewFigureAction(targetTile, unitTile.Figure.Owner, CrossFireFigureGroup.Wall, board);
 
             if (targetTile.Figure.Type is Wall)
                 yield return unitTile.CreateKillWithoutMove(targetTile, board);

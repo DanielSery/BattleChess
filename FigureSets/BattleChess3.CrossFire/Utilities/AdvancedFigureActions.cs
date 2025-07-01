@@ -87,7 +87,7 @@ internal static class AdvancedFigureActions
             return false;
         }
 
-        action = targetTile.CreateNewFigureAction(player, figureType, board);
+        action = unitTile.CreateNewFigureAction(targetTile, player, figureType, board);
         return true;
     }
 }

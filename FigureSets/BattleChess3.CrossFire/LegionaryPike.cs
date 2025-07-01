@@ -73,7 +73,7 @@ public class LegionaryPike : ICrossFireFigureType
                 unitTile.KillWithoutMove(targetTile, board);
                 var owner = unitTile.Figure.Owner;
                 unitTile.Die(board);
-                unitTile.CreateFigure(new Figure(owner, CrossFireFigureGroup.Knight), board);
+                unitTile.CreateFigure(new Figure(owner, CrossFireFigureGroup.LegionarySword), board);
             });
         return true;
     }

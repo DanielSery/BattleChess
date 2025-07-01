@@ -53,8 +53,7 @@ public class MountedKnight : ICrossFireFigureType
                         targetTile.AbsolutePosition,
                         () => AttackAction(unitTile, targetTile, board));
                 }
-
-                if (!unitTile.CanMoveTo(targetTile))
+                else if (!unitTile.CanMoveTo(targetTile))
                     break;
             }
         }

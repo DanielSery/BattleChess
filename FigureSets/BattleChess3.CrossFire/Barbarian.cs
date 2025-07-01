@@ -42,7 +42,7 @@ public class Barbarian : ICrossFireFigureType
                 if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
                     break;
 
-                if (unitTile.CanMoveTo(targetTile)) 
+                if (targetTile.IsEmpty()) 
                     continue;
                 
                 movedTile = targetTile;
@@ -62,7 +62,7 @@ public class Barbarian : ICrossFireFigureType
                 if (targetTile.Position == movedTile.Position)
                 {
                 }
-                else if (unitTile.CanAttack(targetTile))
+                else if (targetTile.IsEmpty())
                 {
                     yield return new FigureAction(
                         FigureActionTypes.Special,
