@@ -23,10 +23,7 @@
         <ProjectReference Include="..\FigureSets\BattleChess3.DoubleChessFigures\BattleChess3.DoubleChessFigures.csproj"/>
         <ProjectReference Include="..\FigureSets\BattleChess3.LordOfTheRingsFigures\BattleChess3.LordOfTheRingsFigures.csproj"/>
         <ProjectReference Include="..\FigureSets\BattleChess3.StarWarsFigures\BattleChess3.StarWarsFigures.csproj" />
-        <ProjectReference Include="..\Themes\BattleChess3.MinasTirithTheme\BattleChess3.MinasTirithTheme.csproj"/>
         <ProjectReference Include="..\Themes\BattleChess3.PaperTheme\BattleChess3.PaperTheme.csproj"/>
-        <ProjectReference Include="..\Themes\BattleChess3.RivendellTheme\BattleChess3.RivendellTheme.csproj"/>
-        <ProjectReference Include="..\Themes\BattleChess3.ValinorTheme\BattleChess3.ValinorTheme.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -61,5 +58,28 @@
             <Generator>SettingsSingleFileGenerator</Generator>
             <LastGenOutput>Settings.Designer.cs</LastGenOutput>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Resources\Styles.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Images\ApplicationBackground.jpg" />
+      <Resource Include="Images\ChessTileCanGo.png" />
+      <Resource Include="Images\ChessTileDangered.png" />
+      <Resource Include="Images\ChessTileMouseOn.png" />
+      <Resource Include="Images\ChessTileSelected.png" />
+      <Resource Include="Images\ChessTileSpecial.png" />
+      <Resource Include="Images\DefaultButton.png" />
+      <Resource Include="Images\DefaultButtonMouseOn.png" />
+      <Resource Include="Images\Preview.png" />
+      <Resource Include="Images\TabItem.png" />
+      <Resource Include="Images\TabItemDisabled.png" />
+      <Resource Include="Images\TabItemMouseOn.png" />
     </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@ internal class FigureService : IFigureService
 
     private IFigureGroup[] _figureGroups = [];
     private Dictionary<int, IFigureType> _figuresDictionary = new();
+    private readonly TaskCompletionSource<bool> _figuresLoaded = new TaskCompletionSource<bool>();
 
     public FigureService()
     {
@@ -43,6 +44,7 @@ internal class FigureService : IFigureService
 
     public IFigureType GetFigureByUniqueUnitId(int uniqueUnitId)
     {
+        _figuresLoaded.Task.Wait();
         return _figuresDictionary[uniqueUnitId];
     }
 
@@ -63,5 +65,6 @@ internal class FigureService : IFigureService
         _figuresDictionary = _figureGroups.SelectMany(group => group.FigureTypes)
             .ToDictionary(figure => figure.UniqueFigureId, figure => figure);
         FigureGroupsChanged?.Invoke(this, _figureGroups);
+        _figuresLoaded.SetResult(true);
     }
 }

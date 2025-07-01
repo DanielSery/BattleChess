@@ -17,14 +17,12 @@ public sealed class MainWindowViewModel : ViewModelBase
         MapsViewModel mapsViewModel,
         BoardViewModel boardViewModel,
         FiguresViewModel figuresViewModel,
-        MultiplayerViewModel multiplayerViewModel,
-        ThemesViewModel themesViewModel)
+        MultiplayerViewModel multiplayerViewModel)
     {
         MapsViewModel = mapsViewModel;
         BoardViewModel = boardViewModel;
         FiguresViewModel = figuresViewModel;
         MultiplayerViewModel = multiplayerViewModel;
-        ThemesViewModel = themesViewModel;
 
         NewGameCommand = new RelayCommand(NewGame);
         JoinGameCommand = new RelayCommand(JoinGame);
@@ -71,7 +69,6 @@ public sealed class MainWindowViewModel : ViewModelBase
     public BoardViewModel BoardViewModel { get; }
     public FiguresViewModel FiguresViewModel { get; }
     public MultiplayerViewModel MultiplayerViewModel { get; }
-    public ThemesViewModel ThemesViewModel { get; set; }
 
     public RelayCommand NewGameCommand { get; }
     public RelayCommand JoinGameCommand { get; }

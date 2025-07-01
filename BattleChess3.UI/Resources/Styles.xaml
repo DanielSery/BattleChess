@@ -2,9 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <BitmapImage x:Key="Preview"
-                 UriSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/Preview.png" />
+                 UriSource="pack://application:,,,/BattleChess3;component/Images/Preview.png" />
     <ImageBrush x:Key="ApplicationBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/ApplicationBackground.jpg" />
+                Stretch="UniformToFill"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ApplicationBackground.jpg" />
 
     <SolidColorBrush x:Key="DefaultObjectForeground" Color="Black" />
     <SolidColorBrush x:Key="DefaultObjectMouseOnForeground" Color="#292944" />
@@ -12,27 +13,27 @@
     <SolidColorBrush x:Key="DefaultObjectDisabledForeground" Color="#6D3651" />
 
     <ImageBrush x:Key="TabItemBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/TabItem.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/TabItem.png" />
     <ImageBrush x:Key="TabItemMouseOnBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/TabItemMouseOn.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/TabItemMouseOn.png" />
     <ImageBrush x:Key="TabItemDisabledBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/TabItemDisabled.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/TabItemDisabled.png" />
 
     <ImageBrush x:Key="DefaultButtonBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/DefaultButton.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/DefaultButton.png" />
     <ImageBrush x:Key="DefaultButtonMouseOnBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/DefaultButtonMouseOn.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/DefaultButtonMouseOn.png" />
 
     <ImageBrush x:Key="ChessTileMouseOnBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/ChessTileMouseOn.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileMouseOn.png" />
     <ImageBrush x:Key="ChessTileSelectedBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/ChessTileSelected.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileSelected.png" />
     <ImageBrush x:Key="ChessTileSpecialBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/ChessTileSpecial.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileSpecial.png" />
     <ImageBrush x:Key="ChessTileCanGoBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/ChessTileCanGo.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileCanGo.png" />
     <ImageBrush x:Key="ChessTileDangeredBackground"
-                ImageSource="pack://application:,,,/BattleChess3.PaperTheme;component/Images/ChessTileDangered.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileDangered.png" />
 
     <Style TargetType="ListBox">
         <Setter Property="Background" Value="Transparent" />
