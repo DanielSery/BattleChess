@@ -11,11 +11,6 @@ public static class FiguresHelper
         return tile.Figure.Type.Equals(DefaultFigureGroup.Empty);
     }
 
-    public static bool IsWater(this ITile tile)
-    {
-        return tile.Figure.Type.Equals(DefaultFigureGroup.Water);
-    }
-
     public static bool IsOwnedByYou(this ITile checkedTile, ITile yoursTile)
     {
         return checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);

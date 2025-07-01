@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures.Utilities;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
@@ -14,23 +15,14 @@ public class Miner : ICrossFireFigureType
         new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
     
-    private readonly Position[] _shieldPositions =
-    [
-        new(-2, 1), new(-2, 0), new(-2, -1),
-        new(2, 1), new(2, 0), new(2, -1),
-        new(1, -2), new(0, -2), new(-1, -2),
-        new(1, 2), new(0, 2), new(-1, 2)
-    ];
-    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var movement in _movePosition)
         {
-            var position = unitTile.Position + movement;
-            if (!board.TryGetTile(position, out var targetTile))
+            if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
                 continue;
             
-            if (targetTile.IsEmpty())
+            if (unitTile.CanMoveTo(targetTile))
             {
                 yield return new FigureAction(
                     FigureActionTypes.Move, 
@@ -59,46 +51,24 @@ public class Miner : ICrossFireFigureType
         }
     }
 
-    private void MoveShield(ITile sourceTile, Position move, IBoard board)
+    private static void MoveShield(ITile sourceTile, Position move, IBoard board)
     {
-        // foreach (var shieldPosition in _shieldPositions)
-        // {
-        //     if (!(sourceTile.Position + shieldPosition).IsInBoard())
-        //     {
-        //         continue;
-        //     }
-        //
-        //     var shieldTile = board[sourceTile.Position + shieldPosition];
-        //     if (shieldTile.Figure.Type is Trench)
-        //     {
-        //         shieldTile.Die(board);
-        //     }
-        // }
-
         var movedPositions = GetMovedPositions(move);
-        foreach (var movedPosition in movedPositions)
+        foreach (var targetTile in movedPositions.GetRelativeTiles(board, sourceTile))
         {
-            if (!(sourceTile.Position + movedPosition).IsInBoard())
-            {
-                continue;
-            }
-
-            var shieldTile = board[sourceTile.Position + movedPosition];
-            if (shieldTile.IsEmpty())
-            {
-                shieldTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Trench), board);
-            }
+            if (targetTile.IsEmpty())
+                targetTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Trench), board);
         }
     }
 
-    private static IEnumerable<Position> GetMovedPositions(Position move)
+    private static Position[] GetMovedPositions(Position move)
     {
         return move switch
         {
-            (0, 1) => new Position[] { new(-1, 2), new(0, 2), new(1, 2) },
-            (1, 0) => new Position[] { new(2, -1), new(2, 0), new(2, 1) },
-            (0, -1) => new Position[] { new(-1, -2), new(0, -2), new(1, -2) },
-            (-1, 0) => new Position[] { new(-2, -1), new(-2, 0), new(-2, 1) },
+            (0, 1) => [new Position(-1, 2), new Position(0, 2), new Position(1, 2)],
+            (1, 0) => [new Position(2, -1), new Position(2, 0), new Position(2, 1)],
+            (0, -1) => [new Position(-1, -2), new Position(0, -2), new Position(1, -2)],
+            (-1, 0) => [new Position(-2, -1), new Position(-2, 0), new Position(-2, 1)],
             _ => throw new ArgumentException($"Unexpected move of Builder {move}")
         };
     }

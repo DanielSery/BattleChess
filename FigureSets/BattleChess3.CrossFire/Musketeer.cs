@@ -6,23 +6,33 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-internal interface IFigureTypeWithChainedAttacksAndMoves : IFigureType
+public class Musketeer : ICrossFireFigureType
 {
-    protected Position[] MoveDirections { get; }
-    protected Position[] AttackDirections { get; }
+    int IFigureType.FigureId => 35;
+    
+    protected Position[] AttackDirections =>
+    [
+        new(-1, 0), new(0, -1), new(0, 1), new(1, 0)
+    ];
 
+    protected Position[] MoveDirections =>
+    [
+        new(-1, -1), new(-1, 1),
+        new(1, -1), new(1, 1)
+    ];
+    
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var direction in AttackDirections)
         {
-            for (var i = 1; i < 8; i++)
+            for (var i = 1; i <= 3; i++)
             {
                 if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
                     break;
                 
                 if (unitTile.CanAttack(targetTile))
-                    yield return unitTile.CreateKillWithMove(targetTile, board);
-
+                    yield return unitTile.CreateKillWithoutMove(targetTile, board);
+                
                 if (!unitTile.CanMoveTo(targetTile))
                     break;
             }
@@ -30,11 +40,11 @@ internal interface IFigureTypeWithChainedAttacksAndMoves : IFigureType
         
         foreach (var direction in MoveDirections)
         {
-            for (var i = 1; i < 8; i++)
+            for (var i = 1; i <= 2; i++)
             {
                 if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    break;
-                
+                    continue;
+            
                 if (unitTile.CanMoveTo(targetTile))
                     yield return unitTile.CreateMoveAction(targetTile, board);
                 else

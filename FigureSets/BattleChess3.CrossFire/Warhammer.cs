@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -18,16 +19,10 @@ public class Warhammer : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movementPosition in MovementPositions)
+        foreach (var targetTile in MovementPositions.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + movementPosition;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
-            if (targetTile.IsEmpty())
-            {
+            if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            }
         }
     }
 
@@ -37,56 +32,45 @@ public class Warhammer : ICrossFireFigureType
         switch (movement)
         {
             case { Y: 1, X: 1 }:
-                TryDestroyTile(targetTile, board, new Position(1, 1));
-                TryDestroyTile(targetTile, board, new Position(0, 1));
-                TryDestroyTile(targetTile, board, new Position(1, 0));
+                targetTile.TryDestroyTile(board, new Position(1, 1));
+                targetTile.TryDestroyTile(board, new Position(0, 1));
+                targetTile.TryDestroyTile(board, new Position(1, 0));
                 break;
             case { Y: -1, X: 1 }:
-                TryDestroyTile(targetTile, board, new Position(1, -1));
-                TryDestroyTile(targetTile, board, new Position(0, -1));
-                TryDestroyTile(targetTile, board, new Position(1, 0));
+                targetTile.TryDestroyTile(board, new Position(1, -1));
+                targetTile.TryDestroyTile(board, new Position(0, -1));
+                targetTile.TryDestroyTile(board, new Position(1, 0));
                 break;
             case { Y: 1, X: -1 }:
-                TryDestroyTile(targetTile, board, new Position(-1, 1));
-                TryDestroyTile(targetTile, board, new Position(0, 1));
-                TryDestroyTile(targetTile, board, new Position(-1, 0));
+                targetTile.TryDestroyTile(board, new Position(-1, 1));
+                targetTile.TryDestroyTile(board, new Position(0, 1));
+                targetTile.TryDestroyTile(board, new Position(-1, 0));
                 break;
             case { Y: -1, X: -1 }:
-                TryDestroyTile(targetTile, board, new Position(-1, -1));
-                TryDestroyTile(targetTile, board, new Position(0, -1));
-                TryDestroyTile(targetTile, board, new Position(-1, 0));
+                targetTile.TryDestroyTile(board, new Position(-1, -1));
+                targetTile.TryDestroyTile(board, new Position(0, -1));
+                targetTile.TryDestroyTile(board, new Position(-1, 0));
                 break;
             case { Y: 0, X: 1 }:
-                TryDestroyTile(targetTile, board, new Position(1, -1));
-                TryDestroyTile(targetTile, board, new Position(1, 0));
-                TryDestroyTile(targetTile, board, new Position(1, 1));
+                targetTile.TryDestroyTile(board, new Position(1, -1));
+                targetTile.TryDestroyTile(board, new Position(1, 0));
+                targetTile.TryDestroyTile(board, new Position(1, 1));
                 break;
             case { Y: 0, X: -1 }:
-                TryDestroyTile(targetTile, board, new Position(-1, -1));
-                TryDestroyTile(targetTile, board, new Position(-1, 0));
-                TryDestroyTile(targetTile, board, new Position(-1, 1));
+                targetTile.TryDestroyTile(board, new Position(-1, -1));
+                targetTile.TryDestroyTile(board, new Position(-1, 0));
+                targetTile.TryDestroyTile(board, new Position(-1, 1));
                 break;
             case { Y: 1, X: 0 }:
-                TryDestroyTile(targetTile, board, new Position(-1, 1));
-                TryDestroyTile(targetTile, board, new Position(0, 1));
-                TryDestroyTile(targetTile, board, new Position(1, 1));
+                targetTile.TryDestroyTile(board, new Position(-1, 1));
+                targetTile.TryDestroyTile(board, new Position(0, 1));
+                targetTile.TryDestroyTile(board, new Position(1, 1));
                 break;
             case { Y: -1, X: 0 }:
-                TryDestroyTile(targetTile, board, new Position(-1, -1));
-                TryDestroyTile(targetTile, board, new Position(0, -1));
-                TryDestroyTile(targetTile, board, new Position(1, -1));
+                targetTile.TryDestroyTile(board, new Position(-1, -1));
+                targetTile.TryDestroyTile(board, new Position(0, -1));
+                targetTile.TryDestroyTile(board, new Position(1, -1));
                 break;
-        }
-    }
-
-    private static void TryDestroyTile(ITile unitTile, IBoard board, Position positionDiff)
-    {
-        if (!board.TryGetTile(unitTile.Position + positionDiff, out var targetTile))
-            return;
-
-        if (!targetTile.IsEmpty())
-        {
-            unitTile.KillWithoutMove(targetTile, board);
         }
     }
 }

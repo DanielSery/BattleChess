@@ -48,6 +48,9 @@ public class CrossFireFigureGroup : IFigureGroup
         new Peasant(),
         new Spearman(),
         new Warhammer(),
-        new Gladiator()
+        new Gladiator(),
+        new Musketeer(),
+        new Cannon(),
+        new Catapult()
     ];
 }

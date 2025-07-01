@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -17,45 +18,44 @@ public class Warrior : ICrossFireFigureType
         new(2, -1), new(2, 1)
     ];
 
-    private readonly Position[] _attackPositions =
+    private readonly Position[] _attackDirections =
     [
-        new(-3, -3), new(-2, -2), new(-1, -1),
-        new(-3, 0), new(-2, 0), new(-1, 0),
-        new(-3, 3), new(-2, 2), new(-1, 1),
-        new(0, -3), new(0, -2), new(0, -1),
-        new(0, 3), new(0, 2), new(0, 1),
-        new(3, -3), new(2, -2), new(1, -1),
-        new(3, 0), new(2, 0), new(1, 0),
-        new(3, 3), new(2, 2), new(1, 1)
+        new(-1, -1),
+        new(-1, 0),
+        new(-1, 1),
+        new(0, -1),
+        new(0, 1),
+        new(1, -1),
+        new(1, 0),
+        new(1, 1)
     ];
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movementPosition in _movePositions)
+        foreach (var targetTile in _movePositions.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + movementPosition;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
-            if (targetTile.IsEmpty())
-            {
+            if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            }
         }
-
-        foreach (var attackPosition in _attackPositions)
+        
+        foreach (var direction in _attackDirections)
         {
-            var position = unitTile.Position + attackPosition;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
-            if (targetTile.IsOwnedByEnemy(unitTile))
+            for (var i = 1; i <= 3; i++)
             {
-                yield return new FigureAction(
-                    FigureActionTypes.Attack, 
-                    unitTile.AbsolutePosition,
-                    targetTile.AbsolutePosition,
-                    () => AttackAction(unitTile, targetTile, board));
+                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
+                    break;
+
+                if (unitTile.CanAttack(targetTile))
+                {
+                    yield return new FigureAction(
+                        FigureActionTypes.Attack, 
+                        unitTile.AbsolutePosition,
+                        targetTile.AbsolutePosition,
+                        () => AttackAction(unitTile, targetTile, board));
+                }
+
+                if (!unitTile.CanMoveTo(targetTile))
+                    break;
             }
         }
     }

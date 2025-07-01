@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -11,34 +12,24 @@ public class Spartan : ICrossFireFigureType
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (TryGetAttackAction(unitTile, board, new Position(1, 1), out var attackAction1))
-        {
+        if (unitTile.TryCreateKillWithMove(board, new Position(1, 1), out var attackAction1))
             yield return attackAction1;
-        }
-        else if (TryGetMoveAction(unitTile, board, new Position(1, 1), out var moveAction1))
-        {
+        else if (unitTile.TryCreateMoveAction(board, new Position(1, 1), out var moveAction1))
             yield return moveAction1;
-        }
 
-        if (TryGetAttackAction(unitTile, board, new Position(-1, 1), out var attackAction2))
-        {
+        if (unitTile.TryCreateKillWithMove(board, new Position(-1, 1), out var attackAction2))
             yield return attackAction2;
-        }
-        else if (TryGetMoveAction(unitTile, board, new Position(-1, 1), out var moveAction2))
-        {
+        else if (unitTile.TryCreateMoveAction(board, new Position(-1, 1), out var moveAction2))
             yield return moveAction2;
-        }
         
-        if (TryGetMoveAction(unitTile, board, new Position(0, -1), out var moveAction3))
-        {
+        if (unitTile.TryCreateMoveAction(board, new Position(0, -1), out var moveAction3))
             yield return moveAction3;
-        }
 
-        if (TryGetMoveAction(unitTile, board, new Position(0, 1), out var moveAction4))
+        if (unitTile.TryCreateMoveAction(board, new Position(0, 1), out var moveAction4))
         {
             yield return moveAction4;
 
-            if (TryGetAttackAction(unitTile, board, new Position(0, 2), out var attackAction3))
+            if (unitTile.TryCreateMoveAction(board, new Position(0, 2), out var attackAction3))
             {
                 yield return attackAction3;
             }
@@ -49,59 +40,10 @@ public class Spartan : ICrossFireFigureType
         }
 
         if (unitTile.Position.Y == 1 &&
-            TryGetMoveAction(unitTile, board, new Position(0, 2), out var moveAction5))
+            unitTile.TryCreateMoveAction(board, new Position(0, 2), out var moveAction5))
         {
             yield return moveAction5;
         }
     }
 
-    private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
-    {
-        var attackPosition = unitTile.Position + relativePosition;
-        if (!board.TryGetTile(attackPosition, out var targetTile) ||
-            (!targetTile.IsOwnedByEnemy(unitTile) && targetTile.Figure.Type is not Explosives))
-        {
-            action = FigureAction.None;
-            return false;
-        }
-
-        action = unitTile.CreateKillWithMove(targetTile, board);
-        return true;
-    }
-
-    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
-    {
-        var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetTile(movePosition, out var targetTile) ||
-            !targetTile.IsEmpty())
-        {
-            return TryGetMoveToBombAction(unitTile, board, relativePosition, out action);
-        }
-
-        action = unitTile.CreateMoveAction(targetTile, board);
-        return true;
-    }
-
-    private static bool TryGetMoveToBombAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
-    {
-        var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetTile(movePosition, out var targetTile) ||
-            targetTile.Figure.Type is not Explosives ||
-            !targetTile.IsOwnedByYou(unitTile))
-        {
-            action = FigureAction.None;
-            return false;
-        }
-
-        action = new FigureAction(
-            FigureActionTypes.Move,
-            unitTile.AbsolutePosition,
-            targetTile.AbsolutePosition,
-            () =>
-            {
-                targetTile.Die(board);
-                unitTile.MoveToTile(targetTile, board);
-            });
-        return true;
-    }
 }

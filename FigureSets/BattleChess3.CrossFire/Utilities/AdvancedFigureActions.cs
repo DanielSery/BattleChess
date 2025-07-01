@@ -1,0 +1,93 @@
+﻿using BattleChess3.DefaultFigures;
+using BattleChess3.DefaultFigures.Utilities;
+using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
+
+namespace BattleChess3.CrossFireFigures.Utilities;
+
+internal static class AdvancedFigureActions
+{
+    public static void TryDestroyTile(this ITile unitTile, IBoard board, Position positionDiff)
+    {
+        if (!board.TryGetTile(unitTile.Position + positionDiff, out var targetTile))
+            return;
+
+        if (!targetTile.IsEmpty())
+        {
+            unitTile.KillWithoutMove(targetTile, board);
+        }
+    }
+    
+    public static bool TryCreateDestroy(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
+            unitTile.IsEmpty())
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = unitTile.CreateKillWithoutMove(targetTile, board);
+        return true;
+    }
+    
+    public static bool TryCreateKillWithMove(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
+            !unitTile.CanAttack(targetTile))
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = unitTile.CreateKillWithMove(targetTile, board);
+        return true;
+    }
+    
+    public static bool TryCreateKillWithoutMove(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
+            !unitTile.CanAttack(targetTile))
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = unitTile.CreateKillWithoutMove(targetTile, board);
+        return true;
+    }
+
+    public static bool TryCreateMoveAction(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
+            !targetTile.IsEmpty())
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = unitTile.CreateMoveAction(targetTile, board);
+        return true;
+    }
+
+    public static bool TryCreateNewFigureAction(this ITile unitTile, IBoard board, Position relativePosition, 
+        Player player, IFigureType figureType,
+        out FigureAction action)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
+            !targetTile.IsEmpty())
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = targetTile.CreateNewFigureAction(player, figureType, board);
+        return true;
+    }
+}

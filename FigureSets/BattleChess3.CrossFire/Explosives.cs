@@ -23,9 +23,6 @@ public class Explosives : ICrossFireFigureType
 
     void IFigureType.OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)
     {
-        if (!attackingTile.Figure.Owner.Equals(unitTile.Figure.Owner))
-            return;
-        
         SilentDie(board, unitTile.Position + new Position(-1, -1));
         SilentDie(board, unitTile.Position + new Position(-1, 0));
         SilentDie(board, unitTile.Position + new Position(-1, 1));

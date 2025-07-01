@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -13,19 +14,14 @@ internal interface IFigureTypeWithDifferentAttackMoves : IFigureType
     {
         foreach (var movement in AttackMovePositions)
         {
-            var position = unitTile.Position + movement;
-            if (!board.TryGetTile(position, out var targetTile))
+            if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
                 continue;
             
-            if (targetTile.IsEmpty())
-            {
+            if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            }
 
-            if (targetTile.IsOwnedByEnemy(unitTile))
-            {
+            if (unitTile.CanAttack(targetTile))
                 yield return unitTile.CreateKillWithMove(targetTile, board);
-            }
         }
     }
 }

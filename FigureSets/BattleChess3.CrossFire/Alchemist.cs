@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures.Utilities;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
@@ -20,8 +21,7 @@ public class Alchemist :ICrossFireFigureType
     {
         foreach (var movement in _movePosition)
         {
-            var position = unitTile.Position + movement;
-            if (!board.TryGetTile(position, out var targetTile))
+            if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
                 continue;
             
             if (targetTile.IsEmpty())

@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -57,25 +58,10 @@ public class LegionaryPike : ICrossFireFigureType
     {
         var attackPosition = unitTile.Position + relativePosition;
         if (!board.TryGetTile(attackPosition, out var targetTile) ||
-            !targetTile.IsOwnedByEnemy(unitTile))
+            !unitTile.CanAttack(targetTile))
         {
             action = FigureAction.None;
             return false;
-        }
-
-        if (attackPosition.Y == 7)
-        {
-            action = new FigureAction(
-                FigureActionTypes.Special,
-                unitTile.AbsolutePosition,
-                targetTile.AbsolutePosition,
-                () =>
-                {
-                    unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Knight), board);
-                    unitTile.Die(board);
-                });
-            return true;
         }
 
         action = new FigureAction(
@@ -85,8 +71,9 @@ public class LegionaryPike : ICrossFireFigureType
             () =>
             {
                 unitTile.KillWithoutMove(targetTile, board);
-                targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.LegionarySword), board);
+                var owner = unitTile.Figure.Owner;
                 unitTile.Die(board);
+                unitTile.CreateFigure(new Figure(owner, CrossFireFigureGroup.Knight), board);
             });
         return true;
     }
@@ -96,7 +83,7 @@ public class LegionaryPike : ICrossFireFigureType
     {
         var attackPosition = unitTile.Position + relativePosition;
         if (!board.TryGetTile(attackPosition, out var targetTile) ||
-            !targetTile.IsOwnedByEnemy(unitTile))
+            !unitTile.CanAttack(targetTile))
         {
             action = FigureAction.None;
             return false;
@@ -126,7 +113,7 @@ public class LegionaryPike : ICrossFireFigureType
     {
         var movePosition = unitTile.Position + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
-            !targetTile.IsEmpty())
+            !unitTile.CanMoveTo(targetTile))
         {
             action = FigureAction.None;
             return false;

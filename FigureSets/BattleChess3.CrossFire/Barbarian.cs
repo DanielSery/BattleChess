@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -27,16 +28,10 @@ public class Barbarian : ICrossFireFigureType
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movementPosition in _movementPositions)
+        foreach (var targetTile in _movementPositions.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + movementPosition;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
             if (targetTile.IsEmpty())
-            {
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            }
         }
         
         foreach (var direction in _attackDirections)
@@ -44,15 +39,14 @@ public class Barbarian : ICrossFireFigureType
             var movedTile = NoneTile.Instance;
             for (var i = 1; i <= 1; i++)
             {
-                var position = unitTile.Position + direction * i;
-                if (!board.TryGetTile(position, out var targetTile))
+                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
                     break;
 
-                if (!targetTile.IsEmpty())
-                {
-                    movedTile = targetTile;
-                    break;
-                }
+                if (unitTile.CanMoveTo(targetTile)) 
+                    continue;
+                
+                movedTile = targetTile;
+                break;
             }
 
             if (movedTile == NoneTile.Instance)
@@ -62,14 +56,13 @@ public class Barbarian : ICrossFireFigureType
             
             for (var i = 1; i < 8; i++)
             {
-                var position = unitTile.Position + direction * i;
-                if (!board.TryGetTile(position, out var targetTile))
+                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
                     break;
 
                 if (targetTile.Position == movedTile.Position)
                 {
                 }
-                else if (targetTile.IsEmpty())
+                else if (unitTile.CanAttack(targetTile))
                 {
                     yield return new FigureAction(
                         FigureActionTypes.Special,

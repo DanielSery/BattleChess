@@ -1,18 +1,19 @@
 ﻿using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.DefaultFigures;
 
 public static class DefaultFigureActions
 {
-    public static FigureAction CreateAddFigureAction(this ITile targetTile, Figure createdFigure, IBoard board)
+    public static FigureAction CreateNewFigureAction(this ITile targetTile, Player player, IFigureType figureType, IBoard board)
     {
         return new FigureAction(
             FigureActionTypes.Special, 
             targetTile.AbsolutePosition,
             targetTile.AbsolutePosition,
-            () => targetTile.CreateFigure(createdFigure, board));
+            () => targetTile.CreateFigure(new Figure(player, figureType), board));
     }
 
     public static FigureAction CreateMoveAction(this ITile unitTile, ITile targetTile, IBoard board)

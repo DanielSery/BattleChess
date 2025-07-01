@@ -1,5 +1,4 @@
-﻿using BattleChess3.DefaultFigures;
-using BattleChess3.DefaultFigures.Utilities;
+﻿using BattleChess3.CrossFireFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 
@@ -11,58 +10,34 @@ public class Gladiator : ICrossFireFigureType
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (TryGetAttackAction(unitTile, board, new Position(0, 1), out var attackAction2))
+        if (unitTile.TryCreateKillWithMove(board, new Position(-1, 1), out var action))
         {
-            yield return attackAction2;
+            yield return action;
+        }
+        
+        if (unitTile.TryCreateKillWithMove(board, new Position(1, 1), out action))
+        {
+            yield return action;
         }
 
-        if (TryGetMoveAction(unitTile, board, new Position(0, 1), out var move1Action))
+        if (unitTile.TryCreateMoveAction(board, new Position(0, 1), out action))
         {
-            yield return move1Action;
+            yield return action;
             
-            if (TryGetMoveAction(unitTile, board, new Position(0, 2), out var move4Action))
+            if (unitTile.TryCreateMoveAction(board, new Position(0, 2), out action))
             {
-                yield return move4Action;
+                yield return action;
             }
         }
 
-        if (TryGetMoveAction(unitTile, board, new Position(-1, 0), out var move2Action))
+        if (unitTile.TryCreateMoveAction(board, new Position(-1, 0), out action))
         {
-            yield return move2Action;
+            yield return action;
         }
 
-        if (TryGetMoveAction(unitTile, board, new Position(1, 0), out var move3Action))
+        if (unitTile.TryCreateMoveAction(board, new Position(1, 0), out action))
         {
-            yield return move3Action;
+            yield return action;
         }
-    }
-
-    private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition,
-        out FigureAction action)
-    {
-        var attackPosition = unitTile.Position + relativePosition;
-        if (!board.TryGetTile(attackPosition, out var targetTile) ||
-            !targetTile.IsOwnedByEnemy(unitTile))
-        {
-            action = FigureAction.None;
-            return false;
-        }
-
-        action = unitTile.CreateKillWithMove(targetTile, board);
-        return true;
-    }
-
-    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
-    {
-        var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetTile(movePosition, out var targetTile) ||
-            !targetTile.IsEmpty())
-        {
-            action = FigureAction.None;
-            return false;
-        }
-
-        action = unitTile.CreateMoveAction(targetTile, board);
-        return true;
     }
 }

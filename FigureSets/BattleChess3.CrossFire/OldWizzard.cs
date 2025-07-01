@@ -1,8 +1,8 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
-using BattleChess3.Game.Players;
 
 namespace BattleChess3.CrossFireFigures;
 
@@ -19,37 +19,22 @@ public class OldWizzard : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movement in _positions)
+        foreach (var targetTile in _positions.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + movement;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
-            if (targetTile.IsEmpty())
-            {
+            if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            }
         }
     }
 
     void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
     {
-        SilentDie(board, targetTile.Position + new Position(-1, -1));
-        SilentDie(board, targetTile.Position + new Position(-1, 0));
-        SilentDie(board, targetTile.Position + new Position(-1, 1));
-        SilentDie(board, targetTile.Position + new Position(0, -1));
-        SilentDie(board, targetTile.Position + new Position(0, 1));
-        SilentDie(board, targetTile.Position + new Position(1, -1));
-        SilentDie(board, targetTile.Position + new Position(1, 0));
-        SilentDie(board, targetTile.Position + new Position(1, 1));
-    }
-
-    private static void SilentDie(IBoard board, Position position)
-    {
-        if (!board.TryGetTile(position, out var tile))
-            return;
-
-        tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(Player.Neutral, DefaultFigureGroup.Empty);
+        targetTile.TryDestroyTile(board, new Position(-1, -1));
+        targetTile.TryDestroyTile(board, new Position(-1, 0));
+        targetTile.TryDestroyTile(board, new Position(-1, 1));
+        targetTile.TryDestroyTile(board, new Position(0, -1));
+        targetTile.TryDestroyTile(board, new Position(0, 1));
+        targetTile.TryDestroyTile(board, new Position(1, -1));
+        targetTile.TryDestroyTile(board, new Position(1, 0));
+        targetTile.TryDestroyTile(board, new Position(1, 1));
     }
 }

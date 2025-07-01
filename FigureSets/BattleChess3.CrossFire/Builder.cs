@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -16,44 +17,24 @@ public class Builder : ICrossFireFigureType
     
     private readonly Position[] _shieldPositions =
     [
-        new(-2, 1), new(-2, -1),
-        new(-1, -2), new(-1, 0), new (-1, 2),
-        new(0, -1), new(0, 1),
-        new(1, -2), new(1, 0),  new(1, 2),
-        new(2, -1), new(2, 1),
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movement in _movePosition)
+        foreach (var targetTile in _movePosition.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + movement;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
-            if (targetTile.IsEmpty())
-            {
+            if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            }
         }
 
-        foreach (var shieldPosition in _shieldPositions)
+        foreach (var targetTile in _shieldPositions.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + shieldPosition;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-
             if (targetTile.IsEmpty())
-            {
-                yield return new FigureAction(
-                    FigureActionTypes.Special, 
-                    unitTile.AbsolutePosition,
-                    targetTile.AbsolutePosition,
-                    () =>
-                    {
-                        targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Wall), board);
-                    });
-            }
+                yield return unitTile.CreateNewFigureAction(unitTile.Figure.Owner, CrossFireFigureGroup.Wall, board);
+
+            if (targetTile.Figure.Type is Wall)
+                yield return unitTile.CreateKillWithoutMove(targetTile, board);
         }
     }
 }

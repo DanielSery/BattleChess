@@ -1,4 +1,5 @@
-﻿using BattleChess3.DefaultFigures;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.DefaultFigures;
 using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
@@ -26,24 +27,14 @@ public class Bard : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movementPosition in _movementPositions)
+        foreach (var targetTile in _movementPositions.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + movementPosition;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
-            if (targetTile.IsEmpty())
-            {
+            if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            }
         }
 
-        foreach (var attackPosition in _attackPositions)
+        foreach (var targetTile in _attackPositions.GetRelativeTiles(board, unitTile))
         {
-            var position = unitTile.Position + attackPosition;
-            if (!board.TryGetTile(position, out var targetTile))
-                continue;
-            
             if (targetTile.IsOwnedByEnemy(unitTile))
             {
                 yield return new FigureAction(
