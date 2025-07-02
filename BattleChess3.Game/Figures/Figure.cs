@@ -29,7 +29,10 @@ public class Figure : IFigureType
     public int FigureId => Type.FigureId;
     public int SetId => Type.SetId;
     public string DisplayName => Type.DisplayName;
-    public string Description => Type.Description;
+    public string BaseDescription => Type.BaseDescription;
+    public string MovementDescription => Type.MovementDescription;
+    public string AttackDescription => Type.AttackDescription;
+    public string SpecialDescription => Type.SpecialDescription;
     public IDictionary<int, Uri> ImageUris => Type.ImageUris;
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

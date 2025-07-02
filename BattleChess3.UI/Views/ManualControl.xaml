@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
+             xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.FiguresViewModel}}">
     <Grid>
@@ -28,27 +29,17 @@
                       VerticalScrollBarVisibility="Hidden">
             <ItemsControl DataContext="{Binding SelectedFigureGroup}"
                           ItemsSource="{Binding FigureTypes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel FlowDirection="LeftToRight"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="5" Padding="10"
                                 BorderBrush="Black" BorderThickness="10">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" MinWidth="100" />
-                                    <ColumnDefinition Width="*" MinWidth="100" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Row="0" Grid.RowSpan="2"
-                                           Grid.Column="0" Grid.ColumnSpan="2"
-                                           Text="{Binding Path=Description}" TextWrapping="Wrap"
-                                           Style="{DynamicResource TextBlockStyle}" />
-
-                                <ItemsControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"
+                            <DockPanel>
+                                <ItemsControl DockPanel.Dock="Right"
                                               ItemsSource="{Binding ImageUris}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -61,7 +52,30 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </Grid>
+                                
+                                <TextBlock DockPanel.Dock="Top"
+                                           Text="{Binding Path=BaseDescription}"
+                                           Style="{DynamicResource TextBlockStyle}" 
+                                           Visibility="{Binding BaseDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"/>
+
+                                <WrapPanel>
+                                    <TextBlock Text="{Binding Path=MovementDescription}"
+                                               Visibility="{Binding MovementDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                                               Style="{DynamicResource TextBlockStyle}" 
+                                               Margin="20"/>
+                                    
+                                    <TextBlock Text="{Binding Path=AttackDescription}"
+                                               Visibility="{Binding AttackDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                                               Style="{DynamicResource TextBlockStyle}" 
+                                               Margin="20"/>
+                                    
+                                    <TextBlock Text="{Binding Path=SpecialDescription}"
+                                               Visibility="{Binding SpecialDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                                               Style="{DynamicResource TextBlockStyle}" 
+                                               Margin="20"/>
+                                </WrapPanel>
+
+                            </DockPanel>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

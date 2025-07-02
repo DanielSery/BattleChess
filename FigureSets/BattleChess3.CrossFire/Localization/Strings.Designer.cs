@@ -60,20 +60,554 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Alchemist_AttackDescription {
+            get {
+                return ResourceManager.GetString("Alchemist_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alchemist
+        ///
+        ///After move creates explosives 
+        ///which detonate when destroyed..
+        /// </summary>
+        internal static string Alchemist_BaseDescription {
+            get {
+                return ResourceManager.GetString("Alchemist_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Alchemist_MovementDescription {
+            get {
+                return ResourceManager.GetString("Alchemist_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After move
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Alchemist_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Alchemist_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Archer_AttackDescription {
+            get {
+                return ResourceManager.GetString("Archer_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archer
-        ///      
-        ///Move:
+        ///
+        ///Does not move with attack..
+        /// </summary>
+        internal static string Archer_BaseDescription {
+            get {
+                return ResourceManager.GetString("Archer_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Archer_MovementDescription {
+            get {
+                return ResourceManager.GetString("Archer_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Archer_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Archer_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Barbarian_AttackDescription {
+            get {
+                return ResourceManager.GetString("Barbarian_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Barbarian
+        ///
+        ///Can push near units.
+        /// </summary>
+        internal static string Barbarian_BaseDescription {
+            get {
+                return ResourceManager.GetString("Barbarian_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Barbarian_MovementDescription {
+            get {
+                return ResourceManager.GetString("Barbarian_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throw near unit:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬛
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬛⬛▦▣▦⬛⬛⬛
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬛⬜⬜⬛⬜⬜⬛⬜.
+        /// </summary>
+        internal static string Barbarian_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Barbarian_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Bard_AttackDescription {
+            get {
+                return ResourceManager.GetString("Bard_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bard
+        ///
+        ///Can convert enemy units..
+        /// </summary>
+        internal static string Bard_BaseDescription {
+            get {
+                return ResourceManager.GetString("Bard_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Bard_MovementDescription {
+            get {
+                return ResourceManager.GetString("Bard_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unit conversion:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Bard_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Bard_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Builder_AttackDescription {
+            get {
+                return ResourceManager.GetString("Builder_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Builder
+        ///
+        ///Can build walls.
+        ///.
+        /// </summary>
+        internal static string Builder_BaseDescription {
+            get {
+                return ResourceManager.GetString("Builder_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛▣⬛⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Builder_MovementDescription {
+            get {
+                return ResourceManager.GetString("Builder_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build wall:
         ///
-        ///Attack:
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Builder_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Builder_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string CamelArcher_AttackDescription {
+            get {
+                return ResourceManager.GetString("CamelArcher_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camel Archer
+        ///
+        ///Moves like chess bishop, attacks like rook.
+        ///.
+        /// </summary>
+        internal static string CamelArcher_BaseDescription {
+            get {
+                return ResourceManager.GetString("CamelArcher_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬛
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string CamelArcher_MovementDescription {
+            get {
+                return ResourceManager.GetString("CamelArcher_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string CamelArcher_SpecialDescription {
+            get {
+                return ResourceManager.GetString("CamelArcher_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬛
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string CamelRider_AttackDescription {
+            get {
+                return ResourceManager.GetString("CamelRider_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camel Rider
+        ///
+        ///Moves and attacks like chess bishop..
+        /// </summary>
+        internal static string CamelRider_BaseDescription {
+            get {
+                return ResourceManager.GetString("CamelRider_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬛
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string CamelRider_MovementDescription {
+            get {
+                return ResourceManager.GetString("CamelRider_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string CamelRider_SpecialDescription {
+            get {
+                return ResourceManager.GetString("CamelRider_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Cannon_AttackDescription {
+            get {
+                return ResourceManager.GetString("Cannon_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannon
+        ///
+        ///Kills multiple units at once.
+        ///Can destroy anything.
+        ///Cannot shoot if unit standing before
+        ///.
+        /// </summary>
+        internal static string Cannon_BaseDescription {
+            get {
+                return ResourceManager.GetString("Cannon_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Cannon_MovementDescription {
+            get {
+                return ResourceManager.GetString("Cannon_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Cannon_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Cannon_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Catapult_AttackDescription {
+            get {
+                return ResourceManager.GetString("Catapult_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Catapult
+        ///
+        ///Can destroy any unit.
+        ///.
+        /// </summary>
+        internal static string Catapult_BaseDescription {
+            get {
+                return ResourceManager.GetString("Catapult_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Catapult_MovementDescription {
+            get {
+                return ResourceManager.GetString("Catapult_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Catapult_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Catapult_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜▣⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Chinese_AttackDescription {
+            get {
+                return ResourceManager.GetString("Chinese_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chinese warrior.
+        /// </summary>
+        internal static string Chinese_BaseDescription {
+            get {
+                return ResourceManager.GetString("Chinese_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Chinese_MovementDescription {
+            get {
+                return ResourceManager.GetString("Chinese_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Chinese_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Chinese_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬛
@@ -82,35 +616,49 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬛⬛⬛⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Crossbow_AttackDescription {
+            get {
+                return ResourceManager.GetString("Crossbow_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crossbowman
+        ///
+        ///Does not move with attack..
+        /// </summary>
+        internal static string Crossbow_BaseDescription {
+            get {
+                return ResourceManager.GetString("Crossbow_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///      
-        ///Info: Good for taking control
-        ///Good vs: Ninja, Knight, Spy
-        ///Bad vs: Builder
-        ///Special: Does not move with attack
-        ///.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
-        internal static string Archer_Description {
+        internal static string Crossbow_MovementDescription {
             get {
-                return ResourceManager.GetString("Archer_Description", resourceCulture);
+                return ResourceManager.GetString("Crossbow_MovementDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archer.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Archer_Name {
+        internal static string Crossbow_SpecialDescription {
             get {
-                return ResourceManager.GetString("Archer_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Builder.
-        /// </summary>
-        internal static string Builder_Name {
-            get {
-                return ResourceManager.GetString("Builder_Name", resourceCulture);
+                return ResourceManager.GetString("Crossbow_SpecialDescription", resourceCulture);
             }
         }
         
@@ -124,9 +672,557 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Knight
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Explosives_AttackDescription {
+            get {
+                return ResourceManager.GetString("Explosives_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explosives
         ///
-        ///Move: As chess knight
+        ///When killed destroys everything in 3x3 square.
+        ///.
+        /// </summary>
+        internal static string Explosives_BaseDescription {
+            get {
+                return ResourceManager.GetString("Explosives_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Explosives_MovementDescription {
+            get {
+                return ResourceManager.GetString("Explosives_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Explosives_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Explosives_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Gladiator_AttackDescription {
+            get {
+                return ResourceManager.GetString("Gladiator_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gladiator.
+        /// </summary>
+        internal static string Gladiator_BaseDescription {
+            get {
+                return ResourceManager.GetString("Gladiator_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Gladiator_MovementDescription {
+            get {
+                return ResourceManager.GetString("Gladiator_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Gladiator_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Gladiator_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string JapanArcher_AttackDescription {
+            get {
+                return ResourceManager.GetString("JapanArcher_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Japanese archer
+        ///
+        ///Does not move with attack..
+        /// </summary>
+        internal static string JapanArcher_BaseDescription {
+            get {
+                return ResourceManager.GetString("JapanArcher_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string JapanArcher_MovementDescription {
+            get {
+                return ResourceManager.GetString("JapanArcher_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string JapanArcher_SpecialDescription {
+            get {
+                return ResourceManager.GetString("JapanArcher_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜.
+        /// </summary>
+        internal static string King_AttackDescription {
+            get {
+                return ResourceManager.GetString("King_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to King
+        ///
+        ///Moves and attacks like chess King.
+        ///Can castle with any unit (not just Rook)..
+        /// </summary>
+        internal static string King_BaseDescription {
+            get {
+                return ResourceManager.GetString("King_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜.
+        /// </summary>
+        internal static string King_MovementDescription {
+            get {
+                return ResourceManager.GetString("King_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string King_SpecialDescription {
+            get {
+                return ResourceManager.GetString("King_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string Knight_AttackDescription {
+            get {
+                return ResourceManager.GetString("Knight_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Knight.
+        /// </summary>
+        internal static string Knight_BaseDescription {
+            get {
+                return ResourceManager.GetString("Knight_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Knight_MovementDescription {
+            get {
+                return ResourceManager.GetString("Knight_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Knight_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Knight_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string LegionaryPike_AttackDescription {
+            get {
+                return ResourceManager.GetString("LegionaryPike_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legionary with Pike
+        ///
+        ///Moves and attacks like chess Pawn.
+        ///When on last tile, turns to Knight.
+        ///Can throw pike and range attack..
+        /// </summary>
+        internal static string LegionaryPike_BaseDescription {
+            get {
+                return ResourceManager.GetString("LegionaryPike_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///On second row:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string LegionaryPike_MovementDescription {
+            get {
+                return ResourceManager.GetString("LegionaryPike_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pike throw:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string LegionaryPike_SpecialDescription {
+            get {
+                return ResourceManager.GetString("LegionaryPike_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string LegionarySword_AttackDescription {
+            get {
+                return ResourceManager.GetString("LegionarySword_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legionary with Sword
+        ///
+        ///Moves and attacks like chess Pawn.
+        ///When on last tile, turns to Knight..
+        /// </summary>
+        internal static string LegionarySword_BaseDescription {
+            get {
+                return ResourceManager.GetString("LegionarySword_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///On second row:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///.
+        /// </summary>
+        internal static string LegionarySword_MovementDescription {
+            get {
+                return ResourceManager.GetString("LegionarySword_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string LegionarySword_SpecialDescription {
+            get {
+                return ResourceManager.GetString("LegionarySword_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Miner_AttackDescription {
+            get {
+                return ResourceManager.GetString("Miner_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miner
+        ///
+        ///After move creates trenches where units 
+        ///cannot move (trench is considered a unit)..
+        /// </summary>
+        internal static string Miner_BaseDescription {
+            get {
+                return ResourceManager.GetString("Miner_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Miner_MovementDescription {
+            get {
+                return ResourceManager.GetString("Miner_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After move
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Miner_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Miner_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬛
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string MountedArcher_AttackDescription {
+            get {
+                return ResourceManager.GetString("MountedArcher_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mounted Archer
+        ///
+        ///Moves like chess rook, attack like bishop..
+        /// </summary>
+        internal static string MountedArcher_BaseDescription {
+            get {
+                return ResourceManager.GetString("MountedArcher_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string MountedArcher_MovementDescription {
+            get {
+                return ResourceManager.GetString("MountedArcher_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string MountedArcher_SpecialDescription {
+            get {
+                return ResourceManager.GetString("MountedArcher_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string MountedKnight_AttackDescription {
+            get {
+                return ResourceManager.GetString("MountedKnight_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mounted knight
+        ///
+        ///Can kill 2 units in line.
+        ///.
+        /// </summary>
+        internal static string MountedKnight_BaseDescription {
+            get {
+                return ResourceManager.GetString("MountedKnight_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -135,52 +1231,120 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬛⬜⬜⬜⬛⬜⬜⬜
         ///⬜⬜▣⬜⬜⬜⬜⬜
         ///⬛⬜⬜⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬜⬜⬜
-        ///
-        ///Attack: Kills all units to tile
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬜⬛⬜⬜
-        ///⬛⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬛⬛⬜⬜⬜⬜
-        ///⬛⬛▣⬛⬛⬛⬛⬜
-        ///⬜⬛⬛⬛⬜⬜⬜⬜
-        ///⬛⬜⬛⬜⬛⬜⬜⬜
-        ///      
-        ///Info: All round good
-        ///Good vs: Builder, Spy, Ninja
-        ///Bad vs: Archer
-        ///.
+        ///⬜⬛⬜⬛⬜⬜⬜⬜.
         /// </summary>
-        internal static string Knight_Description {
+        internal static string MountedKnight_MovementDescription {
             get {
-                return ResourceManager.GetString("Knight_Description", resourceCulture);
+                return ResourceManager.GetString("MountedKnight_MovementDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Knight.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Knight_Name {
+        internal static string MountedKnight_SpecialDescription {
             get {
-                return ResourceManager.GetString("Knight_Name", resourceCulture);
+                return ResourceManager.GetString("MountedKnight_SpecialDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ninja
+        ///   Looks up a localized string similar to Attack:
         ///
-        ///Move:
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Musketeer_AttackDescription {
+            get {
+                return ResourceManager.GetString("Musketeer_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Musketeer
+        ///
+        ///Does not move with attack..
+        /// </summary>
+        internal static string Musketeer_BaseDescription {
+            get {
+                return ResourceManager.GetString("Musketeer_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string Musketeer_MovementDescription {
+            get {
+                return ResourceManager.GetString("Musketeer_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Musketeer_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Musketeer_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///
+        ///Attack with figure
+        ///before ninja:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▦⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Ninja_AttackDescription {
+            get {
+                return ResourceManager.GetString("Ninja_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ninja.
+        /// </summary>
+        internal static string Ninja_BaseDescription {
+            get {
+                return ResourceManager.GetString("Ninja_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -191,16 +1355,83 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜▣⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///
-        ///Attack:
+        ///Move with figure
+        ///before ninja:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▦⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Ninja_MovementDescription {
+            get {
+                return ResourceManager.GetString("Ninja_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Ninja_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Ninja_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string OldWizzard_AttackDescription {
+            get {
+                return ResourceManager.GetString("OldWizzard_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old wizzard
+        ///
+        ///After move explosion kills everything 
+        ///around the wizzard..
+        /// </summary>
+        internal static string OldWizzard_BaseDescription {
+            get {
+                return ResourceManager.GetString("OldWizzard_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▩▩▩⬜⬜
+        ///⬛⬜▣▩⬛▩⬜⬜
+        ///⬜⬜⬜▩▩▩⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string OldWizzard_MovementDescription {
+            get {
+                return ResourceManager.GetString("OldWizzard_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string OldWizzard_SpecialDescription {
+            get {
+                return ResourceManager.GetString("OldWizzard_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -209,83 +1440,329 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Peasant_AttackDescription {
+            get {
+                return ResourceManager.GetString("Peasant_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peasant.
+        /// </summary>
+        internal static string Peasant_BaseDescription {
+            get {
+                return ResourceManager.GetString("Peasant_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///      
-        ///Info: Basic unit
-        ///Good vs: Builder
-        ///Bad vs: Spy, Archer, Knight, Bomber
-        ///Special: Can jump over object
-        ///Special: On last tile turns into Bomber
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Peasant_MovementDescription {
+            get {
+                return ResourceManager.GetString("Peasant_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Peasant_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Peasant_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬛
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
         ///.
         /// </summary>
-        internal static string Ninja_Description {
+        internal static string Queen_AttackDescription {
             get {
-                return ResourceManager.GetString("Ninja_Description", resourceCulture);
+                return ResourceManager.GetString("Queen_AttackDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ninja.
+        ///   Looks up a localized string similar to Queen
+        ///
+        ///Moves and attacks like chess Queen..
         /// </summary>
-        internal static string Ninja_Name {
+        internal static string Queen_BaseDescription {
             get {
-                return ResourceManager.GetString("Ninja_Name", resourceCulture);
+                return ResourceManager.GetString("Queen_BaseDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Builder
+        ///   Looks up a localized string similar to Move:
         ///
-        ///Move:
+        ///⬜⬜⬜⬛⬜⬜⬜⬛
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬛⬜⬜⬛⬜⬜⬛⬜.
+        /// </summary>
+        internal static string Queen_MovementDescription {
+            get {
+                return ResourceManager.GetString("Queen_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Queen_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Queen_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
         ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string Ranger_AttackDescription {
+            get {
+                return ResourceManager.GetString("Ranger_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ranger
+        ///
+        ///Does not move with attack..
+        /// </summary>
+        internal static string Ranger_BaseDescription {
+            get {
+                return ResourceManager.GetString("Ranger_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Ranger_MovementDescription {
+            get {
+                return ResourceManager.GetString("Ranger_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Ranger_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Ranger_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Scout_AttackDescription {
+            get {
+                return ResourceManager.GetString("Scout_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scout
+        ///
+        ///Moves and attacks like chess rook..
+        /// </summary>
+        internal static string Scout_BaseDescription {
+            get {
+                return ResourceManager.GetString("Scout_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Scout_MovementDescription {
+            get {
+                return ResourceManager.GetString("Scout_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Scout_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Scout_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Spartan_AttackDescription {
+            get {
+                return ResourceManager.GetString("Spartan_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spartan.
+        /// </summary>
+        internal static string Spartan_BaseDescription {
+            get {
+                return ResourceManager.GetString("Spartan_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Spartan_MovementDescription {
+            get {
+                return ResourceManager.GetString("Spartan_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Spartan_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Spartan_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Spearman_AttackDescription {
+            get {
+                return ResourceManager.GetString("Spearman_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spearman.
+        /// </summary>
+        internal static string Spearman_BaseDescription {
+            get {
+                return ResourceManager.GetString("Spearman_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///
-        ///Shield:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜▦▦▦⬜⬜⬜
-        ///⬜▦⬜⬜⬜▦⬜⬜
-        ///⬜▦⬜▣⬜▦⬜⬜
-        ///⬜▦⬜⬜⬜▦⬜⬜
-        ///⬜⬜▦▦▦⬜⬜⬜
-        ///      
-        ///Attack: Cannot directly attack
-        ///      
-        ///Info: Defensive unit
-        ///Good vs: Archer, Spy
-        ///Bad vs: Ninja, Knight
-        ///Special: Creates shield around itself
-        ///Special: Moving shield pushes units away
-        ///.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
-        internal static string OldWizzard_Description {
+        internal static string Spearman_MovementDescription {
             get {
-                return ResourceManager.GetString("OldWizzard_Description", resourceCulture);
+                return ResourceManager.GetString("Spearman_MovementDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bomber.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string OldWizzard_Name {
+        internal static string Spearman_SpecialDescription {
             get {
-                return ResourceManager.GetString("OldWizzard_Name", resourceCulture);
+                return ResourceManager.GetString("Spearman_SpecialDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spy
-        ///
-        ///Move + Attack: As chess king
+        ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -294,50 +1771,372 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬛⬛⬜⬜⬜
         ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///
-        ///Info: Strategic unit
-        ///Good vs: Builder, Ninja
-        ///Bad vs: Archer, Knight, Bomber
-        ///Special: Can swap with allied unit
-        ///.
+        ///⬜⬜⬛⬛⬛⬜⬜⬜.
         /// </summary>
-        internal static string Trader_Description {
+        internal static string Trader_AttackDescription {
             get {
-                return ResourceManager.GetString("Trader_Description", resourceCulture);
+                return ResourceManager.GetString("Trader_AttackDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spy.
+        ///   Looks up a localized string similar to Trader
+        ///
+        ///Moves and attacks like chess king.
+        ///
+        ///Can swap with any 
+        ///allied unit on the board..
         /// </summary>
-        internal static string Trader_Name {
+        internal static string Trader_BaseDescription {
             get {
-                return ResourceManager.GetString("Trader_Name", resourceCulture);
+                return ResourceManager.GetString("Trader_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜.
+        /// </summary>
+        internal static string Trader_MovementDescription {
+            get {
+                return ResourceManager.GetString("Trader_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special:
+        ///
+        ///
+        ///.
+        /// </summary>
+        internal static string Trader_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Trader_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Trench_AttackDescription {
+            get {
+                return ResourceManager.GetString("Trench_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trench
+        ///
+        ///Can be destroyed.
+        ///.
+        /// </summary>
+        internal static string Trench_BaseDescription {
+            get {
+                return ResourceManager.GetString("Trench_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Trench_MovementDescription {
+            get {
+                return ResourceManager.GetString("Trench_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Trench_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Trench_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Viking_AttackDescription {
+            get {
+                return ResourceManager.GetString("Viking_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Viking
+        ///
+        ///Moves and attacks like a knight in chess..
+        /// </summary>
+        internal static string Viking_BaseDescription {
+            get {
+                return ResourceManager.GetString("Viking_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Viking_MovementDescription {
+            get {
+                return ResourceManager.GetString("Viking_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Viking_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Viking_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Wall_AttackDescription {
+            get {
+                return ResourceManager.GetString("Wall_AttackDescription", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Wall
         ///
-        ///Info: Can be destoyed by allied unit
-        ///
-        ///Attack: Cannot attack
-        ///Movement: Cannot move 
-        ///.
+        ///Can be destroyed by siege, explosions
+        ///and Warhammer..
         /// </summary>
-        internal static string Wall_Description {
+        internal static string Wall_BaseDescription {
             get {
-                return ResourceManager.GetString("Wall_Description", resourceCulture);
+                return ResourceManager.GetString("Wall_BaseDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wall.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Wall_Name {
+        internal static string Wall_MovementDescription {
             get {
-                return ResourceManager.GetString("Wall_Name", resourceCulture);
+                return ResourceManager.GetString("Wall_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Wall_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Wall_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Warhammer_AttackDescription {
+            get {
+                return ResourceManager.GetString("Warhammer_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warhammer
+        ///
+        ///With move swings with hammer and
+        ///kills multiple units.
+        ///.
+        /// </summary>
+        internal static string Warhammer_BaseDescription {
+            get {
+                return ResourceManager.GetString("Warhammer_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜.
+        /// </summary>
+        internal static string Warhammer_MovementDescription {
+            get {
+                return ResourceManager.GetString("Warhammer_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movement examples:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜▦▦⬜⬜
+        ///⬜⬜⬜⬜⬛▦⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Warhammer_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Warhammer_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string Warrior_AttackDescription {
+            get {
+                return ResourceManager.GetString("Warrior_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warrior
+        ///
+        ///Can kill upt to 3 units in line..
+        /// </summary>
+        internal static string Warrior_BaseDescription {
+            get {
+                return ResourceManager.GetString("Warrior_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Warrior_MovementDescription {
+            get {
+                return ResourceManager.GetString("Warrior_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Warrior_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Warrior_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜▩⬜⬜⬜
+        ///⬛⬜⬜▩⬛▩⬜⬜
+        ///⬜⬜⬜⬜▩⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///.
+        /// </summary>
+        internal static string YoungWizzard_AttackDescription {
+            get {
+                return ResourceManager.GetString("YoungWizzard_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Young Wizzard
+        ///            
+        ///When moving or attacking, explosion 
+        ///kills units in specific shape.
+        ///.
+        /// </summary>
+        internal static string YoungWizzard_BaseDescription {
+            get {
+                return ResourceManager.GetString("YoungWizzard_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬛⬜▣⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬜⬛⬜⬛⬜⬜⬜
+        ///.
+        /// </summary>
+        internal static string YoungWizzard_MovementDescription {
+            get {
+                return ResourceManager.GetString("YoungWizzard_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string YoungWizzard_SpecialDescription {
+            get {
+                return ResourceManager.GetString("YoungWizzard_SpecialDescription", resourceCulture);
             }
         }
     }

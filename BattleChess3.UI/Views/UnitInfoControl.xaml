@@ -4,17 +4,44 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
+             xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:BoardViewModel}"
              d:DesignHeight="300" d:DesignWidth="300"
-             Background="{DynamicResource TextBoxBrush}">
+             Background="{DynamicResource TextBoxBrush}" MinWidth="265">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Border DataContext="{Binding InfoTile.Figure}">
-            <TextBlock Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"
-                       Style="{DynamicResource TextBlockStyle}"
+        <Grid DataContext="{Binding InfoTile.Figure}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0"
+                       Text="{Binding Path=BaseDescription, UpdateSourceTrigger=PropertyChanged}"
+                       Visibility="{Binding BaseDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                        HorizontalAlignment="Left" VerticalAlignment="Top"
-                       TextWrapping="Wrap"
-                       FontSize="25" Margin="20" />
-        </Border>
+                       Style="{DynamicResource TextBlockStyle}" 
+                       FontSize="25" Margin="20"/>
+
+            <WrapPanel Grid.Row="1">
+                <TextBlock Text="{Binding Path=MovementDescription, UpdateSourceTrigger=PropertyChanged}"
+                           Visibility="{Binding MovementDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Style="{DynamicResource TextBlockStyle}" 
+                           FontSize="25" Margin="20"/>
+                                    
+                <TextBlock Text="{Binding Path=AttackDescription, UpdateSourceTrigger=PropertyChanged}"
+                           Visibility="{Binding AttackDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Style="{DynamicResource TextBlockStyle}" 
+                           FontSize="25" Margin="20"/>
+                                    
+                <TextBlock Text="{Binding Path=SpecialDescription, UpdateSourceTrigger=PropertyChanged}"
+                           Visibility="{Binding SpecialDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Style="{DynamicResource TextBlockStyle}" 
+                           FontSize="25" Margin="20"/>
+            </WrapPanel>
+        </Grid>
     </ScrollViewer>
 </UserControl>

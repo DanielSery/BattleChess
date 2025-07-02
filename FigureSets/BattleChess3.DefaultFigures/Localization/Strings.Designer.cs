@@ -81,9 +81,9 @@ namespace BattleChess3.DefaultFigures.Localization {
         ///Empty tile, where you can go. It cannot be destroyed with almost any unit. It does not stop directional attack.
         ///        .
         /// </summary>
-        public static string Empty_Description {
+        public static string Empty_BaseDescription {
             get {
-                return ResourceManager.GetString("Empty_Description", resourceCulture);
+                return ResourceManager.GetString("Empty_BaseDescription", resourceCulture);
             }
         }
         
@@ -103,9 +103,9 @@ namespace BattleChess3.DefaultFigures.Localization {
         ///Ninja is secret warrior and with his diagonal moves can he easily surprise enemy. He is one of cheap figures so he is best in front line.
         ///        .
         /// </summary>
-        public static string Ninja_Description {
+        public static string Ninja_BaseDescription {
             get {
-                return ResourceManager.GetString("Ninja_Description", resourceCulture);
+                return ResourceManager.GetString("Ninja_BaseDescription", resourceCulture);
             }
         }
         
@@ -125,9 +125,9 @@ namespace BattleChess3.DefaultFigures.Localization {
         ///Palm tile, which you can easily destroy. It cannot move and belongs to no one.
         ///        .
         /// </summary>
-        public static string Palm_Description {
+        public static string Palm_BaseDescription {
             get {
-                return ResourceManager.GetString("Palm_Description", resourceCulture);
+                return ResourceManager.GetString("Palm_BaseDescription", resourceCulture);
             }
         }
         
@@ -147,9 +147,9 @@ namespace BattleChess3.DefaultFigures.Localization {
         ///Stone tile, which cannot be destroyed and where you cannot go. It cannot move and belongs to no one.
         ///        .
         /// </summary>
-        public static string Stone_Description {
+        public static string Stone_BaseDescription {
             get {
-                return ResourceManager.GetString("Stone_Description", resourceCulture);
+                return ResourceManager.GetString("Stone_BaseDescription", resourceCulture);
             }
         }
         

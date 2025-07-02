@@ -65,6 +65,6 @@ internal class FigureService : IFigureService
         _figuresDictionary = _figureGroups.SelectMany(group => group.FigureTypes)
             .ToDictionary(figure => figure.UniqueFigureId, figure => figure);
         FigureGroupsChanged?.Invoke(this, _figureGroups);
-        _figuresLoaded.SetResult(true);
+        _figuresLoaded.TrySetResult(true);
     }
 }

@@ -6,7 +6,7 @@ using BattleChess3.Game.Players;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Alchemist :ICrossFireFigureType
+public class Alchemist : ICrossFireFigureType
 {
     int IFigureType.FigureId => 10;
     

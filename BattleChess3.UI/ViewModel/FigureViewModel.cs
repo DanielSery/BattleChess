@@ -14,14 +14,20 @@ public sealed class FigureViewModel : IFigureType
         FigureId = figureType.FigureId;
         SetId = figureType.SetId;
         DisplayName = figureType.DisplayName;
-        Description = figureType.Description;
+        BaseDescription = figureType.BaseDescription;
+        MovementDescription = figureType.MovementDescription;
+        AttackDescription = figureType.AttackDescription;
+        SpecialDescription = figureType.SpecialDescription;
         ImageUris = figureType.ImageUris;
     }
 
     public int FigureId { get; }
     public int SetId { get; }
     public string DisplayName { get; }
-    public string Description { get; }
+    public string BaseDescription { get; }
+    public string MovementDescription { get; }
+    public string AttackDescription { get; }
+    public string SpecialDescription { get; }
     public IDictionary<int, Uri> ImageUris { get; }
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

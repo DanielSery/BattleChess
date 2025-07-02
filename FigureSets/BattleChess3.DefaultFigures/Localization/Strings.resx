@@ -129,7 +129,7 @@
     <data name="Empty_Name" xml:space="preserve">
     <value>Empty tile</value>
   </data>
-    <data name="Empty_Description" xml:space="preserve">
+    <data name="Empty_BaseDescription" xml:space="preserve">
     <value>
 Empty tile
 
@@ -138,7 +138,7 @@ Empty tile, where you can go.</value>
     <data name="Palm_Name" xml:space="preserve">
     <value>Palm</value>
   </data>
-    <data name="Palm_Description" xml:space="preserve">
+    <data name="Palm_BaseDescription" xml:space="preserve">
     <value>
 Palm
 
@@ -148,14 +148,14 @@ Palm tile, which you can easily destroy. It cannot move and belongs to no one.
     <data name="Stone_Name" xml:space="preserve">
     <value>Stone</value>
   </data>
-    <data name="Stone_Description" xml:space="preserve">
+    <data name="Stone_BaseDescription" xml:space="preserve">
     <value>
 Stone
 
 Stone tile, where you cannot go. It cannot move and belongs to no one.
         </value>
   </data>
-    <data name="Water_Description" xml:space="preserve">
+    <data name="Water_BaseDescription" xml:space="preserve">
     <value>Water
 
 Water tile, where you cannot go. It cannot move and belongs to no one.</value>

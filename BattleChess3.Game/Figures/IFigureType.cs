@@ -23,11 +23,26 @@ public interface IFigureType : IEquatable<IFigureType>
     ///     Name shown in menus and helps
     /// </summary>
     string DisplayName { get; }
+    
+    /// <summary>
+    ///     Gets base description of unit 
+    /// </summary>
+    string BaseDescription { get; }
 
     /// <summary>
-    ///     Gets description of unit
+    ///     Gets description of unit movement
     /// </summary>
-    string Description { get; }
+    string MovementDescription { get; }
+
+    /// <summary>
+    ///     Gets description of unit attack
+    /// </summary>
+    string AttackDescription { get; }
+
+    /// <summary>
+    ///     Gets description of unit special abilities
+    /// </summary>
+    string SpecialDescription { get; }
 
     /// <summary>
     ///     Images of player with id

@@ -10,7 +10,10 @@ public class Empty : IFigureType
     int IFigureType.SetId => 0;
     
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
-    string IFigureType.Description => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.Description)}"];
+    string IFigureType.BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.BaseDescription)}"];
+    string IFigureType.MovementDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.MovementDescription)}"];
+    string IFigureType.AttackDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.AttackDescription)}"];
+    string IFigureType.SpecialDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.SpecialDescription)}"];
 
     IDictionary<int, Uri> IFigureType.ImageUris =>
         new Dictionary<int, Uri>

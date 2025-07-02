@@ -123,69 +123,150 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="Archer_Description" xml:space="preserve">
-    <value>Archer
-      
-Move:
+    <data name="CrossFireFigureGroup_Name" xml:space="preserve">
+    <value>Cross fire</value>
+  </data>
+    <data name="Alchemist_BaseDescription" xml:space="preserve">
+        <value>Alchemist
+
+After move creates explosives 
+which detonate when destroyed.</value>
+    </data>
+    <data name="Alchemist_MovementDescription" xml:space="preserve">
+        <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛▣⬛⬜⬜
-
-Attack:
-
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬛
-⬛⬜⬜⬛⬜⬜⬛⬜
-⬜⬛⬜⬛⬜⬛⬜⬜
 ⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Alchemist_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Alchemist_SpecialDescription" xml:space="preserve">
+        <value>After move
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜▦⬜⬜⬜⬜
 ⬜⬜⬜▣⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-      
-Info: Good for taking control
-Good vs: Ninja, Knight, Spy
-Bad vs: Builder
-Special: Does not move with attack
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    
+    <data name="Archer_BaseDescription" xml:space="preserve">
+        <value>Archer
+
+Does not move with attack.</value>
+    </data>
+    <data name="Archer_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬛⬛▣⬛⬛⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Archer_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Archer_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Barbarian_BaseDescription" xml:space="preserve">
+        <value>Barbarian
+
+Can push near units</value>
+    </data>
+    <data name="Barbarian_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Barbarian_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Barbarian_SpecialDescription" xml:space="preserve">
+        <value>Throw near unit:
+
+⬜⬜⬜⬛⬜⬜⬜⬛
+⬛⬜⬜⬛⬜⬜⬛⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬜⬜▦▦▦⬜⬜⬜
+⬛⬛▦▣▦⬛⬛⬛
+⬜⬜▦▦▦⬜⬜⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬛⬜⬜⬛⬜⬜⬛⬜</value>
+    </data>
+    
+    <data name="Bard_BaseDescription" xml:space="preserve">
+        <value>Bard
+
+Can convert enemy units.</value>
+    </data>
+    <data name="Bard_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Bard_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Bard_SpecialDescription" xml:space="preserve">
+        <value>Unit conversion:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    
+    <data name="Builder_BaseDescription" xml:space="preserve">
+        <value>Builder
+
+Can build walls.
 </value>
-  </data>
-    <data name="Archer_Name" xml:space="preserve">
-    <value>Archer</value>
-  </data>
-    <data name="OldWizzard_Description" xml:space="preserve">
-    <value>Bomber
-
-Move:
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬛⬜⬛⬜⬛⬜⬜⬜
-⬜⬜⬜▩▩▩⬜⬜
-⬛⬜▣▩⬛▩⬜⬜
-⬜⬜⬜▩▩▩⬜⬜
-⬛⬜⬛⬜⬛⬜⬜⬜
-      
-Attack: Cannot directly attack
-      
-Info: Hard to use, high reward
-Good vs: Ninja, Spy
-Bad vs: Builder, Archer, Knight
-Special: When move, near tiles are destroyed
-</value>
-  </data>
-    <data name="OldWizzard_Name" xml:space="preserve">
-    <value>Bomber</value>
-  </data>
-    <data name="Builder_Description" xml:space="preserve">
-    <value>Builder
-
-Move:
+    </data>
+    <data name="Builder_MovementDescription" xml:space="preserve">
+        <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -194,38 +275,528 @@ Move:
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬛▣⬛⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Builder_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Builder_SpecialDescription" xml:space="preserve">
+        <value>Build wall:
 
-Shield:
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    
+    <data name="CamelArcher_BaseDescription" xml:space="preserve">
+        <value>Camel Archer
 
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜▦▦▦⬜⬜⬜
-⬜▦⬜⬜⬜▦⬜⬜
-⬜▦⬜▣⬜▦⬜⬜
-⬜▦⬜⬜⬜▦⬜⬜
-⬜⬜▦▦▦⬜⬜⬜
-      
-Attack: Cannot directly attack
-      
-Info: Defensive unit
-Good vs: Archer, Spy
-Bad vs: Ninja, Knight
-Special: Creates shield around itself
-Special: Moving shield pushes units away
+Moves like chess bishop, attacks like rook.
 </value>
-  </data>
-    <data name="Builder_Name" xml:space="preserve">
-    <value>Builder</value>
-  </data>
-    <data name="CrossFireFigureGroup_Name" xml:space="preserve">
-    <value>Cross fire</value>
-  </data>
-    <data name="Knight_Description" xml:space="preserve">
-    <value>Knight
+    </data>
+    <data name="CamelArcher_MovementDescription" xml:space="preserve">
+        <value>Move:
 
-Move: As chess knight
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜</value>
+    </data>
+    <data name="CamelArcher_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬛
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="CamelArcher_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="CamelRider_BaseDescription" xml:space="preserve">
+        <value>Camel Rider
+
+Moves and attacks like chess bishop.</value>
+    </data>
+    <data name="CamelRider_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜</value>
+    </data>
+    <data name="CamelRider_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜</value>
+    </data>
+    <data name="CamelRider_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Cannon_BaseDescription" xml:space="preserve">
+        <value>Cannon
+
+Kills multiple units at once.
+Can destroy anything.
+Cannot shoot if unit standing before
+</value>
+    </data>
+    <data name="Cannon_MovementDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Cannon_AttackDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜▦▦▦⬜⬜⬜
+⬜⬜▦▦▦⬜⬜⬜
+⬜⬜⬜▦⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Cannon_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Catapult_BaseDescription" xml:space="preserve">
+        <value>Catapult
+
+Can destroy any unit.
+</value>
+    </data>
+    <data name="Catapult_MovementDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Catapult_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Catapult_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Chinese_BaseDescription" xml:space="preserve">
+        <value>Chinese warrior</value>
+    </data>
+    <data name="Chinese_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Chinese_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜▣⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Chinese_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Crossbow_BaseDescription" xml:space="preserve">
+        <value>Crossbowman
+
+Does not move with attack.</value>
+    </data>
+    <data name="Crossbow_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Crossbow_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬛
+⬛⬜⬜⬛⬜⬜⬛⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Crossbow_SpecialDescription" xml:space="preserve">
+        <value />
+    </data>
+    
+    <data name="Explosives_BaseDescription" xml:space="preserve">
+        <value>Explosives
+
+When killed destroys everything in 3x3 square.
+</value>
+    </data>
+    <data name="Explosives_MovementDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Explosives_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Explosives_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Gladiator_BaseDescription" xml:space="preserve">
+        <value>Gladiator</value>
+    </data>
+    <data name="Gladiator_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Gladiator_AttackDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Gladiator_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="JapanArcher_BaseDescription" xml:space="preserve">
+        <value>Japanese archer
+
+Does not move with attack.</value>
+    </data>
+    <data name="JapanArcher_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    <data name="JapanArcher_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    <data name="JapanArcher_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="King_BaseDescription" xml:space="preserve">
+        <value>King
+
+Moves and attacks like chess King.
+Can castle with any unit (not just Rook).</value>
+    </data>
+    <data name="King_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜</value>
+    </data>
+    <data name="King_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜</value>
+    </data>
+    <data name="King_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Knight_BaseDescription" xml:space="preserve">
+        <value>Knight</value>
+    </data>
+    <data name="Knight_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Knight_AttackDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    <data name="Knight_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="LegionaryPike_BaseDescription" xml:space="preserve">
+        <value>Legionary with Pike
+
+Moves and attacks like chess Pawn.
+When on last tile, turns to Knight.
+Can throw pike and range attack.</value>
+    </data>
+    <data name="LegionaryPike_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+On second row:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="LegionaryPike_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="LegionaryPike_SpecialDescription" xml:space="preserve">
+        <value>Pike throw:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    
+    <data name="LegionarySword_BaseDescription" xml:space="preserve">
+        <value>Legionary with Sword
+
+Moves and attacks like chess Pawn.
+When on last tile, turns to Knight.</value>
+    </data>
+    <data name="LegionarySword_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+On second row:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+</value>
+    </data>
+    <data name="LegionarySword_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="LegionarySword_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Miner_BaseDescription" xml:space="preserve">
+        <value>Miner
+
+After move creates trenches where units 
+cannot move (trench is considered a unit).</value>
+    </data>
+    <data name="Miner_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Miner_AttackDescription" xml:space="preserve">
+        <value/>
+</data>
+    <data name="Miner_SpecialDescription" xml:space="preserve">
+        <value>After move
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜▦▦▦⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    
+    <data name="MountedArcher_BaseDescription" xml:space="preserve">
+        <value>Mounted Archer
+
+Moves like chess rook, attack like bishop.</value>
+    </data>
+    <data name="MountedArcher_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬛
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="MountedArcher_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜</value>
+    </data>
+    <data name="MountedArcher_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="MountedKnight_BaseDescription" xml:space="preserve">
+        <value>Mounted knight
+
+Can kill 2 units in line.
+</value>
+    </data>
+    <data name="MountedKnight_MovementDescription" xml:space="preserve">
+        <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -234,40 +805,62 @@ Move: As chess knight
 ⬛⬜⬜⬜⬛⬜⬜⬜
 ⬜⬜▣⬜⬜⬜⬜⬜
 ⬛⬜⬜⬜⬛⬜⬜⬜
-⬜⬛⬜⬛⬜⬜⬜⬜
-
-Attack: Kills all units to tile
-
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬛⬜⬜⬛⬜⬜
-⬛⬜⬛⬜⬛⬜⬜⬜
-⬜⬛⬛⬛⬜⬜⬜⬜
-⬛⬛▣⬛⬛⬛⬛⬜
-⬜⬛⬛⬛⬜⬜⬜⬜
-⬛⬜⬛⬜⬛⬜⬜⬜
-      
-Info: All round good
-Good vs: Builder, Spy, Ninja
-Bad vs: Archer
-</value>
-  </data>
-    <data name="Knight_Name" xml:space="preserve">
-    <value>Knight</value>
-  </data>
-    <data name="Ninja_Description" xml:space="preserve">
-    <value>Ninja
-
-Move:
+⬜⬛⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="MountedKnight_AttackDescription" xml:space="preserve">
+        <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    <data name="MountedKnight_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Musketeer_BaseDescription" xml:space="preserve">
+        <value>Musketeer
+
+Does not move with attack.</value>
+    </data>
+    <data name="Musketeer_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    <data name="Musketeer_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬛▦⬛⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Musketeer_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Ninja_BaseDescription" xml:space="preserve">
+        <value>Ninja</value>
+    </data>
+    <data name="Ninja_MovementDescription" xml:space="preserve">
+        <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -278,7 +871,32 @@ Move:
 ⬜⬜⬜▣⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 
-Attack:
+Move with figure
+before ninja:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▦⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Ninja_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+
+Attack with figure
+before ninja:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -287,7 +905,54 @@ Attack:
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Ninja_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="OldWizzard_BaseDescription" xml:space="preserve">
+        <value>Old wizzard
+
+After move explosion kills everything 
+around the wizzard.</value>
+    </data>
+    <data name="OldWizzard_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▩▩▩⬜⬜
+⬛⬜▣▩⬛▩⬜⬜
+⬜⬜⬜▩▩▩⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜</value>
+    </data>
+    <data name="OldWizzard_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="OldWizzard_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Peasant_BaseDescription" xml:space="preserve">
+        <value>Peasant</value>
+    </data>
+    <data name="Peasant_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Peasant_AttackDescription" xml:space="preserve">
+        <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -296,22 +961,184 @@ Attack:
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬛▣⬛⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-      
-Info: Basic unit
-Good vs: Builder
-Bad vs: Spy, Archer, Knight, Bomber
-Special: Can jump over object
-Special: On last tile turns into Bomber
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Peasant_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Queen_BaseDescription" xml:space="preserve">
+        <value>Queen
+
+Moves and attacks like chess Queen.</value>
+    </data>
+    <data name="Queen_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬛⬜⬜⬜⬛
+⬛⬜⬜⬛⬜⬜⬛⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬛
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬛⬜⬜⬛⬜⬜⬛⬜</value>
+    </data>
+    <data name="Queen_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬛⬜⬜⬜⬛
+⬛⬜⬜⬛⬜⬜⬛⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬛
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
+⬛⬜⬜⬛⬜⬜⬛⬜
 </value>
-  </data>
-    <data name="Ninja_Name" xml:space="preserve">
-    <value>Ninja</value>
-  </data>
-    <data name="Trader_Description" xml:space="preserve">
-    <value>Spy
+    </data>
+    <data name="Queen_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Ranger_BaseDescription" xml:space="preserve">
+        <value>Ranger
 
-Move + Attack: As chess king
+Does not move with attack.</value>
+    </data>
+    <data name="Ranger_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬛⬛▣⬛⬛⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Ranger_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    <data name="Ranger_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Scout_BaseDescription" xml:space="preserve">
+        <value>Scout
+
+Moves and attacks like chess rook.</value>
+    </data>
+    <data name="Scout_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬛
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Scout_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬛⬛⬛▣⬛⬛⬛⬛
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Scout_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Spartan_BaseDescription" xml:space="preserve">
+        <value>Spartan</value>
+    </data>
+    <data name="Spartan_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Spartan_AttackDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Spartan_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Spearman_BaseDescription" xml:space="preserve">
+        <value>Spearman</value>
+    </data>
+    <data name="Spearman_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Spearman_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Spearman_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Trader_BaseDescription" xml:space="preserve">
+        <value>Trader
+
+Moves and attacks like chess king.
+
+Can swap with any 
+allied unit on the board.</value>
+    </data>
+    <data name="Trader_MovementDescription" xml:space="preserve">
+        <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -320,27 +1147,203 @@ Move + Attack: As chess king
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬛⬛⬛⬜⬜⬜
 ⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜</value>
+    </data>
+    <data name="Trader_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜</value>
+    </data>
+    <data name="Trader_SpecialDescription" xml:space="preserve">
+        <value>Special:
 
-Info: Strategic unit
-Good vs: Builder, Ninja
-Bad vs: Archer, Knight, Bomber
-Special: Can swap with allied unit
+
 </value>
-  </data>
-    <data name="Trader_Name" xml:space="preserve">
-    <value>Spy</value>
-  </data>
-    <data name="Wall_Description" xml:space="preserve">
-    <value>Wall
+    </data>
+    
+    <data name="Trench_BaseDescription" xml:space="preserve">
+        <value>Trench
 
-Info: Can be destoyed by allied unit
-
-Attack: Cannot attack
-Movement: Cannot move 
+Can be destroyed.
 </value>
-  </data>
-    <data name="Wall_Name" xml:space="preserve">
-    <value>Wall</value>
-  </data>
+    </data>
+    <data name="Trench_MovementDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Trench_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Trench_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Viking_BaseDescription" xml:space="preserve">
+        <value>Viking
+
+Moves and attacks like a knight in chess.</value>
+    </data>
+    <data name="Viking_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Viking_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Viking_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Wall_BaseDescription" xml:space="preserve">
+        <value>Wall
+
+Can be destroyed by siege, explosions
+and Warhammer.</value>
+    </data>
+    <data name="Wall_MovementDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Wall_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Wall_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Warhammer_BaseDescription" xml:space="preserve">
+        <value>Warhammer
+
+With move swings with hammer and
+kills multiple units.
+</value>
+    </data>
+    <data name="Warhammer_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬛⬛⬛⬜⬜⬜</value>
+    </data>
+    <data name="Warhammer_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Warhammer_SpecialDescription" xml:space="preserve">
+        <value>Movement examples:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜▦▦⬜⬜
+⬜⬜⬜⬜⬛▦⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜▦▦▦⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
+    </data>
+    
+    <data name="Warrior_BaseDescription" xml:space="preserve">
+        <value>Warrior
+
+Can kill upt to 3 units in line.</value>
+    </data>
+    <data name="Warrior_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Warrior_AttackDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    <data name="Warrior_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="YoungWizzard_BaseDescription" xml:space="preserve">
+        <value>Young Wizzard
+            
+When moving or attacking, explosion 
+kills units in specific shape.
+</value>
+    </data>
+    <data name="YoungWizzard_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜▩⬜▩⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+⬜▩⬜▩⬜⬜⬜⬜
+⬛⬜▣⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬛⬜⬛⬜⬜⬜
+</value>
+    </data>
+    <data name="YoungWizzard_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜▩⬜⬜⬜
+⬛⬜⬜▩⬛▩⬜⬜
+⬜⬜⬜⬜▩⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+</value>
+    </data>
+    <data name="YoungWizzard_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
 </root>
