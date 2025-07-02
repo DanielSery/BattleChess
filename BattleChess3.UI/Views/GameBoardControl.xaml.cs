@@ -22,7 +22,7 @@ public partial class GameBoardControl
             var image = (Image)sender;
             var tileViewModel = (TileViewModel)image.DataContext;
 
-            var itemsControl = FindAnchestor<ItemsControl>((DependencyObject)e.OriginalSource);
+            var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
             var boardView = (BoardViewModel)itemsControl.DataContext;
 
             boardView.CreateFigure(tileViewModel, figureBlueprint);
@@ -41,22 +41,20 @@ public partial class GameBoardControl
     private void Button_MouseEnter(object sender, MouseEventArgs e)
     {
         var button = (Button)sender;
-        var tileViewModel = (TileViewModel)button.DataContext;
-        var itemsControl = FindAnchestor<ItemsControl>(button);
+        var itemsControl = FindAncestor<ItemsControl>(button);
         var boardViewModel = (BoardViewModel)itemsControl.DataContext;
-        boardViewModel.MouseEnterCommand.Execute(tileViewModel);
+        boardViewModel.MouseEnterCommand.Execute(button.CommandParameter);
     }
 
     private void Button_MouseLeave(object sender, MouseEventArgs e)
     {
         var button = (Button)sender;
-        var tileViewModel = (TileViewModel)button.DataContext;
-        var itemsControl = FindAnchestor<ItemsControl>(button);
+        var itemsControl = FindAncestor<ItemsControl>(button);
         var boardViewModel = (BoardViewModel)itemsControl.DataContext;
-        boardViewModel.MouseExitCommand.Execute(tileViewModel);
+        boardViewModel.MouseExitCommand.Execute(button.CommandParameter);
     }
 
-    private static T FindAnchestor<T>(DependencyObject parent)
+    private static T FindAncestor<T>(DependencyObject parent)
         where T : DependencyObject
     {
         var current = parent;

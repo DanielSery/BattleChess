@@ -10,6 +10,8 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
 
     private IList<IFigureGroup> _figureGroups = Array.Empty<IFigureGroup>();
 
+    private FigureViewModel _tileInfo = new FigureViewModel(Figure.None);
+    private bool _tileInfoFocused;
     private IFigureGroup _selectedFigureGroup = EmptyFigureGroup.Instance;
 
     public FiguresViewModel(IFigureService figureService)
@@ -21,7 +23,10 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
             .ToArray();
         _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
 
-        SelectFigureGroupCommand = new RelayCommand<IFigureGroup>(group => SelectedFigureGroup = group);
+        GotFocusCommand = new RelayCommand<FigureViewModel>(GotFocus);
+        LostFocusCommand = new RelayCommand<FigureViewModel>(LostFocus);
+        MouseEnterCommand = new RelayCommand<FigureViewModel>(MouseEnterTile);
+        MouseExitCommand = new RelayCommand<FigureViewModel>(MouseExitTile);
     }
 
     public IFigureGroup SelectedFigureGroup
@@ -44,7 +49,44 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
         }
     }
 
-    public RelayCommand<IFigureGroup> SelectFigureGroupCommand { get; }
+    public FigureViewModel TileInfo
+    {
+        get => _tileInfo;
+        private set => Set(ref _tileInfo, value);
+    }
+
+    public RelayCommand<FigureViewModel> GotFocusCommand { get; }
+    public RelayCommand<FigureViewModel> LostFocusCommand { get; }
+    public RelayCommand<FigureViewModel> MouseEnterCommand { get; }
+    public RelayCommand<FigureViewModel> MouseExitCommand { get; }
+
+    private void GotFocus(FigureViewModel obj)
+    {
+        TileInfo = obj;
+        _tileInfoFocused = true;
+    }
+
+    private void LostFocus(FigureViewModel obj)
+    {
+        TileInfo = new FigureViewModel(Figure.None);
+        _tileInfoFocused = false;
+    }
+
+    private void MouseExitTile(FigureViewModel obj)
+    {
+        if (_tileInfoFocused)
+            return;
+        
+        TileInfo = new FigureViewModel(Figure.None);
+    }
+
+    private void MouseEnterTile(FigureViewModel obj)
+    {
+        if (_tileInfoFocused)
+            return;
+
+        TileInfo = obj;
+    }
 
     public void Dispose()
     {

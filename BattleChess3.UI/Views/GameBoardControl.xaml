@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:BoardViewModel}"
              d:DesignHeight="300" d:DesignWidth="300"
-             x:Name="ThisUserControl">
+             x:Name="ThisGameBoardControl">
     <ItemsControl HorizontalAlignment="Stretch"
                   ItemsSource="{Binding Tiles}">
         <ItemsControl.ItemsPanel>
@@ -16,7 +16,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Button Command="{Binding DataContext.ClickedCommand, ElementName=ThisUserControl}"
+                <Button Command="{Binding DataContext.ClickedCommand, ElementName=ThisGameBoardControl}"
                         CommandParameter="{Binding}"
                         Style="{DynamicResource ChessButtonStyle}"
                         d:DataContext="{d:DesignInstance viewModel:TileViewModel}"

@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:BoardViewModel}"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:FigureViewModel}"
              d:DesignHeight="300" d:DesignWidth="300"
              Background="{DynamicResource TextBoxBrush}" MinWidth="265">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid DataContext="{Binding InfoTile.Figure}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  Template="{DynamicResource ScrollViewerControlTemplate}">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

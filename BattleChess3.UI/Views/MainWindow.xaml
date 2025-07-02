@@ -61,7 +61,7 @@
                     <views:MultiplayerControl DataContext="{Binding MultiplayerViewModel}" />
                 </Border>
                 <Border BorderBrush="Black" BorderThickness="10,0,0,0">
-                    <views:UnitInfoControl DataContext="{Binding BoardViewModel}" />
+                    <views:UnitInfoControl DataContext="{Binding BoardViewModel.TileInfo.Figure}" />
                 </Border>
             </DockPanel>
         </TabItem>

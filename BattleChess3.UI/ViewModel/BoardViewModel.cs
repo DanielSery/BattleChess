@@ -42,7 +42,7 @@ public sealed class BoardViewModel : ViewModelBase
         {
             _selectedTile.IsSelected = false;
             Set(ref _selectedTile, value);
-            RaisePropertyChanged(nameof(InfoTile));
+            RaisePropertyChanged(nameof(TileInfo));
             value.IsSelected = true;
         }
     }
@@ -61,12 +61,12 @@ public sealed class BoardViewModel : ViewModelBase
                 SetPossibleActions(value);
             }
             
-            RaisePropertyChanged(nameof(InfoTile));
+            RaisePropertyChanged(nameof(TileInfo));
             value.IsMouseOver = true;
         }
     }
 
-    public TileViewModel InfoTile =>
+    public TileViewModel TileInfo =>
         SelectedTile is not NoneTileViewModel
             ? SelectedTile
             : MouseOnTile;

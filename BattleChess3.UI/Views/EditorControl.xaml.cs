@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using BattleChess3.Game.Figures;
+using BattleChess3.UI.ViewModel;
 
 namespace BattleChess3.UI.Views;
 
@@ -35,20 +36,52 @@ public partial class EditorControl
              Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
         {
             // Get the dragged ListViewItem
-            var image = (Image)sender;
-            var itemsControl = FindAnchestor<ItemsControl>((DependencyObject)e.OriginalSource);
+            var button = (Button)sender;
+            var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
 
             //// Find the data behind the ListViewItem
             var figureType = (IFigureType)itemsControl.DataContext;
-            var imagePair = (KeyValuePair<int, Uri>)image.DataContext;
+            var imagePair = (KeyValuePair<int, Uri>)button.DataContext;
             var dataObject = new DataObject("figureData", new FigureIdentifier(imagePair.Key, figureType));
 
             //// Initialize the drag & drop operation
-            DragDrop.DoDragDrop(image, dataObject, DragDropEffects.Move);
+            DragDrop.DoDragDrop(button, dataObject, DragDropEffects.Move);
         }
     }
 
-    private static T? FindAnchestor<T>(DependencyObject parent)
+    private void Button_GotFocus(object sender, RoutedEventArgs e)
+    {
+        var button = (Button)sender;
+        var stackPanel = FindAncestor<StackPanel>(button);
+        var boardViewModel = (FiguresViewModel)stackPanel.DataContext;
+        boardViewModel.GotFocusCommand.Execute(button.CommandParameter);
+    }
+
+    private void Button_LostFocus(object sender, RoutedEventArgs e)
+    {
+        var button = (Button)sender;
+        var stackPanel = FindAncestor<StackPanel>(button);
+        var boardViewModel = (FiguresViewModel)stackPanel.DataContext;
+        boardViewModel.LostFocusCommand.Execute(button.CommandParameter);
+    }
+
+    private void Button_MouseEnter(object sender, MouseEventArgs e)
+    {
+        var button = (Button)sender;
+        var stackPanel = FindAncestor<StackPanel>(button);
+        var boardViewModel = (FiguresViewModel)stackPanel.DataContext;
+        boardViewModel.MouseEnterCommand.Execute(button.CommandParameter);
+    }
+
+    private void Button_MouseLeave(object sender, MouseEventArgs e)
+    {
+        var button = (Button)sender;
+        var stackPanel = FindAncestor<StackPanel>(button);
+        var boardViewModel = (FiguresViewModel)stackPanel.DataContext;
+        boardViewModel.MouseExitCommand.Execute(button.CommandParameter);
+    }
+
+    private static T? FindAncestor<T>(DependencyObject parent)
         where T : DependencyObject
     {
         var current = parent;
