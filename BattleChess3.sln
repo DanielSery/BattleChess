@@ -8,8 +8,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.UI", "BattleCh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FigureSets", "FigureSets", "{F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.DefaultFigures", "FigureSets\BattleChess3.DefaultFigures\BattleChess3.DefaultFigures.csproj", "{EF9D77DE-FDAF-4A48-9224-C101A2E277F1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Themes", "Themes", "{A20E2905-567B-420B-951E-D888DFAC7632}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.CrossFireFigures", "FigureSets\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj", "{6342F138-8B23-498B-ACD6-E75FC3342BF2}"
@@ -32,10 +30,6 @@ Global
 		{EDC1603E-4D88-440C-BEFF-7EB78DB64FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDC1603E-4D88-440C-BEFF-7EB78DB64FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDC1603E-4D88-440C-BEFF-7EB78DB64FE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF9D77DE-FDAF-4A48-9224-C101A2E277F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF9D77DE-FDAF-4A48-9224-C101A2E277F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF9D77DE-FDAF-4A48-9224-C101A2E277F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF9D77DE-FDAF-4A48-9224-C101A2E277F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6342F138-8B23-498B-ACD6-E75FC3342BF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6342F138-8B23-498B-ACD6-E75FC3342BF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6342F138-8B23-498B-ACD6-E75FC3342BF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,8 +47,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EF9D77DE-FDAF-4A48-9224-C101A2E277F1} = {F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}
-		{6342F138-8B23-498B-ACD6-E75FC3342BF2} = {F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0A17059C-17CB-4FA9-BE6E-9BA95510BEFE}

@@ -674,6 +674,44 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string Empty_AttackDescription {
+            get {
+                return ResourceManager.GetString("Empty_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty
+        ///
+        ///Empty tile where units can move..
+        /// </summary>
+        internal static string Empty_BaseDescription {
+            get {
+                return ResourceManager.GetString("Empty_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Empty_MovementDescription {
+            get {
+                return ResourceManager.GetString("Empty_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Empty_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Empty_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string Explosives_AttackDescription {
             get {
                 return ResourceManager.GetString("Explosives_AttackDescription", resourceCulture);

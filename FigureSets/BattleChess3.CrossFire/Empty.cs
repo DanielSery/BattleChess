@@ -1,8 +1,8 @@
-﻿using BattleChess3.DefaultFigures.Localization;
+﻿using BattleChess3.CrossFireFigures.Localization;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 
-namespace BattleChess3.DefaultFigures;
+namespace BattleChess3.CrossFireFigures;
 
 public class Empty : IFigureType
 {
@@ -18,7 +18,7 @@ public class Empty : IFigureType
     IDictionary<int, Uri> IFigureType.ImageUris =>
         new Dictionary<int, Uri>
         {
-            { 0, new Uri($"pack://application:,,,/BattleChess3.DefaultFigures;component/Images/{GetType().Name}0.png", UriKind.Absolute) }
+            { 0, new Uri($"pack://application:,,,/BattleChess3.DefaultFigures;component/Images/{GetType().Name}.png", UriKind.Absolute) }
         };
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

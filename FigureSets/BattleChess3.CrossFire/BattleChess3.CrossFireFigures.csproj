@@ -15,7 +15,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\BattleChess3.Game\BattleChess3.Game.csproj" />
-        <ProjectReference Include="..\BattleChess3.DefaultFigures\BattleChess3.DefaultFigures.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

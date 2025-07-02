@@ -1,5 +1,4 @@
 ﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.DefaultFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 

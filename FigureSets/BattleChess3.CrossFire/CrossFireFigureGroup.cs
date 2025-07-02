@@ -12,9 +12,11 @@ public class CrossFireFigureGroup : IFigureGroup
     public static readonly IFigureType Knight = new Knight();
     public static readonly IFigureType Trench = new Trench();
     public static readonly IFigureType LegionarySword = new LegionarySword();
+    public static readonly IFigureType Empty = new Empty();
 
     public IFigureType[] FigureTypes { get; } =
     [
+        Empty,
         new Peasant(),
         new Spearman(),
         new Gladiator(),
