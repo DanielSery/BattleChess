@@ -83,5 +83,7 @@
       <Resource Include="Images\Button4Background.jpg" />
       <None Remove="Images\Button5Background.jpg" />
       <Resource Include="Images\Button5Background.jpg" />
+      <None Remove="Images\ChessTileBlackBorder.png" />
+      <Resource Include="Images\ChessTileOutsideBoard.png" />
     </ItemGroup>
 </Project>

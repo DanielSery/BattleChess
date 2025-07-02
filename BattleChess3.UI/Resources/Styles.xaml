@@ -24,6 +24,8 @@
     <ImageBrush x:Key="DefaultButtonMouseOnBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/DefaultButtonMouseOn.png" />
 
+    <ImageBrush x:Key="ChessTileOutsideBoardBackground"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileOutsideBoard.png" />
     <ImageBrush x:Key="ChessTileMouseOnBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileMouseOn.png" />
     <ImageBrush x:Key="ChessTileSelectedBackground"

@@ -15,6 +15,6 @@ public class MapBlueprint
     public string MapPath { get; init; } = string.Empty;
     public string PreviewPath { get; init; } = string.Empty;
     public Uri? PreviewUri => string.IsNullOrEmpty(PreviewPath) ? null : new Uri(Path.GetFullPath(PreviewPath));
-    public int StartingPlayer { get; init; }
+    public int StartingPlayer { get; init; } = 1;
     public FigureIdentifier[] Figures { get; init; } = [];
 }

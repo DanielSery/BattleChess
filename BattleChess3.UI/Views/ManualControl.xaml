@@ -7,25 +7,7 @@
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.FiguresViewModel}}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Column="0"
-                      ItemsSource="{Binding FigureGroups}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button Content="{Binding DisplayName}"
-                            Command="{Binding DataContext.SelectFigureGroupCommand, 
-                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                            CommandParameter="{Binding}"
-                            Style="{DynamicResource ManualButtonStyle}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        <ScrollViewer Grid.Column="1"
-                      Foreground="Black" Background="{DynamicResource TextBoxBrush}"
+        <ScrollViewer Foreground="Black" Background="{DynamicResource TextBoxBrush}"
                       VerticalScrollBarVisibility="Hidden">
             <ItemsControl DataContext="{Binding SelectedFigureGroup}"
                           ItemsSource="{Binding FigureTypes}">
@@ -81,5 +63,4 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-    </Grid>
 </UserControl>
