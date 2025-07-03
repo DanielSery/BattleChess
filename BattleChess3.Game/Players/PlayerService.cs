@@ -37,9 +37,16 @@ internal class PlayerService : IPlayerService
     {
         NextPlayer();
 
-        if (!CurrentPlayer.Figures.Any(x => x.IsKing))
+        foreach (var player in _players)
         {
-            PlayerWon?.Invoke(this, 3 - CurrentPlayer.Id);
+            if (player.Value.Equals(Player.Neutral))
+                continue;
+            
+            if (player.Value.Figures.Count == 0)
+                continue;
+            
+            if (!player.Value.Figures.Any(x => x.IsKing))
+                PlayerWon?.Invoke(this, 3 - player.Value.Id);
         }
     }
 
