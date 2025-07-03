@@ -8,7 +8,7 @@ public sealed class FigureGroupViewModel : IFigureGroup
     {
         DisplayName = figureGroup.DisplayName;
         FigureTypes = figureGroup.FigureTypes
-            .Select(x => new FigureViewModel(x))
+            .Select(x => new FigureTypeViewModel(x))
             .Cast<IFigureType>()
             .ToArray();
     }

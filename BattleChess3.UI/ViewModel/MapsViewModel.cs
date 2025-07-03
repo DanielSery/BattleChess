@@ -74,7 +74,8 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
             Figures = board.Select(x => new FigureIdentifier
             {
                 PlayerId = x.Figure.Owner.Id,
-                UniqueUnitId = ((IFigureType)x.Figure).UniqueFigureId
+                UniqueUnitId = ((IFigureType)x.Figure).UniqueFigureId,
+                IsKing = x.Figure.IsKing
             }).ToArray(),
             MapPath = $"Resources/Maps/{identifier}.map",
             PreviewPath = $"./Resources/Maps/{identifier}.png",

@@ -3,11 +3,11 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.UI.ViewModel;
 
-public sealed class FigureViewModel : IFigureType
+public sealed class FigureTypeViewModel : IFigureType
 {
     private readonly Func<ITile, IBoard, IEnumerable<FigureAction>> _getActionsFunc;
 
-    public FigureViewModel(IFigureType figureType)
+    public FigureTypeViewModel(IFigureType figureType)
     {
         _getActionsFunc = figureType.GetPossibleActions;
 

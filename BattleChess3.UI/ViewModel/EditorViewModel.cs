@@ -10,7 +10,7 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
 
     private IList<IFigureGroup> _figureGroups = Array.Empty<IFigureGroup>();
 
-    private FigureViewModel _tileInfo = new FigureViewModel(Figure.None);
+    private FigureTypeViewModel _tileInfo = new FigureTypeViewModel(Figure.None);
     private bool _tileInfoFocused;
     private IFigureGroup _selectedFigureGroup = EmptyFigureGroup.Instance;
 
@@ -23,10 +23,10 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
             .ToArray();
         _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
 
-        GotFocusCommand = new RelayCommand<FigureViewModel>(GotFocus);
-        LostFocusCommand = new RelayCommand<FigureViewModel>(LostFocus);
-        MouseEnterCommand = new RelayCommand<FigureViewModel>(MouseEnterTile);
-        MouseExitCommand = new RelayCommand<FigureViewModel>(MouseExitTile);
+        GotFocusCommand = new RelayCommand<FigureTypeViewModel>(GotFocus);
+        LostFocusCommand = new RelayCommand<FigureTypeViewModel>(LostFocus);
+        MouseEnterCommand = new RelayCommand<FigureTypeViewModel>(MouseEnterTile);
+        MouseExitCommand = new RelayCommand<FigureTypeViewModel>(MouseExitTile);
     }
 
     public IFigureGroup SelectedFigureGroup
@@ -49,38 +49,38 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
         }
     }
 
-    public FigureViewModel TileInfo
+    public FigureTypeViewModel TileInfo
     {
         get => _tileInfo;
         private set => Set(ref _tileInfo, value);
     }
 
-    public RelayCommand<FigureViewModel> GotFocusCommand { get; }
-    public RelayCommand<FigureViewModel> LostFocusCommand { get; }
-    public RelayCommand<FigureViewModel> MouseEnterCommand { get; }
-    public RelayCommand<FigureViewModel> MouseExitCommand { get; }
+    public RelayCommand<FigureTypeViewModel> GotFocusCommand { get; }
+    public RelayCommand<FigureTypeViewModel> LostFocusCommand { get; }
+    public RelayCommand<FigureTypeViewModel> MouseEnterCommand { get; }
+    public RelayCommand<FigureTypeViewModel> MouseExitCommand { get; }
 
-    private void GotFocus(FigureViewModel obj)
+    private void GotFocus(FigureTypeViewModel obj)
     {
         TileInfo = obj;
         _tileInfoFocused = true;
     }
 
-    private void LostFocus(FigureViewModel obj)
+    private void LostFocus(FigureTypeViewModel obj)
     {
-        TileInfo = new FigureViewModel(Figure.None);
+        TileInfo = new FigureTypeViewModel(Figure.None);
         _tileInfoFocused = false;
     }
 
-    private void MouseExitTile(FigureViewModel obj)
+    private void MouseExitTile(FigureTypeViewModel obj)
     {
         if (_tileInfoFocused)
             return;
         
-        TileInfo = new FigureViewModel(Figure.None);
+        TileInfo = new FigureTypeViewModel(Figure.None);
     }
 
-    private void MouseEnterTile(FigureViewModel obj)
+    private void MouseEnterTile(FigureTypeViewModel obj)
     {
         if (_tileInfoFocused)
             return;

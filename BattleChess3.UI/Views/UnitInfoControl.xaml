@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:FigureViewModel}"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:FigureTypeViewModel}"
              d:DesignHeight="300" d:DesignWidth="300" MinWidth="265">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"
