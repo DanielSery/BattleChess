@@ -56,7 +56,7 @@ public class Miner : ICrossFireFigureType
         foreach (var targetTile in movedPositions.GetRelativeTiles(board, sourceTile))
         {
             if (targetTile.IsEmpty())
-                targetTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Trench), board);
+                targetTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Trench, false), board);
         }
     }
 

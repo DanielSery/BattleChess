@@ -55,7 +55,7 @@ public class LegionarySword : ICrossFireFigureType
                 () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Knight), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Knight, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;
@@ -83,7 +83,7 @@ public class LegionarySword : ICrossFireFigureType
                 targetTile.AbsolutePosition,
                 () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Knight), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Knight, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;

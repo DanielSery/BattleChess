@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -17,12 +18,14 @@ public sealed class MainWindowViewModel : ViewModelBase
         MapsViewModel mapsViewModel,
         BoardViewModel boardViewModel,
         EditorViewModel editorViewModel,
-        MultiplayerViewModel multiplayerViewModel)
+        MultiplayerViewModel multiplayerViewModel,
+        IPlayerService playerService)
     {
         MapsViewModel = mapsViewModel;
         BoardViewModel = boardViewModel;
         EditorViewModel = editorViewModel;
         MultiplayerViewModel = multiplayerViewModel;
+        PlayerService = playerService;
 
         NewGameCommand = new RelayCommand(NewGame);
         JoinGameCommand = new RelayCommand(JoinGame);
@@ -32,6 +35,8 @@ public sealed class MainWindowViewModel : ViewModelBase
         CloseApplicationCommand = new RelayCommand(CloseApplication);
         
         BoardViewModel.ManualLoadMap(MapBlueprint.Empty);
+        
+        PlayerService.PlayerWon += PlayerServiceOnPlayerWon;
     }
 
 
@@ -62,13 +67,18 @@ public sealed class MainWindowViewModel : ViewModelBase
     public bool EditorTabSelected
     {
         get => _editorTabSelected;
-        set => SetTabSelected(out _editorTabSelected);
+        set
+        {
+            SetTabSelected(out _editorTabSelected);
+            BoardViewModel.ClearSelectedTile();
+        }
     }
 
     public MapsViewModel MapsViewModel { get; }
     public BoardViewModel BoardViewModel { get; }
     public EditorViewModel EditorViewModel { get; }
     public MultiplayerViewModel MultiplayerViewModel { get; }
+    public IPlayerService PlayerService { get; }
 
     public RelayCommand NewGameCommand { get; }
     public RelayCommand JoinGameCommand { get; }
@@ -101,6 +111,12 @@ public sealed class MainWindowViewModel : ViewModelBase
     private void DeleteGame()
     {
         MapsViewModel.DeleteSelectedMap();
+    }
+
+    private void PlayerServiceOnPlayerWon(object? sender, int e)
+    {
+        var playerColor = e == 1 ? "Red" : "Blue";
+        MessageBox.Show($"{playerColor} player won!", "Player won");
     }
 
     private static void CloseApplication()

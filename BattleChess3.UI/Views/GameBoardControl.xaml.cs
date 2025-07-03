@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using BattleChess3.Game.Figures;
 using BattleChess3.UI.ViewModel;
 
 namespace BattleChess3.UI.Views;
@@ -12,14 +11,6 @@ public partial class GameBoardControl
     public GameBoardControl()
     {
         InitializeComponent();
-    }
-
-    private void Image_Drop(object sender, DragEventArgs e)
-    {
-    }
-
-    private void Image_DragEnter(object sender, DragEventArgs e)
-    {
     }
 
     private void Button_MouseEnter(object sender, MouseEventArgs e)

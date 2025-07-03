@@ -65,7 +65,7 @@ internal static class FiguresHelper
         var figureType = tile.Figure.Type;
         figureType.OnDying(tile, board); 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty);
+        tile.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
         figureType.OnDied(tile, board);
     }
 
@@ -87,7 +87,7 @@ internal static class FiguresHelper
         killedFigure.OnBeingAttacked(to, from, board);
         
         to.Figure.Owner.Figures.Remove(to.Figure);
-        to.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty);
+        to.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
         
         killedFigure.OnDied(to, board);
         killedFigure.OnKilled(to, from, board);
@@ -106,7 +106,7 @@ internal static class FiguresHelper
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = from.Figure;
-        from.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty);
+        from.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
         
         attackingFigure.OnMoved(from, to, board);
         killedFigure.OnDied(to, board);

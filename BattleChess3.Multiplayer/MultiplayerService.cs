@@ -61,7 +61,7 @@ internal sealed class MultiplayerService : IMultiplayerService
                 for (var i = 0; i < map.Figures.Length; i++)
                 {
                     var index = i * 3;
-                    mapData[index] = (byte)map.Figures[i].PlayerId;
+                    mapData[index] = (byte)(map.Figures[i].PlayerId + (map.Figures[i].IsKing ? 128 : 0));
                     mapData[index + 1] = (byte)(map.Figures[i].UniqueUnitId / 256);
                     mapData[index + 2] = (byte)(map.Figures[i].UniqueUnitId % 256);
                 }
@@ -125,8 +125,9 @@ internal sealed class MultiplayerService : IMultiplayerService
                         for (var i = 0; i < figures.Length; i++)
                         {
                             var index = i * 3;
-                            figures[i] = new FigureIdentifier(mapData[index],
-                                mapData[index + 1] * 256 + mapData[index + 2]);
+                            figures[i] = new FigureIdentifier(mapData[index] % 128,
+                                mapData[index + 1] * 256 + mapData[index + 2],
+                                mapData[index] / 128 == 1);
                         }
 
                         var joinedMap = new MapBlueprint

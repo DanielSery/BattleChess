@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:views="clr-namespace:BattleChess3.UI.Views"
+             xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
@@ -19,17 +20,17 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Command="{Binding DataContext.PlayTileCommand, ElementName=ThisBoardControl}"
-                                CommandParameter="{Binding}"
-                                Style="{DynamicResource ChessButtonStyle}"
-                                d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
-                                MouseEnter="ChessButton_MouseEnter"
-                                MouseLeave="ChessButton_MouseLeave">
-                            <Image Source="{Binding Figure.ImageUri}"
-                                   Drop="ChessImage_Drop"
-                                   DragEnter="ChessImage_DragEnter"
-                                   AllowDrop="True" />
-                        </Button>
+                        <Grid>
+                            <Button Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisBoardControl}"
+                                    CommandParameter="{Binding}"
+                                    Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
+                                    d:DataContext="{d:DesignInstance viewModel:TileViewModel}">
+                                <Image Source="{Binding Figure.ImageUri}"
+                                       Drop="ChessImage_Drop"
+                                       DragEnter="ChessImage_DragEnter"
+                                       AllowDrop="True" />
+                            </Button>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -48,7 +49,7 @@
                               HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto"
                               Margin="15 0 0 0"
-                              Template="{DynamicResource ScrollViewerControlTemplate}">
+                              Template="{StaticResource ScrollViewerControlTemplate}">
                     <ItemsControl ItemsSource="{Binding FigureGroups}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -76,7 +77,7 @@
                                                     <DataTemplate>
                                                         <Button
                                                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext}"
-                                                            Style="{DynamicResource EditorChessButtonStyle}"
+                                                            Style="{StaticResource EditorChessButtonStyle}"
                                                             GotFocus="FigureButton_GotFocus"
                                                             LostFocus="FigureButton_LostFocus"
                                                             MouseEnter="FigureButton_MouseEnter"

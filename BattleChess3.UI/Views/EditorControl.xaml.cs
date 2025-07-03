@@ -42,7 +42,7 @@ public partial class EditorControl
             //// Find the data behind the ListViewItem
             var figureType = (IFigureType)itemsControl.DataContext;
             var imagePair = (KeyValuePair<int, Uri>)button.DataContext;
-            var dataObject = new DataObject("figureData", new FigureIdentifier(imagePair.Key, figureType));
+            var dataObject = new DataObject("figureData", new FigureIdentifier(imagePair.Key, figureType, false));
 
             //// Initialize the drag & drop operation
             DragDrop.DoDragDrop(button, dataObject, DragDropEffects.Move);
@@ -78,22 +78,6 @@ public partial class EditorControl
         var button = (Button)sender;
         var stackPanel = FindAncestor<StackPanel>(button);
         var boardViewModel = (EditorViewModel)stackPanel.DataContext;
-        boardViewModel.MouseExitCommand.Execute(button.CommandParameter);
-    }
-
-    private void ChessButton_MouseEnter(object sender, MouseEventArgs e)
-    {
-        var button = (Button)sender;
-        var itemsControl = FindAncestor<ItemsControl>(button);
-        var boardViewModel = (BoardViewModel)itemsControl.DataContext;
-        boardViewModel.MouseEnterCommand.Execute(button.CommandParameter);
-    }
-
-    private void ChessButton_MouseLeave(object sender, MouseEventArgs e)
-    {
-        var button = (Button)sender;
-        var itemsControl = FindAncestor<ItemsControl>(button);
-        var boardViewModel = (BoardViewModel)itemsControl.DataContext;
         boardViewModel.MouseExitCommand.Execute(button.CommandParameter);
     }
 

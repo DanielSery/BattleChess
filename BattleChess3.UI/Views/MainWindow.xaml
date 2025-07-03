@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="{localization:Loc MainWindow_Title}" Height="800" Width="1000" MinHeight="600" MinWidth="1000"
         DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.MainWindowViewModel}}"
-        Style="{DynamicResource MainWindowStyle}">
+        Style="{StaticResource MainWindowStyle}">
     <TabControl>
         <TabItem Header="{localization:Loc MainWindow_Menu_Header}"
                  IsSelected="{Binding MenuTabSelected}">
@@ -21,27 +21,27 @@
                                 DockPanel.Dock="Top"
                                 Command="{Binding NewGameCommand}"
                                 Content="{localization:Loc MainWindow_NewGame}" 
-                                Background="{DynamicResource Button1Background}"/>
+                                Background="{StaticResource Button1Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding JoinGameCommand}"
                                 Content="{localization:Loc MainWindow_JoinGame}" 
-                                Background="{DynamicResource Button2Background}"/>
+                                Background="{StaticResource Button2Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding SaveGameCommand}"
                                 Content="{localization:Loc MainWindow_SaveGame}" 
-                                Background="{DynamicResource Button3Background}"/>
+                                Background="{StaticResource Button3Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding DeleteGameCommand}"
                                 Content="{localization:Loc MainWindow_DeleteGame}" 
-                                Background="{DynamicResource Button4Background}"/>
+                                Background="{StaticResource Button4Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding CloseApplicationCommand}"
                                 Content="{localization:Loc MainWindow_Quit}" 
-                                Background="{DynamicResource Button5Background}"/>
+                                Background="{StaticResource Button5Background}"/>
                     </DockPanel>
                 </Viewbox>
                 <views:MapsControl MinWidth="500"

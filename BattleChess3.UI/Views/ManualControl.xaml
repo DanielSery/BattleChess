@@ -7,9 +7,9 @@
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
              DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.EditorViewModel}}">
-        <ScrollViewer Foreground="Black" Background="{DynamicResource TextBoxBrush}"
+        <ScrollViewer Foreground="Black"
                       VerticalScrollBarVisibility="Auto"
-                      Template="{DynamicResource ScrollViewerControlTemplate}">
+                      Template="{StaticResource ScrollViewerControlTemplate}">
             <ItemsControl DataContext="{Binding SelectedFigureGroup}"
                           ItemsSource="{Binding FigureTypes}">
                 <ItemsControl.ItemsPanel>
@@ -38,23 +38,23 @@
                                 
                                 <TextBlock DockPanel.Dock="Top"
                                            Text="{Binding Path=BaseDescription}"
-                                           Style="{DynamicResource TextBlockStyle}" 
+                                           Style="{StaticResource TextBlockStyle}" 
                                            Visibility="{Binding BaseDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"/>
 
                                 <WrapPanel>
                                     <TextBlock Text="{Binding Path=MovementDescription}"
                                                Visibility="{Binding MovementDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
-                                               Style="{DynamicResource TextBlockStyle}" 
+                                               Style="{StaticResource TextBlockStyle}" 
                                                Margin="20"/>
                                     
                                     <TextBlock Text="{Binding Path=AttackDescription}"
                                                Visibility="{Binding AttackDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
-                                               Style="{DynamicResource TextBlockStyle}" 
+                                               Style="{StaticResource TextBlockStyle}" 
                                                Margin="20"/>
                                     
                                     <TextBlock Text="{Binding Path=SpecialDescription}"
                                                Visibility="{Binding SpecialDescription, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
-                                               Style="{DynamicResource TextBlockStyle}" 
+                                               Style="{StaticResource TextBlockStyle}" 
                                                Margin="20"/>
                                 </WrapPanel>
 

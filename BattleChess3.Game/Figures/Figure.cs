@@ -1,31 +1,35 @@
-﻿using BattleChess3.Game.Board;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using BattleChess3.Game.Board;
 using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.Figures;
 
-public class Figure : IFigureType
+public class Figure : IFigure, IFigureType, INotifyPropertyChanged
 {
-    public static readonly Figure None = new(Player.Neutral, NoneFigureType.Instance);
+    public static readonly Figure None = new(Player.Neutral, NoneFigureType.Instance, false);
 
-    public Figure(Player owner, IFigureType type)
+    public Figure(Player owner, IFigureType type, bool isKing)
     {
         Id = Guid.NewGuid();
         Owner = owner;
         Type = type;
+        IsKing = isKing;
     }
 
-    public Figure(Guid id, Player owner, IFigureType type)
+    public Figure(Guid id, Player owner, IFigureType type, bool isKing)
     {
         Id = id;
         Owner = owner;
         Type = type;
+        IsKing = isKing;
     }
 
     public Guid Id { get; }
     public Player Owner { get; }
     public IFigureType Type { get; }
+    public bool IsKing { get; }
     public Uri ImageUri => Type.ImageUris[Owner.Id];
-
     public int FigureId => Type.FigureId;
     public int SetId => Type.SetId;
     public string DisplayName => Type.DisplayName;
@@ -43,5 +47,20 @@ public class Figure : IFigureType
     public override string ToString()
     {
         return $"{Type.DisplayName}:{Owner.Id}";
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
     }
 }

@@ -94,7 +94,7 @@ internal static class AdvancedFigureActions
             FigureActionTypes.Special, 
             targetTile.AbsolutePosition,
             targetTile.AbsolutePosition,
-            () => targetTile.CreateFigure(new Figure(player, figureType), board));
+            () => targetTile.CreateFigure(new Figure(player, figureType, false), board));
     }
 
     public static FigureAction CreateMoveAction(this ITile unitTile, ITile targetTile, IBoard board)

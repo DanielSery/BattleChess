@@ -3,10 +3,10 @@
 public interface IPlayerService
 {
     /// <summary>
-    ///     Gets players count.
+    /// Occurs when any player wins the game.
     /// </summary>
-    int PlayersCount { get; }
-
+    public event EventHandler<int> PlayerWon;
+    
     /// <summary>
     ///     Gets current player.
     /// </summary>

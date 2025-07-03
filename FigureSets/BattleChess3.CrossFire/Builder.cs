@@ -1,6 +1,7 @@
 ﻿using BattleChess3.CrossFireFigures.Utilities;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.CrossFireFigures;
 
@@ -29,7 +30,7 @@ public class Builder : ICrossFireFigureType
         foreach (var targetTile in _shieldPositions.GetRelativeTiles(board, unitTile))
         {
             if (targetTile.IsEmpty())
-                yield return unitTile.CreateNewFigureAction(targetTile, unitTile.Figure.Owner, CrossFireFigureGroup.Wall, board);
+                yield return unitTile.CreateNewFigureAction(targetTile, Player.Neutral, CrossFireFigureGroup.Wall, board);
 
             if (targetTile.Figure.Type is Wall)
                 yield return unitTile.CreateKillWithoutMove(targetTile, board);

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
+             xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:BoardViewModel}"
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="ThisGameBoardControl">
@@ -18,7 +19,7 @@
             <DataTemplate>
                 <Button Command="{Binding DataContext.PlayTileCommand, ElementName=ThisGameBoardControl}"
                         CommandParameter="{Binding}"
-                        Style="{DynamicResource ChessButtonStyle}"
+                        Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
                         d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
                         MouseEnter="Button_MouseEnter"
                         MouseLeave="Button_MouseLeave">

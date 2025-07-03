@@ -43,7 +43,7 @@ public class Bard : ICrossFireFigureType
                     {
                         var figureType = targetTile.Figure.Type;
                         targetTile.Figure.Owner.Figures.Remove(targetTile.Figure);
-                        targetTile.Figure = new Figure(unitTile.Figure.Owner, figureType);
+                        targetTile.Figure = new Figure(unitTile.Figure.Owner, figureType, false);
                     });
             }
         }

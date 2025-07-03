@@ -5,8 +5,15 @@ internal class PlayerService : IPlayerService
     private readonly IDictionary<int, Player> _players = new Dictionary<int, Player>();
     private int _currentPlayerId;
 
-    public int PlayersCount => _players.Count - 1;
+    public PlayerService()
+    {
+        _players.Clear();
+        _currentPlayerId = 0;
+    }
 
+    /// <inheritdoc />
+    public event EventHandler<int>? PlayerWon;
+    
     public Player CurrentPlayer => GetPlayer(_currentPlayerId);
 
     public Player GetPlayer(int id)
@@ -28,14 +35,11 @@ internal class PlayerService : IPlayerService
 
     public void NextTurn()
     {
-        while (true)
-        {
-            NextPlayer();
+        NextPlayer();
 
-            if (CurrentPlayer.Figures.Count > 0)
-            {
-                break;
-            }
+        if (!CurrentPlayer.Figures.Any(x => x.IsKing))
+        {
+            PlayerWon?.Invoke(this, 3 - CurrentPlayer.Id);
         }
     }
 
