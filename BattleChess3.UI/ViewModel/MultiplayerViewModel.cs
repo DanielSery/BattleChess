@@ -114,7 +114,8 @@ public sealed class MultiplayerViewModel : ViewModelBase
             Figures = _boardViewModel.Tiles.Select(x => new FigureIdentifier
             {
                 PlayerId = x.Figure.Owner.Id,
-                UniqueUnitId = ((IFigureType)x.Figure).UniqueFigureId
+                UniqueUnitId = ((IFigureType)x.Figure).UniqueFigureId,
+                IsKing = x.Figure.IsKing
             }).ToArray(),
             StartingPlayer = _playerService.CurrentPlayer.Id
         };

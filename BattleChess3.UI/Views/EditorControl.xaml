@@ -24,11 +24,11 @@
                             <Button Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisBoardControl}"
                                     CommandParameter="{Binding}"
                                     Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
-                                    d:DataContext="{d:DesignInstance viewModel:TileViewModel}">
-                                <Image Source="{Binding Figure.ImageUri}"
-                                       Drop="ChessImage_Drop"
-                                       DragEnter="ChessImage_DragEnter"
-                                       AllowDrop="True" />
+                                    d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
+                                    Drop="ChessImage_Drop"
+                                    DragEnter="ChessImage_DragEnter"
+                                    AllowDrop="True">
+                                <Image Source="{Binding Figure.ImageUri}" />
                             </Button>
                         </Grid>
                     </DataTemplate>

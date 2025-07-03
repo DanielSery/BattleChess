@@ -87,8 +87,8 @@ public partial class EditorControl
             return;
         
         var figureBlueprint = (FigureIdentifier)e.Data.GetData("figureData");
-        var image = (Image)sender;
-        var tileViewModel = (TileViewModel)image.DataContext;
+        var tileButton = (Button)sender;
+        var tileViewModel = (TileViewModel)tileButton.DataContext;
 
         var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
         var boardView = (BoardViewModel)itemsControl.DataContext;
