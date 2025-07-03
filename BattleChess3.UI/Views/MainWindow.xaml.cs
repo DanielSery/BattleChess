@@ -10,8 +10,6 @@ namespace BattleChess3.UI.Views;
 
 public partial class MainWindow
 {
-    private GameBoardControl? _lastBoardControl;
-
     public MainWindow()
     {
         InitializeComponent();
@@ -27,21 +25,9 @@ public partial class MainWindow
 
         Loaded += MainWindow_Loaded;
         DataContextChanged += MainWindow_DataContextChanged;
-        // EditorBoard.RequestBringIntoView += EditorBoard_RequestBringIntoView;
-        GameBoard.RequestBringIntoView += GameBoard_RequestBringIntoView;
     }
 
     public MainWindowViewModel? ViewModel { get; private set; }
-
-    private void GameBoard_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
-    {
-        _lastBoardControl = GameBoard;
-    }
-
-    private void EditorBoard_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
-    {
-        // _lastBoardControl = EditorBoard;
-    }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
@@ -67,15 +53,15 @@ public partial class MainWindow
 
     public void SaveBoardPreview(string fileName)
     {
-        var dpi = VisualTreeHelper.GetDpi(_lastBoardControl);
+        var dpi = VisualTreeHelper.GetDpi(GameBoard);
         var bmp = new RenderTargetBitmap(
-            (int)_lastBoardControl.ActualWidth,
-            (int)_lastBoardControl.ActualHeight,
+            (int)GameBoard.ActualWidth,
+            (int)GameBoard.ActualHeight,
             dpi.PixelsPerInchX / dpi.DpiScaleX,
             dpi.PixelsPerInchY / dpi.DpiScaleY,
             PixelFormats.Pbgra32);
 
-        bmp.Render(_lastBoardControl);
+        bmp.Render(GameBoard);
 
         var encoder = new PngBitmapEncoder();
         var frame = BitmapFrame.Create(bmp);

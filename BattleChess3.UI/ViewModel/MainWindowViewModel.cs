@@ -103,6 +103,8 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private void SaveGame()
     {
+        GameTabSelected = true;
+        MenuTabSelected = true;
         var identifier = DateTime.Now.Ticks.ToString();
         RequestSavePreview?.Invoke(this, identifier);
         MapsViewModel.SaveSelectedMap(identifier, BoardViewModel.Tiles);
