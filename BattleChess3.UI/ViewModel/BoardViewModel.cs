@@ -25,7 +25,7 @@ public sealed class BoardViewModel : ViewModelBase
         _mapLoader = mapLoader;
         _figureCreator = figureCreator;
 
-        ClickedCommand = new RelayCommand<TileViewModel>(ClickedAtTile);
+        PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
         MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
 
@@ -66,10 +66,12 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    public TileViewModel TileInfo =>
-        SelectedTile is not NoneTileViewModel
+    public TileViewModel TileInfo
+    {
+        get => SelectedTile is not NoneTileViewModel
             ? SelectedTile
             : MouseOnTile;
+    }
 
     public int BoardWidth
     {
@@ -79,7 +81,7 @@ public sealed class BoardViewModel : ViewModelBase
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
 
-    public RelayCommand<TileViewModel> ClickedCommand { get; }
+    public RelayCommand<TileViewModel> PlayTileCommand { get; }
     public RelayCommand<TileViewModel> MouseEnterCommand { get; }
     public RelayCommand<TileViewModel> MouseExitCommand { get; }
 
@@ -117,7 +119,7 @@ public sealed class BoardViewModel : ViewModelBase
         ClearPossibleActions();
     }
 
-    public void ClickedAtTile(TileViewModel clickedTile)
+    private void PlayTile(TileViewModel clickedTile)
     {
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {

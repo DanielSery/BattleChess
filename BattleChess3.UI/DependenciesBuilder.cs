@@ -41,7 +41,7 @@ public static class DependenciesBuilder
             .SingleInstance();
         builder.RegisterType<BoardViewModel>()
             .SingleInstance();
-        builder.RegisterType<FiguresViewModel>()
+        builder.RegisterType<EditorViewModel>()
             .SingleInstance();
         builder.RegisterType<MultiplayerViewModel>()
             .SingleInstance();

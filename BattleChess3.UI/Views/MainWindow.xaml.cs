@@ -27,7 +27,7 @@ public partial class MainWindow
 
         Loaded += MainWindow_Loaded;
         DataContextChanged += MainWindow_DataContextChanged;
-        EditorBoard.RequestBringIntoView += EditorBoard_RequestBringIntoView;
+        // EditorBoard.RequestBringIntoView += EditorBoard_RequestBringIntoView;
         GameBoard.RequestBringIntoView += GameBoard_RequestBringIntoView;
     }
 
@@ -40,7 +40,7 @@ public partial class MainWindow
 
     private void EditorBoard_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
     {
-        _lastBoardControl = EditorBoard;
+        // _lastBoardControl = EditorBoard;
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)

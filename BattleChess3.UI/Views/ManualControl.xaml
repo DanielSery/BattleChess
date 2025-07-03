@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
-             DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.FiguresViewModel}}">
+             DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.EditorViewModel}}">
         <ScrollViewer Foreground="Black" Background="{DynamicResource TextBoxBrush}"
                       VerticalScrollBarVisibility="Auto"
                       Template="{DynamicResource ScrollViewerControlTemplate}">
@@ -21,7 +21,7 @@
                     <DataTemplate>
                         <Border Margin="5" Padding="10"
                                 BorderBrush="Black" BorderThickness="10">
-                            <DockPanel>
+                            <DockPanel LastChildFill="True">
                                 <ItemsControl DockPanel.Dock="Right"
                                               ItemsSource="{Binding ImageUris}">
                                     <ItemsControl.ItemsPanel>

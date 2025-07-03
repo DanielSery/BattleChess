@@ -67,17 +67,7 @@
         </TabItem>
         <TabItem Header="{localization:Loc MainWindow_Editor_Header}"
                  IsSelected="{Binding EditorTabSelected}">
-            <DockPanel LastChildFill="True">
-                <Border>
-                    <views:GameBoardControl
-                        x:Name="EditorBoard"
-                        DataContext="{Binding BoardViewModel}" />
-                </Border>
-                <Border BorderBrush="Black" BorderThickness="10,0,0,0">
-                    <views:EditorControl
-                        DataContext="{Binding FiguresViewModel}" />
-                </Border>
-            </DockPanel>
+            <views:EditorControl/>
         </TabItem>
         <TabItem Header="{localization:Loc MainWindow_Manual_Header}"
                  IsSelected="{Binding ManualTabSelected}">

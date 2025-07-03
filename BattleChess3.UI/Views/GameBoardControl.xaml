@@ -16,16 +16,13 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Button Command="{Binding DataContext.ClickedCommand, ElementName=ThisGameBoardControl}"
+                <Button Command="{Binding DataContext.PlayTileCommand, ElementName=ThisGameBoardControl}"
                         CommandParameter="{Binding}"
                         Style="{DynamicResource ChessButtonStyle}"
                         d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
                         MouseEnter="Button_MouseEnter"
                         MouseLeave="Button_MouseLeave">
-                    <Image Source="{Binding Figure.ImageUri}"
-                           Drop="Image_Drop"
-                           DragEnter="Image_DragEnter"
-                           AllowDrop="True" />
+                    <Image Source="{Binding Figure.ImageUri}" />
                 </Button>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

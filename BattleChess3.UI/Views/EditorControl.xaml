@@ -5,39 +5,59 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:views="clr-namespace:BattleChess3.UI.Views"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:FiguresViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300"
-             x:Name="ThisEditorControl">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <views:UnitInfoControl Grid.Column="1"
-                               DataContext="{Binding TileInfo}"/>
-        <ScrollViewer Grid.Column="0"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto"
-                      Margin="15 0 0 0"
-                      Template="{DynamicResource ScrollViewerControlTemplate}">
-        <ItemsControl ItemsSource="{Binding FigureGroups}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <ItemsControl ItemsSource="{Binding FigureTypes}">
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DockPanel>
+        <Border x:Name="ThisBoardControl"
+            DataContext="{Binding BoardViewModel}">
+            <ItemsControl HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding Tiles}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="{Binding BoardWidth}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding DataContext.PlayTileCommand, ElementName=ThisBoardControl}"
+                                CommandParameter="{Binding}"
+                                Style="{DynamicResource ChessButtonStyle}"
+                                d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
+                                MouseEnter="ChessButton_MouseEnter"
+                                MouseLeave="ChessButton_MouseLeave">
+                            <Image Source="{Binding Figure.ImageUri}"
+                                   Drop="ChessImage_Drop"
+                                   DragEnter="ChessImage_DragEnter"
+                                   AllowDrop="True" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="10,0,0,0"
+                x:Name="ThisEditorControl"
+                DataContext="{Binding EditorViewModel}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <views:UnitInfoControl Grid.Column="1"
+                                       DataContext="{Binding TileInfo}" />
+                <ScrollViewer Grid.Column="0"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto"
+                              Margin="15 0 0 0"
+                              Template="{DynamicResource ScrollViewerControlTemplate}">
+                    <ItemsControl ItemsSource="{Binding FigureGroups}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal" />
+                                <StackPanel Orientation="Vertical" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <ItemsControl ItemsSource="{Binding ImageUris}"
-                                              Margin="15">
+                                <ItemsControl ItemsSource="{Binding FigureTypes}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Horizontal" />
@@ -45,27 +65,37 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Button
-                                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext}"
-                                                Style="{DynamicResource EditorChessButtonStyle}"
-                                                GotFocus="Button_GotFocus"
-                                                LostFocus="Button_LostFocus"
-                                                MouseEnter="Button_MouseEnter"
-                                                MouseLeave="Button_MouseLeave"
-                                                PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown"
-                                                PreviewMouseMove="Image_PreviewMouseMove">
-                                                <Image Source="{Binding Value}"
-                                                       MaxWidth="100" />
-                                            </Button>
+                                            <ItemsControl ItemsSource="{Binding ImageUris}"
+                                                          Margin="15">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext}"
+                                                            Style="{DynamicResource EditorChessButtonStyle}"
+                                                            GotFocus="FigureButton_GotFocus"
+                                                            LostFocus="FigureButton_LostFocus"
+                                                            MouseEnter="FigureButton_MouseEnter"
+                                                            MouseLeave="FigureButton_MouseLeave"
+                                                            PreviewMouseLeftButtonDown="FigureButton_PreviewMouseLeftButtonDown"
+                                                            PreviewMouseMove="FigureButton_PreviewMouseMove">
+                                                            <Image Source="{Binding Value}" MaxWidth="100" />
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
-    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </DockPanel>
 </UserControl>

@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace BattleChess3.UI.ViewModel;
 
-public sealed class FiguresViewModel : ViewModelBase, IDisposable
+public sealed class EditorViewModel : ViewModelBase, IDisposable
 {
     private readonly IFigureService _figureService;
 
@@ -14,7 +14,7 @@ public sealed class FiguresViewModel : ViewModelBase, IDisposable
     private bool _tileInfoFocused;
     private IFigureGroup _selectedFigureGroup = EmptyFigureGroup.Instance;
 
-    public FiguresViewModel(IFigureService figureService)
+    public EditorViewModel(IFigureService figureService)
     {
         _figureService = figureService;
         FigureGroups = _figureService

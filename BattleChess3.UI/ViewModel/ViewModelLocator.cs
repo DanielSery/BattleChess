@@ -6,5 +6,5 @@ public static class ViewModelLocator
 {
     public static MainWindowViewModel MainWindowViewModel => ServiceLocator.Current.GetInstance<MainWindowViewModel>();
 
-    public static FiguresViewModel FiguresViewModel => ServiceLocator.Current.GetInstance<FiguresViewModel>();
+    public static EditorViewModel EditorViewModel => ServiceLocator.Current.GetInstance<EditorViewModel>();
 }
