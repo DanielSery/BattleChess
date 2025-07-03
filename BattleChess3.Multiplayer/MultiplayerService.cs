@@ -24,7 +24,7 @@ internal sealed class MultiplayerService : IMultiplayerService
         _timer = new Timer
         {
             AutoReset = true,
-            Interval = 300,
+            Interval = 500,
             Enabled = true
         };
         _timer.Elapsed += TimerOnElapsed;

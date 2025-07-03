@@ -6,10 +6,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.Game", "Battle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.UI", "BattleChess3.UI\BattleChess3.UI.csproj", "{EDC1603E-4D88-440C-BEFF-7EB78DB64FE0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FigureSets", "FigureSets", "{F4AE98FC-E8F7-4D64-8EDD-CCAF59A5CDDF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Themes", "Themes", "{A20E2905-567B-420B-951E-D888DFAC7632}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleChess3.CrossFireFigures", "FigureSets\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj", "{6342F138-8B23-498B-ACD6-E75FC3342BF2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.Maps", "BattleChess3.Maps\BattleChess3.Maps.csproj", "{34CDCE2C-4349-4FA9-8355-1D6FB8B07811}"
