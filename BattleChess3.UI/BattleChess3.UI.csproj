@@ -32,6 +32,7 @@
         <PackageReference Include="CommonServiceLocator" Version="2.0.7"/>
         <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="Nicenis" Version="1.3.6" />
     </ItemGroup>
 
     <ItemGroup>

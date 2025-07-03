@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using BattleChess3.Game.Figures;
 using BattleChess3.UI.ViewModel;
+using Nicenis.Windows;
 
 namespace BattleChess3.UI.Views;
 
@@ -12,41 +13,9 @@ namespace BattleChess3.UI.Views;
 /// </summary>
 public partial class EditorControl
 {
-    private Point _startPoint;
-
     public EditorControl()
     {
         InitializeComponent();
-    }
-
-    private void FigureButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        // Store the mouse position
-        _startPoint = e.GetPosition(null);
-    }
-
-    private void FigureButton_PreviewMouseMove(object sender, MouseEventArgs e)
-    {
-        // Get the current mouse position
-        var mousePos = e.GetPosition(null);
-        var diff = _startPoint - mousePos;
-
-        if (e.LeftButton == MouseButtonState.Pressed &&
-            (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-             Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
-        {
-            // Get the dragged ListViewItem
-            var button = (Button)sender;
-            var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
-
-            //// Find the data behind the ListViewItem
-            var figureType = (IFigureType)itemsControl.DataContext;
-            var imagePair = (KeyValuePair<int, Uri>)button.DataContext;
-            var dataObject = new DataObject("figureData", new FigureIdentifier(imagePair.Key, figureType, false));
-
-            //// Initialize the drag & drop operation
-            DragDrop.DoDragDrop(button, dataObject, DragDropEffects.Move);
-        }
     }
 
     private void FigureButton_GotFocus(object sender, RoutedEventArgs e)
@@ -83,26 +52,28 @@ public partial class EditorControl
 
     private void ChessImage_Drop(object sender, DragEventArgs e)
     {
-        if (!e.Data.GetDataPresent("figureData")) 
+        if (!e.Data.GetDataPresent("BattleChess3.Game.Figures.FigureIdentifier")) 
             return;
         
-        var figureBlueprint = (FigureIdentifier)e.Data.GetData("figureData");
+        var figureIdentifier = (FigureIdentifier)e.Data.GetData("BattleChess3.Game.Figures.FigureIdentifier");
         var tileButton = (Button)sender;
         var tileViewModel = (TileViewModel)tileButton.DataContext;
 
         var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
         var boardView = (BoardViewModel)itemsControl.DataContext;
 
-        boardView.CreateFigure(tileViewModel, figureBlueprint);
+        boardView.CreateFigure(tileViewModel, figureIdentifier);
     }
 
-    private void ChessImage_DragEnter(object sender, DragEventArgs e)
+    private void ChessImage_DragEnter(object sender, DragSourceDraggingEventArgs e)
     {
-        if (!e.Data.GetDataPresent("figureData") ||
-            sender == e.Source)
-        {
-            e.Effects = DragDropEffects.Copy;
-        }
+        var image = (Image)sender;
+        var imagePair = (KeyValuePair<int, Uri>)image.DataContext;
+        var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
+
+        var figureType = (IFigureType)itemsControl.DataContext;
+        
+        e.Data = new FigureIdentifier(imagePair.Key, figureType, false);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)
