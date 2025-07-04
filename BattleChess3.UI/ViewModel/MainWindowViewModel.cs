@@ -30,10 +30,9 @@ public sealed class MainWindowViewModel : ViewModelBase
         JoinGameCommand = new RelayCommand(JoinGame);
         SaveGameCommand = new RelayCommand(SaveGame);
         DeleteGameCommand = new RelayCommand(DeleteGame);
+        EditorCommand = new RelayCommand(SelectEditor);
         SelectOptionsCommand = new RelayCommand(() => OptionsTabSelected = true);
         CloseApplicationCommand = new RelayCommand(CloseApplication);
-        
-        BoardViewModel.ManualLoadMap(MapBlueprint.Empty);
         
         PlayerService.PlayerWon += PlayerServiceOnPlayerWon;
     }
@@ -76,6 +75,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     public RelayCommand NewGameCommand { get; }
     public RelayCommand JoinGameCommand { get; }
     public RelayCommand SaveGameCommand { get; }
+    public RelayCommand EditorCommand { get; }
     public RelayCommand DeleteGameCommand { get; }
     public RelayCommand SelectOptionsCommand { get; }
     public RelayCommand CloseApplicationCommand { get; }
@@ -86,6 +86,11 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         BoardViewModel.ManualLoadMap(MapsViewModel.SelectedMap ?? MapBlueprint.Empty);
         GameTabSelected = true;
+    }
+
+    private void SelectEditor()
+    {
+        EditorTabSelected = true;
     }
 
     private void JoinGame()

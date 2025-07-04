@@ -7,12 +7,61 @@
              xmlns:views="clr-namespace:BattleChess3.UI.Views"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              xmlns:n="clr-namespace:Nicenis.Windows;assembly=Nicenis"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
+             xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:EditorViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <DockPanel>
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Left"
+              x:Name="ThisGridControl"
+              Width="{Binding ActualHeight, ElementName=ThisGridControl}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Grid.RowSpan="3"
+                    BorderBrush="Black" BorderThickness="0 0 0 6"
+                    SnapsToDevicePixels="True">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Visible"
+                              Margin="0 0 0 0"
+                              Template="{StaticResource ScrollViewerControlTemplate}"
+                              Drop="Figures_Drop"
+                              AllowDrop="True">
+                    <ItemsControl HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Figures}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    CommandParameter="{Binding .}"
+                                    Style="{StaticResource EditorChessButtonStyle}"
+                                    GotFocus="FigureButton_GotFocus"
+                                    LostFocus="FigureButton_LostFocus"
+                                    MouseEnter="FigureButton_MouseEnter"
+                                    MouseLeave="FigureButton_MouseLeave"
+                                    n:DragSource.AllowDrag="True"
+                                    n:DragSource.AllowedEffects="Copy"
+                                    n:DragSource.Dragging="ChessImage_DragEnter"
+                                    MaxWidth="100">
+                                    <Image Source="{Binding ImageUri}" />
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+            
             <Border x:Name="ThisBoardControl"
-                    DataContext="{Binding BoardViewModel}">
+                    Grid.Row="3"
+                    BorderBrush="Black" BorderThickness="0 0 6 0"
+                    SnapsToDevicePixels="True">
                 <ItemsControl HorizontalAlignment="Stretch"
                               ItemsSource="{Binding Tiles}">
                     <ItemsControl.ItemsPanel>
@@ -22,90 +71,83 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Button
-                                    Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisBoardControl}"
-                                    CommandParameter="{Binding}"
-                                    Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
-                                    d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
-                                    n:DragSource.AllowDrag="True"
-                                    n:DragSource.AllowedEffects="Move"
-                                    n:DragSource.Dragging="ChessButton_DragEnter"
-                                    Drop="ChessImage_Drop"
-                                    AllowDrop="True">
-                                    <Image Source="{Binding Figure.ImageUri}" />
-                                </Button>
-                            </Grid>
+                            <Button
+                                Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisBoardControl}"
+                                CommandParameter="{Binding}"
+                                Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
+                                d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
+                                n:DragSource.AllowDrag="True"
+                                n:DragSource.AllowedEffects="Move"
+                                n:DragSource.Dragging="ChessButton_DragEnter"
+                                Drop="ChessImage_Drop"
+                                AllowDrop="True">
+                                <Image Source="{Binding Figure.ImageUri}" />
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Border>
-            <Border BorderBrush="Black" BorderThickness="10,0,0,0"
-                    x:Name="ThisEditorControl"
-                    DataContext="{Binding EditorViewModel}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <views:UnitInfoControl Grid.Column="1"
-                                           DataContext="{Binding TileInfo}" />
-                    <ScrollViewer Grid.Column="0"
-                                  HorizontalScrollBarVisibility="Disabled"
-                                  VerticalScrollBarVisibility="Auto"
-                                  Margin="15 0 0 0"
-                                  Template="{StaticResource ScrollViewerControlTemplate}"
-                                  Drop="Figures_Drop"
-                                  AllowDrop="True">
-                        <ItemsControl ItemsSource="{Binding FigureGroups}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <ItemsControl ItemsSource="{Binding FigureTypes}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <ItemsControl ItemsSource="{Binding ImageUris}"
-                                                              Margin="15">
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <WrapPanel Orientation="Horizontal" />
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <Button
-                                                                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext}"
-                                                                Style="{StaticResource EditorChessButtonStyle}"
-                                                                GotFocus="FigureButton_GotFocus"
-                                                                LostFocus="FigureButton_LostFocus"
-                                                                MouseEnter="FigureButton_MouseEnter"
-                                                                MouseLeave="FigureButton_MouseLeave">
-                                                                <Image Source="{Binding Value}" MaxWidth="100" 
-                                                                       n:DragSource.AllowDrag="True"
-                                                                       n:DragSource.AllowedEffects="Copy"
-                                                                       n:DragSource.Dragging="ChessImage_DragEnter"/>
-                                                            </Button>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </Border>
-        </DockPanel>
-    </Grid>
+        </Grid>
+        
+        <Border DockPanel.Dock="Right">
+            
+        </Border>
+        
+        <Grid DockPanel.Dock="Right" SnapsToDevicePixels="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="130"/>
+                <ColumnDefinition Width="*" MinWidth="130"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+                    
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="Available points: 72" 
+                    BorderThickness="3 6 6 3"
+                    FontSize="25"
+                    Background="{StaticResource ButtonGreenBackground}"
+                    Padding="20"
+                    IsEnabled="False" Opacity="0.7"/>
+            <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                     Visibility="{Binding HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                     Content="{localization:Loc Editor_KingNotSelected}" 
+                     BorderThickness="3 3 6 3"
+                     FontSize="25"
+                     Background="{StaticResource ButtonRed2Background}"
+                     Padding="20"
+                     IsEnabled="False" Opacity="0.7"/>
+            
+            <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                     Visibility="{Binding HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
+                     Content="{localization:Loc Editor_KingSelected}" 
+                     BorderThickness="3 3 6 3"
+                     FontSize="25"
+                     Background="{StaticResource ButtonGreen2Background}"
+                     Padding="20"
+                     IsEnabled="False" Opacity="0.7"/>
+                    
+            <Button Grid.Row="2" Grid.Column="0"
+                    Command="{Binding NewGameCommand}"
+                    Content="Save" 
+                    BorderThickness="3 3 3 6"
+                    FontSize="25"
+                    Background="{StaticResource ButtonBlueBackground}"
+                    Padding="20"/>
+            <Button  Grid.Row="2" Grid.Column="1"
+                     Command="{Binding JoinGameCommand}"
+                     Content="Cancel" 
+                     BorderThickness="3 3 6 6"
+                     FontSize="25"
+                     Background="{StaticResource ButtonOrangeBackground}"
+                     Padding="20"/>
+                
+            <views:UnitInfoControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
+                                   DataContext="{Binding TileInfo}"
+                                   BorderBrush="Black" BorderThickness="3,0,0,0" />
+        </Grid>
+    </DockPanel>
 </UserControl>

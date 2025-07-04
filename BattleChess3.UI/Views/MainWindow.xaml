@@ -7,12 +7,12 @@
         xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
         xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
         mc:Ignorable="d"
-        Title="{localization:Loc MainWindow_Title}" Height="800" Width="1000" MinHeight="600" MinWidth="1000"
+        Title="{localization:Loc MainWindow_Title}" Height="800" Width="1035" MinHeight="600" MinWidth="1035"
         DataContext="{Binding Source={x:Static viewModel:ViewModelLocator.MainWindowViewModel}}"
         Style="{StaticResource MainWindowStyle}">
+    <!-- WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" -->
     <TabControl>
-        <TabItem Header="{localization:Loc MainWindow_Menu_Header}"
-                 IsSelected="{Binding MenuTabSelected}">
+        <TabItem IsSelected="{Binding MenuTabSelected}">
             <DockPanel>
                 <Viewbox DockPanel.Dock="Left" Stretch="Uniform"
                          HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -21,35 +21,45 @@
                                 DockPanel.Dock="Top"
                                 Command="{Binding NewGameCommand}"
                                 Content="{localization:Loc MainWindow_NewGame}" 
-                                Background="{StaticResource Button1Background}"/>
+                                BorderThickness="10 10 10 5"
+                                Background="{StaticResource ButtonBlueBackground}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding JoinGameCommand}"
                                 Content="{localization:Loc MainWindow_JoinGame}" 
-                                Background="{StaticResource Button2Background}"/>
+                                BorderThickness="10 5 10 5"
+                                Background="{StaticResource ButtonPurpleBackground}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding SaveGameCommand}"
                                 Content="{localization:Loc MainWindow_SaveGame}" 
-                                Background="{StaticResource Button3Background}"/>
+                                BorderThickness="10 5 10 5"
+                                Background="{StaticResource ButtonRedBackground}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding DeleteGameCommand}"
                                 Content="{localization:Loc MainWindow_DeleteGame}" 
-                                Background="{StaticResource Button4Background}"/>
+                                BorderThickness="10 5 10 5"
+                                Background="{StaticResource ButtonOrangeBackground}"/>
+                        <Button Height="125" Width="300"
+                                DockPanel.Dock="Top"
+                                Command="{Binding EditorCommand}"
+                                Content="Editor" 
+                                BorderThickness="10 5 10 5"
+                                Background="{StaticResource ButtonGreen2Background}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
                                 Command="{Binding CloseApplicationCommand}"
                                 Content="{localization:Loc MainWindow_Quit}" 
-                                Background="{StaticResource Button5Background}"/>
+                                BorderThickness="10 5 10 10"
+                                Background="{StaticResource ButtonOrange2Background}"/>
                     </DockPanel>
                 </Viewbox>
                 <views:MapsControl MinWidth="500"
                                    DataContext="{Binding MapsViewModel}" />
             </DockPanel>
         </TabItem>
-        <TabItem Header="{localization:Loc MainWindow_Game_Header}"
-                 IsSelected="{Binding GameTabSelected}">
+        <TabItem IsSelected="{Binding GameTabSelected}">
             <DockPanel LastChildFill="True">
                 <Border DockPanel.Dock="Left">
                     <views:GameBoardControl
@@ -65,9 +75,8 @@
                 </Border>
             </DockPanel>
         </TabItem>
-        <TabItem Header="{localization:Loc MainWindow_Editor_Header}"
-                 IsSelected="{Binding EditorTabSelected}">
-            <views:EditorControl/>
+        <TabItem IsSelected="{Binding EditorTabSelected}">
+            <views:EditorControl DataContext="{Binding EditorViewModel}"/>
         </TabItem>
     </TabControl>
 </Window>

@@ -23,33 +23,33 @@ public partial class EditorControl
     private void FigureButton_GotFocus(object sender, RoutedEventArgs e)
     {
         var button = (Button)sender;
-        var stackPanel = FindAncestor<StackPanel>(button);
-        var boardViewModel = (EditorViewModel)stackPanel.DataContext;
-        boardViewModel.GotFocusCommand.Execute(button.CommandParameter);
+        var stackPanel = FindAncestor<Grid>(button);
+        var editorViewModel = (EditorViewModel)stackPanel.DataContext;
+        editorViewModel.FigureGotFocusCommand.Execute(button.CommandParameter);
     }
 
     private void FigureButton_LostFocus(object sender, RoutedEventArgs e)
     {
         var button = (Button)sender;
-        var stackPanel = FindAncestor<StackPanel>(button);
-        var boardViewModel = (EditorViewModel)stackPanel.DataContext;
-        boardViewModel.LostFocusCommand.Execute(button.CommandParameter);
+        var stackPanel = FindAncestor<Grid>(button);
+        var editorViewModel = (EditorViewModel)stackPanel.DataContext;
+        editorViewModel.FigureLostFocusCommand.Execute(button.CommandParameter);
     }
 
     private void FigureButton_MouseEnter(object sender, MouseEventArgs e)
     {
         var button = (Button)sender;
-        var stackPanel = FindAncestor<StackPanel>(button);
-        var boardViewModel = (EditorViewModel)stackPanel.DataContext;
-        boardViewModel.MouseEnterCommand.Execute(button.CommandParameter);
+        var stackPanel = FindAncestor<Grid>(button);
+        var editorViewModel = (EditorViewModel)stackPanel.DataContext;
+        editorViewModel.FigureMouseEnterCommand.Execute(button.CommandParameter);
     }
 
     private void FigureButton_MouseLeave(object sender, MouseEventArgs e)
     {
         var button = (Button)sender;
-        var stackPanel = FindAncestor<StackPanel>(button);
-        var boardViewModel = (EditorViewModel)stackPanel.DataContext;
-        boardViewModel.MouseExitCommand.Execute(button.CommandParameter);
+        var stackPanel = FindAncestor<Grid>(button);
+        var editorViewModel = (EditorViewModel)stackPanel.DataContext;
+        editorViewModel.FigureMouseExitCommand.Execute(button.CommandParameter);
     }
 
     private void ChessImage_Drop(object sender, DragEventArgs e)
@@ -61,31 +61,31 @@ public partial class EditorControl
             var targetTile = (TileViewModel)tileButton.DataContext;
 
             var itemsControl = FindAncestor<ItemsControl>((DependencyObject)sender);
-            var boardViewModel = (BoardViewModel)itemsControl.DataContext;
+            var editorViewModel = (EditorViewModel)itemsControl.DataContext;
 
-            boardViewModel.CreateFigure(targetTile, figureIdentifier);
+            editorViewModel.CreateFigure(targetTile, figureIdentifier);
         }
-        else if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
+        else if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.EditorViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
         {
-            var (boardViewModel, sourceTile) =  ((BoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+            var (editorViewModel, sourceTile) =  ((EditorViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.EditorViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
             var sourceFigureIdentifier = new FigureIdentifier(sourceTile.Figure.Owner.Id, sourceTile.Figure.Type, sourceTile.Figure.IsKing);
             
             var tileButton = (Button)sender;
             var targetTile = (TileViewModel)tileButton.DataContext;
             var targetFigureIdentifier = new FigureIdentifier(targetTile.Figure.Owner.Id, targetTile.Figure.Type, targetTile.Figure.IsKing);
             
-            boardViewModel.CreateFigure(sourceTile, targetFigureIdentifier);
-            boardViewModel.CreateFigure(targetTile, sourceFigureIdentifier);
+            editorViewModel.CreateFigure(sourceTile, targetFigureIdentifier);
+            editorViewModel.CreateFigure(targetTile, sourceFigureIdentifier);
         }
     }
 
     private void Figures_Drop(object sender, DragEventArgs e)
     {
-        if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
+        if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.EditorViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
         {
-            var (boardViewModel, sourceTile) =  ((BoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+            var (editorViewModel, sourceTile) =  ((EditorViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.EditorViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
 
-            boardViewModel.CreateFigure(sourceTile, new FigureIdentifier(0, CrossFireFigureGroup.Empty, false));
+            editorViewModel.CreateFigure(sourceTile, new FigureIdentifier(0, CrossFireFigureGroup.Empty, false));
         }
     }
 
@@ -95,20 +95,16 @@ public partial class EditorControl
         var tileViewModel = (TileViewModel)button.DataContext;
         
         var itemsControl = FindAncestor<ItemsControl>((DependencyObject)sender);
-        var boardViewModel = (BoardViewModel)itemsControl.DataContext;
+        var editorViewModel = (EditorViewModel)itemsControl.DataContext;
         
-        e.Data = (boardViewModel, tileViewModel);
+        e.Data = (editorViewModel, tileViewModel);
     }
 
     private void ChessImage_DragEnter(object sender, DragSourceDraggingEventArgs e)
     {
-        var image = (Image)sender;
-        var imagePair = (KeyValuePair<int, Uri>)image.DataContext;
-        var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
-
-        var figureType = (IFigureType)itemsControl.DataContext;
-        
-        e.Data = new FigureIdentifier(imagePair.Key, figureType, false);
+        var button = (Button)sender;
+        var figureType = (FigureTypeViewModel)button.DataContext;
+        e.Data = new FigureIdentifier(figureType.PlayerId, figureType.UniqueFigureId, false);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

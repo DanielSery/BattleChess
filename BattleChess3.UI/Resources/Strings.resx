@@ -189,4 +189,10 @@
     <data name="MultiplayerService_ApiKey" xml:space="preserve">
     <value>Api key</value>
   </data>
+    <data name="Editor_KingSelected" xml:space="preserve">
+    <value>King selected</value>
+  </data>
+    <data name="Editor_KingNotSelected" xml:space="preserve">
+    <value>King not selected</value>
+  </data>
 </root>

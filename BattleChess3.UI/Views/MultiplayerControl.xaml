@@ -29,6 +29,7 @@
             <TextBlock Text="{Binding GameId}"
                        Style="{StaticResource TextBlockStyle}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                       FontSize="25"
                        MaxHeight="150" />
         </Border>
 
@@ -38,20 +39,20 @@
             Content="{localization:Loc MultiplayerControl_HostButton}"
             Command="{Binding HostAndCopyCommand}"
             Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" 
-            Background="{StaticResource Button1Background}"/>
+            Background="{StaticResource ButtonBlueBackground}"/>
         <Button
             Grid.Column="1" Grid.Row="1"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_JoinButton}"
             Command="{Binding PasteAndJoinCommand}"
             Visibility="{Binding CanConnect, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" 
-            Background="{StaticResource Button2Background}"/>
+            Background="{StaticResource ButtonGreen2Background}"/>
         <Button
             Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
             FontSize="25"
             Content="{localization:Loc MultiplayerControl_StopButton}"
             Command="{Binding StopCommand}"
             Visibility="{Binding IsConnected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Hidden}}" 
-            Background="{StaticResource Button5Background}"/>
+            Background="{StaticResource ButtonOrange2Background}"/>
     </Grid>
 </UserControl>

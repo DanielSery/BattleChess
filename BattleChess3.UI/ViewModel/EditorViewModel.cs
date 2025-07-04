@@ -1,52 +1,79 @@
-﻿using BattleChess3.Game.Figures;
+﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using NUnit.Framework;
 
 namespace BattleChess3.UI.ViewModel;
 
 public sealed class EditorViewModel : ViewModelBase, IDisposable
 {
     private readonly IFigureService _figureService;
+    private readonly IFigureCreator _figureCreator;
 
-    private IList<IFigureGroup> _figureGroups = Array.Empty<IFigureGroup>();
-
+    private FigureTypeViewModel[] _figures = [];
     private FigureTypeViewModel _tileInfo = new FigureTypeViewModel(Figure.None);
     private bool _tileInfoFocused;
-    private IFigureGroup _selectedFigureGroup = EmptyFigureGroup.Instance;
+    private int _pointsLeft;
+    private bool _hasKing;
 
-    public EditorViewModel(IFigureService figureService)
+    public EditorViewModel(
+        IFigureService figureService,
+        IFigureCreator figureCreator)
     {
         _figureService = figureService;
-        FigureGroups = _figureService
-            .GetFigureGroups()
-            .Select<IFigureGroup, IFigureGroup>(x => new FigureGroupViewModel(x))
-            .ToArray();
         _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
+        Figures = _figureService.GetFigureGroups()
+            .SelectMany(x => x.FigureTypes)
+            .Select(x => new FigureTypeViewModel(x))
+            .ToArray();
 
-        GotFocusCommand = new RelayCommand<FigureTypeViewModel>(GotFocus);
-        LostFocusCommand = new RelayCommand<FigureTypeViewModel>(LostFocus);
-        MouseEnterCommand = new RelayCommand<FigureTypeViewModel>(MouseEnterTile);
-        MouseExitCommand = new RelayCommand<FigureTypeViewModel>(MouseExitTile);
-    }
+        _figureCreator = figureCreator;
 
-    public IFigureGroup SelectedFigureGroup
-    {
-        get => _selectedFigureGroup;
-        private set => Set(ref _selectedFigureGroup, value);
-    }
+        FigureGotFocusCommand = new RelayCommand<FigureTypeViewModel>(GotFocus);
+        FigureLostFocusCommand = new RelayCommand<FigureTypeViewModel>(LostFocus);
+        FigureMouseEnterCommand = new RelayCommand<FigureTypeViewModel>(MouseEnterTile);
+        FigureMouseExitCommand = new RelayCommand<FigureTypeViewModel>(MouseExitTile);
+        MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
 
-    public IList<IFigureGroup> FigureGroups
-    {
-        get => _figureGroups;
-        private set
+        Tiles = Enumerable.Range(0, IBoard.Length * 2)
+            .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
+            .ToArray();
+        Board = new Board(Tiles.Cast<ITile>().ToArray());
+        
+        for (var i = 0; i < Board.Count; i++)
         {
-            Set(ref _figureGroups, value);
-            if (_figureGroups.All(x => x.DisplayName != _selectedFigureGroup.DisplayName))
-            {
-                SelectedFigureGroup = _figureGroups.FirstOrDefault()
-                                      ?? EmptyFigureGroup.Instance;
-            }
+            Board[i].Figure = new Figure(Player.Neutral, _figureService.GetFigureByUniqueUnitId(0), false);
         }
+    }
+
+    public int BoardWidth
+    {
+        get => IBoard.Length;
+    }
+
+    public IBoard Board { get; }
+    public TileViewModel[] Tiles { get; }
+
+    public int PointsLeft
+    {
+        get => _pointsLeft;
+        private set => Set(ref _pointsLeft, value);
+    }
+
+    public bool CanSave => PointsLeft > 0 && HasKing;
+
+    public bool HasKing
+    {
+        get => _hasKing;
+        private set => Set(ref _hasKing, value);
+    }
+
+    public FigureTypeViewModel[] Figures
+    {
+        get => _figures;
+        private set => Set(ref _figures, value);
     }
 
     public FigureTypeViewModel TileInfo
@@ -55,10 +82,11 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
         private set => Set(ref _tileInfo, value);
     }
 
-    public RelayCommand<FigureTypeViewModel> GotFocusCommand { get; }
-    public RelayCommand<FigureTypeViewModel> LostFocusCommand { get; }
-    public RelayCommand<FigureTypeViewModel> MouseEnterCommand { get; }
-    public RelayCommand<FigureTypeViewModel> MouseExitCommand { get; }
+    public RelayCommand<TileViewModel> MakeUnitKingCommand { get; }
+    public RelayCommand<FigureTypeViewModel> FigureGotFocusCommand { get; }
+    public RelayCommand<FigureTypeViewModel> FigureLostFocusCommand { get; }
+    public RelayCommand<FigureTypeViewModel> FigureMouseEnterCommand { get; }
+    public RelayCommand<FigureTypeViewModel> FigureMouseExitCommand { get; }
 
     private void GotFocus(FigureTypeViewModel obj)
     {
@@ -88,6 +116,48 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
         TileInfo = obj;
     }
 
+    public void CreateFigure(ITile tile, FigureIdentifier figureIdentifier)
+    {
+        tile.Figure.Owner.Figures.Remove(tile.Figure);
+        tile.Figure = _figureCreator.CreateFigure(figureIdentifier);
+    }
+
+    private void MakeUnitKing(TileViewModel tile)
+    {
+        if (tile.Figure.Owner.Equals(Player.Neutral))
+            return;
+
+        if (tile.Figure.IsKing)
+        {
+            var demotedFigureId = tile.Figure.Type.UniqueFigureId;
+            tile.Figure.Owner.Figures.Remove(tile.Figure);
+            tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(tile.Figure.Owner.Id, demotedFigureId, false));
+            
+            HasKing = false;
+            RaisePropertyChanged(nameof(CanSave));
+            return;
+        }
+        
+        var owner = tile.Figure.Owner;
+        foreach (var checkedTile in Board)
+        {
+            if (!checkedTile.Figure.Owner.Equals(owner) ||
+                !checkedTile.Figure.IsKing) 
+                continue;
+            
+            var demotedFigureId = checkedTile.Figure.Type.UniqueFigureId;
+            checkedTile.Figure.Owner.Figures.Remove(checkedTile.Figure);
+            checkedTile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, demotedFigureId, false));
+        }
+        
+        var upgradedFigureId = tile.Figure.Type.UniqueFigureId;
+        tile.Figure.Owner.Figures.Remove(tile.Figure);
+        tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, upgradedFigureId, true));
+        
+        HasKing = true;
+        RaisePropertyChanged(nameof(CanSave));
+    }
+
     public void Dispose()
     {
         _figureService.FigureGroupsChanged -= OnFigureGroupsChanged;
@@ -95,8 +165,8 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
 
     private void OnFigureGroupsChanged(object? sender, IList<IFigureGroup> groups)
     {
-        FigureGroups = groups
-            .Select<IFigureGroup, IFigureGroup>(x => new FigureGroupViewModel(x))
+        Figures = groups.SelectMany(x => x.FigureTypes)
+            .Select(x => new FigureTypeViewModel(x))
             .ToArray();
     }
 }

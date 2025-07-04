@@ -3,7 +3,7 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.UI.ViewModel;
 
-public sealed class FigureTypeViewModel : IFigureType
+public sealed class FigureTypeViewModel
 {
     private readonly Func<ITile, IBoard, IEnumerable<FigureAction>> _getActionsFunc;
 
@@ -11,24 +11,33 @@ public sealed class FigureTypeViewModel : IFigureType
     {
         _getActionsFunc = figureType.GetPossibleActions;
 
-        FigureId = figureType.FigureId;
-        SetId = figureType.SetId;
+        UniqueFigureId = figureType.UniqueFigureId;
         DisplayName = figureType.DisplayName;
         BaseDescription = figureType.BaseDescription;
         MovementDescription = figureType.MovementDescription;
         AttackDescription = figureType.AttackDescription;
         SpecialDescription = figureType.SpecialDescription;
-        ImageUris = figureType.ImageUris;
+
+        if (figureType.ImageUris.TryGetValue(1, out var redUri))
+        {
+            PlayerId = 1;
+            ImageUri = redUri;
+        }
+        else if (figureType.ImageUris.TryGetValue(0, out var neutralUri))
+        {
+            PlayerId = 0;
+            ImageUri = neutralUri;
+        }
     }
 
-    public int FigureId { get; }
-    public int SetId { get; }
+    public int PlayerId { get; set; }
+    public int UniqueFigureId { get; }
     public string DisplayName { get; }
     public string BaseDescription { get; }
     public string MovementDescription { get; }
     public string AttackDescription { get; }
     public string SpecialDescription { get; }
-    public IDictionary<int, Uri> ImageUris { get; }
+    public Uri? ImageUri { get; }
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

@@ -25,7 +25,6 @@ public sealed class BoardViewModel : ViewModelBase
         _mapLoader = mapLoader;
         _figureCreator = figureCreator;
 
-        MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
         PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
         MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
@@ -34,6 +33,8 @@ public sealed class BoardViewModel : ViewModelBase
             .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
             .ToArray();
         Board = new Board(Tiles.Cast<ITile>().ToArray());
+        
+        _mapLoader.LoadMap(Board, MapBlueprint.Empty);
     }
 
     public TileViewModel SelectedTile
@@ -82,8 +83,6 @@ public sealed class BoardViewModel : ViewModelBase
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
     
-
-    public RelayCommand<TileViewModel> MakeUnitKingCommand { get; }
     public RelayCommand<TileViewModel> PlayTileCommand { get; }
     public RelayCommand<TileViewModel> MouseEnterCommand { get; }
     public RelayCommand<TileViewModel> MouseExitCommand { get; }
@@ -109,12 +108,6 @@ public sealed class BoardViewModel : ViewModelBase
         _mapLoader.LoadMap(Board, map);
     }
 
-    public void CreateFigure(ITile tile, FigureIdentifier figureIdentifier)
-    {
-        tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = _figureCreator.CreateFigure(figureIdentifier);
-    }
-
     public void RemotePlayTurn(TileViewModel fromTile, TileViewModel toTile)
     {
         SelectedTile = NoneTileViewModel.Instance;
@@ -127,28 +120,6 @@ public sealed class BoardViewModel : ViewModelBase
         SelectedTile = NoneTileViewModel.Instance;
         _playerService.NextTurn();
         ClearPossibleActions();
-    }
-
-    private void MakeUnitKing(TileViewModel tile)
-    {
-        if (tile.Figure.Owner.Equals(Player.Neutral))
-            return;
-        
-        var owner = tile.Figure.Owner;
-        foreach (var checkedTile in Board)
-        {
-            if (!checkedTile.Figure.Owner.Equals(owner) ||
-                !checkedTile.Figure.IsKing) 
-                continue;
-            
-            var demotedFigureId = checkedTile.Figure.Type.UniqueFigureId;
-            checkedTile.Figure.Owner.Figures.Remove(checkedTile.Figure);
-            checkedTile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, demotedFigureId, false));
-        }
-        
-        var upgradedFigureId = tile.Figure.Type.UniqueFigureId;
-        tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, upgradedFigureId, true));
     }
 
     private void PlayTile(TileViewModel clickedTile)

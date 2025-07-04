@@ -39,6 +39,7 @@ internal class FigureService : IFigureService
 
     public IList<IFigureGroup> GetFigureGroups()
     {
+        _figuresLoaded.Task.Wait();
         return _figureGroups;
     }
 

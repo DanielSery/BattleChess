@@ -12,13 +12,6 @@
     <SolidColorBrush x:Key="DefaultObjectSelectedForeground" Color="#1C5945" />
     <SolidColorBrush x:Key="DefaultObjectDisabledForeground" Color="#6D3651" />
 
-    <ImageBrush x:Key="TabItemBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/TabItem.png" />
-    <ImageBrush x:Key="TabItemMouseOnBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/TabItemMouseOn.png" />
-    <ImageBrush x:Key="TabItemDisabledBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/TabItemDisabled.png" />
-
     <ImageBrush x:Key="DefaultButtonBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/DefaultButton.png" />
     <ImageBrush x:Key="DefaultButtonMouseOnBackground"
@@ -48,20 +41,29 @@
     <ImageBrush x:Key="ChessTileKingDangeredBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileKingDangered.png" />
     
-    <ImageBrush x:Key="Button1Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/Button1Background.jpg" 
+    <ImageBrush x:Key="ButtonBlueBackground"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonBlueBackground.jpg" 
                 Stretch="UniformToFill"/>
-    <ImageBrush x:Key="Button2Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/Button2Background.jpg" 
+    <ImageBrush x:Key="ButtonGreenBackground"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonGreenBackground.jpg"
                 Stretch="UniformToFill"/>
-    <ImageBrush x:Key="Button3Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/Button3Background.jpg" 
+    <ImageBrush x:Key="ButtonGreen2Background"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonGreen2Background.jpg" 
                 Stretch="UniformToFill"/>
-    <ImageBrush x:Key="Button4Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/Button4Background.jpg" 
+    <ImageBrush x:Key="ButtonRedBackground"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonRedBackground.jpg" 
                 Stretch="UniformToFill"/>
-    <ImageBrush x:Key="Button5Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/Button5Background.jpg" 
+    <ImageBrush x:Key="ButtonRed2Background"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonRed2Background.png" 
+                Stretch="UniformToFill"/>
+    <ImageBrush x:Key="ButtonOrangeBackground"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonOrangeBackground.jpg" 
+                Stretch="UniformToFill"/>
+    <ImageBrush x:Key="ButtonOrange2Background"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonOrange2Background.jpg" 
+                Stretch="UniformToFill"/>
+    <ImageBrush x:Key="ButtonPurpleBackground"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonPurpleBackground.jpg" 
                 Stretch="UniformToFill"/>
 
     <Style TargetType="ListBox">
@@ -72,19 +74,14 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
         <Setter Property="FontWeight" Value="Heavy" />
-        <Setter Property="BorderThickness" Value="0 10 0 0" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Margin" Value="0" />
     </Style>
 
     <Style TargetType="TabItem">
-        <Setter Property="Background" Value="{StaticResource TabItemBackground}" />
-        <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
-        <Setter Property="FontSize" Value="25" />
-        <Setter Property="Height" Value="40" />
-        <Setter Property="Width" Value="100" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Visibility" Value="Collapsed" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -97,24 +94,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
-                <Setter Property="Background" Value="{StaticResource TabItemBackground}" />
-            </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource DefaultObjectMouseOnForeground}" />
-                <Setter Property="Background" Value="{StaticResource TabItemMouseOnBackground}" />
-            </Trigger>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource DefaultObjectMouseOnForeground}" />
-                <Setter Property="Background" Value="{StaticResource TabItemMouseOnBackground}" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource DefaultObjectDisabledForeground}" />
-                <Setter Property="Background" Value="{StaticResource TabItemDisabledBackground}" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <Style TargetType="ToggleButton">
@@ -152,211 +131,6 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{StaticResource DefaultObjectDisabledForeground}" />
                 <Setter Property="Background" Value="{StaticResource TabItemDisabledBackground}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-    
-    <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
-        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
-        <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Background" Value="{StaticResource ScrollBar.Static.Background}" />
-        <Setter Property="BorderBrush" Value="{StaticResource ScrollBar.Static.Border}" />
-        <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="BorderThickness" Value="1,0" />
-        <Setter Property="Width" Value="{StaticResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
-        <Setter Property="MinWidth" Value="{StaticResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ScrollBar}">
-                    <Grid x:Name="Bg" SnapsToDevicePixels="true">
-                        <Grid.RowDefinitions>
-                            <RowDefinition
-                                MaxHeight="{StaticResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
-                            <RowDefinition Height="0.00001*" />
-                            <RowDefinition
-                                MaxHeight="{StaticResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
-                        </Grid.RowDefinitions>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                BorderBrush="{TemplateBinding BorderBrush}" Grid.Row="1" />
-                        <RepeatButton x:Name="PART_LineUpButton" Command="{x:Static ScrollBar.LineUpCommand}"
-                                      IsEnabled="{TemplateBinding IsMouseOver}"
-                                      Style="{StaticResource ScrollBarButton}">
-                            <Path x:Name="ArrowTop"
-                                  Data="M 0,4 C0,4 0,6 0,6 0,6 3.5,2.5 3.5,2.5 3.5,2.5 7,6 7,6 7,6 7,4 7,4 7,4 3.5,0.5 3.5,0.5 3.5,0.5 0,4 0,4 z"
-                                  Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3,4,3,3" Stretch="Uniform" />
-                        </RepeatButton>
-                        <Track x:Name="PART_Track" IsEnabled="{TemplateBinding IsMouseOver}" IsDirectionReversed="true"
-                               Grid.Row="1">
-                            <Track.DecreaseRepeatButton>
-                                <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}"
-                                              Style="{StaticResource RepeatButtonTransparent}" />
-                            </Track.DecreaseRepeatButton>
-                            <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}"
-                                              Style="{StaticResource RepeatButtonTransparent}" />
-                            </Track.IncreaseRepeatButton>
-                            <Track.Thumb>
-                                <Thumb Style="{StaticResource ScrollBarThumbVertical}" />
-                            </Track.Thumb>
-                        </Track>
-                        <RepeatButton x:Name="PART_LineDownButton" Command="{x:Static ScrollBar.LineDownCommand}"
-                                      IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="2"
-                                      Style="{StaticResource ScrollBarButton}">
-                            <Path x:Name="ArrowBottom"
-                                  Data="M 0,2.5 C0,2.5 0,0.5 0,0.5 0,0.5 3.5,4 3.5,4 3.5,4 7,0.5 7,0.5 7,0.5 7,2.5 7,2.5 7,2.5 3.5,6 3.5,6 3.5,6 0,2.5 0,2.5 z"
-                                  Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3,4,3,3" Stretch="Uniform" />
-                        </RepeatButton>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineDownButton}"
-                                           Value="true" />
-                                <Condition Binding="{Binding IsPressed, ElementName=PART_LineDownButton}" Value="true" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="Fill" TargetName="ArrowBottom"
-                                    Value="{StaticResource ScrollBar.Pressed.Glyph}" />
-                        </MultiDataTrigger>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineUpButton}" Value="true" />
-                                <Condition Binding="{Binding IsPressed, ElementName=PART_LineUpButton}" Value="true" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="Fill" TargetName="ArrowTop"
-                                    Value="{StaticResource ScrollBar.Pressed.Glyph}" />
-                        </MultiDataTrigger>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineDownButton}"
-                                           Value="true" />
-                                <Condition Binding="{Binding IsPressed, ElementName=PART_LineDownButton}" Value="false" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="Fill" TargetName="ArrowBottom"
-                                    Value="{StaticResource ScrollBar.MouseOver.Glyph}" />
-                        </MultiDataTrigger>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineUpButton}" Value="true" />
-                                <Condition Binding="{Binding IsPressed, ElementName=PART_LineUpButton}" Value="false" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="Fill" TargetName="ArrowTop"
-                                    Value="{StaticResource ScrollBar.MouseOver.Glyph}" />
-                        </MultiDataTrigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Fill" TargetName="ArrowTop"
-                                    Value="{StaticResource ScrollBar.Disabled.Glyph}" />
-                            <Setter Property="Fill" TargetName="ArrowBottom"
-                                    Value="{StaticResource ScrollBar.Disabled.Glyph}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="Orientation" Value="Horizontal">
-                <Setter Property="Width" Value="Auto" />
-                <Setter Property="MinWidth" Value="0" />
-                <Setter Property="Height"
-                        Value="{StaticResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}" />
-                <Setter Property="MinHeight"
-                        Value="{StaticResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}" />
-                <Setter Property="BorderThickness" Value="0,1" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ScrollBar}">
-                            <Grid x:Name="Bg" SnapsToDevicePixels="true">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        MaxWidth="{StaticResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}" />
-                                    <ColumnDefinition Width="0.00001*" />
-                                    <ColumnDefinition
-                                        MaxWidth="{StaticResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}" />
-                                </Grid.ColumnDefinitions>
-                                <Border Background="{TemplateBinding Background}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        BorderBrush="{TemplateBinding BorderBrush}" Grid.Column="1" />
-                                <RepeatButton x:Name="PART_LineLeftButton"
-                                              Command="{x:Static ScrollBar.LineLeftCommand}"
-                                              IsEnabled="{TemplateBinding IsMouseOver}"
-                                              Style="{StaticResource ScrollBarButton}">
-                                    <Path x:Name="ArrowLeft"
-                                          Data="M 3.18,7 C3.18,7 5,7 5,7 5,7 1.81,3.5 1.81,3.5 1.81,3.5 5,0 5,0 5,0 3.18,0 3.18,0 3.18,0 0,3.5 0,3.5 0,3.5 3.18,7 3.18,7 z"
-                                          Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3" Stretch="Uniform" />
-                                </RepeatButton>
-                                <Track x:Name="PART_Track" Grid.Column="1" IsEnabled="{TemplateBinding IsMouseOver}">
-                                    <Track.DecreaseRepeatButton>
-                                        <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}"
-                                                      Style="{StaticResource RepeatButtonTransparent}" />
-                                    </Track.DecreaseRepeatButton>
-                                    <Track.IncreaseRepeatButton>
-                                        <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}"
-                                                      Style="{StaticResource RepeatButtonTransparent}" />
-                                    </Track.IncreaseRepeatButton>
-                                    <Track.Thumb>
-                                        <Thumb Style="{StaticResource ScrollBarThumbHorizontal}" />
-                                    </Track.Thumb>
-                                </Track>
-                                <RepeatButton x:Name="PART_LineRightButton"
-                                              Command="{x:Static ScrollBar.LineRightCommand}" Grid.Column="2"
-                                              IsEnabled="{TemplateBinding IsMouseOver}"
-                                              Style="{StaticResource ScrollBarButton}">
-                                    <Path x:Name="ArrowRight"
-                                          Data="M 1.81,7 C1.81,7 0,7 0,7 0,7 3.18,3.5 3.18,3.5 3.18,3.5 0,0 0,0 0,0 1.81,0 1.81,0 1.81,0 5,3.5 5,3.5 5,3.5 1.81,7 1.81,7 z"
-                                          Fill="{StaticResource ScrollBar.Static.Glyph}" Margin="3" Stretch="Uniform" />
-                                </RepeatButton>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineRightButton}"
-                                                   Value="true" />
-                                        <Condition Binding="{Binding IsPressed, ElementName=PART_LineRightButton}"
-                                                   Value="true" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Fill" TargetName="ArrowRight"
-                                            Value="{StaticResource ScrollBar.Pressed.Glyph}" />
-                                </MultiDataTrigger>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineLeftButton}"
-                                                   Value="true" />
-                                        <Condition Binding="{Binding IsPressed, ElementName=PART_LineLeftButton}"
-                                                   Value="true" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Fill" TargetName="ArrowLeft"
-                                            Value="{StaticResource ScrollBar.Pressed.Glyph}" />
-                                </MultiDataTrigger>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineRightButton}"
-                                                   Value="true" />
-                                        <Condition Binding="{Binding IsPressed, ElementName=PART_LineRightButton}"
-                                                   Value="false" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Fill" TargetName="ArrowRight"
-                                            Value="{StaticResource ScrollBar.MouseOver.Glyph}" />
-                                </MultiDataTrigger>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineLeftButton}"
-                                                   Value="true" />
-                                        <Condition Binding="{Binding IsPressed, ElementName=PART_LineLeftButton}"
-                                                   Value="false" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Fill" TargetName="ArrowLeft"
-                                            Value="{StaticResource ScrollBar.MouseOver.Glyph}" />
-                                </MultiDataTrigger>
-                                <Trigger Property="IsEnabled" Value="false">
-                                    <Setter Property="Fill" TargetName="ArrowLeft"
-                                            Value="{StaticResource ScrollBar.Disabled.Glyph}" />
-                                    <Setter Property="Fill" TargetName="ArrowRight"
-                                            Value="{StaticResource ScrollBar.Disabled.Glyph}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -416,12 +190,13 @@
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
         <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="Width" Value="10"/>
-        <Setter Property="MinWidth" Value="10"/>
+        <Setter Property="Width" Value="6"/>
+        <Setter Property="MinWidth" Value="6"/>
+        <Setter Property="MaxWidth" Value="6"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
-                    <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="#7FBFBFBF">
+                    <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="#30000000">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0.00001*"/>
                         </Grid.RowDefinitions>
@@ -444,12 +219,13 @@
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto"/>
                 <Setter Property="MinWidth" Value="0"/>
-                <Setter Property="Height" Value="10"/>
-                <Setter Property="MinHeight" Value="10"/>
+                <Setter Property="Height" Value="6"/>
+                <Setter Property="MinHeight" Value="6"/>
+                <Setter Property="MaxHeight" Value="6"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ScrollBar}">
-                            <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="#7FA7A7A7">
+                            <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="#30000000">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.00001*"/>
                                 </Grid.ColumnDefinitions>
@@ -473,9 +249,9 @@
     </Style>
 
     <Style TargetType="Button">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
         <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectForeground}"/>
-        <Setter Property="BorderThickness" Value="10" />
         <Setter Property="FontSize" Value="40" />
         <Setter Property="FontWeight" Value="Heavy" />
         <Setter Property="Template">
@@ -503,6 +279,7 @@
     </Style>
 
     <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
         <Setter Property="FontWeight" Value="Heavy" />
@@ -512,29 +289,32 @@
     </Style>
     
     <Style x:Key="EditorChessButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource ChessTileOutsideBoardBackground}" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource ChessTileOutsideBoardBackground}" />
         <Setter Property="FontWeight" Value="Heavy" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}">
+                    <Grid>
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
+                        <Canvas Background="{TemplateBinding BorderBrush}"/>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileMouseOnBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileMouseOnBackground}" />
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileSelectedBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileSelectedBackground}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="ChessButtonStyle" TargetType="Button">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="FontWeight" Value="Heavy" />
@@ -572,6 +352,7 @@
     </Style>
 
     <Style x:Key="ChessButtonKingStyle" TargetType="Button">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{StaticResource ChessTileKingBaseBackground}" />
         <Setter Property="FontWeight" Value="Heavy" />
@@ -603,28 +384,6 @@
             <DataTrigger Binding="{Binding IsSelected}" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource ChessTileKingSelectedBackground}" />
             </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="ManualButtonStyle" TargetType="Button">
-        <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="50" />
-        <Setter Property="FontWeight" Value="Heavy" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource DefaultObjectMouseOnForeground}" />
-            </Trigger>
         </Style.Triggers>
     </Style>
 

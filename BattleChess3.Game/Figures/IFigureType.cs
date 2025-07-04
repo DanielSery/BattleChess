@@ -43,7 +43,7 @@ public interface IFigureType : IEquatable<IFigureType>
     ///     Gets description of unit special abilities
     /// </summary>
     string SpecialDescription { get; }
-
+    
     /// <summary>
     ///     Images of player with id
     /// </summary>
