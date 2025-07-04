@@ -52,7 +52,9 @@ public class Warrior : ICrossFireFigureType
                         () => AttackAction(unitTile, targetTile, board));
                 }
                 else if (!unitTile.CanMoveTo(targetTile))
+                {
                     break;
+                }
             }
         }
     }

@@ -17,10 +17,10 @@ public class Cannon : ICrossFireFigureType
     
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (board.TryGetRelativeTile(unitTile, new Position(0, 1), out var tileBefore1) && 
-            !tileBefore1.IsEmpty())
+        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
-            yield break;
+            if (unitTile.IsOwnedByEnemy(neighbourTile))
+                yield break;
         }
         
         if (TryGetAttackAction(unitTile, board, new Position(0, 2), out var attack1Action))

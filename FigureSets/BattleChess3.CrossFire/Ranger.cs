@@ -21,6 +21,26 @@ public class Ranger : ICrossFireFigureType
     
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
+        foreach (var direction in MoveDirections)
+        {
+            for (var i = 1; i <= 2; i++)
+            {
+                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
+                    continue;
+            
+                if (unitTile.CanMoveTo(targetTile))
+                    yield return unitTile.CreateMoveAction(targetTile, board);
+                else
+                    break;
+            }
+        }
+        
+        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        {
+            if (unitTile.IsOwnedByEnemy(neighbourTile))
+                yield break;
+        }
+        
         foreach (var direction in AttackDirections)
         {
             for (var i = 1; i <= 3; i++)
@@ -32,20 +52,6 @@ public class Ranger : ICrossFireFigureType
                     yield return unitTile.CreateKillWithoutMove(targetTile, board);
 
                 if (!unitTile.CanMoveTo(targetTile))
-                    break;
-            }
-        }
-        
-        foreach (var direction in MoveDirections)
-        {
-            for (var i = 1; i <= 2; i++)
-            {
-                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    continue;
-            
-                if (unitTile.CanMoveTo(targetTile))
-                    yield return unitTile.CreateMoveAction(targetTile, board);
-                else
                     break;
             }
         }

@@ -10,8 +10,7 @@ public class Spearman : ICrossFireFigureType
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (board.TryGetTile(unitTile.Position + new Position(0, 1), out var tileBefore) &&
-            unitTile.CanMoveTo(tileBefore) &&
+        if (unitTile.CanMoveTo(board, new Position(0, 1)) &&
             unitTile.TryCreateKillWithMove(board, new Position(0, 2), out var attackAction1))
         {
             yield return attackAction1;

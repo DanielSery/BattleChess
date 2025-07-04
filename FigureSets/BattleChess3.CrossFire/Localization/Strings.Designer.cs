@@ -123,9 +123,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬛⬛⬛▣⬛⬛⬛⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬛⬜▣⬜⬛⬛⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜.
         /// </summary>
         internal static string Archer_AttackDescription {
@@ -137,7 +137,8 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Archer
         ///
-        ///Does not move with attack..
+        ///Does not move with attack.
+        ///Cannot attack when standing next to enemy..
         /// </summary>
         internal static string Archer_BaseDescription {
             get {
@@ -312,9 +313,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Builder_MovementDescription {
@@ -330,9 +331,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Builder_SpecialDescription {
@@ -477,7 +478,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///
         ///Kills multiple units at once.
         ///Can destroy anything.
-        ///Cannot shoot if unit standing before
+        ///Cannot attack when standing next to enemy.
         ///.
         /// </summary>
         internal static string Cannon_BaseDescription {
@@ -526,6 +527,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///   Looks up a localized string similar to Catapult
         ///
         ///Can destroy any unit.
+        ///Cannot attack when standing next to enemy.
         ///.
         /// </summary>
         internal static string Catapult_BaseDescription {
@@ -558,11 +560,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬜▣⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        ///⬜⬛⬛⬜⬛⬛⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬛⬛⬜⬛⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
         /// </summary>
         internal static string Chinese_AttackDescription {
             get {
@@ -585,11 +587,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
         /// </summary>
         internal static string Chinese_MovementDescription {
             get {
@@ -609,14 +611,14 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Attack:
         ///
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬛
-        ///⬛⬜⬜⬛⬜⬜⬛⬜
-        ///⬜⬛⬜⬛⬜⬛⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬛⬛⬜▣⬜⬛⬛⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
         /// </summary>
         internal static string Crossbow_AttackDescription {
             get {
@@ -627,7 +629,8 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Crossbowman
         ///
-        ///Does not move with attack..
+        ///Does not move with attack.
+        ///Cannot attack when standing next to enemy..
         /// </summary>
         internal static string Crossbow_BaseDescription {
             get {
@@ -641,11 +644,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
         /// </summary>
         internal static string Crossbow_MovementDescription {
             get {
@@ -749,7 +752,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move:
+        ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -823,7 +826,8 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Japanese archer
         ///
-        ///Does not move with attack..
+        ///Does not move with attack.
+        ///Cannot attack when standing next to enemy..
         /// </summary>
         internal static string JapanArcher_BaseDescription {
             get {
@@ -916,7 +920,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move:
+        ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1035,7 +1039,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
@@ -1289,14 +1293,14 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Attack:
         ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬛
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬛⬛⬛▣⬛⬛⬛⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Musketeer_AttackDescription {
             get {
@@ -1307,7 +1311,8 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Musketeer
         ///
-        ///Does not move with attack..
+        ///Does not move with attack.
+        ///Cannot attack when standing next to enemy..
         /// </summary>
         internal static string Musketeer_BaseDescription {
             get {
@@ -1321,11 +1326,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Musketeer_MovementDescription {
             get {
@@ -1469,7 +1474,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move:
+        ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1586,9 +1591,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬛⬜⬜⬜⬜⬜⬛⬜
         ///⬜⬛⬜⬜⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬛⬜⬜⬜⬛⬜⬜.
         /// </summary>
         internal static string Ranger_AttackDescription {
@@ -1600,7 +1605,8 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Ranger
         ///
-        ///Does not move with attack..
+        ///Does not move with attack.
+        ///Cannot attack when standing next to enemy..
         /// </summary>
         internal static string Ranger_BaseDescription {
             get {
@@ -1692,7 +1698,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move:
+        ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -2063,7 +2069,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move:
+        ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜

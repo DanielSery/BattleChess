@@ -9,16 +9,9 @@ public class Alchemist : ICrossFireFigureType
 {
     int IFigureType.FigureId => 10;
     
-    private readonly Position[] _movePosition =
-    [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
-    ];
-    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movement in _movePosition)
+        foreach (var movement in ICrossFireFigureType.NeighbourPositions)
         {
             if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
                 continue;

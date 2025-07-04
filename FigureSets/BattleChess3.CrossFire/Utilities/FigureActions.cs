@@ -6,6 +6,14 @@ namespace BattleChess3.CrossFireFigures.Utilities;
 
 internal static class AdvancedFigureActions
 {
+
+    public static bool CanDestroy(this ITile unitTile, IBoard board, Position relativePosition)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        return board.TryGetTile(movePosition, out var targetTile) &&
+               !targetTile.IsEmpty();
+    }
+    
     public static void TryDestroyTile(this ITile unitTile, IBoard board, Position positionDiff)
     {
         if (!board.TryGetTile(unitTile.Position + positionDiff, out var targetTile))
@@ -29,6 +37,13 @@ internal static class AdvancedFigureActions
 
         action = unitTile.CreateKillWithoutMove(targetTile, board);
         return true;
+    }
+
+    public static bool CanAttack(this ITile unitTile, IBoard board, Position relativePosition)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        return board.TryGetTile(movePosition, out var targetTile) &&
+               unitTile.CanAttack(targetTile);
     }
     
     public static bool TryCreateKillWithMove(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
@@ -57,6 +72,13 @@ internal static class AdvancedFigureActions
 
         action = unitTile.CreateKillWithoutMove(targetTile, board);
         return true;
+    }
+
+    public static bool CanMoveTo(this ITile unitTile, IBoard board, Position relativePosition)
+    {
+        var movePosition = unitTile.Position + relativePosition;
+        return board.TryGetTile(movePosition, out var targetTile) &&
+               targetTile.IsEmpty();
     }
 
     public static bool TryCreateMoveAction(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)

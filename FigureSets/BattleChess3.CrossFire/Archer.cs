@@ -7,8 +7,8 @@ namespace BattleChess3.CrossFireFigures;
 public class Archer : ICrossFireFigureType
 {
     int IFigureType.FigureId => 27;
-
-    protected Position[] AttackDirections =>
+    
+    private readonly Position[] _directions =
     [
         new(-1, 0), new(1, 0),
         new(0, -1), new(0, 1)
@@ -16,7 +16,25 @@ public class Archer : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var direction in AttackDirections)
+        foreach (var direction in _directions)
+        {
+            for (var i = 1; i <= 2; i++)
+            {
+                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
+                    break;
+
+                if (unitTile.CanMoveTo(targetTile))
+                    yield return unitTile.CreateMoveAction(targetTile, board);
+            }
+        }
+        
+        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        {
+            if (unitTile.IsOwnedByEnemy(neighbourTile))
+                yield break;
+        }
+        
+        foreach (var direction in _directions)
         {
             for (var i = 1; i <= 3; i++)
             {
@@ -26,17 +44,8 @@ public class Archer : ICrossFireFigureType
                 if (unitTile.CanAttack(targetTile))
                     yield return unitTile.CreateKillWithoutMove(targetTile, board);
                 
-                if (unitTile.CanMoveTo(targetTile))
-                {
-                    if (i <= 2)
-                    {
-                        yield return unitTile.CreateMoveAction(targetTile, board);
-                    }
-                }
-                else
-                {
+                if (!unitTile.CanMoveTo(targetTile))
                     break;
-                }
             }
         }
     }

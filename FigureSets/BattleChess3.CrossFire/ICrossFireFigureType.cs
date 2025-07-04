@@ -1,10 +1,18 @@
 ﻿using BattleChess3.CrossFireFigures.Localization;
+using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
 internal interface ICrossFireFigureType : IFigureType
 {
+    protected static readonly Position[] NeighbourPositions =
+    [
+        new(-1, -1), new(-1, 0), new(-1, 1),
+        new(0, -1), new(0, 1),
+        new(1, -1), new(1, 0), new(1, 1)
+    ];
+    
     int IFigureType.SetId => 2;
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(DisplayName)}"];
     string IFigureType.BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(BaseDescription)}"];

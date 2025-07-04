@@ -20,11 +20,6 @@ public class LegionaryPike : ICrossFireFigureType
             yield return pikeAttackAction2;
         }
 
-        if (TryGetPikeAttackAction(unitTile, board, new Position(0, 3), out var pikeAttackAction3))
-        {
-            yield return pikeAttackAction3;
-        }
-
         if (TryGetAttackAction(unitTile, board, new Position(1, 1), out var attackAction1))
         {
             yield return attackAction1;

@@ -8,16 +8,9 @@ public class Warhammer : ICrossFireFigureType
 {
     int IFigureType.FigureId => 33;
     
-    Position[] MovementPositions =>
-    [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
-    ];
-
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in MovementPositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);

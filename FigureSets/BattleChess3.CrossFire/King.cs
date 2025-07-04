@@ -8,16 +8,9 @@ public class King : ICrossFireFigureType
 {
     int IFigureType.FigureId => 23;
     
-    private readonly Position[] _attackMovePositions =
-    [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
-    ];
-    
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in _attackMovePositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);

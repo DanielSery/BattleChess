@@ -17,6 +17,12 @@ public class Catapult : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
+        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        {
+            if (unitTile.IsOwnedByEnemy(neighbourTile))
+                yield break;
+        }
+        
         foreach (var targetTile in _attackPositions.GetRelativeTiles(board, unitTile))
         {
             if (!targetTile.IsEmpty())

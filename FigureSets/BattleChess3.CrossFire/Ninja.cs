@@ -21,17 +21,16 @@ public class Ninja : ICrossFireFigureType
                 yield return unitTile.CreateKillWithMove(targetTile, board);
         }
 
-        if (unitTile.TryCreateMoveAction(board, new Position(-1, 1), out var move1Action))
-            yield return move1Action;
+        if (unitTile.TryCreateMoveAction(board, new Position(-1, 1), out var action))
+            yield return action;
 
-        if (unitTile.TryCreateMoveAction(board, new Position(1, 1), out var move2Action))
-            yield return move2Action;
+        if (unitTile.TryCreateMoveAction(board, new Position(1, 1), out action))
+            yield return action;
 
-        if (board.TryGetTile(unitTile.Position + new Position(0, 1), out var tileBefore) &&
-            !tileBefore.IsEmpty() &&
-            unitTile.TryCreateMoveAction(board, new Position(0, 2), out var move3Action))
+        if (unitTile.CanMoveTo(board, new Position(0, 1)) &&
+            unitTile.TryCreateMoveAction(board, new Position(0, 2), out action))
         {
-            yield return move3Action;
+            yield return action;
         }
     }
 }

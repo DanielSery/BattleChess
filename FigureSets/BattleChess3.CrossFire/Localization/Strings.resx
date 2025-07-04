@@ -179,7 +179,8 @@ which detonate when destroyed.</value>
     <data name="Archer_BaseDescription" xml:space="preserve">
         <value>Archer
 
-Does not move with attack.</value>
+Does not move with attack.
+Cannot attack when standing next to enemy.</value>
     </data>
     <data name="Archer_MovementDescription" xml:space="preserve">
         <value>Move:
@@ -200,9 +201,9 @@ Does not move with attack.</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬛⬛⬛▣⬛⬛⬛⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬛⬜▣⬜⬛⬛⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜</value>
     </data>
     <data name="Archer_SpecialDescription" xml:space="preserve">
@@ -288,9 +289,9 @@ Can build walls.
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬛▣⬛⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     <data name="Builder_AttackDescription" xml:space="preserve">
@@ -303,9 +304,9 @@ Can build walls.
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
@@ -381,7 +382,7 @@ Moves and attacks like chess bishop.</value>
 
 Kills multiple units at once.
 Can destroy anything.
-Cannot shoot if unit standing before
+Cannot attack when standing next to enemy.
 </value>
     </data>
     <data name="Cannon_MovementDescription" xml:space="preserve">
@@ -407,6 +408,7 @@ Cannot shoot if unit standing before
         <value>Catapult
 
 Can destroy any unit.
+Cannot attack when standing next to enemy.
 </value>
     </data>
     <data name="Catapult_MovementDescription" xml:space="preserve">
@@ -437,11 +439,11 @@ Can destroy any unit.
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬛▣⬛⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜</value>
+⬜⬛⬛▣⬛⬛⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
     </data>
     <data name="Chinese_AttackDescription" xml:space="preserve">
         <value>Attack:
@@ -449,11 +451,11 @@ Can destroy any unit.
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬛⬜▣⬜⬛⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜</value>
+⬜⬛⬛⬜⬛⬛⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬛⬛⬜⬛⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜</value>
     </data>
     <data name="Chinese_SpecialDescription" xml:space="preserve">
         <value/>
@@ -462,7 +464,8 @@ Can destroy any unit.
     <data name="Crossbow_BaseDescription" xml:space="preserve">
         <value>Crossbowman
 
-Does not move with attack.</value>
+Does not move with attack.
+Cannot attack when standing next to enemy.</value>
     </data>
     <data name="Crossbow_MovementDescription" xml:space="preserve">
         <value>Move:
@@ -470,23 +473,23 @@ Does not move with attack.</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬛▣⬛⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜</value>
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
     </data>
     <data name="Crossbow_AttackDescription" xml:space="preserve">
         <value>Attack:
 
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬛
-⬛⬜⬜⬛⬜⬜⬛⬜
-⬜⬛⬜⬛⬜⬛⬜⬜
-⬜⬜⬛⬛⬛⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬜⬜⬜⬜⬜</value>
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬛⬛⬜▣⬜⬛⬛⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
     </data>
     <data name="Crossbow_SpecialDescription" xml:space="preserve">
         <value />
@@ -524,7 +527,7 @@ When killed destroys everything in 3x3 square.
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     <data name="Gladiator_AttackDescription" xml:space="preserve">
-        <value>Move:
+        <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -542,7 +545,8 @@ When killed destroys everything in 3x3 square.
     <data name="JapanArcher_BaseDescription" xml:space="preserve">
         <value>Japanese archer
 
-Does not move with attack.</value>
+Does not move with attack.
+Cannot attack when standing next to enemy.</value>
     </data>
     <data name="JapanArcher_MovementDescription" xml:space="preserve">
         <value>Move:
@@ -622,7 +626,7 @@ Can castle with any unit (not just Rook).</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     <data name="Knight_AttackDescription" xml:space="preserve">
-        <value>Move:
+        <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -685,7 +689,7 @@ On second row:
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜▣⬜⬜⬜⬜
@@ -842,7 +846,8 @@ Can kill 2 units in line.
     <data name="Musketeer_BaseDescription" xml:space="preserve">
         <value>Musketeer
 
-Does not move with attack.</value>
+Does not move with attack.
+Cannot attack when standing next to enemy.</value>
     </data>
     <data name="Musketeer_MovementDescription" xml:space="preserve">
         <value>Move:
@@ -850,23 +855,23 @@ Does not move with attack.</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬛⬜⬜⬜⬛⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
-⬜⬛⬜⬜⬜⬛⬜⬜</value>
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     <data name="Musketeer_AttackDescription" xml:space="preserve">
         <value>Attack:
 
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬛
+⬛⬜⬜⬛⬜⬜⬛⬜
+⬜⬛⬜⬛⬜⬛⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬛⬛⬛▣⬛⬛⬛⬜
-⬜⬜⬜⬛⬜⬜⬜⬜
-⬜⬜⬜⬛⬜⬜⬜⬜</value>
+⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     <data name="Musketeer_SpecialDescription" xml:space="preserve">
         <value/>
@@ -968,7 +973,7 @@ around the wizzard.</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     <data name="Peasant_AttackDescription" xml:space="preserve">
-        <value>Move:
+        <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1020,7 +1025,8 @@ Moves and attacks like chess Queen.</value>
     <data name="Ranger_BaseDescription" xml:space="preserve">
         <value>Ranger
 
-Does not move with attack.</value>
+Does not move with attack.
+Cannot attack when standing next to enemy.</value>
     </data>
     <data name="Ranger_MovementDescription" xml:space="preserve">
         <value>Move:
@@ -1041,9 +1047,9 @@ Does not move with attack.</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬛⬜⬜⬜⬜⬜⬛⬜
 ⬜⬛⬜⬜⬜⬛⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜▣⬜⬜⬜⬜
-⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬛⬜⬜⬜⬛⬜⬜</value>
     </data>
     <data name="Ranger_SpecialDescription" xml:space="preserve">
@@ -1099,7 +1105,7 @@ Moves and attacks like chess rook.</value>
 ⬜⬜⬜⬛⬜⬜⬜⬜</value>
     </data>
     <data name="Spartan_AttackDescription" xml:space="preserve">
-        <value>Move:
+        <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1311,7 +1317,7 @@ Can kill upt to 3 units in line.</value>
 ⬜⬛⬜⬛⬜⬜⬜⬜</value>
     </data>
     <data name="Warrior_AttackDescription" xml:space="preserve">
-        <value>Move:
+        <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
 ⬜⬜⬜⬜⬜⬜⬜⬜

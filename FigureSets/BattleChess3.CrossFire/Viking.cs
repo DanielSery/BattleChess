@@ -1,17 +1,30 @@
-﻿using BattleChess3.Game.Board;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Viking : IFigureTypeWithDifferentAttackMoves, ICrossFireFigureType
+public class Viking : ICrossFireFigureType
 {
     int IFigureType.FigureId => 25;
     
-    Position[] IFigureTypeWithDifferentAttackMoves.AttackMovePositions { get; } =
+    private static readonly Position[] AttackMovePositions =
     [
         new(-2, -1), new(-2, 1),
         new(-1, -2), new(-1, 2),
         new(1, -2), new(1, 2),
         new(2, -1), new(2, 1)
     ];
+    
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        foreach (var targetTile in AttackMovePositions.GetRelativeTiles(board, unitTile))
+        {
+            if (unitTile.CanMoveTo(targetTile))
+                yield return unitTile.CreateMoveAction(targetTile, board);
+
+            if (unitTile.CanAttack(targetTile))
+                yield return unitTile.CreateKillWithMove(targetTile, board);
+        }
+    }
 }

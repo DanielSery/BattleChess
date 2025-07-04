@@ -11,12 +11,12 @@ public class Builder : ICrossFireFigureType
     
     private readonly Position[] _movePosition =
     [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
+        new(-1, -1), new(1, -1), new(1, 1), new(-1, 1)
     ];
     
     private readonly Position[] _shieldPositions =
     [
-        new(-1, -1), new(1, -1), new(1, 1), new(-1, 1)
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

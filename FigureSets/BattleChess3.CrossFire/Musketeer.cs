@@ -6,46 +6,44 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Musketeer : ICrossFireFigureType
 {
-    int IFigureType.FigureId => 35;
+    int IFigureType.FigureId => 2;
     
-    protected Position[] AttackDirections =>
-    [
-        new(-1, 0), new(0, -1), new(0, 1), new(1, 0)
-    ];
-
-    protected Position[] MoveDirections =>
+    private readonly Position[] _attackDirections =
     [
         new(-1, -1), new(-1, 1),
+        new(0, -1), new(0, 1),
         new(1, -1), new(1, 1)
     ];
-    
+
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var direction in AttackDirections)
+        if (unitTile.TryCreateMoveAction(board, new Position(-1, 0), out var move1Action))
         {
-            for (var i = 1; i <= 3; i++)
+            yield return move1Action;
+        }
+        
+        if (unitTile.TryCreateMoveAction(board, new Position(1, 0), out var move2Action))
+        {
+            yield return move2Action;
+        }
+        
+        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        {
+            if (unitTile.IsOwnedByEnemy(neighbourTile))
+                yield break;
+        }
+        
+        foreach (var direction in _attackDirections)
+        {
+            for (var i = 1; i < 8; i++)
             {
                 if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
                     break;
                 
                 if (unitTile.CanAttack(targetTile))
                     yield return unitTile.CreateKillWithoutMove(targetTile, board);
-                
+
                 if (!unitTile.CanMoveTo(targetTile))
-                    break;
-            }
-        }
-        
-        foreach (var direction in MoveDirections)
-        {
-            for (var i = 1; i <= 2; i++)
-            {
-                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    continue;
-            
-                if (unitTile.CanMoveTo(targetTile))
-                    yield return unitTile.CreateMoveAction(targetTile, board);
-                else
                     break;
             }
         }
