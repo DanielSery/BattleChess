@@ -8,7 +8,7 @@ public class Musketeer : ICrossFireFigureType
 {
     int IFigureType.FigureId => 2;
     
-    private readonly Position[] _attackDirections =
+    private static readonly Position[] AttackDirections =
     [
         new(-1, -1), new(-1, 1),
         new(0, -1), new(0, 1),
@@ -29,21 +29,18 @@ public class Musketeer : ICrossFireFigureType
         
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
-            if (unitTile.IsOwnedByEnemy(neighbourTile))
+            if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;
         }
         
-        foreach (var direction in _attackDirections)
+        foreach (var direction in AttackDirections)
         {
-            for (var i = 1; i < 8; i++)
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 7, board, unitTile))
             {
-                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    break;
-                
                 if (unitTile.CanAttack(targetTile))
                     yield return unitTile.CreateKillWithoutMove(targetTile, board);
 
-                if (!unitTile.CanMoveTo(targetTile))
+                if (!targetTile.IsEmpty())
                     break;
             }
         }

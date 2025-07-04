@@ -8,7 +8,7 @@ public class Catapult : ICrossFireFigureType
 {
     int IFigureType.FigureId => 37;
     
-    private readonly Position[] _attackPositions =
+    private static readonly Position[] AttackPositions =
     [
         new (-1, 2), new (1, 2),
         new (-2, 3), new (0, 3), new (2, 3),
@@ -19,11 +19,11 @@ public class Catapult : ICrossFireFigureType
     {
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
-            if (unitTile.IsOwnedByEnemy(neighbourTile))
+            if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;
         }
         
-        foreach (var targetTile in _attackPositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in AttackPositions.GetRelativeTiles(board, unitTile))
         {
             if (!targetTile.IsEmpty())
                 yield return unitTile.CreateKillWithoutMove(targetTile, board);

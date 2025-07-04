@@ -8,14 +8,14 @@ public class YoungWizzard : ICrossFireFigureType
 {
     int IFigureType.FigureId => 14;
     
-    Position[] MovementPositions =>
+    private static readonly Position[] MovementPositions =
     [
         new(-2, -2), new(-2, 0), new(-2, 2),
         new(0, -2), new(0, 2),
         new(2, -2), new(2, 0), new(2, 2)
     ];
 
-    Position[] AttackPositions =>
+    private static readonly Position[] AttackPositions =
     [
         new(-2, -2), new(-2, 2),
         new(2, -2), new(2, 2)

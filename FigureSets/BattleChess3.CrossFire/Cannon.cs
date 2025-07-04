@@ -8,7 +8,7 @@ public class Cannon : ICrossFireFigureType
 {
     int IFigureType.FigureId => 36;
     
-    private readonly Position[] _attackPositions =
+    private static readonly Position[] AttackPositions =
     [
         new(0, 2), 
         new(-1, 3), new(0, 3), new(1, 3),
@@ -19,7 +19,7 @@ public class Cannon : ICrossFireFigureType
     {
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
-            if (unitTile.IsOwnedByEnemy(neighbourTile))
+            if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;
         }
         
@@ -54,7 +54,7 @@ public class Cannon : ICrossFireFigureType
             targetTile.AbsolutePosition,
             () =>
             {
-                foreach (var attackPosition in _attackPositions)
+                foreach (var attackPosition in AttackPositions)
                 {
                     if (board.TryGetRelativeTile(unitTile, attackPosition, out var tile) &&
                         !tile.IsEmpty())

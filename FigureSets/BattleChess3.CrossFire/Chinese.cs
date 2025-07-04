@@ -8,12 +8,12 @@ public class Chinese : ICrossFireFigureType
 {
     int IFigureType.FigureId => 20;
     
-    private readonly Position[] _moveDirections =
+    private static readonly Position[] MoveDirections =
     [
         new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
 
-    private readonly Position[] _attackPositions =
+    private static readonly Position[] AttackPositions =
     [
         new(-2, -1), new(-2, 1),
         new(-1, -2), new(-1, -1), new(-1, 1), new(-1, 2),
@@ -23,19 +23,18 @@ public class Chinese : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var direction in _moveDirections)
+        foreach (var direction in MoveDirections)
         {
-            for (var i = 1; i <= 2; i++)
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 2, board, unitTile))
             {
-                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    break;
-
                 if (unitTile.CanMoveTo(targetTile))
                     yield return unitTile.CreateMoveAction(targetTile, board);
+                else
+                    break;
             }
         }
         
-        foreach (var targetTile in _attackPositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in AttackPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanAttack(targetTile))
                 yield return unitTile.CreateKillWithMove(targetTile, board);

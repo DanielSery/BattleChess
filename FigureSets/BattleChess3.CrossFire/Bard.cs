@@ -8,14 +8,14 @@ public class Bard : ICrossFireFigureType
 {
     int IFigureType.FigureId => 11;
     
-    private readonly Position[] _movementPositions =
+    private static readonly Position[] MovementPositions =
     [
         new(-1, -1), new(-1, 0), new(-1, 1),
         new(0, -1), new(0, 1),
         new(1, -1), new(1, 0), new(1, 1)
     ];
 
-    private readonly Position[] _attackPositions =
+    private static readonly Position[] AttackPositions =
     [
         new(-2, -1), new(-2, 1),
         new(-1, -2), new(-1, 2),
@@ -25,15 +25,15 @@ public class Bard : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in _movementPositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in MovementPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
         }
 
-        foreach (var targetTile in _attackPositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in AttackPositions.GetRelativeTiles(board, unitTile))
         {
-            if (targetTile.IsOwnedByEnemy(unitTile))
+            if (unitTile.IsEnemyTo(targetTile))
             {
                 yield return new FigureAction(
                     FigureActionTypes.Attack,

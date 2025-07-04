@@ -32,12 +32,12 @@ internal static class FiguresHelper
         return tile.Figure.Type.Equals(CrossFireFigureGroup.Empty);
     }
 
-    public static bool IsOwnedByYou(this ITile checkedTile, ITile yoursTile)
+    public static bool IsOwnedByYou(this ITile yoursTile, ITile checkedTile)
     {
         return checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
     }
 
-    public static bool IsOwnedByEnemy(this ITile checkedTile, ITile yoursTile)
+    public static bool IsEnemyTo(this ITile yoursTile, ITile checkedTile)
     {
         if (checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner))
         {

@@ -9,14 +9,14 @@ public class Miner : ICrossFireFigureType
 {
     int IFigureType.FigureId => 29;
     
-    private readonly Position[] _movePosition =
+    private static readonly Position[] MovePosition =
     [
         new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movement in _movePosition)
+        foreach (var movement in MovePosition)
         {
             if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
                 continue;

@@ -8,12 +8,12 @@ public class Crossbow : ICrossFireFigureType
 {
     int IFigureType.FigureId => 35;
     
-    protected Position[] AttackDirections =>
+    private static readonly Position[] AttackDirections =
     [
         new(-1, 0), new(0, -1), new(0, 1), new(1, 0)
     ];
 
-    protected Position[] MoveDirections =>
+    private static readonly Position[] MoveDirections =
     [
         new(-1, -1), new(-1, 1),
         new(1, -1), new(1, 1)
@@ -23,11 +23,8 @@ public class Crossbow : ICrossFireFigureType
     {
         foreach (var direction in MoveDirections)
         {
-            for (var i = 1; i <= 2; i++)
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 2, board, unitTile))
             {
-                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    continue;
-            
                 if (unitTile.CanMoveTo(targetTile))
                     yield return unitTile.CreateMoveAction(targetTile, board);
                 else
@@ -37,21 +34,18 @@ public class Crossbow : ICrossFireFigureType
         
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
-            if (unitTile.IsOwnedByEnemy(neighbourTile))
+            if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;
         }
         
         foreach (var direction in AttackDirections)
         {
-            for (var i = 1; i <= 3; i++)
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 3, board, unitTile))
             {
-                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    break;
-                
                 if (unitTile.CanAttack(targetTile))
                     yield return unitTile.CreateKillWithoutMove(targetTile, board);
-                
-                if (!unitTile.CanMoveTo(targetTile))
+
+                if (!targetTile.IsEmpty())
                     break;
             }
         }

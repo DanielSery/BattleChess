@@ -1,13 +1,14 @@
-﻿using BattleChess3.Game.Board;
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class MountedArcher : IFigureTypeWithChainedAttacksAndMoves, ICrossFireFigureType
+public class MountedArcher : ICrossFireFigureType
 {
     int IFigureType.FigureId => 17;
     
-    Position[] IFigureTypeWithChainedAttacksAndMoves.MoveDirections { get; } =
+    private static readonly Position[] MoveDirections =
     [
         new(-1, 0),
         new(1, 0),
@@ -15,9 +16,35 @@ public class MountedArcher : IFigureTypeWithChainedAttacksAndMoves, ICrossFireFi
         new(0, 1)
     ];
 
-    Position[] IFigureTypeWithChainedAttacksAndMoves.AttackDirections { get; } =
+    private static readonly Position[] AttackDirections =
     [
         new(-1, -1), new(-1, 1),
         new(1, -1), new(1, 1)
     ];
+
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        foreach (var direction in AttackDirections)
+        {
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 7, board, unitTile))
+            {
+                if (unitTile.CanAttack(targetTile))
+                    yield return unitTile.CreateKillWithMove(targetTile, board);
+
+                if (!unitTile.CanMoveTo(targetTile))
+                    break;
+            }
+        }
+        
+        foreach (var direction in MoveDirections)
+        {
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 7, board, unitTile))
+            {
+                if (unitTile.CanMoveTo(targetTile))
+                    yield return unitTile.CreateMoveAction(targetTile, board);
+                else
+                    break;
+            }
+        }
+    }
 }

@@ -8,7 +8,7 @@ public class Trader : ICrossFireFigureType
 {
     int IFigureType.FigureId => 6;
     
-    private readonly Position[] _attackMovePositions =
+    private static readonly Position[] AttackMovePositions =
     [
         new(-1, -1), new(-1, 0), new(-1, 1),
         new(0, -1), new(0, 1),
@@ -17,7 +17,7 @@ public class Trader : ICrossFireFigureType
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in _attackMovePositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in AttackMovePositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);

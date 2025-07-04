@@ -8,7 +8,7 @@ public class OldWizzard : ICrossFireFigureType
 {
     int IFigureType.FigureId => 3;
     
-    private readonly Position[] _positions =
+    private static readonly Position[] Positions =
     [
         new(-2, -2), new(-2, 0), new(-2, 2),
         new(0, -2), new(0, 2),
@@ -17,7 +17,7 @@ public class OldWizzard : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in _positions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in Positions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);

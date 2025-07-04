@@ -8,7 +8,7 @@ public class MountedKnight : ICrossFireFigureType
 {
     int IFigureType.FigureId => 5;
     
-    private readonly Position[] _movePositions =
+    private static readonly Position[] MovePositions =
     [
         new(-2, -1), new(-2, 1),
         new(-1, -2), new(-1, 2),
@@ -16,33 +16,25 @@ public class MountedKnight : ICrossFireFigureType
         new(2, -1), new(2, 1)
     ];
 
-    private readonly Position[] _attackDirections =
+    private static readonly Position[] AttackDirections =
     [
-        new(-1, -1),
-        new(-1, 0),
-        new(-1, 1),
-        new(0, -1),
-        new(0, 1),
-        new(1, -1),
-        new(1, 0),
-        new(1, 1)
+        new(-1, -1), new(-1, 0), new(-1, 1),
+        new(0, -1), new(0, 1),
+        new(1, -1), new(1, 0), new(1, 1)
     ];
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in _movePositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
         }
         
-        foreach (var direction in _attackDirections)
+        foreach (var direction in AttackDirections)
         {
-            for (var i = 1; i <= 2; i++)
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 2, board, unitTile))
             {
-                if (!board.TryGetRelativeTile(unitTile, direction * i, out var targetTile))
-                    break;
-
                 if (unitTile.CanAttack(targetTile))
                 {
                     yield return new FigureAction(
