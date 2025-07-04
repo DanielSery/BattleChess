@@ -69,9 +69,5 @@
                  IsSelected="{Binding EditorTabSelected}">
             <views:EditorControl/>
         </TabItem>
-        <TabItem Header="{localization:Loc MainWindow_Manual_Header}"
-                 IsSelected="{Binding ManualTabSelected}">
-            <views:ManualControl />
-        </TabItem>
     </TabControl>
 </Window>

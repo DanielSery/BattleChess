@@ -10,7 +10,6 @@ public sealed class MainWindowViewModel : ViewModelBase
 {
     private bool _editorTabSelected;
     private bool _gameTabSelected;
-    private bool _manualTabSelected;
     private bool _menuTabSelected;
     private bool _optionsTabSelected;
 
@@ -56,12 +55,6 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         get => _optionsTabSelected;
         set => SetTabSelected(out _optionsTabSelected);
-    }
-
-    public bool ManualTabSelected
-    {
-        get => _manualTabSelected;
-        set => SetTabSelected(out _manualTabSelected);
     }
 
     public bool EditorTabSelected
@@ -131,14 +124,12 @@ public sealed class MainWindowViewModel : ViewModelBase
         _menuTabSelected = false;
         _gameTabSelected = false;
         _optionsTabSelected = false;
-        _manualTabSelected = false;
         _editorTabSelected = false;
         selectedTab = true;
 
         RaisePropertyChanged(nameof(MenuTabSelected));
         RaisePropertyChanged(nameof(GameTabSelected));
         RaisePropertyChanged(nameof(OptionsTabSelected));
-        RaisePropertyChanged(nameof(ManualTabSelected));
         RaisePropertyChanged(nameof(EditorTabSelected));
     }
 }

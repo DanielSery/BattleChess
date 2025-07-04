@@ -2,7 +2,9 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using BattleChess3.CrossFireFigures;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 using BattleChess3.UI.ViewModel;
 using Nicenis.Windows;
 
@@ -52,17 +54,50 @@ public partial class EditorControl
 
     private void ChessImage_Drop(object sender, DragEventArgs e)
     {
-        if (!e.Data.GetDataPresent("BattleChess3.Game.Figures.FigureIdentifier")) 
-            return;
+        if (e.Data.GetDataPresent("BattleChess3.Game.Figures.FigureIdentifier"))
+        {
+            var figureIdentifier = (FigureIdentifier)e.Data.GetData("BattleChess3.Game.Figures.FigureIdentifier");
+            var tileButton = (Button)sender;
+            var targetTile = (TileViewModel)tileButton.DataContext;
+
+            var itemsControl = FindAncestor<ItemsControl>((DependencyObject)sender);
+            var boardViewModel = (BoardViewModel)itemsControl.DataContext;
+
+            boardViewModel.CreateFigure(targetTile, figureIdentifier);
+        }
+        else if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
+        {
+            var (boardViewModel, sourceTile) =  ((BoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+            var sourceFigureIdentifier = new FigureIdentifier(sourceTile.Figure.Owner.Id, sourceTile.Figure.Type, sourceTile.Figure.IsKing);
+            
+            var tileButton = (Button)sender;
+            var targetTile = (TileViewModel)tileButton.DataContext;
+            var targetFigureIdentifier = new FigureIdentifier(targetTile.Figure.Owner.Id, targetTile.Figure.Type, targetTile.Figure.IsKing);
+            
+            boardViewModel.CreateFigure(sourceTile, targetFigureIdentifier);
+            boardViewModel.CreateFigure(targetTile, sourceFigureIdentifier);
+        }
+    }
+
+    private void Figures_Drop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
+        {
+            var (boardViewModel, sourceTile) =  ((BoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.BoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+
+            boardViewModel.CreateFigure(sourceTile, new FigureIdentifier(0, CrossFireFigureGroup.Empty, false));
+        }
+    }
+
+    private void ChessButton_DragEnter(object sender, DragSourceDraggingEventArgs e)
+    {
+        var button = (Button)sender;
+        var tileViewModel = (TileViewModel)button.DataContext;
         
-        var figureIdentifier = (FigureIdentifier)e.Data.GetData("BattleChess3.Game.Figures.FigureIdentifier");
-        var tileButton = (Button)sender;
-        var tileViewModel = (TileViewModel)tileButton.DataContext;
-
-        var itemsControl = FindAncestor<ItemsControl>((DependencyObject)e.OriginalSource);
-        var boardView = (BoardViewModel)itemsControl.DataContext;
-
-        boardView.CreateFigure(tileViewModel, figureIdentifier);
+        var itemsControl = FindAncestor<ItemsControl>((DependencyObject)sender);
+        var boardViewModel = (BoardViewModel)itemsControl.DataContext;
+        
+        e.Data = (boardViewModel, tileViewModel);
     }
 
     private void ChessImage_DragEnter(object sender, DragSourceDraggingEventArgs e)

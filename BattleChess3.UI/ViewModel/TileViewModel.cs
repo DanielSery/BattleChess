@@ -10,24 +10,28 @@ public class TileViewModel : ViewModelBase, ITile
     private Figure _figure = Figure.None;
 
     private bool _isMouseOver;
-
     private bool _isPossibleAttack;
-
     private bool _isPossibleMove;
-
     private bool _isPossibleSpecial;
-
     private bool _isSelected;
+    private bool _isBlack;
 
     private FigureAction _possibleAction = FigureAction.None;
 
     public TileViewModel(Position position)
     {
         Position = position;
+        IsBlack = position.X % 2 == 0 ^ position.Y % 2 == 0;
     }
 
     public Position Position { get; }
     public Position AbsolutePosition => Position;
+
+    public bool IsBlack
+    {
+        get => _isBlack;
+        set => Set(ref _isBlack, value);
+    }
 
     public bool IsMouseOver
     {

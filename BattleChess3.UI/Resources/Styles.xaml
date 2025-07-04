@@ -536,90 +536,72 @@
 
     <Style x:Key="ChessButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="FontWeight" Value="Heavy" />
-        <Setter Property="Margin" Value="0, 0 -1 -1"></Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0, 0, 1, 1">
-                            <Border.BorderBrush>
-                                <VisualBrush>
-                                    <VisualBrush.Visual>
-                                        <Rectangle StrokeDashArray="3 3" Stroke="Black" StrokeThickness="1"
-                                                   Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
-                                                   Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
-                                    </VisualBrush.Visual>
-                                </VisualBrush>
-                            </Border.BorderBrush>
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        
                         <Canvas Background="{TemplateBinding Background}"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Canvas Background="{TemplateBinding BorderBrush}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
+            <DataTrigger Binding="{Binding IsBlack}" Value="True">
+                <Setter Property="Background" Value="#40000000"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding IsPossibleMove}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileCanGoBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileCanGoBackground}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding IsPossibleSpecial}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileSpecialBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileSpecialBackground}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding IsPossibleAttack}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileDangeredBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileDangeredBackground}" />
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileMouseOnBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileMouseOnBackground}" />
             </Trigger>
             <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileSelectedBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileSelectedBackground}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="ChessButtonKingStyle" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource ChessTileKingBaseBackground}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource ChessTileKingBaseBackground}" />
         <Setter Property="FontWeight" Value="Heavy" />
-        <Setter Property="Margin" Value="0, 0 -1 -1"></Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0, 0, 1, 1">
-                            <Border.BorderBrush>
-                                <VisualBrush>
-                                    <VisualBrush.Visual>
-                                        <Rectangle StrokeDashArray="3 3" Stroke="Black" StrokeThickness="1"
-                                                   Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
-                                                   Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}"/>
-                                    </VisualBrush.Visual>
-                                </VisualBrush>
-                            </Border.BorderBrush>
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        
                         <Canvas Background="{TemplateBinding Background}"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Canvas Background="{TemplateBinding BorderBrush}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
+            <DataTrigger Binding="{Binding IsBlack}" Value="True">
+                <Setter Property="Background" Value="#40000000"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding IsPossibleSpecial}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileKingSpecialBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileKingSpecialBackground}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding IsPossibleAttack}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileKingDangeredBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileKingDangeredBackground}" />
             </DataTrigger>
             
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileKingMouseOnBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileKingMouseOnBackground}" />
             </Trigger>
             <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ChessTileKingSelectedBackground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ChessTileKingSelectedBackground}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

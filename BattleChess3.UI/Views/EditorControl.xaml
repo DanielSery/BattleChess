@@ -28,6 +28,9 @@
                                     CommandParameter="{Binding}"
                                     Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
                                     d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
+                                    n:DragSource.AllowDrag="True"
+                                    n:DragSource.AllowedEffects="Move"
+                                    n:DragSource.Dragging="ChessButton_DragEnter"
                                     Drop="ChessImage_Drop"
                                     AllowDrop="True">
                                     <Image Source="{Binding Figure.ImageUri}" />
@@ -51,7 +54,9 @@
                                   HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Auto"
                                   Margin="15 0 0 0"
-                                  Template="{StaticResource ScrollViewerControlTemplate}">
+                                  Template="{StaticResource ScrollViewerControlTemplate}"
+                                  Drop="Figures_Drop"
+                                  AllowDrop="True">
                         <ItemsControl ItemsSource="{Binding FigureGroups}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -86,7 +91,6 @@
                                                                 MouseLeave="FigureButton_MouseLeave">
                                                                 <Image Source="{Binding Value}" MaxWidth="100" 
                                                                        n:DragSource.AllowDrag="True"
-                                                                       n:DragSource.Data="{Binding}"
                                                                        n:DragSource.AllowedEffects="Copy"
                                                                        n:DragSource.Dragging="ChessImage_DragEnter"/>
                                                             </Button>
