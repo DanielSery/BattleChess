@@ -13,6 +13,7 @@ public class CrossFireFigureGroup : IFigureGroup
     public static readonly IFigureType Trench = new Trench();
     public static readonly IFigureType LegionarySword = new LegionarySword();
     public static readonly IFigureType Empty = new Empty();
+    public static readonly IFigureType Fire = new Fire();
 
     public IFigureType[] FigureTypes { get; } =
     [
@@ -35,6 +36,7 @@ public class CrossFireFigureGroup : IFigureGroup
         new Scout(),
         new MountedArcher(),
         new CamelArcher(),
+        new Elephant(),
         
         new Crossbow(),
         new Ranger(),
@@ -50,14 +52,17 @@ public class CrossFireFigureGroup : IFigureGroup
         new Alchemist(),
         new Barbarian(),
         new Miner(),
+        new Priest(),
         
         Wall,
         Explosives,
-        new Trench(),
+        Trench,
+        Fire,
         
         new OldWizzard(),
         new YoungWizzard(),
         new Warrior(),
         new Queen(),
+        new Dragon()
     ];
 }

@@ -28,7 +28,7 @@ public class Trader : ICrossFireFigureType
 
         foreach (var targetTile in board)
         {
-            if (targetTile.IsOwnedByYou(unitTile) &&
+            if (targetTile.IsAllyTo(unitTile) &&
                 targetTile.Figure != unitTile.Figure)
             {
                 yield return new FigureAction(

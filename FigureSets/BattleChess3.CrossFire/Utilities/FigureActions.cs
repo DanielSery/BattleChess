@@ -78,14 +78,14 @@ internal static class AdvancedFigureActions
     {
         var movePosition = unitTile.Position + relativePosition;
         return board.TryGetTile(movePosition, out var targetTile) &&
-               targetTile.IsEmpty();
+               unitTile.CanMoveTo(targetTile);
     }
 
     public static bool TryCreateMoveAction(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
         var movePosition = unitTile.Position + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
-            !targetTile.IsEmpty())
+            !unitTile.CanMoveTo(targetTile))
         {
             action = FigureAction.None;
             return false;

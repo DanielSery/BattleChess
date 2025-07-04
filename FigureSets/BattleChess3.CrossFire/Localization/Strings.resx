@@ -1368,4 +1368,134 @@ kills units in specific shape.
     <data name="YoungWizzard_SpecialDescription" xml:space="preserve">
         <value/>
     </data>
+    
+    <data name="Fire_BaseDescription" xml:space="preserve">
+        <value>Fire
+            
+When unit walks into fire, it is killed
+and the fire extinguished.
+</value>
+    </data>
+    <data name="Fire_MovementDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Fire_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Fire_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Dragon_BaseDescription" xml:space="preserve">
+        <value>Dragon
+            
+Can create line of 1-2 tiles of fire.
+Can walk on fire without harm.
+</value>
+    </data>
+    <data name="Dragon_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬛⬜⬜⬜⬛⬜⬜⬜
+⬜⬛⬜⬛⬜⬜⬜⬜</value>
+    </data>
+    <data name="Dragon_AttackDescription" xml:space="preserve">
+        <value/>
+    </data>
+    <data name="Dragon_SpecialDescription" xml:space="preserve">
+        <value>Fire:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬛⬜⬜⬜⬛⬜⬜</value>
+    </data>
+    
+    <data name="Elephant_BaseDescription" xml:space="preserve">
+        <value>Elephant
+            
+Kills everything in 1-3 tile line.
+</value>
+    </data>
+    <data name="Elephant_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Elephant_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜▣⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜
+⬜⬜⬛⬜⬜⬜⬜⬜</value>
+    </data>
+    <data name="Elephant_SpecialDescription" xml:space="preserve">
+        <value/>
+    </data>
+    
+    <data name="Priest_BaseDescription" xml:space="preserve">
+        <value>Priest
+            
+Can make unit a king.
+Can convert enemy unit and make it a king.
+</value>
+    </data>
+    <data name="Priest_MovementDescription" xml:space="preserve">
+        <value>Move:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜</value>
+    </data>
+    <data name="Priest_AttackDescription" xml:space="preserve">
+        <value>Attack:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛
+⬛⬜⬜⬜⬜⬜⬛⬜
+⬜⬛⬜⬜⬜⬛⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜
+⬜⬜⬜▣⬜⬜⬜⬜
+⬜⬜⬛⬜⬛⬜⬜⬜</value>
+    </data>
+    <data name="Priest_SpecialDescription" xml:space="preserve">
+        <value>Special:
+
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜
+⬜⬜⬛▣⬛⬜⬜⬜
+⬜⬜⬜⬛⬜⬜⬜⬜</value>
+    </data>
 </root>

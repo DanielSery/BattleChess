@@ -14,7 +14,7 @@ internal interface ICrossFireFigureType : IFigureType
     ];
     
     int IFigureType.SetId => 2;
-    string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(DisplayName)}"];
+    string IFigureType.DisplayName => BaseDescription.Split("\n")[0];
     string IFigureType.BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(BaseDescription)}"];
     string IFigureType.MovementDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(MovementDescription)}"];
     string IFigureType.AttackDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(AttackDescription)}"];

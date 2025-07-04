@@ -677,6 +677,121 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        internal static string Dragon_AttackDescription {
+            get {
+                return ResourceManager.GetString("Dragon_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dragon
+        ///            
+        ///Can create line of 1-2 tiles of fire.
+        ///Can walk on fire without harm.
+        ///.
+        /// </summary>
+        internal static string Dragon_BaseDescription {
+            get {
+                return ResourceManager.GetString("Dragon_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Dragon_MovementDescription {
+            get {
+                return ResourceManager.GetString("Dragon_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fire:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        /// </summary>
+        internal static string Dragon_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Dragon_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Elephant_AttackDescription {
+            get {
+                return ResourceManager.GetString("Elephant_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Elephant
+        ///            
+        ///Kills everything in 1-3 tile line.
+        ///.
+        /// </summary>
+        internal static string Elephant_BaseDescription {
+            get {
+                return ResourceManager.GetString("Elephant_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Elephant_MovementDescription {
+            get {
+                return ResourceManager.GetString("Elephant_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Elephant_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Elephant_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         internal static string Empty_AttackDescription {
             get {
                 return ResourceManager.GetString("Empty_AttackDescription", resourceCulture);
@@ -748,6 +863,46 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Explosives_SpecialDescription {
             get {
                 return ResourceManager.GetString("Explosives_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Fire_AttackDescription {
+            get {
+                return ResourceManager.GetString("Fire_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fire
+        ///            
+        ///When unit walks into fire, it is killed
+        ///and the fire extinguished.
+        ///.
+        /// </summary>
+        internal static string Fire_BaseDescription {
+            get {
+                return ResourceManager.GetString("Fire_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Fire_MovementDescription {
+            get {
+                return ResourceManager.GetString("Fire_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Fire_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Fire_SpecialDescription", resourceCulture);
             }
         }
         
@@ -1524,6 +1679,73 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Peasant_SpecialDescription {
             get {
                 return ResourceManager.GetString("Peasant_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬛
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string Priest_AttackDescription {
+            get {
+                return ResourceManager.GetString("Priest_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Priest
+        ///            
+        ///Can make unit a king.
+        ///Can convert enemy unit and make it a king.
+        ///.
+        /// </summary>
+        internal static string Priest_BaseDescription {
+            get {
+                return ResourceManager.GetString("Priest_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬛
+        ///⬛⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string Priest_MovementDescription {
+            get {
+                return ResourceManager.GetString("Priest_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Priest_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Priest_SpecialDescription", resourceCulture);
             }
         }
         

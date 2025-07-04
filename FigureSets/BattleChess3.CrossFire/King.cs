@@ -26,7 +26,7 @@ public class King : ICrossFireFigureType
         }
         
         var rook1Tile = board[0, 0];
-        if (rook1Tile.IsOwnedByYou(unitTile) &&
+        if (rook1Tile.IsAllyTo(unitTile) &&
             board[1, 0].IsEmpty() &&
             board[2, 0].IsEmpty() &&
             board[3, 0].IsEmpty())
@@ -43,7 +43,7 @@ public class King : ICrossFireFigureType
         }
 
         var rook2Tile = board[7, 0];
-        if (rook2Tile.IsOwnedByYou(unitTile) &&
+        if (rook2Tile.IsAllyTo(unitTile) &&
             board[5, 0].IsEmpty() &&
             board[6, 0].IsEmpty())
         {

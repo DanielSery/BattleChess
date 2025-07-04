@@ -7,50 +7,44 @@ namespace BattleChess3.CrossFireFigures.Utilities;
 internal static class FiguresHelper
 {
     public static bool CanMoveTo(this ITile yourTile, ITile targetTile)
-        => targetTile.IsEmpty();
-    
+    {
+        return targetTile.IsEmpty() || targetTile.IsFire();
+    }
+
     public static bool CanAttack(this ITile yourTile, ITile targetTile)
     {
-        if (targetTile.Figure.Owner.Equals(yourTile.Figure.Owner) ||
-            targetTile.Figure.Type is Wall)
-        {
+        if (targetTile.Figure.Owner.Equals(yourTile.Figure.Owner))
             return false;
-        }
-        
-        if (!targetTile.Figure.Owner.Equals(Player.Neutral) ||
-            !targetTile.IsEmpty())
-        {
-            return true;
-        }
 
-        return false;
+        return !targetTile.IsEmpty() &&
+               !targetTile.IsWall() &&
+               !targetTile.IsFire();
     }
-    
+
+    public static bool IsWall(this ITile tile)
+    {
+        return tile.Figure.Type is Wall;
+    }
+
+    public static bool IsFire(this ITile tile)
+    {
+        return tile.Figure.Type is Fire;
+    }
     
     public static bool IsEmpty(this ITile tile)
     {
-        return tile.Figure.Type.Equals(CrossFireFigureGroup.Empty);
+        return tile.Figure.Type is Empty;
     }
 
-    public static bool IsOwnedByYou(this ITile yoursTile, ITile checkedTile)
+    public static bool IsAllyTo(this ITile yoursTile, ITile checkedTile)
     {
         return checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
     }
 
     public static bool IsEnemyTo(this ITile yoursTile, ITile checkedTile)
     {
-        if (checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner))
-        {
-            return false;
-        }
-        
-        if (!checkedTile.Figure.Owner.Equals(Player.Neutral) ||
-            !checkedTile.IsEmpty())
-        {
-            return true;
-        }
-
-        return false;
+        return !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner) &&
+               !checkedTile.Figure.Owner.Equals(Player.Neutral);
     }
 
     public static void CreateFigure(this ITile tile, Figure createdFigure, IBoard board)
@@ -71,10 +65,18 @@ internal static class FiguresHelper
 
     public static void MoveToTile(this ITile from, ITile to, IBoard board)
     {
-        var figureType = from.Figure.Type; 
-        figureType.OnMoving(from, to, board);
-        (to.Figure, from.Figure) = (from.Figure, to.Figure);
-        figureType.OnMoved(from, to, board);
+        var movingFigure = from.Figure.Type; 
+        var targetFigure = to.Figure.Type;
+        
+        movingFigure.OnMoving(from, to, board);
+        targetFigure.OnDying(to, board);
+        
+        to.Figure.Owner.Figures.Remove(to.Figure);
+        to.Figure = from.Figure;
+        from.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
+        
+        movingFigure.OnMoved(from, to, board);
+        targetFigure.OnDied(to, board);
     }
 
     public static void KillWithoutMove(this ITile from, ITile to, IBoard board)
