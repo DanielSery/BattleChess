@@ -66,10 +66,6 @@
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonPurpleBackground.jpg" 
                 Stretch="UniformToFill"/>
 
-    <Style TargetType="ListBox">
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-
     <Style TargetType="TabControl">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
@@ -181,6 +177,25 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Rectangle Fill="Black" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Visible"
+                                      Margin="0 0 0 0"
+                                      Padding="1 1 7 1"
+                                      Template="{StaticResource ScrollViewerControlTemplate}">
+                            <StackPanel IsItemsHost="True" />
+                        </ScrollViewer>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -3,7 +3,6 @@ using Autofac.Extras.CommonServiceLocator;
 using BattleChess3.Game;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
-using BattleChess3.UI.Themes;
 using BattleChess3.UI.ViewModel;
 using CommonServiceLocator;
 
@@ -33,15 +32,15 @@ public static class DependenciesBuilder
 
     private static void SetUpServiceLocator(ContainerBuilder builder)
     {
-        builder.RegisterType<ThemeService>()
-            .As<IThemeService>()
-            .SingleInstance();
-
         builder.RegisterType<MapsViewModel>()
             .SingleInstance();
         builder.RegisterType<BoardViewModel>()
             .SingleInstance();
         builder.RegisterType<EditorViewModel>()
+            .SingleInstance();
+        builder.RegisterType<EditorUnitsViewModel>()
+            .SingleInstance();
+        builder.RegisterType<TeamBoardViewModel>()
             .SingleInstance();
         builder.RegisterType<MultiplayerViewModel>()
             .SingleInstance();

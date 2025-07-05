@@ -15,12 +15,12 @@
              ScrollViewer.VerticalScrollBarVisibility="Hidden">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-                <WrapPanel Orientation="Horizontal" IsItemsHost="True" />
+                <WrapPanel Orientation="Horizontal" IsItemsHost="True" ItemWidth="300"/>
             </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Image Width="300" Margin="10"
+                <Image Margin="5"
                        Source="{Binding Path=PreviewUri}">
                     <Image.InputBindings>
                         <MouseBinding

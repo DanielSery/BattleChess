@@ -6,7 +6,6 @@
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:views="clr-namespace:BattleChess3.UI.Views"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
-             xmlns:n="clr-namespace:Nicenis.Windows;assembly=Nicenis"
              xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:EditorViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -20,79 +19,12 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
-            <Border Grid.Row="0" Grid.RowSpan="3"
-                    BorderBrush="Black" BorderThickness="0 0 0 6"
-                    SnapsToDevicePixels="True">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Visible"
-                              Margin="0 0 0 0"
-                              Template="{StaticResource ScrollViewerControlTemplate}"
-                              Drop="Figures_Drop"
-                              AllowDrop="True">
-                    <ItemsControl HorizontalAlignment="Stretch"
-                                  ItemsSource="{Binding Figures}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Button
-                                    CommandParameter="{Binding .}"
-                                    Style="{StaticResource EditorChessButtonStyle}"
-                                    GotFocus="FigureButton_GotFocus"
-                                    LostFocus="FigureButton_LostFocus"
-                                    MouseEnter="FigureButton_MouseEnter"
-                                    MouseLeave="FigureButton_MouseLeave"
-                                    n:DragSource.AllowDrag="True"
-                                    n:DragSource.AllowedEffects="Copy"
-                                    n:DragSource.Dragging="ChessImage_DragEnter"
-                                    MaxWidth="100">
-                                    <Image Source="{Binding ImageUri}" />
-                                </Button>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
             
-            <Border x:Name="ThisBoardControl"
-                    Grid.Row="3"
-                    BorderBrush="Black" BorderThickness="0 0 6 0"
-                    SnapsToDevicePixels="True">
-                <ItemsControl HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding Tiles}"
-                              x:Name="ThisBoard">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="{Binding BoardWidth}" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisBoardControl}"
-                                CommandParameter="{Binding}"
-                                Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
-                                d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
-                                n:DragSource.AllowDrag="True"
-                                n:DragSource.AllowedEffects="Move"
-                                n:DragSource.Dragging="ChessButton_DragEnter"
-                                Drop="ChessImage_Drop"
-                                AllowDrop="True">
-                                <Image Source="{Binding Figure.ImageUri}" />
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
+            <views:EditorUnitsControl Grid.Row="0" Grid.RowSpan="3" SnapsToDevicePixels="True"
+                                      DataContext="{Binding EditorUnits}"/>
+            <views:TeamBoardControl Grid.Row="3" SnapsToDevicePixels="True"
+                                    DataContext="{Binding TeamBoard}"/>
         </Grid>
-        
-        <Border DockPanel.Dock="Right">
-            
-        </Border>
         
         <Grid DockPanel.Dock="Right" SnapsToDevicePixels="True">
             <Grid.ColumnDefinitions>
@@ -107,9 +39,9 @@
             </Grid.RowDefinitions>
                     
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                    Content="{Binding PointsLeft}"
+                    Content="{Binding  TeamBoard.PointsLeft}"
                     ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
-                    Visibility="{Binding PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
+                    Visibility="{Binding TeamBoard.PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
                     BorderThickness="3 6 6 3"
                     FontSize="25"
                     Background="{StaticResource ButtonGreenBackground}"
@@ -117,9 +49,9 @@
                     IsEnabled="False" Opacity="0.7"/>
                     
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                    Content="{Binding PointsLeft}"
+                    Content="{Binding TeamBoard.PointsLeft}"
                     ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
-                    Visibility="{Binding PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                    Visibility="{Binding TeamBoard.PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                     BorderThickness="3 6 6 3"
                     FontSize="25"
                     Background="{StaticResource ButtonRedBackground}"
@@ -127,7 +59,7 @@
                     IsEnabled="False" Opacity="0.7"/>
             
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                     Visibility="{Binding HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                     Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                      Content="{localization:Loc Editor_KingNotSelected}" 
                      BorderThickness="3 3 6 3"
                      FontSize="25"
@@ -136,7 +68,7 @@
                      IsEnabled="False" Opacity="0.7"/>
             
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                     Visibility="{Binding HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
+                     Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
                      Content="{localization:Loc Editor_KingSelected}" 
                      BorderThickness="3 3 6 3"
                      FontSize="25"
@@ -148,8 +80,8 @@
                     Command="{Binding SaveGameCommand}"
                     Content="{localization:Loc Editor_Save}" 
                     BorderThickness="3 3 3 6"
-                    Opacity="{Binding CanSave, Converter={converters:BooleanMultiValueConverter TrueValue=1.0, FalseValue=0.5}}"
-                    IsEnabled="{Binding CanSave}"
+                    Opacity="{Binding TeamBoard.CanSave, Converter={converters:BooleanMultiValueConverter TrueValue=1.0, FalseValue=0.5}}"
+                    IsEnabled="{Binding TeamBoard.CanSave}"
                     FontSize="25"
                     Background="{StaticResource ButtonBlueBackground}"
                     Padding="20"/>
@@ -161,10 +93,12 @@
                      FontSize="25"
                      Background="{StaticResource ButtonOrangeBackground}"
                      Padding="20"/>
-                
-            <views:UnitInfoControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
-                                   DataContext="{Binding TileInfo}"
-                                   BorderBrush="Black" BorderThickness="3,0,0,0" />
+            
+            <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                    BorderBrush="Black" BorderThickness="3,0,6,0"
+                    SnapsToDevicePixels="True">
+                <views:UnitInfoControl DataContext="{Binding EditorUnits.TileInfo}" />
+            </Border>
         </Grid>
     </DockPanel>
 </UserControl>
