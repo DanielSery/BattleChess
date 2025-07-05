@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Scout : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 10;
+    
     int IFigureType.FigureId => 16;
     
     private static readonly Position[] Directions =

@@ -28,13 +28,12 @@ public sealed class MainWindowViewModel : ViewModelBase
 
         NewGameCommand = new RelayCommand(NewGame);
         JoinGameCommand = new RelayCommand(JoinGame);
-        SaveGameCommand = new RelayCommand(SaveGame);
-        DeleteGameCommand = new RelayCommand(DeleteGame);
         EditorCommand = new RelayCommand(SelectEditor);
         SelectOptionsCommand = new RelayCommand(() => OptionsTabSelected = true);
         CloseApplicationCommand = new RelayCommand(CloseApplication);
         
         PlayerService.PlayerWon += PlayerServiceOnPlayerWon;
+        EditorViewModel.RequestSwitchToMainView += EditorViewModelOnRequestSwitchToMainView;
     }
 
 
@@ -74,13 +73,9 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public RelayCommand NewGameCommand { get; }
     public RelayCommand JoinGameCommand { get; }
-    public RelayCommand SaveGameCommand { get; }
     public RelayCommand EditorCommand { get; }
-    public RelayCommand DeleteGameCommand { get; }
     public RelayCommand SelectOptionsCommand { get; }
     public RelayCommand CloseApplicationCommand { get; }
-
-    public event EventHandler<string>? RequestSavePreview;
 
     private void NewGame()
     {
@@ -99,24 +94,15 @@ public sealed class MainWindowViewModel : ViewModelBase
         GameTabSelected = true;
     }
 
-    private void SaveGame()
-    {
-        GameTabSelected = true;
-        MenuTabSelected = true;
-        var identifier = DateTime.Now.Ticks.ToString();
-        RequestSavePreview?.Invoke(this, identifier);
-        MapsViewModel.SaveSelectedMap(identifier, BoardViewModel.Tiles);
-    }
-
-    private void DeleteGame()
-    {
-        MapsViewModel.DeleteSelectedMap();
-    }
-
     private void PlayerServiceOnPlayerWon(object? sender, int e)
     {
         var playerColor = e == 1 ? "Red" : "Blue";
         MessageBox.Show($"{playerColor} player won!", "Player won");
+    }
+
+    private void EditorViewModelOnRequestSwitchToMainView(object? sender, EventArgs e)
+    {
+        MenuTabSelected = true;
     }
 
     private static void CloseApplication()

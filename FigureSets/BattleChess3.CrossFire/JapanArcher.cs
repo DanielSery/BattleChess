@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class JapanArcher : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 8;
+    
     int IFigureType.FigureId => 26;
 
     private static readonly Position[] Directions =

@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Cannon : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 14;
+    
     int IFigureType.FigureId => 36;
     
     private static readonly Position[] AttackPositions =

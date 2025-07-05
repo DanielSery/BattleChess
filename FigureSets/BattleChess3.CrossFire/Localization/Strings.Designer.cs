@@ -69,7 +69,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alchemist
+        ///   Looks up a localized string similar to Alchemist (Cost: 4)
         ///
         ///After move creates explosives 
         ///which detonate when destroyed..
@@ -135,7 +135,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archer
+        ///   Looks up a localized string similar to Archer (Cost: 10)
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -183,7 +183,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Barbarian
+        ///   Looks up a localized string similar to Barbarian (Cost: 5)
         ///
         ///Can push near units.
         /// </summary>
@@ -239,7 +239,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bard
+        ///   Looks up a localized string similar to Bard (Cost: 12)
         ///
         ///Can convert enemy units..
         /// </summary>
@@ -295,7 +295,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Builder
+        ///   Looks up a localized string similar to Builder (Cost: 5)
         ///
         ///Can build walls.
         ///.
@@ -361,7 +361,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Camel Archer
+        ///   Looks up a localized string similar to Camel Archer (Cost: 9)
         ///
         ///Moves like chess bishop, attacks like rook.
         ///.
@@ -418,7 +418,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Camel Rider
+        ///   Looks up a localized string similar to Camel Rider (Cost: 6)
         ///
         ///Moves and attacks like chess bishop..
         /// </summary>
@@ -474,7 +474,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannon
+        ///   Looks up a localized string similar to Cannon (Cost: 14)
         ///
         ///Kills multiple units at once.
         ///Can destroy anything.
@@ -524,7 +524,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Catapult
+        ///   Looks up a localized string similar to Catapult (Cost: 12)
         ///
         ///Can destroy any unit.
         ///Cannot attack when standing next to enemy.
@@ -573,7 +573,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chinese warrior.
+        ///   Looks up a localized string similar to Chinese warrior (Cost: 7).
         /// </summary>
         internal static string Chinese_BaseDescription {
             get {
@@ -627,7 +627,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crossbowman
+        ///   Looks up a localized string similar to Crossbowman (Cost: 9)
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -684,7 +684,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dragon
+        ///   Looks up a localized string similar to Dragon (Cost: 20)
         ///            
         ///Can create line of 1-2 tiles of fire.
         ///Can walk on fire without harm.
@@ -751,7 +751,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Elephant
+        ///   Looks up a localized string similar to Elephant (Cost: 8)
         ///            
         ///Kills everything in 1-3 tile line.
         ///.
@@ -799,7 +799,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty
+        ///   Looks up a localized string similar to Empty (Cost: 0)
         ///
         ///Empty tile where units can move..
         /// </summary>
@@ -837,7 +837,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Explosives
+        ///   Looks up a localized string similar to Explosives (Cost: 1)
         ///
         ///When killed destroys everything in 3x3 square.
         ///.
@@ -876,7 +876,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fire
+        ///   Looks up a localized string similar to Fire (Cost: 0)
         ///            
         ///When unit walks into fire, it is killed
         ///and the fire extinguished.
@@ -925,7 +925,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gladiator.
+        ///   Looks up a localized string similar to Gladiator (Cost: 3).
         /// </summary>
         internal static string Gladiator_BaseDescription {
             get {
@@ -979,7 +979,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Japanese archer
+        ///   Looks up a localized string similar to Japanese archer (Cost: 8)
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -1036,7 +1036,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to King
+        ///   Looks up a localized string similar to King (Cost: 5)
         ///
         ///Moves and attacks like chess King.
         ///Can castle with any unit (not just Rook)..
@@ -1093,7 +1093,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Knight.
+        ///   Looks up a localized string similar to Knight (Cost: 5).
         /// </summary>
         internal static string Knight_BaseDescription {
             get {
@@ -1147,7 +1147,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Legionary with Pike
+        ///   Looks up a localized string similar to Legionary with Pike (Cost: 4)
         ///
         ///Moves and attacks like chess Pawn.
         ///When on last tile, turns to Knight.
@@ -1225,7 +1225,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Legionary with Sword
+        ///   Looks up a localized string similar to Legionary with Sword (Cost: 2)
         ///
         ///Moves and attacks like chess Pawn.
         ///When on last tile, turns to Knight..
@@ -1285,7 +1285,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Miner
+        ///   Looks up a localized string similar to Miner (Cost: 3)
         ///
         ///After move creates trenches where units 
         ///cannot move (trench is considered a unit)..
@@ -1351,7 +1351,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mounted Archer
+        ///   Looks up a localized string similar to Mounted Archer (Cost: 11)
         ///
         ///Moves like chess rook, attack like bishop..
         /// </summary>
@@ -1407,7 +1407,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mounted knight
+        ///   Looks up a localized string similar to Mounted knight (Cost: 6)
         ///
         ///Can kill 2 units in line.
         ///.
@@ -1464,7 +1464,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Musketeer
+        ///   Looks up a localized string similar to Musketeer (Cost: 12)
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -1533,7 +1533,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ninja.
+        ///   Looks up a localized string similar to Ninja (Cost: 3).
         /// </summary>
         internal static string Ninja_BaseDescription {
             get {
@@ -1590,7 +1590,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Old wizzard
+        ///   Looks up a localized string similar to Old wizzard (Cost: 22)
         ///
         ///After move explosion kills everything 
         ///around the wizzard..
@@ -1647,7 +1647,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Peasant.
+        ///   Looks up a localized string similar to Peasant (Cost: 1).
         /// </summary>
         internal static string Peasant_BaseDescription {
             get {
@@ -1701,7 +1701,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Priest
+        ///   Looks up a localized string similar to Priest (Cost: 9)
         ///            
         ///Can make unit a king.
         ///Can convert enemy unit and make it a king.
@@ -1769,7 +1769,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queen
+        ///   Looks up a localized string similar to Queen (Cost: 18)
         ///
         ///Moves and attacks like chess Queen..
         /// </summary>
@@ -1825,7 +1825,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ranger
+        ///   Looks up a localized string similar to Ranger (Cost: 11)
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -1882,7 +1882,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scout
+        ///   Looks up a localized string similar to Scout (Cost: 10)
         ///
         ///Moves and attacks like chess rook..
         /// </summary>
@@ -1938,7 +1938,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spartan.
+        ///   Looks up a localized string similar to Spartan (Cost: 4).
         /// </summary>
         internal static string Spartan_BaseDescription {
             get {
@@ -1992,7 +1992,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spearman.
+        ///   Looks up a localized string similar to Spearman (Cost: 2).
         /// </summary>
         internal static string Spearman_BaseDescription {
             get {
@@ -2046,7 +2046,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trader
+        ///   Looks up a localized string similar to Trader (Cost: 7)
         ///
         ///Moves and attacks like chess king.
         ///
@@ -2078,10 +2078,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Special:
-        ///
-        ///
-        ///.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Trader_SpecialDescription {
             get {
@@ -2099,7 +2096,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trench
+        ///   Looks up a localized string similar to Trench (Cost: 0)
         ///
         ///Can be destroyed.
         ///.
@@ -2147,7 +2144,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Viking
+        ///   Looks up a localized string similar to Viking (Cost: 6)
         ///
         ///Moves and attacks like a knight in chess..
         /// </summary>
@@ -2194,7 +2191,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wall
+        ///   Looks up a localized string similar to Wall (Cost: 1)
         ///
         ///Can be destroyed by siege, explosions
         ///and Warhammer..
@@ -2233,7 +2230,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warhammer
+        ///   Looks up a localized string similar to Warhammer (Cost: 6)
         ///
         ///With move swings with hammer and
         ///kills multiple units.
@@ -2309,7 +2306,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warrior
+        ///   Looks up a localized string similar to Warrior (Cost: 16)
         ///
         ///Can kill upt to 3 units in line..
         /// </summary>
@@ -2366,7 +2363,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Young Wizzard
+        ///   Looks up a localized string similar to Young Wizzard (Cost: 20)
         ///            
         ///When moving or attacking, explosion 
         ///kills units in specific shape.

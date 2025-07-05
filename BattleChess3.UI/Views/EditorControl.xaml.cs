@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using BattleChess3.CrossFireFigures;
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
@@ -18,6 +20,34 @@ public partial class EditorControl
     public EditorControl()
     {
         InitializeComponent();
+
+        Loaded += MainWindow_Loaded;
+        DataContextChanged += MainWindow_DataContextChanged;
+    }
+
+    public EditorViewModel? ViewModel { get; private set; }
+
+    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is EditorViewModel viewModel)
+        {
+            ViewModel = viewModel;
+            ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
+        }
+    }
+
+    private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (ViewModel is not null)
+        {
+            ViewModel.RequestSavePreview -= ViewModel_RequestSavePreview;
+        }
+
+        if (DataContext is EditorViewModel viewModel)
+        {
+            ViewModel = viewModel;
+            ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
+        }
     }
 
     private void FigureButton_GotFocus(object sender, RoutedEventArgs e)
@@ -105,6 +135,31 @@ public partial class EditorControl
         var button = (Button)sender;
         var figureType = (FigureTypeViewModel)button.DataContext;
         e.Data = new FigureIdentifier(figureType.PlayerId, figureType.UniqueFigureId, false);
+    }
+
+    private void ViewModel_RequestSavePreview(object? sender, string identifier)
+    {
+        SaveBoardPreview($"Resources\\Maps\\{identifier}.png");
+    }
+
+    public void SaveBoardPreview(string fileName)
+    {
+        var dpi = VisualTreeHelper.GetDpi(ThisBoard);
+        var bmp = new RenderTargetBitmap(
+            (int)ThisBoard.ActualWidth,
+            (int)ThisBoard.ActualHeight,
+            dpi.PixelsPerInchX / dpi.DpiScaleX,
+            dpi.PixelsPerInchY / dpi.DpiScaleY,
+            PixelFormats.Pbgra32);
+
+        bmp.Render(ThisBoard);
+
+        var encoder = new PngBitmapEncoder();
+        var frame = BitmapFrame.Create(bmp);
+        encoder.Frames.Add(frame);
+
+        using var stream = File.Create(fileName);
+        encoder.Save(stream);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

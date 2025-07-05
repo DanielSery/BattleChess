@@ -195,4 +195,13 @@
     <data name="Editor_KingNotSelected" xml:space="preserve">
     <value>King not selected</value>
   </data>
+    <data name="Editor_AvailablePointsFormat" xml:space="preserve">
+    <value>Available points: {0}</value>
+  </data>
+    <data name="Editor_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+    <data name="Editor_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

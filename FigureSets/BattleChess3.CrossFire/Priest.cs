@@ -7,6 +7,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Priest : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 9;
+    
     int IFigureType.FigureId => 40;
     
     private static readonly Position[] Directions =

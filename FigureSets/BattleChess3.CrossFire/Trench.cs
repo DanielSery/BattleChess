@@ -5,6 +5,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Trench : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 0;
+    
     int IFigureType.FigureId => 28;
     
     IDictionary<int, Uri> IFigureType.ImageUris =>

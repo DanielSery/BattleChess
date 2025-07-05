@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class OldWizzard : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 22;
+    
     int IFigureType.FigureId => 3;
     
     private static readonly Position[] Positions =

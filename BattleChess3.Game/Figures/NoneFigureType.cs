@@ -5,6 +5,8 @@ namespace BattleChess3.Game.Figures;
 public class NoneFigureType : IFigureType
 {
     public static NoneFigureType Instance { get; } = new();
+
+    public int FigureValue => 0;
     public int FigureId => -1;
     public int SetId => -1;
     public string DisplayName => string.Empty;

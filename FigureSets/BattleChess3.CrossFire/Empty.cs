@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Empty : IFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 0;
+    
     int IFigureType.FigureId => 0;
     int IFigureType.SetId => 0;
     

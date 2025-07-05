@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class LegionarySword : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 2;
+    
     int IFigureType.FigureId => 22;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

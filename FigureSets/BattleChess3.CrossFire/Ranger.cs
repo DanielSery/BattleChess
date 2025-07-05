@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Ranger : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 11;
+    
     int IFigureType.FigureId => 13;
     
     private static readonly Position[] AttackDirections =

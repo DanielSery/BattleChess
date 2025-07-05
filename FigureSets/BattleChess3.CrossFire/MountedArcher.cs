@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class MountedArcher : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 11;
+    
     int IFigureType.FigureId => 17;
     
     private static readonly Position[] MoveDirections =

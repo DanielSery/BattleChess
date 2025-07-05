@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Musketeer : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 12;
+    
     int IFigureType.FigureId => 2;
     
     private static readonly Position[] AttackDirections =

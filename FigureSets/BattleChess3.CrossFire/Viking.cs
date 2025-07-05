@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Viking : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 6;
+    
     int IFigureType.FigureId => 25;
     
     private static readonly Position[] AttackMovePositions =

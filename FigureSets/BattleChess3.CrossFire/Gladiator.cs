@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Gladiator : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 3;
+    
     int IFigureType.FigureId => 34;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

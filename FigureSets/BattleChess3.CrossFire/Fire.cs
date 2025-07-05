@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Fire : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 0;
+    
     int IFigureType.FigureId => 38;
     
     IDictionary<int, Uri> IFigureType.ImageUris =>

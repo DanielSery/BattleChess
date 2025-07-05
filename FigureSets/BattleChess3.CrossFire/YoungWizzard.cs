@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class YoungWizzard : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 20;
+    
     int IFigureType.FigureId => 14;
     
     private static readonly Position[] MovementPositions =

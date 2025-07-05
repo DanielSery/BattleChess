@@ -3,24 +3,26 @@ using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using NUnit.Framework;
 
 namespace BattleChess3.UI.ViewModel;
 
 public sealed class EditorViewModel : ViewModelBase, IDisposable
 {
+    private const int BasePoints = 85;
+    
     private readonly IFigureService _figureService;
     private readonly IFigureCreator _figureCreator;
 
     private FigureTypeViewModel[] _figures = [];
     private FigureTypeViewModel _tileInfo = new FigureTypeViewModel(Figure.None);
     private bool _tileInfoFocused;
-    private int _pointsLeft;
     private bool _hasKing;
+    private int _totalPoints;
 
     public EditorViewModel(
         IFigureService figureService,
-        IFigureCreator figureCreator)
+        IFigureCreator figureCreator,
+        MapsViewModel mapsViewModel)
     {
         _figureService = figureService;
         _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
@@ -30,7 +32,11 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
             .ToArray();
 
         _figureCreator = figureCreator;
+        MapsViewModel = mapsViewModel;
 
+        SaveGameCommand = new RelayCommand(SaveGame);
+        CancelCommand = new RelayCommand(Cancel);
+        
         FigureGotFocusCommand = new RelayCommand<FigureTypeViewModel>(GotFocus);
         FigureLostFocusCommand = new RelayCommand<FigureTypeViewModel>(LostFocus);
         FigureMouseEnterCommand = new RelayCommand<FigureTypeViewModel>(MouseEnterTile);
@@ -48,21 +54,23 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
         }
     }
 
-    public int BoardWidth
-    {
-        get => IBoard.Length;
-    }
 
+    public MapsViewModel MapsViewModel { get; set; }
+
+    public int BoardWidth => IBoard.Length;
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
 
-    public int PointsLeft
+    public bool PositivePoints => PointsLeft >= 0;
+    public int PointsLeft => BasePoints - TotalPoints;
+
+    public int TotalPoints
     {
-        get => _pointsLeft;
-        private set => Set(ref _pointsLeft, value);
+        get => _totalPoints;
+        private set => Set(ref _totalPoints, value);
     }
 
-    public bool CanSave => PointsLeft > 0 && HasKing;
+    public bool CanSave => PositivePoints && HasKing;
 
     public bool HasKing
     {
@@ -82,11 +90,17 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
         private set => Set(ref _tileInfo, value);
     }
 
+    public RelayCommand SaveGameCommand { get; set; }
+    public RelayCommand CancelCommand { get; set; }
     public RelayCommand<TileViewModel> MakeUnitKingCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureGotFocusCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureLostFocusCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureMouseEnterCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureMouseExitCommand { get; }
+
+
+    public event EventHandler RequestSwitchToMainView;
+    public event EventHandler<string>? RequestSavePreview;
 
     private void GotFocus(FigureTypeViewModel obj)
     {
@@ -120,6 +134,12 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
     {
         tile.Figure.Owner.Figures.Remove(tile.Figure);
         tile.Figure = _figureCreator.CreateFigure(figureIdentifier);
+
+        TotalPoints = Board.Sum(x => x.Figure.FigureValue);
+        HasKing = Board.Any(x => x.Figure.IsKing);
+        RaisePropertyChanged(nameof(PointsLeft));
+        RaisePropertyChanged(nameof(PositivePoints));
+        RaisePropertyChanged(nameof(CanSave));
     }
 
     private void MakeUnitKing(TileViewModel tile)
@@ -156,6 +176,19 @@ public sealed class EditorViewModel : ViewModelBase, IDisposable
         
         HasKing = true;
         RaisePropertyChanged(nameof(CanSave));
+    }
+
+    private void SaveGame()
+    {
+        var identifier = DateTime.Now.Ticks.ToString();
+        RequestSavePreview?.Invoke(this, identifier);
+        MapsViewModel.SaveSelectedMap(identifier, Tiles);
+        RequestSwitchToMainView?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Cancel()
+    {
+        RequestSwitchToMainView?.Invoke(this, EventArgs.Empty);
     }
 
     public void Dispose()

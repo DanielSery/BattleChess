@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Archer : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 10;
+    
     int IFigureType.FigureId => 27;
     
     private static readonly Position[] Directions =

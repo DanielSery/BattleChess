@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Queen : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 18;
+    
     int IFigureType.FigureId => 24;
     
     private static readonly Position[] Directions =

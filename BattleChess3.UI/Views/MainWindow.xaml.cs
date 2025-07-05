@@ -22,52 +22,5 @@ public partial class MainWindow
             typeof(TextBlock),
             new FrameworkPropertyMetadata(
                 new FontFamily("Britannic Bold")));
-
-        Loaded += MainWindow_Loaded;
-        DataContextChanged += MainWindow_DataContextChanged;
-    }
-
-    public MainWindowViewModel? ViewModel { get; private set; }
-
-    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        ViewModel = (MainWindowViewModel)DataContext;
-        ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
-    }
-
-    private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-    {
-        if (ViewModel is not null)
-        {
-            ViewModel.RequestSavePreview -= ViewModel_RequestSavePreview;
-        }
-
-        ViewModel = (MainWindowViewModel)DataContext;
-        ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
-    }
-
-    private void ViewModel_RequestSavePreview(object? sender, string identifier)
-    {
-        SaveBoardPreview($"Resources\\Maps\\{identifier}.png");
-    }
-
-    public void SaveBoardPreview(string fileName)
-    {
-        var dpi = VisualTreeHelper.GetDpi(GameBoard);
-        var bmp = new RenderTargetBitmap(
-            (int)GameBoard.ActualWidth,
-            (int)GameBoard.ActualHeight,
-            dpi.PixelsPerInchX / dpi.DpiScaleX,
-            dpi.PixelsPerInchY / dpi.DpiScaleY,
-            PixelFormats.Pbgra32);
-
-        bmp.Render(GameBoard);
-
-        var encoder = new PngBitmapEncoder();
-        var frame = BitmapFrame.Create(bmp);
-        encoder.Frames.Add(frame);
-
-        using var stream = File.Create(fileName);
-        encoder.Save(stream);
     }
 }

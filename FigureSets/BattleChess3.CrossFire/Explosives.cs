@@ -7,6 +7,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Explosives : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 1;
+    
     int IFigureType.FigureId => 9;
     
     IDictionary<int, Uri> IFigureType.ImageUris =>

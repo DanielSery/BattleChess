@@ -31,18 +31,6 @@
                                 Background="{StaticResource ButtonPurpleBackground}"/>
                         <Button Height="125" Width="300"
                                 DockPanel.Dock="Top"
-                                Command="{Binding SaveGameCommand}"
-                                Content="{localization:Loc MainWindow_SaveGame}" 
-                                BorderThickness="10 5 10 5"
-                                Background="{StaticResource ButtonRedBackground}"/>
-                        <Button Height="125" Width="300"
-                                DockPanel.Dock="Top"
-                                Command="{Binding DeleteGameCommand}"
-                                Content="{localization:Loc MainWindow_DeleteGame}" 
-                                BorderThickness="10 5 10 5"
-                                Background="{StaticResource ButtonOrangeBackground}"/>
-                        <Button Height="125" Width="300"
-                                DockPanel.Dock="Top"
                                 Command="{Binding EditorCommand}"
                                 Content="Editor" 
                                 BorderThickness="10 5 10 5"
@@ -62,9 +50,7 @@
         <TabItem IsSelected="{Binding GameTabSelected}">
             <DockPanel LastChildFill="True">
                 <Border DockPanel.Dock="Left">
-                    <views:GameBoardControl
-                        x:Name="GameBoard"
-                        DataContext="{Binding BoardViewModel}" />
+                    <views:GameBoardControl DataContext="{Binding BoardViewModel}" />
                 </Border>
                 <Border DockPanel.Dock="Top"
                         BorderBrush="Black" BorderThickness="10,0,0,5">

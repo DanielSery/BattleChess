@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Crossbow : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 9;
+    
     int IFigureType.FigureId => 35;
     
     private static readonly Position[] AttackDirections =

@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Spearman : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 2;
+    
     int IFigureType.FigureId => 32;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

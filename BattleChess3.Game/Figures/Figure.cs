@@ -29,6 +29,7 @@ public class Figure : IFigure, IFigureType, INotifyPropertyChanged
     public Player Owner { get; }
     public IFigureType Type { get; }
     public bool IsKing { get; }
+    public int FigureValue => Type.FigureValue;
     public Uri ImageUri => Type.ImageUris[Owner.Id];
     public int FigureId => Type.FigureId;
     public int SetId => Type.SetId;

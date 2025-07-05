@@ -63,7 +63,8 @@
                     BorderBrush="Black" BorderThickness="0 0 6 0"
                     SnapsToDevicePixels="True">
                 <ItemsControl HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding Tiles}">
+                              ItemsSource="{Binding Tiles}"
+                              x:Name="ThisBoard">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="{Binding BoardWidth}" />
@@ -106,12 +107,25 @@
             </Grid.RowDefinitions>
                     
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                    Content="Available points: 72" 
+                    Content="{Binding PointsLeft}"
+                    ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
+                    Visibility="{Binding PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
                     BorderThickness="3 6 6 3"
                     FontSize="25"
                     Background="{StaticResource ButtonGreenBackground}"
                     Padding="20"
                     IsEnabled="False" Opacity="0.7"/>
+                    
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="{Binding PointsLeft}"
+                    ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
+                    Visibility="{Binding PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
+                    BorderThickness="3 6 6 3"
+                    FontSize="25"
+                    Background="{StaticResource ButtonRedBackground}"
+                    Padding="20"
+                    IsEnabled="False" Opacity="0.7"/>
+            
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                      Visibility="{Binding HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                      Content="{localization:Loc Editor_KingNotSelected}" 
@@ -129,17 +143,20 @@
                      Background="{StaticResource ButtonGreen2Background}"
                      Padding="20"
                      IsEnabled="False" Opacity="0.7"/>
-                    
+            
             <Button Grid.Row="2" Grid.Column="0"
-                    Command="{Binding NewGameCommand}"
-                    Content="Save" 
+                    Command="{Binding SaveGameCommand}"
+                    Content="{localization:Loc Editor_Save}" 
                     BorderThickness="3 3 3 6"
+                    Opacity="{Binding CanSave, Converter={converters:BooleanMultiValueConverter TrueValue=1.0, FalseValue=0.5}}"
+                    IsEnabled="{Binding CanSave}"
                     FontSize="25"
                     Background="{StaticResource ButtonBlueBackground}"
                     Padding="20"/>
+            
             <Button  Grid.Row="2" Grid.Column="1"
-                     Command="{Binding JoinGameCommand}"
-                     Content="Cancel" 
+                     Command="{Binding CancelCommand}"
+                     Content="{localization:Loc Editor_Cancel}" 
                      BorderThickness="3 3 6 6"
                      FontSize="25"
                      Background="{StaticResource ButtonOrangeBackground}"

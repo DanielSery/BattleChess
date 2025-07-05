@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class Bard : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 12;
+    
     int IFigureType.FigureId => 11;
     
     private static readonly Position[] MovementPositions =

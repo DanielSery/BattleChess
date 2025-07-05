@@ -5,6 +5,11 @@ namespace BattleChess3.Game.Figures;
 public interface IFigureType : IEquatable<IFigureType>
 {
     /// <summary>
+    /// Gets figure value.
+    /// </summary>
+    int FigureValue { get; }
+    
+    /// <summary>
     /// Gets figure id.
     /// </summary>
     int FigureId { get; }

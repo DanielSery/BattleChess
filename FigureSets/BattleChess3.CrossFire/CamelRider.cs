@@ -6,6 +6,9 @@ namespace BattleChess3.CrossFireFigures;
 
 public class CamelRider : ICrossFireFigureType
 {
+    /// <inheritdoc />
+    public int FigureValue { get; } = 6;
+    
     int IFigureType.FigureId => 15;
     
     private static readonly Position[] Directions =
