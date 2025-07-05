@@ -8,33 +8,31 @@
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:TeamBoardViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Border x:Name="ThisBoardControl"
-            BorderBrush="Black" BorderThickness="0 0 6 0">
-        <ItemsControl HorizontalAlignment="Stretch"
-                      ItemsSource="{Binding Tiles}"
-                      x:Name="ThisBoard">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding BoardWidth}" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button
-                        Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisBoardControl}"
-                        CommandParameter="{Binding}"
-                        Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
-                        d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
-                        n:DragSource.AllowDrag="True"
-                        n:DragSource.AllowedEffects="Move"
-                        n:DragSource.Dragging="ChessButton_DragEnter"
-                        Drop="ChessImage_Drop"
-                        AllowDrop="True">
-                        <Image Source="{Binding Figure.ImageUri}" />
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </Border>
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="ThisTeamBoardControl">
+    <ItemsControl HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding Tiles}"
+                  x:Name="ThisBoard">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding BoardWidth}" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Button
+                    Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisTeamBoardControl}"
+                    CommandParameter="{Binding}"
+                    Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
+                    d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
+                    n:DragSource.AllowDrag="True"
+                    n:DragSource.AllowedEffects="Move"
+                    n:DragSource.Dragging="ChessButton_DragEnter"
+                    Drop="ChessImage_Drop"
+                    AllowDrop="True">
+                    <Image Source="{Binding Figure.ImageUri}" />
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>

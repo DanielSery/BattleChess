@@ -7,6 +7,7 @@ internal class MapService : IMapService
 {
     private readonly FileSystemWatcher _watcher;
 
+    private readonly TaskCompletionSource _taskCompletionSource = new TaskCompletionSource();
     private MapBlueprint[] _maps = [];
 
     public MapService()
@@ -31,13 +32,14 @@ internal class MapService : IMapService
         _watcher.IncludeSubdirectories = true;
         _watcher.EnableRaisingEvents = true;
 
-        Task.Run(() => ReloadMaps());
+        Task.Run(ReloadMaps);
     }
 
     public event EventHandler<IList<MapBlueprint>>? MapsChanged;
 
     public IList<MapBlueprint> GetCurrentMaps()
     {
+        _taskCompletionSource.Task.Wait();
         return _maps;
     }
 
@@ -88,6 +90,7 @@ internal class MapService : IMapService
             });
 
         MapsChanged?.Invoke(this, _maps);
+        _taskCompletionSource.TrySetResult();
     }
 
     private static bool IsFileLocked(FileInfo file)

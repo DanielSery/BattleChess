@@ -8,38 +8,36 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:EditorUnitsViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
-   <Border BorderBrush="Black" BorderThickness="0 0 0 6">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Visible"
-                              Margin="0 0 0 0"
-                              Template="{StaticResource ScrollViewerControlTemplate}"
-                              Drop="Figures_Drop"
-                              AllowDrop="True">
-                    <ItemsControl HorizontalAlignment="Stretch"
-                                  ItemsSource="{Binding Figures}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Button
-                                    CommandParameter="{Binding .}"
-                                    Style="{StaticResource EditorChessButtonStyle}"
-                                    GotFocus="FigureButton_GotFocus"
-                                    LostFocus="FigureButton_LostFocus"
-                                    MouseEnter="FigureButton_MouseEnter"
-                                    MouseLeave="FigureButton_MouseLeave"
-                                    n:DragSource.AllowDrag="True"
-                                    n:DragSource.AllowedEffects="Copy"
-                                    n:DragSource.Dragging="ChessImage_DragEnter"
-                                    MaxWidth="100">
-                                    <Image Source="{Binding ImageUri}" />
-                                </Button>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Border>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Visible"
+                  Margin="0 0 0 0"
+                  Template="{StaticResource ScrollViewerControlTemplate}"
+                  Drop="Figures_Drop"
+                  AllowDrop="True">
+        <ItemsControl HorizontalAlignment="Stretch"
+                      ItemsSource="{Binding Figures}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        CommandParameter="{Binding .}"
+                        Style="{StaticResource EditorChessButtonStyle}"
+                        GotFocus="FigureButton_GotFocus"
+                        LostFocus="FigureButton_LostFocus"
+                        MouseEnter="FigureButton_MouseEnter"
+                        MouseLeave="FigureButton_MouseLeave"
+                        n:DragSource.AllowDrag="True"
+                        n:DragSource.AllowedEffects="Copy"
+                        n:DragSource.Dragging="ChessImage_DragEnter"
+                        MaxWidth="100">
+                        <Image Source="{Binding ImageUri}" />
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

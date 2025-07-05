@@ -2,6 +2,7 @@
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
+using BattleChess3.Maps;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -16,7 +17,10 @@ public class TeamBoardViewModel : ViewModelBase
     
     private readonly IFigureCreator _figureCreator;
 
-    public TeamBoardViewModel(IFigureCreator figureCreator)
+    public TeamBoardViewModel(
+        IFigureCreator figureCreator,
+        MapsViewModel maps,
+        IMapLoader mapLoader)
     {
         _figureCreator = figureCreator;
         
@@ -30,6 +34,7 @@ public class TeamBoardViewModel : ViewModelBase
             Board[i].Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
         }
         
+        mapLoader.LoadTeamMap(Board, maps.SelectedMap);
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
     }
 

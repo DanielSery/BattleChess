@@ -20,10 +20,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             
-            <views:EditorUnitsControl Grid.Row="0" Grid.RowSpan="3" SnapsToDevicePixels="True"
-                                      DataContext="{Binding EditorUnits}"/>
-            <views:TeamBoardControl Grid.Row="3" SnapsToDevicePixels="True"
-                                    DataContext="{Binding TeamBoard}"/>
+            <Border Grid.Row="0" Grid.RowSpan="3" SnapsToDevicePixels="True"
+                    BorderBrush="Black" BorderThickness="0 0 0 9">
+                <views:EditorUnitsControl DataContext="{Binding EditorUnits}"
+                                          Opacity="0.85"/>
+            </Border>
+            <Border Grid.Row="3" SnapsToDevicePixels="True"
+                                BorderBrush="Black" BorderThickness="0 0 6 0">
+                <views:TeamBoardControl DataContext="{Binding TeamBoard}"/>
+            </Border>
         </Grid>
         
         <Grid DockPanel.Dock="Right" SnapsToDevicePixels="True">
@@ -46,7 +51,7 @@
                     FontSize="25"
                     Background="{StaticResource ButtonGreenBackground}"
                     Padding="20"
-                    IsEnabled="False" Opacity="0.7"/>
+                    IsEnabled="False" Opacity="0.85"/>
                     
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                     Content="{Binding TeamBoard.PointsLeft}"
@@ -56,7 +61,7 @@
                     FontSize="25"
                     Background="{StaticResource ButtonRedBackground}"
                     Padding="20"
-                    IsEnabled="False" Opacity="0.7"/>
+                    IsEnabled="False" Opacity="0.85"/>
             
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                      Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
@@ -65,7 +70,7 @@
                      FontSize="25"
                      Background="{StaticResource ButtonRed2Background}"
                      Padding="20"
-                     IsEnabled="False" Opacity="0.7"/>
+                     IsEnabled="False" Opacity="0.85"/>
             
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                      Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
@@ -74,7 +79,7 @@
                      FontSize="25"
                      Background="{StaticResource ButtonGreen2Background}"
                      Padding="20"
-                     IsEnabled="False" Opacity="0.7"/>
+                     IsEnabled="False" Opacity="0.85"/>
             
             <Button Grid.Row="2" Grid.Column="0"
                     Command="{Binding SaveGameCommand}"

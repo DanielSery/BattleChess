@@ -18,6 +18,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         BoardViewModel boardViewModel,
         EditorViewModel editorViewModel,
         MultiplayerViewModel multiplayerViewModel,
+        TeamBoardViewModel teamBoardViewModel,
         IPlayerService playerService)
     {
         MapsViewModel = mapsViewModel;
@@ -25,8 +26,10 @@ public sealed class MainWindowViewModel : ViewModelBase
         EditorViewModel = editorViewModel;
         MultiplayerViewModel = multiplayerViewModel;
         PlayerService = playerService;
+        TeamBoardViewModel = teamBoardViewModel;
 
         NewGameCommand = new RelayCommand(NewGame);
+        HostGameCommand = new RelayCommand(HostGame);
         JoinGameCommand = new RelayCommand(JoinGame);
         EditorCommand = new RelayCommand(SelectEditor);
         SelectOptionsCommand = new RelayCommand(() => OptionsTabSelected = true);
@@ -69,13 +72,22 @@ public sealed class MainWindowViewModel : ViewModelBase
     public BoardViewModel BoardViewModel { get; }
     public EditorViewModel EditorViewModel { get; }
     public MultiplayerViewModel MultiplayerViewModel { get; }
+    public TeamBoardViewModel TeamBoardViewModel { get; }
     public IPlayerService PlayerService { get; }
 
     public RelayCommand NewGameCommand { get; }
+    public RelayCommand HostGameCommand { get; }
     public RelayCommand JoinGameCommand { get; }
     public RelayCommand EditorCommand { get; }
     public RelayCommand SelectOptionsCommand { get; }
     public RelayCommand CloseApplicationCommand { get; }
+
+    private void HostGame()
+    {
+        BoardViewModel.ManualLoadMap(MapsViewModel.SelectedMap ?? MapBlueprint.Empty);
+        GameTabSelected = true;
+        MultiplayerViewModel.HostAndCopyCommand.Execute(null);
+    }
 
     private void NewGame()
     {

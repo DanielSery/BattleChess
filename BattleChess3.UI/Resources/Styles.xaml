@@ -263,6 +263,34 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="ScalingButtonStyle" TargetType="Button">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectForeground}"/>
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Viewbox>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="5" />
+                        </Viewbox>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource DefaultObjectMouseOnForeground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectMouseOnForeground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="Button">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />

@@ -13,50 +13,14 @@
     <!-- WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" -->
     <TabControl>
         <TabItem IsSelected="{Binding MenuTabSelected}">
-            <DockPanel>
-                <Viewbox DockPanel.Dock="Left" Stretch="Uniform"
-                         HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <DockPanel>
-                        <Button Height="125" Width="300"
-                                DockPanel.Dock="Top"
-                                Command="{Binding NewGameCommand}"
-                                Content="{localization:Loc MainWindow_NewGame}" 
-                                BorderThickness="10 10 10 5"
-                                Background="{StaticResource ButtonBlueBackground}"/>
-                        <Button Height="125" Width="300"
-                                DockPanel.Dock="Top"
-                                Command="{Binding JoinGameCommand}"
-                                Content="{localization:Loc MainWindow_JoinGame}" 
-                                BorderThickness="10 5 10 5"
-                                Background="{StaticResource ButtonPurpleBackground}"/>
-                        <Button Height="125" Width="300"
-                                DockPanel.Dock="Top"
-                                Command="{Binding EditorCommand}"
-                                Content="Editor" 
-                                BorderThickness="10 5 10 5"
-                                Background="{StaticResource ButtonGreen2Background}"/>
-                        <Button Height="125" Width="300"
-                                DockPanel.Dock="Top"
-                                Command="{Binding CloseApplicationCommand}"
-                                Content="{localization:Loc MainWindow_Quit}" 
-                                BorderThickness="10 5 10 10"
-                                Background="{StaticResource ButtonOrange2Background}"/>
-                    </DockPanel>
-                </Viewbox>
-                <views:MapsControl MinWidth="500"
-                                   DataContext="{Binding MapsViewModel}" />
-            </DockPanel>
+            <views:MenuControl/>
         </TabItem>
         <TabItem IsSelected="{Binding GameTabSelected}">
             <DockPanel LastChildFill="True">
                 <Border DockPanel.Dock="Left">
                     <views:GameBoardControl DataContext="{Binding BoardViewModel}" />
                 </Border>
-                <Border DockPanel.Dock="Top"
-                        BorderBrush="Black" BorderThickness="10,0,0,5">
-                    <views:MultiplayerControl DataContext="{Binding MultiplayerViewModel}" />
-                </Border>
-                <Border BorderBrush="Black" BorderThickness="10,0,0,0">
+                <Border BorderBrush="Black" BorderThickness="3,0,0,0">
                     <views:UnitInfoControl DataContext="{Binding BoardViewModel.TileInfo.Figure}" />
                 </Border>
             </DockPanel>

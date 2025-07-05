@@ -17,13 +17,26 @@ internal class MapLoader : IMapLoader
         _figureCreator = figureCreator;
     }
     
-    public void LoadMap(IBoard board, MapBlueprint map)
+    public void LoadTeamMap(IBoard board, MapBlueprint map)
     {
-        _playerService.InitializePlayers(map.StartingPlayer);
-
-        for (var i = 0; i < IBoard.TilesCount; i++)
+        for (var i = 0; i < board.Count; i++)
         {
             board[i].Figure = _figureCreator.CreateFigure(map.Figures[i]);
+        }
+    }
+
+    public void Load2PlayerMap(IBoard board, MapBlueprint map)
+    {
+        _playerService.InitializePlayers(map.StartingPlayer);
+        var player1 = _playerService.GetPlayer(1);
+        
+        for (var i = 0; i < map.Figures.Length; i++)
+        {
+            var redFigure = map.Figures[i];
+            var redPosition = Position.FromIndex(i + 64 - 16);
+            var blueFigure = new FigureIdentifier(2, redFigure.UniqueUnitId, redFigure.IsKing);
+            board[redPosition.GetPlayerPOVPosition(player1)].Figure = _figureCreator.CreateFigure(blueFigure);
+            board[redPosition.Index].Figure = _figureCreator.CreateFigure(redFigure);
         }
     }
 }

@@ -20,7 +20,7 @@ public sealed class EditorViewModel : ViewModelBase
 
     public MapsViewModel Maps { get; }
     public EditorUnitsViewModel EditorUnits { get; }
-    public TeamBoardViewModel TeamBoard { get; set; }
+    public TeamBoardViewModel TeamBoard { get; }
 
     public RelayCommand SaveGameCommand { get; }
     public RelayCommand CancelCommand { get; }
