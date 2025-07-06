@@ -11,19 +11,16 @@ public sealed class BoardViewModel : ViewModelBase
 {
     private readonly IPlayerService _playerService;
     private readonly IMapLoader _mapLoader;
-    private readonly IFigureCreator _figureCreator;
 
     private TileViewModel _mouseOnTile = NoneTileViewModel.Instance;
     private TileViewModel _selectedTile = NoneTileViewModel.Instance;
 
     public BoardViewModel(
         IPlayerService playerService,
-        IMapLoader mapLoader,
-        IFigureCreator figureCreator)
+        IMapLoader mapLoader)
     {
         _playerService = playerService;
         _mapLoader = mapLoader;
-        _figureCreator = figureCreator;
 
         PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
@@ -60,7 +57,7 @@ public sealed class BoardViewModel : ViewModelBase
             if (_selectedTile.Equals(NoneTileViewModel.Instance))
             {                
                 ClearPossibleActions();
-                SetPossibleActions(value);
+                SetPossibleActions(value, false);
             }
             
             RaisePropertyChanged(nameof(TileInfo));
@@ -97,14 +94,16 @@ public sealed class BoardViewModel : ViewModelBase
         ClearPossibleActions();
     }
 
-    public void ManualLoadMap(MapBlueprint map)
+    public void SinglePlayerLoadMap(MapBlueprint map)
     {
+        _playerService.InitializePlayers(map.StartingPlayer, false);
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestLoadMap?.Invoke(this, map);
     }
 
-    public void AutomaticLoadMap(MapBlueprint map)
+    public void MultiplayerLoadMap(MapBlueprint map)
     {
+        _playerService.InitializePlayers(map.StartingPlayer, true);
         _mapLoader.LoadMap(Board, map);
     }
 
@@ -114,7 +113,7 @@ public sealed class BoardViewModel : ViewModelBase
         ClearPossibleActions();
         
         SelectedTile = fromTile;
-        SetPossibleActions(fromTile);
+        SetPossibleActions(fromTile, true);
         
         toTile.PossibleAction.Action.Invoke();
         SelectedTile = NoneTileViewModel.Instance;
@@ -141,7 +140,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
 
         ClearPossibleActions();
-        SetPossibleActions(clickedTile);
+        SetPossibleActions(clickedTile, false);
     }
 
 
@@ -153,8 +152,11 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private void SetPossibleActions(TileViewModel clickedTile)
+    private void SetPossibleActions(TileViewModel clickedTile, bool remote)
     {
+        if (!_playerService.CanMove && !remote)
+            return;
+        
         if (!_playerService.CurrentPlayer.Equals(clickedTile.Figure.Owner))
             return;
         

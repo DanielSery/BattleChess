@@ -72,7 +72,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
     private void RemoteRequestedLoadMap(object? sender, MapBlueprint e)
     {
-        _boardViewModel.AutomaticLoadMap(e);
+        _boardViewModel.MultiplayerLoadMap(e);
     }
 
     private void MultiplayerServiceOnRequestPlayMove(object? sender, (Position from, Position to) e)
@@ -117,7 +117,8 @@ public sealed class MultiplayerViewModel : ViewModelBase
         };
 
         var random = new Random();
-        var isHostStarting = random.Next(0, 1) == 1;
+        var isHostStarting = false;
+        // var isHostStarting = random.Next(0, 1) == 1;
         var gameIdTask = _multiplayerService.Host(false, isHostStarting, map);
         gameIdTask.ContinueWith(task =>
         {

@@ -84,14 +84,13 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private void HostGame()
     {
-        // BoardViewModel.ManualLoadMap(MapsViewModel.SelectedMap ?? MapBlueprint.Empty);
         GameTabSelected = true;
         MultiplayerViewModel.HostAndCopyCommand.Execute(null);
     }
 
     private void NewGame()
     {
-        BoardViewModel.ManualLoadMap(MapsViewModel.TeamMap);
+        BoardViewModel.SinglePlayerLoadMap(MapsViewModel.TeamMap);
         GameTabSelected = true;
     }
 

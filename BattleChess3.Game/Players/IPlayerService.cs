@@ -7,6 +7,8 @@ public interface IPlayerService
     /// </summary>
     public event EventHandler<int> PlayerWon;
     
+    bool CanMove { get; }
+    
     /// <summary>
     ///     Gets current player.
     /// </summary>
@@ -20,7 +22,7 @@ public interface IPlayerService
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void InitializePlayers(in int currentPlayer);
+    void InitializePlayers(in int currentPlayer, in bool multiplayer);
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayer" />.

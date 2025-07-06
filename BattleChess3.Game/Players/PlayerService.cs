@@ -4,12 +4,15 @@ internal class PlayerService : IPlayerService
 {
     private readonly IDictionary<int, Player> _players = new Dictionary<int, Player>();
     private int _currentPlayerId;
+    private bool _isMultiplayer;
 
     public PlayerService()
     {
         _players.Clear();
         _currentPlayerId = 0;
     }
+    
+    public bool CanMove { get; private set; }
 
     /// <inheritdoc />
     public event EventHandler<int>? PlayerWon;
@@ -27,15 +30,18 @@ internal class PlayerService : IPlayerService
         return _players[id];
     }
 
-    public void InitializePlayers(in int currentPlayerId)
+    public void InitializePlayers(in int currentPlayerId, in bool multiplayer)
     {
         _players.Clear();
         _currentPlayerId = currentPlayerId;
+        _isMultiplayer = multiplayer;
+        CanMove = currentPlayerId == 1 || !_isMultiplayer;
     }
 
     public void NextTurn()
     {
         NextPlayer();
+        CanMove = CurrentPlayer.Id == 1 || !_isMultiplayer;
 
         foreach (var player in _players)
         {
