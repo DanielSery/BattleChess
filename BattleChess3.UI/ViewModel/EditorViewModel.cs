@@ -6,11 +6,9 @@ namespace BattleChess3.UI.ViewModel;
 public sealed class EditorViewModel : ViewModelBase
 {
     public EditorViewModel(
-        MapsViewModel maps,
         EditorUnitsViewModel editorUnits,
         TeamBoardViewModel teamBoard)
     {
-        Maps = maps;
         EditorUnits = editorUnits;
         TeamBoard = teamBoard;
 
@@ -18,7 +16,6 @@ public sealed class EditorViewModel : ViewModelBase
         CancelCommand = new RelayCommand(Cancel);
     }
 
-    public MapsViewModel Maps { get; }
     public EditorUnitsViewModel EditorUnits { get; }
     public TeamBoardViewModel TeamBoard { get; }
 
@@ -29,13 +26,13 @@ public sealed class EditorViewModel : ViewModelBase
 
     private void SaveGame()
     {
-        var identifier = DateTime.Now.Ticks.ToString();
-        TeamBoard.RequestSave(identifier);
-        Maps.SaveSelectedMap(identifier, TeamBoard.Tiles);
+        TeamBoard.SaveMap();
+        RequestSwitchToMainView?.Invoke(this, EventArgs.Empty);
     }
 
     private void Cancel()
     {
+        TeamBoard.Discard();
         RequestSwitchToMainView?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -14,35 +14,9 @@ public partial class TeamBoardControl
     public TeamBoardControl()
     {
         InitializeComponent();
-
-        Loaded += TeamBoardControl_Loaded;
-        DataContextChanged += TeamBoardControl_DataContextChanged;
     }
 
     public TeamBoardViewModel? ViewModel { get; private set; }
-
-    private void TeamBoardControl_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is TeamBoardViewModel viewModel)
-        {
-            ViewModel = viewModel;
-            ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
-        }
-    }
-
-    private void TeamBoardControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-    {
-        if (ViewModel is not null)
-        {
-            ViewModel.RequestSavePreview -= ViewModel_RequestSavePreview;
-        }
-
-        if (DataContext is TeamBoardViewModel viewModel)
-        {
-            ViewModel = viewModel;
-            ViewModel.RequestSavePreview += ViewModel_RequestSavePreview;
-        }
-    }
 
     private void ChessImage_Drop(object sender, DragEventArgs e)
     {
@@ -97,30 +71,5 @@ public partial class TeamBoardControl
         } while (current != null);
 
         return null;
-    }
-
-    private void ViewModel_RequestSavePreview(object? sender, string identifier)
-    {
-        SaveBoardPreview($"Resources\\Maps\\{identifier}.png");
-    }
-
-    public void SaveBoardPreview(string fileName)
-    {
-        var dpi = VisualTreeHelper.GetDpi(ThisBoard);
-        var bmp = new RenderTargetBitmap(
-            (int)ThisBoard.ActualWidth,
-            (int)ThisBoard.ActualHeight,
-            dpi.PixelsPerInchX / dpi.DpiScaleX,
-            dpi.PixelsPerInchY / dpi.DpiScaleY,
-            PixelFormats.Pbgra32);
-
-        bmp.Render(ThisBoard);
-
-        var encoder = new PngBitmapEncoder();
-        var frame = BitmapFrame.Create(bmp);
-        encoder.Frames.Add(frame);
-
-        using var stream = File.Create(fileName);
-        encoder.Save(stream);
     }
 }

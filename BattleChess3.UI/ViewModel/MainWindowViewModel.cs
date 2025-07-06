@@ -91,7 +91,7 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private void NewGame()
     {
-        BoardViewModel.ManualLoadMap(MapsViewModel.SelectedMap ?? MapBlueprint.Empty);
+        BoardViewModel.ManualLoadMap(MapsViewModel.TeamMap);
         GameTabSelected = true;
     }
 

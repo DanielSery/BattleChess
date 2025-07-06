@@ -6,19 +6,9 @@
 public interface IMapService
 {
     /// <summary>
-    ///     Raised when maps collection has changed.
-    /// </summary>
-    event EventHandler<IList<MapBlueprint>>? MapsChanged;
-
-    /// <summary>
     ///     Gets current maps.
     /// </summary>
-    IList<MapBlueprint> GetCurrentMaps();
-
-    /// <summary>
-    ///     Deletes specified map.
-    /// </summary>
-    void Delete(MapBlueprint selectedMap);
+    MapBlueprint GetCurrentMap();
 
     /// <summary>
     ///     Saves specified map.

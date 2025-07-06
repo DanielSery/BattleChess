@@ -16,6 +16,8 @@ public class TeamBoardViewModel : ViewModelBase
     private int _totalPoints;
     
     private readonly IFigureCreator _figureCreator;
+    private readonly MapsViewModel _maps;
+    private readonly IMapLoader _mapLoader;
 
     public TeamBoardViewModel(
         IFigureCreator figureCreator,
@@ -23,18 +25,16 @@ public class TeamBoardViewModel : ViewModelBase
         IMapLoader mapLoader)
     {
         _figureCreator = figureCreator;
+        _maps = maps;
+        _mapLoader = mapLoader;
         
         Tiles = Enumerable.Range(0, IBoard.Length * 2)
             .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
             .ToArray();
+        
         Board = new Board(Tiles.Cast<ITile>().ToArray());
+        mapLoader.LoadMap(Board, maps.TeamMap);
         
-        for (var i = 0; i < Board.Count; i++)
-        {
-            Board[i].Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
-        }
-        
-        mapLoader.LoadMap(Board, maps.SelectedMap ?? MapBlueprint.EmptyTeam);
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
     }
 
@@ -60,7 +60,6 @@ public class TeamBoardViewModel : ViewModelBase
     }
     
     public RelayCommand<TileViewModel> MakeUnitKingCommand { get; }
-    public event EventHandler<string>? RequestSavePreview;
 
     public void CreateFigure(ITile tile, FigureIdentifier figureIdentifier)
     {
@@ -72,6 +71,16 @@ public class TeamBoardViewModel : ViewModelBase
         RaisePropertyChanged(nameof(PointsLeft));
         RaisePropertyChanged(nameof(PositivePoints));
         RaisePropertyChanged(nameof(CanSave));
+    }
+
+    public void SaveMap()
+    {
+        _maps.SaveMap(Tiles);
+    }
+
+    public void Discard()
+    {
+        _mapLoader.LoadMap(Board, _maps.TeamMap);
     }
 
     private void MakeUnitKing(TileViewModel tile)
@@ -108,10 +117,5 @@ public class TeamBoardViewModel : ViewModelBase
         
         HasKing = true;
         RaisePropertyChanged(nameof(CanSave));
-    }
-
-    public void RequestSave(string identifier)
-    {
-        RequestSavePreview?.Invoke(this, identifier);
     }
 }

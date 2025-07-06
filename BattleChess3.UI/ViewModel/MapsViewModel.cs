@@ -7,66 +7,25 @@ using GalaSoft.MvvmLight;
 
 namespace BattleChess3.UI.ViewModel;
 
-public sealed class MapsViewModel : ViewModelBase, IDisposable
+public sealed class MapsViewModel : ViewModelBase
 {
     private readonly IMapService _mapService;
-    private readonly IPlayerService _playerService;
 
-    private IList<MapBlueprint> _maps = Array.Empty<MapBlueprint>();
+    private MapBlueprint _teamMap;
 
-    private MapBlueprint? _selectedMap;
-
-    public MapsViewModel(
-        IMapService mapService,
-        IPlayerService playerService)
+    public MapsViewModel(IMapService mapService)
     {
         _mapService = mapService;
-        _playerService = playerService;
-
-        Maps = new ObservableCollection<MapBlueprint>(_mapService.GetCurrentMaps());
-        _mapService.MapsChanged += OnMapsChanged;
+        _teamMap = _mapService.GetCurrentMap();
     }
 
-    public MapBlueprint? SelectedMap
+    public MapBlueprint TeamMap
     {
-        get => _selectedMap;
-        set => Set(ref _selectedMap, value);
+        get => _teamMap;
+        set => Set(ref _teamMap, value);
     }
 
-    public IList<MapBlueprint> Maps
-    {
-        get => _maps;
-        private set
-        {
-            if (_selectedMap is null ||
-                value.All(x => x.MapPath != _selectedMap.MapPath))
-            {
-                SelectedMap = value.FirstOrDefault();
-            }
-
-            Set(ref _maps, value);
-        }
-    }
-
-    public void Dispose()
-    {
-        _mapService.MapsChanged -= OnMapsChanged;
-    }
-
-    private void OnMapsChanged(object? sender, IList<MapBlueprint> maps)
-    {
-        Maps = new ObservableCollection<MapBlueprint>(maps);
-    }
-
-    internal void DeleteSelectedMap()
-    {
-        if (SelectedMap is not null)
-        {
-            _mapService.Delete(SelectedMap);
-        }
-    }
-
-    internal void SaveSelectedMap(string identifier, IEnumerable<ITile> board)
+    internal void SaveMap(IEnumerable<ITile> board)
     {
         var map = new MapBlueprint
         {
@@ -76,10 +35,10 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
                 FigureId = ((IFigureType)x.Figure).FigureId,
                 IsKing = x.Figure.IsKing
             }).ToArray(),
-            MapPath = $"Resources/Maps/{identifier}.map",
-            PreviewPath = $"./Resources/Maps/{identifier}.png",
+            StartingPlayer = 1
         };
 
         _mapService.Save(map);
+        TeamMap = map;
     }
 }
