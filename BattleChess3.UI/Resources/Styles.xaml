@@ -65,6 +65,9 @@
     <ImageBrush x:Key="ButtonPurpleBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonPurpleBackground.jpg" 
                 Stretch="UniformToFill"/>
+    <ImageBrush x:Key="ButtonPurple2Background"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonPurple2Background.jpg" 
+                Stretch="UniformToFill"/>
 
     <Style TargetType="TabControl">
         <Setter Property="Background" Value="Transparent" />

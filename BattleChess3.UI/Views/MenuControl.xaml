@@ -97,7 +97,7 @@
                         FontSize="35"
                         Command="{Binding EditorCommand}"
                         BorderThickness="6, 6, 6, 6"
-                        Background="{StaticResource ButtonPurpleBackground}"
+                        Background="{StaticResource ButtonPurple2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
