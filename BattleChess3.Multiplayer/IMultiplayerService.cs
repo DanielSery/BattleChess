@@ -11,8 +11,9 @@ public interface IMultiplayerService
     public event EventHandler<MapBlueprint>? RequestLoadMap;
     public event EventHandler<string>? RequestDisplayMessage; 
     
-    public void Host(uint gameId, MapBlueprint map);
-    public void Join(uint? gameId);
+    public Task<string> Host(bool isPublic, bool isHostStarting, MapBlueprint myMap);
+    public Task WaitForHostConfirmation(bool isHostStarting, MapBlueprint myMap);
+    public void Join(string gameId, MapBlueprint myMap);
     public void Stop();
     public void PlayedMove(Position from, Position to);
 }

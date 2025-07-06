@@ -34,7 +34,7 @@ public sealed class BoardViewModel : ViewModelBase
             .ToArray();
         Board = new Board(Tiles.Cast<ITile>().ToArray());
         
-        _mapLoader.LoadTeamMap(Board, MapBlueprint.Empty);
+        _mapLoader.LoadMap(Board, MapBlueprint.Empty);
     }
 
     public TileViewModel SelectedTile
@@ -99,13 +99,13 @@ public sealed class BoardViewModel : ViewModelBase
 
     public void ManualLoadMap(MapBlueprint map)
     {
-        _mapLoader.Load2PlayerMap(Board, map);
+        _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestLoadMap?.Invoke(this, map);
     }
 
     public void AutomaticLoadMap(MapBlueprint map)
     {
-        _mapLoader.Load2PlayerMap(Board, map);
+        _mapLoader.LoadMap(Board, map);
     }
 
     public void RemotePlayTurn(TileViewModel fromTile, TileViewModel toTile)

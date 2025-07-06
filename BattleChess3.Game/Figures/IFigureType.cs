@@ -15,16 +15,6 @@ public interface IFigureType : IEquatable<IFigureType>
     int FigureId { get; }
     
     /// <summary>
-    /// Gets figure set id.
-    /// </summary>
-    int SetId { get; }
-
-    /// <summary>
-    /// Gets unique figure id
-    /// </summary>
-    int UniqueFigureId => SetId * 256 + FigureId;
-    
-    /// <summary>
     ///     Name shown in menus and helps
     /// </summary>
     string DisplayName { get; }
@@ -59,7 +49,7 @@ public interface IFigureType : IEquatable<IFigureType>
     /// </summary>
     bool IEquatable<IFigureType>.Equals(IFigureType? other)
     {
-        return UniqueFigureId == other?.UniqueFigureId;
+        return FigureId == other?.FigureId;
     }
 
     /// <summary>

@@ -32,7 +32,6 @@ public class Figure : IFigure, IFigureType, INotifyPropertyChanged
     public int FigureValue => Type.FigureValue;
     public Uri ImageUri => Type.ImageUris[Owner.Id];
     public int FigureId => Type.FigureId;
-    public int SetId => Type.SetId;
     public string DisplayName => Type.DisplayName;
     public string BaseDescription => Type.BaseDescription;
     public string MovementDescription => Type.MovementDescription;

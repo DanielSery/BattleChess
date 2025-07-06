@@ -11,7 +11,7 @@ public sealed class FigureTypeViewModel
     {
         _getActionsFunc = figureType.GetPossibleActions;
 
-        UniqueFigureId = figureType.UniqueFigureId;
+        FigureId = figureType.FigureId;
         DisplayName = figureType.DisplayName;
         BaseDescription = figureType.BaseDescription;
         MovementDescription = figureType.MovementDescription;
@@ -31,7 +31,7 @@ public sealed class FigureTypeViewModel
     }
 
     public int PlayerId { get; set; }
-    public int UniqueFigureId { get; }
+    public int FigureId { get; }
     public string DisplayName { get; }
     public string BaseDescription { get; }
     public string MovementDescription { get; }

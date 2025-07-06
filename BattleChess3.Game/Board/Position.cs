@@ -81,17 +81,18 @@ public readonly struct Position : IEquatable<Position>
         return new Position(index % IBoard.Length, index / IBoard.Length);
     }
 
-    public Position GetPlayerPOVPosition(in Player currentPlayer)
+    public Position GetPlayerPOVPosition(in int playerId)
     {
-        return (currentPlayer.Id % 4) switch
+        return playerId switch
         {
             1 => new Position(X, IBoard.Length - Y - 1),
             2 => new Position(X, Y),
-            3 => new Position(Y, X),
-            0 => new Position(IBoard.Length - Y - 1, X),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
+
+    public Position GetPlayerPOVPosition(in Player currentPlayer)
+        => GetPlayerPOVPosition(currentPlayer.Id);
 
     public void Deconstruct(out int x, out int y)
     {

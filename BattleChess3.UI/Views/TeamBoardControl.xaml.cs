@@ -57,9 +57,9 @@ public partial class TeamBoardControl
 
             teamBoard.CreateFigure(targetTile, figureIdentifier);
         }
-        else if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
+        else if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]"))
         {
-            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]");
             var sourceFigureIdentifier = new FigureIdentifier(sourceTile.Figure.Owner.Id, sourceTile.Figure.Type, sourceTile.Figure.IsKing);
             
             var tileButton = (Button)sender;

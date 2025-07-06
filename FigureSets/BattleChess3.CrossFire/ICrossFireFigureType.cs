@@ -13,7 +13,6 @@ internal interface ICrossFireFigureType : IFigureType
         new(1, -1), new(1, 0), new(1, 1)
     ];
     
-    int IFigureType.SetId => 2;
     string IFigureType.DisplayName => BaseDescription.Split("\n")[0];
     string IFigureType.BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(BaseDescription)}"];
     string IFigureType.MovementDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(MovementDescription)}"];

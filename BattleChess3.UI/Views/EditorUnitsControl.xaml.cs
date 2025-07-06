@@ -50,9 +50,9 @@ public partial class EditorUnitsControl
 
     private void Figures_Drop(object sender, DragEventArgs e)
     {
-        if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"))
+        if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]"))
         {
-            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]");
+            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.ViewModel.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.ViewModel.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]");
 
             teamBoard.CreateFigure(sourceTile, new FigureIdentifier(0, CrossFireFigureGroup.Empty, false));
         }
@@ -62,7 +62,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var figureType = (FigureTypeViewModel)button.DataContext;
-        e.Data = new FigureIdentifier(figureType.PlayerId, figureType.UniqueFigureId, false);
+        e.Data = new FigureIdentifier(figureType.PlayerId, figureType.FigureId, false);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

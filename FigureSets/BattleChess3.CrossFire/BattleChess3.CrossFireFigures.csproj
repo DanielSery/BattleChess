@@ -6,6 +6,7 @@
         <RootNamespace>BattleChess3.CrossFireFigures</RootNamespace>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
+        <Version>4.0.2</Version>
     </PropertyGroup>
 
     <ItemGroup>

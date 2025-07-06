@@ -41,8 +41,7 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
             if (_selectedMap is null ||
                 value.All(x => x.MapPath != _selectedMap.MapPath))
             {
-                SelectedMap = value.FirstOrDefault()
-                              ?? MapBlueprint.None;
+                SelectedMap = value.FirstOrDefault();
             }
 
             Set(ref _maps, value);
@@ -74,12 +73,11 @@ public sealed class MapsViewModel : ViewModelBase, IDisposable
             Figures = board.Select(x => new FigureIdentifier
             {
                 PlayerId = x.Figure.Owner.Id,
-                UniqueUnitId = ((IFigureType)x.Figure).UniqueFigureId,
+                FigureId = ((IFigureType)x.Figure).FigureId,
                 IsKing = x.Figure.IsKing
             }).ToArray(),
             MapPath = $"Resources/Maps/{identifier}.map",
             PreviewPath = $"./Resources/Maps/{identifier}.png",
-            StartingPlayer = _playerService.CurrentPlayer.Id
         };
 
         _mapService.Save(map);

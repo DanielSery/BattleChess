@@ -14,13 +14,16 @@ public sealed class MultiplayerViewModel : ViewModelBase
     private readonly BoardViewModel _boardViewModel;
     private readonly IMultiplayerService _multiplayerService;
     private readonly IPlayerService _playerService;
+    private readonly TeamBoardViewModel _teamBoardViewModel;
     private uint? _gameId;
 
     public MultiplayerViewModel(
+        TeamBoardViewModel teamBoardViewModel,
         BoardViewModel boardViewModel,
         IMultiplayerService multiplayerService,
         IPlayerService playerService)
     {
+        _teamBoardViewModel = teamBoardViewModel;
         _boardViewModel = boardViewModel;
         _multiplayerService = multiplayerService;
         _playerService = playerService;
@@ -34,12 +37,6 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
     public bool IsConnected => _multiplayerService.IsHost || _multiplayerService.IsGuest;
     public bool CanConnect => _multiplayerService is { IsHost: false, IsGuest: false };
-
-    public uint? GameId
-    {
-        get => _gameId;
-        private set => Set(ref _gameId, value);
-    }
 
     public RelayCommand HostAndCopyCommand { get; }
     public RelayCommand PasteAndJoinCommand { get; }
@@ -85,12 +82,6 @@ public sealed class MultiplayerViewModel : ViewModelBase
             _boardViewModel.Tiles[e.to.Index]);
     }
 
-    public void SetGameId(uint gameId)
-    {
-        GameId = gameId;
-        RaiseCanExecuteChanged();
-    }
-
     private void StopMultiplayer()
     {
         _multiplayerService.Stop();
@@ -99,11 +90,17 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
     private void JoinGame()
     {
-        if (!uint.TryParse(Clipboard.GetText(), out var gameId))
-            return; 
+        var map = new MapBlueprint
+        {
+            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
+            {
+                PlayerId = x.Figure.Owner.Id,
+                FigureId = ((IFigureType)x.Figure).FigureId,
+                IsKing = x.Figure.IsKing
+            }).ToArray(),
+        };
         
-        GameId = gameId;
-        _multiplayerService.Join(GameId);
+        _multiplayerService.Join(Clipboard.GetText(), map);
         RaiseCanExecuteChanged();
     }
 
@@ -111,21 +108,23 @@ public sealed class MultiplayerViewModel : ViewModelBase
     {
         var map = new MapBlueprint
         {
-            Figures = _boardViewModel.Tiles.Select(x => new FigureIdentifier
+            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
             {
                 PlayerId = x.Figure.Owner.Id,
-                UniqueUnitId = ((IFigureType)x.Figure).UniqueFigureId,
+                FigureId = ((IFigureType)x.Figure).FigureId,
                 IsKing = x.Figure.IsKing
             }).ToArray(),
-            StartingPlayer = _playerService.CurrentPlayer.Id
         };
 
-        var guid = Guid.NewGuid();
-        var bytes = guid.ToByteArray();
-        GameId = BitConverter.ToUInt32(bytes, 0);
-        Clipboard.SetText(GameId.ToString() ?? string.Empty);
-        _multiplayerService.Host(GameId.Value, map);
-        RaiseCanExecuteChanged();
+        var random = new Random();
+        var isHostStarting = random.Next(0, 1) == 1;
+        var gameIdTask = _multiplayerService.Host(false, isHostStarting, map);
+        gameIdTask.ContinueWith(task =>
+        {
+            Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(task.Result));
+            _multiplayerService.WaitForHostConfirmation(isHostStarting, map);
+            RaiseCanExecuteChanged();
+        });;
     }
 
     private void RaiseCanExecuteChanged()

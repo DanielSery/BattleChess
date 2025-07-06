@@ -10,7 +10,6 @@ public class Empty : IFigureType
     public int FigureValue { get; } = 0;
     
     int IFigureType.FigureId => 0;
-    int IFigureType.SetId => 0;
     
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
     string IFigureType.BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.BaseDescription)}"];

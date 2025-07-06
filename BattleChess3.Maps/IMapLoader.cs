@@ -4,7 +4,7 @@ namespace BattleChess3.Maps;
 
 public interface IMapLoader
 {
-    void LoadTeamMap(IBoard board, MapBlueprint map);
+    void LoadMap(IBoard board, MapBlueprint map);
 
-    void Load2PlayerMap(IBoard board, MapBlueprint map);
+    void LoadMapExtendedFor2Players(IBoard board, MapBlueprint map);
 }

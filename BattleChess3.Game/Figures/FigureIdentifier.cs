@@ -9,37 +9,33 @@ public class FigureIdentifier
     {
     }
 
-    public FigureIdentifier(int playerId, int uniqueUnitId, bool isKing)
+    public FigureIdentifier(int playerId, int figureId, bool isKing)
     {
-        FigureId = Guid.NewGuid();
         PlayerId = playerId;
-        UniqueUnitId = uniqueUnitId;
+        FigureId = figureId;
         IsKing = isKing;
     }
 
     public FigureIdentifier(Figure figure)
     {
-        FigureId = figure.Id;
         PlayerId = figure.Owner.Id;
-        UniqueUnitId = ((IFigureType)figure).UniqueFigureId;
+        FigureId = ((IFigureType)figure).FigureId;
         IsKing = figure.IsKing;
     }
 
     public FigureIdentifier(int playerId, IFigureType figureType, bool isKing)
     {
-        FigureId = Guid.NewGuid();
         PlayerId = playerId;
-        UniqueUnitId = figureType.UniqueFigureId;
+        FigureId = figureType.FigureId;
         IsKing = isKing;
     }
 
-    public Guid FigureId { get; set; }
     public int PlayerId { get; set; } = Player.Neutral.Id;
-    public int UniqueUnitId { get; set; } = ((IFigureType)NoneFigureType.Instance).UniqueFigureId;
+    public int FigureId { get; set; } = ((IFigureType)NoneFigureType.Instance).FigureId;
     public bool IsKing { get; set; }
 
     public override string ToString()
     {
-        return $"{UniqueUnitId} {PlayerId}";
+        return $"{FigureId} {PlayerId}";
     }
 }

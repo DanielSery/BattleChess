@@ -78,7 +78,7 @@
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 6, 6"
-                        Command="{Binding NewGameCommand}"
+                        Command="{Binding HostGameCommand}"
                         Background="{StaticResource ButtonGreenBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -126,6 +126,7 @@
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 6, 6"
+                        Command="{Binding JoinGameCommand}"
                         Background="{StaticResource ButtonGreen2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"

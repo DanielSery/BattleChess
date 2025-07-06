@@ -10,7 +10,7 @@ namespace BattleChess3.UI.ViewModel;
 
 public class TeamBoardViewModel : ViewModelBase
 {
-    private const int BasePoints = 85;
+    private const int BasePoints = 84;
 
     private bool _hasKing;
     private int _totalPoints;
@@ -34,7 +34,7 @@ public class TeamBoardViewModel : ViewModelBase
             Board[i].Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
         }
         
-        mapLoader.LoadTeamMap(Board, maps.SelectedMap);
+        mapLoader.LoadMap(Board, maps.SelectedMap ?? MapBlueprint.EmptyTeam);
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
     }
 
@@ -81,7 +81,7 @@ public class TeamBoardViewModel : ViewModelBase
 
         if (tile.Figure.IsKing)
         {
-            var demotedFigureId = tile.Figure.Type.UniqueFigureId;
+            var demotedFigureId = tile.Figure.Type.FigureId;
             tile.Figure.Owner.Figures.Remove(tile.Figure);
             tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(tile.Figure.Owner.Id, demotedFigureId, false));
             
@@ -97,12 +97,12 @@ public class TeamBoardViewModel : ViewModelBase
                 !checkedTile.Figure.IsKing) 
                 continue;
             
-            var demotedFigureId = checkedTile.Figure.Type.UniqueFigureId;
+            var demotedFigureId = checkedTile.Figure.Type.FigureId;
             checkedTile.Figure.Owner.Figures.Remove(checkedTile.Figure);
             checkedTile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, demotedFigureId, false));
         }
         
-        var upgradedFigureId = tile.Figure.Type.UniqueFigureId;
+        var upgradedFigureId = tile.Figure.Type.FigureId;
         tile.Figure.Owner.Figures.Remove(tile.Figure);
         tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, upgradedFigureId, true));
         

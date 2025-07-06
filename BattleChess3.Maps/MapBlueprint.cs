@@ -7,6 +7,11 @@ public class MapBlueprint
 {
     public static readonly MapBlueprint None = new();
 
+    public static readonly MapBlueprint EmptyTeam = new()
+    {
+        Figures = Enumerable.Range(0, 16).Select(x => new FigureIdentifier(0, 0, false)).ToArray()
+    };
+
     public static readonly MapBlueprint Empty = new()
     {
         Figures = Enumerable.Range(0, 64).Select(x => new FigureIdentifier(0, 0, false)).ToArray()

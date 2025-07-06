@@ -9,6 +9,7 @@
         <AssemblyName>BattleChess3</AssemblyName>
         <ApplicationIcon>morgoth.ico</ApplicationIcon>
         <LangVersion>default</LangVersion>
+        <Version>4.0.2</Version>
     </PropertyGroup>
 
     <ItemGroup>
