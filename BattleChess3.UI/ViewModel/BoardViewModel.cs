@@ -2,6 +2,7 @@
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
+using BattleChess3.Multiplayer;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
@@ -11,16 +12,19 @@ public sealed class BoardViewModel : ViewModelBase
 {
     private readonly IPlayerService _playerService;
     private readonly IMapLoader _mapLoader;
+    private readonly IMultiplayerGameService _multiplayerGameService;
 
     private TileViewModel _mouseOnTile = NoneTileViewModel.Instance;
     private TileViewModel _selectedTile = NoneTileViewModel.Instance;
 
     public BoardViewModel(
         IPlayerService playerService,
-        IMapLoader mapLoader)
+        IMapLoader mapLoader,
+        IMultiplayerGameService multiplayerGameService)
     {
         _playerService = playerService;
         _mapLoader = mapLoader;
+        _multiplayerGameService = multiplayerGameService;
 
         PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
@@ -32,6 +36,7 @@ public sealed class BoardViewModel : ViewModelBase
         Board = new Board(Tiles.Cast<ITile>().ToArray());
         
         _mapLoader.LoadMap(Board, MapBlueprint.Empty);
+        _multiplayerGameService.RequestPlayMove += MultiplayerGameServiceOnRequestPlayMove;
     }
 
     public TileViewModel SelectedTile
@@ -84,9 +89,7 @@ public sealed class BoardViewModel : ViewModelBase
     public RelayCommand<TileViewModel> MouseEnterCommand { get; }
     public RelayCommand<TileViewModel> MouseExitCommand { get; }
 
-
-    public event EventHandler<(Position, Position)>? RequestMove;
-    public event EventHandler<MapBlueprint>? RequestLoadMap;
+    public event EventHandler? RequestSwitchToGame;
 
     public void ClearSelectedTile()
     {
@@ -98,27 +101,20 @@ public sealed class BoardViewModel : ViewModelBase
     {
         _playerService.InitializePlayers(map.StartingPlayer, false);
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
-        RequestLoadMap?.Invoke(this, map);
+        RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
-    public void MultiplayerLoadMap(MapBlueprint map)
+    public void MultiplayerLoadMap(string? gameId, MapBlueprint map)
     {
         _playerService.InitializePlayers(map.StartingPlayer, true);
         _mapLoader.LoadMap(Board, map);
-    }
-
-    public void RemotePlayTurn(TileViewModel fromTile, TileViewModel toTile)
-    {
-        SelectedTile = NoneTileViewModel.Instance;
-        ClearPossibleActions();
+        RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
         
-        SelectedTile = fromTile;
-        SetPossibleActions(fromTile, true);
-        
-        toTile.PossibleAction.Action.Invoke();
-        SelectedTile = NoneTileViewModel.Instance;
-        _playerService.NextTurn();
-        ClearPossibleActions();
+        _multiplayerGameService.StartGame(gameId);
+        if (map.StartingPlayer != 1)
+        {
+            _multiplayerGameService.HandleHisTurn();
+        }
     }
 
     private void PlayTile(TileViewModel? clickedTile)
@@ -127,7 +123,7 @@ public sealed class BoardViewModel : ViewModelBase
         
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
-            RequestMove?.Invoke(this, (SelectedTile.Position, clickedTile.Position));
+            _multiplayerGameService.PlayedMove(SelectedTile.Position, clickedTile.Position);
             clickedTile.PossibleAction.Action.Invoke();
             SelectedTile = NoneTileViewModel.Instance;
             _playerService.NextTurn();
@@ -200,5 +196,21 @@ public sealed class BoardViewModel : ViewModelBase
         {
             MouseOnTile = NoneTileViewModel.Instance;
         }
+    }
+
+    private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to) e)
+    {
+        SelectedTile = NoneTileViewModel.Instance;
+        ClearPossibleActions();
+
+        var fromTile = Tiles[e.from.Index];
+        SelectedTile = fromTile;
+        SetPossibleActions(fromTile, true);
+        
+        var toTile = Tiles[e.to.Index];
+        toTile.PossibleAction.Action.Invoke();
+        SelectedTile = NoneTileViewModel.Instance;
+        _playerService.NextTurn();
+        ClearPossibleActions();
     }
 }

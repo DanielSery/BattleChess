@@ -4,14 +4,14 @@ using MongoDB.Driver;
 
 namespace BattleChess3.Multiplayer;
 
-internal class LoginService : ILoginService
+internal class MultiplayerLoginService : IMultiplayerLoginService
 {
     private Player? _loggedInPlayer;
     
     private readonly IMongoCollection<Player> _playersCollection;
     private readonly IMultiplayerScheduler _scheduler;
 
-    public LoginService(IMultiplayerScheduler scheduler)
+    public MultiplayerLoginService(IMultiplayerScheduler scheduler)
     {
         _scheduler = scheduler;
         var client = new MongoClient(DbSecrets.ConnectionString);
@@ -25,8 +25,7 @@ internal class LoginService : ILoginService
     {
         lock (_scheduler.SyncLock)
         {
-            var tcs = new TaskCompletionSource<Result<string>>();
-            _scheduler.QueueTask(async () =>
+            return _scheduler.QueueTask(async () =>
             {
                 try
                 {
@@ -35,16 +34,14 @@ internal class LoginService : ILoginService
                     var foundPlayers = await _playersCollection.FindAsync(filter);
                     var foundPlayer = foundPlayers.FirstOrDefault();
                     Console.WriteLine($"Found user with name: {foundPlayer.Name}");
-                    tcs.SetResult(Result.Ok(foundPlayer.PasswordSalt));
+                    return Result.Ok(foundPlayer.PasswordSalt);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    tcs.SetResult(Result.Fail(ex.ToString()));
+                    Console.WriteLine($"Error: {ex}");
+                    return Result.Fail<string>(ex.Message);
                 }
             });
-            
-            return tcs.Task;
         }
     }
 
@@ -52,8 +49,7 @@ internal class LoginService : ILoginService
     {
         lock (_scheduler.SyncLock)
         {
-            var tcs = new TaskCompletionSource<Result>();
-            _scheduler.QueueTask(async () =>
+            return _scheduler.QueueTask(async () =>
             {
                 try
                 {
@@ -66,23 +62,21 @@ internal class LoginService : ILoginService
                     var foundPlayer = foundPlayers.FirstOrDefault();
                     if (foundPlayer is null)
                     {
-                        tcs.SetResult(Result.Fail("Incorrect username or password"));
+                        return Result.Fail("Incorrect username or password");
                     }
                     else
                     {
                         Console.WriteLine($"Found player: {foundPlayer.Name}");
                         _loggedInPlayer = foundPlayer;
-                        tcs.SetResult(Result.Ok());
+                        return Result.Ok();
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    tcs.SetResult(Result.Fail($"Failed to login as: {name}"));
+                    Console.WriteLine($"Error: {ex}");
+                    return Result.Fail(ex.Message);
                 }
             });
-            
-            return tcs.Task;
         }
     }
 
@@ -90,8 +84,7 @@ internal class LoginService : ILoginService
     {
         lock (_scheduler.SyncLock)
         {
-            var tcs = new TaskCompletionSource<Result>();
-            _scheduler.QueueTask(async () =>
+            return _scheduler.QueueTask(async () =>
             {
                 try
                 {
@@ -101,7 +94,7 @@ internal class LoginService : ILoginService
                     if (await foundPlayers.AnyAsync())
                     {
                         Console.WriteLine($"Found user with name: {name}");
-                        tcs.SetResult(Result.Fail($"User with name {name} already exists"));
+                        return Result.Fail($"User with name {name} already exists");
                     }
                     
                     Console.WriteLine($"Creating new player with name: {name}");
@@ -115,16 +108,14 @@ internal class LoginService : ILoginService
                     };
 
                     await _playersCollection.InsertOneAsync(player);
-                    tcs.SetResult(Result.Ok());
+                    return Result.Ok();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    tcs.SetResult(Result.Fail($"Failed to create player: {name}"));
+                    Console.WriteLine($"Error: {ex}");
+                    return Result.Fail(ex.Message);
                 }
             });
-            
-            return tcs.Task;
         }
     }
 }

@@ -3,7 +3,7 @@ using FluentResults;
 
 namespace BattleChess3.Multiplayer;
 
-public interface ILoginService
+public interface IMultiplayerLoginService
 {
     Player? LoggedInPlayer { get; }
     

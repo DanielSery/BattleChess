@@ -54,7 +54,7 @@
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
-                        <TextBlock Text="{localization:Loc MainWindow_NewGame}"
+                        <TextBlock Text="Local game"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    FontSize="35"/>
                     </Border>
@@ -113,12 +113,12 @@
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 6, 6"
-                        Command="{Binding HostGameCommand}"
+                        Command="{Binding ShowLobbiesCommand}"
                         Background="{StaticResource ButtonGreenBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
-                        <TextBlock Text="Host and copy"
+                        <TextBlock Text="Lobby"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    FontSize="35"/>
                     </Border>
@@ -161,12 +161,11 @@
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 6, 6"
-                        Command="{Binding JoinGameCommand}"
                         Background="{StaticResource ButtonGreen2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
-                        <TextBlock Text="Paste and join"
+                        <TextBlock Text="Settings"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    FontSize="35"/>
                     </Border>
@@ -196,6 +195,9 @@
                 </Border>
                 <Border Visibility="{Binding SignUpShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
                     <views:SignUpControl DataContext="{Binding SignUpViewModel}"/>
+                </Border>
+                <Border Visibility="{Binding LobbyShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                    <views:MultiplayerLobbyControl DataContext="{Binding MultiplayerLobbyViewModel}"/>
                 </Border>
             </Grid>
         </Border>

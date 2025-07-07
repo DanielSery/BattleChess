@@ -6,14 +6,17 @@ public static class MultiplayerModule
 {
     public static void RegisterMultiplayerModule(this ContainerBuilder builder)
     {
+        builder.RegisterType<MultiplayerLobbyService>()
+            .As<IMultiplayerLobbyService>()
+            .SingleInstance();
         builder.RegisterType<MultiplayerScheduler>()
             .As<IMultiplayerScheduler>()
             .SingleInstance();
-        builder.RegisterType<LoginService>()
-            .As<ILoginService>()
+        builder.RegisterType<MultiplayerLoginService>()
+            .As<IMultiplayerLoginService>()
             .SingleInstance();
-        builder.RegisterType<MultiplayerService>()
-            .As<IMultiplayerService>()
+        builder.RegisterType<MultiplayerGameService>()
+            .As<IMultiplayerGameService>()
             .SingleInstance();
     }
 }

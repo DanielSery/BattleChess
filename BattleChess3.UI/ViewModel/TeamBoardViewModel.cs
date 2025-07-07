@@ -33,6 +33,7 @@ public class TeamBoardViewModel : ViewModelBase
         
         Board = new Board(Tiles.Cast<ITile>().ToArray());
         mapLoader.LoadMap(Board, maps.TeamMap);
+        EvaluateTeamBoard();
         
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
     }
@@ -64,7 +65,11 @@ public class TeamBoardViewModel : ViewModelBase
     {
         tile.Figure.Owner.Figures.Remove(tile.Figure);
         tile.Figure = _figureCreator.CreateFigure(figureIdentifier);
+        EvaluateTeamBoard();
+    }
 
+    private void EvaluateTeamBoard()
+    {
         TotalPoints = Board.Sum(x => x.Figure.FigureValue);
         HasKing = Board.Any(x => x.Figure.IsKing);
         RaisePropertyChanged(nameof(PointsLeft));

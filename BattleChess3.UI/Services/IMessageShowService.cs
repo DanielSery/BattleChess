@@ -2,5 +2,5 @@
 
 public interface IMessageShowService
 {
-    void ShowMessage(string message);
+    void ShowMessage(string? message);
 }

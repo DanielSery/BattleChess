@@ -4,7 +4,9 @@ public interface IMultiplayerScheduler
 {
     object SyncLock { get; }
 
-    void QueueTask(Func<Task> getTask);
+    Task<T> QueueTask<T>(Func<Task<T>> getTask);
+
+    Task QueueTask(Func<Task> getTask);
 
     void WaitForFinish();
 }

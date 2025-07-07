@@ -47,13 +47,13 @@ public static class DependenciesBuilder
             .SingleInstance();
         builder.RegisterType<TeamBoardViewModel>()
             .SingleInstance();
-        builder.RegisterType<MultiplayerViewModel>()
+        builder.RegisterType<MultiplayerLobbyViewModel>()
+            .SingleInstance();
+        builder.RegisterType<LoginViewModel>()
             .SingleInstance();
         builder.RegisterType<MenuViewModel>()
             .SingleInstance();
         builder.RegisterType<SignUpViewModel>()
-            .SingleInstance();
-        builder.RegisterType<LoginViewModel>()
             .SingleInstance();
         builder.RegisterType<MainWindowViewModel>()
             .SingleInstance();

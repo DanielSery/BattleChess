@@ -10,14 +10,14 @@ namespace BattleChess3.UI.ViewModel;
 
 public class SignUpViewModel : ViewModelBase
 {
-    private readonly ILoginService _loginService;
+    private readonly IMultiplayerLoginService _multiplayerLoginService;
     private readonly IMessageShowService _messageShowService;
     
     public SignUpViewModel(
-        ILoginService loginService,
+        IMultiplayerLoginService multiplayerLoginService,
         IMessageShowService messageShowService)
     {
-        _loginService = loginService;
+        _multiplayerLoginService = multiplayerLoginService;
         _messageShowService = messageShowService;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
@@ -62,11 +62,10 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
 
-        var result = await _loginService.TrySignUp(Name, hash, stringSalt);
+        var result = await _multiplayerLoginService.TrySignUp(Name, hash, stringSalt);
         if (result.IsFailed)
         {
             _messageShowService.ShowMessage(result.Errors.First().Message);
-            return;
         }
         else
         {

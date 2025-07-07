@@ -5,36 +5,53 @@ namespace BattleChess3.Multiplayer;
 internal class MultiplayerScheduler : IMultiplayerScheduler
 {
     private Task? _runningTask;
-    private readonly ConcurrentQueue<Func<Task>> _queuedTasks = new ConcurrentQueue<Func<Task>>();
+    private readonly ConcurrentQueue<IScheduledTask> _queuedTasks = new ConcurrentQueue<IScheduledTask>();
     
     public object SyncLock { get; } = new object();
 
-    public void QueueTask(Func<Task> getTask)
+    /// <inheritdoc />
+    public Task<T> QueueTask<T>(Func<Task<T>> getTask)
     {
         lock (SyncLock)
         {
-            _queuedTasks.Enqueue(getTask);
-            _runningTask ??= Task.Run(async () =>
-            {
-                while (TryGetTaskToRun(out var task))
-                {
-                    await task;
-                }
-            });
+            var scheduledTask = new ScheduledTask<T>(getTask);
+            _queuedTasks.Enqueue(scheduledTask);
+            _runningTask ??= Task.Run(ExecuteQueue);
+            return scheduledTask.GetTaskForWaiting();
         }
     }
 
-    private bool TryGetTaskToRun(out Task task)
+    public Task QueueTask(Func<Task> getTask)
+    {
+        lock (SyncLock)
+        {
+            var scheduledTask = new ScheduledTask(getTask);
+            _queuedTasks.Enqueue(scheduledTask);
+            _runningTask ??= Task.Run(ExecuteQueue);
+            return scheduledTask.GetTaskForWaiting();
+        }
+    }
+
+    private async Task ExecuteQueue()
+    {
+        while (TryGetTaskToRun(out var currentScheduledTask))
+        {
+            await currentScheduledTask!.GetExecutedTask();
+            currentScheduledTask.SetResult();
+        }
+    }
+
+    private bool TryGetTaskToRun(out IScheduledTask? scheduledTask)
     {
         lock (SyncLock)
         {
             if (_queuedTasks.TryDequeue(out var getTask))
             {
-                task = getTask.Invoke();
+                scheduledTask = getTask;
                 return true;
             }
 
-            task = Task.CompletedTask;
+            scheduledTask = null;
             _runningTask = null;
             return false;
         }
