@@ -50,7 +50,10 @@ public class MultiplayerLobbyViewModel : ViewModelBase
         set
         {
             SetProperty(ref _selectedRow, value);
-            Name = _selectedRow.LobbyName;
+            if (_selectedRow is not null)
+            {
+                Name = _selectedRow.LobbyName;
+            }
         }
     }
 
@@ -88,14 +91,16 @@ public class MultiplayerLobbyViewModel : ViewModelBase
 
         if (gameRequestResult.IsFailed)
         {
-            _messageShowService.ShowMessage(gameRequestResult.Reasons.ToString());
+            _messageShowService.ShowMessage(gameRequestResult.Reasons.First().Message);
+            return;
         }
         var gameRequest = gameRequestResult.Value;
         
         var gameJoinResult = await _multiplayerLobbyService.WaitForLobbyPlayer(gameRequestResult.Value);
         if (gameJoinResult.IsFailed)
         {
-            _messageShowService.ShowMessage(gameJoinResult.Reasons.ToString());
+            _messageShowService.ShowMessage(gameJoinResult.Reasons.First().Message);
+            return;
         }
         var gameJoin = gameJoinResult.Value;
 
@@ -122,7 +127,8 @@ public class MultiplayerLobbyViewModel : ViewModelBase
             myMap);
         if (joinedLobbyResult.IsFailed)
         {
-            _messageShowService.ShowMessage(joinedLobbyResult.Reasons.ToString());
+            _messageShowService.ShowMessage(joinedLobbyResult.Reasons.First().Message);
+            return;
         }
 
         var joinedLobby = joinedLobbyResult.Value;
