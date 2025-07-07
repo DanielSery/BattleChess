@@ -1,10 +1,8 @@
-﻿using System.Collections.Concurrent;
-using System.Reflection;
+﻿using System.Reflection;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer.Tables;
-using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -13,28 +11,29 @@ namespace BattleChess3.Multiplayer;
 internal sealed class MultiplayerService : IMultiplayerService
 {
     private string? _gameId;
-    private Player? _player = null;
     
-    private readonly object _syncLock = new object();
-    private Task? _runningTask;
     private readonly int _version;
+    private readonly IMultiplayerScheduler _scheduler;
+    private readonly ILoginService _loginService;
     
-    private readonly ConcurrentQueue<Func<Task>> _queuedTasks = new ConcurrentQueue<Func<Task>>();
     private readonly IMongoCollection<GameRequest> _gameRequestsCollection;
     private readonly IMongoCollection<GameJoin> _gameJoinsCollection;
     private readonly IMongoCollection<GameConfirm> _gameConfirmsCollection;
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
-    private readonly IMongoCollection<Player> _playersCollection;
 
-    public MultiplayerService()
+    public MultiplayerService(
+        IMultiplayerScheduler scheduler,
+        ILoginService loginService)
     {
+        _scheduler = scheduler;
+        _loginService = loginService;
+        
         var client = new MongoClient(DbSecrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _gameRequestsCollection = database.GetCollection<GameRequest>("GameRequests");
         _gameJoinsCollection = database.GetCollection<GameJoin>("GameJoins");
         _gameConfirmsCollection = database.GetCollection<GameConfirm>("GameConfirms");
         _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
-        _playersCollection = database.GetCollection<Player>("Players");
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         _version = version is not null 
@@ -50,121 +49,10 @@ internal sealed class MultiplayerService : IMultiplayerService
 
     public event EventHandler<(Position, Position)>? RequestPlayMove;
     public event EventHandler<MapBlueprint>? RequestLoadMap;
-    public event EventHandler<string>? RequestDisplayMessage;
-
-    public Task<Result<string>> GetUserSalt(string name)
-    {
-        lock (_syncLock)
-        {
-            var taskCompletionSource = new TaskCompletionSource<Result<string>>();
-            
-            QueueTask(async () =>
-            {
-                try
-                {
-                    Console.WriteLine($"Getting user salt with name: {name}");
-                    var filter = Builders<Player>.Filter.Eq("Name", name);
-                    var foundPlayers = await _playersCollection.FindAsync(filter);
-                    var foundPlayer = foundPlayers.FirstOrDefault();
-                    Console.WriteLine($"Found user with name: {foundPlayer.Name}");
-                    taskCompletionSource.SetResult(Result.Ok(foundPlayer.PasswordSalt));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    taskCompletionSource.SetResult(Result.Fail(ex.ToString()));
-                }
-            });
-            
-            return taskCompletionSource.Task;
-        }
-    }
-
-    public Task<Result> TryLogin(string name, string hash)
-    {
-        lock (_syncLock)
-        {
-            var taskCompletionSource = new TaskCompletionSource<Result>();
-            
-            QueueTask(async () =>
-            {
-                try
-                {
-                    Console.WriteLine($"Getting users with name: {name}");
-                    var filter = Builders<Player>.Filter.And(
-                        Builders<Player>.Filter.Eq(g => g.Name, name),
-                        Builders<Player>.Filter.Eq(g => g.PasswordHash, hash)
-                    );
-                    var foundPlayers = await _playersCollection.FindAsync(filter);
-                    var foundPlayer = foundPlayers.FirstOrDefault();
-                    if (foundPlayer is null)
-                    {
-                        taskCompletionSource.SetResult(Result.Fail($"Player {name} not found"));
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Found player: {foundPlayer.Name}");
-                        _player = foundPlayer;
-                        taskCompletionSource.SetResult(Result.Ok());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    taskCompletionSource.SetResult(Result.Fail(ex.ToString()));
-                }
-            });
-            
-            return taskCompletionSource.Task;
-        }
-    }
-
-    public Task<Result> TrySignUp(string name, string hash, string salt)
-    {
-        lock (_syncLock)
-        {
-            var taskCompletionSource = new TaskCompletionSource<Result>();
-            
-            QueueTask(async () =>
-            {
-                try
-                {
-                    Console.WriteLine($"Getting users with name: {name}");
-                    var filter = Builders<Player>.Filter.Eq("Name", name);
-                    var foundPlayers = await _playersCollection.FindAsync(filter);
-                    if (await foundPlayers.AnyAsync())
-                    {
-                        Console.WriteLine($"Found user with name: {name}");
-                        taskCompletionSource.SetResult(Result.Fail($"User with name {name} already exists"));
-                    }
-                    
-                    Console.WriteLine($"Creating new player with name: {name}");
-                    var player = new Player
-                    {
-                        Name = name,
-                        PasswordHash = hash,
-                        PasswordSalt = salt,
-                        Elo = 1000,
-                        UnlockedFigures = new byte[16]
-                    };
-
-                    await _playersCollection.InsertOneAsync(player);
-                    taskCompletionSource.SetResult(Result.Ok());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                    taskCompletionSource.SetResult(Result.Fail(ex.ToString()));
-                }
-            });
-            
-            return taskCompletionSource.Task;
-        }
-    }
 
     public Task<string> Host(bool isPublic, bool isHostStarting, MapBlueprint myMap)
     {
-        lock (_syncLock)
+        lock (_scheduler.SyncLock)
         {
             if (IsInGame)
                 return Task.FromResult(string.Empty);
@@ -173,17 +61,19 @@ internal sealed class MultiplayerService : IMultiplayerService
             IsGuest = false;
             var taskCompletionSource = new TaskCompletionSource<string>();
             
-            QueueTask(async () =>
+            _scheduler.QueueTask(async () =>
             {
                 var myMapData = GetMapData(myMap);
                 try
                 {
+                    var currentPlayer = _loginService.LoggedInPlayer;
+                    
                     Console.WriteLine("Creating game request");
                     var game = new GameRequest
                     {
                         Map = myMapData,
-                        PlayerId = _player?.Id ?? null,
-                        Elo = _player?.Elo ?? 0,
+                        PlayerId = currentPlayer?.Id ?? null,
+                        Elo = currentPlayer?.Elo ?? 0,
                         RequestTime = DateTime.UtcNow,
                         IsRanked = isPublic,
                         Version = _version,
@@ -207,13 +97,13 @@ internal sealed class MultiplayerService : IMultiplayerService
 
     public Task WaitForHostConfirmation(bool isHostStarting, MapBlueprint myMap)
     {
-        lock (_syncLock)
+        lock (_scheduler.SyncLock)
         {
             if (!IsInGame || _gameId is null)
                 return Task.CompletedTask;
         
             var taskCompletionSource = new TaskCompletionSource();
-            QueueTask(async () =>
+            _scheduler.QueueTask(async () =>
             {
                 try
                 {
@@ -255,7 +145,7 @@ internal sealed class MultiplayerService : IMultiplayerService
 
     public void Join(string gameId, MapBlueprint myMap)
     {
-        lock (_syncLock)
+        lock (_scheduler.SyncLock)
         {
             if (IsInGame)
                 return;
@@ -263,7 +153,7 @@ internal sealed class MultiplayerService : IMultiplayerService
             IsGuest = true;
             IsHost = false;
             _gameId = gameId;
-            QueueTask(async () =>
+            _scheduler.QueueTask(async () =>
             {
                 try
                 {         
@@ -276,11 +166,13 @@ internal sealed class MultiplayerService : IMultiplayerService
                     var gameRequest = foundGames.FirstOrDefault();
                     Console.WriteLine($"Found game request with id: {gameId}");
 
+                    var currentPlayer = _loginService.LoggedInPlayer;
+                    
                     Console.WriteLine($"Creating join request for game: {gameId}");
                     var gameJoin = new GameJoin
                     {
                         GameId = gameId,
-                        PlayerId = _player?.Id ?? null,
+                        PlayerId = currentPlayer?.Id ?? null,
                         Map = GetMapData(myMap),
                     };
                     var gameJoinTask = _gameJoinsCollection.InsertOneAsync(gameJoin);
@@ -312,7 +204,7 @@ internal sealed class MultiplayerService : IMultiplayerService
 
     public void Stop()
     {
-        lock (_syncLock)
+        lock (_scheduler.SyncLock)
         {
             if (!IsInGame || _gameId is null)
                 return;
@@ -321,7 +213,7 @@ internal sealed class MultiplayerService : IMultiplayerService
             IsHost = false;
             IsGuest = false;
             _gameId = null;
-            QueueTask(async () =>
+            _scheduler.QueueTask(async () =>
             {
                 try
                 {
@@ -376,12 +268,12 @@ internal sealed class MultiplayerService : IMultiplayerService
 
     public void PlayedMove(Position from, Position to)
     {
-        lock (_syncLock)
+        lock (_scheduler.SyncLock)
         {
             if (!IsInGame || _gameId is null)
                 return;
         
-            QueueTask(async () =>
+            _scheduler.QueueTask(async () =>
             {
                 try
                 {
@@ -609,41 +501,10 @@ internal sealed class MultiplayerService : IMultiplayerService
         return GetPositionOfOppositePlayer(index).Index;
     }
 
-    private void QueueTask(Func<Task> getTask)
-    {
-        lock (_syncLock)
-        {
-            _queuedTasks.Enqueue(getTask);
-            _runningTask ??= Task.Run(async () =>
-            {
-                while (TryGetTaskToRun(out var task))
-                {
-                    await task;
-                }
-            });
-        }
-    }
-
-    private bool TryGetTaskToRun(out Task task)
-    {
-        lock (_syncLock)
-        {
-            if (_queuedTasks.TryDequeue(out var getTask))
-            {
-                task = getTask.Invoke();
-                return true;
-            }
-
-            task = Task.CompletedTask;
-            _runningTask = null;
-            return false;
-        }
-    }
-
     private void CurrentDomainOnProcessExit(object? sender, EventArgs e)
     {
         AppDomain.CurrentDomain.ProcessExit -= CurrentDomainOnProcessExit;
         Stop();
-        _runningTask?.Wait();
+        _scheduler.WaitForFinish();
     }
 }

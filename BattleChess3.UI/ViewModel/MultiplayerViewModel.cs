@@ -23,7 +23,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
         _boardViewModel = boardViewModel;
         _multiplayerService = multiplayerService;
 
-        HostAndCopyCommand = new RelayCommand(HostGame, CanConnect);
+        HostAndCopyCommand = new AsyncRelayCommand(HostGame, CanConnect);
         PasteAndJoinCommand = new RelayCommand(JoinGame, CanConnect);
         StopCommand = new RelayCommand(StopMultiplayer, IsConnected);
 
@@ -33,7 +33,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
     public bool IsConnected() => _multiplayerService.IsHost || _multiplayerService.IsGuest;
     public bool CanConnect() => _multiplayerService is { IsHost: false, IsGuest: false };
 
-    public RelayCommand HostAndCopyCommand { get; }
+    public AsyncRelayCommand HostAndCopyCommand { get; }
     public RelayCommand PasteAndJoinCommand { get; }
     public RelayCommand StopCommand { get; }
 
@@ -41,14 +41,8 @@ public sealed class MultiplayerViewModel : ViewModelBase
     {
         _multiplayerService.RequestPlayMove += MultiplayerServiceOnRequestPlayMove;
         _multiplayerService.RequestLoadMap += RemoteRequestedLoadMap;
-        _multiplayerService.RequestDisplayMessage += RemoteRequestedDisplayMessage;
         _boardViewModel.RequestMove += LocalRequestMove;
         _boardViewModel.RequestLoadMap += LocalRequestLoadMap;
-    }
-
-    private void RemoteRequestedDisplayMessage(object? sender, string e)
-    {
-        Application.Current.Dispatcher.Invoke(() => MessageBox.Show(e));
     }
 
     private void LocalRequestLoadMap(object? sender, MapBlueprint e)
@@ -99,7 +93,7 @@ public sealed class MultiplayerViewModel : ViewModelBase
         RaiseCanExecuteChanged();
     }
 
-    private void HostGame()
+    private async Task HostGame()
     {
         var map = new MapBlueprint
         {
@@ -113,13 +107,10 @@ public sealed class MultiplayerViewModel : ViewModelBase
 
         var random = new Random();
         var isHostStarting = random.Next(0, 1) == 1;
-        var gameIdTask = _multiplayerService.Host(false, isHostStarting, map);
-        gameIdTask.ContinueWith(task =>
-        {
-            Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(task.Result));
-            _multiplayerService.WaitForHostConfirmation(isHostStarting, map);
-            RaiseCanExecuteChanged();
-        });
+        var gameId = await _multiplayerService.Host(false, isHostStarting, map);
+        Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(gameId));
+        await _multiplayerService.WaitForHostConfirmation(isHostStarting, map);
+        RaiseCanExecuteChanged();
     }
 
     private void RaiseCanExecuteChanged()

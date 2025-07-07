@@ -2,6 +2,7 @@
 using System.Security;
 using System.Security.Cryptography;
 using BattleChess3.Multiplayer;
+using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
@@ -9,13 +10,24 @@ namespace BattleChess3.UI.ViewModel;
 
 public class LoginViewModel : ViewModelBase
 {
-    private readonly IMultiplayerService _multiplayerService;
+    private readonly ILoginService _loginService;
+    private readonly IMessageShowService _messageShowService;
     
-    public LoginViewModel(IMultiplayerService multiplayerService)
+    public LoginViewModel(
+        ILoginService loginService,
+        IMessageShowService messageShowService)
     {
-        _multiplayerService = multiplayerService;
+        _loginService = loginService;
+        _messageShowService = messageShowService;
         
-        LoginCommand = new RelayCommand(LogIn);
+        LoginCommand = new AsyncRelayCommand(LogIn);
+    }
+
+    private bool _isLoggedIn;
+    public bool IsLoggedIn
+    {
+        get => _isLoggedIn;
+        set => SetProperty(ref _isLoggedIn, value);
     }
 
     private string _name =  string.Empty;
@@ -26,18 +38,31 @@ public class LoginViewModel : ViewModelBase
     }
 
     public SecureString SecurePassword { get; set; } = new SecureString();
-    public RelayCommand LoginCommand { get; }
+    
+    public AsyncRelayCommand LoginCommand { get; }
 
-    private void LogIn()
+    public event EventHandler? RequestEndLogin;
+    
+    private async Task LogIn()
     {
-        var saltResult = _multiplayerService.GetUserSalt(Name).Result;
+        var saltResult = await _loginService.GetUserSalt(Name);
         if (saltResult.IsFailed)
-            throw new Exception("Incorrect name or password");
+        {
+            _messageShowService.ShowMessage("Invalid username or password");
+            return;
+        }
         
         var hash = GetHash(SecurePassword, saltResult.Value);
-        var result = _multiplayerService.TryLogin(Name, hash).Result;
+        var result = await _loginService.TryLogin(Name, hash);
         if (result.IsFailed)
-            throw new Exception(result.ToString());
+        {
+            _messageShowService.ShowMessage(result.Errors.First().Message);
+        }
+        else
+        {
+            RequestEndLogin?.Invoke(this, EventArgs.Empty);
+            IsLoggedIn = true;
+        }
     }
 
     private static string GetHash(SecureString secureString, string saltString)

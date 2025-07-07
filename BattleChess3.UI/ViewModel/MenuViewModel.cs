@@ -25,12 +25,16 @@ public class MenuViewModel : ViewModelBase
         SignUpViewModel = signUpViewModel;
         LoginViewModel = loginViewModel;
         
-        NewGameCommand = new RelayCommand(NewGame);
+        LocalGameCommand = new RelayCommand(LocalGame);
         HostGameCommand = new RelayCommand(HostGame);
         JoinGameCommand = new RelayCommand(JoinGame);
         SelectEditorCommand = new RelayCommand(SelectEditor);
         ShowLoginCommand = new RelayCommand(ShowLogin);
         ShowSignUpCommand = new RelayCommand(ShowSignUp);
+        RankedGameCommand = new RelayCommand(RankedGame);
+        
+        SignUpViewModel.RequestEndSignUp += HideSideMenu;
+        LoginViewModel.RequestEndLogin += HideSideMenu;
     }
 
     public LoginViewModel LoginViewModel { get; }
@@ -51,12 +55,14 @@ public class MenuViewModel : ViewModelBase
         set => SetProperty(ref _signUpShown, value);
     }
 
-    public RelayCommand NewGameCommand { get; }
+    public RelayCommand LocalGameCommand { get; }
     public RelayCommand HostGameCommand { get; }
     public RelayCommand JoinGameCommand { get; }
     public RelayCommand SelectEditorCommand { get; }
-    public RelayCommand ShowSignUpCommand { get; set; }
+    
+    public RelayCommand ShowSignUpCommand { get; }
     public RelayCommand ShowLoginCommand { get; }
+    public RelayCommand RankedGameCommand { get; }
 
     public event EventHandler? RequestSwitchToGame;
     public event EventHandler? RequestSwitchToEditor;
@@ -73,7 +79,11 @@ public class MenuViewModel : ViewModelBase
         _multiplayerViewModel.HostAndCopyCommand.Execute(null);
     }
 
-    private void NewGame()
+    private void RankedGame()
+    {
+    }
+
+    private void LocalGame()
     {
         _boardViewModel.SinglePlayerLoadMap(_mapsViewModel.TeamMap);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
@@ -94,9 +104,9 @@ public class MenuViewModel : ViewModelBase
         SetTabSelected(out _signUpShown);
     }
 
-    private void HideSideMenu()
+    private void HideSideMenu(object? sender, EventArgs e)
     {
-        SetTabSelected(out _);
+        SetTabSelected(out _); 
     }
 
     private void SetTabSelected(out bool selectedTab)

@@ -2,6 +2,7 @@
 using System.Security;
 using System.Security.Cryptography;
 using BattleChess3.Multiplayer;
+using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
@@ -9,11 +10,15 @@ namespace BattleChess3.UI.ViewModel;
 
 public class SignUpViewModel : ViewModelBase
 {
-    private readonly IMultiplayerService _multiplayerService;
+    private readonly ILoginService _loginService;
+    private readonly IMessageShowService _messageShowService;
     
-    public SignUpViewModel(IMultiplayerService multiplayerService)
+    public SignUpViewModel(
+        ILoginService loginService,
+        IMessageShowService messageShowService)
     {
-        _multiplayerService = multiplayerService;
+        _loginService = loginService;
+        _messageShowService = messageShowService;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
     }
@@ -29,26 +34,44 @@ public class SignUpViewModel : ViewModelBase
     public SecureString SecurePassword2 { get; set; } = new SecureString();
     public AsyncRelayCommand SignUpCommand { get; }
 
+    public event EventHandler? RequestEndSignUp;
+
     private async Task SignUp()
     {
         if (Name.Length < 5)
-            throw new Exception("Name is too short.");
-        
-        if (SecurePassword1.Length < 8)
-            throw new Exception("Password must be at least 8 characters");
+        {
+            _messageShowService.ShowMessage("Name is too short.");
+            return;
+        }
+
+        if (SecurePassword1.Length < 6)
+        {
+            _messageShowService.ShowMessage("Password is too short.");
+            return;
+        }
         
         var salt = RandomNumberGenerator.GetBytes(16); // Generate 16-byte salt
         var stringSalt = Convert.ToBase64String(salt);
         
         var hash = GetHash(SecurePassword1, salt);
         var hash2 = GetHash(SecurePassword2, salt);
-        
-        if (hash != hash2)
-            throw new Exception("Passwords do not match");
 
-        var result = await _multiplayerService.TrySignUp(Name, hash, stringSalt);
+        if (hash != hash2)
+        {
+            _messageShowService.ShowMessage("Passwords do not match.");
+            return;
+        }
+
+        var result = await _loginService.TrySignUp(Name, hash, stringSalt);
         if (result.IsFailed)
-            throw new Exception(result.ToString());
+        {
+            _messageShowService.ShowMessage(result.Errors.First().Message);
+            return;
+        }
+        else
+        {
+            RequestEndSignUp?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private static string GetHash(SecureString secureString, byte[] salt)

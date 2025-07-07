@@ -25,7 +25,7 @@
                     <Image.InputBindings>
                         <MouseBinding
                             Gesture="LeftDoubleClick" 
-                            Command="{Binding DataContext.NewGameCommand, RelativeSource={RelativeSource AncestorType=views:MainWindow}}" />
+                            Command="{Binding DataContext.LocalGameCommand, RelativeSource={RelativeSource AncestorType=views:MainWindow}}" />
                     </Image.InputBindings>
                 </Image>
             </DataTemplate>

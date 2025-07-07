@@ -48,7 +48,7 @@
                 <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"
                         DockPanel.Dock="Top"
                         FontSize="35"
-                        Command="{Binding NewGameCommand}"
+                        Command="{Binding LocalGameCommand}"
                         BorderThickness="6, 6, 6, 6"
                         Background="{StaticResource ButtonBlueBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
@@ -61,16 +61,33 @@
                 </Button>
                 <Border Grid.Row="1" Grid.Column="6" Background="#40000000" />
 
+                <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                        DockPanel.Dock="Top"
+                        FontSize="35"
+                        BorderThickness="6"
+                        Visibility="{Binding LoginViewModel.IsLoggedIn, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
+                        Command="{Binding RankedGameCommand}"
+                        Background="{StaticResource ButtonOrangeBackground}"
+                        Style="{StaticResource ScalingButtonStyle}">
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                            MinWidth="225" MinHeight="40">
+                        <TextBlock Text="Ranked game"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontSize="35"/>
+                    </Border>
+                </Button>
+
                 <Button Grid.Row="2" Grid.Column="1"
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 3, 6"
+                        Visibility="{Binding LoginViewModel.IsLoggedIn, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                         Command="{Binding ShowLoginCommand}"
                         Background="{StaticResource ButtonOrangeBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="112" MinHeight="40">
-                        <TextBlock Text="Login"
+                        <TextBlock Text="Log in"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    FontSize="35"/>
                     </Border>
@@ -80,6 +97,7 @@
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="3, 6, 6, 6"
+                        Visibility="{Binding LoginViewModel.IsLoggedIn, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                         Command="{Binding ShowSignUpCommand}"
                         Background="{StaticResource ButtonOrange2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
