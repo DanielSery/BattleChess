@@ -1,10 +1,9 @@
-﻿using BattleChess3.CrossFireFigures;
-using BattleChess3.Game.Board;
+﻿using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
+using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
@@ -48,7 +47,7 @@ public class TeamBoardViewModel : ViewModelBase
     public int TotalPoints
     {
         get => _totalPoints;
-        private set => Set(ref _totalPoints, value);
+        private set => SetProperty(ref _totalPoints, value);
     }
 
     public bool CanSave => PositivePoints && HasKing;
@@ -56,7 +55,7 @@ public class TeamBoardViewModel : ViewModelBase
     public bool HasKing
     {
         get => _hasKing;
-        private set => Set(ref _hasKing, value);
+        private set => SetProperty(ref _hasKing, value);
     }
     
     public RelayCommand<TileViewModel> MakeUnitKingCommand { get; }
@@ -83,8 +82,10 @@ public class TeamBoardViewModel : ViewModelBase
         _mapLoader.LoadMap(Board, _maps.TeamMap);
     }
 
-    private void MakeUnitKing(TileViewModel tile)
+    private void MakeUnitKing(TileViewModel? tile)
     {
+        ArgumentNullException.ThrowIfNull(tile);
+
         if (tile.Figure.Owner.Equals(Player.Neutral))
             return;
 

@@ -2,8 +2,8 @@
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
+using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
@@ -40,7 +40,7 @@ public sealed class BoardViewModel : ViewModelBase
         private set
         {
             _selectedTile.IsSelected = false;
-            Set(ref _selectedTile, value);
+            SetProperty(ref _selectedTile, value);
             RaisePropertyChanged(nameof(TileInfo));
             value.IsSelected = true;
         }
@@ -52,7 +52,7 @@ public sealed class BoardViewModel : ViewModelBase
         private set
         {
             _mouseOnTile.IsMouseOver = false;
-            Set(ref _mouseOnTile, value);
+            SetProperty(ref _mouseOnTile, value);
             
             if (_selectedTile.Equals(NoneTileViewModel.Instance))
             {                
@@ -121,8 +121,10 @@ public sealed class BoardViewModel : ViewModelBase
         ClearPossibleActions();
     }
 
-    private void PlayTile(TileViewModel clickedTile)
+    private void PlayTile(TileViewModel? clickedTile)
     {
+        ArgumentNullException.ThrowIfNull(clickedTile);
+        
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
             RequestMove?.Invoke(this, (SelectedTile.Position, clickedTile.Position));
@@ -185,13 +187,15 @@ public sealed class BoardViewModel : ViewModelBase
         return new Board(povBoard);
     }
 
-    private void MouseEnterTile(TileViewModel tile)
+    private void MouseEnterTile(TileViewModel? tile)
     {
+        ArgumentNullException.ThrowIfNull(tile);
         MouseOnTile = tile;
     }
 
-    private void MouseExitTile(TileViewModel tile)
+    private void MouseExitTile(TileViewModel? tile)
     {
+        ArgumentNullException.ThrowIfNull(tile);
         if (MouseOnTile == tile)
         {
             MouseOnTile = NoneTileViewModel.Instance;

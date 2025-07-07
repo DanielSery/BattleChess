@@ -50,7 +50,7 @@
                     BorderThickness="3 6 6 3"
                     FontSize="25"
                     Background="{StaticResource ButtonGreenBackground}"
-                    Padding="20"
+                    Padding="10"
                     IsEnabled="False" Opacity="0.85"/>
                     
             <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
@@ -60,7 +60,7 @@
                     BorderThickness="3 6 6 3"
                     FontSize="25"
                     Background="{StaticResource ButtonRedBackground}"
-                    Padding="20"
+                    Padding="10"
                     IsEnabled="False" Opacity="0.85"/>
             
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
@@ -69,7 +69,7 @@
                      BorderThickness="3 3 6 3"
                      FontSize="25"
                      Background="{StaticResource ButtonRed2Background}"
-                     Padding="20"
+                     Padding="10"
                      IsEnabled="False" Opacity="0.85"/>
             
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
@@ -78,7 +78,7 @@
                      BorderThickness="3 3 6 3"
                      FontSize="25"
                      Background="{StaticResource ButtonGreen2Background}"
-                     Padding="20"
+                     Padding="10"
                      IsEnabled="False" Opacity="0.85"/>
             
             <Button Grid.Row="2" Grid.Column="0"
@@ -89,7 +89,7 @@
                     IsEnabled="{Binding TeamBoard.CanSave}"
                     FontSize="25"
                     Background="{StaticResource ButtonBlueBackground}"
-                    Padding="20"/>
+                    Padding="10"/>
             
             <Button  Grid.Row="2" Grid.Column="1"
                      Command="{Binding CancelCommand}"
@@ -97,7 +97,7 @@
                      BorderThickness="3 3 6 6"
                      FontSize="25"
                      Background="{StaticResource ButtonOrangeBackground}"
-                     Padding="20"/>
+                     Padding="10"/>
             
             <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                     BorderBrush="Black" BorderThickness="3,0,6,0"

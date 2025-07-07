@@ -1,5 +1,5 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using CommunityToolkit.Mvvm.Input;
+using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 

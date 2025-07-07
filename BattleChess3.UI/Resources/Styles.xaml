@@ -62,6 +62,9 @@
     <ImageBrush x:Key="ButtonOrange2Background"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonOrange2Background.jpg" 
                 Stretch="UniformToFill"/>
+    <ImageBrush x:Key="ButtonOrange3Background"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonOrange3Background.jpg" 
+                Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonPurpleBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonPurpleBackground.jpg" 
                 Stretch="UniformToFill"/>
@@ -309,6 +312,68 @@
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Margin="10" />
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource DefaultObjectMouseOnForeground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectMouseOnForeground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="TextBox">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectForeground}"/>
+        <Setter Property="FontWeight" Value="Heavy" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Grid>
+                        <!-- Background -->
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" >
+                        </Border>
+                
+                        <!-- Password Content -->
+                        <ScrollViewer x:Name="PART_ContentHost" 
+                                      Margin="5" 
+                                      VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource DefaultObjectMouseOnForeground}" />
+                <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectMouseOnForeground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="PasswordBox">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectForeground}"/>
+        <Setter Property="FontWeight" Value="Heavy" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Grid>
+                        <!-- Background -->
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" >
+                        </Border>
+                
+                        <!-- Password Content -->
+                        <ScrollViewer x:Name="PART_ContentHost" 
+                                      Margin="5" 
+                                      VerticalAlignment="Center" />
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

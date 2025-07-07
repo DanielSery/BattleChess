@@ -1,9 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using BattleChess3.Game.Board;
+﻿using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
-using BattleChess3.Game.Players;
 using BattleChess3.Maps;
-using GalaSoft.MvvmLight;
+using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
@@ -22,7 +20,7 @@ public sealed class MapsViewModel : ViewModelBase
     public MapBlueprint TeamMap
     {
         get => _teamMap;
-        set => Set(ref _teamMap, value);
+        set => SetProperty(ref _teamMap, value);
     }
 
     internal void SaveMap(IEnumerable<ITile> board)

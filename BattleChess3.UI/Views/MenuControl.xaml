@@ -6,7 +6,8 @@
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:views="clr-namespace:BattleChess3.UI.Views"
              xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
-             d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
+             xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
+             d:DataContext="{d:DesignInstance viewModel:MenuViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="350" d:DesignWidth="350">
     <DockPanel LastChildFill="True">
@@ -60,15 +61,31 @@
                 </Button>
                 <Border Grid.Row="1" Grid.Column="6" Background="#40000000" />
 
-                <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                <Button Grid.Row="2" Grid.Column="1"
                         DockPanel.Dock="Top"
                         FontSize="35"
-                        BorderThickness="6, 6, 6, 6"
+                        BorderThickness="6, 6, 3, 6"
+                        Command="{Binding ShowLoginCommand}"
                         Background="{StaticResource ButtonOrangeBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
-                            MinWidth="225" MinHeight="40">
+                            MinWidth="112" MinHeight="40">
                         <TextBlock Text="Login"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontSize="35"/>
+                    </Border>
+                </Button>
+
+                <Button Grid.Row="2" Grid.Column="2"
+                        DockPanel.Dock="Top"
+                        FontSize="35"
+                        BorderThickness="3, 6, 6, 6"
+                        Command="{Binding ShowSignUpCommand}"
+                        Background="{StaticResource ButtonOrange2Background}"
+                        Style="{StaticResource ScalingButtonStyle}">
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                            MinWidth="112" MinHeight="40">
+                        <TextBlock Text="Sign up"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    FontSize="35"/>
                     </Border>
@@ -95,7 +112,7 @@
                 <Button Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2"
                         DockPanel.Dock="Top"
                         FontSize="35"
-                        Command="{Binding EditorCommand}"
+                        Command="{Binding SelectEditorCommand}"
                         BorderThickness="6, 6, 6, 6"
                         Background="{StaticResource ButtonPurple2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
@@ -112,7 +129,7 @@
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 6, 6"
-                        Background="{StaticResource ButtonOrange2Background}"
+                        Background="{StaticResource ButtonOrange3Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
@@ -154,6 +171,15 @@
             </Grid>
         </Border>
         <Border BorderBrush="Black" BorderThickness="3 0 6 0"
-                SnapsToDevicePixels="True"/>
+                SnapsToDevicePixels="True">
+            <Grid>
+                <Border Visibility="{Binding LoginShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                    <views:LoginControl DataContext="{Binding LoginViewModel}"/>
+                </Border>
+                <Border Visibility="{Binding SignUpShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                    <views:SignUpControl DataContext="{Binding SignUpViewModel}"/>
+                </Border>
+            </Grid>
+        </Border>
     </DockPanel>
 </UserControl>

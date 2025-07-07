@@ -1,6 +1,6 @@
 ﻿using BattleChess3.Game.Figures;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
+using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
@@ -30,13 +30,13 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
     public FigureTypeViewModel[] Figures
     {
         get => _figures;
-        private set => Set(ref _figures, value);
+        private set => SetProperty(ref _figures, value);
     }
 
     public FigureTypeViewModel TileInfo
     {
         get => _tileInfo;
-        private set => Set(ref _tileInfo, value);
+        private set => SetProperty(ref _tileInfo, value);
     }
     
     public RelayCommand<FigureTypeViewModel> FigureGotFocusCommand { get; }

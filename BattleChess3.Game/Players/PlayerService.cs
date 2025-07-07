@@ -58,10 +58,6 @@ internal class PlayerService : IPlayerService
 
     private void NextPlayer()
     {
-        _currentPlayerId = (_currentPlayerId + 1) % _players.Count;
-        if (_currentPlayerId == 0)
-        {
-            _currentPlayerId = 1;
-        }
+        _currentPlayerId = _currentPlayerId == 1 ? 2 : 1;
     }
 }

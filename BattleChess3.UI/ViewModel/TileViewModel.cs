@@ -1,7 +1,7 @@
 ﻿using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
-using GalaSoft.MvvmLight;
+using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
@@ -30,37 +30,37 @@ public class TileViewModel : ViewModelBase, ITile
     public bool IsBlack
     {
         get => _isBlack;
-        set => Set(ref _isBlack, value);
+        set => SetProperty(ref _isBlack, value);
     }
 
     public bool IsMouseOver
     {
         get => _isMouseOver;
-        set => Set(ref _isMouseOver, value);
+        set => SetProperty(ref _isMouseOver, value);
     }
 
     public bool IsSelected
     {
         get => _isSelected;
-        set => Set(ref _isSelected, value);
+        set => SetProperty(ref _isSelected, value);
     }
 
     public bool IsPossibleAttack
     {
         get => _isPossibleAttack;
-        private set => Set(ref _isPossibleAttack, value);
+        private set => SetProperty(ref _isPossibleAttack, value);
     }
 
     public bool IsPossibleMove
     {
         get => _isPossibleMove;
-        private set => Set(ref _isPossibleMove, value);
+        private set => SetProperty(ref _isPossibleMove, value);
     }
 
     public bool IsPossibleSpecial
     {
         get => _isPossibleSpecial;
-        private set => Set(ref _isPossibleSpecial, value);
+        private set => SetProperty(ref _isPossibleSpecial, value);
     }
 
     public FigureAction PossibleAction
@@ -68,7 +68,7 @@ public class TileViewModel : ViewModelBase, ITile
         get => _possibleAction;
         set
         {
-            Set(ref _possibleAction, value);
+            SetProperty(ref _possibleAction, value);
             IsPossibleAttack = value.ActionType == FigureActionTypes.Attack;
             IsPossibleMove = value.ActionType == FigureActionTypes.Move;
             IsPossibleSpecial = value.ActionType == FigureActionTypes.Special;
@@ -78,7 +78,7 @@ public class TileViewModel : ViewModelBase, ITile
     public Figure Figure
     {
         get => _figure;
-        set => Set(ref _figure, value);
+        set => SetProperty(ref _figure, value);
     }
 
     public ITile GetPovTile(Player player)

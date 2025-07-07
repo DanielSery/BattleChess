@@ -1,11 +1,10 @@
 ﻿using System.Windows;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
-using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
+using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
@@ -13,20 +12,16 @@ public sealed class MultiplayerViewModel : ViewModelBase
 {
     private readonly BoardViewModel _boardViewModel;
     private readonly IMultiplayerService _multiplayerService;
-    private readonly IPlayerService _playerService;
     private readonly TeamBoardViewModel _teamBoardViewModel;
-    private uint? _gameId;
 
     public MultiplayerViewModel(
         TeamBoardViewModel teamBoardViewModel,
         BoardViewModel boardViewModel,
-        IMultiplayerService multiplayerService,
-        IPlayerService playerService)
+        IMultiplayerService multiplayerService)
     {
         _teamBoardViewModel = teamBoardViewModel;
         _boardViewModel = boardViewModel;
         _multiplayerService = multiplayerService;
-        _playerService = playerService;
 
         HostAndCopyCommand = new RelayCommand(HostGame, CanConnect);
         PasteAndJoinCommand = new RelayCommand(JoinGame, CanConnect);
@@ -35,8 +30,8 @@ public sealed class MultiplayerViewModel : ViewModelBase
         SubscribeToEvents();
     }
 
-    public bool IsConnected => _multiplayerService.IsHost || _multiplayerService.IsGuest;
-    public bool CanConnect => _multiplayerService is { IsHost: false, IsGuest: false };
+    public bool IsConnected() => _multiplayerService.IsHost || _multiplayerService.IsGuest;
+    public bool CanConnect() => _multiplayerService is { IsHost: false, IsGuest: false };
 
     public RelayCommand HostAndCopyCommand { get; }
     public RelayCommand PasteAndJoinCommand { get; }
@@ -117,22 +112,21 @@ public sealed class MultiplayerViewModel : ViewModelBase
         };
 
         var random = new Random();
-        var isHostStarting = false;
-        // var isHostStarting = random.Next(0, 1) == 1;
+        var isHostStarting = random.Next(0, 1) == 1;
         var gameIdTask = _multiplayerService.Host(false, isHostStarting, map);
         gameIdTask.ContinueWith(task =>
         {
             Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(task.Result));
             _multiplayerService.WaitForHostConfirmation(isHostStarting, map);
             RaiseCanExecuteChanged();
-        });;
+        });
     }
 
     private void RaiseCanExecuteChanged()
     {
-        HostAndCopyCommand.RaiseCanExecuteChanged();
-        PasteAndJoinCommand.RaiseCanExecuteChanged();
-        StopCommand.RaiseCanExecuteChanged();
+        HostAndCopyCommand.NotifyCanExecuteChanged();
+        PasteAndJoinCommand.NotifyCanExecuteChanged();
+        StopCommand.NotifyCanExecuteChanged();
 
         RaisePropertyChanged(nameof(IsConnected));
         RaisePropertyChanged(nameof(CanConnect));
