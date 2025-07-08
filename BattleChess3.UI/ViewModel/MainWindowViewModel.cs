@@ -66,7 +66,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         var gameId = _multiplayerGameService.CurrentGameId;
         _multiplayerGameService.DeleteGame(gameId).Wait();
-        _multiplayerLobbyService.DeleteGame(gameId).Wait();
+        _multiplayerLobbyService.DeleteGameAsync(gameId).Wait();
         
         var playerColor = e == 1 ? "Red" : "Blue";
         MessageBox.Show($"{playerColor} player won!", "Player won");

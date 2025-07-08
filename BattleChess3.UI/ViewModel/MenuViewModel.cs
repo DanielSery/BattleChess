@@ -15,21 +15,20 @@ public class MenuViewModel : ViewModelBase
         TeamBoardViewModel teamBoardViewModel,
         SignUpViewModel signUpViewModel,
         LoginViewModel loginViewModel,
-        MultiplayerLobbyViewModel multiplayerLobbyViewModel)
+        MultiplayerViewModel multiplayerViewModel)
     {
         _boardViewModel = boardViewModel;
         _mapsViewModel = mapsViewModel;
         TeamBoardViewModel = teamBoardViewModel;
         SignUpViewModel = signUpViewModel;
         LoginViewModel = loginViewModel;
-        MultiplayerLobbyViewModel = multiplayerLobbyViewModel;
+        MultiplayerViewModel = multiplayerViewModel;
         
         LocalGameCommand = new RelayCommand(LocalGame);
         SelectEditorCommand = new RelayCommand(SelectEditor);
         ShowLobbiesCommand = new RelayCommand(ShowLobbies);
         ShowLoginCommand = new RelayCommand(ShowLogin);
         ShowSignUpCommand = new RelayCommand(ShowSignUp);
-        RankedGameCommand = new RelayCommand(RankedGame);
         
         SignUpViewModel.RequestEndSignUp += HideSideMenu;
         LoginViewModel.RequestEndLogin += HideSideMenu;
@@ -38,7 +37,7 @@ public class MenuViewModel : ViewModelBase
     public LoginViewModel LoginViewModel { get; }
     public SignUpViewModel SignUpViewModel { get; }
     public TeamBoardViewModel TeamBoardViewModel { get; }
-    public MultiplayerLobbyViewModel MultiplayerLobbyViewModel { get; }
+    public MultiplayerViewModel MultiplayerViewModel { get; }
 
     private bool _lobbyShown;
     public bool LobbyShown
@@ -67,15 +66,10 @@ public class MenuViewModel : ViewModelBase
     public RelayCommand ShowSignUpCommand { get; }
     public RelayCommand ShowLoginCommand { get; }
     public RelayCommand ShowLobbiesCommand { get; }
-    public RelayCommand RankedGameCommand { get; }
 
     public event EventHandler? RequestSwitchToGame;
     public event EventHandler? RequestSwitchToEditor;
     
-    private void RankedGame()
-    {
-    }
-
     private void LocalGame()
     {
         _boardViewModel.SinglePlayerLoadMap(_mapsViewModel.TeamMap);
@@ -89,7 +83,7 @@ public class MenuViewModel : ViewModelBase
 
     private void ShowLobbies()
     {
-        MultiplayerLobbyViewModel.OnActivation();
+        MultiplayerViewModel.OnActivation();
         LobbyShown = true;
     }
 

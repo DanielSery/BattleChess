@@ -6,6 +6,9 @@ public static class MultiplayerModule
 {
     public static void RegisterMultiplayerModule(this ContainerBuilder builder)
     {
+        builder.RegisterType<MultiplayerRankedService>()
+            .As<IMultiplayerRankedService>()
+            .SingleInstance();
         builder.RegisterType<MultiplayerLobbyService>()
             .As<IMultiplayerLobbyService>()
             .SingleInstance();

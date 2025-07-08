@@ -62,7 +62,7 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
 
-        var result = await _multiplayerLoginService.TrySignUp(Name, hash, stringSalt);
+        var result = await _multiplayerLoginService.TrySignUpAsync(Name, hash, stringSalt);
         if (result.IsFailed)
         {
             _messageShowService.ShowMessage(result.Errors.First().Message);

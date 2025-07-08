@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BattleChess3.Multiplayer;
@@ -16,9 +17,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
     private readonly IMultiplayerLoginService _multiplayerLoginService;
     
     private readonly IMongoCollection<GameLobby> _gameLobbyCollection;
-    private readonly IMongoCollection<GameJoin> _gameJoinsCollection;
-    private readonly IMongoCollection<GameConfirm> _gameConfirmsCollection;
-    private readonly IMongoCollection<Player> _playersCollection;
+    private readonly IMongoCollection<GameLobbyJoin> _gameJoinsCollection;
 
     public MultiplayerLobbyService(
         IMultiplayerScheduler scheduler,
@@ -30,9 +29,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
         var client = new MongoClient(DbSecrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _gameLobbyCollection = database.GetCollection<GameLobby>("GameLobbies");
-        _gameJoinsCollection = database.GetCollection<GameJoin>("GameJoins");
-        _gameConfirmsCollection = database.GetCollection<GameConfirm>("GameConfirms");
-        _playersCollection = database.GetCollection<Player>("Players");
+        _gameJoinsCollection = database.GetCollection<GameLobbyJoin>("GameLobbyJoins");
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         _version = version is not null 
@@ -40,35 +37,29 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
             : -1;
     }
 
-    public Task<List<PublicLobbyData>> GetPublicLobbies()
+    public Task<List<PublicLobbyData>> GetPublicLobbiesAsync()
     { 
         return _gameLobbyCollection.Aggregate()
-            .Match(l => l.Version == _version)
-            .Lookup<GameLobby, Player, LobbyLookupResult>(
-                foreignCollection: _playersCollection,
-                localField: l => l.PlayerId,
-                foreignField: p => p.Id,
-                @as: r => r.PlayerDocs
-            )
+            .Match(l => l.Version == _version && string.IsNullOrEmpty(l.JoinedId))
             .Project(doc => new PublicLobbyData
             {
                 LobbyName = doc.LobbyName,
                 Elo = doc.Elo,
-                IsHostStarting = doc.IsHostStarting,
-                IsLocked = doc.PasswordHash.Length > 0,
-                PlayerName = doc.PlayerDocs.FirstOrDefault().Name
+                Locked = doc.PasswordHash.Length > 0,
             })
             .ToListAsync();
     }
 
-    public Task<Result<GameLobby>> CreateLobby(
+    public Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         string password,
-        bool isHostStarting, 
         MapBlueprint myMap)
     {
         lock (_scheduler.SyncLock)
         {
+            var random = new Random();
+            var isHostStarting = random.Next(0, 1) == 1;
+            
             return _scheduler.QueueTask(async () =>
             {
                 var myMapData = GetMapData(myMap);
@@ -98,7 +89,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
                         PasswordSalt = salt,
                         Map = myMapData,
                         PlayerId = currentPlayer?.Id ?? null,
-                        Elo = currentPlayer?.Elo ?? 0,
+                        Elo = currentPlayer?.Elo ?? null,
                         Version = _version,
                         IsHostStarting = isHostStarting,
                     };
@@ -115,7 +106,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
         }
     }
 
-    public Task<Result<GameJoin>> WaitForLobbyPlayer(GameLobby lobby)
+    public Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby)
     {
         lock (_scheduler.SyncLock)
         {
@@ -127,24 +118,26 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
                     var joinRequest = await WaitForGameJoinAsync(lobby.Id, 5 * 60);
                     if (joinRequest is null)
                     {
+                        await DeleteGameAsync(lobby.Id);
                         return Result.Fail("Timeout waiting for joining player");
                     }
                     Console.WriteLine($"Found join request: {joinRequest.Id}");
                     
-                    Console.WriteLine("Creating game confirmation");
-                    var gameConfirm = new GameConfirm
+                    Console.WriteLine("Confirming game join");
+                    var filter = Builders<GameLobby>.Filter.Eq(l => l.Id, lobby.Id);
+                    var update = Builders<GameLobby>.Update.Set(x => x.JoinedId, joinRequest.Id);
+                    var result = await _gameLobbyCollection.UpdateOneAsync(filter, update);
+                    if (!result.IsAcknowledged)
                     {
-                        GameId = lobby.Id,
-                        RequestId = joinRequest.Id,
-                    };
-                    var gameConfirmTask = _gameConfirmsCollection.InsertOneAsync(gameConfirm);
-                    Console.WriteLine($"Created game confirmation for request: {joinRequest.Id}");
-                    
-                    await gameConfirmTask;
+                        await DeleteGameAsync(lobby.Id);
+                        return Result.Fail("Failed to update game confirmation");
+                    }
+                    Console.WriteLine($"Confirmed game join for request: {joinRequest.Id}");
                     return Result.Ok(joinRequest);
                 }
                 catch (Exception ex)
                 {
+                    await DeleteGameAsync(lobby.Id);
                     Console.WriteLine($"Error: {ex}");
                     return Result.Fail("Failed to wait for joining player");
                 } 
@@ -152,7 +145,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
         }
     }
 
-    public Task<Result<GameLobby>> JoinLobby(
+    public Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
         string password,
         MapBlueprint myMap)
@@ -180,7 +173,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
 
                     var currentPlayer = _multiplayerLoginService.LoggedInPlayer;
                     Console.WriteLine($"Creating join request for lobby: {lobbyName}");
-                    var gameJoin = new GameJoin
+                    var gameJoin = new GameLobbyJoin
                     {
                         GameId = gameRequest.Id,
                         PlayerId = currentPlayer?.Id ?? null,
@@ -190,12 +183,12 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
                     Console.WriteLine($"Created join request with id: {gameJoin.Id}");
                     
                     Console.WriteLine("Waiting for join request confirmation");
-                    var confirmation = await WaitForGameConfirmAsync(gameRequest.Id);
-                    if (confirmation is null)
+                    var lobbyUpdate = await WaitForLobbyAccept(gameRequest.Id);
+                    if (lobbyUpdate is null || lobbyUpdate.JoinedId != gameJoin.Id)
                     {
                         return Result.Fail("The lobby is already full");
                     }
-                    Console.WriteLine($"Confirmed join request with id: {confirmation.RequestId}");
+                    Console.WriteLine($"Confirmed join request with id: {gameJoin.Id}");
                     
                     return Result.Ok(gameRequest);
                 }
@@ -208,12 +201,12 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
         }
     }
 
-    private async Task<GameJoin?> WaitForGameJoinAsync(string gameId, int timeoutSeconds = 30)
+    private async Task<GameLobbyJoin?> WaitForGameJoinAsync(string gameId, int timeoutSeconds = 30)
     {
         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
 
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameJoin>>()
-            .Match(Builders<ChangeStreamDocument<GameJoin>>.Filter
+        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobbyJoin>>()
+            .Match(Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter
                 .Eq(cs => cs.FullDocument.GameId, gameId));
 
         using var cursor = await _gameJoinsCollection.WatchAsync(
@@ -235,16 +228,18 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
 
         return null;
     }
-
-    private async Task<GameConfirm?> WaitForGameConfirmAsync(string gameId, int timeoutSeconds = 30)
+    
+    public async Task<GameLobby?> WaitForLobbyAccept(string lobbyId, int timeoutSeconds = 30)
     {
         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+        
+        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
+            .Match(change =>
+                change.OperationType == ChangeStreamOperationType.Update &&
+                change.DocumentKey["_id"] == ObjectId.Parse(lobbyId));
 
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameConfirm>>()
-            .Match(Builders<ChangeStreamDocument<GameConfirm>>.Filter
-                .Eq(cs => cs.FullDocument.GameId, gameId));
-
-        using var cursor = await _gameConfirmsCollection.WatchAsync(
+        
+        using var cursor = await _gameLobbyCollection.WatchAsync(
             pipeline,
             new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
             cancellationTokenSource.Token
@@ -254,7 +249,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
         {
             foreach (var change in cursor.Current)
             {
-                if (change.FullDocument.GameId == gameId)
+                if (change.FullDocument.Id == lobbyId)
                 {
                     return change.FullDocument;
                 }
@@ -304,7 +299,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
         }
     }
 
-    public Task<Result> DeleteGame(string gameId)
+    public Task<Result> DeleteGameAsync(string gameId)
     {
         lock (_scheduler.SyncLock)
         {
@@ -313,21 +308,9 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
                 try
                 {
                     Console.WriteLine("Deleting GameJoins");
-                    var filter = Builders<GameJoin>.Filter.Eq(gj => gj.GameId, gameId);
+                    var filter = Builders<GameLobbyJoin>.Filter.Eq(gj => gj.GameId, gameId);
                     var result = await _gameJoinsCollection.DeleteManyAsync(filter);
                     Console.WriteLine($"Deleted GameJoins: {result.DeletedCount}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-                
-                try
-                {
-                    Console.WriteLine("Deleting GameConfirms");
-                    var filter = Builders<GameConfirm>.Filter.Eq(gj => gj.GameId, gameId);
-                    var result = await _gameConfirmsCollection.DeleteManyAsync(filter);
-                    Console.WriteLine($"Deleted GameConfirms: {result.DeletedCount}");
                 }
                 catch (Exception ex)
                 {

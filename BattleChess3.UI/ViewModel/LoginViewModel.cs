@@ -45,7 +45,7 @@ public class LoginViewModel : ViewModelBase
     
     private async Task LogIn()
     {
-        var saltResult = await _multiplayerLoginService.GetUserSalt(Name);
+        var saltResult = await _multiplayerLoginService.GetUserSaltAsync(Name);
         if (saltResult.IsFailed)
         {
             _messageShowService.ShowMessage("Invalid username or password");
@@ -53,7 +53,7 @@ public class LoginViewModel : ViewModelBase
         }
         
         var hash = GetHash(SecurePassword, saltResult.Value);
-        var result = await _multiplayerLoginService.TryLogin(Name, hash);
+        var result = await _multiplayerLoginService.TryLoginAsync(Name, hash);
         if (result.IsFailed)
         {
             _messageShowService.ShowMessage(result.Errors.First().Message);

@@ -6,20 +6,19 @@ namespace BattleChess3.Multiplayer;
 
 public interface IMultiplayerLobbyService
 {
-    public Task<List<PublicLobbyData>> GetPublicLobbies();
+    public Task<List<PublicLobbyData>> GetPublicLobbiesAsync();
     
-    public Task<Result<GameLobby>> CreateLobby(
+    public Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         string password,
-        bool isHostStarting, 
         MapBlueprint myMap);
     
-    public Task<Result<GameJoin>> WaitForLobbyPlayer(GameLobby lobby);
+    public Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby);
     
-    public Task<Result<GameLobby>> JoinLobby(
+    public Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
         string password, 
         MapBlueprint myMap);
     
-    public Task<Result> DeleteGame(string gameId);
+    public Task<Result> DeleteGameAsync(string gameId);
 }

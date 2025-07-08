@@ -66,7 +66,7 @@
                         FontSize="35"
                         BorderThickness="6"
                         Visibility="{Binding LoginViewModel.IsLoggedIn, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
-                        Command="{Binding RankedGameCommand}"
+                        Command="{Binding MultiplayerViewModel.RankedGameCommand}"
                         Background="{StaticResource ButtonOrangeBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -197,7 +197,7 @@
                     <views:SignUpControl DataContext="{Binding SignUpViewModel}"/>
                 </Border>
                 <Border Visibility="{Binding LobbyShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                    <views:MultiplayerLobbyControl DataContext="{Binding MultiplayerLobbyViewModel}"/>
+                    <views:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"/>
                 </Border>
             </Grid>
         </Border>

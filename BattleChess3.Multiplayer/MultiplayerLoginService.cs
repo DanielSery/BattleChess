@@ -21,7 +21,7 @@ internal class MultiplayerLoginService : IMultiplayerLoginService
 
     public Player? LoggedInPlayer => _loggedInPlayer;
 
-    public Task<Result<string>> GetUserSalt(string name)
+    public Task<Result<string>> GetUserSaltAsync(string name)
     {
         lock (_scheduler.SyncLock)
         {
@@ -45,7 +45,7 @@ internal class MultiplayerLoginService : IMultiplayerLoginService
         }
     }
 
-    public Task<Result> TryLogin(string name, string hash)
+    public Task<Result> TryLoginAsync(string name, string hash)
     {
         lock (_scheduler.SyncLock)
         {
@@ -80,7 +80,7 @@ internal class MultiplayerLoginService : IMultiplayerLoginService
         }
     }
 
-    public Task<Result> TrySignUp(string name, string hash, string salt)
+    public Task<Result> TrySignUpAsync(string name, string hash, string salt)
     {
         lock (_scheduler.SyncLock)
         {

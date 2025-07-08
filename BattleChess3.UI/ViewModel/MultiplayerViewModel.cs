@@ -11,27 +11,31 @@ using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
-public class MultiplayerLobbyViewModel : ViewModelBase
+public class MultiplayerViewModel : ViewModelBase
 {
     private readonly TeamBoardViewModel _teamBoardViewModel;
     private readonly IMultiplayerLobbyService _multiplayerLobbyService;
+    private readonly IMultiplayerRankedService _multiplayerRankedService;
     private readonly IMessageShowService _messageShowService;
     private readonly BoardViewModel _boardViewModel;
     private readonly LoginViewModel _loginViewModel;
     
-    public MultiplayerLobbyViewModel(
+    public MultiplayerViewModel(
         TeamBoardViewModel teamBoardViewModel,
         IMultiplayerLobbyService multiplayerLobbyService,
+        IMultiplayerRankedService multiplayerRankedService,
         IMessageShowService messageShowService,
         BoardViewModel boardViewModel,
         LoginViewModel loginViewModel)
     {
         _teamBoardViewModel = teamBoardViewModel;
         _multiplayerLobbyService = multiplayerLobbyService;
+        _multiplayerRankedService = multiplayerRankedService;
         _messageShowService = messageShowService;
         _boardViewModel = boardViewModel;
         _loginViewModel = loginViewModel;
         
+        RankedGameCommand = new AsyncRelayCommand(FindRankedGame);
         CreateLobbyCommand = new AsyncRelayCommand(CreateLobby);
         JoinLobbyCommand = new AsyncRelayCommand(JoinLobby);
     }
@@ -43,7 +47,7 @@ public class MultiplayerLobbyViewModel : ViewModelBase
         set => SetProperty(ref _lobbies, value);
     }
     
-    private PublicLobbyData _selectedRow;
+    private PublicLobbyData _selectedRow = new PublicLobbyData();
     public PublicLobbyData SelectedRow
     {
         get => _selectedRow;
@@ -68,6 +72,40 @@ public class MultiplayerLobbyViewModel : ViewModelBase
 
     public AsyncRelayCommand CreateLobbyCommand { get; }
     public AsyncRelayCommand JoinLobbyCommand { get; }
+    public AsyncRelayCommand RankedGameCommand { get; }
+
+    private async Task FindRankedGame()
+    {
+        var myMap = new MapBlueprint
+        {
+            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
+            {
+                PlayerId = x.Figure.Owner.Id,
+                FigureId = ((IFigureType)x.Figure).FigureId,
+                IsKing = x.Figure.IsKing
+            }).ToArray(),
+        };
+
+        var request = await _multiplayerRankedService.FindRankedGame(myMap);
+        if (request.IsFailed)
+        {
+            _messageShowService.ShowMessage(request.Reasons.First().Message);
+            return;
+        }
+        var (isHost, gameSearch, gameSearchJoin) = request.Value;
+        if (isHost)
+        {
+            var hisMap = GetFigures(gameSearchJoin.Map);
+            var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
+            _boardViewModel.MultiplayerLoadMap(gameSearch.Id, playedMap);
+        }
+        else
+        {
+            var hisMap = GetFigures(gameSearch.Map);
+            var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
+            _boardViewModel.MultiplayerLoadMap(gameSearch.Id, playedMap);
+        }
+    }
 
     private async Task CreateLobby()
     {
@@ -81,12 +119,9 @@ public class MultiplayerLobbyViewModel : ViewModelBase
             }).ToArray(),
         };
     
-        var random = new Random();
-        var isHostStarting = random.Next(0, 1) == 1;
-        var gameRequestResult = await _multiplayerLobbyService.CreateLobby(
+        var gameRequestResult = await _multiplayerLobbyService.CreateLobbyAsync(
             Name,
             GetPassword(SecurePassword),
-            isHostStarting, 
             myMap);
 
         if (gameRequestResult.IsFailed)
@@ -96,7 +131,7 @@ public class MultiplayerLobbyViewModel : ViewModelBase
         }
         var gameRequest = gameRequestResult.Value;
         
-        var gameJoinResult = await _multiplayerLobbyService.WaitForLobbyPlayer(gameRequestResult.Value);
+        var gameJoinResult = await _multiplayerLobbyService.WaitForLobbyPlayerAsync(gameRequestResult.Value);
         if (gameJoinResult.IsFailed)
         {
             _messageShowService.ShowMessage(gameJoinResult.Reasons.First().Message);
@@ -105,7 +140,7 @@ public class MultiplayerLobbyViewModel : ViewModelBase
         var gameJoin = gameJoinResult.Value;
 
         var hisMap = GetFigures(gameJoin.Map);
-        var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, isHostStarting);
+        var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameRequest.IsHostStarting);
         _boardViewModel.MultiplayerLoadMap(gameRequest.Id, playedMap);
     }
 
@@ -121,7 +156,7 @@ public class MultiplayerLobbyViewModel : ViewModelBase
             }).ToArray(),
         };
         
-        var joinedLobbyResult = await _multiplayerLobbyService.JoinLobby(
+        var joinedLobbyResult = await _multiplayerLobbyService.JoinLobbyAsync(
             Name,
             GetPassword(SecurePassword),
             myMap);
@@ -215,7 +250,7 @@ public class MultiplayerLobbyViewModel : ViewModelBase
         Name = _loginViewModel.Name;
         Task.Run(async () =>
         {
-            Lobbies = await _multiplayerLobbyService.GetPublicLobbies();
+            Lobbies = await _multiplayerLobbyService.GetPublicLobbiesAsync();
         });
     }
 }

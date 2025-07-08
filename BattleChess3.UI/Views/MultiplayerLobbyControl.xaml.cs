@@ -15,7 +15,7 @@ public partial class MultiplayerLobbyControl : UserControl
     {
         if (DataContext != null)
         {
-            ((MultiplayerLobbyViewModel)DataContext).SecurePassword = ((PasswordBox)sender).SecurePassword;
+            ((MultiplayerViewModel)DataContext).SecurePassword = ((PasswordBox)sender).SecurePassword;
         }
     }
 }

@@ -7,7 +7,7 @@ public interface IMultiplayerLoginService
 {
     Player? LoggedInPlayer { get; }
     
-    Task<Result<string>> GetUserSalt(string name);
-    Task<Result> TryLogin(string name, string hash);
-    Task<Result> TrySignUp(string name, string hash, string salt);
+    Task<Result<string>> GetUserSaltAsync(string name);
+    Task<Result> TryLoginAsync(string name, string hash);
+    Task<Result> TrySignUpAsync(string name, string hash, string salt);
 }

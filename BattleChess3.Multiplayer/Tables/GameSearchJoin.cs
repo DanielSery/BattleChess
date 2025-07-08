@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BattleChess3.Multiplayer.Tables;
 
-public class GameConfirm
+public class GameSearchJoin
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -13,5 +13,7 @@ public class GameConfirm
     public string GameId { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public string RequestId { get; set; }
+    public string? PlayerId { get; set; }
+    
+    public byte[] Map { get; set; }
 }
