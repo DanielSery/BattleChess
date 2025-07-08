@@ -63,6 +63,20 @@ internal static class FiguresHelper
         figureType.OnDied(tile, board);
     }
 
+    public static void SwapWithTile(this ITile from, ITile to, IBoard board)
+    {
+        var movingFigure = from.Figure.Type;
+        var targetFigure = to.Figure.Type;
+
+        movingFigure.OnMoving(from, to, board);
+        targetFigure.OnMoving(to, from, board);
+
+        (to.Figure, from.Figure) = (from.Figure, to.Figure);
+
+        movingFigure.OnMoved(from, to, board);
+        targetFigure.OnMoved(to, from, board);
+    }
+
     public static void MoveToTile(this ITile from, ITile to, IBoard board)
     {
         var movingFigure = from.Figure.Type; 

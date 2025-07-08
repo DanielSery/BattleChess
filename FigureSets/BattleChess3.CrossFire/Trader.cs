@@ -38,7 +38,7 @@ public class Trader : ICrossFireFigureType
                     FigureActionTypes.Special,
                     unitTile.AbsolutePosition,
                     targetTile.AbsolutePosition,
-                    () => unitTile.MoveToTile(targetTile, board));
+                    () => unitTile.SwapWithTile(targetTile, board));
             }
         }
     }
