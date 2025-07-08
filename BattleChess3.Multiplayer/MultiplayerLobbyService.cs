@@ -14,17 +14,17 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
     private readonly int _version;
     
     private readonly IMultiplayerScheduler _scheduler;
-    private readonly IMultiplayerLoginService _multiplayerLoginService;
+    private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     
     private readonly IMongoCollection<GameLobby> _gameLobbyCollection;
     private readonly IMongoCollection<GameLobbyJoin> _gameJoinsCollection;
 
     public MultiplayerLobbyService(
         IMultiplayerScheduler scheduler,
-        IMultiplayerLoginService multiplayerLoginService)
+        IMultiplayerPlayerService multiplayerPlayerService)
     {
         _scheduler = scheduler;
-        _multiplayerLoginService = multiplayerLoginService;
+        _multiplayerPlayerService = multiplayerPlayerService;
         
         var client = new MongoClient(DbSecrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
@@ -77,7 +77,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
                     }
                     Console.WriteLine($"Found lobby with name: {lobbyName}");
                     
-                    var currentPlayer = _multiplayerLoginService.LoggedInPlayer;
+                    var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
                     var salt = GetSalt();
                     var hash = GetHash(password, salt);
                     
@@ -171,7 +171,7 @@ public class MultiplayerLobbyService : IMultiplayerLobbyService
                         return  Result.Fail<GameLobby>("Password doesn't match");
                     }
 
-                    var currentPlayer = _multiplayerLoginService.LoggedInPlayer;
+                    var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
                     Console.WriteLine($"Creating join request for lobby: {lobbyName}");
                     var gameJoin = new GameLobbyJoin
                     {

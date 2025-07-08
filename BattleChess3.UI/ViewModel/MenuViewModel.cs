@@ -15,7 +15,8 @@ public class MenuViewModel : ViewModelBase
         TeamBoardViewModel teamBoardViewModel,
         SignUpViewModel signUpViewModel,
         LoginViewModel loginViewModel,
-        MultiplayerViewModel multiplayerViewModel)
+        MultiplayerViewModel multiplayerViewModel,
+        LeaderboardViewModel leaderboardViewModel)
     {
         _boardViewModel = boardViewModel;
         _mapsViewModel = mapsViewModel;
@@ -23,12 +24,14 @@ public class MenuViewModel : ViewModelBase
         SignUpViewModel = signUpViewModel;
         LoginViewModel = loginViewModel;
         MultiplayerViewModel = multiplayerViewModel;
+        LeaderboardViewModel = leaderboardViewModel;
         
         LocalGameCommand = new RelayCommand(LocalGame);
         SelectEditorCommand = new RelayCommand(SelectEditor);
         ShowLobbiesCommand = new RelayCommand(ShowLobbies);
         ShowLoginCommand = new RelayCommand(ShowLogin);
         ShowSignUpCommand = new RelayCommand(ShowSignUp);
+        ShowLeaderboardCommand = new RelayCommand(ShowLeaderboard);
         
         SignUpViewModel.RequestEndSignUp += HideSideMenu;
         LoginViewModel.RequestEndLogin += HideSideMenu;
@@ -38,6 +41,7 @@ public class MenuViewModel : ViewModelBase
     public SignUpViewModel SignUpViewModel { get; }
     public TeamBoardViewModel TeamBoardViewModel { get; }
     public MultiplayerViewModel MultiplayerViewModel { get; }
+    public LeaderboardViewModel LeaderboardViewModel { get; }
 
     private bool _lobbyShown;
     public bool LobbyShown
@@ -60,12 +64,20 @@ public class MenuViewModel : ViewModelBase
         set => SetTabSelected(out _signUpShown, value);
     }
 
+    private bool _leaderboardShown;
+    public bool LeaderboardShown
+    {
+        get => _leaderboardShown;
+        set => SetTabSelected(out _leaderboardShown, value);
+    }
+
     public RelayCommand LocalGameCommand { get; }
     public RelayCommand SelectEditorCommand { get; }
     
     public RelayCommand ShowSignUpCommand { get; }
     public RelayCommand ShowLoginCommand { get; }
     public RelayCommand ShowLobbiesCommand { get; }
+    public RelayCommand ShowLeaderboardCommand { get; }
 
     public event EventHandler? RequestSwitchToGame;
     public event EventHandler? RequestSwitchToEditor;
@@ -97,6 +109,12 @@ public class MenuViewModel : ViewModelBase
         SignUpShown = true;
     }
 
+    private void ShowLeaderboard()
+    {
+        LeaderboardViewModel.OnActivation();
+        LeaderboardShown = true;
+    }
+
     private void HideSideMenu(object? sender, EventArgs e)
     {
         SetTabSelected(out _, false); 
@@ -107,10 +125,12 @@ public class MenuViewModel : ViewModelBase
         _loginShown = false;
         _signUpShown = false;
         _lobbyShown = false;
+        _leaderboardShown = false;
         selectedTab = value;
 
         RaisePropertyChanged(nameof(LoginShown));
         RaisePropertyChanged(nameof(SignUpShown));
         RaisePropertyChanged(nameof(LobbyShown));
+        RaisePropertyChanged(nameof(LeaderboardShown));
     }
 }

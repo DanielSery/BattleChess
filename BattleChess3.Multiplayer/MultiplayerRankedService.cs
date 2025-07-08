@@ -13,17 +13,17 @@ public class MultiplayerRankedService : IMultiplayerRankedService
     private readonly int _version;
     
     private readonly IMultiplayerScheduler _scheduler;
-    private readonly IMultiplayerLoginService _multiplayerLoginService;
+    private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     
     private readonly IMongoCollection<RankedGame> _rankedGamesCollection;
     private readonly IMongoCollection<RankedGameJoins> _rankedGameJoinsCollection;
 
     public MultiplayerRankedService(
         IMultiplayerScheduler scheduler,
-        IMultiplayerLoginService multiplayerLoginService)
+        IMultiplayerPlayerService multiplayerPlayerService)
     {
         _scheduler = scheduler;
-        _multiplayerLoginService = multiplayerLoginService;
+        _multiplayerPlayerService = multiplayerPlayerService;
         
         var client = new MongoClient(DbSecrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
@@ -40,7 +40,7 @@ public class MultiplayerRankedService : IMultiplayerRankedService
     {
         lock (_scheduler.SyncLock)
         {
-            var currentPlayer = _multiplayerLoginService.LoggedInPlayer;
+            var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
             if (currentPlayer is null)
             {
                 return Task.FromResult(Result.Fail<(bool, RankedGame, RankedGameJoins)>("No player logged in"));
@@ -80,7 +80,6 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                                 Result.Fail("Failed to update game confirmation");
                                 continue;
                             }
-
                             Console.WriteLine($"Confirmed game join for request: {foundSearchJoin.Id}");
                             return Result.Ok<(bool, RankedGame, RankedGameJoins)>((true, createdGameSearch, foundSearchJoin));
                         }
@@ -89,6 +88,16 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                             var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData);
                             if (joinResult.IsSuccess)
                             {
+                                Console.WriteLine("Confirming game join");
+                                var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, createdGameSearch.Id);
+                                var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, joinResult.Value!.Id);
+                                var result = await _rankedGamesCollection.UpdateOneAsync(filter, update);
+                                if (!result.IsAcknowledged)
+                                {
+                                    Console.WriteLine("Failed to update game confirmation");
+                                    continue;
+                                }
+                                Console.WriteLine($"Confirmed game join for request: {joinResult.Value.Id}");
                                 return Result.Ok<(bool, RankedGame, RankedGameJoins)>((false, foundSearch!, joinResult.Value));
                             }
                         }

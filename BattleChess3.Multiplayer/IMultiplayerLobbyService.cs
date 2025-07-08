@@ -6,6 +6,8 @@ namespace BattleChess3.Multiplayer;
 
 public interface IMultiplayerLobbyService
 {
+    
+    
     public Task<List<PublicLobbyData>> GetPublicLobbiesAsync();
     
     public Task<Result<GameLobby>> CreateLobbyAsync(

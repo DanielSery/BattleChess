@@ -147,6 +147,7 @@
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 6, 6"
+                        Command="{Binding ShowLeaderboardCommand}"
                         Background="{StaticResource ButtonOrange3Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -198,6 +199,9 @@
                 </Border>
                 <Border Visibility="{Binding LobbyShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
                     <views:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"/>
+                </Border>
+                <Border Visibility="{Binding LeaderboardShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                    <views:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"/>
                 </Border>
             </Grid>
         </Border>

@@ -49,6 +49,8 @@ public static class DependenciesBuilder
             .SingleInstance();
         builder.RegisterType<MultiplayerViewModel>()
             .SingleInstance();
+        builder.RegisterType<LeaderboardViewModel>()
+            .SingleInstance();
         builder.RegisterType<LoginViewModel>()
             .SingleInstance();
         builder.RegisterType<MenuViewModel>()

@@ -10,14 +10,14 @@ namespace BattleChess3.UI.ViewModel;
 
 public class LoginViewModel : ViewModelBase
 {
-    private readonly IMultiplayerLoginService _multiplayerLoginService;
+    private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly IMessageShowService _messageShowService;
     
     public LoginViewModel(
-        IMultiplayerLoginService multiplayerLoginService,
+        IMultiplayerPlayerService multiplayerPlayerService,
         IMessageShowService messageShowService)
     {
-        _multiplayerLoginService = multiplayerLoginService;
+        _multiplayerPlayerService = multiplayerPlayerService;
         _messageShowService = messageShowService;
         
         LoginCommand = new AsyncRelayCommand(LogIn);
@@ -45,7 +45,7 @@ public class LoginViewModel : ViewModelBase
     
     private async Task LogIn()
     {
-        var saltResult = await _multiplayerLoginService.GetUserSaltAsync(Name);
+        var saltResult = await _multiplayerPlayerService.GetUserSaltAsync(Name);
         if (saltResult.IsFailed)
         {
             _messageShowService.ShowMessage("Invalid username or password");
@@ -53,7 +53,7 @@ public class LoginViewModel : ViewModelBase
         }
         
         var hash = GetHash(SecurePassword, saltResult.Value);
-        var result = await _multiplayerLoginService.TryLoginAsync(Name, hash);
+        var result = await _multiplayerPlayerService.TryLoginAsync(Name, hash);
         if (result.IsFailed)
         {
             _messageShowService.ShowMessage(result.Errors.First().Message);

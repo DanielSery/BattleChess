@@ -15,8 +15,8 @@ public static class MultiplayerModule
         builder.RegisterType<MultiplayerScheduler>()
             .As<IMultiplayerScheduler>()
             .SingleInstance();
-        builder.RegisterType<MultiplayerLoginService>()
-            .As<IMultiplayerLoginService>()
+        builder.RegisterType<MultiplayerPlayerService>()
+            .As<IMultiplayerPlayerService>()
             .SingleInstance();
         builder.RegisterType<MultiplayerGameService>()
             .As<IMultiplayerGameService>()

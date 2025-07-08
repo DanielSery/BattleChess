@@ -1,17 +1,17 @@
 ﻿using BattleChess3.Multiplayer.Tables;
 using FluentResults;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace BattleChess3.Multiplayer;
 
-internal class MultiplayerLoginService : IMultiplayerLoginService
+internal class MultiplayerPlayerService : IMultiplayerPlayerService
 {
-    private Player? _loggedInPlayer;
-    
     private readonly IMongoCollection<Player> _playersCollection;
     private readonly IMultiplayerScheduler _scheduler;
 
-    public MultiplayerLoginService(IMultiplayerScheduler scheduler)
+    public MultiplayerPlayerService(IMultiplayerScheduler scheduler)
     {
         _scheduler = scheduler;
         var client = new MongoClient(DbSecrets.ConnectionString);
@@ -19,7 +19,80 @@ internal class MultiplayerLoginService : IMultiplayerLoginService
         _playersCollection = database.GetCollection<Player>("Players");
     }
 
-    public Player? LoggedInPlayer => _loggedInPlayer;
+    public Player? LoggedInPlayer { get; private set; }
+
+    /// <inheritdoc />
+    public Task<List<PublicPlayerData>> GetLeaderboard()
+    {
+        return LoggedInPlayer is null 
+            ? GetTopLeaderboard() 
+            : GetUserLeaderboard(LoggedInPlayer.Id);
+    }
+
+    private async Task<List<PublicPlayerData>> GetTopLeaderboard()
+    {
+        var bsonCollection = _playersCollection.Database
+            .GetCollection<BsonDocument>(_playersCollection.CollectionNamespace.CollectionName);
+
+        var pipeline = new EmptyPipelineDefinition<BsonDocument>()
+            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
+            {
+                { "sortBy", new BsonDocument("Elo", -1) },
+                { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
+            }))
+            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$limit", 100));
+        
+        var topDocs = await bsonCollection.Aggregate(pipeline).ToListAsync();
+        return topDocs.Select(doc => new PublicPlayerData
+        {
+            Rank = doc["Rank"].AsInt32,
+            Name = doc["Name"].AsString,
+            Elo = (short)doc["Elo"].AsInt32
+        }).ToList();
+    }
+
+    private async Task<List<PublicPlayerData>> GetUserLeaderboard(string playerId)
+    {
+        var bsonCollection = _playersCollection.Database
+            .GetCollection<BsonDocument>(_playersCollection.CollectionNamespace.CollectionName);
+        
+        var targetId = ObjectId.Parse(playerId);
+
+        var rankPipeline = new EmptyPipelineDefinition<BsonDocument>()
+            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
+            {
+                { "sortBy", new BsonDocument("Elo", -1) },
+                { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
+            }))
+            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument("_id", targetId)))
+            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$project", new BsonDocument("Rank", 1)));
+
+        var rankDoc = await bsonCollection.Aggregate(rankPipeline).FirstOrDefaultAsync();
+        if (rankDoc == null)
+            return [];
+
+        var targetRank = rankDoc["Rank"].AsInt32;int minRank = Math.Max(targetRank - 100, 1);
+        var maxRank = targetRank + 100;
+
+        var leaderboardPipeline = new EmptyPipelineDefinition<BsonDocument>()
+            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
+            {
+                { "sortBy", new BsonDocument("Elo", -1) },
+                { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
+            }))
+            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument
+            {
+                { "Rank", new BsonDocument("$gte", minRank).Add("$lte", maxRank) }
+            }));
+
+        var leaderboardDocs = await bsonCollection.Aggregate(leaderboardPipeline).ToListAsync();
+        return leaderboardDocs.Select(doc => new PublicPlayerData
+        {
+            Rank = doc["Rank"].AsInt32,
+            Name = doc["Name"].AsString,
+            Elo = (short)doc["Elo"].AsInt32
+        }).ToList();
+    }
 
     public Task<Result<string>> GetUserSaltAsync(string name)
     {
@@ -67,7 +140,7 @@ internal class MultiplayerLoginService : IMultiplayerLoginService
                     else
                     {
                         Console.WriteLine($"Found player: {foundPlayer.Name}");
-                        _loggedInPlayer = foundPlayer;
+                        LoggedInPlayer = foundPlayer;
                         return Result.Ok();
                     }
                 }
