@@ -9,7 +9,7 @@ using MongoDB.Driver;
 
 namespace BattleChess3.Multiplayer;
 
-public class MultiplayerLobbyService : IMultiplayerLobbyService
+internal class MultiplayerLobbyService : IMultiplayerLobbyService
 {
     private readonly int _version;
     

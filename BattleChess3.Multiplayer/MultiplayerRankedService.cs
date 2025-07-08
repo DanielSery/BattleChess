@@ -7,9 +7,8 @@ using MongoDB.Driver;
 
 namespace BattleChess3.Multiplayer;
 
-public class MultiplayerRankedService : IMultiplayerRankedService
+internal class MultiplayerRankedService : IMultiplayerRankedService
 {
-    
     private readonly int _version;
     
     private readonly IMultiplayerScheduler _scheduler;
@@ -195,7 +194,6 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                 change.OperationType == ChangeStreamOperationType.Update &&
                 change.DocumentKey["_id"] == ObjectId.Parse(lobbyId));
 
-        
         using var cursor = await _rankedGamesCollection.WatchAsync(
             pipeline,
             new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },

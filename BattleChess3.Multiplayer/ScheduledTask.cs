@@ -1,6 +1,6 @@
 ﻿namespace BattleChess3.Multiplayer;
 
-public class ScheduledTask<T> : IScheduledTask
+internal class ScheduledTask<T> : IScheduledTask
 {
     private Task<T>? _task;
     private readonly Func<Task<T>> _getTask;
