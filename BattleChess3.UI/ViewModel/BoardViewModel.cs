@@ -104,16 +104,16 @@ public sealed class BoardViewModel : ViewModelBase
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
-    public void MultiplayerLoadMap(string? gameId, MapBlueprint map)
+    public void MultiplayerLoadMap(MultiplayerGameType gameType, string? gameId, MapBlueprint map)
     {
         _playerService.InitializePlayers(map.StartingPlayer, true);
         _mapLoader.LoadMap(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
         
-        _multiplayerGameService.StartGame(gameId);
-        if (map.StartingPlayer != 1)
+        _multiplayerGameService.StartGame(gameType, gameId);
+        if (_playerService.IsWaitingForMove)
         {
-            _multiplayerGameService.HandleHisTurn();
+            _multiplayerGameService.HandleHisTurnAsync();
         }
     }
 
@@ -123,10 +123,14 @@ public sealed class BoardViewModel : ViewModelBase
         
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
-            _multiplayerGameService.PlayedMove(SelectedTile.Position, clickedTile.Position);
+            _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position);
             clickedTile.PossibleAction.Action.Invoke();
             SelectedTile = NoneTileViewModel.Instance;
             _playerService.NextTurn();
+            if (_playerService.IsWaitingForMove)
+            {
+                _multiplayerGameService.HandleHisTurnAsync();
+            }
         }
         else if (clickedTile.Figure.Owner.Equals(_playerService.CurrentPlayer))
         {
@@ -211,6 +215,10 @@ public sealed class BoardViewModel : ViewModelBase
         toTile.PossibleAction.Action.Invoke();
         SelectedTile = NoneTileViewModel.Instance;
         _playerService.NextTurn();
+        if (_playerService.IsWaitingForMove)
+        {
+            _multiplayerGameService.HandleHisTurnAsync();
+        }
         ClearPossibleActions();
     }
 }

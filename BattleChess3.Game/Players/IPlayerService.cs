@@ -9,6 +9,8 @@ public interface IPlayerService
     
     bool CanMove { get; }
     
+    bool IsWaitingForMove { get; }
+    
     /// <summary>
     ///     Gets current player.
     /// </summary>

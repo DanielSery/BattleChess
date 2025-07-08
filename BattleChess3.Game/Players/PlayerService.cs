@@ -13,6 +13,8 @@ internal class PlayerService : IPlayerService
     }
     
     public bool CanMove { get; private set; }
+    
+    public bool IsWaitingForMove { get; private set; }
 
     /// <inheritdoc />
     public event EventHandler<int>? PlayerWon;
@@ -36,12 +38,14 @@ internal class PlayerService : IPlayerService
         _currentPlayerId = currentPlayerId;
         _isMultiplayer = multiplayer;
         CanMove = currentPlayerId == 1 || !_isMultiplayer;
+        IsWaitingForMove = currentPlayerId == 2 && _isMultiplayer;
     }
 
     public void NextTurn()
     {
-        NextPlayer();
+        _currentPlayerId = _currentPlayerId == 1 ? 2 : 1;
         CanMove = CurrentPlayer.Id == 1 || !_isMultiplayer;
+        IsWaitingForMove = CurrentPlayer.Id == 2 && _isMultiplayer;
 
         foreach (var player in _players)
         {
@@ -50,14 +54,13 @@ internal class PlayerService : IPlayerService
             
             if (player.Value.Figures.Count == 0)
                 continue;
-            
-            if (!player.Value.Figures.Any(x => x.IsKing))
-                PlayerWon?.Invoke(this, 3 - player.Value.Id);
-        }
-    }
 
-    private void NextPlayer()
-    {
-        _currentPlayerId = _currentPlayerId == 1 ? 2 : 1;
+            if (!player.Value.Figures.Any(x => x.IsKing))
+            {
+                PlayerWon?.Invoke(this, 3 - player.Value.Id);
+                CanMove = false;
+                IsWaitingForMove = false;
+            }
+        }
     }
 }

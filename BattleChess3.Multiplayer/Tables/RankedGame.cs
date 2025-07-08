@@ -3,17 +3,21 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BattleChess3.Multiplayer.Tables;
 
-public class GameSearchJoin
+public class RankedGame
 {
-    [BsonId]
+    [BsonId] // Automatically maps to MongoDB's _id field
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public string GameId { get; set; }
+    public string? PlayerId { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? PlayerId { get; set; }
+    public string? JoinedId { get; set; }
     
+    public int Version { get; set; }
+    public short Elo { get; set; }
+    public bool IsHostStarting { get; set; }
+
     public byte[] Map { get; set; }
 }

@@ -15,8 +15,8 @@ public class MultiplayerRankedService : IMultiplayerRankedService
     private readonly IMultiplayerScheduler _scheduler;
     private readonly IMultiplayerLoginService _multiplayerLoginService;
     
-    private readonly IMongoCollection<GameSearch> _gameSearchesCollection;
-    private readonly IMongoCollection<GameSearchJoin> _gameSearchJoinsCollection;
+    private readonly IMongoCollection<RankedGame> _rankedGamesCollection;
+    private readonly IMongoCollection<RankedGameJoins> _rankedGameJoinsCollection;
 
     public MultiplayerRankedService(
         IMultiplayerScheduler scheduler,
@@ -27,8 +27,8 @@ public class MultiplayerRankedService : IMultiplayerRankedService
         
         var client = new MongoClient(DbSecrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
-        _gameSearchesCollection = database.GetCollection<GameSearch>("GameSearches");
-        _gameSearchJoinsCollection = database.GetCollection<GameSearchJoin>("GameSearchJoins");
+        _rankedGamesCollection = database.GetCollection<RankedGame>("RankedGames");
+        _rankedGameJoinsCollection = database.GetCollection<RankedGameJoins>("RankedGameJoins");
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         _version = version is not null 
@@ -36,14 +36,14 @@ public class MultiplayerRankedService : IMultiplayerRankedService
             : -1;
     }
 
-    public Task<Result<(bool isHost, GameSearch gameSearch, GameSearchJoin gameSearchJoin)>> FindRankedGame(MapBlueprint myMap)
+    public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoins gameSearchJoin)>> FindRankedGameAsync(MapBlueprint myMap)
     {
         lock (_scheduler.SyncLock)
         {
             var currentPlayer = _multiplayerLoginService.LoggedInPlayer;
             if (currentPlayer is null)
             {
-                return Task.FromResult(Result.Fail<(bool, GameSearch, GameSearchJoin)>("No player logged in"));
+                return Task.FromResult(Result.Fail<(bool, RankedGame, RankedGameJoins)>("No player logged in"));
             }
             
             var random = new Random();
@@ -54,27 +54,27 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                 var myMapData = GetMapData(myMap);
                 try
                 {
-                    var closestGameSearch = await GetClosestGameSearchAsync(currentPlayer!);
-                    while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer!.Elo) <= 50)
+                    var closestGameSearch = await GetClosestGameSearchAsync(currentPlayer);
+                    while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= 50)
                     {
                         var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData);
                         if (joinResult.IsSuccess)
                         {
-                            return Result.Ok<(bool, GameSearch, GameSearchJoin)>((false, closestGameSearch, joinResult.Value));
+                            return Result.Ok<(bool, RankedGame, RankedGameJoins)>((false, closestGameSearch, joinResult.Value));
                         }
                     }
                     
                     var eloDifference = 50;
-                    var createdGameSearch = await CreateGameSearchAsync(myMapData, currentPlayer!, isHostStarting);
+                    var createdGameSearch = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting);
                     while (true)
                     {
-                        var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer!.Elo, eloDifference, 30);
+                        var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 30);
                         if (waitResult == WaitResult.GameJoin)
                         {
                             Console.WriteLine("Confirming game join");
-                            var filter = Builders<GameSearch>.Filter.Eq(l => l.Id, createdGameSearch.Id);
-                            var update = Builders<GameSearch>.Update.Set(x => x.JoinedId, foundSearchJoin!.Id);
-                            var result = await _gameSearchesCollection.UpdateOneAsync(filter, update);
+                            var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, createdGameSearch.Id);
+                            var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, foundSearchJoin!.Id);
+                            var result = await _rankedGamesCollection.UpdateOneAsync(filter, update);
                             if (!result.IsAcknowledged)
                             {
                                 Result.Fail("Failed to update game confirmation");
@@ -82,14 +82,14 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                             }
 
                             Console.WriteLine($"Confirmed game join for request: {foundSearchJoin.Id}");
-                            return Result.Ok<(bool, GameSearch, GameSearchJoin)>((true, createdGameSearch, foundSearchJoin!));
+                            return Result.Ok<(bool, RankedGame, RankedGameJoins)>((true, createdGameSearch, foundSearchJoin));
                         }
                         else if (waitResult == WaitResult.GameSearch)
                         {
                             var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData);
                             if (joinResult.IsSuccess)
                             {
-                                return Result.Ok<(bool, GameSearch, GameSearchJoin)>((false, foundSearch!, joinResult.Value));
+                                return Result.Ok<(bool, RankedGame, RankedGameJoins)>((false, foundSearch!, joinResult.Value));
                             }
                         }
                         else
@@ -102,7 +102,7 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error: {ex}");
-                    return Result.Fail<(bool, GameSearch, GameSearchJoin)>("Failed to create lobby");
+                    return Result.Fail<(bool, RankedGame, RankedGameJoins)>("Failed to create lobby");
                 }
             });
         }
@@ -115,7 +115,7 @@ public class MultiplayerRankedService : IMultiplayerRankedService
         GameJoin
     }
     
-    private async Task<(WaitResult result, GameSearch? search, GameSearchJoin? searchJoin)> WaitForLobbyOrJoinAsync(
+    private async Task<(WaitResult result, RankedGame? search, RankedGameJoins? searchJoin)> WaitForLobbyOrJoinAsync(
         string gameId,
         short targetElo,
         int eloDifference,
@@ -123,19 +123,19 @@ public class MultiplayerRankedService : IMultiplayerRankedService
     {
         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
 
-        var searchesPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameSearch>>()
+        var searchesPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
             .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
                              change.FullDocument.Version == _version &&
                              string.IsNullOrEmpty(change.FullDocument.JoinedId) &&
                              Math.Abs(change.FullDocument.Elo - targetElo) < eloDifference);
 
-        var joinPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameSearchJoin>>()
+        var joinPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGameJoins>>()
             .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
                              change.FullDocument.GameId == gameId);
 
-        var gameSearch = Task.Run<GameSearch?>(async () =>
+        var gameSearch = Task.Run<RankedGame?>(async () =>
         {
-            using var cursor = await _gameSearchesCollection.WatchAsync(searchesPipeline, cancellationToken: cancellationTokenSource.Token);
+            using var cursor = await _rankedGamesCollection.WatchAsync(searchesPipeline, cancellationToken: cancellationTokenSource.Token);
             while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
             {
                 foreach (var change in cursor.Current)
@@ -147,9 +147,9 @@ public class MultiplayerRankedService : IMultiplayerRankedService
             return null;
         }, cancellationTokenSource.Token);
 
-        var joinTask = Task.Run<GameSearchJoin?>(async () =>
+        var joinTask = Task.Run<RankedGameJoins?>(async () =>
         {
-            using var cursor = await _gameSearchJoinsCollection.WatchAsync(joinPipeline, cancellationToken: cancellationTokenSource.Token);
+            using var cursor = await _rankedGameJoinsCollection.WatchAsync(joinPipeline, cancellationToken: cancellationTokenSource.Token);
             while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
             {
                 foreach (var change in cursor.Current)
@@ -177,17 +177,17 @@ public class MultiplayerRankedService : IMultiplayerRankedService
         return (WaitResult.Timeout, null, null);
     }
     
-    public async Task<GameSearch?> WaitForGameAccept(string lobbyId, int timeoutSeconds = 30)
+    public async Task<RankedGame?> WaitForGameAccept(string lobbyId, int timeoutSeconds = 30)
     {
         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameSearch>>()
+        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
             .Match(change =>
                 change.OperationType == ChangeStreamOperationType.Update &&
                 change.DocumentKey["_id"] == ObjectId.Parse(lobbyId));
 
         
-        using var cursor = await _gameSearchesCollection.WatchAsync(
+        using var cursor = await _rankedGamesCollection.WatchAsync(
             pipeline,
             new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
             cancellationTokenSource.Token
@@ -207,10 +207,10 @@ public class MultiplayerRankedService : IMultiplayerRankedService
         return null;
     }
 
-    private async Task<GameSearch> CreateGameSearchAsync(byte[] myMapData, Player currentPlayer, bool isHostStarting)
+    private async Task<RankedGame> CreateGameSearchAsync(byte[] myMapData, Player currentPlayer, bool isHostStarting)
     {
         Console.WriteLine("Creating game request");
-        var game = new GameSearch()
+        var game = new RankedGame()
         {
             Map = myMapData,
             PlayerId = currentPlayer.Id,
@@ -218,25 +218,25 @@ public class MultiplayerRankedService : IMultiplayerRankedService
             Version = _version,
             IsHostStarting = isHostStarting,
         };
-        await _gameSearchesCollection.InsertOneAsync(game);
+        await _rankedGamesCollection.InsertOneAsync(game);
         Console.WriteLine($"Created game request: {game.Id}");
         return game;
     }
 
-    private async Task<Result<GameSearchJoin>> TryToJoinGameAsync(GameSearch gameSearch, Player currentPlayer, byte[] myMapData)
+    private async Task<Result<RankedGameJoins>> TryToJoinGameAsync(RankedGame rankedGame, Player currentPlayer, byte[] myMapData)
     {
-        Console.WriteLine($"Creating join game: {gameSearch.Id}");
-        var gameJoin = new GameSearchJoin()
+        Console.WriteLine($"Creating join game: {rankedGame.Id}");
+        var gameJoin = new RankedGameJoins()
         {
-            GameId = gameSearch.Id,
+            GameId = rankedGame.Id,
             PlayerId = currentPlayer.Id,
             Map = myMapData,
         };
-        await _gameSearchJoinsCollection.InsertOneAsync(gameJoin);
-        Console.WriteLine($"Created join request with id: {gameSearch.Id}"); 
+        await _rankedGameJoinsCollection.InsertOneAsync(gameJoin);
+        Console.WriteLine($"Created join request with id: {rankedGame.Id}"); 
                         
         Console.WriteLine("Waiting for join request confirmation");
-        var lobbyUpdate = await WaitForGameAccept(gameSearch.Id);
+        var lobbyUpdate = await WaitForGameAccept(rankedGame.Id);
         if (lobbyUpdate is null || lobbyUpdate.JoinedId != gameJoin.Id)
         {
             Console.WriteLine("The lobby is already full");
@@ -246,10 +246,10 @@ public class MultiplayerRankedService : IMultiplayerRankedService
         return Result.Ok(gameJoin);
     }
 
-    private async Task<GameSearch?> GetClosestGameSearchAsync(Player currentPlayer)
+    private async Task<RankedGame?> GetClosestGameSearchAsync(Player currentPlayer)
     {
         Console.WriteLine($"Searching for ranked game with elo: {currentPlayer.Elo - 50}-{currentPlayer.Elo + 50}");
-        var closestGameSearch = await _gameSearchesCollection.Aggregate()
+        var closestGameSearch = await _rankedGamesCollection.Aggregate()
             .Match(l => l.Version == _version && string.IsNullOrEmpty(l.JoinedId))
             .Project(lobby => new
             {
@@ -286,8 +286,8 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                 try
                 {
                     Console.WriteLine("Deleting GameJoins");
-                    var filter = Builders<GameSearchJoin>.Filter.Eq(gj => gj.GameId, gameId);
-                    var result = await _gameSearchJoinsCollection.DeleteManyAsync(filter);
+                    var filter = Builders<RankedGameJoins>.Filter.Eq(gj => gj.GameId, gameId);
+                    var result = await _rankedGameJoinsCollection.DeleteManyAsync(filter);
                     Console.WriteLine($"Deleted GameJoins: {result.DeletedCount}");
                 }
                 catch (Exception ex)
@@ -298,8 +298,8 @@ public class MultiplayerRankedService : IMultiplayerRankedService
                 try
                 {
                     Console.WriteLine("Deleting GameLobbies");
-                    var filter = Builders<GameSearch>.Filter.Eq(gj => gj.Id, gameId);
-                    var result = await _gameSearchesCollection.DeleteManyAsync(filter);
+                    var filter = Builders<RankedGame>.Filter.Eq(gj => gj.Id, gameId);
+                    var result = await _rankedGamesCollection.DeleteManyAsync(filter);
                     Console.WriteLine($"Deleted GameLobbies: {result.DeletedCount}");
                 }
                 catch (Exception ex)

@@ -7,9 +7,9 @@ public interface IMultiplayerGameService
 {
     public event EventHandler<(Position, Position)>? RequestPlayMove;
 
-    public string? CurrentGameId { get; }
-    public void StartGame(string? gameId);
-    public Task HandleHisTurn(string? turnId = null);
-    public Task<Result> PlayedMove(Position from, Position to);
-    public Task<Result> DeleteGame(string gameId);
+    public void StartGame(MultiplayerGameType gameType, string? rankedGameId);
+    public Task<Result> HandleHisTurnAsync();
+    public Task<Result> HandleWinAsync();
+    public Task<Result> PlayedMoveAsync(Position from, Position to);
+    public Task<Result> DeleteGameAsync(string gameId);
 }

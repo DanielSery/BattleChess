@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using BattleChess3.Game.Players;
 using BattleChess3.Multiplayer;
+using BattleChess3.UI.Services;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
@@ -13,7 +14,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     
     private readonly IPlayerService _playerService;
     private readonly IMultiplayerGameService _multiplayerGameService;
-    private readonly IMultiplayerLobbyService _multiplayerLobbyService;
+    private readonly IMessageShowService _messageShowService;
 
     public MainWindowViewModel(
         BoardViewModel boardViewModel,
@@ -21,11 +22,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         IPlayerService playerService,
         MenuViewModel menuViewModel,
         IMultiplayerGameService multiplayerGameService,
-        IMultiplayerLobbyService multiplayerLobbyService)
+        IMessageShowService messageShowService)
     {
         _playerService = playerService;
         _multiplayerGameService = multiplayerGameService;
-        _multiplayerLobbyService = multiplayerLobbyService;
+        _messageShowService = messageShowService;
         
         BoardViewModel = boardViewModel;
         EditorViewModel = editorViewModel;
@@ -64,9 +65,17 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private void PlayerServiceOnPlayerWon(object? sender, int e)
     {
-        var gameId = _multiplayerGameService.CurrentGameId;
-        _multiplayerGameService.DeleteGame(gameId).Wait();
-        _multiplayerLobbyService.DeleteGameAsync(gameId).Wait();
+        if (e == 1)
+        {
+            var result = _multiplayerGameService.HandleWinAsync().Result;
+            if (result.IsFailed)
+            {
+                _messageShowService.ShowMessage(result.Reasons.First().Message);
+            }
+        }
+        // var gameId = _multiplayerGameService.RankedGameId;
+        // _multiplayerGameService.DeleteGame(gameId).Wait();
+        // _multiplayerLobbyService.DeleteGameAsync(gameId).Wait();
         
         var playerColor = e == 1 ? "Red" : "Blue";
         MessageBox.Show($"{playerColor} player won!", "Player won");

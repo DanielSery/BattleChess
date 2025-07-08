@@ -86,7 +86,7 @@ public class MultiplayerViewModel : ViewModelBase
             }).ToArray(),
         };
 
-        var request = await _multiplayerRankedService.FindRankedGame(myMap);
+        var request = await _multiplayerRankedService.FindRankedGameAsync(myMap);
         if (request.IsFailed)
         {
             _messageShowService.ShowMessage(request.Reasons.First().Message);
@@ -97,13 +97,13 @@ public class MultiplayerViewModel : ViewModelBase
         {
             var hisMap = GetFigures(gameSearchJoin.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
-            _boardViewModel.MultiplayerLoadMap(gameSearch.Id, playedMap);
+            _boardViewModel.MultiplayerLoadMap(MultiplayerGameType.Ranked | MultiplayerGameType.Host, gameSearch.Id, playedMap);
         }
         else
         {
             var hisMap = GetFigures(gameSearch.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
-            _boardViewModel.MultiplayerLoadMap(gameSearch.Id, playedMap);
+            _boardViewModel.MultiplayerLoadMap(MultiplayerGameType.Ranked, gameSearch.Id, playedMap);
         }
     }
 
@@ -141,7 +141,7 @@ public class MultiplayerViewModel : ViewModelBase
 
         var hisMap = GetFigures(gameJoin.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameRequest.IsHostStarting);
-        _boardViewModel.MultiplayerLoadMap(gameRequest.Id, playedMap);
+        _boardViewModel.MultiplayerLoadMap(MultiplayerGameType.Lobby | MultiplayerGameType.Host, gameRequest.Id, playedMap);
     }
 
     private async Task JoinLobby()
@@ -169,7 +169,7 @@ public class MultiplayerViewModel : ViewModelBase
         var joinedLobby = joinedLobbyResult.Value;
         var hisMap = GetFigures(joinedLobby.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !joinedLobby.IsHostStarting);
-        _boardViewModel.MultiplayerLoadMap(joinedLobby.Id, playedMap);
+        _boardViewModel.MultiplayerLoadMap(MultiplayerGameType.Lobby, joinedLobby.Id, playedMap);
     }
 
     private static string GetPassword(SecureString secureString)
