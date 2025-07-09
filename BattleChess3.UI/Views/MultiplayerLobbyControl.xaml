@@ -55,7 +55,17 @@
         <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                   ItemsSource="{Binding Lobbies}"
                   SelectionUnit="FullRow"
-                  SelectedItem="{Binding SelectedRow, Mode=TwoWay}">
+                  SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
+                  SnapsToDevicePixels="True"
+                  AutoGenerateColumns="False"
+                  FontSize="15"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding LobbyName}" Width="*" ElementStyle="{StaticResource CellTextStyle}"/>
+                <DataGridTextColumn Header="Elo" Binding="{Binding Elo}" Width="Auto" ElementStyle="{StaticResource CellTextStyle}"/>
+                <DataGridTextColumn Header="Locked" Binding="{Binding Locked}" Width="Auto" ElementStyle="{StaticResource CellTextStyle}"/>
+            </DataGrid.Columns>
         </DataGrid>
 
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"

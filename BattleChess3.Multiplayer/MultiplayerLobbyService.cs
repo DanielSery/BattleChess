@@ -45,7 +45,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             {
                 LobbyName = doc.LobbyName,
                 Elo = doc.Elo,
-                Locked = doc.PasswordHash.Length > 0,
+                Locked = (doc.PasswordHash.Length > 0) ? "True" : "False",
             })
             .ToListAsync();
     }

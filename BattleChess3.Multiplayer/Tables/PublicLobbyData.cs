@@ -3,6 +3,6 @@
 public class PublicLobbyData
 {
     public string LobbyName { get; set; }
-    public bool Locked { get; set; }
+    public string Locked { get; set; }
     public short? Elo { get; set; }
 }
