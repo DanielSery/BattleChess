@@ -95,8 +95,8 @@ public class MenuViewModel : ViewModelBase
 
     private void ShowLobbies()
     {
-        MultiplayerViewModel.OnActivation();
         LobbyShown = true;
+        MultiplayerViewModel.OnActivation();
     }
 
     private void ShowLogin()
@@ -111,8 +111,8 @@ public class MenuViewModel : ViewModelBase
 
     private void ShowLeaderboard()
     {
-        LeaderboardViewModel.OnActivation();
         LeaderboardShown = true;
+        LeaderboardViewModel.OnActivation();
     }
 
     private void HideSideMenu(object? sender, EventArgs e)
@@ -122,6 +122,9 @@ public class MenuViewModel : ViewModelBase
 
     private void SetTabSelected(out bool selectedTab, bool value)
     {
+        MultiplayerViewModel.OnDeactivation();
+        LeaderboardViewModel.OnDeactivation();
+        
         _loginShown = false;
         _signUpShown = false;
         _lobbyShown = false;

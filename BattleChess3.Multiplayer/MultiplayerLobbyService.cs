@@ -43,11 +43,100 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             .Match(l => l.Version == _version && string.IsNullOrEmpty(l.JoinedId))
             .Project(doc => new PublicLobbyData
             {
+                Id = doc.Id,
                 LobbyName = doc.LobbyName,
                 Elo = doc.Elo,
                 Locked = (doc.PasswordHash.Length > 0) ? "True" : "False",
             })
             .ToListAsync();
+    }
+    
+    public Task WatchLobbiesAsync(
+        Action<PublicLobbyData> onLobbyAdded,
+        Action<PublicLobbyData> onLobbyChanged,
+        Action<string> onLobbyRemoved,  // pass removed lobby Id as string
+        CancellationToken cancellationToken)
+    {
+        return Task.Run(() =>
+        {
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
+                .Match(change => change.OperationType == ChangeStreamOperationType.Insert ||
+                                 change.OperationType == ChangeStreamOperationType.Replace ||
+                                 change.OperationType == ChangeStreamOperationType.Update ||
+                                 change.OperationType == ChangeStreamOperationType.Delete);
+
+            using var cursor = _gameLobbyCollection.Watch(pipeline, cancellationToken: cancellationToken);
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (!cursor.MoveNext(cancellationToken)) 
+                    continue;
+                
+                foreach (var change in cursor.Current)
+                {
+                    switch (change.OperationType)
+                    {
+                        case ChangeStreamOperationType.Insert:
+                            if (change.FullDocument != null)
+                            {
+                                onLobbyAdded?.Invoke(new PublicLobbyData
+                                {
+                                    Id = change.FullDocument.Id,
+                                    LobbyName = change.FullDocument.LobbyName,
+                                    Elo = change.FullDocument.Elo,
+                                    JoinedId = change.FullDocument.JoinedId,
+                                    Locked = (change.FullDocument.PasswordHash.Length > 0) ? "True" : "False",
+                                });
+                            }
+                            break;
+
+                        case ChangeStreamOperationType.Replace:
+                        case ChangeStreamOperationType.Update:
+                            PublicLobbyData? lobby;
+                            if (change.FullDocument != null)
+                            {
+                                lobby = new PublicLobbyData
+                                {
+                                    Id = change.FullDocument.Id,
+                                    LobbyName = change.FullDocument.LobbyName,
+                                    Elo = change.FullDocument.Elo,
+                                    JoinedId = change.FullDocument.JoinedId,
+                                    Locked = (change.FullDocument.PasswordHash.Length > 0) ? "True" : "False",
+                                };
+                            }
+                            else
+                            {
+                                var id = change.DocumentKey["_id"].AsObjectId.ToString();
+                                var foundLobby = _gameLobbyCollection.Find(l => l.Id == id).FirstOrDefault(cancellationToken);
+                                if (foundLobby is null)
+                                {
+                                    lobby = null;
+                                }
+                                else
+                                {
+                                    lobby = new PublicLobbyData
+                                    {
+                                        Id = id,
+                                        LobbyName = foundLobby.LobbyName,
+                                        Elo = foundLobby.Elo,
+                                        JoinedId = foundLobby.JoinedId,
+                                        Locked = (foundLobby.PasswordHash.Length > 0) ? "True" : "False",
+                                    };
+                                }
+                            }
+
+                            if (lobby is not null)
+                                onLobbyChanged?.Invoke(lobby);
+                            break;
+
+                        case ChangeStreamOperationType.Delete:
+                            var removedId = change.DocumentKey["_id"].AsObjectId.ToString();
+                            onLobbyRemoved?.Invoke(removedId);
+                            break;
+                    }
+                }
+            }
+        }, cancellationToken);
     }
 
     public Task<Result<GameLobby>> CreateLobbyAsync(

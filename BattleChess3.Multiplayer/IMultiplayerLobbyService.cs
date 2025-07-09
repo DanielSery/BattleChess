@@ -1,14 +1,19 @@
 ﻿using BattleChess3.Maps;
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
+using MongoDB.Bson;
 
 namespace BattleChess3.Multiplayer;
 
 public interface IMultiplayerLobbyService
 {
-    
-    
     public Task<List<PublicLobbyData>> GetPublicLobbiesAsync();
+
+    Task WatchLobbiesAsync(
+        Action<PublicLobbyData> onLobbyAdded,
+        Action<PublicLobbyData> onLobbyChanged,
+        Action<string> onLobbyRemoved,  // pass removed lobby Id as string
+        CancellationToken cancellationToken);
     
     public Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,

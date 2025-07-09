@@ -1,5 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using System.Security;
+using System.Windows;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
 using BattleChess3.Maps;
@@ -7,6 +9,7 @@ using BattleChess3.Multiplayer;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
+using MongoDB.Bson;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
@@ -40,8 +43,9 @@ public class MultiplayerViewModel : ViewModelBase
         JoinLobbyCommand = new AsyncRelayCommand(JoinLobby);
     }
 
-    private List<PublicLobbyData> _lobbies = [];
-    public List<PublicLobbyData> Lobbies
+    private readonly object _lobbyLock = new object();
+    private ObservableCollection<PublicLobbyData> _lobbies = [];
+    public ObservableCollection<PublicLobbyData> Lobbies
     {
         get => _lobbies;
         set => SetProperty(ref _lobbies, value);
@@ -245,12 +249,94 @@ public class MultiplayerViewModel : ViewModelBase
         return GetPositionOfOppositePlayer(index).Index;
     }
 
+    private CancellationTokenSource? _lobbyWatchCancellation;
     public void OnActivation()
     {
         Name = _loginViewModel.Name;
         Task.Run(async () =>
         {
-            Lobbies = await _multiplayerLobbyService.GetPublicLobbiesAsync();
+            var lobbies = new ObservableCollection<PublicLobbyData>(await _multiplayerLobbyService.GetPublicLobbiesAsync());
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                lock (_lobbyLock)
+                {
+                    Lobbies = lobbies;
+                }
+            });
+            
+            _lobbyWatchCancellation = new CancellationTokenSource();
+            await _multiplayerLobbyService.WatchLobbiesAsync(
+                OnLobbyAdded, 
+                OnLobbyChanged,
+                OnLobbyRemoved,
+                _lobbyWatchCancellation.Token);
         });
+    }
+
+    private void OnLobbyAdded(PublicLobbyData lobbyData)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            if (!string.IsNullOrEmpty(lobbyData.JoinedId))
+                return;
+            
+            lock (_lobbyLock)
+            {
+                Lobbies.Add(lobbyData);
+            }
+        });
+    }
+
+    private void OnLobbyChanged(PublicLobbyData lobbyData)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            lock (_lobbyLock)
+            {
+                for (var i = 0; i < Lobbies.Count; i++)
+                {
+                    var lobby = Lobbies[i];
+                    if (lobby.Id != lobbyData.Id)
+                    {
+                        continue;
+                    }
+                    
+                    if (!string.IsNullOrEmpty(lobbyData.JoinedId))
+                    {
+                        Lobbies.RemoveAt(i);
+                    }
+                    else
+                    {
+                        Lobbies[i] = lobbyData;
+                    }
+                    return;
+                }
+            }
+        });
+    }
+
+    private void OnLobbyRemoved(string lobbyId)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            lock (_lobbyLock)
+            {
+                for (var i = 0; i < Lobbies.Count; i++)
+                {
+                    var lobby = Lobbies[i];
+                    if (lobby.Id == lobbyId)
+                    {
+                        Lobbies.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
+        });
+    }
+
+    public void OnDeactivation()
+    {
+        _lobbyWatchCancellation?.Cancel();
+        _lobbyWatchCancellation = null;
     }
 }

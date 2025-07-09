@@ -29,4 +29,8 @@ public class LeaderboardViewModel : ViewModelBase
                 Leaderboard = x.Result;
             });
     }
+
+    public void OnDeactivation()
+    {
+    }
 }
