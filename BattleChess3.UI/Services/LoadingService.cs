@@ -5,25 +5,33 @@ namespace BattleChess3.UI.Services;
 
 public class LoadingService : ViewModelBase, ILoadingService
 {
-    private readonly IMessageShowService _messageShowService;
+    private readonly INotificationService _notificationService;
 
-    public LoadingService(IMessageShowService messageShowService)
+    public LoadingService(INotificationService notificationService)
     {
-        _messageShowService = messageShowService;
+        _notificationService = notificationService;
         CancelCommand = new RelayCommand(CancelOperation, CanCancelOperation);
     }
 
     public bool IsLoading => CurrentOperation is not null;
+
+    private string _message = string.Empty;
+    public string Message
+    {
+        get => _message;
+        set => SetProperty(ref _message, value);
+    }
+    
     public LoadingOperation? CurrentOperation { get; private set; }
     
     public RelayCommand CancelCommand { get; private set; }
-    
-    
+
     public event EventHandler<bool>? LoadingChanged;
 
     /// <inheritdoc />
-    public LoadingOperation StartLoadingOperation()
+    public LoadingOperation StartLoadingOperation(string message)
     {
+        Message = message;
         CurrentOperation = new LoadingOperation(this);
         LoadingChanged?.Invoke(this, true);
         return CurrentOperation;
@@ -36,7 +44,7 @@ public class LoadingService : ViewModelBase, ILoadingService
 
     private void CancelOperation()
     {
-        _messageShowService.SetShowingMessages(false);
+        _notificationService.SetShowMessages(ShownMessage.MessageType.Error);
         CurrentOperation?.CancelOperation();
     }
     
@@ -46,6 +54,12 @@ public class LoadingService : ViewModelBase, ILoadingService
         private readonly CancellationTokenSource _cts;
         
         public CancellationToken CancellationToken => _cts.Token;
+
+        public string Message
+        {
+            get => _service.Message;
+            set => _service.Message = value;
+        }
         
         public LoadingOperation(LoadingService service)
         {
@@ -66,7 +80,7 @@ public class LoadingService : ViewModelBase, ILoadingService
             _service.CurrentOperation = null;
             _service.CancelCommand.NotifyCanExecuteChanged();
             _service.LoadingChanged?.Invoke(this, false);
-            _service._messageShowService.SetShowingMessages(true);
+            _service._notificationService.SetShowMessages(ShownMessage.MessageType.All);
         }
     }
 }

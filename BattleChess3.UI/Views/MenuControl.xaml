@@ -5,14 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:views="clr-namespace:BattleChess3.UI.Views"
-             xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              d:DataContext="{d:DesignInstance viewModel:MenuViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="350" d:DesignWidth="350">
     <DockPanel LastChildFill="True">
         <Border DockPanel.Dock="Left"
-                BorderBrush="Black" BorderThickness="0 0 6 0"
+                BorderBrush="Black" BorderThickness="0 0 4 0"
                 SnapsToDevicePixels="True"
                 x:Name="ThisBorderControl"
                 Width="{Binding ActualHeight, ElementName=ThisBorderControl}">
@@ -173,14 +172,14 @@
                 </Button>
                 <Border Grid.Row="4" Grid.Column="7" Background="#40000000" />
 
-                <Border Grid.Row="5" Grid.Column="0" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 9" />
-                <Border Grid.Row="5" Grid.Column="1" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 9" />
-                <Border Grid.Row="5" Grid.Column="2" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 9" />
-                <Border Grid.Row="5" Grid.Column="3" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 9" />
-                <Border Grid.Row="5" Grid.Column="4" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 9" />
-                <Border Grid.Row="5" Grid.Column="5" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 9" />
-                <Border Grid.Row="5" Grid.Column="6" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 9" />
-                <Border Grid.Row="5" Grid.Column="7" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 9" />
+                <Border Grid.Row="5" Grid.Column="0" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 6" />
+                <Border Grid.Row="5" Grid.Column="1" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 6" />
+                <Border Grid.Row="5" Grid.Column="2" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 6" />
+                <Border Grid.Row="5" Grid.Column="3" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 6" />
+                <Border Grid.Row="5" Grid.Column="4" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 6" />
+                <Border Grid.Row="5" Grid.Column="5" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 6" />
+                <Border Grid.Row="5" Grid.Column="6" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 6" />
+                <Border Grid.Row="5" Grid.Column="7" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 6" />
 
                 <Border Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="6" Grid.RowSpan="2" SnapsToDevicePixels="True">
                     <views:TeamBoardControl DataContext="{Binding TeamBoardViewModel}" 
@@ -188,7 +187,7 @@
                 </Border>
             </Grid>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="3 0 6 0"
+        <Border BorderBrush="Black" BorderThickness="2 0 4 0"
                 SnapsToDevicePixels="True">
             <Grid>
                 <Border Visibility="{Binding LoginShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">

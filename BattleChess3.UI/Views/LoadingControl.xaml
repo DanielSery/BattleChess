@@ -82,8 +82,15 @@
             </Canvas>
                 
             <!-- Loading Text -->
-            <TextBlock x:Name="ThisTextBlock"
-                        Text="Loading..." Foreground="#C1B6A4" FontWeight="SemiBold"
+            <TextBlock x:Name="MessageTextBlock"
+                       Text="{Binding Message}" Foreground="#C1B6A4" FontWeight="SemiBold"
+                       Margin="25"
+                       FontSize="25" HorizontalAlignment="Center"/>
+            
+            <!-- Loading Text -->
+            <TextBlock x:Name="CancelTextBlock"
+                       Visibility="Collapsed"
+                       Text="Cancel" Foreground="#C1B6A4" FontWeight="SemiBold"
                        Margin="25"
                        FontSize="25" HorizontalAlignment="Center"/>
         </StackPanel>

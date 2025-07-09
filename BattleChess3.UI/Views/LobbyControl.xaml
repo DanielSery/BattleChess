@@ -21,14 +21,14 @@
 
         <Button Grid.Row="0" Grid.Column="0"
                 Content="Name"
-                BorderThickness="3 6 3 3"
+                BorderThickness="2 2 2 2"
                 FontSize="25"
                 Background="{StaticResource ButtonBlueBackground}"
                 Padding="10"
                 IsEnabled="False" Opacity="0.85" />
 
         <TextBox Grid.Row="0" Grid.Column="1"
-                 BorderThickness="3 6 6 3"
+                 BorderThickness="2 2 4 2"
                  FontSize="25"
                  Text="{Binding Name}"
                  Background="#40000000"
@@ -37,14 +37,14 @@
 
         <Button Grid.Row="1" Grid.Column="0"
                 Content="Password"
-                BorderThickness="3 3 3 6"
+                BorderThickness="2 2 2 4"
                 FontSize="25"
                 Background="{StaticResource ButtonPurple2Background}"
                 Padding="10"
                 IsEnabled="False" Opacity="0.85" />
 
         <PasswordBox Grid.Row="1" Grid.Column="1"
-                     BorderThickness="3 3 6 6"
+                     BorderThickness="2 2 4 4"
                      FontSize="25"
                      Background="#40000000"
                      Padding="10"
@@ -53,6 +53,7 @@
                      PasswordChanged="PasswordBox_OnPasswordChanged"/>
         
         <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                  Margin="-2"
                   ItemsSource="{Binding Lobbies}"
                   SelectionUnit="FullRow"
                   SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
@@ -70,7 +71,7 @@
 
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                 Content="Create lobby"
-                BorderThickness="3 6 3 3"
+                BorderThickness="2 4 2 2"
                 FontSize="25"
                 Command="{Binding CreateLobbyCommand}"
                 Background="{StaticResource ButtonGreenBackground}"
@@ -78,7 +79,7 @@
 
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                 Content="Join lobby"
-                BorderThickness="3 3 3 6"
+                BorderThickness="2 2 2 4"
                 FontSize="25"
                 Command="{Binding JoinLobbyCommand}"
                 Background="{StaticResource ButtonGreen2Background}"

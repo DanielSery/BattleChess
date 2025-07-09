@@ -15,8 +15,6 @@ public partial class LoadingControl
     public LoadingControl()
     {
         InitializeComponent();
-
-        Loaded += MainWindow_Loaded;
         DataContextChanged += MainWindow_DataContextChanged;
         
         _innerMouseOnBrush = new SolidColorBrush(Color.FromArgb(32, 193, 182, 164));
@@ -29,16 +27,7 @@ public partial class LoadingControl
         _spinnerMouseOnBrush.Freeze();
     }
 
-    public LoadingService? ViewModel { get; private set; }
-
-    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is not LoadingService loadingService)
-            return;
-        
-        ViewModel = loadingService;
-        ViewModel.LoadingChanged += ViewModelOnLoadingChanged;
-    }
+    public ILoadingService? ViewModel { get; private set; }
 
     private void MainWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
@@ -47,7 +36,7 @@ public partial class LoadingControl
             ViewModel.LoadingChanged -= ViewModelOnLoadingChanged;
         }
 
-        if (DataContext is not LoadingService loadingService)
+        if (DataContext is not ILoadingService loadingService)
             return;
 
         ViewModel = loadingService;
@@ -56,7 +45,7 @@ public partial class LoadingControl
 
     private void ViewModelOnLoadingChanged(object? sender, bool e)
     {
-        Task.Delay(150).ContinueWith(_ =>
+        Task.Delay(250).ContinueWith(_ =>
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -88,14 +77,16 @@ public partial class LoadingControl
 
     private void Spinner_MouseEnter(object sender, MouseEventArgs e)
     {
-        ThisTextBlock.Text = "Cancel";
+        MessageTextBlock.Visibility = Visibility.Collapsed;
+        CancelTextBlock.Visibility = Visibility.Visible;
         InnerEllipse.Fill = _innerMouseOnBrush;
         SpinnerPath.Stroke = _spinnerMouseOnBrush;
     }
 
     private void Spinner_MouseLeave(object sender, MouseEventArgs e)
     {
-        ThisTextBlock.Text = "Loading...";
+        MessageTextBlock.Visibility = Visibility.Visible;
+        CancelTextBlock.Visibility = Visibility.Collapsed;
         InnerEllipse.Fill = Brushes.Transparent;
         SpinnerPath.Stroke = _spinnerMouseOffBrush;
     }

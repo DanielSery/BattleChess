@@ -14,7 +14,6 @@ public sealed class MainWindowViewModel : ViewModelBase
     
     private readonly IPlayerService _playerService;
     private readonly IMultiplayerGameService _multiplayerGameService;
-    private readonly IMessageShowService _messageShowService;
 
     public MainWindowViewModel(
         BoardViewModel boardViewModel,
@@ -22,13 +21,13 @@ public sealed class MainWindowViewModel : ViewModelBase
         IPlayerService playerService,
         MenuViewModel menuViewModel,
         IMultiplayerGameService multiplayerGameService,
-        IMessageShowService messageShowService,
+        INotificationService notificationService,
         ILoadingService loadingService)
     {
         _playerService = playerService;
         _multiplayerGameService = multiplayerGameService;
-        _messageShowService = messageShowService;
         
+        NotificationService = notificationService;
         BoardViewModel = boardViewModel;
         EditorViewModel = editorViewModel;
         MenuViewModel = menuViewModel;
@@ -64,6 +63,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     public BoardViewModel BoardViewModel { get; }
     public EditorViewModel EditorViewModel { get; }
     public ILoadingService LoadingService { get; }
+    public INotificationService NotificationService { get; }
 
     private void PlayerServiceOnPlayerWon(object? sender, int e)
     {
@@ -72,7 +72,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             var result = _multiplayerGameService.HandleWinAsync().Result;
             if (result.IsFailed)
             {
-                _messageShowService.ShowMessage(result.Reasons.First().Message);
+                NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
             }
         }
         // var gameId = _multiplayerGameService.RankedGameId;

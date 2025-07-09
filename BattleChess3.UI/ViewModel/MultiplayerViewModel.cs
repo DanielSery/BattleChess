@@ -18,7 +18,7 @@ public class MultiplayerViewModel : ViewModelBase
     private readonly TeamBoardViewModel _teamBoardViewModel;
     private readonly IMultiplayerLobbyService _multiplayerLobbyService;
     private readonly IMultiplayerRankedService _multiplayerRankedService;
-    private readonly IMessageShowService _messageShowService;
+    private readonly INotificationService _notificationService;
     private readonly BoardViewModel _boardViewModel;
     private readonly LoginViewModel _loginViewModel;
     private readonly ILoadingService _loadingService;
@@ -27,7 +27,7 @@ public class MultiplayerViewModel : ViewModelBase
         TeamBoardViewModel teamBoardViewModel,
         IMultiplayerLobbyService multiplayerLobbyService,
         IMultiplayerRankedService multiplayerRankedService,
-        IMessageShowService messageShowService,
+        INotificationService notificationService,
         BoardViewModel boardViewModel,
         LoginViewModel loginViewModel,
         ILoadingService loadingService)
@@ -35,7 +35,7 @@ public class MultiplayerViewModel : ViewModelBase
         _teamBoardViewModel = teamBoardViewModel;
         _multiplayerLobbyService = multiplayerLobbyService;
         _multiplayerRankedService = multiplayerRankedService;
-        _messageShowService = messageShowService;
+        _notificationService = notificationService;
         _boardViewModel = boardViewModel;
         _loginViewModel = loginViewModel;
         _loadingService = loadingService;
@@ -82,7 +82,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private async Task FindRankedGame()
     {
-        using var loadingOperation = _loadingService.StartLoadingOperation();
+        using var loadingOperation = _loadingService.StartLoadingOperation("Finding ranked game");
         var myMap = new MapBlueprint
         {
             Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
@@ -96,7 +96,7 @@ public class MultiplayerViewModel : ViewModelBase
         var request = await _multiplayerRankedService.FindRankedGameAsync(myMap, loadingOperation.CancellationToken);
         if (request.IsFailed)
         {
-            _messageShowService.ShowMessage(request.Reasons.First().Message);
+            _notificationService.ShowMessage(ShownMessage.MessageType.Warning, request.Reasons.First().Message);
             return;
         }
         var (isHost, gameSearch, gameSearchJoin) = request.Value;
@@ -116,7 +116,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private async Task CreateLobby()
     {
-        using var loadingOperation = _loadingService.StartLoadingOperation();
+        using var loadingOperation = _loadingService.StartLoadingOperation("Creating lobby");
         var myMap = new MapBlueprint
         {
             Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
@@ -135,15 +135,16 @@ public class MultiplayerViewModel : ViewModelBase
 
         if (gameRequestResult.IsFailed)
         {
-            _messageShowService.ShowMessage(gameRequestResult.Reasons.First().Message);
+            _notificationService.ShowMessage(ShownMessage.MessageType.Warning, gameRequestResult.Reasons.First().Message);
             return;
         }
         var gameRequest = gameRequestResult.Value;
-        
+
+        loadingOperation.Message = "Waiting for opponent";
         var gameJoinResult = await _multiplayerLobbyService.WaitForLobbyPlayerAsync(gameRequestResult.Value, loadingOperation.CancellationToken);
         if (gameJoinResult.IsFailed)
         {
-            _messageShowService.ShowMessage(gameJoinResult.Reasons.First().Message);
+            _notificationService.ShowMessage(ShownMessage.MessageType.Warning, gameJoinResult.Reasons.First().Message);
             return;
         }
         var gameJoin = gameJoinResult.Value;
@@ -155,7 +156,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private async Task JoinLobby()
     {
-        using var loadingOperation = _loadingService.StartLoadingOperation();
+        using var loadingOperation = _loadingService.StartLoadingOperation("Joining lobby");
         var myMap = new MapBlueprint
         {
             Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
@@ -173,7 +174,8 @@ public class MultiplayerViewModel : ViewModelBase
             loadingOperation.CancellationToken);
         if (joinedLobbyResult.IsFailed)
         {
-            _messageShowService.ShowMessage(joinedLobbyResult.Reasons.First().Message);
+            _notificationService.ShowMessage(ShownMessage.MessageType.Warning, joinedLobbyResult.Reasons.First().Message);
+            
             return;
         }
 

@@ -33,8 +33,8 @@ public static class DependenciesBuilder
 
     private static void SetUpServiceLocator(ContainerBuilder builder)
     {
-        builder.RegisterType<MessageShowService>()
-            .As<IMessageShowService>()
+        builder.RegisterType<NotificationService>()
+            .As<INotificationService>()
             .SingleInstance();
         builder.RegisterType<LoadingService>()
             .As<ILoadingService>()

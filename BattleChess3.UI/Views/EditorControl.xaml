@@ -21,12 +21,12 @@
             </Grid.RowDefinitions>
             
             <Border Grid.Row="0" Grid.RowSpan="3" SnapsToDevicePixels="True"
-                    BorderBrush="Black" BorderThickness="0 0 0 9">
+                    BorderBrush="Black" BorderThickness="0 0 0 6">
                 <views:EditorUnitsControl DataContext="{Binding EditorUnits}"
                                           Opacity="0.85"/>
             </Border>
             <Border Grid.Row="3" SnapsToDevicePixels="True"
-                                BorderBrush="Black" BorderThickness="0 0 6 0">
+                                BorderBrush="Black" BorderThickness="0 0 4 0">
                 <views:TeamBoardControl DataContext="{Binding TeamBoard}"/>
             </Border>
         </Grid>
@@ -47,7 +47,7 @@
                     Content="{Binding  TeamBoard.PointsLeft}"
                     ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
                     Visibility="{Binding TeamBoard.PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
-                    BorderThickness="3 6 6 3"
+                    BorderThickness="2 2 4 2"
                     FontSize="25"
                     Background="{StaticResource ButtonGreenBackground}"
                     Padding="10"
@@ -57,7 +57,7 @@
                     Content="{Binding TeamBoard.PointsLeft}"
                     ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
                     Visibility="{Binding TeamBoard.PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
-                    BorderThickness="3 6 6 3"
+                    BorderThickness="2 4 4 2"
                     FontSize="25"
                     Background="{StaticResource ButtonRedBackground}"
                     Padding="10"
@@ -66,7 +66,7 @@
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                      Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                      Content="{localization:Loc Editor_KingNotSelected}" 
-                     BorderThickness="3 3 6 3"
+                     BorderThickness="2 2 4 2"
                      FontSize="25"
                      Background="{StaticResource ButtonRed2Background}"
                      Padding="10"
@@ -75,7 +75,7 @@
             <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                      Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
                      Content="{localization:Loc Editor_KingSelected}" 
-                     BorderThickness="3 3 6 3"
+                     BorderThickness="2 2 4 2"
                      FontSize="25"
                      Background="{StaticResource ButtonGreen2Background}"
                      Padding="10"
@@ -84,7 +84,7 @@
             <Button Grid.Row="2" Grid.Column="0"
                     Command="{Binding SaveGameCommand}"
                     Content="{localization:Loc Editor_Save}" 
-                    BorderThickness="3 3 3 6"
+                    BorderThickness="2 2 2 4"
                     Opacity="{Binding TeamBoard.CanSave, Converter={converters:BooleanMultiValueConverter TrueValue=1.0, FalseValue=0.5}}"
                     IsEnabled="{Binding TeamBoard.CanSave}"
                     FontSize="25"
@@ -94,13 +94,13 @@
             <Button  Grid.Row="2" Grid.Column="1"
                      Command="{Binding CancelCommand}"
                      Content="{localization:Loc Editor_Cancel}" 
-                     BorderThickness="3 3 6 6"
+                     BorderThickness="2 2 4 4"
                      FontSize="25"
                      Background="{StaticResource ButtonOrangeBackground}"
                      Padding="10"/>
             
             <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                    BorderBrush="Black" BorderThickness="3,0,6,0"
+                    BorderBrush="Black" BorderThickness="2 0 4 0"
                     SnapsToDevicePixels="True">
                 <views:UnitInfoControl DataContext="{Binding EditorUnits.TileInfo}" />
             </Border>

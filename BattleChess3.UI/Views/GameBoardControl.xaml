@@ -7,7 +7,7 @@
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:BoardViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Border BorderBrush="Black" BorderThickness="0 0 6 0"
+    <Border BorderBrush="Black" BorderThickness="0 0 4 0"
             SnapsToDevicePixels="True"
             x:Name="ThisGameBoardControl"
             Width="{Binding ActualHeight, ElementName=ThisGameBoardControl}">

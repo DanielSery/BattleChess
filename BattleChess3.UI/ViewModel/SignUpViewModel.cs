@@ -11,16 +11,16 @@ namespace BattleChess3.UI.ViewModel;
 public class SignUpViewModel : ViewModelBase
 {
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
-    private readonly IMessageShowService _messageShowService;
+    private readonly INotificationService _notificationService;
     private readonly ILoadingService _loadingService;
     
     public SignUpViewModel(
         IMultiplayerPlayerService multiplayerPlayerService,
-        IMessageShowService messageShowService,
+        INotificationService notificationService,
         ILoadingService loadingService)
     {
         _multiplayerPlayerService = multiplayerPlayerService;
-        _messageShowService = messageShowService;
+        _notificationService = notificationService;
         _loadingService = loadingService;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
@@ -43,17 +43,17 @@ public class SignUpViewModel : ViewModelBase
     {
         if (Name.Length < 5)
         {
-            _messageShowService.ShowMessage("Name is too short.");
+            _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Name is too short.");
             return;
         }
 
         if (SecurePassword1.Length < 6)
         {
-            _messageShowService.ShowMessage("Password is too short.");
+            _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Password is too short.");
             return;
         }
         
-        using var loading = _loadingService.StartLoadingOperation();
+        using var loading = _loadingService.StartLoadingOperation("Signing up");
         var salt = RandomNumberGenerator.GetBytes(16); // Generate 16-byte salt
         var stringSalt = Convert.ToBase64String(salt);
         
@@ -62,14 +62,14 @@ public class SignUpViewModel : ViewModelBase
 
         if (hash != hash2)
         {
-            _messageShowService.ShowMessage("Passwords do not match.");
+            _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Passwords do not match.");
             return;
         }
 
         var result = await _multiplayerPlayerService.TrySignUpAsync(Name, hash, stringSalt, loading.CancellationToken);
         if (result.IsFailed)
         {
-            _messageShowService.ShowMessage(result.Errors.First().Message);
+            _notificationService.ShowMessage(ShownMessage.MessageType.Error, result.Errors[0].Message);
         }
         else
         {

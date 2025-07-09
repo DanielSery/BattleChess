@@ -111,6 +111,12 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     var filter = Builders<Player>.Filter.Eq("Name", name);
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     var foundPlayer = foundPlayers.FirstOrDefault();
+                    if (foundPlayer is null)
+                    {
+                        Console.WriteLine("Did not find player");
+                        return Result.Fail("Wrong username or password");
+                    }
+                    
                     Console.WriteLine($"Found user with name: {foundPlayer.Name}");
                     return Result.Ok(foundPlayer.PasswordSalt);
                 }
