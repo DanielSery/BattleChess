@@ -5,7 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:LoginViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             Focusable="True">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter"
+                    Command="{Binding LoginCommand}" />
+        <KeyBinding Key="Escape"
+                    Command="{Binding RequestEndCommand}" />
+    </UserControl.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />

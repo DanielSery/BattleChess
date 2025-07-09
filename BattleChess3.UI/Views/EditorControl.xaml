@@ -8,7 +8,14 @@
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:EditorViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             Focusable="True">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter"
+                    Command="{Binding SaveGameCommand}" />
+        <KeyBinding Key="Escape"
+                    Command="{Binding CancelCommand}" />
+    </UserControl.InputBindings>
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Left"
               x:Name="ThisGridControl"

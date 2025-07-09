@@ -35,6 +35,8 @@ public class MenuViewModel : ViewModelBase
         
         SignUpViewModel.RequestEndSignUp += HideSideMenu;
         LoginViewModel.RequestEndLogin += HideSideMenu;
+        LeaderboardViewModel.RequestEnd += HideSideMenu;
+        MultiplayerViewModel.RequestEnd += HideSideMenu;
     }
 
     public LoginViewModel LoginViewModel { get; }

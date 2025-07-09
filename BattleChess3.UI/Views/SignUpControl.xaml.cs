@@ -9,6 +9,15 @@ public partial class SignUpControl : UserControl
     public SignUpControl()
     {
         InitializeComponent();
+        IsVisibleChanged += OnIsVisibleChanged;
+    }
+
+    private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (e.NewValue.Equals(true))
+        {
+            Focus();
+        }
     }
 
     private void PasswordBox1_OnPasswordChanged(object sender, RoutedEventArgs e)

@@ -64,6 +64,7 @@ public partial class LoadingControl
     private void StartSpinner()
     {
         LoadingOverlay.Visibility = Visibility.Visible;
+        Focus();
         Storyboard sb = (Storyboard)Resources["SpinnerAnimation"];
         sb.Begin(this, true);
     }

@@ -43,6 +43,7 @@ public class MultiplayerViewModel : ViewModelBase
         RankedGameCommand = new AsyncRelayCommand(FindRankedGame);
         CreateLobbyCommand = new AsyncRelayCommand(CreateLobby);
         JoinLobbyCommand = new AsyncRelayCommand(JoinLobby);
+        RequestEndCommand = new RelayCommand(RaiseRequestEnd);
     }
 
     private readonly object _lobbyLock = new object();
@@ -79,6 +80,9 @@ public class MultiplayerViewModel : ViewModelBase
     public AsyncRelayCommand CreateLobbyCommand { get; }
     public AsyncRelayCommand JoinLobbyCommand { get; }
     public AsyncRelayCommand RankedGameCommand { get; }
+    public RelayCommand RequestEndCommand { get; }
+    
+    public event EventHandler? RequestEnd;
 
     private async Task FindRankedGame()
     {
@@ -347,5 +351,10 @@ public class MultiplayerViewModel : ViewModelBase
     {
         _lobbyWatchCancellation?.Cancel();
         _lobbyWatchCancellation = null;
+    }
+
+    private void RaiseRequestEnd()
+    {
+        RequestEnd?.Invoke(this, EventArgs.Empty);
     }
 }

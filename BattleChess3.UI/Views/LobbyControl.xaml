@@ -5,7 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:MultiplayerViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             Focusable="True">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter"
+                    Command="{Binding JoinLobbyCommand}" />
+        <KeyBinding Key="Escape"
+                    Command="{Binding RequestEndCommand}" />
+    </UserControl.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -53,14 +60,22 @@
                      PasswordChanged="PasswordBox_OnPasswordChanged"/>
         
         <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                  x:Name="MyDataGrid"
                   Margin="-2"
                   ItemsSource="{Binding Lobbies}"
                   SelectionUnit="FullRow"
                   SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
+                  MouseDoubleClick="Control_OnMouseDoubleClick"
                   SnapsToDevicePixels="True"
                   AutoGenerateColumns="False"
                   FontSize="15"
                   IsReadOnly="True">
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Enter"
+                            Command="{Binding JoinLobbyCommand}" />
+                <KeyBinding Key="Escape"
+                            Command="{Binding RequestEndCommand}" />
+            </DataGrid.InputBindings>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding LobbyName}" Width="*" ElementStyle="{StaticResource CellTextStyle}"/>

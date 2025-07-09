@@ -1,6 +1,7 @@
 ﻿using BattleChess3.Multiplayer;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.UI.Services;
+using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
@@ -16,14 +17,21 @@ public class LeaderboardViewModel : ViewModelBase
     {
         _multiplayerPlayerService = multiplayerPlayerService;
         _loadingService = loadingService;
+
+        RequestEndCommand = new RelayCommand(RaiseRequestEnd);
     }
-    
+
+
     private List<PublicPlayerData> _leaderboard = new List<PublicPlayerData>();
     public List<PublicPlayerData> Leaderboard
     {
         get => _leaderboard;
         set => SetProperty(ref _leaderboard, value);
     }
+    
+    public event EventHandler? RequestEnd;
+    
+    public RelayCommand RequestEndCommand { get; }
 
     public void OnActivation()
     {
@@ -36,5 +44,10 @@ public class LeaderboardViewModel : ViewModelBase
 
     public void OnDeactivation()
     {
+    }
+
+    private void RaiseRequestEnd()
+    {
+        RequestEnd?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -5,7 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:services="clr-namespace:BattleChess3.UI.Services"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance services:LoadingService}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             Focusable="True">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Escape"
+                    Command="{Binding CancelCommand}" />
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <QuadraticEase x:Key="Ease" EasingMode="EaseInOut"/>
         <Storyboard x:Key="SpinnerAnimation" RepeatBehavior="Forever">

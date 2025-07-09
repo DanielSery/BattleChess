@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using BattleChess3.UI.Services;
 
@@ -33,6 +34,13 @@ public partial class NotificationControl : UserControl
     {
         if (string.IsNullOrEmpty(e.Content))
             return;
+
+        if (e.Type == ShownMessage.MessageType.Info)
+            NotificationButton.Background = (Brush)Application.Current.Resources["ButtonBlueBackground"];
+        else if (e.Type == ShownMessage.MessageType.Error)
+            NotificationButton.Background = (Brush)Application.Current.Resources["ButtonOrangeBackground"];
+        else if (e.Type == ShownMessage.MessageType.Warning)
+            NotificationButton.Background = (Brush)Application.Current.Resources["ButtonRedBackground"];
         
         NotificationButton.Visibility = Visibility.Visible;
         NotificationButton.Opacity = 1;

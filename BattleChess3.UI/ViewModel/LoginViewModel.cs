@@ -24,6 +24,7 @@ public class LoginViewModel : ViewModelBase
         _loadingService = loadingService;
         
         LoginCommand = new AsyncRelayCommand(LogIn);
+        RequestEndCommand = new RelayCommand(CallRequestEnd);
     }
 
     private bool _isLoggedIn;
@@ -43,6 +44,7 @@ public class LoginViewModel : ViewModelBase
     public SecureString SecurePassword { get; set; } = new SecureString();
     
     public AsyncRelayCommand LoginCommand { get; }
+    public RelayCommand RequestEndCommand { get; }
 
     public event EventHandler? RequestEndLogin;
     
@@ -88,5 +90,10 @@ public class LoginViewModel : ViewModelBase
         {
             Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); // Clear memory
         }
+    }
+
+    private void CallRequestEnd()
+    {
+        RequestEndLogin?.Invoke(this, EventArgs.Empty);
     }
 }

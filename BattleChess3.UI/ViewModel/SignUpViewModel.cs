@@ -24,7 +24,9 @@ public class SignUpViewModel : ViewModelBase
         _loadingService = loadingService;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
+        RequestEndCommand = new RelayCommand(CallRequestEnd);
     }
+
 
     private string _name =  string.Empty;
     public string Name
@@ -35,7 +37,9 @@ public class SignUpViewModel : ViewModelBase
 
     public SecureString SecurePassword1 { get; set; } = new SecureString();
     public SecureString SecurePassword2 { get; set; } = new SecureString();
+    
     public AsyncRelayCommand SignUpCommand { get; }
+    public RelayCommand RequestEndCommand { get; }
 
     public event EventHandler? RequestEndSignUp;
 
@@ -74,6 +78,7 @@ public class SignUpViewModel : ViewModelBase
         else
         {
             RequestEndSignUp?.Invoke(this, EventArgs.Empty);
+            _notificationService.ShowMessage(ShownMessage.MessageType.Info, $"Created user {Name}");
         }
     }
 
@@ -95,5 +100,10 @@ public class SignUpViewModel : ViewModelBase
         {
             Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); // Clear memory
         }
+    }
+
+    private void CallRequestEnd()
+    {
+        RequestEndSignUp?.Invoke(this, EventArgs.Empty);
     }
 }
