@@ -1,10 +1,7 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using BattleChess3.UI.ViewModel;
 
 namespace BattleChess3.UI.Views;
 

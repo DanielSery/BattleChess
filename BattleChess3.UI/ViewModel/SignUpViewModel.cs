@@ -12,13 +12,16 @@ public class SignUpViewModel : ViewModelBase
 {
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly IMessageShowService _messageShowService;
+    private readonly ILoadingService _loadingService;
     
     public SignUpViewModel(
         IMultiplayerPlayerService multiplayerPlayerService,
-        IMessageShowService messageShowService)
+        IMessageShowService messageShowService,
+        ILoadingService loadingService)
     {
         _multiplayerPlayerService = multiplayerPlayerService;
         _messageShowService = messageShowService;
+        _loadingService = loadingService;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
     }
@@ -50,6 +53,7 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
         
+        using var loading = _loadingService.StartLoadingOperation();
         var salt = RandomNumberGenerator.GetBytes(16); // Generate 16-byte salt
         var stringSalt = Convert.ToBase64String(salt);
         
@@ -62,7 +66,7 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
 
-        var result = await _multiplayerPlayerService.TrySignUpAsync(Name, hash, stringSalt);
+        var result = await _multiplayerPlayerService.TrySignUpAsync(Name, hash, stringSalt, loading.CancellationToken);
         if (result.IsFailed)
         {
             _messageShowService.ShowMessage(result.Errors.First().Message);

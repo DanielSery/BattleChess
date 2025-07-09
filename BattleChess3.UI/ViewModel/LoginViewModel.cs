@@ -12,13 +12,16 @@ public class LoginViewModel : ViewModelBase
 {
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly IMessageShowService _messageShowService;
+    private readonly ILoadingService _loadingService;
     
     public LoginViewModel(
         IMultiplayerPlayerService multiplayerPlayerService,
-        IMessageShowService messageShowService)
+        IMessageShowService messageShowService,
+        ILoadingService loadingService)
     {
         _multiplayerPlayerService = multiplayerPlayerService;
         _messageShowService = messageShowService;
+        _loadingService = loadingService;
         
         LoginCommand = new AsyncRelayCommand(LogIn);
     }
@@ -45,7 +48,8 @@ public class LoginViewModel : ViewModelBase
     
     private async Task LogIn()
     {
-        var saltResult = await _multiplayerPlayerService.GetUserSaltAsync(Name);
+        using var loading = _loadingService.StartLoadingOperation();
+        var saltResult = await _multiplayerPlayerService.GetUserSaltAsync(Name, loading.CancellationToken);
         if (saltResult.IsFailed)
         {
             _messageShowService.ShowMessage("Invalid username or password");
@@ -53,7 +57,7 @@ public class LoginViewModel : ViewModelBase
         }
         
         var hash = GetHash(SecurePassword, saltResult.Value);
-        var result = await _multiplayerPlayerService.TryLoginAsync(Name, hash);
+        var result = await _multiplayerPlayerService.TryLoginAsync(Name, hash, loading.CancellationToken);
         if (result.IsFailed)
         {
             _messageShowService.ShowMessage(result.Errors.First().Message);

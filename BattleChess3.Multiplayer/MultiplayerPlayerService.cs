@@ -21,14 +21,14 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public Player? LoggedInPlayer { get; private set; }
 
     /// <inheritdoc />
-    public Task<List<PublicPlayerData>> GetLeaderboard()
+    public Task<List<PublicPlayerData>> GetLeaderboard(CancellationToken cancellationToken)
     {
         return LoggedInPlayer is null 
-            ? GetTopLeaderboard() 
-            : GetUserLeaderboard(LoggedInPlayer.Id);
+            ? GetTopLeaderboard(cancellationToken) 
+            : GetUserLeaderboard(LoggedInPlayer.Id, cancellationToken);
     }
 
-    private async Task<List<PublicPlayerData>> GetTopLeaderboard()
+    private async Task<List<PublicPlayerData>> GetTopLeaderboard(CancellationToken cancellationToken)
     {
         var bsonCollection = _playersCollection.Database
             .GetCollection<BsonDocument>(_playersCollection.CollectionNamespace.CollectionName);
@@ -41,7 +41,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             }))
             .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$limit", 100));
         
-        var topDocs = await bsonCollection.Aggregate(pipeline).ToListAsync();
+        var topDocs = await bsonCollection
+            .Aggregate(pipeline, cancellationToken: cancellationToken)
+            .ToListAsync(cancellationToken: cancellationToken);
         return topDocs.Select(doc => new PublicPlayerData
         {
             Rank = doc["Rank"].AsInt32,
@@ -50,7 +52,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }).ToList();
     }
 
-    private async Task<List<PublicPlayerData>> GetUserLeaderboard(string playerId)
+    private async Task<List<PublicPlayerData>> GetUserLeaderboard(string playerId, CancellationToken cancellationToken)
     {
         var bsonCollection = _playersCollection.Database
             .GetCollection<BsonDocument>(_playersCollection.CollectionNamespace.CollectionName);
@@ -66,7 +68,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument("_id", targetId)))
             .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$project", new BsonDocument("Rank", 1)));
 
-        var rankDoc = await bsonCollection.Aggregate(rankPipeline).FirstOrDefaultAsync();
+        var rankDoc = await bsonCollection
+            .Aggregate(rankPipeline, cancellationToken: cancellationToken)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
         if (rankDoc == null)
             return [];
 
@@ -84,7 +88,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 { "Rank", new BsonDocument("$gte", minRank).Add("$lte", maxRank) }
             }));
 
-        var leaderboardDocs = await bsonCollection.Aggregate(leaderboardPipeline).ToListAsync();
+        var leaderboardDocs = await bsonCollection
+            .Aggregate(leaderboardPipeline, cancellationToken: cancellationToken)
+            .ToListAsync(cancellationToken: cancellationToken);
         return leaderboardDocs.Select(doc => new PublicPlayerData
         {
             Rank = doc["Rank"].AsInt32,
@@ -93,7 +99,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }).ToList();
     }
 
-    public Task<Result<string>> GetUserSaltAsync(string name)
+    public Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -103,7 +109,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 {
                     Console.WriteLine($"Getting user salt with name: {name}");
                     var filter = Builders<Player>.Filter.Eq("Name", name);
-                    var foundPlayers = await _playersCollection.FindAsync(filter);
+                    var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     var foundPlayer = foundPlayers.FirstOrDefault();
                     Console.WriteLine($"Found user with name: {foundPlayer.Name}");
                     return Result.Ok(foundPlayer.PasswordSalt);
@@ -117,7 +123,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }
     }
 
-    public Task<Result> TryLoginAsync(string name, string hash)
+    public Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -130,7 +136,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                         Builders<Player>.Filter.Eq(g => g.Name, name),
                         Builders<Player>.Filter.Eq(g => g.PasswordHash, hash)
                     );
-                    var foundPlayers = await _playersCollection.FindAsync(filter);
+                    var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     var foundPlayer = foundPlayers.FirstOrDefault();
                     if (foundPlayer is null)
                     {
@@ -152,7 +158,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }
     }
 
-    public Task<Result> TrySignUpAsync(string name, string hash, string salt)
+    public Task<Result> TrySignUpAsync(string name, string hash, string salt, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -162,8 +168,8 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 {
                     Console.WriteLine($"Getting users with name: {name}");
                     var filter = Builders<Player>.Filter.Eq("Name", name);
-                    var foundPlayers = await _playersCollection.FindAsync(filter);
-                    if (await foundPlayers.AnyAsync())
+                    var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
+                    if (await foundPlayers.AnyAsync(cancellationToken: cancellationToken))
                     {
                         Console.WriteLine($"Found user with name: {name}");
                         return Result.Fail($"User with name {name} already exists");
@@ -179,7 +185,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                         UnlockedFigures = new byte[16]
                     };
 
-                    await _playersCollection.InsertOneAsync(player);
+                    await _playersCollection.InsertOneAsync(player, cancellationToken: cancellationToken);
                     return Result.Ok();
                 }
                 catch (Exception ex)

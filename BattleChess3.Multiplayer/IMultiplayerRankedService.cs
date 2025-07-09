@@ -6,5 +6,5 @@ namespace BattleChess3.Multiplayer;
 
 public interface IMultiplayerRankedService
 {
-    Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoins gameSearchJoin)>> FindRankedGameAsync(MapBlueprint myMap);
+    Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoins gameSearchJoin)>> FindRankedGameAsync(MapBlueprint myMap, CancellationToken cancellationToken);
 }

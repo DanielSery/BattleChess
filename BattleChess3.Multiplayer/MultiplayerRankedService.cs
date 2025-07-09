@@ -35,7 +35,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             : -1;
     }
 
-    public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoins gameSearchJoin)>> FindRankedGameAsync(MapBlueprint myMap)
+    public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoins gameSearchJoin)>> FindRankedGameAsync(MapBlueprint myMap, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -53,10 +53,10 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                 var myMapData = GetMapData(myMap);
                 try
                 {
-                    var closestGameSearch = await GetClosestGameSearchAsync(currentPlayer);
+                    var closestGameSearch = await GetClosestGameSearchAsync(currentPlayer, cancellationToken);
                     while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= 50)
                     {
-                        var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData);
+                        var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
                         if (joinResult.IsSuccess)
                         {
                             return Result.Ok<(bool, RankedGame, RankedGameJoins)>((false, closestGameSearch, joinResult.Value));
@@ -64,15 +64,16 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                     }
                     
                     var eloDifference = 50;
-                    var createdGameSearch = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting);
+                    var createdGameSearch = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
                     while (true)
                     {
-                        var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 30);
+                        var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 30, cancellationToken);
                         if (waitResult == WaitResult.GameJoin)
                         {
                             Console.WriteLine("Confirming game join");
                             var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, createdGameSearch.Id);
                             var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, foundSearchJoin!.Id);
+                            // ReSharper disable once MethodSupportsCancellation
                             var result = await _rankedGamesCollection.UpdateOneAsync(filter, update);
                             if (!result.IsAcknowledged)
                             {
@@ -84,12 +85,13 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                         }
                         else if (waitResult == WaitResult.GameSearch)
                         {
-                            var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData);
+                            var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
                             if (joinResult.IsSuccess)
                             {
                                 Console.WriteLine("Confirming game join");
                                 var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, createdGameSearch.Id);
                                 var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, joinResult.Value!.Id);
+                                // ReSharper disable once MethodSupportsCancellation
                                 var result = await _rankedGamesCollection.UpdateOneAsync(filter, update);
                                 if (!result.IsAcknowledged)
                                 {
@@ -127,9 +129,11 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         string gameId,
         short targetElo,
         int eloDifference,
-        int timeoutSeconds)
+        int timeoutSeconds,
+        CancellationToken cancellationToken)
     {
-        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+        var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+        var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
 
         var searchesPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
             .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
@@ -185,9 +189,10 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return (WaitResult.Timeout, null, null);
     }
     
-    public async Task<RankedGame?> WaitForGameAccept(string lobbyId, int timeoutSeconds = 30)
+    public async Task<RankedGame?> WaitForGameAccept(string lobbyId, int timeoutSeconds, CancellationToken cancellationToken)
     {
-        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+        using var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+        using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
         
         var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
             .Match(change =>
@@ -214,7 +219,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return null;
     }
 
-    private async Task<RankedGame> CreateGameSearchAsync(byte[] myMapData, Player currentPlayer, bool isHostStarting)
+    private async Task<RankedGame> CreateGameSearchAsync(byte[] myMapData, Player currentPlayer, bool isHostStarting, CancellationToken cancellationToken)
     {
         Console.WriteLine("Creating game request");
         var game = new RankedGame()
@@ -225,12 +230,12 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             Version = _version,
             IsHostStarting = isHostStarting,
         };
-        await _rankedGamesCollection.InsertOneAsync(game);
+        await _rankedGamesCollection.InsertOneAsync(game, cancellationToken: cancellationToken);
         Console.WriteLine($"Created game request: {game.Id}");
         return game;
     }
 
-    private async Task<Result<RankedGameJoins>> TryToJoinGameAsync(RankedGame rankedGame, Player currentPlayer, byte[] myMapData)
+    private async Task<Result<RankedGameJoins>> TryToJoinGameAsync(RankedGame rankedGame, Player currentPlayer, byte[] myMapData, CancellationToken cancellationToken)
     {
         Console.WriteLine($"Creating join game: {rankedGame.Id}");
         var gameJoin = new RankedGameJoins()
@@ -239,11 +244,11 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             PlayerId = currentPlayer.Id,
             Map = myMapData,
         };
-        await _rankedGameJoinsCollection.InsertOneAsync(gameJoin);
+        await _rankedGameJoinsCollection.InsertOneAsync(gameJoin, cancellationToken: cancellationToken);
         Console.WriteLine($"Created join request with id: {rankedGame.Id}"); 
                         
         Console.WriteLine("Waiting for join request confirmation");
-        var lobbyUpdate = await WaitForGameAccept(rankedGame.Id);
+        var lobbyUpdate = await WaitForGameAccept(rankedGame.Id, 30, cancellationToken);
         if (lobbyUpdate is null || lobbyUpdate.JoinedId != gameJoin.Id)
         {
             Console.WriteLine("The lobby is already full");
@@ -253,7 +258,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return Result.Ok(gameJoin);
     }
 
-    private async Task<RankedGame?> GetClosestGameSearchAsync(Player currentPlayer)
+    private async Task<RankedGame?> GetClosestGameSearchAsync(Player currentPlayer, CancellationToken cancellationToken)
     {
         Console.WriteLine($"Searching for ranked game with elo: {currentPlayer.Elo - 50}-{currentPlayer.Elo + 50}");
         var closestGameSearch = await _rankedGamesCollection.Aggregate()
@@ -266,7 +271,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             .SortBy(x => x.EloDifference)
             .Limit(1)
             .Project(x => x.Lobby)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
         Console.WriteLine($"Closest game search elo: {closestGameSearch?.Elo ?? null}");
         return closestGameSearch;
     }
@@ -284,38 +289,30 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return myMapData;
     }
 
-    public Task<Result> DeleteGameAsync(string gameId)
+    private async Task DeleteGameAsync(string gameId)
     {
-        lock (_scheduler.SyncLock)
+        try
         {
-            return _scheduler.QueueTask(async () =>
-            {
-                try
-                {
-                    Console.WriteLine("Deleting GameJoins");
-                    var filter = Builders<RankedGameJoins>.Filter.Eq(gj => gj.GameId, gameId);
-                    var result = await _rankedGameJoinsCollection.DeleteManyAsync(filter);
-                    Console.WriteLine($"Deleted GameJoins: {result.DeletedCount}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
+            Console.WriteLine("Deleting GameJoins");
+            var filter = Builders<RankedGameJoins>.Filter.Eq(gj => gj.GameId, gameId);
+            var result = await _rankedGameJoinsCollection.DeleteManyAsync(filter);
+            Console.WriteLine($"Deleted GameJoins: {result.DeletedCount}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
                 
-                try
-                {
-                    Console.WriteLine("Deleting GameLobbies");
-                    var filter = Builders<RankedGame>.Filter.Eq(gj => gj.Id, gameId);
-                    var result = await _rankedGamesCollection.DeleteManyAsync(filter);
-                    Console.WriteLine($"Deleted GameLobbies: {result.DeletedCount}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-
-                return Result.Ok();
-            });
+        try
+        {
+            Console.WriteLine("Deleting GameLobbies");
+            var filter = Builders<RankedGame>.Filter.Eq(gj => gj.Id, gameId);
+            var result = await _rankedGamesCollection.DeleteManyAsync(filter);
+            Console.WriteLine($"Deleted GameLobbies: {result.DeletedCount}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
         }
     }
 }

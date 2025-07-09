@@ -7,8 +7,8 @@ public interface IMultiplayerPlayerService
 {
     Player? LoggedInPlayer { get; }
 
-    Task<List<PublicPlayerData>> GetLeaderboard();
-    Task<Result<string>> GetUserSaltAsync(string name);
-    Task<Result> TryLoginAsync(string name, string hash);
-    Task<Result> TrySignUpAsync(string name, string hash, string salt);
+    Task<List<PublicPlayerData>> GetLeaderboard(CancellationToken cancellationToken);
+    Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken);
+    Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken);
+    Task<Result> TrySignUpAsync(string name, string hash, string salt, CancellationToken cancellationToken);
 }

@@ -36,6 +36,9 @@ public static class DependenciesBuilder
         builder.RegisterType<MessageShowService>()
             .As<IMessageShowService>()
             .SingleInstance();
+        builder.RegisterType<LoadingService>()
+            .As<ILoadingService>()
+            .SingleInstance();
         
         builder.RegisterType<MapsViewModel>()
             .SingleInstance();

@@ -6,12 +6,18 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
 {
     private Task? _runningTask;
     private readonly ConcurrentQueue<IScheduledTask> _queuedTasks = new ConcurrentQueue<IScheduledTask>();
-    
+    private int _currentThreadId;
+
     public object SyncLock { get; } = new object();
 
     /// <inheritdoc />
     public Task<T> QueueTask<T>(Func<Task<T>> getTask)
     {
+        if (_currentThreadId == Environment.CurrentManagedThreadId)
+        {
+            return getTask.Invoke();
+        }
+        
         lock (SyncLock)
         {
             var scheduledTask = new ScheduledTask<T>(getTask);
@@ -23,6 +29,11 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
 
     public Task QueueTask(Func<Task> getTask)
     {
+        if (_currentThreadId == Environment.CurrentManagedThreadId)
+        {
+            return getTask.Invoke();
+        }
+
         lock (SyncLock)
         {
             var scheduledTask = new ScheduledTask(getTask);
@@ -34,6 +45,7 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
 
     private async Task ExecuteQueue()
     {
+        _currentThreadId = Environment.CurrentManagedThreadId;
         while (TryGetTaskToRun(out var currentScheduledTask))
         {
             await currentScheduledTask!.GetExecutedTask();

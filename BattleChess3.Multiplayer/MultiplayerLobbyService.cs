@@ -37,7 +37,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             : -1;
     }
 
-    public Task<List<PublicLobbyData>> GetPublicLobbiesAsync()
+    public Task<List<PublicLobbyData>> GetPublicLobbiesAsync(CancellationToken cancellationToken)
     { 
         return _gameLobbyCollection.Aggregate()
             .Match(l => l.Version == _version && string.IsNullOrEmpty(l.JoinedId))
@@ -48,7 +48,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                 Elo = doc.Elo,
                 Locked = (doc.PasswordHash.Length > 0) ? "True" : "False",
             })
-            .ToListAsync();
+            .ToListAsync(cancellationToken: cancellationToken);
     }
     
     public Task WatchLobbiesAsync(
@@ -142,7 +142,8 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         string password,
-        MapBlueprint myMap)
+        MapBlueprint myMap,
+        CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -159,8 +160,8 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
                         Builders<GameLobby>.Filter.Eq(g => g.Version, _version)
                     );
-                    var foundGames = await _gameLobbyCollection.FindAsync(filter);
-                    if (await foundGames.AnyAsync())
+                    var foundGames = await _gameLobbyCollection.FindAsync(filter, cancellationToken: cancellationToken);
+                    if (await foundGames.AnyAsync(cancellationToken: cancellationToken))
                     {
                         return Result.Fail<GameLobby>("Lobby already exists");
                     }
@@ -182,7 +183,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         Version = _version,
                         IsHostStarting = isHostStarting,
                     };
-                    await _gameLobbyCollection.InsertOneAsync(game);
+                    await _gameLobbyCollection.InsertOneAsync(game, cancellationToken: cancellationToken);
                     Console.WriteLine($"Created game request: {game.Id}");
                     return Result.Ok(game);
                 }
@@ -195,7 +196,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         }
     }
 
-    public Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby)
+    public Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -204,7 +205,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                 try
                 {
                     Console.WriteLine($"Waiting for join request for game: {lobby.Id}");
-                    var joinRequest = await WaitForGameJoinAsync(lobby.Id, 5 * 60);
+                    var joinRequest = await WaitForGameJoinAsync(lobby.Id, cancellationToken);
                     if (joinRequest is null)
                     {
                         await DeleteGameAsync(lobby.Id);
@@ -215,7 +216,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     Console.WriteLine("Confirming game join");
                     var filter = Builders<GameLobby>.Filter.Eq(l => l.Id, lobby.Id);
                     var update = Builders<GameLobby>.Update.Set(x => x.JoinedId, joinRequest.Id);
-                    var result = await _gameLobbyCollection.UpdateOneAsync(filter, update);
+                    var result = await _gameLobbyCollection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
                     if (!result.IsAcknowledged)
                     {
                         await DeleteGameAsync(lobby.Id);
@@ -226,7 +227,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                 }
                 catch (Exception ex)
                 {
-                    await DeleteGameAsync(lobby.Id);
+                    await DeleteGameAsync(lobby.Id);       
                     Console.WriteLine($"Error: {ex}");
                     return Result.Fail("Failed to wait for joining player");
                 } 
@@ -237,7 +238,8 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
         string password,
-        MapBlueprint myMap)
+        MapBlueprint myMap,
+        CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -250,7 +252,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
                         Builders<GameLobby>.Filter.Eq(g => g.Version, _version)
                     );
-                    var foundGames = await _gameLobbyCollection.FindAsync(filter);
+                    var foundGames = await _gameLobbyCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     var gameRequest = foundGames.FirstOrDefault();
                     Console.WriteLine($"Found lobby with name: {lobbyName}");
 
@@ -268,11 +270,11 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         PlayerId = currentPlayer?.Id ?? null,
                         Map = GetMapData(myMap),
                     };
-                    await _gameJoinsCollection.InsertOneAsync(gameJoin);
+                    await _gameJoinsCollection.InsertOneAsync(gameJoin, cancellationToken: cancellationToken);
                     Console.WriteLine($"Created join request with id: {gameJoin.Id}");
                     
                     Console.WriteLine("Waiting for join request confirmation");
-                    var lobbyUpdate = await WaitForLobbyAccept(gameRequest.Id);
+                    var lobbyUpdate = await WaitForLobbyAccept(gameRequest.Id, cancellationToken);
                     if (lobbyUpdate is null || lobbyUpdate.JoinedId != gameJoin.Id)
                     {
                         return Result.Fail("The lobby is already full");
@@ -290,10 +292,8 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         }
     }
 
-    private async Task<GameLobbyJoin?> WaitForGameJoinAsync(string gameId, int timeoutSeconds = 30)
+    private async Task<GameLobbyJoin?> WaitForGameJoinAsync(string gameId, CancellationToken cancellationToken)
     {
-        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
-
         var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobbyJoin>>()
             .Match(Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter
                 .Eq(cs => cs.FullDocument.GameId, gameId));
@@ -301,13 +301,15 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         using var cursor = await _gameJoinsCollection.WatchAsync(
             pipeline,
             new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationTokenSource.Token
+            cancellationToken
         );
 
-        while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+        while (await cursor.MoveNextAsync(cancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
             foreach (var change in cursor.Current)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 if (change.FullDocument.GameId == gameId)
                 {
                     return change.FullDocument;
@@ -318,10 +320,8 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         return null;
     }
     
-    public async Task<GameLobby?> WaitForLobbyAccept(string lobbyId, int timeoutSeconds = 30)
+    public async Task<GameLobby?> WaitForLobbyAccept(string lobbyId, CancellationToken cancellationToken)
     {
-        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
-        
         var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
             .Match(change =>
                 change.OperationType == ChangeStreamOperationType.Update &&
@@ -331,10 +331,10 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         using var cursor = await _gameLobbyCollection.WatchAsync(
             pipeline,
             new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationTokenSource.Token
+            cancellationToken
         );
 
-        while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+        while (await cursor.MoveNextAsync(cancellationToken))
         {
             foreach (var change in cursor.Current)
             {
@@ -388,38 +388,30 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         }
     }
 
-    public Task<Result> DeleteGameAsync(string gameId)
+    private async Task DeleteGameAsync(string gameId)
     {
-        lock (_scheduler.SyncLock)
+        try
         {
-            return _scheduler.QueueTask(async () =>
-            {
-                try
-                {
-                    Console.WriteLine("Deleting GameJoins");
-                    var filter = Builders<GameLobbyJoin>.Filter.Eq(gj => gj.GameId, gameId);
-                    var result = await _gameJoinsCollection.DeleteManyAsync(filter);
-                    Console.WriteLine($"Deleted GameJoins: {result.DeletedCount}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
+            Console.WriteLine("Deleting GameJoins");
+            var filter = Builders<GameLobbyJoin>.Filter.Eq(gj => gj.GameId, gameId);
+            var result = await _gameJoinsCollection.DeleteManyAsync(filter);
+            Console.WriteLine($"Deleted GameJoins: {result.DeletedCount}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
                 
-                try
-                {
-                    Console.WriteLine("Deleting GameLobbies");
-                    var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
-                    var result = await _gameLobbyCollection.DeleteManyAsync(filter);
-                    Console.WriteLine($"Deleted GameLobbies: {result.DeletedCount}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-
-                return Result.Ok();
-            });
+        try
+        {
+            Console.WriteLine("Deleting GameLobbies");
+            var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
+            var result = await _gameLobbyCollection.DeleteManyAsync(filter);
+            Console.WriteLine($"Deleted GameLobbies: {result.DeletedCount}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
         }
     }
 }

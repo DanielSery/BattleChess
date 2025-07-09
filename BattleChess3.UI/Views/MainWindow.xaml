@@ -31,5 +31,7 @@
         <Border Visibility="{Binding EditorTabSelected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
             <views:EditorControl DataContext="{Binding EditorViewModel}"/>
         </Border>
+        
+        <views:LoadingControl DataContext="{Binding LoadingService}"/>
     </Grid>
 </Window>

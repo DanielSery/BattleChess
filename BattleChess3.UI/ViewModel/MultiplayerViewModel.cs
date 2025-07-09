@@ -9,7 +9,6 @@ using BattleChess3.Multiplayer;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
-using MongoDB.Bson;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
@@ -22,6 +21,7 @@ public class MultiplayerViewModel : ViewModelBase
     private readonly IMessageShowService _messageShowService;
     private readonly BoardViewModel _boardViewModel;
     private readonly LoginViewModel _loginViewModel;
+    private readonly ILoadingService _loadingService;
     
     public MultiplayerViewModel(
         TeamBoardViewModel teamBoardViewModel,
@@ -29,7 +29,8 @@ public class MultiplayerViewModel : ViewModelBase
         IMultiplayerRankedService multiplayerRankedService,
         IMessageShowService messageShowService,
         BoardViewModel boardViewModel,
-        LoginViewModel loginViewModel)
+        LoginViewModel loginViewModel,
+        ILoadingService loadingService)
     {
         _teamBoardViewModel = teamBoardViewModel;
         _multiplayerLobbyService = multiplayerLobbyService;
@@ -37,6 +38,7 @@ public class MultiplayerViewModel : ViewModelBase
         _messageShowService = messageShowService;
         _boardViewModel = boardViewModel;
         _loginViewModel = loginViewModel;
+        _loadingService = loadingService;
         
         RankedGameCommand = new AsyncRelayCommand(FindRankedGame);
         CreateLobbyCommand = new AsyncRelayCommand(CreateLobby);
@@ -80,6 +82,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private async Task FindRankedGame()
     {
+        using var loadingOperation = _loadingService.StartLoadingOperation();
         var myMap = new MapBlueprint
         {
             Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
@@ -90,7 +93,7 @@ public class MultiplayerViewModel : ViewModelBase
             }).ToArray(),
         };
 
-        var request = await _multiplayerRankedService.FindRankedGameAsync(myMap);
+        var request = await _multiplayerRankedService.FindRankedGameAsync(myMap, loadingOperation.CancellationToken);
         if (request.IsFailed)
         {
             _messageShowService.ShowMessage(request.Reasons.First().Message);
@@ -113,6 +116,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private async Task CreateLobby()
     {
+        using var loadingOperation = _loadingService.StartLoadingOperation();
         var myMap = new MapBlueprint
         {
             Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
@@ -126,7 +130,8 @@ public class MultiplayerViewModel : ViewModelBase
         var gameRequestResult = await _multiplayerLobbyService.CreateLobbyAsync(
             Name,
             GetPassword(SecurePassword),
-            myMap);
+            myMap,
+            loadingOperation.CancellationToken);
 
         if (gameRequestResult.IsFailed)
         {
@@ -135,7 +140,7 @@ public class MultiplayerViewModel : ViewModelBase
         }
         var gameRequest = gameRequestResult.Value;
         
-        var gameJoinResult = await _multiplayerLobbyService.WaitForLobbyPlayerAsync(gameRequestResult.Value);
+        var gameJoinResult = await _multiplayerLobbyService.WaitForLobbyPlayerAsync(gameRequestResult.Value, loadingOperation.CancellationToken);
         if (gameJoinResult.IsFailed)
         {
             _messageShowService.ShowMessage(gameJoinResult.Reasons.First().Message);
@@ -150,6 +155,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private async Task JoinLobby()
     {
+        using var loadingOperation = _loadingService.StartLoadingOperation();
         var myMap = new MapBlueprint
         {
             Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
@@ -163,7 +169,8 @@ public class MultiplayerViewModel : ViewModelBase
         var joinedLobbyResult = await _multiplayerLobbyService.JoinLobbyAsync(
             Name,
             GetPassword(SecurePassword),
-            myMap);
+            myMap,
+            loadingOperation.CancellationToken);
         if (joinedLobbyResult.IsFailed)
         {
             _messageShowService.ShowMessage(joinedLobbyResult.Reasons.First().Message);
@@ -255,7 +262,7 @@ public class MultiplayerViewModel : ViewModelBase
         Name = _loginViewModel.Name;
         Task.Run(async () =>
         {
-            var lobbies = new ObservableCollection<PublicLobbyData>(await _multiplayerLobbyService.GetPublicLobbiesAsync());
+            var lobbies = new ObservableCollection<PublicLobbyData>(await _multiplayerLobbyService.GetPublicLobbiesAsync(CancellationToken.None));
             Application.Current.Dispatcher.Invoke(() =>
             {
                 lock (_lobbyLock)

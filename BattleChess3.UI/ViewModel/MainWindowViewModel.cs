@@ -22,7 +22,8 @@ public sealed class MainWindowViewModel : ViewModelBase
         IPlayerService playerService,
         MenuViewModel menuViewModel,
         IMultiplayerGameService multiplayerGameService,
-        IMessageShowService messageShowService)
+        IMessageShowService messageShowService,
+        ILoadingService loadingService)
     {
         _playerService = playerService;
         _multiplayerGameService = multiplayerGameService;
@@ -31,6 +32,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         BoardViewModel = boardViewModel;
         EditorViewModel = editorViewModel;
         MenuViewModel = menuViewModel;
+        LoadingService = loadingService;
 
         _playerService.PlayerWon += PlayerServiceOnPlayerWon;
         EditorViewModel.RequestSwitchToMainView += EditorViewModelOnRequestSwitchToMainView;
@@ -39,7 +41,6 @@ public sealed class MainWindowViewModel : ViewModelBase
         MenuViewModel.RequestSwitchToEditor += MenuViewModelOnRequestSwitchToEditor;
         BoardViewModel.RequestSwitchToGame += BoardViewModelOnRequestSwitchToGame;
     }
-
 
     public bool MenuTabSelected
     {
@@ -62,6 +63,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     public MenuViewModel MenuViewModel { get; }
     public BoardViewModel BoardViewModel { get; }
     public EditorViewModel EditorViewModel { get; }
+    public ILoadingService LoadingService { get; }
 
     private void PlayerServiceOnPlayerWon(object? sender, int e)
     {
