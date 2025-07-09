@@ -518,7 +518,7 @@
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="Padding" Value="10 4"/>
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="2 2 2 4"/>
         <Setter Property="Margin" Value="0 -1 -1 0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>

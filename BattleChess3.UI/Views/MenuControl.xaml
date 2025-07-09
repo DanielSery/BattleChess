@@ -183,7 +183,7 @@
 
                 <Border Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="6" Grid.RowSpan="2" SnapsToDevicePixels="True">
                     <views:TeamBoardControl DataContext="{Binding TeamBoardViewModel}" 
-                                            Opacity="0.85"/>
+                                            Opacity="0.85" IsEnabled="False"/>
                 </Border>
             </Grid>
         </Border>
