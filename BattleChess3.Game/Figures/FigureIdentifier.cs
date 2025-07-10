@@ -18,7 +18,7 @@ public class FigureIdentifier
 
     public FigureIdentifier(Figure figure)
     {
-        PlayerId = figure.Owner.Id;
+        PlayerId = figure.Owner.Index;
         FigureId = ((IFigureType)figure).FigureId;
         IsKing = figure.IsKing;
     }
@@ -30,7 +30,7 @@ public class FigureIdentifier
         IsKing = isKing;
     }
 
-    public int PlayerId { get; set; } = Player.Neutral.Id;
+    public int PlayerId { get; set; } = Player.Neutral.Index;
     public int FigureId { get; set; } = ((IFigureType)NoneFigureType.Instance).FigureId;
     public bool IsKing { get; set; }
 

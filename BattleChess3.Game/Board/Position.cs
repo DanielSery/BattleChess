@@ -92,7 +92,7 @@ public readonly struct Position : IEquatable<Position>
     }
 
     public Position GetPlayerPOVPosition(in Player currentPlayer)
-        => GetPlayerPOVPosition(currentPlayer.Id);
+        => GetPlayerPOVPosition(currentPlayer.Index);
 
     public void Deconstruct(out int x, out int y)
     {

@@ -30,7 +30,7 @@ public class Figure : IFigure, IFigureType, INotifyPropertyChanged
     public IFigureType Type { get; }
     public bool IsKing { get; }
     public int FigureValue => Type.FigureValue;
-    public Uri ImageUri => Type.ImageUris[Owner.Id];
+    public Uri ImageUri => Type.ImageUris[Owner.Index];
     public int FigureId => Type.FigureId;
     public string DisplayName => Type.DisplayName;
     public string BaseDescription => Type.BaseDescription;
@@ -46,7 +46,7 @@ public class Figure : IFigure, IFigureType, INotifyPropertyChanged
 
     public override string ToString()
     {
-        return $"{Type.DisplayName}:{Owner.Id}";
+        return $"{Type.DisplayName}:{Owner.Index}";
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

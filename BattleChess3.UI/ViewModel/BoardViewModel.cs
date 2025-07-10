@@ -35,7 +35,7 @@ public sealed class BoardViewModel : ViewModelBase
             .ToArray();
         Board = new Board(Tiles.Cast<ITile>().ToArray());
         
-        _mapLoader.LoadMap(Board, MapBlueprint.Empty);
+        SinglePlayerLoadMap(MapBlueprint.EmptyTeam);
         _multiplayerGameService.RequestPlayMove += MultiplayerGameServiceOnRequestPlayMove;
     }
 
@@ -99,14 +99,25 @@ public sealed class BoardViewModel : ViewModelBase
 
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
-        _playerService.InitializePlayers(map.StartingPlayer, false);
+        _playerService.InitializePlayers(
+            new Player(null, "Player1", null, 1),
+            new Player(null, "Player2", null, 2),
+            map.StartingPlayer, false, false);
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
-    public void MultiplayerLoadMap(MultiplayerGameType gameType, string? gameId, MapBlueprint map)
+    public void MultiplayerLoadMap(
+        MultiplayerGameType gameType, 
+        string? gameId, 
+        Player player1,
+        Player player2,
+        MapBlueprint map, 
+        bool hasTimer)
     {
-        _playerService.InitializePlayers(map.StartingPlayer, true);
+        _playerService.InitializePlayers(
+            player1, player2,
+            map.StartingPlayer, true, hasTimer);
         _mapLoader.LoadMap(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
         
@@ -123,7 +134,8 @@ public sealed class BoardViewModel : ViewModelBase
         
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
-            _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position);
+            _playerService.StopTimer();
+            _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position, _playerService.TimeSpent);
             clickedTile.PossibleAction.Action.Invoke();
             SelectedTile = NoneTileViewModel.Instance;
             _playerService.NextTurn();
@@ -211,6 +223,7 @@ public sealed class BoardViewModel : ViewModelBase
         SelectedTile = fromTile;
         SetPossibleActions(fromTile, true);
         
+        _playerService.StopTimer();
         var toTile = Tiles[e.to.Index];
         toTile.PossibleAction.Action.Invoke();
         SelectedTile = NoneTileViewModel.Instance;

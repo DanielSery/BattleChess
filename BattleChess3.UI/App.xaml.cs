@@ -15,6 +15,6 @@ public partial class App
     {
         // new DatabaseClearer().ClearDatabase();
         DependenciesBuilder.Initialize();
-        // AllocConsole();
+        AllocConsole();
     }
 }

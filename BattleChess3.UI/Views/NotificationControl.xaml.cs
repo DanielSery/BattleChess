@@ -6,7 +6,7 @@ using BattleChess3.UI.Services;
 
 namespace BattleChess3.UI.Views;
 
-public partial class NotificationControl : UserControl
+public partial class NotificationControl
 {
     public NotificationControl()
     {
@@ -35,34 +35,45 @@ public partial class NotificationControl : UserControl
         if (string.IsNullOrEmpty(e.Content))
             return;
 
-        if (e.Type == ShownMessage.MessageType.Info)
-            NotificationButton.Background = (Brush)Application.Current.Resources["ButtonBlueBackground"];
-        else if (e.Type == ShownMessage.MessageType.Error)
-            NotificationButton.Background = (Brush)Application.Current.Resources["ButtonOrangeBackground"];
-        else if (e.Type == ShownMessage.MessageType.Warning)
-            NotificationButton.Background = (Brush)Application.Current.Resources["ButtonRedBackground"];
+        if (NotificationButton.Visibility == Visibility.Visible)
+        {
+            await Task.Delay(4000);
+        }
+
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            NotificationButton.Background = e.Type switch
+            {
+                ShownMessage.MessageType.Info => (Brush)Application.Current.Resources["ButtonBlueBackground"],
+                ShownMessage.MessageType.Error => (Brush)Application.Current.Resources["ButtonOrangeBackground"],
+                ShownMessage.MessageType.Warning => (Brush)Application.Current.Resources["ButtonRedBackground"],
+                _ => NotificationButton.Background
+            };
+            NotificationButton.Opacity = 1;
+            NotificationTextBlock.Text = e.Content;
+            NotificationButton.Visibility = Visibility.Visible;
+        });
+
+        await Task.Delay(3000);
         
-        NotificationButton.Visibility = Visibility.Visible;
-        NotificationButton.Opacity = 1;
-        NotificationTextBlock.Text = e.Content;
-
-        await Task.Delay(1000);
-
-        var fadeOut = new DoubleAnimation
+        Application.Current.Dispatcher.Invoke(() =>
         {
-            From = 1,
-            To = 0,
-            Duration = TimeSpan.FromSeconds(0.5),
-            EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseIn },
-            FillBehavior = FillBehavior.Stop
-        };
+            var fadeOut = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(0.5),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseIn },
+                FillBehavior = FillBehavior.Stop
+            };
 
-        fadeOut.Completed += (_, _) =>
-        {
-            NotificationButton.Visibility = Visibility.Collapsed;
-            NotificationButton.Opacity = 1; // Reset for next time
-        };
-
-        NotificationButton.BeginAnimation(OpacityProperty, fadeOut);
+            fadeOut.Completed += (_, _) =>
+            {
+                NotificationButton.Visibility = Visibility.Collapsed;
+                NotificationButton.Opacity = 1; // Reset for next time
+            };
+            
+            NotificationButton.BeginAnimation(OpacityProperty, fadeOut);
+        });
     }
 }

@@ -65,22 +65,18 @@ public sealed class MainWindowViewModel : ViewModelBase
     public ILoadingService LoadingService { get; }
     public INotificationService NotificationService { get; }
 
-    private void PlayerServiceOnPlayerWon(object? sender, int e)
+    private void PlayerServiceOnPlayerWon(object? sender, (Player won, Player lost) e)
     {
-        if (e == 1)
-        {
-            var result = _multiplayerGameService.HandleWinAsync().Result;
-            if (result.IsFailed)
-            {
-                NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
-            }
-        }
-        // var gameId = _multiplayerGameService.RankedGameId;
-        // _multiplayerGameService.DeleteGame(gameId).Wait();
-        // _multiplayerLobbyService.DeleteGameAsync(gameId).Wait();
+        NotificationService.ShowMessage(ShownMessage.MessageType.Info, $"{e.won.Name} player won!");
         
-        var playerColor = e == 1 ? "Red" : "Blue";
-        MessageBox.Show($"{playerColor} player won!", "Player won");
+        var result = _multiplayerGameService.HandleWinAsync(e.won, e.lost).Result;
+        if (result.IsFailed)
+        {
+            NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
+            return;
+        }
+        
+        NotificationService.ShowMessage(ShownMessage.MessageType.Info, result.Value);
     }
 
     private void EditorViewModelOnRequestSwitchToMainView(object? sender, EventArgs e)

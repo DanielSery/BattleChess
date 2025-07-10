@@ -5,11 +5,12 @@ public interface IPlayerService
     /// <summary>
     /// Occurs when any player wins the game.
     /// </summary>
-    public event EventHandler<int> PlayerWon;
+    public event EventHandler<(Player won, Player lost)> PlayerWon;
     
     bool CanMove { get; }
     
     bool IsWaitingForMove { get; }
+    TimeSpan TimeSpent { get; }
     
     /// <summary>
     ///     Gets current player.
@@ -24,10 +25,12 @@ public interface IPlayerService
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void InitializePlayers(in int currentPlayer, in bool multiplayer);
+    void InitializePlayers(Player player1, Player player2, int currentPlayerId, bool multiplayer, bool hasTimer);
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayer" />.
     /// </summary>
     void NextTurn();
+
+    void StopTimer();
 }

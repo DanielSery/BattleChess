@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BattleChess3.Multiplayer.Tables;
 
-public class Player
+public class RegisteredPlayer
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

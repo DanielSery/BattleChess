@@ -1,4 +1,5 @@
 ﻿using BattleChess3.Game.Board;
+using BattleChess3.Game.Players;
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
 using MongoDB.Bson;
@@ -11,9 +12,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     private readonly IMultiplayerScheduler _scheduler;
     
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
-    private readonly IMongoCollection<RankedGame> _rankedGamesCollection;
-    private readonly IMongoCollection<RankedGameJoins> _rankedGameJoinsCollection;
-    private readonly IMongoCollection<Player> _playersCollection;
+    private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
 
     public MultiplayerGameService(
         IMultiplayerScheduler scheduler)
@@ -23,9 +22,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         var client = new MongoClient(DbSecrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
-        _rankedGamesCollection = database.GetCollection<RankedGame>("RankedGames");
-        _rankedGameJoinsCollection = database.GetCollection<RankedGameJoins>("RankedGameJoins");
-        _playersCollection = database.GetCollection<Player>("Players");
+        _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
     }
 
     public event EventHandler<(Position, Position)>? RequestPlayMove;
@@ -41,12 +38,12 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         TurnId = null;
     }
 
-    public Task<Result> HandleWinAsync()
+    public Task<Result<string?>> HandleWinAsync(Player won, Player lost)
     {
         lock (_scheduler.SyncLock)
         {
             if (GameId is null)
-                return Task.FromResult(Result.Fail("Not in game"));
+                return Task.FromResult(Result.Fail<string?>("Not in game"));
         
             return _scheduler.QueueTask(async () =>
             {
@@ -54,67 +51,51 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                 {
                     if (GameId is null || !GameType.HasFlag(MultiplayerGameType.Ranked))
                     {
-                        return Result.Ok();
+                        return Result.Ok<string?>(null);
                     }
                     
-                    Console.WriteLine($"Searching for game with id: {GameId}");
-                    var filter = Builders<RankedGame>.Filter.Eq(g => g.Id, GameId);
-                    var foundGames = await _rankedGamesCollection.FindAsync(filter);
-                    var foundGame = foundGames.FirstOrDefault();
-                    if (foundGame is null)
+                    Console.WriteLine($"Searching for winning player with id: {won.PlayerId}");
+                    var winningPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, won.PlayerId);
+                    var winningPlayers = await _playersCollection.FindAsync(winningPlayerFilter);
+                    var winningPlayer = winningPlayers.FirstOrDefault();
+                    if (winningPlayer is null)
                     {
-                        return Result.Fail("Could not find game");
+                        return Result.Fail("Could not find winning player");
                     }
-                    Console.WriteLine($"Found game with id: {foundGame.Id}");
+                    Console.WriteLine($"Found winning player with id: {winningPlayer.Id}");
                     
-                    Console.WriteLine($"Searching for game join with id: {foundGame.JoinedId}");
-                    var joinFilter = Builders<RankedGameJoins>.Filter.Eq(g => g.GameId, GameId);
-                    var foundJoins = await _rankedGameJoinsCollection.FindAsync(joinFilter);
-                    var foundJoin = foundJoins.FirstOrDefault();
-                    if (foundJoin is null)
+                    Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
+                    var losingPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
+                    var losingPlayers = await _playersCollection.FindAsync(losingPlayerFilter);
+                    var losingPlayer = losingPlayers.FirstOrDefault();
+                    if (losingPlayer is null)
                     {
-                        return Result.Fail("Could opponent");
+                        return Result.Fail("Could not find losing player");
                     }
-                    Console.WriteLine($"Found game join with id: {foundJoin.Id}");
-                    
-                    Console.WriteLine($"Searching for host player with id: {foundGame.PlayerId}");
-                    var hostPlayerFilter = Builders<Player>.Filter.Eq(g => g.Id, foundGame.PlayerId);
-                    var hostPlayers = await _playersCollection.FindAsync(hostPlayerFilter);
-                    var hostPlayer = hostPlayers.FirstOrDefault();
-                    if (hostPlayer is null)
-                    {
-                        return Result.Fail("Could not find host player");
-                    }
-                    Console.WriteLine($"Found host player with id: {foundJoin.Id}");
-                    
-                    Console.WriteLine($"Searching for guest player with id: {foundJoin.PlayerId}");
-                    var guestPlayerFilter = Builders<Player>.Filter.Eq(g => g.Id, foundJoin.PlayerId);
-                    var guestPlayers = await _playersCollection.FindAsync(guestPlayerFilter);
-                    var guestPlayer = guestPlayers.FirstOrDefault();
-                    if (guestPlayer is null)
-                    {
-                        return Result.Fail("Could not find guest player");
-                    }
-                    Console.WriteLine($"Found guest player with id: {foundJoin.Id}");
+                    Console.WriteLine($"Found guest player with id: {losingPlayer.Id}");
 
-                    UpdateElo(hostPlayer, guestPlayer, GameType.HasFlag(MultiplayerGameType.Host) ? 1d : 0d);
-                    var hostPlayerUpdate = Builders<Player>.Update.Set(x => x.Elo, hostPlayer.Elo);
-                    var hostPlayerResult = await _playersCollection.UpdateOneAsync(hostPlayerFilter, hostPlayerUpdate);
+                    UpdateElo(winningPlayer, losingPlayer, GameType.HasFlag(MultiplayerGameType.Host) ? 1d : 0d);
+                    if (won.Index == 1) // only update database if winning player
+                    {
+                        var hostPlayerUpdate = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, winningPlayer.Elo);
+                        var hostPlayerResult = await _playersCollection.UpdateOneAsync(winningPlayerFilter, hostPlayerUpdate);
                     
-                    var guestPlayerUpdate = Builders<Player>.Update.Set(x => x.Elo, guestPlayer.Elo);
-                    var guestPlayerResult = await _playersCollection.UpdateOneAsync(guestPlayerFilter, guestPlayerUpdate);
+                        var guestPlayerUpdate = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, losingPlayer.Elo);
+                        var guestPlayerResult = await _playersCollection.UpdateOneAsync(losingPlayerFilter, guestPlayerUpdate);
 
-                    if (!guestPlayerResult.IsAcknowledged)
-                    {
-                        return Result.Fail("Could not update guest player");
+                        if (!guestPlayerResult.IsAcknowledged)
+                        {
+                            return Result.Fail("Could not update guest player");
+                        }
+                    
+                        if (!hostPlayerResult.IsAcknowledged)
+                        {
+                            return Result.Fail("Failed to update game confirmation");
+                        }
                     }
                     
-                    if (!hostPlayerResult.IsAcknowledged)
-                    {
-                        return Result.Fail("Failed to update game confirmation");
-                    }
-                    
-                    return Result.Ok();
+                    return Result.Ok<string?>($"{won.Name} gained {winningPlayer.Elo - won.Elo} → {winningPlayer.Elo}\n" +
+                                              $"{lost.Name} lost {losingPlayer.Elo - lost.Elo} → {losingPlayer.Elo}");
                 }
                 catch (Exception ex)
                 {
@@ -124,7 +105,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             });
         }
     }
-    public static void UpdateElo(Player playerA, Player playerB, double resultA, int k = 32)
+    public static void UpdateElo(RegisteredPlayer playerA, RegisteredPlayer playerB, double resultA, int k = 32)
     {
         var expectedA = 1.0 / (1.0 + Math.Pow(10, (playerB.Elo - playerA.Elo) / 400.0));
         var expectedB = 1.0 / (1.0 + Math.Pow(10, (playerA.Elo - playerB.Elo) / 400.0));
@@ -133,7 +114,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         playerB.Elo += (short)(k * ((1 - resultA) - expectedB));
     }
 
-    public Task<Result> PlayedMoveAsync(Position from, Position to)
+    public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent)
     {
         lock (_scheduler.SyncLock)
         {
@@ -149,7 +130,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                     {
                         GameId = GameId,
                         FromIndex = (byte)from.Index,
-                        ToIndex = (byte)to.Index
+                        ToIndex = (byte)to.Index,
+                        TimeSpentInSeconds = timeSpent.TotalSeconds
                     };
                     await _gameTurnsCollection.InsertOneAsync(gameTurn);
                     Console.WriteLine($"Created game turn: {from} to {to}");

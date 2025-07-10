@@ -29,7 +29,7 @@ public sealed class MapsViewModel : ViewModelBase
         {
             Figures = board.Select(x => new FigureIdentifier
             {
-                PlayerId = x.Figure.Owner.Id,
+                PlayerId = x.Figure.Owner.Index,
                 FigureId = ((IFigureType)x.Figure).FigureId,
                 IsKing = x.Figure.IsKing
             }).ToArray(),

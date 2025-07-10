@@ -4,14 +4,20 @@ namespace BattleChess3.Game.Players;
 
 public class Player : IEquatable<Player>
 {
-    public static readonly Player Neutral = new(0);
+    public static readonly Player Neutral = new(null, "Neutral", 0, 0);
 
-    public Player(int id)
+    public Player(string? playerId, string playerName, int? elo, int index)
     {
-        Id = id;
+        Index = index;
+        PlayerId = playerId;
+        Name = playerName;
+        Elo = elo;
     }
 
-    public int Id { get; }
+    public int Index { get; }
+    public string? PlayerId { get; set; }
+    public string Name { get; set; }
+    public int? Elo { get; set; }
     public List<Figure> Figures { get; } = [];
 
     public bool Equals(Player? other)
@@ -26,12 +32,12 @@ public class Player : IEquatable<Player>
             return true;
         }
 
-        return Id == other.Id;
+        return Index == other.Index;
     }
 
     public override string ToString()
     {
-        return $"Player{Id}";
+        return $"Player{Index}";
     }
 
     public override bool Equals(object? obj)
@@ -56,6 +62,6 @@ public class Player : IEquatable<Player>
 
     public override int GetHashCode()
     {
-        return Id;
+        return Index;
     }
 }

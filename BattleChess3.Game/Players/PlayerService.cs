@@ -17,26 +17,30 @@ internal class PlayerService : IPlayerService
     public bool IsWaitingForMove { get; private set; }
 
     /// <inheritdoc />
-    public event EventHandler<int>? PlayerWon;
+    public TimeSpan TimeSpent { get; } = TimeSpan.Zero;
+
+    public bool HasTimer { get; private set; }
+
+    /// <inheritdoc />
+    public event EventHandler<(Player won, Player lost)>? PlayerWon;
     
     public Player CurrentPlayer => GetPlayer(_currentPlayerId);
 
     public Player GetPlayer(int id)
     {
-        if (_players.TryGetValue(id, out var player))
-        {
-            return player;
-        }
-
-        _players[id] = new Player(id);
         return _players[id];
     }
 
-    public void InitializePlayers(in int currentPlayerId, in bool multiplayer)
+    public void InitializePlayers(Player player1, Player player2, int currentPlayerId, bool multiplayer, bool hasTimer)
     {
         _players.Clear();
+        _players[0] = Player.Neutral;
+        _players[1] = player1;
+        _players[2] = player2;
+        
         _currentPlayerId = currentPlayerId;
         _isMultiplayer = multiplayer;
+        HasTimer = hasTimer;
         CanMove = currentPlayerId == 1 || !_isMultiplayer;
         IsWaitingForMove = currentPlayerId == 2 && _isMultiplayer;
     }
@@ -44,23 +48,25 @@ internal class PlayerService : IPlayerService
     public void NextTurn()
     {
         _currentPlayerId = _currentPlayerId == 1 ? 2 : 1;
-        CanMove = CurrentPlayer.Id == 1 || !_isMultiplayer;
-        IsWaitingForMove = CurrentPlayer.Id == 2 && _isMultiplayer;
+        CanMove = CurrentPlayer.Index == 1 || !_isMultiplayer;
+        IsWaitingForMove = CurrentPlayer.Index == 2 && _isMultiplayer;
+        
+        EvaluateLost(_players[1], _players[2]);
+        EvaluateLost(_players[2], _players[1]);
+    }
 
-        foreach (var player in _players)
-        {
-            if (player.Value.Equals(Player.Neutral))
-                continue;
-            
-            if (player.Value.Figures.Count == 0)
-                continue;
+    private void EvaluateLost(Player evaluatedPlayer, Player otherPlayer)
+    {
+        if (evaluatedPlayer.Figures.Any(x => x.IsKing))
+            return;
+        
+        PlayerWon?.Invoke(this, (otherPlayer, evaluatedPlayer));
+        CanMove = false;
+        IsWaitingForMove = false;
+    }
 
-            if (!player.Value.Figures.Any(x => x.IsKing))
-            {
-                PlayerWon?.Invoke(this, 3 - player.Value.Id);
-                CanMove = false;
-                IsWaitingForMove = false;
-            }
-        }
+    /// <inheritdoc />
+    public void StopTimer()
+    {
     }
 }

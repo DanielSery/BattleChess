@@ -1,4 +1,5 @@
-﻿using BattleChess3.Multiplayer.Tables;
+﻿using BattleChess3.Game.Players;
+using BattleChess3.Multiplayer.Tables;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -7,7 +8,7 @@ namespace BattleChess3.Multiplayer;
 
 internal class MultiplayerPlayerService : IMultiplayerPlayerService
 {
-    private readonly IMongoCollection<Player> _playersCollection;
+    private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
     private readonly IMultiplayerScheduler _scheduler;
 
     public MultiplayerPlayerService(IMultiplayerScheduler scheduler)
@@ -15,10 +16,10 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         _scheduler = scheduler;
         var client = new MongoClient(DbSecrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
-        _playersCollection = database.GetCollection<Player>("Players");
+        _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
     }
 
-    public Player? LoggedInPlayer { get; private set; }
+    public RegisteredPlayer? LoggedInPlayer { get; private set; }
 
     /// <inheritdoc />
     public Task<List<PublicPlayerData>> GetLeaderboard(CancellationToken cancellationToken)
@@ -99,6 +100,44 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }).ToList();
     }
 
+    public Result<Player> GetCurrentPlayer()
+    {
+        if (LoggedInPlayer is null)
+            return Result.Fail<Player>("Not logged in");
+        
+        return Result.Ok(new Player(LoggedInPlayer.Id, LoggedInPlayer.Name, LoggedInPlayer.Elo, 1));
+    }
+
+    public Task<Result<Player>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken)
+    {
+        lock (_scheduler.SyncLock)
+        {
+            return _scheduler.QueueTask(async () =>
+            {
+                try
+                {
+                    Console.WriteLine($"Getting player with id: {playerId}");
+                    var filter = Builders<RegisteredPlayer>.Filter.Eq("Id", playerId);
+                    var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
+                    var foundPlayer = foundPlayers.FirstOrDefault();
+                    if (foundPlayer is null)
+                    {
+                        Console.WriteLine("Did not find player");
+                        return Result.Fail("Error getting player");
+                    }
+                    
+                    Console.WriteLine($"Found user with id: {foundPlayer.Id}");
+                    return Result.Ok(new Player(playerId, foundPlayer.Name, foundPlayer.Elo, 2));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex}");
+                    return Result.Fail(ex.Message);
+                }
+            });
+        }
+    }
+
     public Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
@@ -108,7 +147,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 try
                 {
                     Console.WriteLine($"Getting user salt with name: {name}");
-                    var filter = Builders<Player>.Filter.Eq("Name", name);
+                    var filter = Builders<RegisteredPlayer>.Filter.Eq("Name", name);
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     var foundPlayer = foundPlayers.FirstOrDefault();
                     if (foundPlayer is null)
@@ -138,9 +177,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 try
                 {
                     Console.WriteLine($"Getting users with name: {name}");
-                    var filter = Builders<Player>.Filter.And(
-                        Builders<Player>.Filter.Eq(g => g.Name, name),
-                        Builders<Player>.Filter.Eq(g => g.PasswordHash, hash)
+                    var filter = Builders<RegisteredPlayer>.Filter.And(
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.Name, name),
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.PasswordHash, hash)
                     );
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     var foundPlayer = foundPlayers.FirstOrDefault();
@@ -173,7 +212,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 try
                 {
                     Console.WriteLine($"Getting users with name: {name}");
-                    var filter = Builders<Player>.Filter.Eq("Name", name);
+                    var filter = Builders<RegisteredPlayer>.Filter.Eq("Name", name);
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     if (await foundPlayers.AnyAsync(cancellationToken: cancellationToken))
                     {
@@ -182,7 +221,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     }
                     
                     Console.WriteLine($"Creating new player with name: {name}");
-                    var player = new Player
+                    var player = new RegisteredPlayer
                     {
                         Name = name,
                         PasswordHash = hash,

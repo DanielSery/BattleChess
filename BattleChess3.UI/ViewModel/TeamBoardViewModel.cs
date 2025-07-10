@@ -98,7 +98,7 @@ public class TeamBoardViewModel : ViewModelBase
         {
             var demotedFigureId = tile.Figure.Type.FigureId;
             tile.Figure.Owner.Figures.Remove(tile.Figure);
-            tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(tile.Figure.Owner.Id, demotedFigureId, false));
+            tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(tile.Figure.Owner.Index, demotedFigureId, false));
             
             HasKing = false;
             RaisePropertyChanged(nameof(CanSave));
@@ -114,12 +114,12 @@ public class TeamBoardViewModel : ViewModelBase
             
             var demotedFigureId = checkedTile.Figure.Type.FigureId;
             checkedTile.Figure.Owner.Figures.Remove(checkedTile.Figure);
-            checkedTile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, demotedFigureId, false));
+            checkedTile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Index, demotedFigureId, false));
         }
         
         var upgradedFigureId = tile.Figure.Type.FigureId;
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Id, upgradedFigureId, true));
+        tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Index, upgradedFigureId, true));
         
         HasKing = true;
         RaisePropertyChanged(nameof(CanSave));

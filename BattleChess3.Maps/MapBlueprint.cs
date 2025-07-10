@@ -10,11 +10,6 @@ public class MapBlueprint
         Figures = Enumerable.Range(0, 16).Select(x => new FigureIdentifier(0, 0, false)).ToArray()
     };
 
-    public static readonly MapBlueprint Empty = new()
-    {
-        Figures = Enumerable.Range(0, 64).Select(x => new FigureIdentifier(0, 0, false)).ToArray()
-    };
-    
     public int StartingPlayer { get; init; } = 1;
     public FigureIdentifier[] Figures { get; init; } = [];
 }
