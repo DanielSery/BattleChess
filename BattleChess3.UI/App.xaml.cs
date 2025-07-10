@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using BattleChess3.Multiplayer;
 
 namespace BattleChess3.UI;
 
@@ -15,6 +14,6 @@ public partial class App
     {
         // new DatabaseClearer().ClearDatabase();
         DependenciesBuilder.Initialize();
-        AllocConsole();
+        // AllocConsole();
     }
 }

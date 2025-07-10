@@ -100,12 +100,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }).ToList();
     }
 
-    public Result<Player> GetCurrentPlayer()
+    public Player GetCurrentPlayer()
     {
-        if (LoggedInPlayer is null)
-            return Result.Fail<Player>("Not logged in");
-        
-        return Result.Ok(new Player(LoggedInPlayer.Id, LoggedInPlayer.Name, LoggedInPlayer.Elo, 1));
+        return new Player(null, "Player 1", null, 1);
     }
 
     public Task<Result<Player>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken)

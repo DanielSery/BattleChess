@@ -4,6 +4,7 @@ using System.Security;
 using System.Windows;
 using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.Multiplayer.Tables;
@@ -109,48 +110,32 @@ public class MultiplayerViewModel : ViewModelBase
         var (isHost, gameSearch, gameSearchJoin) = request.Value;
         if (isHost)
         {
-            var player1Request = _multiplayerPlayerService.GetCurrentPlayer();
-            if (player1Request.IsFailed)
-            {
-                _notificationService.ShowMessage(ShownMessage.MessageType.Error, player1Request.Reasons.First().Message);
-                return;
-            }
-            
+            var player = _multiplayerPlayerService.GetCurrentPlayer();
             var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearchJoin.PlayerId!, loadingOperation.CancellationToken);
-            if (player2Request.IsFailed)
-            {
-                _notificationService.ShowMessage(ShownMessage.MessageType.Error, player2Request.Reasons.First().Message);
-                return;
-            }
+            var player2 = player2Request.IsSuccess
+                ? player2Request.Value
+                : new Player(null, "Player 2", null, 2);
                 
             var hisMap = GetFigures(gameSearchJoin.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
             _boardViewModel.MultiplayerLoadMap(
                 MultiplayerGameType.Ranked | MultiplayerGameType.Host, gameSearch.Id, 
-                player1Request.Value, player2Request.Value,
+                player, player2,
                 playedMap, true);
         }
         else
         {
-            var player1Request = _multiplayerPlayerService.GetCurrentPlayer();
-            if (player1Request.IsFailed)
-            {
-                _notificationService.ShowMessage(ShownMessage.MessageType.Error, player1Request.Reasons.First().Message);
-                return;
-            }
-            
+            var player1 = _multiplayerPlayerService.GetCurrentPlayer();
             var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearch.PlayerId!, loadingOperation.CancellationToken);
-            if (player2Request.IsFailed)
-            {
-                _notificationService.ShowMessage(ShownMessage.MessageType.Error, player2Request.Reasons.First().Message);
-                return;
-            }
+            var player2 = player2Request.IsSuccess
+                ? player2Request.Value
+                : new Player(null, "Player 2", null, 2);
             
             var hisMap = GetFigures(gameSearch.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
             _boardViewModel.MultiplayerLoadMap(
                 MultiplayerGameType.Ranked, gameSearch.Id, 
-                player1Request.Value, player2Request.Value,
+                player1, player2,
                 playedMap, true);
         }
     }
@@ -190,25 +175,17 @@ public class MultiplayerViewModel : ViewModelBase
         }
         var gameJoin = gameJoinResult.Value;
         
-        var player1Request = _multiplayerPlayerService.GetCurrentPlayer();
-        if (player1Request.IsFailed)
-        {
-            _notificationService.ShowMessage(ShownMessage.MessageType.Error, player1Request.Reasons.First().Message);
-            return;
-        }
-            
+        var player1 = _multiplayerPlayerService.GetCurrentPlayer();
         var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameJoin.PlayerId!, loadingOperation.CancellationToken);
-        if (player2Request.IsFailed)
-        {
-            _notificationService.ShowMessage(ShownMessage.MessageType.Error, player2Request.Reasons.First().Message);
-            return;
-        }
+        var player2 = player2Request.IsSuccess
+            ? player2Request.Value
+            : new Player(null, "Player 2", null, 2);
 
         var hisMap = GetFigures(gameJoin.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, lobby.IsHostStarting);
         _boardViewModel.MultiplayerLoadMap(
             MultiplayerGameType.Lobby | MultiplayerGameType.Host, lobby.Id, 
-            player1Request.Value, player2Request.Value,
+            player1, player2,
             playedMap, false);
     }
 
@@ -238,25 +215,17 @@ public class MultiplayerViewModel : ViewModelBase
         }
         var lobby = lobbyResult.Value;
         
-        var player1Request = _multiplayerPlayerService.GetCurrentPlayer();
-        if (player1Request.IsFailed)
-        {
-            _notificationService.ShowMessage(ShownMessage.MessageType.Error, player1Request.Reasons.First().Message);
-            return;
-        }
-            
+        var player1 = _multiplayerPlayerService.GetCurrentPlayer();
         var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(lobby.PlayerId!, loadingOperation.CancellationToken);
-        if (player2Request.IsFailed)
-        {
-            _notificationService.ShowMessage(ShownMessage.MessageType.Error, player2Request.Reasons.First().Message);
-            return;
-        }
+        var player2 = player2Request.IsSuccess
+            ? player2Request.Value
+            : new Player(null, "Player 2", null, 2);
         
         var hisMap = GetFigures(lobby.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !lobby.IsHostStarting);
         _boardViewModel.MultiplayerLoadMap(
             MultiplayerGameType.Lobby, lobby.Id, 
-            player1Request.Value, player2Request.Value,
+            player1, player2,
             playedMap, false);
     }
 

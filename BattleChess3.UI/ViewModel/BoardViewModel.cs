@@ -100,8 +100,8 @@ public sealed class BoardViewModel : ViewModelBase
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
         _playerService.InitializePlayers(
-            new Player(null, "Player1", null, 1),
-            new Player(null, "Player2", null, 2),
+            new Player(null, "Player 1", null, 1),
+            new Player(null, "Player 2", null, 2),
             map.StartingPlayer, false, false);
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);

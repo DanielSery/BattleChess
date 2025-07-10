@@ -9,7 +9,7 @@ public interface IMultiplayerPlayerService
     RegisteredPlayer? LoggedInPlayer { get; }
 
     Task<List<PublicPlayerData>> GetLeaderboard(CancellationToken cancellationToken);
-    Result<Player> GetCurrentPlayer();
+    Player GetCurrentPlayer();
     Task<Result<Player>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken);
     Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken);
     Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken);

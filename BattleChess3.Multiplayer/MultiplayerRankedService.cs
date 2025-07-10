@@ -60,8 +60,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                         var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
                         if (joinResult.IsSuccess)
                         {
-                            var (game, gameJoin) = joinResult.Value;
-                            return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, game, gameJoin));
+                            return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
                         }
                     }
 
@@ -70,13 +69,13 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                     {
                         while (true)
                         {
-                            var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 30, cancellationToken);
+                            var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
                             if (waitResult == WaitResult.GameJoin)
                             {
                                 var confirmationResult = await TryConfirmGameJoin(createdGameSearch, foundSearchJoin);
                                 if (confirmationResult.IsSuccess)
                                 {
-                                    return Result.Ok((true, createdGameSearch!, foundSearchJoin!));
+                                    return Result.Ok((true, createdGameSearch, foundSearchJoin!));
                                 }
                             }
                             else if (waitResult == WaitResult.GameSearch)
@@ -84,23 +83,26 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                                 var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
                                 if (joinResult.IsSuccess)
                                 {
-                                    var (game, gameJoin) = joinResult.Value;
-                                    if (game.JoinedId == gameJoin.Id)
-                                    {
-                                        return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, game, gameJoin));
-                                    }
+                                    return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, foundSearch!, joinResult.Value));
                                 }
                             }
-                            else
+                            else if (eloDifference < 300)
                             {
                                 Console.WriteLine($"No game found with elo difference {eloDifference}, increasing to {eloDifference + 50}");
                                 eloDifference += 50;
-                            }                    
-                        }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"No game found with elo difference {eloDifference}, continuing search");
+                            }
+                        }                    
                     }
                     finally
                     {
-                        await DeleteGameSearch(createdGameSearch);
+                        if (string.IsNullOrEmpty(createdGameSearch.JoinedId))
+                        {
+                            await DeleteGameSearch(createdGameSearch);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -128,18 +130,18 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return Result.Ok();
     }
 
-    private async Task DeleteGameSearch(RankedGame createdGameSearch)
+    private async Task DeleteGameSearch(RankedGame deletedGame)
     {
         Console.WriteLine("Deleting game search");
         
-        var gameSearchFilter = Builders<RankedGame>.Filter.Eq(l => l.Id, createdGameSearch.Id);
+        var gameSearchFilter = Builders<RankedGame>.Filter.Eq(l => l.Id, deletedGame.Id);
         var gameSearchDeletion = await _rankedGamesCollection.DeleteManyAsync(gameSearchFilter);
                         
         Console.WriteLine($"Deleted game search count: {gameSearchDeletion.DeletedCount}");
         
         Console.WriteLine("Deleting game joins");
         
-        var gameJoinFilter = Builders<RankedGameJoin>.Filter.Eq(l => l.GameId, createdGameSearch.Id);
+        var gameJoinFilter = Builders<RankedGameJoin>.Filter.Eq(l => l.GameId, deletedGame.Id);
         var gameJoinDeletion = await _rankedGameJoinsCollection.DeleteManyAsync(gameJoinFilter);
                         
         Console.WriteLine($"Deleted game join count: {gameJoinDeletion.DeletedCount}");
@@ -164,7 +166,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
 
         var gameObjectId = ObjectId.Parse(gameId);
         var searchesPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
-            .Match(change => (change.OperationType == ChangeStreamOperationType.Insert || change.OperationType == ChangeStreamOperationType.Update) &&
+            .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
                              change.DocumentKey["_id"] > gameObjectId &&
                              change.FullDocument.Version == _version &&
                              string.IsNullOrEmpty(change.FullDocument.JoinedId) &&
@@ -254,7 +256,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
                 .Match(change =>
-                    change.OperationType == ChangeStreamOperationType.Update &&
+                    (change.OperationType == ChangeStreamOperationType.Update || change.OperationType == ChangeStreamOperationType.Delete) &&
                     change.DocumentKey["_id"] == ObjectId.Parse(joinedGame.Id));
 
             using var cursor = await _rankedGamesCollection.WatchAsync(
@@ -287,6 +289,11 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             {
                 foreach (var change in cursor.Current)
                 {
+                    if (change.OperationType == ChangeStreamOperationType.Delete)
+                    {
+                        return null;
+                    }
+                    
                     if (change.FullDocument.Id == joinedGame.Id)
                     {
                         return change.FullDocument;
@@ -318,7 +325,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return game;
     }
 
-    private async Task<Result<(RankedGame, RankedGameJoin)>> TryToJoinGameAsync(
+    private async Task<Result<RankedGameJoin>> TryToJoinGameAsync(
         RankedGame joinedGame, 
         RegisteredPlayer currentPlayer, 
         byte[] myMapData, 
@@ -335,7 +342,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         Console.WriteLine($"Created join request with id: {joinedGame.Id}"); 
                         
         Console.WriteLine("Waiting for join request confirmation");
-        var updatedJoinedGame = await WaitForGameAccept(joinedGame, 30, cancellationToken);
+        var updatedJoinedGame = await WaitForGameAccept(joinedGame, 20, cancellationToken);
         if (updatedJoinedGame is null)
         {
             Console.WriteLine("Cancelled join request");
@@ -343,8 +350,9 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         }
         else if (updatedJoinedGame.JoinedId == gameJoin.Id)
         {
+            await DeleteGameSearch(updatedJoinedGame);
             Console.WriteLine($"Confirmed join request with id: {gameJoin.Id}");
-            return Result.Ok((updatedJoinedGame, gameJoin));
+            return Result.Ok(gameJoin);
         }
         else
         {
