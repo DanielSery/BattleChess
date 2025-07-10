@@ -21,26 +21,26 @@
                        Visibility="{Binding BaseDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                        HorizontalAlignment="Left" VerticalAlignment="Top"
                        Style="{StaticResource TextBlockStyle}" 
-                       FontSize="25" Margin="20"/>
+                       FontSize="20" Margin="20"/>
 
             <WrapPanel Grid.Row="1">
                 <TextBlock Text="{Binding Path=MovementDescription, UpdateSourceTrigger=PropertyChanged}"
                            Visibility="{Binding MovementDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                            HorizontalAlignment="Left" VerticalAlignment="Top"
                            Style="{StaticResource TextBlockStyle}" 
-                           FontSize="25" Margin="20"/>
+                           FontSize="20" Margin="20"/>
                                     
                 <TextBlock Text="{Binding Path=AttackDescription, UpdateSourceTrigger=PropertyChanged}"
                            Visibility="{Binding AttackDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                            HorizontalAlignment="Left" VerticalAlignment="Top"
                            Style="{StaticResource TextBlockStyle}" 
-                           FontSize="25" Margin="20"/>
+                           FontSize="20" Margin="20"/>
                                     
                 <TextBlock Text="{Binding Path=SpecialDescription, UpdateSourceTrigger=PropertyChanged}"
                            Visibility="{Binding SpecialDescription, UpdateSourceTrigger=PropertyChanged, Converter={converters:IsStringEmptyMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                            HorizontalAlignment="Left" VerticalAlignment="Top"
                            Style="{StaticResource TextBlockStyle}" 
-                           FontSize="25" Margin="20"/>
+                           FontSize="20" Margin="20"/>
             </WrapPanel>
         </Grid>
     </ScrollViewer>

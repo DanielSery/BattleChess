@@ -6,7 +6,7 @@ namespace BattleChess3.Multiplayer;
 
 public interface IMultiplayerGameService
 {
-    public event EventHandler<(Position, Position)>? RequestPlayMove;
+    public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
 
     public void StartGame(MultiplayerGameType gameType, string? rankedGameId);
     public Task<Result> HandleHisTurnAsync();

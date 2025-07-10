@@ -26,6 +26,7 @@ public sealed class BoardViewModel : ViewModelBase
         _mapLoader = mapLoader;
         _multiplayerGameService = multiplayerGameService;
 
+        ForfeitCommand = new RelayCommand(Forfeit);
         PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
         MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
@@ -85,10 +86,12 @@ public sealed class BoardViewModel : ViewModelBase
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
     
+    public RelayCommand ForfeitCommand { get; }
     public RelayCommand<TileViewModel> PlayTileCommand { get; }
     public RelayCommand<TileViewModel> MouseEnterCommand { get; }
     public RelayCommand<TileViewModel> MouseExitCommand { get; }
 
+    public event EventHandler? RequestSwitchToMenu;
     public event EventHandler? RequestSwitchToGame;
 
     public void ClearSelectedTile()
@@ -128,14 +131,20 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
+    private void Forfeit()
+    {
+        _playerService.Forfeit();
+        RequestSwitchToMenu?.Invoke(this, EventArgs.Empty);
+    }
+
     private void PlayTile(TileViewModel? clickedTile)
     {
         ArgumentNullException.ThrowIfNull(clickedTile);
         
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
-            _playerService.StopTimer();
-            _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position, _playerService.TimeSpent);
+            var timeSpent = _playerService.EndTurn();
+            _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position, timeSpent);
             clickedTile.PossibleAction.Action.Invoke();
             SelectedTile = NoneTileViewModel.Instance;
             _playerService.NextTurn();
@@ -214,7 +223,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to) e)
+    private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to, TimeSpan turnTimeSpent) e)
     {
         SelectedTile = NoneTileViewModel.Instance;
         ClearPossibleActions();
@@ -223,7 +232,7 @@ public sealed class BoardViewModel : ViewModelBase
         SelectedTile = fromTile;
         SetPossibleActions(fromTile, true);
         
-        _playerService.StopTimer();
+        _playerService.EndTurn(e.turnTimeSpent);
         var toTile = Tiles[e.to.Index];
         toTile.PossibleAction.Action.Invoke();
         SelectedTile = NoneTileViewModel.Instance;

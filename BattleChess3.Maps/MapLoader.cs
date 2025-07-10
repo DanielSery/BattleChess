@@ -33,5 +33,10 @@ internal class MapLoader : IMapLoader
             board[redPosition.GetPlayerPOVPosition(1)].Figure = _figureCreator.CreateFigure(oppositeFigure);
             board[redPosition.Index].Figure = _figureCreator.CreateFigure(redFigure);
         }
+        
+        for (var i = 16; i < 48; i++)
+        {
+            board[i].Figure = _figureCreator.CreateEmptyFigure();
+        }
     }
 }

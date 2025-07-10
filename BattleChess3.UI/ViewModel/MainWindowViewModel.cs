@@ -20,6 +20,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         EditorViewModel editorViewModel,
         IPlayerService playerService,
         MenuViewModel menuViewModel,
+        PlayersViewModel playersViewModel,
         IMultiplayerGameService multiplayerGameService,
         INotificationService notificationService,
         ILoadingService loadingService)
@@ -32,13 +33,15 @@ public sealed class MainWindowViewModel : ViewModelBase
         EditorViewModel = editorViewModel;
         MenuViewModel = menuViewModel;
         LoadingService = loadingService;
+        PlayersViewModel = playersViewModel;
 
         _playerService.PlayerWon += PlayerServiceOnPlayerWon;
-        EditorViewModel.RequestSwitchToMainView += EditorViewModelOnRequestSwitchToMainView;
+        EditorViewModel.RequestSwitchToMainView += OnRequestSwitchToMainView;
 
-        MenuViewModel.RequestSwitchToGame += MenuViewModelOnRequestSwitchToGame;
-        MenuViewModel.RequestSwitchToEditor += MenuViewModelOnRequestSwitchToEditor;
-        BoardViewModel.RequestSwitchToGame += BoardViewModelOnRequestSwitchToGame;
+        MenuViewModel.RequestSwitchToGame += OnRequestSwitchToGame;
+        MenuViewModel.RequestSwitchToEditor += OnRequestSwitchToEditor;
+        BoardViewModel.RequestSwitchToGame += OnRequestSwitchToGame;
+        BoardViewModel.RequestSwitchToMenu += OnRequestSwitchToMainView;
     }
 
     public bool MenuTabSelected
@@ -62,14 +65,18 @@ public sealed class MainWindowViewModel : ViewModelBase
     public MenuViewModel MenuViewModel { get; }
     public BoardViewModel BoardViewModel { get; }
     public EditorViewModel EditorViewModel { get; }
+    public PlayersViewModel PlayersViewModel { get; set; }
     public ILoadingService LoadingService { get; }
     public INotificationService NotificationService { get; }
 
-    private void PlayerServiceOnPlayerWon(object? sender, (Player won, Player lost) e)
+    private async void PlayerServiceOnPlayerWon(object? sender, (Player? won, Player? lost) e)
     {
+        if (e.won is null || e.lost is null)
+            return;
+        
         NotificationService.ShowMessage(ShownMessage.MessageType.Info, $"{e.won.Name} player won!");
         
-        var result = _multiplayerGameService.HandleWinAsync(e.won, e.lost).Result;
+        var result = await _multiplayerGameService.HandleWinAsync(e.won, e.lost);
         if (result.IsFailed)
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
@@ -79,22 +86,17 @@ public sealed class MainWindowViewModel : ViewModelBase
         NotificationService.ShowMessage(ShownMessage.MessageType.Info, result.Value);
     }
 
-    private void EditorViewModelOnRequestSwitchToMainView(object? sender, EventArgs e)
+    private void OnRequestSwitchToMainView(object? sender, EventArgs e)
     {
         MenuTabSelected = true;
     }
 
-    private void BoardViewModelOnRequestSwitchToGame(object? sender, EventArgs e)
+    private void OnRequestSwitchToGame(object? sender, EventArgs e)
     {
         GameTabSelected = true;
     }
 
-    private void MenuViewModelOnRequestSwitchToGame(object? sender, EventArgs e)
-    {
-        GameTabSelected = true;
-    }
-
-    private void MenuViewModelOnRequestSwitchToEditor(object? sender, EventArgs e)
+    private void OnRequestSwitchToEditor(object? sender, EventArgs e)
     {
         EditorTabSelected = true;
     }

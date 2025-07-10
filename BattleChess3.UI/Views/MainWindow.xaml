@@ -97,7 +97,7 @@
                     <views:GameBoardControl DataContext="{Binding BoardViewModel}" />
                 </Border>
                 <Border BorderBrush="Black" BorderThickness="2,0,0,0">
-                    <views:UnitInfoControl DataContext="{Binding BoardViewModel.TileInfo.Figure}" />
+                    <views:GameSideControl/>
                 </Border>
             </DockPanel>
         

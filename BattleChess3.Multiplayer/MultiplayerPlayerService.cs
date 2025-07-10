@@ -102,7 +102,10 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
     public Player GetCurrentPlayer()
     {
-        return new Player(null, "Player 1", null, 1);
+        if (LoggedInPlayer is null)
+            return new Player(null, "Player 1", null, 1);
+
+        return new Player(LoggedInPlayer.Id, LoggedInPlayer.Name, LoggedInPlayer.Elo, 1);
     }
 
     public Task<Result<Player>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken)

@@ -25,7 +25,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
     }
 
-    public event EventHandler<(Position, Position)>? RequestPlayMove;
+    public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
 
     private MultiplayerGameType GameType { get; set; }
     private string? GameId { get; set; }
@@ -165,13 +165,14 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                         : await WaitForNextTurnAsync(TurnId, GameId);
                     if (hisTurn is null)
                     {
-                        return  Result.Fail("Opponent did not play in time.");
+                        return Result.Fail("Opponent did not play in time.");
                     }
                     Console.WriteLine($"Found his turn with id: {hisTurn.Id}");
 
-                    RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position>(
+                    RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
                         GetPositionOfOppositePlayer(hisTurn.FromIndex),
-                        GetPositionOfOppositePlayer(hisTurn.ToIndex)));
+                        GetPositionOfOppositePlayer(hisTurn.ToIndex),
+                        TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
                     return Result.Ok();
                 }
                 catch (Exception ex)
@@ -183,7 +184,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         }
     }
 
-    private async Task<GameTurn?> WaitForNextTurnAsync(string gameId, int timeoutSeconds = 30)
+    private async Task<GameTurn?> WaitForNextTurnAsync(string gameId, int timeoutSeconds = 60)
     {
         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
