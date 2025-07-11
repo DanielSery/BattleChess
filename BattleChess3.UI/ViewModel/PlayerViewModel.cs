@@ -102,7 +102,7 @@ public class PlayerViewModel : ViewModelBase
                 IdleTime = "00:00";
                 if (_player.Index == 1)
                 {
-                    _playerService.PlayerLost(_player, WinType.OutOfTime, false);
+                    _playerService.PlayerLost(_player, WinType.NotResponding, false);
                 }
             }
         }
@@ -128,7 +128,7 @@ public class PlayerViewModel : ViewModelBase
                 IdleTime = "0:00";
                 if (_player.Index == 1)
                 {
-                    _playerService.PlayerLost(_player, WinType.OutOfTime, false);
+                    _playerService.PlayerLost(_player, WinType.NotResponding, false);
                 }
             }
         }

@@ -246,12 +246,6 @@ public sealed class BoardViewModel : ViewModelBase
             case IMultiplayerGameService.SurrenderMessage:
                 _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.Surrender, false);
                 return;
-            case IMultiplayerGameService.WonMessage:
-                _playerService.PlayerWin(_playerService.GetPlayer(2), WinType.CapturedKing, false);
-                return;
-            case IMultiplayerGameService.LostMessage:
-                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.CapturedKing, false);
-                return;
         }
 
         var fromTile = Tiles[e.from.Index];

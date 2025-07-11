@@ -57,8 +57,11 @@ internal class PlayerService : IPlayerService
         
         EvaluateLost(_players[1], _players[2]);
         EvaluateLost(_players[2], _players[1]);
-        
-        StartTurn();
+
+        if (CanMove || IsWaitingForMove)
+        {
+            StartTurn();
+        }
     }
 
     public void Surrender()

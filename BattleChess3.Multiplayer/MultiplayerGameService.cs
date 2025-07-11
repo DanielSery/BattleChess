@@ -14,6 +14,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
     private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
     private readonly IMultiplayerPlayerService _playerService;
+    private readonly MongoClient _client;
 
     public MultiplayerGameService(
         IMultiplayerScheduler scheduler,
@@ -22,8 +23,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         _scheduler = scheduler;
         _playerService = playerService;
         
-        var client = new MongoClient(Secrets.ConnectionString);
-        var database = client.GetDatabase("BattleChess");
+        _client = new MongoClient(Secrets.ConnectionString);
+        var database = _client.GetDatabase("BattleChess");
         _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
     }
@@ -56,80 +57,27 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                     {
                         return Result.Ok<string?>(null);
                     }
-
+                    
+                    await DeleteGameTurnsAsync();
                     if (nofityOther)
                     {
-                        Console.WriteLine("Sending game result to the other player");
-                        var messageIndex = winType switch
-                        {
-                            WinType.CapturedKing => won.Index == 1 ? IMultiplayerGameService.WonMessage : IMultiplayerGameService.LostMessage,
-                            WinType.Surrender => IMultiplayerGameService.SurrenderMessage,
-                            WinType.NotResponding => IMultiplayerGameService.NotRespondingMessage,
-                            WinType.OutOfTime => IMultiplayerGameService.OutOfTimeMessage,
-                            _ => throw new ArgumentOutOfRangeException(nameof(winType), winType, null),
-                        };
-                        
-                        var result = await PlayedMoveAsync(Position.FromIndex(messageIndex), Position.None, TimeSpan.Zero);
-                        if (result.IsFailed)
-                        {
-                            Console.WriteLine("Could not send game result to the other player");
-                        }
-                        Console.WriteLine("Sent game result to the other player");
+                        await SendGameResultToOpponent(winType);
                     }
 
                     if (!GameType.HasFlag(MultiplayerGameType.Ranked))
                     {
                         return Result.Ok<string?>(null);
                     }
-                    
-                    Console.WriteLine($"Searching for winning player with id: {won.PlayerId}");
-                    var winningPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, won.PlayerId);
-                    var winningPlayers = await _playersCollection.FindAsync(winningPlayerFilter);
-                    var winningPlayer = await winningPlayers.FirstOrDefaultAsync();
-                    if (winningPlayer is null)
-                    {
-                        return Result.Fail("Could not find winning player");
-                    }
-                    Console.WriteLine($"Found winning player with id: {winningPlayer.Id}");
-                    
-                    Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
-                    var losingPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
-                    var losingPlayers = await _playersCollection.FindAsync(losingPlayerFilter);
-                    var losingPlayer = await losingPlayers.FirstOrDefaultAsync();
-                    if (losingPlayer is null)
-                    {
-                        return Result.Fail("Could not find losing player");
-                    }
-                    Console.WriteLine($"Found guest player with id: {losingPlayer.Id}");
 
-                    UpdateElo(winningPlayer, losingPlayer, GameType.HasFlag(MultiplayerGameType.Host) ? 1d : 0d);
-                    if (won.Index == 1) // only update database if winning player
+                    if (nofityOther)
                     {
-                        var updateWinningPlayer = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, winningPlayer.Elo);
-                        var updateWinningPlayerResult = await _playersCollection.UpdateOneAsync(winningPlayerFilter, updateWinningPlayer);
-                    
-                        var updateLosingPlayer = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, losingPlayer.Elo);
-                        var updateLosingPlayerResult = await _playersCollection.UpdateOneAsync(losingPlayerFilter, updateLosingPlayer);
-
-                        if (!updateLosingPlayerResult.IsAcknowledged)
-                        {
-                            return Result.Fail("Could not update guest player");
-                        }
-                    
-                        if (!updateWinningPlayerResult.IsAcknowledged)
-                        {
-                            return Result.Fail("Failed to update game confirmation");
-                        }
-                        
-                        _playerService.LoggedInPlayer!.Elo = winningPlayer.Elo;
+                        return await UpdatePlayersElo(won, lost);
                     }
                     else
                     {
-                        _playerService.LoggedInPlayer!.Elo = losingPlayer.Elo;
+                        var updated = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost; 
+                        return await GetUpdatedElo(updated);
                     }
-                    
-                    return Result.Ok<string?>($"{won.Name} gained {winningPlayer.Elo - won.Elo} → {winningPlayer.Elo}\n" +
-                                              $"{lost.Name} lost {losingPlayer.Elo - lost.Elo} → {losingPlayer.Elo}");
                 }
                 catch (Exception ex)
                 {
@@ -139,7 +87,136 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             });
         }
     }
-    public static void UpdateElo(RegisteredPlayer playerA, RegisteredPlayer playerB, double resultA, int k = 32)
+
+    private async Task SendGameResultToOpponent(WinType winType)
+    {
+        if (winType == WinType.CapturedKing)
+            return;
+        
+        Console.WriteLine("Sending game result to the other player");
+        int messageIndex = winType switch
+        {
+            WinType.Surrender => IMultiplayerGameService.SurrenderMessage,
+            WinType.NotResponding => IMultiplayerGameService.NotRespondingMessage,
+            WinType.OutOfTime => IMultiplayerGameService.OutOfTimeMessage,
+            _ => throw new ArgumentOutOfRangeException(nameof(winType), winType, null)
+        };
+
+        var result = await PlayedMoveAsync(Position.FromIndex(messageIndex), Position.None, TimeSpan.Zero);
+        if (result.IsFailed)
+        {
+            Console.WriteLine("Could not send game result to the other player");
+        }
+        
+        Console.WriteLine("Sent game result to the other player");
+    }
+
+    private async Task<Result<string?>> GetUpdatedElo(Player lost)
+    {
+        Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
+        var updatedPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
+        var updatedPlayers = await _playersCollection.FindAsync(updatedPlayerFilter);
+        var updatedPlayer = await updatedPlayers.FirstOrDefaultAsync();
+        if (updatedPlayer is null)
+        {
+            return Result.Fail("Could not find losing player");
+        }
+        Console.WriteLine($"Found guest player with id: {updatedPlayer.Id}");
+
+        if (updatedPlayer.Elo != lost.Elo)
+        {
+            _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
+            return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
+        }
+
+        updatedPlayer = await WaitForEloUpdate(lost);
+        if (updatedPlayer is null)
+        {
+            return Result.Fail("Could not find losing player");
+        }
+
+        _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
+        return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
+    }
+
+    private async Task<RegisteredPlayer?> WaitForEloUpdate(Player lost)
+    {
+        using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(5));
+        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RegisteredPlayer>>()
+            .Match(change =>
+                (change.OperationType == ChangeStreamOperationType.Update &&
+                change.DocumentKey["_id"] == ObjectId.Parse(lost.PlayerId)));
+
+        
+        using var cursor = await _playersCollection.WatchAsync(
+            pipeline,
+            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+            cancellationTokenSource.Token
+        );
+
+        while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+        {
+            foreach (var change in cursor.Current)
+            {
+                if (change.FullDocument.Id == lost.PlayerId)
+                {
+                    return change.FullDocument;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private async Task<Result<string?>> UpdatePlayersElo(Player won, Player lost)
+    {
+        Console.WriteLine($"Searching for winning player with id: {won.PlayerId}");
+        var winningPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, won.PlayerId);
+        var winningPlayers = await _playersCollection.FindAsync(winningPlayerFilter);
+        var winningPlayer = await winningPlayers.FirstOrDefaultAsync();
+        if (winningPlayer is null)
+        {
+            return Result.Fail("Could not find winning player");
+        }
+        winningPlayer.Elo = (short)won.Elo!;
+        Console.WriteLine($"Found winning player with id: {winningPlayer.Id}");
+                    
+        Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
+        var losingPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
+        var losingPlayers = await _playersCollection.FindAsync(losingPlayerFilter);
+        var losingPlayer = await losingPlayers.FirstOrDefaultAsync();
+        if (losingPlayer is null)
+        {
+            return Result.Fail("Could not find losing player");
+        }
+        losingPlayer.Elo = (short)lost.Elo!;
+        Console.WriteLine($"Found guest player with id: {losingPlayer.Id}");
+
+        UpdateElo(winningPlayer, losingPlayer, 1d);
+                        
+        var updateWinningPlayer = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, winningPlayer.Elo);
+        var updateWinningPlayerResult = await _playersCollection.UpdateOneAsync(winningPlayerFilter, updateWinningPlayer);
+                    
+        var updateLosingPlayer = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, losingPlayer.Elo);
+        var updateLosingPlayerResult = await _playersCollection.UpdateOneAsync(losingPlayerFilter, updateLosingPlayer);
+
+        if (!updateLosingPlayerResult.IsAcknowledged)
+        {
+            return Result.Fail("Could not update guest player");
+        }
+                    
+        if (!updateWinningPlayerResult.IsAcknowledged)
+        {
+            return Result.Fail("Failed to update game confirmation");
+        }
+
+        var currentPlayer = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost;
+        var updatedPlayer = _playerService.LoggedInPlayer!.Id == winningPlayer.Id ? winningPlayer : losingPlayer;
+        _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
+        return Result.Ok<string?>($"Elo {updatedPlayer.Elo - currentPlayer.Elo} → {updatedPlayer.Elo}");
+    }
+
+    private static void UpdateElo(RegisteredPlayer playerA, RegisteredPlayer playerB, double resultA, int k = 32)
     {
         var expectedA = 1.0 / (1.0 + Math.Pow(10, (playerB.Elo - playerA.Elo) / 400.0));
         var expectedB = 1.0 / (1.0 + Math.Pow(10, (playerA.Elo - playerB.Elo) / 400.0));
@@ -314,26 +391,33 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             .GetPlayerPOVPosition(1);
     }
 
-    public Task<Result> DeleteGameAsync(string gameId)
+    private async Task<Result> DeleteGameTurnsAsync()
     {
-        lock (_scheduler.SyncLock)
+        try
         {
-            return _scheduler.QueueTask(async () =>
-            {
-                try
-                {
-                    Console.WriteLine("Deleting GameTurns");
-                    var filter = Builders<GameTurn>.Filter.Eq(gj => gj.GameId, gameId);
-                    var result = await _gameTurnsCollection.DeleteManyAsync(filter);
-                    Console.WriteLine($"Deleted GameTurns: {result.DeletedCount}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
+            Console.WriteLine("Getting server time");
+            var serverTime = await GetServerTimeAsync();
+            Console.WriteLine($"Current server time: {serverTime}");
 
-                return Result.Ok();
-            });
+            var oldestKeepTime = serverTime - TimeSpan.FromMinutes(20);
+            
+            Console.WriteLine("Deleting GameTurns");
+            var filter = Builders<GameTurn>.Filter.Lt(gj => gj.CreatedAt, oldestKeepTime);
+            var result = await _gameTurnsCollection.DeleteManyAsync(filter);
+            Console.WriteLine($"Deleted GameTurns: {result.DeletedCount}");
+            return Result.Ok();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return Result.Fail(ex.Message);
+        }
+    }
+
+    private async Task<DateTime> GetServerTimeAsync()
+    {
+        var command = new BsonDocument("hello", 1); // "hello" is the modern replacement for "isMaster"
+        var result = await _client.GetDatabase("admin").RunCommandAsync<BsonDocument>(command);
+        return result["localTime"].ToUniversalTime();
     }
 }

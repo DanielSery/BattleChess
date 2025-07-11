@@ -15,7 +15,14 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
     {
         if (_currentThreadId == Environment.CurrentManagedThreadId)
         {
-            return getTask.Invoke();
+            try
+            {
+                return getTask.Invoke();     
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
         
         lock (SyncLock)
@@ -31,7 +38,14 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
     {
         if (_currentThreadId == Environment.CurrentManagedThreadId)
         {
-            return getTask.Invoke();
+            try
+            {
+                return getTask.Invoke();     
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         lock (SyncLock)
@@ -48,8 +62,15 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
         _currentThreadId = Environment.CurrentManagedThreadId;
         while (TryGetTaskToRun(out var currentScheduledTask))
         {
-            await currentScheduledTask!.GetExecutedTask();
-            currentScheduledTask.SetResult();
+            try
+            {
+                await currentScheduledTask!.GetExecutedTask();
+                currentScheduledTask.SetResult();            
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 
