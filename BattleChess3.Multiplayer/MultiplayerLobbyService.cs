@@ -283,7 +283,12 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     
                     Console.WriteLine("Waiting for join request confirmation");
                     var lobbyUpdate = await WaitForLobbyAccept(lobby.Id, cancellationToken);
-                    if (lobbyUpdate is null || lobbyUpdate.JoinedId != gameJoin.Id)
+                    if (lobbyUpdate?.JoinedId is null)
+                    {
+                        await DeleteGameAsync(lobby.Id);
+                        return Result.Fail("The lobby was invalid");
+                    }
+                    else if (lobbyUpdate.JoinedId != lobby.Id)
                     {
                         return Result.Fail("The lobby is already full");
                     }
@@ -303,61 +308,77 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
 
     private async Task<GameLobbyJoin?> WaitForGameJoinAsync(string gameId, CancellationToken cancellationToken)
     {
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobbyJoin>>()
-            .Match(Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter
-                .Eq(cs => cs.FullDocument.GameId, gameId));
-
-        using var cursor = await _gameJoinsCollection.WatchAsync(
-            pipeline,
-            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationToken
-        );
-
-        while (await cursor.MoveNextAsync(cancellationToken))
+        try
         {
-            foreach (var change in cursor.Current)
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobbyJoin>>()
+                .Match(Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter
+                    .Eq(cs => cs.FullDocument.GameId, gameId));
+
+            using var cursor = await _gameJoinsCollection.WatchAsync(
+                pipeline,
+                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+                cancellationToken
+            );
+
+            while (await cursor.MoveNextAsync(cancellationToken))
             {
-                if (change.FullDocument.GameId == gameId)
+                foreach (var change in cursor.Current)
                 {
-                    return change.FullDocument;
+                    if (change.FullDocument.GameId == gameId)
+                    {
+                        return change.FullDocument;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        }
+        catch (OperationCanceledException)
+        {
+            return null;
+        }
     }
 
     private async Task<GameLobby?> WaitForLobbyAccept(string lobbyId, CancellationToken cancellationToken)
     {
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
-            .Match(change =>
-                (change.OperationType == ChangeStreamOperationType.Update || change.OperationType == ChangeStreamOperationType.Delete) &&
-                change.DocumentKey["_id"] == ObjectId.Parse(lobbyId));
+        try
+        {
+            using var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            using var compositeTimeoutTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
+                .Match(change =>
+                    (change.OperationType == ChangeStreamOperationType.Update || change.OperationType == ChangeStreamOperationType.Delete) &&
+                    change.DocumentKey["_id"] == ObjectId.Parse(lobbyId));
 
         
-        using var cursor = await _gameLobbyCollection.WatchAsync(
-            pipeline,
-            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationToken
-        );
+            using var cursor = await _gameLobbyCollection.WatchAsync(
+                pipeline,
+                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+                compositeTimeoutTokenSource.Token
+            );
 
-        while (await cursor.MoveNextAsync(cancellationToken))
-        {
-            foreach (var change in cursor.Current)
+            while (await cursor.MoveNextAsync(compositeTimeoutTokenSource.Token))
             {
-                if (change.OperationType == ChangeStreamOperationType.Delete)
+                foreach (var change in cursor.Current)
                 {
-                    return null;
-                }
+                    if (change.OperationType == ChangeStreamOperationType.Delete)
+                    {
+                        return null;
+                    }
                 
-                if (change.FullDocument.Id == lobbyId)
-                {
-                    return change.FullDocument;
+                    if (change.FullDocument.Id == lobbyId)
+                    {
+                        return change.FullDocument;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        }
+        catch (OperationCanceledException)
+        {
+            return null;
+        }
     }
 
 

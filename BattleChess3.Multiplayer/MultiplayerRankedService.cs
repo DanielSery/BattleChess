@@ -62,6 +62,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                         {
                             return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
                         }
+                        
+                        closestGameSearch = await GetClosestGameSearchAsync(currentPlayer, eloDifference, cancellationToken);
                     }
 
                     var createdGameSearch = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
@@ -347,7 +349,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         var updatedJoinedGame = await WaitForGameAccept(joinedGame, 20, cancellationToken);
         if (updatedJoinedGame is null)
         {
-            Console.WriteLine("Cancelled join request");
+            await DeleteGameSearch(joinedGame);
+            Console.WriteLine("Invalid game search");
             return Result.Fail("Joining timed out");
         }
         else if (updatedJoinedGame.JoinedId == gameJoin.Id)

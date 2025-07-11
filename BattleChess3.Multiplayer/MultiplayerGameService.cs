@@ -155,31 +155,37 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     private async Task<RegisteredPlayer?> WaitForEloUpdate(Player lost)
     {
-        using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RegisteredPlayer>>()
-            .Match(change =>
-                (change.OperationType == ChangeStreamOperationType.Update &&
-                change.DocumentKey["_id"] == ObjectId.Parse(lost.PlayerId)));
-
-        
-        using var cursor = await _playersCollection.WatchAsync(
-            pipeline,
-            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationTokenSource.Token
-        );
-
-        while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+        try
         {
-            foreach (var change in cursor.Current)
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(5));
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RegisteredPlayer>>()
+                .Match(change =>
+                    (change.OperationType == ChangeStreamOperationType.Update &&
+                     change.DocumentKey["_id"] == ObjectId.Parse(lost.PlayerId)));
+        
+            using var cursor = await _playersCollection.WatchAsync(
+                pipeline,
+                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+                cancellationTokenSource.Token
+            );
+
+            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
             {
-                if (change.FullDocument.Id == lost.PlayerId)
+                foreach (var change in cursor.Current)
                 {
-                    return change.FullDocument;
+                    if (change.FullDocument.Id == lost.PlayerId)
+                    {
+                        return change.FullDocument;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        }
+        catch (OperationCanceledException)
+        {
+            return null;
+        }
     }
 
     private async Task<Result<string?>> UpdatePlayersElo(Player won, Player lost)
@@ -338,65 +344,79 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     private async Task<GameTurn?> WaitForNextTurnAsync(string gameId, TimeSpan timeout)
     {
-        var cancellationTokenSource = new CancellationTokenSource(timeout);
-        var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-            .Match(filter);
-
-        using var cursor = await _gameTurnsCollection.WatchAsync(
-            pipeline,
-            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationTokenSource.Token
-        );
-
-        while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+        try
         {
-            foreach (var change in cursor.Current)
+            var cancellationTokenSource = new CancellationTokenSource(timeout);
+            var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
+
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
+                .Match(filter);
+
+            using var cursor = await _gameTurnsCollection.WatchAsync(
+                pipeline,
+                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+                cancellationTokenSource.Token
+            );
+
+            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
             {
-                var turn = change.FullDocument;
-                if (turn.GameId == gameId)
+                foreach (var change in cursor.Current)
                 {
-                    return turn;
+                    var turn = change.FullDocument;
+                    if (turn.GameId == gameId)
+                    {
+                        return turn;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        }
+        catch (OperationCanceledException)
+        {
+            return null;
+        }
     }
 
     private async Task<GameTurn?> WaitForNextTurnAsync(string turnId, string gameId, TimeSpan timeout) 
     {
-        var afterObjectId = ObjectId.Parse(turnId);
-        var cancellationTokenSource = new CancellationTokenSource(timeout);
-
-        var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
-            Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
-            Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, turnId)
-        );
-
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-            .Match(filter);
-
-        using var cursor = await _gameTurnsCollection.WatchAsync(
-            pipeline,
-            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationTokenSource.Token
-        );
-
-        while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+        try
         {
-            foreach (var change in cursor.Current)
+            var afterObjectId = ObjectId.Parse(turnId);
+            var cancellationTokenSource = new CancellationTokenSource(timeout);
+
+            var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
+                Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
+                Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, turnId)
+            );
+
+            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
+                .Match(filter);
+
+            using var cursor = await _gameTurnsCollection.WatchAsync(
+                pipeline,
+                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+                cancellationTokenSource.Token
+            );
+
+            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
             {
-                var turn = change.FullDocument;
-                if (turn.GameId == gameId && ObjectId.Parse(turn.Id) > afterObjectId)
+                foreach (var change in cursor.Current)
                 {
-                    return turn;
+                    var turn = change.FullDocument;
+                    if (turn.GameId == gameId && ObjectId.Parse(turn.Id) > afterObjectId)
+                    {
+                        return turn;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        }
+        catch (OperationCanceledException)
+        {
+            return null;
+        }
     }
 
     private static Position GetPositionOfOppositePlayer(int index)
