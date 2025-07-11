@@ -90,6 +90,9 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     private async Task SendGameResultToOpponent(WinType winType)
     {
+        if (GameId == null)
+            return;
+        
         if (winType == WinType.CapturedKing)
             return;
         
@@ -97,18 +100,29 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         int messageIndex = winType switch
         {
             WinType.Surrender => IMultiplayerGameService.SurrenderMessage,
-            WinType.NotResponding => IMultiplayerGameService.NotRespondingMessage,
+            WinType.NotResponding => IMultiplayerGameService.NotRespondingLostMessage,
             WinType.OutOfTime => IMultiplayerGameService.OutOfTimeMessage,
             _ => throw new ArgumentOutOfRangeException(nameof(winType), winType, null)
         };
 
-        var result = await PlayedMoveAsync(Position.FromIndex(messageIndex), Position.None, TimeSpan.Zero);
-        if (result.IsFailed)
+        try
         {
-            Console.WriteLine("Could not send game result to the other player");
+            Console.WriteLine("Creating game result");
+            var gameTurn = new GameTurn()
+            {
+                GameId = GameId,
+                FromIndex = (byte)messageIndex,
+                ToIndex = 0,
+                CreatedAt = DateTime.UtcNow,
+                TimeSpentInSeconds = 0
+            };
+            await _gameTurnsCollection.InsertOneAsync(gameTurn);
+            Console.WriteLine("Created game result");        
         }
-        
-        Console.WriteLine("Sent game result to the other player");
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     private async Task<Result<string?>> GetUpdatedElo(Player lost)

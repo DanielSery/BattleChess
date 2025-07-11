@@ -9,6 +9,7 @@ public interface IMultiplayerGameService
     public const int SurrenderMessage = 67;
     public const int OutOfTimeMessage = 68;
     public const int NotRespondingMessage = 69;
+    public const int NotRespondingLostMessage = 70;
     
     public static readonly TimeSpan TurnTimeout = TimeSpan.FromMinutes(2);
     

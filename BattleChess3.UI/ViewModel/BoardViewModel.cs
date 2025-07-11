@@ -240,6 +240,9 @@ public sealed class BoardViewModel : ViewModelBase
             case IMultiplayerGameService.NotRespondingMessage:
                 _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.NotResponding, true);
                 return;
+            case IMultiplayerGameService.NotRespondingLostMessage:
+                _playerService.PlayerWin(_playerService.GetPlayer(2), WinType.NotResponding, false);
+                return;
             case IMultiplayerGameService.OutOfTimeMessage:
                 _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.OutOfTime, false);
                 return;
