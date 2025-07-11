@@ -12,6 +12,7 @@ public class GameTurn
     [BsonRepresentation(BsonType.ObjectId)]
     public string GameId { get; set; }
     
+    public DateTime CreatedAt { get; set; }
     public double TimeSpentInSeconds { get; set; }
     
     public byte FromIndex { get; set; }

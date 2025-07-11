@@ -47,6 +47,7 @@ public partial class NotificationControl
                 ShownMessage.MessageType.Info => (Brush)Application.Current.Resources["ButtonBlueBackground"],
                 ShownMessage.MessageType.Error => (Brush)Application.Current.Resources["ButtonOrangeBackground"],
                 ShownMessage.MessageType.Warning => (Brush)Application.Current.Resources["ButtonRedBackground"],
+                ShownMessage.MessageType.Success => (Brush)Application.Current.Resources["ButtonGreenBackground"],
                 _ => NotificationButton.Background
             };
             NotificationButton.Opacity = 1;

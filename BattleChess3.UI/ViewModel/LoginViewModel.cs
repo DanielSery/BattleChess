@@ -66,6 +66,7 @@ public class LoginViewModel : ViewModelBase
         }
         else
         {
+            _notificationService.ShowMessage(ShownMessage.MessageType.Success, $"Logged in as {Name}");
             RequestEndLogin?.Invoke(this, EventArgs.Empty);
             IsLoggedIn = true;
         }

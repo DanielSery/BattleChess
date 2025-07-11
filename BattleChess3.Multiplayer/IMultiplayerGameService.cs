@@ -6,11 +6,19 @@ namespace BattleChess3.Multiplayer;
 
 public interface IMultiplayerGameService
 {
+    public const int WonMessage = 65;
+    public const int LostMessage = 66;
+    public const int SurrenderMessage = 67;
+    public const int OutOfTimeMessage = 68;
+    public const int NotRespondingMessage = 69;
+    
+    public static readonly TimeSpan TurnTimeout = TimeSpan.FromSeconds(20);
+    
     public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
 
     public void StartGame(MultiplayerGameType gameType, string? rankedGameId);
     public Task<Result> HandleHisTurnAsync();
-    public Task<Result<string?>> HandleWinAsync(Player won, Player lost);
+    public Task<Result<string?>> HandleWinAsync(bool notifyOther, WinType winType, Player won, Player lost);
     public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent);
     public Task<Result> DeleteGameAsync(string gameId);
 }

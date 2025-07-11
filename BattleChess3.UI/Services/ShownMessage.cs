@@ -18,6 +18,7 @@ public class ShownMessage
         Error = 1,
         Warning = 2,
         Info = 4,
-        All = Error | Warning | Info
+        Success = 8,
+        All = Error | Warning | Info | Success
     }
 }

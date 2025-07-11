@@ -35,7 +35,7 @@
                 IsEnabled="False" Opacity="0.85" />
 
         <TextBox Grid.Row="0" Grid.Column="1"
-                 Text="{Binding Name}"
+                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                  BorderThickness="2 2 4 2"
                  FontSize="25"
                  Background="#40000000"

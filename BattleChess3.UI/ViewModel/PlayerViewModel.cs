@@ -1,15 +1,15 @@
 ﻿using System.Windows.Threading;
 using BattleChess3.Game.Players;
+using BattleChess3.Multiplayer;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.ViewModel;
 
 public class PlayerViewModel : ViewModelBase
 {
-    private readonly bool _hasTimer;
     private readonly Player _player;
+    private readonly IPlayerService _playerService;
     private readonly DispatcherTimer _timer;
-    private readonly TimeSpan _initialIdleTime = TimeSpan.FromSeconds(60);
     
     public int Index => _player.Index;
     public string FullName => _player.Elo is null ? _player.Name : $"{_player.Name} ({_player.Elo})";
@@ -45,9 +45,10 @@ public class PlayerViewModel : ViewModelBase
         }
     }
 
-    public PlayerViewModel(Player player, bool hasTimer)
+    public PlayerViewModel(Player player, IPlayerService playerService)
     {
         _player = player;
+        _playerService = playerService;
 
         _timer = new DispatcherTimer
         {
@@ -55,7 +56,6 @@ public class PlayerViewModel : ViewModelBase
         };
         _timer.Tick += TimerTick;
 
-        _hasTimer = hasTimer;
         UpdateTimerText();
     }
 
@@ -63,7 +63,7 @@ public class PlayerViewModel : ViewModelBase
     public void StartTurn(TimeSpan initialTime)
     {
         IsHisTurn = true;
-        if (!_timer.IsEnabled && _hasTimer)
+        if (!_timer.IsEnabled)
         {
             _timer.Start();
         }
@@ -72,11 +72,14 @@ public class PlayerViewModel : ViewModelBase
     public void EndTurn()
     {
         IsHisTurn = false;
-        if (_hasTimer)
-        {
-            _timer.Stop();
-            IdleTime = _initialIdleTime.ToString(@"mm\:ss");
-        }
+        _timer.Stop();
+        IdleTime = IMultiplayerGameService.TurnTimeout.ToString(@"mm\:ss");
+    }
+
+    public void StopTimers()
+    {
+        IsHisTurn = false;
+        _timer.Stop();
     }
     
     private void TimerTick(object? sender, EventArgs e)
@@ -86,23 +89,48 @@ public class PlayerViewModel : ViewModelBase
 
     private void UpdateTimerText()
     {
-        if (!_hasTimer)
-            return;
-        
-        var timeRemaining = _player.RemainingTime - _player.CurrentStopwatch.Elapsed;
-        var idleTimeRemaining = _initialIdleTime - _player.CurrentStopwatch.Elapsed;
-        
-        if (timeRemaining.TotalSeconds > 0 && idleTimeRemaining.TotalSeconds > 0)
+        if (_playerService is { IsMultiplayer: true, HasTimer: false })
         {
-            timeRemaining = timeRemaining.Subtract(TimeSpan.FromSeconds(1));
-            idleTimeRemaining = idleTimeRemaining.Subtract(TimeSpan.FromSeconds(1));
-            RemainingTime = timeRemaining.ToString(@"m\:ss\.f");
-            IdleTime = idleTimeRemaining.ToString(@"m\:ss\.f");
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _player.CurrentStopwatch.Elapsed;
+            if (idleTimeRemaining.TotalSeconds > 0)
+            {
+                IdleTime = idleTimeRemaining.ToString(@"m\:ss\.f");
+            }
+            else
+            {
+                _timer.Stop();
+                IdleTime = "00:00";
+                if (_player.Index == 1)
+                {
+                    _playerService.PlayerLost(_player, WinType.OutOfTime, false);
+                }
+            }
         }
-        else
+        else if (_playerService is { IsMultiplayer: true, HasTimer: true })
         {
-            _timer.Stop();
-            RemainingTime = "00:00";
+            var timeRemaining = _player.RemainingTime - _player.CurrentStopwatch.Elapsed;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _player.CurrentStopwatch.Elapsed;
+        
+            if (timeRemaining.TotalSeconds > 0 && idleTimeRemaining.TotalSeconds > 0)
+            {
+                RemainingTime = timeRemaining.ToString(@"m\:ss\.f");
+                IdleTime = idleTimeRemaining.ToString(@"m\:ss\.f");
+            }
+            else if (timeRemaining.TotalSeconds <= 0)
+            {
+                _timer.Stop();
+                RemainingTime = "0:00";
+                _playerService.PlayerLost(_player, WinType.OutOfTime, _player.Index == 1);
+            }
+            else if (idleTimeRemaining.TotalMinutes <= 0)
+            {
+                _timer.Stop();
+                IdleTime = "0:00";
+                if (_player.Index == 1)
+                {
+                    _playerService.PlayerLost(_player, WinType.OutOfTime, false);
+                }
+            }
         }
     }
 }

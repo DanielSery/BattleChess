@@ -69,21 +69,53 @@ public sealed class MainWindowViewModel : ViewModelBase
     public ILoadingService LoadingService { get; }
     public INotificationService NotificationService { get; }
 
-    private async void PlayerServiceOnPlayerWon(object? sender, (Player? won, Player? lost) e)
+    private async void PlayerServiceOnPlayerWon(object? sender, (bool notifyOther, WinType winType, Player? won, Player? lost) e)
     {
         if (e.won is null || e.lost is null)
             return;
+
+        ShownMessage.MessageType messageType = ShownMessage.MessageType.Info;
+        if (!_playerService.IsMultiplayer)
+        {
+            messageType = ShownMessage.MessageType.Info;
+        }
+        else if (e.won.Index == 1)
+        {
+            messageType = ShownMessage.MessageType.Success;
+        }
+        else if (e.won.Index == 2)
+        {
+            messageType = ShownMessage.MessageType.Warning;
+        }
+
+        if (e.winType == WinType.NotResponding)
+        {
+            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name} did not play in time.");
+        }
+        else if (e.winType == WinType.Surrender)
+        {
+            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name} surrendered.");
+        }
+        else if (e.winType == WinType.OutOfTime)
+        {
+            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name} ran out of time.");
+        }
+        else if (e.winType == WinType.CapturedKing)
+        {
+            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name}'s king was captured.");
+        }
         
-        NotificationService.ShowMessage(ShownMessage.MessageType.Info, $"{e.won.Name} won!");
-        
-        var result = await _multiplayerGameService.HandleWinAsync(e.won, e.lost);
+        var result = await _multiplayerGameService.HandleWinAsync(e.notifyOther, e.winType, e.won, e.lost);
         if (result.IsFailed)
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
             return;
         }
-        
-        NotificationService.ShowMessage(ShownMessage.MessageType.Info, result.Value);
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            NotificationService.ShowMessage(messageType, result.Value);
+        }
     }
 
     private void OnRequestSwitchToMainView(object? sender, EventArgs e)

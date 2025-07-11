@@ -18,7 +18,7 @@ internal class PlayerService : IPlayerService
     public event EventHandler? TurnEnded;
 
     /// <inheritdoc />
-    public event EventHandler<(Player? won, Player? lost)>? PlayerWon;
+    public event EventHandler<(bool notifyOther, WinType winType, Player? won, Player? lost)>? PlayerWon;
     
     public Player CurrentPlayer => GetPlayer(_currentPlayerId);
 
@@ -52,8 +52,8 @@ internal class PlayerService : IPlayerService
     public void NextTurn()
     {
         _currentPlayerId = _currentPlayerId == 1 ? 2 : 1;
-        CanMove = CurrentPlayer.Index == 1 || !IsMultiplayer;
-        IsWaitingForMove = CurrentPlayer.Index == 2 && IsMultiplayer;
+        CanMove = _currentPlayerId == 1 || !IsMultiplayer;
+        IsWaitingForMove = _currentPlayerId == 2 && IsMultiplayer;
         
         EvaluateLost(_players[1], _players[2]);
         EvaluateLost(_players[2], _players[1]);
@@ -61,14 +61,36 @@ internal class PlayerService : IPlayerService
         StartTurn();
     }
 
-    public void Forfeit()
+    public void Surrender()
     {
         if (CanMove || IsWaitingForMove)
         {
+            CanMove = false;
+            IsWaitingForMove = false;
             PlayerWon?.Invoke(this, IsMultiplayer 
-                ? (_players[2], _players[1]) 
-                : (null, null));
+                ? (true, WinType.Surrender, _players[2], _players[1]) 
+                : (false, WinType.Surrender, null, null));
         }
+    }
+
+    /// <inheritdoc />
+    public void PlayerLost(Player player, WinType winType, bool notifyOther)
+    {
+        CanMove = false;
+        IsWaitingForMove = false;
+        PlayerWon?.Invoke(this, player.Index == 1 
+            ? (notifyOther, winType, _players[2], _players[1]) 
+            : (notifyOther, winType, _players[1], _players[2]));
+    }
+
+    /// <inheritdoc />
+    public void PlayerWin(Player player, WinType winType, bool notifyOther)
+    {
+        CanMove = false;
+        IsWaitingForMove = false;
+        PlayerWon?.Invoke(this, player.Index == 1 
+            ? (notifyOther, winType, _players[1], _players[2]) 
+            : (notifyOther, winType, _players[2], _players[1]));
     }
 
     private void EvaluateLost(Player evaluatedPlayer, Player otherPlayer)
@@ -76,9 +98,9 @@ internal class PlayerService : IPlayerService
         if (evaluatedPlayer.Figures.Any(x => x.IsKing))
             return;
         
-        PlayerWon?.Invoke(this, (otherPlayer, evaluatedPlayer));
         CanMove = false;
         IsWaitingForMove = false;
+        PlayerWon?.Invoke(this, (otherPlayer.Index == 1, WinType.CapturedKing, otherPlayer, evaluatedPlayer));
     }
 
     private void StartTurn()

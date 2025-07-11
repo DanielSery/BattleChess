@@ -10,15 +10,18 @@ namespace BattleChess3.UI.ViewModel;
 
 public class SignUpViewModel : ViewModelBase
 {
+    private readonly LoginViewModel _loginViewModel;
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly INotificationService _notificationService;
     private readonly ILoadingService _loadingService;
     
     public SignUpViewModel(
+        LoginViewModel loginViewModel,
         IMultiplayerPlayerService multiplayerPlayerService,
         INotificationService notificationService,
         ILoadingService loadingService)
     {
+        _loginViewModel = loginViewModel;
         _multiplayerPlayerService = multiplayerPlayerService;
         _notificationService = notificationService;
         _loadingService = loadingService;
@@ -61,8 +64,8 @@ public class SignUpViewModel : ViewModelBase
         var salt = RandomNumberGenerator.GetBytes(16); // Generate 16-byte salt
         var stringSalt = Convert.ToBase64String(salt);
         
-        var hash = GetHash(SecurePassword1, salt);
-        var hash2 = GetHash(SecurePassword2, salt);
+        var hash = GetHash(SecurePassword1, stringSalt);
+        var hash2 = GetHash(SecurePassword2, stringSalt);
 
         if (hash != hash2)
         {
@@ -74,21 +77,27 @@ public class SignUpViewModel : ViewModelBase
         if (result.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Error, result.Errors[0].Message);
+            return;
         }
         else
         {
             RequestEndSignUp?.Invoke(this, EventArgs.Empty);
-            _notificationService.ShowMessage(ShownMessage.MessageType.Info, $"Created user {Name}");
+            _notificationService.ShowMessage(ShownMessage.MessageType.Success, $"Created user {Name}");
         }
+        
+        _loginViewModel.Name = Name;
+        _loginViewModel.SecurePassword = SecurePassword1;
+        await _loginViewModel.LoginCommand.ExecuteAsync(null);
     }
 
-    private static string GetHash(SecureString secureString, byte[] salt)
+    private static string GetHash(SecureString secureString, string saltString)
     {
         ArgumentNullException.ThrowIfNull(secureString);
 
         var unmanagedString = IntPtr.Zero;
         try
         {
+            var salt = Convert.FromBase64String(saltString);
             unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
             
             var pbkdf2 = new Rfc2898DeriveBytes(Marshal.PtrToStringUni(unmanagedString)!, salt, 100000, HashAlgorithmName.SHA256);

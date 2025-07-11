@@ -8,7 +8,7 @@ public interface IPlayerService
     /// <summary>
     /// Occurs when any player wins the game.
     /// </summary>
-    public event EventHandler<(Player? won, Player? lost)> PlayerWon;
+    public event EventHandler<(bool notifyOther, WinType winType, Player? won, Player? lost)> PlayerWon;
     
     bool CanMove { get; }
     
@@ -41,5 +41,9 @@ public interface IPlayerService
     /// </summary>
     void NextTurn();
 
-    void Forfeit();
+    void Surrender();
+    
+    void PlayerLost(Player player, WinType winType, bool notifyOther);
+    
+    void PlayerWin(Player player, WinType winType, bool notifyOther);
 }

@@ -26,7 +26,7 @@ public sealed class BoardViewModel : ViewModelBase
         _mapLoader = mapLoader;
         _multiplayerGameService = multiplayerGameService;
 
-        ForfeitCommand = new RelayCommand(Forfeit);
+        SurrenderCommand = new RelayCommand(Surrender);
         PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
         MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
@@ -86,7 +86,7 @@ public sealed class BoardViewModel : ViewModelBase
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
     
-    public RelayCommand ForfeitCommand { get; }
+    public RelayCommand SurrenderCommand { get; }
     public RelayCommand<TileViewModel> PlayTileCommand { get; }
     public RelayCommand<TileViewModel> MouseEnterCommand { get; }
     public RelayCommand<TileViewModel> MouseExitCommand { get; }
@@ -131,12 +131,12 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private void Forfeit()
+    private void Surrender()
     {
         if (_playerService.IsMultiplayer &&
             (_playerService.CanMove || _playerService.IsWaitingForMove))
         {
-            _playerService.Forfeit();
+            _playerService.Surrender();
         }
         else
         {
@@ -234,6 +234,25 @@ public sealed class BoardViewModel : ViewModelBase
     {
         SelectedTile = NoneTileViewModel.Instance;
         ClearPossibleActions();
+
+        switch (e.from.Index)
+        {
+            case IMultiplayerGameService.NotRespondingMessage:
+                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.NotResponding, true);
+                return;
+            case IMultiplayerGameService.OutOfTimeMessage:
+                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.OutOfTime, false);
+                return;
+            case IMultiplayerGameService.SurrenderMessage:
+                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.Surrender, false);
+                return;
+            case IMultiplayerGameService.WonMessage:
+                _playerService.PlayerWin(_playerService.GetPlayer(2), WinType.CapturedKing, false);
+                return;
+            case IMultiplayerGameService.LostMessage:
+                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.CapturedKing, false);
+                return;
+        }
 
         var fromTile = Tiles[e.from.Index];
         SelectedTile = fromTile;

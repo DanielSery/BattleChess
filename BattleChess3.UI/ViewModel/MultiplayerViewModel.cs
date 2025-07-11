@@ -48,6 +48,7 @@ public class MultiplayerViewModel : ViewModelBase
         CreateLobbyCommand = new AsyncRelayCommand(CreateLobby);
         JoinLobbyCommand = new AsyncRelayCommand(JoinLobby);
         RequestEndCommand = new RelayCommand(RaiseRequestEnd);
+        EnterCommand = new AsyncRelayCommand(HandleEnterAsync);
     }
 
     private readonly object _lobbyLock = new object();
@@ -58,16 +59,16 @@ public class MultiplayerViewModel : ViewModelBase
         set => SetProperty(ref _lobbies, value);
     }
     
-    private PublicLobbyData _selectedRow = new PublicLobbyData();
-    public PublicLobbyData SelectedRow
+    private PublicLobbyData? _selectedRow;
+    public PublicLobbyData? SelectedRow
     {
         get => _selectedRow;
         set
         {
             SetProperty(ref _selectedRow, value);
-            if (_selectedRow is not null)
+            if (value is not null)
             {
-                Name = _selectedRow.LobbyName;
+                SetProperty(ref _name, value.LobbyName, nameof(Name));
             }
         }
     }
@@ -76,7 +77,11 @@ public class MultiplayerViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            SetProperty(ref _name, value);
+            SetProperty(ref _selectedRow, Lobbies.FirstOrDefault(x => x.LobbyName == value), nameof(SelectedRow));
+        }
     }
 
     public SecureString SecurePassword { get; set; } = new SecureString();
@@ -85,7 +90,8 @@ public class MultiplayerViewModel : ViewModelBase
     public AsyncRelayCommand JoinLobbyCommand { get; }
     public AsyncRelayCommand RankedGameCommand { get; }
     public RelayCommand RequestEndCommand { get; }
-    
+    public AsyncRelayCommand EnterCommand { get; }
+
     public event EventHandler? RequestEnd;
 
     private async Task FindRankedGame()
@@ -338,6 +344,18 @@ public class MultiplayerViewModel : ViewModelBase
                 Lobbies.Add(lobbyData);
             }
         });
+    }
+
+    private Task HandleEnterAsync()
+    {
+        if (SelectedRow is null)
+        {
+            return CreateLobby();
+        }
+        else
+        {
+            return JoinLobby();
+        }
     }
 
     private void OnLobbyChanged(PublicLobbyData lobbyData)
