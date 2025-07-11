@@ -39,18 +39,15 @@
         </Grid>
         
         <Grid DockPanel.Dock="Right" SnapsToDevicePixels="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="130"/>
-                <ColumnDefinition Width="*" MinWidth="130"/>
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
                     
-            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+            <Button Grid.Row="0" 
                     Content="{Binding  TeamBoard.PointsLeft}"
                     ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
                     Visibility="{Binding TeamBoard.PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
@@ -60,57 +57,57 @@
                     Padding="10"
                     IsEnabled="False" Opacity="0.85"/>
                     
-            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+            <Button Grid.Row="0"
                     Content="{Binding TeamBoard.PointsLeft}"
                     ContentStringFormat="{localization:Loc Editor_AvailablePointsFormat}"
                     Visibility="{Binding TeamBoard.PositivePoints, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
-                    BorderThickness="2 4 4 2"
+                    BorderThickness="2 2 4 2"
                     FontSize="25"
                     Background="{StaticResource ButtonRedBackground}"
                     Padding="10"
                     IsEnabled="False" Opacity="0.85"/>
             
-            <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+            <Button  Grid.Row="1"
                      Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                      Content="{localization:Loc Editor_KingNotSelected}" 
-                     BorderThickness="2 2 4 2"
+                     BorderThickness="2 2 4 4"
                      FontSize="25"
                      Background="{StaticResource ButtonRed2Background}"
                      Padding="10"
                      IsEnabled="False" Opacity="0.85"/>
             
-            <Button  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+            <Button  Grid.Row="1"
                      Visibility="{Binding TeamBoard.HasKing, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
                      Content="{localization:Loc Editor_KingSelected}" 
-                     BorderThickness="2 2 4 2"
+                     BorderThickness="2 2 4 4"
                      FontSize="25"
                      Background="{StaticResource ButtonGreen2Background}"
                      Padding="10"
                      IsEnabled="False" Opacity="0.85"/>
             
-            <Button Grid.Row="2" Grid.Column="0"
+            <Border Grid.Row="2"
+                    BorderBrush="Black" BorderThickness="2 0 4 0"
+                    SnapsToDevicePixels="True">
+                <views:UnitInfoControl DataContext="{Binding EditorUnits.TileInfo}" />
+            </Border>
+            
+            <Button Grid.Row="3"
                     Command="{Binding SaveGameCommand}"
                     Content="{localization:Loc Editor_Save}" 
-                    BorderThickness="2 2 2 4"
+                    BorderThickness="2 4 4 2"
                     Opacity="{Binding TeamBoard.CanSave, Converter={converters:BooleanMultiValueConverter TrueValue=1.0, FalseValue=0.5}}"
                     IsEnabled="{Binding TeamBoard.CanSave}"
                     FontSize="25"
-                    Background="{StaticResource ButtonBlueBackground}"
+                    Background="{StaticResource ButtonGreen3Background}"
                     Padding="10"/>
             
-            <Button  Grid.Row="2" Grid.Column="1"
+            <Button  Grid.Row="4"
                      Command="{Binding CancelCommand}"
                      Content="{localization:Loc Editor_Cancel}" 
                      BorderThickness="2 2 4 4"
                      FontSize="25"
                      Background="{StaticResource ButtonOrangeBackground}"
                      Padding="10"/>
-            
-            <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                    BorderBrush="Black" BorderThickness="2 0 4 0"
-                    SnapsToDevicePixels="True">
-                <views:UnitInfoControl DataContext="{Binding EditorUnits.TileInfo}" />
-            </Border>
         </Grid>
     </DockPanel>
 </UserControl>

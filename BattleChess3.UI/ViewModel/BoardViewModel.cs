@@ -103,8 +103,8 @@ public sealed class BoardViewModel : ViewModelBase
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
         _playerService.InitializePlayers(
-            new Player(null, "Player 1", null, 1),
-            new Player(null, "Player 2", null, 2),
+            new Player(null, "Red player", null, 1),
+            new Player(null, "Blue player", null, 2),
             map.StartingPlayer, false, false);
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
@@ -133,8 +133,15 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void Forfeit()
     {
-        _playerService.Forfeit();
-        RequestSwitchToMenu?.Invoke(this, EventArgs.Empty);
+        if (_playerService.IsMultiplayer &&
+            (_playerService.CanMove || _playerService.IsWaitingForMove))
+        {
+            _playerService.Forfeit();
+        }
+        else
+        {
+            RequestSwitchToMenu?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void PlayTile(TileViewModel? clickedTile)

@@ -63,7 +63,7 @@
                 BorderThickness="2 4 2 4"
                 FontSize="25"
                 Command="{Binding LoginCommand}"
-                Background="{StaticResource ButtonGreenBackground}"
+                Background="{StaticResource ButtonGreen3Background}"
                 Padding="10" />
     </Grid>
 </UserControl>

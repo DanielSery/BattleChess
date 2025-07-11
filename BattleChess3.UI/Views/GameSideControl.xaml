@@ -11,22 +11,29 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <Button Grid.Row="0" Grid.Column="0"
-                Content="{Binding PlayersViewModel.IsMultiplayer, Converter={converters:BooleanMultiValueConverter TrueValue='Surrender', FalseValue='Exit'}}"
-                Command="{Binding BoardViewModel.ForfeitCommand}"
-                BorderThickness="2 2 4 2"
-                FontSize="25"
-                Background="{StaticResource ButtonOrangeBackground}"
-                Padding="10"/>
-        
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding PlayersViewModel.Players}"
+        <ItemsControl Grid.Row="0" ItemsSource="{Binding PlayersViewModel.Players}"
                       BorderBrush="Black"
-                      BorderThickness="0 2">
+                      Visibility="{Binding PlayersViewModel.HasTimer, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Background="{Binding IsHisTurn, Converter={converters:BooleanMultiValueConverter TrueValue=#40000000, FalseValue=#20000000}}"
+                            BorderThickness="2 2 2 4"
+                            FontSize="15"
+                            Padding="0"
+                            IsEnabled="False" Opacity="0.85">
+                        <TextBlock Text="{Binding FullName}" TextWrapping="Wrap" Margin="-5"></TextBlock>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <ItemsControl Grid.Row="0" ItemsSource="{Binding PlayersViewModel.Players}"
+                      BorderBrush="Black"
+                      Visibility="{Binding PlayersViewModel.HasTimer, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -73,7 +80,15 @@
         </ItemsControl>
 
         <local:UnitInfoControl 
-            Grid.Row="3"
+            Grid.Row="1"
             DataContext="{Binding BoardViewModel.TileInfo.Figure}" />
+        
+        <Button Grid.Row="2"
+                Content="{Binding PlayersViewModel.CanExit, Converter={converters:BooleanMultiValueConverter TrueValue='Exit', FalseValue='Surrender'}}"
+                Command="{Binding BoardViewModel.ForfeitCommand}"
+                BorderThickness="2 4 4 4"
+                FontSize="25"
+                Background="{StaticResource ButtonOrangeBackground}"
+                Padding="10"/>
     </Grid>
 </UserControl>

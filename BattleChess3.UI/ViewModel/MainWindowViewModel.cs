@@ -74,7 +74,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         if (e.won is null || e.lost is null)
             return;
         
-        NotificationService.ShowMessage(ShownMessage.MessageType.Info, $"{e.won.Name} player won!");
+        NotificationService.ShowMessage(ShownMessage.MessageType.Info, $"{e.won.Name} won!");
         
         var result = await _multiplayerGameService.HandleWinAsync(e.won, e.lost);
         if (result.IsFailed)

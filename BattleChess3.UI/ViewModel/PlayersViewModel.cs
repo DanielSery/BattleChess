@@ -13,6 +13,7 @@ public class PlayersViewModel : ViewModelBase
         _playerService.PlayersChanged += PlayerServiceOnPlayersChanged;
         _playerService.TurnStarted += PlayerServiceOnTurnStarted;
         _playerService.TurnEnded += PlayerServiceOnTurnEnded;
+        _playerService.PlayerWon += PlayerServiceOnPlayerWon;
     }
 
     private PlayerViewModel[] _players = [];
@@ -21,6 +22,13 @@ public class PlayersViewModel : ViewModelBase
         get => _players;
         set => SetProperty(ref _players, value);
     }
+    
+    private bool _canExit = true;
+    public bool CanExit
+    {
+        get => _canExit;
+        set => SetProperty(ref _canExit, value);
+    }
 
     private bool _hasTimer;
     public bool HasTimer
@@ -28,26 +36,18 @@ public class PlayersViewModel : ViewModelBase
         get => _hasTimer;
         set => SetProperty(ref _hasTimer, value);
     }
-    
-    private bool _isMultiplayer;
-    public bool IsMultiplayer
-    {
-        get => _isMultiplayer;
-        set => SetProperty(ref _isMultiplayer, value);
-    }
 
     private void PlayerServiceOnPlayersChanged(object? sender, EventArgs e)
     {
         var players = _playerService.GetPlayers();
         Players = players
             .Where(x => !x.Equals(Player.Neutral))
-            .Select(x => new PlayerViewModel(x))
+            .Select(x => new PlayerViewModel(x, _playerService.HasTimer))
             .ToArray();
 
-        IsMultiplayer = _playerService.IsMultiplayer;
+        CanExit = !_playerService.IsMultiplayer;
         HasTimer = _playerService.HasTimer;
     }
-
 
     private void PlayerServiceOnTurnStarted(object? sender, EventArgs e)
     {
@@ -59,5 +59,10 @@ public class PlayersViewModel : ViewModelBase
     {
         var currentPlayer = Players.FirstOrDefault(x => x.Index == _playerService.CurrentPlayer.Index);
         currentPlayer?.EndTurn();
+    }
+
+    private void PlayerServiceOnPlayerWon(object? sender, (Player? won, Player? lost) e)
+    {
+        CanExit = true;
     }
 }

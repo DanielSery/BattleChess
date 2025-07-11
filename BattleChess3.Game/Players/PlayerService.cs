@@ -63,9 +63,12 @@ internal class PlayerService : IPlayerService
 
     public void Forfeit()
     {
-        PlayerWon?.Invoke(this, IsMultiplayer 
-            ? (_players[2], _players[1]) 
-            : (null, null));
+        if (CanMove || IsWaitingForMove)
+        {
+            PlayerWon?.Invoke(this, IsMultiplayer 
+                ? (_players[2], _players[1]) 
+                : (null, null));
+        }
     }
 
     private void EvaluateLost(Player evaluatedPlayer, Player otherPlayer)

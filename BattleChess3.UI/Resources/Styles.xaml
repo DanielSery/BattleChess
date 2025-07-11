@@ -50,6 +50,9 @@
     <ImageBrush x:Key="ButtonGreen2Background"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonGreen2Background.jpg" 
                 Stretch="UniformToFill"/>
+    <ImageBrush x:Key="ButtonGreen3Background"
+                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonGreen3Background.jpg" 
+                Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonRedBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonRedBackground.jpg" 
                 Stretch="UniformToFill"/>

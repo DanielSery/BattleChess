@@ -6,6 +6,7 @@ namespace BattleChess3.UI.ViewModel;
 
 public class PlayerViewModel : ViewModelBase
 {
+    private readonly bool _hasTimer;
     private readonly Player _player;
     private readonly DispatcherTimer _timer;
     private readonly TimeSpan _initialIdleTime = TimeSpan.FromSeconds(60);
@@ -44,7 +45,7 @@ public class PlayerViewModel : ViewModelBase
         }
     }
 
-    public PlayerViewModel(Player player)
+    public PlayerViewModel(Player player, bool hasTimer)
     {
         _player = player;
 
@@ -54,22 +55,28 @@ public class PlayerViewModel : ViewModelBase
         };
         _timer.Tick += TimerTick;
 
+        _hasTimer = hasTimer;
         UpdateTimerText();
     }
+
 
     public void StartTurn(TimeSpan initialTime)
     {
         IsHisTurn = true;
-        
-        if (!_timer.IsEnabled)
+        if (!_timer.IsEnabled && _hasTimer)
+        {
             _timer.Start();
+        }
     }
 
     public void EndTurn()
     {
         IsHisTurn = false;
-        _timer.Stop();
-        IdleTime = _initialIdleTime.ToString(@"mm\:ss");
+        if (_hasTimer)
+        {
+            _timer.Stop();
+            IdleTime = _initialIdleTime.ToString(@"mm\:ss");
+        }
     }
     
     private void TimerTick(object? sender, EventArgs e)
@@ -79,6 +86,9 @@ public class PlayerViewModel : ViewModelBase
 
     private void UpdateTimerText()
     {
+        if (!_hasTimer)
+            return;
+        
         var timeRemaining = _player.RemainingTime - _player.CurrentStopwatch.Elapsed;
         var idleTimeRemaining = _initialIdleTime - _player.CurrentStopwatch.Elapsed;
         

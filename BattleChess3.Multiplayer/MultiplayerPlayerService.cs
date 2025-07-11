@@ -103,7 +103,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public Player GetCurrentPlayer()
     {
         if (LoggedInPlayer is null)
-            return new Player(null, "Player 1", null, 1);
+            return new Player(null, "Red player", null, 1);
 
         return new Player(LoggedInPlayer.Id, LoggedInPlayer.Name, LoggedInPlayer.Elo, 1);
     }
