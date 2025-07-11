@@ -26,7 +26,8 @@
             <Button Grid.Column="0"
                     PreviewMouseDown="DragButton_MouseDown"
                     BorderThickness="4 4 2 4"
-                    Background="Transparent">
+                    Background="Transparent"
+                    MouseDoubleClick="Control_OnMouseDoubleClick">
                 <Button.Style>
                     <Style BasedOn="{StaticResource ScalingButtonStyle}" TargetType="Button">
                         <Style.Triggers>

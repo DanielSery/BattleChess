@@ -15,6 +15,8 @@ public class RegisteredPlayer
     
     public string PasswordSalt { get; set; }
     
+    public string EmailHash { get; set; }
+    
     public short Elo { get; set; }
     
     public byte[] UnlockedFigures { get; set; }

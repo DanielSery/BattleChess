@@ -13,7 +13,7 @@ public class DatabaseClearer
 
     public DatabaseClearer()
     {
-        var client = new MongoClient(DbSecrets.ConnectionString);
+        var client = new MongoClient(Secrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _rankedGamesCollection = database.GetCollection<RankedGame>("RankedGames");
         _rankedGameJoinsCollection = database.GetCollection<RankedGameJoin>("RankedGameJoins");

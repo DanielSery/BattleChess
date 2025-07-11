@@ -13,5 +13,6 @@ public interface IMultiplayerPlayerService
     Task<Result<Player>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken);
     Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken);
     Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken);
-    Task<Result> TrySignUpAsync(string name, string hash, string salt, CancellationToken cancellationToken);
+    Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, CancellationToken cancellationToken);
+    Task<Result> TryVerifyEmailAsync(string emailHash, CancellationToken cancellationToken);
 }

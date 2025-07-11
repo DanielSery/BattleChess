@@ -53,4 +53,18 @@ public partial class MainWindow
     {
         Close();
     }
+
+    private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (WindowState == WindowState.Normal)
+        {
+            WindowState = WindowState.Maximized;
+            MaximizeButtonTextBlock.Text = "🗗"; // Change to restore icon
+        }
+        else if (WindowState == WindowState.Maximized)
+        {
+            WindowState = WindowState.Normal;
+            MaximizeButtonTextBlock.Text = "🗖"; // Change to maximize icon
+        }
+    }
 }

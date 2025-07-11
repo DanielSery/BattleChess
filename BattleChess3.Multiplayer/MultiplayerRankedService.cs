@@ -24,7 +24,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
         
-        var client = new MongoClient(DbSecrets.ConnectionString);
+        var client = new MongoClient(Secrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _rankedGamesCollection = database.GetCollection<RankedGame>("RankedGames");
         _rankedGameJoinsCollection = database.GetCollection<RankedGameJoin>("RankedGameJoins");
@@ -187,7 +187,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                 Builders<RankedGame>.Filter.Where(g => Math.Abs(g.Elo - targetElo) < eloDifference));
             // ReSharper disable once PossiblyMistakenUseOfCancellationToken
             var foundGames = await _rankedGamesCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundGame = foundGames.FirstOrDefault();
+            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
+            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken);
             if (foundGame is not null)
             {
                 return foundGame;
@@ -211,7 +212,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             var filter = Builders<RankedGameJoin>.Filter.Eq(g => g.GameId, gameId);
             // ReSharper disable once PossiblyMistakenUseOfCancellationToken
             var foundGames = await _rankedGameJoinsCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundGame = foundGames.FirstOrDefault();
+            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
+            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken);
             if (foundGame is not null)
             {
                 return foundGame;
@@ -270,7 +272,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             // ReSharper disable once PossiblyMistakenUseOfCancellationToken
             var foundGames = await _rankedGamesCollection.FindAsync(filter, cancellationToken: cancellationToken);
             // ReSharper disable once PossiblyMistakenUseOfCancellationToken
-            var foundGame = foundGames.FirstOrDefault(cancellationToken: cancellationToken);
+            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken: cancellationToken);
             if (foundGame is null)
             {
                 Console.WriteLine("Did not find game");

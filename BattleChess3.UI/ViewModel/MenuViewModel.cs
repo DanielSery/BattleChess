@@ -109,6 +109,7 @@ public class MenuViewModel : ViewModelBase
     private void ShowSignUp()
     {
         SignUpShown = true;
+        SignUpViewModel.OnActivation();
     }
 
     private void ShowLeaderboard()
@@ -126,6 +127,7 @@ public class MenuViewModel : ViewModelBase
     {
         MultiplayerViewModel.OnDeactivation();
         LeaderboardViewModel.OnDeactivation();
+        SignUpViewModel.OnDeactivation();
         
         _loginShown = false;
         _signUpShown = false;

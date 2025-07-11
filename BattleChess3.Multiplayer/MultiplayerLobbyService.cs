@@ -26,7 +26,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
         
-        var client = new MongoClient(DbSecrets.ConnectionString);
+        var client = new MongoClient(Secrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _gameLobbyCollection = database.GetCollection<GameLobby>("GameLobbies");
         _gameJoinsCollection = database.GetCollection<GameLobbyJoin>("GameLobbyJoins");
@@ -261,7 +261,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         Builders<GameLobby>.Filter.Eq(g => g.Version, _version)
                     );
                     var foundGames = await _gameLobbyCollection.FindAsync(filter, cancellationToken: cancellationToken);
-                    var lobby = foundGames.FirstOrDefault();
+                    var lobby = await foundGames.FirstOrDefaultAsync(cancellationToken);
                     Console.WriteLine($"Found lobby with name: {lobbyName}");
 
                     var hash = GetHash(password, lobby.PasswordSalt);

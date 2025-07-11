@@ -347,7 +347,6 @@
                 
                         <!-- Password Content -->
                         <ScrollViewer x:Name="PART_ContentHost" 
-                                      Margin="5" 
                                       VerticalAlignment="Center" />
                     </Grid>
                 </ControlTemplate>
@@ -378,7 +377,6 @@
                 
                         <!-- Password Content -->
                         <ScrollViewer x:Name="PART_ContentHost" 
-                                      Margin="5" 
                                       VerticalAlignment="Center" />
                     </Grid>
                 </ControlTemplate>

@@ -22,7 +22,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         _scheduler = scheduler;
         _playerService = playerService;
         
-        var client = new MongoClient(DbSecrets.ConnectionString);
+        var client = new MongoClient(Secrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
@@ -85,7 +85,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                     Console.WriteLine($"Searching for winning player with id: {won.PlayerId}");
                     var winningPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, won.PlayerId);
                     var winningPlayers = await _playersCollection.FindAsync(winningPlayerFilter);
-                    var winningPlayer = winningPlayers.FirstOrDefault();
+                    var winningPlayer = await winningPlayers.FirstOrDefaultAsync();
                     if (winningPlayer is null)
                     {
                         return Result.Fail("Could not find winning player");
@@ -95,7 +95,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                     Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
                     var losingPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
                     var losingPlayers = await _playersCollection.FindAsync(losingPlayerFilter);
-                    var losingPlayer = losingPlayers.FirstOrDefault();
+                    var losingPlayer = await losingPlayers.FirstOrDefaultAsync();
                     if (losingPlayer is null)
                     {
                         return Result.Fail("Could not find losing player");

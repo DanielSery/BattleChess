@@ -14,7 +14,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public MultiplayerPlayerService(IMultiplayerScheduler scheduler)
     {
         _scheduler = scheduler;
-        var client = new MongoClient(DbSecrets.ConnectionString);
+        var client = new MongoClient(Secrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
     }
@@ -119,7 +119,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     Console.WriteLine($"Getting player with id: {playerId}");
                     var filter = Builders<RegisteredPlayer>.Filter.Eq("Id", playerId);
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
-                    var foundPlayer = foundPlayers.FirstOrDefault();
+                    var foundPlayer = await foundPlayers.FirstOrDefaultAsync(cancellationToken);
                     if (foundPlayer is null)
                     {
                         Console.WriteLine("Did not find player");
@@ -149,7 +149,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     Console.WriteLine($"Getting user salt with name: {name}");
                     var filter = Builders<RegisteredPlayer>.Filter.Eq("Name", name);
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
-                    var foundPlayer = foundPlayers.FirstOrDefault();
+                    var foundPlayer = await foundPlayers.FirstOrDefaultAsync(cancellationToken);
                     if (foundPlayer is null)
                     {
                         Console.WriteLine("Did not find player");
@@ -182,7 +182,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                         Builders<RegisteredPlayer>.Filter.Eq(g => g.PasswordHash, hash)
                     );
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
-                    var foundPlayer = foundPlayers.FirstOrDefault();
+                    var foundPlayer = await foundPlayers.FirstOrDefaultAsync(cancellationToken);
                     if (foundPlayer is null)
                     {
                         return Result.Fail("Incorrect username or password");
@@ -203,7 +203,37 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }
     }
 
-    public Task<Result> TrySignUpAsync(string name, string hash, string salt, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public Task<Result> TryVerifyEmailAsync(string emailHash, CancellationToken cancellationToken)
+    {
+        lock (_scheduler.SyncLock)
+        {
+            return _scheduler.QueueTask(async () =>
+            {
+                try
+                {
+                    Console.WriteLine($"Getting users with email hash: {emailHash}");
+                    var filter = Builders<RegisteredPlayer>.Filter.Eq(g => g.EmailHash, emailHash);
+                    var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
+                    var foundPlayer = await foundPlayers.FirstOrDefaultAsync(cancellationToken);
+                    if (foundPlayer is not null && string.Equals(foundPlayer.EmailHash, emailHash, StringComparison.Ordinal))
+                    {
+                        Console.WriteLine($"Found user with email hash: {emailHash}");
+                        return Result.Fail("User with given email already exists");
+                    }
+                    
+                    return Result.Ok();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex}");
+                    return Result.Fail(ex.Message);
+                }
+            });
+        }
+    }
+
+    public Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -212,12 +242,20 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 try
                 {
                     Console.WriteLine($"Getting users with name: {name}");
-                    var filter = Builders<RegisteredPlayer>.Filter.Eq("Name", name);
+                    var filter = Builders<RegisteredPlayer>.Filter.Or(
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.Name, name),
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.EmailHash, emailHash));
                     var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
-                    if (await foundPlayers.AnyAsync(cancellationToken: cancellationToken))
+                    var foundPlayer = await foundPlayers.FirstOrDefaultAsync(cancellationToken);
+                    if (foundPlayer is not null && string.Equals(foundPlayer.Name, name, StringComparison.Ordinal))
                     {
                         Console.WriteLine($"Found user with name: {name}");
                         return Result.Fail($"User with name {name} already exists");
+                    }
+                    else if (foundPlayer is not null && string.Equals(foundPlayer.EmailHash, emailHash, StringComparison.Ordinal))
+                    {
+                        Console.WriteLine($"Found user with email hash: {emailHash}");
+                        return Result.Fail($"User with given email already exists");
                     }
                     
                     Console.WriteLine($"Creating new player with name: {name}");
@@ -226,6 +264,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                         Name = name,
                         PasswordHash = hash,
                         PasswordSalt = salt,
+                        EmailHash = emailHash,
                         Elo = 1000,
                         UnlockedFigures = new byte[16]
                     };
