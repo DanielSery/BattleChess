@@ -9,10 +9,6 @@ namespace BattleChess3.UI.MainWindow;
 
 public sealed class MainWindowViewModel : ViewModelBase
 {
-    private bool _editorTabSelected;
-    private bool _gameTabSelected;
-    private bool _menuTabSelected = true;
-    
     private readonly IPlayerService _playerService;
     private readonly IMultiplayerGameService _multiplayerGameService;
 
@@ -44,31 +40,30 @@ public sealed class MainWindowViewModel : ViewModelBase
         BoardViewModel.RequestSwitchToGame += OnRequestSwitchToGame;
         BoardViewModel.RequestSwitchToMenu += OnRequestSwitchToMainView;
     }
-
-    public bool MenuTabSelected
+    
+    private SelectedMainWindowTab _selectedTab = SelectedMainWindowTab.Menu;
+    public SelectedMainWindowTab SelectedTab
     {
-        get => _menuTabSelected;
-        set => SetTabSelected(out _menuTabSelected, value);
-    }
-
-    public bool GameTabSelected
-    {
-        get => _gameTabSelected;
-        set => SetTabSelected(out _gameTabSelected, value);
-    }
-
-    public bool EditorTabSelected
-    {
-        get => _editorTabSelected;
-        set => SetTabSelected(out _editorTabSelected, value);
+        get => _selectedTab;
+        set
+        {
+            var previousTab = _selectedTab;
+            if (SetProperty(ref _selectedTab, value))
+            {
+                BoardViewModel.ClearSelectedTile();
+                SelectedTabChanged?.Invoke(this, (previousTab, value));
+            }
+        }
     }
 
     public MenuViewModel MenuViewModel { get; }
     public BoardViewModel BoardViewModel { get; }
     public EditorViewModel EditorViewModel { get; }
-    public PlayersViewModel PlayersViewModel { get; set; }
+    public PlayersViewModel PlayersViewModel { get; }
     public ILoadingService LoadingService { get; }
     public INotificationService NotificationService { get; }
+
+    public event EventHandler<(SelectedMainWindowTab, SelectedMainWindowTab)>? SelectedTabChanged;
 
     private async void PlayerServiceOnPlayerWon(object? sender, (bool notifyOther, WinType winType, Player? won, Player? lost) e)
     {
@@ -121,29 +116,16 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private void OnRequestSwitchToMainView(object? sender, EventArgs e)
     {
-        MenuTabSelected = true;
+        SelectedTab = SelectedMainWindowTab.Menu;
     }
 
     private void OnRequestSwitchToGame(object? sender, EventArgs e)
     {
-        GameTabSelected = true;
+        SelectedTab = SelectedMainWindowTab.Game;
     }
 
     private void OnRequestSwitchToEditor(object? sender, EventArgs e)
     {
-        EditorTabSelected = true;
-    }
-
-    private void SetTabSelected(out bool selectedTab, bool value)
-    {
-        _menuTabSelected = false;
-        _gameTabSelected = false;
-        _editorTabSelected = false;
-        selectedTab = value;
-
-        BoardViewModel.ClearSelectedTile();
-        RaisePropertyChanged(nameof(MenuTabSelected));
-        RaisePropertyChanged(nameof(GameTabSelected));
-        RaisePropertyChanged(nameof(EditorTabSelected));
+        SelectedTab = SelectedMainWindowTab.Editor;
     }
 }

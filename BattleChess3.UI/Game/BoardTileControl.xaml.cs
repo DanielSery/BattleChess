@@ -54,7 +54,7 @@ public partial class BoardTileControl
         {
             From = Colors.Transparent,
             To = targetColor,
-            Duration = TimeSpan.FromSeconds(1),
+            Duration = TimeSpan.FromSeconds(0.4),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             AutoReverse = true,
             RepeatBehavior = new RepeatBehavior(1), // play once forward and once backward

@@ -92,10 +92,10 @@
 
         <Grid ClipToBounds="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
+
             <Border Grid.Column="0"
                     SnapsToDevicePixels="True"
                     x:Name="ThisBorderControl"
@@ -104,111 +104,133 @@
                     DataContextChanged="GameBoard_OnDataContextChanged">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    
-                    <Border x:Name="MenuBorder" Grid.Row="0" SnapsToDevicePixels="True"
-                            BorderBrush="Black" BorderThickness="0 0 4 0"
-                            ClipToBounds="True">
-                        <Border.RenderTransform>
-                            <TranslateTransform x:Name="MenuTransform"/>
-                        </Border.RenderTransform>
-                        <menu:MenuControl DataContext="{Binding MenuViewModel}"/>
+
+                    <Border Grid.Row="0" SnapsToDevicePixels="True"
+                            BorderBrush="Black" BorderThickness="0 0 4 0">
+                        <Border x:Name="MenuControl"
+                                CacheMode="BitmapCache">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="MenuTransform" />
+                            </Border.RenderTransform>
+                            <menu:MenuControl DataContext="{Binding MenuViewModel}" />
+                        </Border>
                     </Border>
-                    
+
                     <Border Grid.Row="1" SnapsToDevicePixels="True"
-                            BorderBrush="Black" BorderThickness="0 0 4 0"
-                            Visibility="{Binding MenuTabSelected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                        <editor:TeamBoardControl DataContext="{Binding  MenuViewModel.TeamBoardViewModel}"
-                                                 Opacity="0.85" IsEnabled="False"/>
+                            BorderBrush="Black" BorderThickness="0 0 4 0">
+                        <editor:TeamBoardControl x:Name="TeamBoardControl"
+                                                 DataContext="{Binding  MenuViewModel.TeamBoardViewModel}"
+                                                 Opacity="0.85" IsEnabled="False"
+                                                 CacheMode="BitmapCache" />
                     </Border>
-                    
+
                     <Border Grid.Row="0" Grid.RowSpan="2" x:Name="ParentGameBoardBorder"
                             BorderBrush="Black" BorderThickness="0 0 4 0"
                             SnapsToDevicePixels="True">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Border x:Name="OffsetBorder" Grid.Row="0" Height="577.5"/>
-                            <Border x:Name="GameBoardBorder" Grid.Row="1" Visibility="Hidden">
-                                <Border Height="{Binding ActualHeight, ElementName=ThisBorderControl}">
-                                    <Border x:Name="TranslatedBorder">
-                                        <Border.RenderTransform>
-                                            <TranslateTransform x:Name="GameBoardTransform"/>
-                                        </Border.RenderTransform>
+                        <Grid ClipToBounds="True" x:Name="GameBoardOuterControl" Opacity="0.85"
+                              CacheMode="BitmapCache">
+                            <Grid.RenderTransform>
+                                <TranslateTransform x:Name="GameBoardOuterTransform" />
+                            </Grid.RenderTransform>
+                            <Grid ClipToBounds="True" x:Name="GameBoardMiddleControl"
+                                  CacheMode="BitmapCache">
+                                <Grid.RenderTransform>
+                                    <TranslateTransform x:Name="GameBoardMiddleTransform" />
+                                </Grid.RenderTransform>
+                                <Border x:Name="GameBoardInnerControl"
+                                        CacheMode="BitmapCache">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform x:Name="GameBoardInnerTransform" />
+                                    </Border.RenderTransform>
+                                    <Border Height="{Binding ActualHeight, ElementName=ThisBorderControl}">
                                         <game:GameBoardControl DataContext="{Binding BoardViewModel}" />
                                     </Border>
                                 </Border>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="0" 
+                            SnapsToDevicePixels="True"
+                            BorderBrush="Black" BorderThickness="0 0 0 6">
+                        <Grid ClipToBounds="True" x:Name="EditorUnitsOuterControl" CacheMode="BitmapCache">
+                            <Grid.RenderTransform>
+                                <TranslateTransform x:Name="EditorUnitsOuterTransform" />
+                            </Grid.RenderTransform>
+                            <Border x:Name="EditorUnitsInnerControl"
+                                    CacheMode="BitmapCache">
+                                <Border.RenderTransform>
+                                    <TranslateTransform x:Name="EditorUnitsInnerTransform" />
+                                </Border.RenderTransform>
+                                <editor:EditorUnitsControl DataContext="{Binding EditorViewModel.EditorUnits}"
+                                                           Opacity="0.85" />
                             </Border>
                         </Grid>
                     </Border>
-                    
-                    <Border Grid.Row="0" SnapsToDevicePixels="True"
-                            BorderBrush="Black" BorderThickness="0 0 0 6"
-                            Visibility="{Binding EditorTabSelected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                        <editor:EditorUnitsControl DataContext="{Binding EditorViewModel.EditorUnits}"
-                                                   Opacity="0.85" />
-                    </Border>
-                    <Border Grid.Row="1" SnapsToDevicePixels="True"
-                            BorderBrush="Black" BorderThickness="0 0 4 0"
-                            Visibility="{Binding EditorTabSelected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                        <editor:TeamBoardControl DataContext="{Binding EditorViewModel.TeamBoard}" />
-                    </Border>
                 </Grid>
-            </Border>
-            
-            <Border Grid.Column="1" 
-                    Visibility="{Binding MenuTabSelected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
-                    BorderBrush="Black" BorderThickness="2 0 4 0"
-                    SnapsToDevicePixels="True">
-                <Grid DataContext="{Binding MenuViewModel}">
-                    <Border
-                        Visibility="{Binding LoginShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                        <menu:LoginControl DataContext="{Binding LoginViewModel}" />
-                    </Border>
-                    <Border
-                        Visibility="{Binding SignUpShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                        <menu:SignUpControl DataContext="{Binding SignUpViewModel}" />
-                    </Border>
-                    <Border
-                        Visibility="{Binding LobbyShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                        <menu:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}" />
-                    </Border>
-                    <Border
-                        Visibility="{Binding LeaderboardShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                        <menu:LeaderboardControl DataContext="{Binding LeaderboardViewModel}" />
-                    </Border>
-                </Grid>
-            </Border>
-            
-            <Border x:Name="GameSideControlParent"
-                    Grid.Column="1" 
-                    Visibility="{Binding GameTabSelected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
-                    BorderBrush="Black" BorderThickness="2 0 4 0"
-                    SnapsToDevicePixels="True">
-                <Border x:Name="GameSideControl">
-                    <game:GameSideControl />
-                </Border>
-            </Border>
-            
-            <Border x:Name="EditorSideControlParent"
-                    Grid.Column="1" 
-                    Visibility="{Binding EditorTabSelected, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
-                    BorderBrush="Black" BorderThickness="0 0 4 0"
-                    SnapsToDevicePixels="True">
-                <Border x:Name="EditorSideControl">
-                    <editor:EditorRightControl DataContext="{Binding EditorViewModel}" />
-                </Border>
             </Border>
 
-            <mainWindow:LoadingControl 
+            <Grid Grid.Column="1" ClipToBounds="True" x:Name="ParentMenuSideControl">
+                <Border x:Name="MenuSideControl"
+                        BorderBrush="Black" BorderThickness="2 0 4 0"
+                        SnapsToDevicePixels="True"
+                        CacheMode="BitmapCache">
+                    <Border.RenderTransform>
+                        <TranslateTransform x:Name="MenuSideTransform" />
+                    </Border.RenderTransform>
+                    <Grid DataContext="{Binding MenuViewModel}">
+                        <Border Visibility="{Binding LoginShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                            <menu:LoginControl DataContext="{Binding LoginViewModel}"
+                                               CacheMode="BitmapCache" />
+                        </Border>
+                        <Border Visibility="{Binding SignUpShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                            <menu:SignUpControl DataContext="{Binding SignUpViewModel}"
+                                                CacheMode="BitmapCache" />
+                        </Border>
+                        <Border Visibility="{Binding LobbyShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                            <menu:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"
+                                                          CacheMode="BitmapCache" />
+                        </Border>
+                        <Border Visibility="{Binding LeaderboardShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
+                            <menu:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"
+                                                     CacheMode="BitmapCache" />
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="1" ClipToBounds="True" x:Name="ParentGameSideControl">
+                <Border x:Name="GameSideControl"
+                    BorderBrush="Black" BorderThickness="2 0 4 0"
+                    SnapsToDevicePixels="True"
+                    CacheMode="BitmapCache">
+                    <Border.RenderTransform>
+                        <TranslateTransform x:Name="GameSideTransform" />
+                    </Border.RenderTransform>
+                    <game:GameSideControl />
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="1" ClipToBounds="True" x:Name="ParentEditorSideControl">
+                <Border x:Name="EditorSideControl"
+                        BorderBrush="Black" BorderThickness="0 0 4 0"
+                        SnapsToDevicePixels="True"
+                        CacheMode="BitmapCache">
+                    <Border.RenderTransform>
+                        <TranslateTransform x:Name="EditorSideTransform" />
+                    </Border.RenderTransform>
+                    <editor:EditorRightControl DataContext="{Binding EditorViewModel}" />
+                </Border>
+            </Grid>
+
+            <mainWindow:LoadingControl
                 Grid.Column="0" Grid.ColumnSpan="2"
                 DataContext="{Binding LoadingService}" />
 
-            <mainWindow:NotificationControl 
+            <mainWindow:NotificationControl
                 Grid.Column="0" Grid.ColumnSpan="2"
                 DataContext="{Binding NotificationService}" />
         </Grid>
