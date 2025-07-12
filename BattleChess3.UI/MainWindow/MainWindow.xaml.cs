@@ -127,11 +127,11 @@ public partial class MainWindow
         GameBoardMiddleTransform.Y = -parentHeight / 4;
         GameBoardOuterTransform.Y = 0;
         GameBoardOuterControl.Opacity = 1;
-        GameSideTransform.X = 0;
+        GameSideTransform.Y = 0;
         
         MenuTransform.Y = 0;
         TeamBoardControl.Opacity = 1;
-        MenuSideTransform.X = -ParentMenuSideControl.ActualWidth;
+        MenuSideTransform.Y = -ParentMenuSideControl.ActualHeight;
         
         GameBoardOuterControl.Visibility = Visibility.Visible;
         GameSideControl.Visibility = Visibility.Visible;
@@ -207,26 +207,26 @@ public partial class MainWindow
         {
             BeginTime = TimeSpan.Zero,
             From = 0,
-            To = ParentGameSideControl.ActualWidth,
+            To = ParentGameSideControl.ActualHeight,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(gameSideTransformAnimation, GameSideControl);
-        Storyboard.SetTargetProperty(gameSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(gameSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(gameSideTransformAnimation);
 
         var menuSideTransformAnimation = new DoubleAnimation
         {
             BeginTime = TimeSpan.Zero,
-            From = -ParentMenuSideControl.ActualWidth,
+            From = -ParentMenuSideControl.ActualHeight,
             To = 0,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(menuSideTransformAnimation, MenuSideControl);
-        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(menuSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
@@ -246,9 +246,9 @@ public partial class MainWindow
             GameBoardInnerTransform.Y = parentHeight / 4;
             GameBoardMiddleTransform.Y = -parentHeight;
             GameBoardOuterTransform.Y = parentHeight * 3 / 4;
-            GameSideTransform.X = ParentGameSideControl.ActualWidth;
+            GameSideTransform.Y = ParentGameSideControl.ActualHeight;
             
-            MenuSideTransform.X = 0;
+            MenuSideTransform.Y = 0;
             MenuTransform.Y = 0;
             TeamBoardControl.Opacity = 0.85;
         }
@@ -261,11 +261,11 @@ public partial class MainWindow
         GameBoardMiddleTransform.Y = -parentHeight;
         GameBoardOuterTransform.Y = parentHeight * 3 / 4;
         GameBoardOuterControl.Opacity = 0.85;
-        GameSideTransform.X = ParentGameSideControl.ActualWidth;
+        GameSideTransform.Y = ParentGameSideControl.ActualHeight;
         
         MenuTransform.Y = 0;
         TeamBoardControl.Opacity = 0.85;
-        MenuSideTransform.X = 0;
+        MenuSideTransform.Y = 0;
         
         GameBoardOuterControl.Visibility = Visibility.Visible;
         TeamBoardControl.Visibility = Visibility.Visible;
@@ -343,26 +343,26 @@ public partial class MainWindow
         {
             BeginTime = TimeSpan.Zero,
             From = 0,
-            To = -ParentMenuSideControl.ActualWidth,
+            To = -ParentMenuSideControl.ActualHeight,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(menuSideTransformAnimation, MenuSideControl);
-        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(menuSideTransformAnimation);
 
         var gameSideTransformAnimation = new DoubleAnimation
         {
             BeginTime = TimeSpan.Zero,
-            From = ParentGameSideControl.ActualWidth,
+            From = ParentGameSideControl.ActualHeight,
             To = 0,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(gameSideTransformAnimation, GameSideControl);
-        Storyboard.SetTargetProperty(gameSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(gameSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(gameSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
@@ -382,11 +382,11 @@ public partial class MainWindow
             GameBoardInnerTransform.Y = 0;
             GameBoardMiddleTransform.Y = 0;
             GameBoardOuterTransform.Y = 0;
-            GameSideTransform.X = 0;
+            GameSideTransform.Y = 0;
             
             MenuTransform.Y = -parentHeight * 3 / 4;
             TeamBoardControl.Opacity = 0.85;
-            MenuSideTransform.X = -ParentMenuSideControl.ActualWidth;
+            MenuSideTransform.Y = -ParentMenuSideControl.ActualHeight;
         }
     }
     
@@ -395,11 +395,11 @@ public partial class MainWindow
         var parentHeight = ParentGameBoardBorder.ActualHeight;
         EditorUnitsInnerTransform.Y = -parentHeight * 3 / 4;
         EditorUnitsOuterTransform.Y = parentHeight * 3 / 4;
-        EditorSideTransform.X = ParentEditorSideControl.ActualWidth;
+        EditorSideTransform.Y = ParentEditorSideControl.ActualHeight;
         
         MenuTransform.Y = 0;
         TeamBoardControl.Opacity = 0.85;
-        MenuSideTransform.X = 0;
+        MenuSideTransform.Y = 0;
         
         EditorUnitsOuterControl.Visibility = Visibility.Visible;
         EditorSideControl.Visibility = Visibility.Visible;
@@ -464,26 +464,26 @@ public partial class MainWindow
         {
             BeginTime = TimeSpan.Zero,
             From = 0,
-            To = -ParentMenuSideControl.ActualWidth,
+            To = -ParentMenuSideControl.ActualHeight,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(menuSideTransformAnimation, MenuSideControl);
-        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(menuSideTransformAnimation);
 
         var editorSideTransformAnimation = new DoubleAnimation
         {
             BeginTime = TimeSpan.Zero,
-            From = ParentEditorSideControl.ActualWidth,
+            From = ParentEditorSideControl.ActualHeight,
             To = 0,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(editorSideTransformAnimation, EditorSideControl);
-        Storyboard.SetTargetProperty(editorSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(editorSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(editorSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
@@ -501,11 +501,11 @@ public partial class MainWindow
 
             EditorUnitsInnerTransform.Y = 0;
             EditorUnitsOuterTransform.Y = 0;
-            EditorSideTransform.X = 0;
+            EditorSideTransform.Y = 0;
             
             MenuTransform.Y = -parentHeight * 3 / 4;
             TeamBoardControl.Opacity = 1;
-            MenuSideTransform.X = -ParentMenuSideControl.ActualWidth;
+            MenuSideTransform.Y = -ParentMenuSideControl.ActualHeight;
         }
     }
     
@@ -514,11 +514,11 @@ public partial class MainWindow
         var parentHeight = ParentGameBoardBorder.ActualHeight;
         EditorUnitsInnerTransform.Y = 0;
         EditorUnitsOuterTransform.Y = 0;
-        EditorSideTransform.X = 0;
+        EditorSideTransform.Y = 0;
         
         MenuTransform.Y = -parentHeight * 3 / 4;
         TeamBoardControl.Opacity = 1;
-        MenuSideTransform.X = -ParentMenuSideControl.ActualWidth;
+        MenuSideTransform.Y = -ParentMenuSideControl.ActualHeight;
         
         EditorUnitsOuterControl.Visibility = Visibility.Visible;
         EditorSideControl.Visibility = Visibility.Visible;
@@ -583,26 +583,26 @@ public partial class MainWindow
         {
             BeginTime = TimeSpan.Zero,
             To = 0,
-            From = -ParentMenuSideControl.ActualWidth,
+            From = -ParentMenuSideControl.ActualHeight,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(menuSideTransformAnimation, MenuSideControl);
-        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(menuSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(menuSideTransformAnimation);
 
         var editorSideTransformAnimation = new DoubleAnimation
         {
             BeginTime = TimeSpan.Zero,
-            To = ParentEditorSideControl.ActualWidth,
+            To = ParentEditorSideControl.ActualHeight,
             From = 0,
             Duration = TimeSpan.FromMilliseconds(600),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(editorSideTransformAnimation, EditorSideControl);
-        Storyboard.SetTargetProperty(editorSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+        Storyboard.SetTargetProperty(editorSideTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
         storyBoard.Children.Add(editorSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
@@ -620,11 +620,11 @@ public partial class MainWindow
 
             EditorUnitsInnerTransform.Y = -parentHeight * 3 / 4;
             EditorUnitsOuterTransform.Y = parentHeight * 3 / 4;
-            EditorSideTransform.X = ParentEditorSideControl.ActualWidth;
+            EditorSideTransform.Y = ParentEditorSideControl.ActualHeight;
             
             MenuTransform.Y = 0;
             TeamBoardControl.Opacity = 0.95;
-            MenuSideTransform.X = 0;
+            MenuSideTransform.Y = 0;
         }
     }
 }

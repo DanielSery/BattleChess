@@ -9,8 +9,8 @@ namespace BattleChess3.UI;
 /// </summary>
 public partial class App
 {
-    [DllImport("kernel32.dll")]
-    static extern bool AllocConsole();
+    // [DllImport("kernel32.dll")]
+    // static extern bool AllocConsole();
     
     public App()
     {

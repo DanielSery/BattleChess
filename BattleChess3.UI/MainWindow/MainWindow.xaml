@@ -153,23 +153,22 @@
                         </Grid>
                     </Border>
 
-                    <Border Grid.Row="0" 
-                            SnapsToDevicePixels="True"
-                            BorderBrush="Black" BorderThickness="0 0 0 6">
-                        <Grid ClipToBounds="True" x:Name="EditorUnitsOuterControl" CacheMode="BitmapCache">
-                            <Grid.RenderTransform>
-                                <TranslateTransform x:Name="EditorUnitsOuterTransform" />
-                            </Grid.RenderTransform>
-                            <Border x:Name="EditorUnitsInnerControl"
-                                    CacheMode="BitmapCache">
-                                <Border.RenderTransform>
-                                    <TranslateTransform x:Name="EditorUnitsInnerTransform" />
-                                </Border.RenderTransform>
-                                <editor:EditorUnitsControl DataContext="{Binding EditorViewModel.EditorUnits}"
-                                                           Opacity="0.85" />
-                            </Border>
-                        </Grid>
-                    </Border>
+                    <Grid Grid.Row="0" ClipToBounds="True" x:Name="EditorUnitsOuterControl" CacheMode="BitmapCache">
+                        <Grid.RenderTransform>
+                            <TranslateTransform x:Name="EditorUnitsOuterTransform" />
+                        </Grid.RenderTransform>
+                        
+                        <Border x:Name="EditorUnitsInnerControl"
+                                SnapsToDevicePixels="True"
+                                BorderBrush="Black" BorderThickness="0 0 0 6"
+                                CacheMode="BitmapCache">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="EditorUnitsInnerTransform" />
+                            </Border.RenderTransform>
+                            <editor:EditorUnitsControl DataContext="{Binding EditorViewModel.EditorUnits}"
+                                                       Opacity="0.85" />
+                        </Border>
+                    </Grid>
                 </Grid>
             </Border>
 
