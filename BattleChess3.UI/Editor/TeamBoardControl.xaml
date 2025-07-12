@@ -12,8 +12,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="ThisTeamBoardControl">
     <ItemsControl HorizontalAlignment="Stretch"
-                  ItemsSource="{Binding Tiles}"
-                  x:Name="ThisBoard">
+                  ItemsSource="{Binding Tiles}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <UniformGrid Columns="{Binding BoardWidth}" />

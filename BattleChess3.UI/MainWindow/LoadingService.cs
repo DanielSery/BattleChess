@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
-namespace BattleChess3.UI.Services;
+namespace BattleChess3.UI.MainWindow;
 
 public class LoadingService : ViewModelBase, ILoadingService
 {

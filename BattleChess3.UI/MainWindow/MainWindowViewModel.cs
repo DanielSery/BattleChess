@@ -3,7 +3,6 @@ using BattleChess3.Multiplayer;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.Game;
 using BattleChess3.UI.Menu;
-using BattleChess3.UI.Services;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.MainWindow;

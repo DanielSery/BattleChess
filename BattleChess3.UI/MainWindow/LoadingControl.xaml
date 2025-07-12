@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:services="clr-namespace:BattleChess3.UI.Services"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance services:LoadingService}"
+             xmlns:mainWindow="clr-namespace:BattleChess3.UI.MainWindow"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance mainWindow:LoadingService}"
              d:DesignHeight="300" d:DesignWidth="300"
              Focusable="True">
     <UserControl.InputBindings>

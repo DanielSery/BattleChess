@@ -5,9 +5,9 @@ namespace BattleChess3.UI.Editor;
 /// <summary>
 ///     Interaction logic for EditorControl.xaml
 /// </summary>
-public partial class EditorControl
+public partial class EditorRightControl
 {
-    public EditorControl()
+    public EditorRightControl()
     {
         InitializeComponent();
         IsVisibleChanged += OnIsVisibleChanged;

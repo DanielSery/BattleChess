@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-namespace BattleChess3.UI.Services;
+namespace BattleChess3.UI.MainWindow;
 
 public interface ILoadingService
 {

@@ -4,18 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
-             xmlns:editor="clr-namespace:BattleChess3.UI.Editor"
              xmlns:menu="clr-namespace:BattleChess3.UI.Menu"
              d:DataContext="{d:DesignInstance menu:MenuViewModel}"
              mc:Ignorable="d"
-             d:DesignHeight="350" d:DesignWidth="350">
-    <DockPanel LastChildFill="True">
-        <Border DockPanel.Dock="Left"
-                BorderBrush="Black" BorderThickness="0 0 4 0"
-                SnapsToDevicePixels="True"
-                x:Name="ThisBorderControl"
-                Width="{Binding ActualHeight, ElementName=ThisBorderControl}">
-            <Grid DockPanel.Dock="Left" SnapsToDevicePixels="True">
+             d:DesignHeight="350" d:DesignWidth="350"><Grid DockPanel.Dock="Left" SnapsToDevicePixels="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -27,8 +19,6 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -180,29 +170,5 @@
                 <Border Grid.Row="5" Grid.Column="5" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 6" />
                 <Border Grid.Row="5" Grid.Column="6" Background="#40000000" BorderBrush="Black" BorderThickness="0 0 0 6" />
                 <Border Grid.Row="5" Grid.Column="7" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 6" />
-
-                <Border Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="6" Grid.RowSpan="2" SnapsToDevicePixels="True">
-                    <editor:TeamBoardControl DataContext="{Binding TeamBoardViewModel}" 
-                                            Opacity="0.85" IsEnabled="False"/>
-                </Border>
             </Grid>
-        </Border>
-        <Border BorderBrush="Black" BorderThickness="2 0 4 0"
-                SnapsToDevicePixels="True">
-            <Grid>
-                <Border Visibility="{Binding LoginShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                    <menu:LoginControl DataContext="{Binding LoginViewModel}"/>
-                </Border>
-                <Border Visibility="{Binding SignUpShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                    <menu:SignUpControl DataContext="{Binding SignUpViewModel}"/>
-                </Border>
-                <Border Visibility="{Binding LobbyShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                    <menu:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"/>
-                </Border>
-                <Border Visibility="{Binding LeaderboardShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                    <menu:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"/>
-                </Border>
-            </Grid>
-        </Border>
-    </DockPanel>
 </UserControl>

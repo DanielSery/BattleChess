@@ -111,7 +111,7 @@
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>
       </Page>
-      <Page Update="Editor\EditorControl.xaml">
+      <Page Update="Editor\EditorRightControl.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>
@@ -136,5 +136,9 @@
     <ItemGroup>
         <Resource Include="Images\*" />
         <None Remove="Images\*" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\" />
     </ItemGroup>
 </Project>
