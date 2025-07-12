@@ -6,7 +6,8 @@
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
              xmlns:game="clr-namespace:BattleChess3.UI.Game"
              xmlns:shared="clr-namespace:BattleChess3.UI.Shared"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance shared:MainWindowViewModel}"
+             xmlns:mainWindow="clr-namespace:BattleChess3.UI.MainWindow"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance mainWindow:MainWindowViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>

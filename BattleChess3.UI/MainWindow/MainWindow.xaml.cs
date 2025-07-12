@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace BattleChess3.UI.Shared;
+namespace BattleChess3.UI.MainWindow;
 
 public partial class MainWindow
 {

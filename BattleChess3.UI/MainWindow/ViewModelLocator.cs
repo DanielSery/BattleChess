@@ -1,6 +1,6 @@
 ﻿using CommonServiceLocator;
 
-namespace BattleChess3.UI.Shared;
+namespace BattleChess3.UI.MainWindow;
 
 public static class ViewModelLocator
 {

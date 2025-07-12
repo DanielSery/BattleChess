@@ -3,7 +3,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using BattleChess3.UI.Services;
 
-namespace BattleChess3.UI.Shared;
+namespace BattleChess3.UI.MainWindow;
 
 public partial class NotificationControl
 {
