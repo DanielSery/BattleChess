@@ -100,8 +100,8 @@
                     SnapsToDevicePixels="True"
                     x:Name="ThisBorderControl"
                     Width="{Binding ActualHeight, ElementName=ThisBorderControl}"
-                    Loaded="GameBoard_OnLoaded"
-                    DataContextChanged="GameBoard_OnDataContextChanged">
+                    Loaded="MainArea_OnLoaded"
+                    DataContextChanged="MainArea_OnDataContextChanged">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="3*" />
@@ -131,7 +131,7 @@
                             BorderBrush="Black" BorderThickness="0 0 4 0"
                             SnapsToDevicePixels="True">
                         <Grid ClipToBounds="True" x:Name="GameBoardOuterControl" Opacity="0.85"
-                              CacheMode="BitmapCache">
+                              CacheMode="BitmapCache" Visibility="Collapsed">
                             <Grid.RenderTransform>
                                 <TranslateTransform x:Name="GameBoardOuterTransform" />
                             </Grid.RenderTransform>
@@ -153,7 +153,8 @@
                         </Grid>
                     </Border>
 
-                    <Grid Grid.Row="0" ClipToBounds="True" x:Name="EditorUnitsOuterControl" CacheMode="BitmapCache">
+                    <Grid Grid.Row="0" ClipToBounds="True" x:Name="EditorUnitsOuterControl" CacheMode="BitmapCache"
+                          Visibility="Collapsed">
                         <Grid.RenderTransform>
                             <TranslateTransform x:Name="EditorUnitsOuterTransform" />
                         </Grid.RenderTransform>
@@ -180,22 +181,32 @@
                     <Border.RenderTransform>
                         <TranslateTransform x:Name="MenuSideTransform" />
                     </Border.RenderTransform>
-                    <Grid DataContext="{Binding MenuViewModel}">
-                        <Border Visibility="{Binding LoginShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                            <menu:LoginControl DataContext="{Binding LoginViewModel}"
-                                               CacheMode="BitmapCache" />
+                    <Grid DataContext="{Binding MenuViewModel}" x:Name="ParentSubMenuSideControl"
+                          Loaded="ParentSubMenuSideControl_OnLoaded"
+                          DataContextChanged="ParentSubMenuSideControl_OnDataContextChanged">
+                        <Border x:Name="LoginSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="LoginSideTransform" />
+                            </Border.RenderTransform>
+                            <menu:LoginControl DataContext="{Binding LoginViewModel}"/>
                         </Border>
-                        <Border Visibility="{Binding SignUpShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                            <menu:SignUpControl DataContext="{Binding SignUpViewModel}"
-                                                CacheMode="BitmapCache" />
+                        <Border x:Name="SignupSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="SignupSideTransform" />
+                            </Border.RenderTransform>
+                            <menu:SignUpControl DataContext="{Binding SignUpViewModel}"/>
                         </Border>
-                        <Border Visibility="{Binding LobbyShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                            <menu:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"
-                                                          CacheMode="BitmapCache" />
+                        <Border x:Name="LobbySideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="LobbySideTransform" />
+                            </Border.RenderTransform>
+                            <menu:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"/>
                         </Border>
-                        <Border Visibility="{Binding LeaderboardShown, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}">
-                            <menu:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"
-                                                     CacheMode="BitmapCache" />
+                        <Border x:Name="LeaderboardSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="LeaderboardSideTransform" />
+                            </Border.RenderTransform>
+                            <menu:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"/>
                         </Border>
                     </Grid>
                 </Border>
@@ -205,7 +216,8 @@
                 <Border x:Name="GameSideControl"
                     BorderBrush="Black" BorderThickness="2 0 4 0"
                     SnapsToDevicePixels="True"
-                    CacheMode="BitmapCache">
+                    CacheMode="BitmapCache"
+                    Visibility="Collapsed">
                     <Border.RenderTransform>
                         <TranslateTransform x:Name="GameSideTransform" />
                     </Border.RenderTransform>
@@ -217,7 +229,8 @@
                 <Border x:Name="EditorSideControl"
                         BorderBrush="Black" BorderThickness="0 0 4 0"
                         SnapsToDevicePixels="True"
-                        CacheMode="BitmapCache">
+                        CacheMode="BitmapCache"
+                        Visibility="Collapsed">
                     <Border.RenderTransform>
                         <TranslateTransform x:Name="EditorSideTransform" />
                     </Border.RenderTransform>

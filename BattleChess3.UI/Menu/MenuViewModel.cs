@@ -47,32 +47,21 @@ public class MenuViewModel : ViewModelBase
     public MultiplayerViewModel MultiplayerViewModel { get; }
     public LeaderboardViewModel LeaderboardViewModel { get; }
 
-    private bool _lobbyShown;
-    public bool LobbyShown
+    private SelectedMenuTab _selectedMenuTab = SelectedMenuTab.None;
+    public SelectedMenuTab SelectedMenuTab
     {
-        get => _lobbyShown;
-        set => SetTabSelected(out _lobbyShown, value);
-    }
-
-    private bool _loginShown;
-    public bool LoginShown
-    {
-        get => _loginShown;
-        set => SetTabSelected(out _loginShown, value);
-    }
-
-    private bool _signUpShown;
-    public bool SignUpShown
-    {
-        get => _signUpShown;
-        set => SetTabSelected(out _signUpShown, value);
-    }
-
-    private bool _leaderboardShown;
-    public bool LeaderboardShown
-    {
-        get => _leaderboardShown;
-        set => SetTabSelected(out _leaderboardShown, value);
+        get => _selectedMenuTab;
+        set
+        {
+            var previousTab = _selectedMenuTab;
+            if (!SetProperty(ref _selectedMenuTab, value)) 
+                return;
+            
+            MultiplayerViewModel.OnDeactivation();
+            LeaderboardViewModel.OnDeactivation();
+            SignUpViewModel.OnDeactivation();
+            SelectedTabChanged?.Invoke(this, (previousTab, value));
+        }
     }
 
     public RelayCommand LocalGameCommand { get; }
@@ -85,6 +74,7 @@ public class MenuViewModel : ViewModelBase
 
     public event EventHandler? RequestSwitchToGame;
     public event EventHandler? RequestSwitchToEditor;
+    public event EventHandler<(SelectedMenuTab, SelectedMenuTab)>? SelectedTabChanged; 
     
     private void LocalGame()
     {
@@ -99,47 +89,29 @@ public class MenuViewModel : ViewModelBase
 
     private void ShowLobbies()
     {
-        LobbyShown = true;
+        SelectedMenuTab = SelectedMenuTab.Lobby;
         MultiplayerViewModel.OnActivation();
     }
 
     private void ShowLogin()
     {
-        LoginShown = true;
+        SelectedMenuTab = SelectedMenuTab.Login;
     }
 
     private void ShowSignUp()
     {
-        SignUpShown = true;
+        SelectedMenuTab = SelectedMenuTab.SignUp;
         SignUpViewModel.OnActivation();
     }
 
     private void ShowLeaderboard()
     {
-        LeaderboardShown = true;
+        SelectedMenuTab = SelectedMenuTab.Leaderboard;
         LeaderboardViewModel.OnActivation();
     }
 
     private void HideSideMenu(object? sender, EventArgs e)
     {
-        SetTabSelected(out _, false); 
-    }
-
-    private void SetTabSelected(out bool selectedTab, bool value)
-    {
-        MultiplayerViewModel.OnDeactivation();
-        LeaderboardViewModel.OnDeactivation();
-        SignUpViewModel.OnDeactivation();
-        
-        _loginShown = false;
-        _signUpShown = false;
-        _lobbyShown = false;
-        _leaderboardShown = false;
-        selectedTab = value;
-
-        RaisePropertyChanged(nameof(LoginShown));
-        RaisePropertyChanged(nameof(SignUpShown));
-        RaisePropertyChanged(nameof(LobbyShown));
-        RaisePropertyChanged(nameof(LeaderboardShown));
+        SelectedMenuTab = SelectedMenuTab.None;
     }
 }

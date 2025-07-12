@@ -1,16 +1,17 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using BattleChess3.UI.Menu;
 
 namespace BattleChess3.UI.MainWindow;
 
 public partial class MainWindow
 {
     private Storyboard? _storyBoard;
+    private EventHandler? _finishStoryboard;
 
     public MainWindow()
     {
@@ -72,36 +73,29 @@ public partial class MainWindow
         }
     }
 
-    private void GameBoard_OnLoaded(object sender, RoutedEventArgs e)
-        => GameSideControlSetAppearAnimation(null, (sender as Border)?.DataContext);
+    private void MainArea_OnLoaded(object sender, RoutedEventArgs e)
+        => MainAreaAppearAnimation(null, (sender as Border)?.DataContext);
     
-    private void GameBoard_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        => GameSideControlSetAppearAnimation(e.OldValue, e.NewValue);
+    private void MainArea_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        => MainAreaAppearAnimation(e.OldValue, e.NewValue);
     
-    private void GameSideControlSetAppearAnimation(object? oldDataContext, object? newDataContext)
+    private void MainAreaAppearAnimation(object? oldDataContext, object? newDataContext)
     {
         if (oldDataContext is MainWindowViewModel oldViewModel)
             oldViewModel.SelectedTabChanged -= OldViewModelOnSelectedTabChanged;
     
         if (newDataContext is MainWindowViewModel newViewModel)
-        {
-            TeamBoardControl.Visibility = newViewModel.SelectedTab is SelectedMainWindowTab.Editor or SelectedMainWindowTab.Menu ? Visibility.Visible : Visibility.Hidden;
-            MenuSideControl.Visibility = newViewModel.SelectedTab == SelectedMainWindowTab.Menu ? Visibility.Visible : Visibility.Hidden;
-            MenuControl.Visibility = newViewModel.SelectedTab == SelectedMainWindowTab.Menu ? Visibility.Visible : Visibility.Hidden;
-            
-            GameBoardOuterControl.Visibility = newViewModel.SelectedTab == SelectedMainWindowTab.Game ? Visibility.Visible : Visibility.Collapsed;
-            GameSideControl.Visibility = newViewModel.SelectedTab == SelectedMainWindowTab.Game ? Visibility.Visible : Visibility.Collapsed;
-            
-            EditorUnitsOuterControl.Visibility = newViewModel.SelectedTab == SelectedMainWindowTab.Editor ? Visibility.Visible : Visibility.Collapsed;
-            EditorSideControl.Visibility = newViewModel.SelectedTab == SelectedMainWindowTab.Editor ? Visibility.Visible : Visibility.Collapsed;
-            
             newViewModel.SelectedTabChanged += OldViewModelOnSelectedTabChanged;
-        }
     
 
         void OldViewModelOnSelectedTabChanged(object? sender, (SelectedMainWindowTab oldTab, SelectedMainWindowTab newTab) e)
         {
-            _storyBoard?.Stop();
+            if (_storyBoard is not null)
+            {
+                _storyBoard.Stop();
+                _finishStoryboard?.Invoke(this, EventArgs.Empty);
+            }
+            
             switch (e)
             {
                 case { oldTab: SelectedMainWindowTab.Menu, newTab: SelectedMainWindowTab.Game }:
@@ -230,12 +224,14 @@ public partial class MainWindow
         storyBoard.Children.Add(menuSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
+        _finishStoryboard = StoryBoardOnCompleted;
         storyBoard.Freeze();
         storyBoard.Begin();
         _storyBoard = storyBoard;
         
         void StoryBoardOnCompleted(object? sender, EventArgs e)
         {
+            _storyBoard = null;
             TeamBoardControl.Visibility = Visibility.Visible;
             MenuControl.Visibility = Visibility.Visible;
             MenuSideControl.Visibility = Visibility.Visible;
@@ -366,12 +362,14 @@ public partial class MainWindow
         storyBoard.Children.Add(gameSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
+        _finishStoryboard = StoryBoardOnCompleted;
         storyBoard.Freeze();
         storyBoard.Begin();
         _storyBoard = storyBoard;
         
         void StoryBoardOnCompleted(object? sender, EventArgs e)
         {
+            _storyBoard = null;
             GameBoardOuterControl.Visibility = Visibility.Visible;
             GameSideControl.Visibility = Visibility.Visible;
             MenuControl.Visibility = Visibility.Collapsed;
@@ -487,12 +485,14 @@ public partial class MainWindow
         storyBoard.Children.Add(editorSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
+        _finishStoryboard = StoryBoardOnCompleted;
         storyBoard.Freeze();
         storyBoard.Begin();
         _storyBoard = storyBoard;
         
         void StoryBoardOnCompleted(object? sender, EventArgs e)
         {
+            _storyBoard = null;
             EditorUnitsOuterControl.Visibility = Visibility.Visible;
             EditorSideControl.Visibility = Visibility.Visible;
             TeamBoardControl.Visibility = Visibility.Visible;
@@ -606,12 +606,14 @@ public partial class MainWindow
         storyBoard.Children.Add(editorSideTransformAnimation);
         
         storyBoard.Completed += StoryBoardOnCompleted;
+        _finishStoryboard = StoryBoardOnCompleted;
         storyBoard.Freeze();
         storyBoard.Begin();
         _storyBoard = storyBoard;
         
         void StoryBoardOnCompleted(object? sender, EventArgs e)
         {
+            _storyBoard = null;
             EditorUnitsOuterControl.Visibility = Visibility.Collapsed;
             EditorSideControl.Visibility = Visibility.Collapsed;
             TeamBoardControl.Visibility = Visibility.Visible;
@@ -626,5 +628,109 @@ public partial class MainWindow
             TeamBoardControl.Opacity = 0.95;
             MenuSideTransform.Y = 0;
         }
+    }
+
+    private void ParentSubMenuSideControl_OnLoaded(object sender, RoutedEventArgs e)
+        => SideAreaAppearAnimation(null, sender);
+
+    private void ParentSubMenuSideControl_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        => SideAreaAppearAnimation(e.OldValue, e.NewValue);
+    
+    
+    private void SideAreaAppearAnimation(object? oldDataContext, object? newDataContext)
+    {
+        if (oldDataContext is MenuViewModel oldViewModel)
+            oldViewModel.SelectedTabChanged -= OldViewModelOnSelectedTabChanged;
+    
+        if (newDataContext is MenuViewModel newViewModel)
+            newViewModel.SelectedTabChanged += OldViewModelOnSelectedTabChanged;
+    
+
+        void OldViewModelOnSelectedTabChanged(object? sender, (SelectedMenuTab oldTab, SelectedMenuTab newTab) e)
+        {
+            if (_storyBoard is not null)
+            {
+                _storyBoard.Stop();
+                _finishStoryboard?.Invoke(this, EventArgs.Empty);
+            }
+
+            var parentHeight = ParentSubMenuSideControl.ActualHeight;
+            var (oldControl, oldTransform) = GetSideTabControl(e.oldTab);
+            var (newControl, newTransform) = GetSideTabControl(e.newTab);
+
+            var storyBoard = new Storyboard();
+            if (oldControl is not null)
+            {
+                oldTransform!.Y = 0;
+                oldControl.Visibility = Visibility.Visible;
+                
+                var oldTransformAnimation = new DoubleAnimation
+                {
+                    BeginTime = TimeSpan.Zero,
+                    From = 0,
+                    To = -parentHeight, 
+                    Duration = TimeSpan.FromMilliseconds(600),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
+                    FillBehavior = FillBehavior.Stop
+                };
+                Storyboard.SetTarget(oldTransformAnimation, oldControl);
+                Storyboard.SetTargetProperty(oldTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
+                storyBoard.Children.Add(oldTransformAnimation);
+            }
+
+            if (newControl is not null)
+            {
+                newTransform!.Y = parentHeight;
+                newControl.Visibility = Visibility.Visible;
+                
+                var newTransformAnimation = new DoubleAnimation
+                {
+                    BeginTime = TimeSpan.Zero,
+                    From = parentHeight,
+                    To = 0, 
+                    Duration = TimeSpan.FromMilliseconds(600),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
+                    FillBehavior = FillBehavior.Stop
+                };
+                Storyboard.SetTarget(newTransformAnimation, newControl);
+                Storyboard.SetTargetProperty(newTransformAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
+                storyBoard.Children.Add(newTransformAnimation);
+            }
+        
+            storyBoard.Completed += StoryBoardOnCompleted;
+            _finishStoryboard = StoryBoardOnCompleted;
+            storyBoard.Freeze();
+            storyBoard.Begin();
+            _storyBoard = storyBoard;
+        
+            void StoryBoardOnCompleted(object? sender1, EventArgs e1)
+            {
+                _storyBoard = null;
+                if (oldControl is not null)
+                {
+                    oldTransform!.Y = -parentHeight;
+                    oldControl.Visibility = Visibility.Collapsed;
+                }
+
+                if (newControl is not null)
+                {
+                    newTransform!.Y = 0;
+                    newControl.Visibility = Visibility.Visible;
+                }
+            }
+        }
+    }
+
+    private (Border? control, TranslateTransform? transform) GetSideTabControl(SelectedMenuTab selectedMenuTab)
+    {
+        return selectedMenuTab switch
+        {
+            SelectedMenuTab.None => (null, null),
+            SelectedMenuTab.Lobby => (LobbySideControl, LobbySideTransform),
+            SelectedMenuTab.Login => (LoginSideControl, LoginSideTransform),
+            SelectedMenuTab.SignUp => (SignupSideControl, SignupSideTransform),
+            SelectedMenuTab.Leaderboard => (LeaderboardSideControl, LeaderboardSideTransform),
+            _ => throw new ArgumentOutOfRangeException(nameof(selectedMenuTab), selectedMenuTab, null)
+        };
     }
 }
