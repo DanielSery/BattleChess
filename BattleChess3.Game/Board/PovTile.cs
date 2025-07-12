@@ -27,4 +27,22 @@ public class PovTile : ITile
     {
         return new PovTile(this, player);
     }
+
+    /// <inheritdoc />
+    public void OnDied()
+    {
+        _innerTile.OnDied();
+    }
+
+    /// <inheritdoc />
+    public void OnMovedTo()
+    {
+        _innerTile.OnMovedTo();
+    }
+
+    /// <inheritdoc />
+    public void OnCreated()
+    {
+        _innerTile.OnCreated();
+    }
 }

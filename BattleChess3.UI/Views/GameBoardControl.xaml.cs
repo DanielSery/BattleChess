@@ -15,18 +15,18 @@ public partial class GameBoardControl
 
     private void Button_MouseEnter(object sender, MouseEventArgs e)
     {
-        var button = (Button)sender;
+        var button = (BoardTileControl)sender;
         var itemsControl = FindAncestor<ItemsControl>(button);
         var boardViewModel = (BoardViewModel)itemsControl.DataContext;
-        boardViewModel.MouseEnterCommand.Execute(button.CommandParameter);
+        boardViewModel.MouseEnterCommand.Execute(button.Button.CommandParameter);
     }
 
     private void Button_MouseLeave(object sender, MouseEventArgs e)
     {
-        var button = (Button)sender;
+        var button = (BoardTileControl)sender;
         var itemsControl = FindAncestor<ItemsControl>(button);
         var boardViewModel = (BoardViewModel)itemsControl.DataContext;
-        boardViewModel.MouseExitCommand.Execute(button.CommandParameter);
+        boardViewModel.MouseExitCommand.Execute(button.Button.CommandParameter);
     }
 
     private static T FindAncestor<T>(DependencyObject parent)

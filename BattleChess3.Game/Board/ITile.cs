@@ -33,4 +33,8 @@ public interface ITile
     {
         return $"{Position}:{Figure}";
     }
+
+    void OnDied();
+    void OnMovedTo();
+    void OnCreated();
 }

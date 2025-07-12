@@ -29,6 +29,7 @@ public class OldWizzard : ICrossFireFigureType
 
     void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
     {
+        targetTile.OnMovedTo();
         targetTile.TryDestroyTile(board, new Position(-1, -1));
         targetTile.TryDestroyTile(board, new Position(-1, 0));
         targetTile.TryDestroyTile(board, new Position(-1, 1));

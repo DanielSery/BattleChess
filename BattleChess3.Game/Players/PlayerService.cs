@@ -4,7 +4,7 @@ internal class PlayerService : IPlayerService
 {
     private readonly Dictionary<int, Player> _players = new Dictionary<int, Player>();
     private int _currentPlayerId;
-    
+
     public bool CanMove { get; private set; }
     
     public bool IsWaitingForMove { get; private set; }
@@ -55,8 +55,8 @@ internal class PlayerService : IPlayerService
         CanMove = _currentPlayerId == 1 || !IsMultiplayer;
         IsWaitingForMove = _currentPlayerId == 2 && IsMultiplayer;
         
-        EvaluateLost(_players[1], _players[2]);
-        EvaluateLost(_players[2], _players[1]);
+        EvaluateLost(_players[_currentPlayerId], _players[3 - _currentPlayerId]);
+        EvaluateLost(_players[3 - _currentPlayerId], _players[_currentPlayerId]);
 
         if (CanMove || IsWaitingForMove)
         {
@@ -98,6 +98,9 @@ internal class PlayerService : IPlayerService
 
     private void EvaluateLost(Player evaluatedPlayer, Player otherPlayer)
     {
+        if (!CanMove && !IsWaitingForMove)
+            return;
+        
         if (evaluatedPlayer.Figures.Any(x => x.IsKing))
             return;
         

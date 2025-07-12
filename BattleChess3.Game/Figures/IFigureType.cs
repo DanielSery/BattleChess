@@ -79,6 +79,7 @@ public interface IFigureType : IEquatable<IFigureType>
     
     void OnDied(ITile unitTile, IBoard board)
     {
+        unitTile.OnDied();
     }
 
     void OnMoving(ITile from, ITile to, IBoard board)
@@ -87,9 +88,11 @@ public interface IFigureType : IEquatable<IFigureType>
 
     void OnMoved(ITile from, ITile to, IBoard board)
     {
+        to.OnMovedTo();
     }
 
-    void OnCreated(IBoard board)
+    void OnCreated(ITile tile, IBoard board)
     {
+        tile.OnCreated();
     }
 }

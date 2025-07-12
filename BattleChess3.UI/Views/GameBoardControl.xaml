@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BattleChess3.UI.ViewModel"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
+             xmlns:views="clr-namespace:BattleChess3.UI.Views"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:BoardViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Border BorderBrush="Black" BorderThickness="0 0 4 0"
@@ -20,14 +21,9 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding DataContext.PlayTileCommand, ElementName=ThisGameBoardControl}"
-                            CommandParameter="{Binding}"
-                            Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
-                            d:DataContext="{d:DesignInstance viewModel:TileViewModel}"
-                            MouseEnter="Button_MouseEnter"
-                            MouseLeave="Button_MouseLeave">
-                        <Image Source="{Binding Figure.ImageUri}" />
-                    </Button>
+                    <views:BoardTileControl 
+                        MouseEnter="Button_MouseEnter"
+                        MouseLeave="Button_MouseLeave"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

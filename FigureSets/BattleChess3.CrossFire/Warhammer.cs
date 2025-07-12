@@ -22,6 +22,7 @@ public class Warhammer : ICrossFireFigureType
 
     void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
     {
+        targetTile.OnMovedTo();
         var movement = targetTile.Position - unitTile.Position;
         switch (movement)
         {

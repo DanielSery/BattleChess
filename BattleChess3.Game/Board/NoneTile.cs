@@ -15,4 +15,19 @@ public class NoneTile : ITile
     {
         return Instance;
     }
+
+    /// <inheritdoc />
+    public void OnDied()
+    {
+    }
+
+    /// <inheritdoc />
+    public void OnMovedTo()
+    {
+    }
+
+    /// <inheritdoc />
+    public void OnCreated()
+    {
+    }
 }

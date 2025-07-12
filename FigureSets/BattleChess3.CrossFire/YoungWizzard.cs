@@ -41,6 +41,7 @@ public class YoungWizzard : ICrossFireFigureType
 
     void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
     {
+        targetTile.OnMovedTo();
         var movement = targetTile.Position - unitTile.Position;
         if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {

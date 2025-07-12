@@ -19,24 +19,7 @@ internal static class AdvancedFigureActions
         if (!board.TryGetTile(unitTile.Position + positionDiff, out var targetTile))
             return;
 
-        if (!targetTile.IsEmpty())
-        {
-            unitTile.KillWithoutMove(targetTile, board);
-        }
-    }
-    
-    public static bool TryCreateDestroy(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
-    {
-        var movePosition = unitTile.Position + relativePosition;
-        if (!board.TryGetTile(movePosition, out var targetTile) ||
-            unitTile.IsEmpty())
-        {
-            action = FigureAction.None;
-            return false;
-        }
-
-        action = unitTile.CreateKillWithoutMove(targetTile, board);
-        return true;
+        unitTile.KillWithoutMove(targetTile, board);
     }
 
     public static bool CanAttack(this ITile unitTile, IBoard board, Position relativePosition)

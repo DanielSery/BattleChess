@@ -51,7 +51,7 @@ internal static class FiguresHelper
     {
         tile.Figure = createdFigure;
         tile.Figure.Owner.Figures.Add(tile.Figure);
-        tile.Figure.Type.OnCreated(board);
+        tile.Figure.Type.OnCreated(tile, board);
     }
 
     public static void Die(this ITile tile, IBoard board)
@@ -80,17 +80,13 @@ internal static class FiguresHelper
     public static void MoveToTile(this ITile from, ITile to, IBoard board)
     {
         var movingFigure = from.Figure.Type; 
-        var targetFigure = to.Figure.Type;
-        
         movingFigure.OnMoving(from, to, board);
-        targetFigure.OnDying(to, board);
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = from.Figure;
         from.Figure = new Figure(Player.Neutral, CrossFireFigureGroup.Empty, false);
         
         movingFigure.OnMoved(from, to, board);
-        targetFigure.OnDied(to, board);
     }
 
     public static void KillWithoutMove(this ITile from, ITile to, IBoard board)

@@ -39,6 +39,21 @@ public class Figure : IFigure, IFigureType, INotifyPropertyChanged
     public string SpecialDescription => Type.SpecialDescription;
     public IDictionary<int, Uri> ImageUris => Type.ImageUris;
 
+    public void OnDied(ITile unitTile, IBoard board)
+    {
+        unitTile.OnDied();
+    }
+
+    public void OnMoved(ITile from, ITile to, IBoard board)
+    {
+        to.OnMovedTo();
+    }
+
+    public void OnCreated(ITile tile, IBoard board)
+    {
+        tile.OnCreated();
+    }
+
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         return Type.GetPossibleActions(unitTile, board);

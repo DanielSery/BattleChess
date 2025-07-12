@@ -27,6 +27,10 @@ public class TileViewModel : ViewModelBase, ITile
     public Position Position { get; }
     public Position AbsolutePosition => Position;
 
+    public event EventHandler MovedTo;
+    public event EventHandler Died;
+    public event EventHandler Created;
+
     public bool IsBlack
     {
         get => _isBlack;
@@ -84,5 +88,23 @@ public class TileViewModel : ViewModelBase, ITile
     public ITile GetPovTile(Player player)
     {
         return new PovTile(this, player);
+    }
+
+    /// <inheritdoc />
+    public void OnDied()
+    {
+        Died?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <inheritdoc />
+    public void OnMovedTo()
+    {
+        MovedTo?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <inheritdoc />
+    public void OnCreated()
+    {
+        Created?.Invoke(this, EventArgs.Empty);
     }
 }

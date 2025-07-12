@@ -288,7 +288,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         await DeleteGameAsync(lobby.Id);
                         return Result.Fail("The lobby was invalid");
                     }
-                    else if (lobbyUpdate.JoinedId != lobby.Id)
+                    else if (lobbyUpdate.JoinedId != gameJoin.Id)
                     {
                         return Result.Fail("The lobby is already full");
                     }
