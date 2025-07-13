@@ -1,5 +1,7 @@
 ﻿using BattleChess3.Game.Players;
+using BattleChess3.Maps;
 using BattleChess3.Multiplayer.Tables;
+using BattleChess3.Multiplayer.Utilities;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -19,6 +21,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
     }
 
+    /// <inheritdoc />
+    public event EventHandler? LoggedInPlayerChanged;
+    
     public RegisteredPlayer? LoggedInPlayer { get; private set; }
 
     /// <inheritdoc />
@@ -191,6 +196,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     {
                         Console.WriteLine($"Found player: {foundPlayer.Name}");
                         LoggedInPlayer = foundPlayer;
+                        LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
                         return Result.Ok();
                     }
                 }
@@ -233,7 +239,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }
     }
 
-    public Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, CancellationToken cancellationToken)
+    public Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, MapBlueprint myMap, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -257,6 +263,10 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                         Console.WriteLine($"Found user with email hash: {emailHash}");
                         return Result.Fail($"User with given email already exists");
                     }
+
+                    var mapData = myMap.IsValid(IMultiplayerPlayerService.DefaultUnlockedFigures) 
+                        ? GetMapData(myMap) 
+                        : new byte[16];
                     
                     Console.WriteLine($"Creating new player with name: {name}");
                     var player = new RegisteredPlayer
@@ -266,7 +276,8 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                         PasswordSalt = salt,
                         EmailHash = emailHash,
                         Elo = 1000,
-                        UnlockedFigures = new byte[16]
+                        Map = mapData,
+                        UnlockedFigures = IMultiplayerPlayerService.DefaultUnlockedFigures,
                     };
 
                     await _playersCollection.InsertOneAsync(player, cancellationToken: cancellationToken);
@@ -279,5 +290,18 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 }
             });
         }
+    }
+
+    private static byte[] GetMapData(MapBlueprint map)
+    {
+        var myMapData = new byte[32];
+        for (var i = 0; i < map.Figures.Length; i++)
+        {
+            var index = i * 2;
+            myMapData[index] = (byte)(map.Figures[i].PlayerId + (map.Figures[i].IsKing ? 128 : 0));
+            myMapData[index + 1] = (byte)(map.Figures[i].FigureId);
+        }
+
+        return myMapData;
     }
 }

@@ -3,7 +3,10 @@ using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
+using BattleChess3.Game.Figures;
+using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
+using BattleChess3.UI.Editor;
 using BattleChess3.UI.MainWindow;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
@@ -16,18 +19,21 @@ public class SignUpViewModel : ViewModelBase
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly INotificationService _notificationService;
     private readonly ILoadingService _loadingService;
+    private readonly TeamBoardViewModel _teamBoardViewModel;
     private string _privateVerificationCode = string.Empty;
     
     public SignUpViewModel(
         LoginViewModel loginViewModel,
         IMultiplayerPlayerService multiplayerPlayerService,
         INotificationService notificationService,
-        ILoadingService loadingService)
+        ILoadingService loadingService,
+        TeamBoardViewModel teamBoardViewModel)
     {
         _loginViewModel = loginViewModel;
         _multiplayerPlayerService = multiplayerPlayerService;
         _notificationService = notificationService;
         _loadingService = loadingService;
+        _teamBoardViewModel = teamBoardViewModel;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
         RequestEndCommand = new RelayCommand(CallRequestEnd);
@@ -104,9 +110,19 @@ public class SignUpViewModel : ViewModelBase
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Passwords do not match.");
             return;
         }
+        
+        var myMap = new MapBlueprint
+        {
+            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
+            {
+                PlayerId = x.Figure.Owner.Index,
+                FigureId = ((IFigureType)x.Figure).FigureId,
+                IsKing = x.Figure.IsKing
+            }).ToArray(),
+        };
 
         var emailHash = GetHash(Email, Secrets.EmailSalt);
-        var result = await _multiplayerPlayerService.TrySignUpAsync(Name, password1Hash, passwordSalt, emailHash, loading.CancellationToken);
+        var result = await _multiplayerPlayerService.TrySignUpAsync(Name, password1Hash, passwordSalt, emailHash, myMap, loading.CancellationToken);
         if (result.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Error, result.Errors[0].Message);

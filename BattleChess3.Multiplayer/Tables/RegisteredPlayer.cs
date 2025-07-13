@@ -20,4 +20,6 @@ public class RegisteredPlayer
     public short Elo { get; set; }
     
     public byte[] UnlockedFigures { get; set; }
+    
+    public byte[] Map { get; set; }
 }

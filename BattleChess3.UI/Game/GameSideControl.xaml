@@ -119,7 +119,7 @@
                 Content="{Binding PlayersViewModel.CanExit, Converter={converters:BooleanMultiValueConverter TrueValue='Exit', FalseValue='Surrender'}}"
                 Command="{Binding BoardViewModel.SurrenderCommand}"
                 IsEnabled="{Binding PlayersViewModel.CanEndGame}"
-                Opacity="{Binding PlayersViewModel.CanEndGame, Converter={converters:BooleanMultiValueConverter TrueValue=1, FalseValue=0.7}}"
+                Opacity="{Binding PlayersViewModel.CanEndGame, Converter={converters:BooleanMultiValueConverter TrueValue=1, FalseValue=0.65}}"
                 BorderThickness="2 4 4 4"
                 FontSize="25"
                 Background="{StaticResource ButtonOrangeBackground}"

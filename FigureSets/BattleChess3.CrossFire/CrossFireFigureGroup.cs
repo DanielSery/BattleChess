@@ -18,6 +18,11 @@ public class CrossFireFigureGroup : IFigureGroup
     public IFigureType[] FigureTypes { get; } =
     [
         Empty,
+        Wall,
+        Explosives,
+        Trench,
+        Fire,
+        
         new Peasant(),
         new Spearman(),
         new Gladiator(),
@@ -53,11 +58,6 @@ public class CrossFireFigureGroup : IFigureGroup
         new Barbarian(),
         new Miner(),
         new Priest(),
-        
-        Wall,
-        Explosives,
-        Trench,
-        Fire,
         
         new OldWizzard(),
         new YoungWizzard(),

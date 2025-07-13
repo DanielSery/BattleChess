@@ -5,18 +5,15 @@ namespace BattleChess3.UI.Editor;
 
 public sealed class FigureTypeViewModel
 {
-    private readonly Func<ITile, IBoard, IEnumerable<FigureAction>> _getActionsFunc;
-
-    public FigureTypeViewModel(IFigureType figureType)
+    public FigureTypeViewModel(IFigureType figureType, bool isUnlocked)
     {
-        _getActionsFunc = figureType.GetPossibleActions;
-
         FigureId = figureType.FigureId;
         DisplayName = figureType.DisplayName;
         BaseDescription = figureType.BaseDescription;
         MovementDescription = figureType.MovementDescription;
         AttackDescription = figureType.AttackDescription;
         SpecialDescription = figureType.SpecialDescription;
+        IsUnlocked = isUnlocked;
 
         if (figureType.ImageUris.TryGetValue(1, out var redUri))
         {
@@ -30,17 +27,13 @@ public sealed class FigureTypeViewModel
         }
     }
 
-    public int PlayerId { get; set; }
+    public int PlayerId { get;}
     public int FigureId { get; }
     public string DisplayName { get; }
     public string BaseDescription { get; }
     public string MovementDescription { get; }
     public string AttackDescription { get; }
     public string SpecialDescription { get; }
+    public bool IsUnlocked { get;}
     public Uri? ImageUri { get; }
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        return _getActionsFunc.Invoke(unitTile, board);
-    }
 }

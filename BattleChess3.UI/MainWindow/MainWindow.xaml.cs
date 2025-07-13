@@ -398,6 +398,7 @@ public partial class MainWindow
         MenuTransform.Y = 0;
         TeamBoardControl.Opacity = 0.85;
         MenuSideTransform.Y = 0;
+        TeamBoardControl.IsEnabled = true;
         
         EditorUnitsOuterControl.Visibility = Visibility.Visible;
         EditorSideControl.Visibility = Visibility.Visible;
@@ -506,6 +507,7 @@ public partial class MainWindow
             MenuTransform.Y = -parentHeight * 3 / 4;
             TeamBoardControl.Opacity = 1;
             MenuSideTransform.Y = -ParentMenuSideControl.ActualHeight;
+            TeamBoardControl.IsEnabled = true;
         }
     }
     
@@ -627,6 +629,7 @@ public partial class MainWindow
             MenuTransform.Y = 0;
             TeamBoardControl.Opacity = 0.95;
             MenuSideTransform.Y = 0;
+            TeamBoardControl.IsEnabled = false;
         }
     }
 
