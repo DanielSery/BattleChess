@@ -111,16 +111,7 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
         
-        var myMap = new MapBlueprint
-        {
-            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
-            {
-                PlayerId = x.Figure.Owner.Index,
-                FigureId = ((IFigureType)x.Figure).FigureId,
-                IsKing = x.Figure.IsKing
-            }).ToArray(),
-        };
-
+        var myMap = _teamBoardViewModel.GetMapBlueprint();
         var emailHash = GetHash(Email, Secrets.EmailSalt);
         var result = await _multiplayerPlayerService.TrySignUpAsync(Name, password1Hash, passwordSalt, emailHash, myMap, loading.CancellationToken);
         if (result.IsFailed)

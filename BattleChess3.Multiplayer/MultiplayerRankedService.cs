@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer.Tables;
+using BattleChess3.Multiplayer.Utilities;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -50,7 +51,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             
             return _scheduler.QueueTask(async () =>
             {
-                var myMapData = GetMapData(myMap);
+                var myMapData = myMap.GetByteData();
                 try
                 {
                     var eloDifference = 50;
@@ -382,19 +383,6 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
         Console.WriteLine($"Closest game search elo: {closestGameSearch?.Elo ?? null}");
         return closestGameSearch;
-    }
-
-    private static byte[] GetMapData(MapBlueprint map)
-    {
-        var myMapData = new byte[32];
-        for (var i = 0; i < map.Figures.Length; i++)
-        {
-            var index = i * 2;
-            myMapData[index] = (byte)(map.Figures[i].PlayerId + (map.Figures[i].IsKing ? 128 : 0));
-            myMapData[index + 1] = (byte)(map.Figures[i].FigureId);
-        }
-
-        return myMapData;
     }
 
 }

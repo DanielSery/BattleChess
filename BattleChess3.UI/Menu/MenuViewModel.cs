@@ -1,5 +1,4 @@
-﻿using BattleChess3.UI.Editor;
-using BattleChess3.UI.Game;
+﻿using BattleChess3.UI.Game;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
@@ -14,7 +13,6 @@ public class MenuViewModel : ViewModelBase
     public MenuViewModel(
         BoardViewModel boardViewModel,
         MapsViewModel mapsViewModel,
-        TeamBoardViewModel teamBoardViewModel,
         SignUpViewModel signUpViewModel,
         LoginViewModel loginViewModel,
         MultiplayerViewModel multiplayerViewModel,
@@ -22,7 +20,6 @@ public class MenuViewModel : ViewModelBase
     {
         _boardViewModel = boardViewModel;
         _mapsViewModel = mapsViewModel;
-        TeamBoardViewModel = teamBoardViewModel;
         SignUpViewModel = signUpViewModel;
         LoginViewModel = loginViewModel;
         MultiplayerViewModel = multiplayerViewModel;
@@ -43,7 +40,6 @@ public class MenuViewModel : ViewModelBase
 
     public LoginViewModel LoginViewModel { get; }
     public SignUpViewModel SignUpViewModel { get; }
-    public TeamBoardViewModel TeamBoardViewModel { get; }
     public MultiplayerViewModel MultiplayerViewModel { get; }
     public LeaderboardViewModel LeaderboardViewModel { get; }
 
@@ -54,13 +50,12 @@ public class MenuViewModel : ViewModelBase
         set
         {
             var previousTab = _selectedMenuTab;
-            if (!SetProperty(ref _selectedMenuTab, value)) 
-                return;
-            
-            MultiplayerViewModel.OnDeactivation();
-            LeaderboardViewModel.OnDeactivation();
-            SignUpViewModel.OnDeactivation();
-            SelectedTabChanged?.Invoke(this, (previousTab, value));
+            if (SetProperty(ref _selectedMenuTab, value,
+                    onChanging: _ => OnDeactivation()))
+            {
+                SelectedTabChanged?.Invoke(this, (previousTab, value));
+                OnActivation();
+            }
         }
     }
 
@@ -90,7 +85,6 @@ public class MenuViewModel : ViewModelBase
     private void ShowLobbies()
     {
         SelectedMenuTab = SelectedMenuTab.Lobby;
-        MultiplayerViewModel.OnActivation();
     }
 
     private void ShowLogin()
@@ -101,13 +95,31 @@ public class MenuViewModel : ViewModelBase
     private void ShowSignUp()
     {
         SelectedMenuTab = SelectedMenuTab.SignUp;
-        SignUpViewModel.OnActivation();
     }
 
     private void ShowLeaderboard()
     {
         SelectedMenuTab = SelectedMenuTab.Leaderboard;
-        LeaderboardViewModel.OnActivation();
+    }
+
+    public void OnActivation()
+    {
+        if (SelectedMenuTab == SelectedMenuTab.Lobby)
+            MultiplayerViewModel.OnActivation();
+        else if (SelectedMenuTab == SelectedMenuTab.SignUp)
+            SignUpViewModel.OnActivation();
+        else if  (SelectedMenuTab == SelectedMenuTab.Leaderboard)
+            LeaderboardViewModel.OnActivation();
+    }
+
+    public void OnDeactivation()
+    {
+        if (SelectedMenuTab == SelectedMenuTab.Lobby)
+            MultiplayerViewModel.OnDeactivation();
+        else if (SelectedMenuTab == SelectedMenuTab.SignUp)
+            SignUpViewModel.OnDeactivation();
+        else if  (SelectedMenuTab == SelectedMenuTab.Leaderboard)
+            LeaderboardViewModel.OnDeactivation();
     }
 
     private void HideSideMenu(object? sender, EventArgs e)

@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.Players;
+﻿using System.Collections;
+using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.Multiplayer.Utilities;
@@ -210,6 +211,93 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     }
 
     /// <inheritdoc />
+    public Task<Result> UpdateCurrentPlayerMapAsync(MapBlueprint map, CancellationToken cancellationToken)
+    {
+        if (LoggedInPlayer is null)
+            return Task.FromResult(Result.Fail("No logged in player"));
+        
+        if (!map.IsValid(LoggedInPlayer.UnlockedFigures))
+            return Task.FromResult(Result.Fail("Trying to save setup with not unlocked figures"));
+        
+        lock (_scheduler.SyncLock)
+        {
+            return _scheduler.QueueTask(async () =>
+            {
+                try
+                {
+                    var mapData = map.GetByteData();
+                    
+                    Console.WriteLine($"Updating player setup with name: {LoggedInPlayer.Name}");
+                    var filter = Builders<RegisteredPlayer>.Filter.And(
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.Name, LoggedInPlayer.Name),
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.PasswordHash, LoggedInPlayer.PasswordHash)
+                    );
+                    var update = Builders<RegisteredPlayer>.Update.Set(x => x.Map, mapData);
+                    var result = await _playersCollection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+                    if (!result.IsAcknowledged)
+                    {
+                        return Result.Fail("Failed to change player setup");
+                    }
+                    
+                    LoggedInPlayer.Map = mapData;
+                    LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
+                    return Result.Ok();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex}");
+                    return Result.Fail(ex.Message);
+                }
+            });
+        }
+    }
+
+    /// <inheritdoc />
+    public Task<Result> UpdateCurrentPlayerUnlockedFigure(int unlockedFigureId, CancellationToken cancellationToken)
+    {
+        if (LoggedInPlayer is null)
+            return Task.FromResult(Result.Fail("No logged in player"));
+        
+        lock (_scheduler.SyncLock)
+        {
+            return _scheduler.QueueTask(async () =>
+            {
+                try
+                {
+                    var unlockedFiguresArray = new BitArray(LoggedInPlayer.UnlockedFigures)
+                    {
+                        [unlockedFigureId] = true
+                    };
+                    
+                    var newArray = new byte[LoggedInPlayer.UnlockedFigures.Length];
+                    unlockedFiguresArray.CopyTo(newArray, 0);
+
+                    Console.WriteLine($"Updating player setup with name: {LoggedInPlayer.Name}");
+                    var filter = Builders<RegisteredPlayer>.Filter.And(
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.Name, LoggedInPlayer.Name),
+                        Builders<RegisteredPlayer>.Filter.Eq(g => g.PasswordHash, LoggedInPlayer.PasswordHash)
+                    );
+                    var update = Builders<RegisteredPlayer>.Update.Set(x => x.UnlockedFigures, newArray);
+                    var result = await _playersCollection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+                    if (!result.IsAcknowledged)
+                    {
+                        return Result.Fail("Failed to change player");
+                    }
+                    
+                    LoggedInPlayer.UnlockedFigures = newArray;
+                    LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
+                    return Result.Ok();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex}");
+                    return Result.Fail(ex.Message);
+                }
+            });
+        }
+    }
+
+    /// <inheritdoc />
     public Task<Result> TryVerifyEmailAsync(string emailHash, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
@@ -265,8 +353,8 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     }
 
                     var mapData = myMap.IsValid(IMultiplayerPlayerService.DefaultUnlockedFigures) 
-                        ? GetMapData(myMap) 
-                        : new byte[16];
+                        ? myMap.GetByteData() 
+                        : MapBlueprint.ChessTeam.GetByteData();
                     
                     Console.WriteLine($"Creating new player with name: {name}");
                     var player = new RegisteredPlayer
@@ -290,18 +378,5 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 }
             });
         }
-    }
-
-    private static byte[] GetMapData(MapBlueprint map)
-    {
-        var myMapData = new byte[32];
-        for (var i = 0; i < map.Figures.Length; i++)
-        {
-            var index = i * 2;
-            myMapData[index] = (byte)(map.Figures[i].PlayerId + (map.Figures[i].IsKing ? 128 : 0));
-            myMapData[index + 1] = (byte)(map.Figures[i].FigureId);
-        }
-
-        return myMapData;
     }
 }

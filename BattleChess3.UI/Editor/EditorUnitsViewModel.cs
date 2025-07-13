@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using System.Windows.Documents;
 using BattleChess3.Game.Figures;
 using BattleChess3.Multiplayer;
+using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
@@ -10,12 +12,15 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
 {
     private readonly IFigureService _figureService;
     private readonly IMultiplayerPlayerService _playerService;
-    
-    private FigureTypeViewModel _tileInfo = new FigureTypeViewModel(Figure.None, false);
+
+    private IFigureInfo _mouseOnInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
+    private IFigureInfo _tileInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
     private FigureTypeViewModel[] _figures = [];
     private bool _tileInfoFocused;
 
-    public EditorUnitsViewModel(IFigureService figureService, IMultiplayerPlayerService playerService)
+    public EditorUnitsViewModel(
+        IFigureService figureService, 
+        IMultiplayerPlayerService playerService)
     {
         _figureService = figureService;
         _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
@@ -26,8 +31,10 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
 
         FigureGotFocusCommand = new RelayCommand<FigureTypeViewModel>(GotFocus);
         FigureLostFocusCommand = new RelayCommand<FigureTypeViewModel>(LostFocus);
-        FigureMouseEnterCommand = new RelayCommand<FigureTypeViewModel>(MouseEnterTile);
-        FigureMouseExitCommand = new RelayCommand<FigureTypeViewModel>(MouseExitTile);
+        FigureMouseEnterCommand = new RelayCommand<FigureTypeViewModel>(FigureMouseEnter);
+        FigureMouseExitCommand = new RelayCommand<FigureTypeViewModel>(FigureMouseExit);
+        TileMouseEnterCommand = new RelayCommand<TileViewModel>(TileMouseEnter);
+        TileMouseExitCommand = new RelayCommand<TileViewModel>(TileMouseExit);
     }
 
     public FigureTypeViewModel[] Figures
@@ -36,7 +43,7 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
         private set => SetProperty(ref _figures, value);
     }
 
-    public FigureTypeViewModel TileInfo
+    public IFigureInfo TileInfo
     {
         get => _tileInfo;
         private set => SetProperty(ref _tileInfo, value);
@@ -46,6 +53,36 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
     public RelayCommand<FigureTypeViewModel> FigureLostFocusCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureMouseEnterCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureMouseExitCommand { get; }
+    public RelayCommand<TileViewModel> TileMouseEnterCommand { get; }
+    public RelayCommand<TileViewModel> TileMouseExitCommand { get; }
+
+    public async Task<string?> PossiblyUnlockUnit(bool isWin)
+    {
+        var random = new Random();
+        var chance = isWin ? 0.015 : 0.01;
+        var potentialUnlock = new List<(int, string)>();
+        
+        foreach (var figure in Figures)
+        {
+            if (figure.IsUnlocked)
+                continue;
+
+            if (random.NextDouble() <= chance)
+                potentialUnlock.Add((figure.FigureId, figure.DisplayName));
+        }
+        
+        if (potentialUnlock.Count == 0)
+            return null;
+        
+        var unlocked = potentialUnlock[random.Next(0, potentialUnlock.Count)];
+        var result = await _playerService.UpdateCurrentPlayerUnlockedFigure(unlocked.Item1, CancellationToken.None);
+        if (result.IsFailed)
+        {
+            return null;
+        }
+        
+        return unlocked.Item2;
+    }
 
     private void GotFocus(FigureTypeViewModel? obj)
     {
@@ -57,26 +94,52 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
     private void LostFocus(FigureTypeViewModel? obj)
     {
         if (obj is null) return;
-        TileInfo = new FigureTypeViewModel(Figure.None, false);
+        TileInfo = _mouseOnInfo;
         _tileInfoFocused = false;
     }
 
-    private void MouseExitTile(FigureTypeViewModel? obj)
+    private void FigureMouseExit(FigureTypeViewModel? obj)
     {
         if (obj is null) return;
+        
+        _mouseOnInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
         if (_tileInfoFocused)
             return;
         
-        TileInfo = new FigureTypeViewModel(Figure.None, false);
+        TileInfo = _mouseOnInfo;
     }
 
-    private void MouseEnterTile(FigureTypeViewModel? obj)
+    private void FigureMouseEnter(FigureTypeViewModel? obj)
     {
         if (obj is null) return;
+
+        _mouseOnInfo = obj;
         if (_tileInfoFocused)
             return;
 
-        TileInfo = obj;
+        TileInfo = _mouseOnInfo;
+    }
+
+    private void TileMouseExit(TileViewModel? obj)
+    {
+        if (obj is null) return;
+
+        _mouseOnInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
+        if (_tileInfoFocused)
+            return;
+        
+        TileInfo =  _mouseOnInfo;
+    }
+
+    private void TileMouseEnter(TileViewModel? obj)
+    {
+        if (obj is null) return;
+
+        _mouseOnInfo = obj.Figure;
+        if (_tileInfoFocused)
+            return;
+
+        TileInfo = _mouseOnInfo;
     }
 
     private void RefreshFigures()

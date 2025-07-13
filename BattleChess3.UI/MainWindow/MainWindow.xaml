@@ -122,7 +122,7 @@
                     <Border Grid.Row="1" SnapsToDevicePixels="True"
                             BorderBrush="Black" BorderThickness="0 0 4 0">
                         <editor:TeamBoardControl x:Name="TeamBoardControl"
-                                                 DataContext="{Binding  MenuViewModel.TeamBoardViewModel}"
+                                                 DataContext="{Binding  EditorViewModel}"
                                                  Opacity="0.85" IsEnabled="False"
                                                  CacheMode="BitmapCache" />
                     </Border>

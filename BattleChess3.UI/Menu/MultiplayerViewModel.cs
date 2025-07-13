@@ -99,16 +99,7 @@ public class MultiplayerViewModel : ViewModelBase
     private async Task FindRankedGame()
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Finding ranked game");
-        var myMap = new MapBlueprint
-        {
-            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
-            {
-                PlayerId = x.Figure.Owner.Index,
-                FigureId = ((IFigureType)x.Figure).FigureId,
-                IsKing = x.Figure.IsKing
-            }).ToArray(),
-        };
-
+        var myMap = _teamBoardViewModel.GetMapBlueprint();
         var request = await _multiplayerRankedService.FindRankedGameAsync(myMap, loadingOperation.CancellationToken);
         if (request.IsFailed)
         {
@@ -151,16 +142,7 @@ public class MultiplayerViewModel : ViewModelBase
     private async Task CreateLobby()
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Creating lobby");
-        var myMap = new MapBlueprint
-        {
-            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
-            {
-                PlayerId = x.Figure.Owner.Index,
-                FigureId = ((IFigureType)x.Figure).FigureId,
-                IsKing = x.Figure.IsKing
-            }).ToArray(),
-        };
-    
+        var myMap = _teamBoardViewModel.GetMapBlueprint();
         var jobbyResult = await _multiplayerLobbyService.CreateLobbyAsync(
             Name,
             GetPassword(SecurePassword),
@@ -200,16 +182,7 @@ public class MultiplayerViewModel : ViewModelBase
     private async Task JoinLobby()
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Joining lobby");
-        var myMap = new MapBlueprint
-        {
-            Figures = _teamBoardViewModel.Tiles.Select(x => new FigureIdentifier
-            {
-                PlayerId = x.Figure.Owner.Index,
-                FigureId = ((IFigureType)x.Figure).FigureId,
-                IsKing = x.Figure.IsKing
-            }).ToArray(),
-        };
-        
+        var myMap = _teamBoardViewModel.GetMapBlueprint();
         var lobbyResult = await _multiplayerLobbyService.JoinLobbyAsync(
             Name,
             GetPassword(SecurePassword),

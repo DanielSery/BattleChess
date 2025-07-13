@@ -48,10 +48,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         set
         {
             var previousTab = _selectedTab;
-            if (SetProperty(ref _selectedTab, value))
+            if (SetProperty(ref _selectedTab, value,
+                    onChanging: _ => OnDeactivation()))
             {
-                BoardViewModel.ClearSelectedTile();
                 SelectedTabChanged?.Invoke(this, (previousTab, value));
+                OnActivation();
             }
         }
     }
@@ -70,7 +71,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         if (e.won is null || e.lost is null)
             return;
 
-        ShownMessage.MessageType messageType = ShownMessage.MessageType.Info;
+        var messageType = ShownMessage.MessageType.Info;
         if (!_playerService.IsMultiplayer)
         {
             messageType = ShownMessage.MessageType.Info;
@@ -100,18 +101,38 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name}'s king was captured.");
         }
-        
+
         var result = await _multiplayerGameService.HandleWinAsync(e.notifyOther, e.winType, e.won, e.lost);
         if (result.IsFailed)
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
-            return;
         }
-
-        if (!string.IsNullOrEmpty(result.Value))
+        else if (!string.IsNullOrEmpty(result.Value))
         {
             NotificationService.ShowMessage(messageType, result.Value);
         }
+        
+        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(e.won.Index == 1);
+        if (!string.IsNullOrEmpty(unlockedUnit))
+        {
+            NotificationService.ShowMessage(ShownMessage.MessageType.Success, $"Unlocked {unlockedUnit}");
+        }
+    }
+
+    private void OnActivation()
+    {
+        if (SelectedTab == SelectedMainWindowTab.Game)
+            BoardViewModel.OnActivation();
+        else if (SelectedTab == SelectedMainWindowTab.Menu)
+            MenuViewModel.OnActivation();
+    }
+
+    private void OnDeactivation()
+    {
+        if (SelectedTab == SelectedMainWindowTab.Game)
+            BoardViewModel.OnDeactivation();
+        else if (SelectedTab == SelectedMainWindowTab.Menu)
+            MenuViewModel.OnDeactivation();
     }
 
     private void OnRequestSwitchToMainView(object? sender, EventArgs e)

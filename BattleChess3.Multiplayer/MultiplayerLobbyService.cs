@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer.Tables;
+using BattleChess3.Multiplayer.Utilities;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -152,7 +153,6 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             
             return _scheduler.QueueTask(async () =>
             {
-                var myMapData = GetMapData(myMap);
                 try
                 {
                     Console.WriteLine($"Searching for lobby with name: {lobbyName}");
@@ -177,7 +177,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         LobbyName = lobbyName,
                         PasswordHash = hash,
                         PasswordSalt = salt,
-                        Map = myMapData,
+                        Map = myMap.GetByteData(),
                         PlayerId = currentPlayer?.Id ?? null,
                         Elo = currentPlayer?.Elo ?? null,
                         Version = _version,
@@ -276,7 +276,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     {
                         GameId = lobby.Id,
                         PlayerId = currentPlayer?.Id ?? null,
-                        Map = GetMapData(myMap),
+                        Map = myMap.GetByteData(),
                     };
                     await _gameJoinsCollection.InsertOneAsync(gameJoin, cancellationToken: cancellationToken);
                     Console.WriteLine($"Created join request with id: {gameJoin.Id}");
@@ -379,20 +379,6 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         {
             return null;
         }
-    }
-
-
-    private static byte[] GetMapData(MapBlueprint map)
-    {
-        var myMapData = new byte[32];
-        for (var i = 0; i < map.Figures.Length; i++)
-        {
-            var index = i * 2;
-            myMapData[index] = (byte)(map.Figures[i].PlayerId + (map.Figures[i].IsKing ? 128 : 0));
-            myMapData[index + 1] = (byte)(map.Figures[i].FigureId);
-        }
-
-        return myMapData;
     }
 
     private static string GetSalt()

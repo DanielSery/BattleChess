@@ -5,7 +5,7 @@ using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.Figures;
 
-public class Figure : IFigure, IFigureType, INotifyPropertyChanged
+public class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
 {
     public static readonly Figure None = new(Player.Neutral, NoneFigureType.Instance, false);
 

@@ -81,6 +81,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alchemist.
+        /// </summary>
+        internal static string Alchemist_DisplayName {
+            get {
+                return ResourceManager.GetString("Alchemist_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -147,6 +156,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archer.
+        /// </summary>
+        internal static string Archer_DisplayName {
+            get {
+                return ResourceManager.GetString("Archer_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -190,6 +208,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Barbarian_BaseDescription {
             get {
                 return ResourceManager.GetString("Barbarian_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Barbarian.
+        /// </summary>
+        internal static string Barbarian_DisplayName {
+            get {
+                return ResourceManager.GetString("Barbarian_DisplayName", resourceCulture);
             }
         }
         
@@ -250,6 +277,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bard.
+        /// </summary>
+        internal static string Bard_DisplayName {
+            get {
+                return ResourceManager.GetString("Bard_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -303,6 +339,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Builder_BaseDescription {
             get {
                 return ResourceManager.GetString("Builder_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Builder.
+        /// </summary>
+        internal static string Builder_DisplayName {
+            get {
+                return ResourceManager.GetString("Builder_DisplayName", resourceCulture);
             }
         }
         
@@ -373,6 +418,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Camel Archer.
+        /// </summary>
+        internal static string CamelArcher_DisplayName {
+            get {
+                return ResourceManager.GetString("CamelArcher_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -425,6 +479,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string CamelRider_BaseDescription {
             get {
                 return ResourceManager.GetString("CamelRider_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camel Rider.
+        /// </summary>
+        internal static string CamelRider_DisplayName {
+            get {
+                return ResourceManager.GetString("CamelRider_DisplayName", resourceCulture);
             }
         }
         
@@ -488,6 +551,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannon.
+        /// </summary>
+        internal static string Cannon_DisplayName {
+            get {
+                return ResourceManager.GetString("Cannon_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Cannon_MovementDescription {
@@ -537,6 +609,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Catapult.
+        /// </summary>
+        internal static string Catapult_DisplayName {
+            get {
+                return ResourceManager.GetString("Catapult_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Catapult_MovementDescription {
@@ -578,6 +659,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Chinese_BaseDescription {
             get {
                 return ResourceManager.GetString("Chinese_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chinese warrior.
+        /// </summary>
+        internal static string Chinese_DisplayName {
+            get {
+                return ResourceManager.GetString("Chinese_DisplayName", resourceCulture);
             }
         }
         
@@ -639,6 +729,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crossbowman.
+        /// </summary>
+        internal static string Crossbow_Crossbow {
+            get {
+                return ResourceManager.GetString("Crossbow_Crossbow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -693,6 +792,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Dragon_BaseDescription {
             get {
                 return ResourceManager.GetString("Dragon_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dragon.
+        /// </summary>
+        internal static string Dragon_DisplayName {
+            get {
+                return ResourceManager.GetString("Dragon_DisplayName", resourceCulture);
             }
         }
         
@@ -763,6 +871,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Elephant.
+        /// </summary>
+        internal static string Elephant_DisplayName {
+            get {
+                return ResourceManager.GetString("Elephant_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -810,6 +927,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty.
+        /// </summary>
+        internal static string Empty_DisplayName {
+            get {
+                return ResourceManager.GetString("Empty_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Empty_MovementDescription {
@@ -845,6 +971,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Explosives_BaseDescription {
             get {
                 return ResourceManager.GetString("Explosives_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explosives.
+        /// </summary>
+        internal static string Explosives_DisplayName {
+            get {
+                return ResourceManager.GetString("Explosives_DisplayName", resourceCulture);
             }
         }
         
@@ -885,6 +1020,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Fire_BaseDescription {
             get {
                 return ResourceManager.GetString("Fire_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fire.
+        /// </summary>
+        internal static string Fire_DisplayName {
+            get {
+                return ResourceManager.GetString("Fire_DisplayName", resourceCulture);
             }
         }
         
@@ -930,6 +1074,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Gladiator_BaseDescription {
             get {
                 return ResourceManager.GetString("Gladiator_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gladiator.
+        /// </summary>
+        internal static string Gladiator_DisplayName {
+            get {
+                return ResourceManager.GetString("Gladiator_DisplayName", resourceCulture);
             }
         }
         
@@ -991,6 +1144,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Japanese archer.
+        /// </summary>
+        internal static string JapanArcher_DisplayName {
+            get {
+                return ResourceManager.GetString("JapanArcher_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1044,6 +1206,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string King_BaseDescription {
             get {
                 return ResourceManager.GetString("King_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to King.
+        /// </summary>
+        internal static string King_DisplayName {
+            get {
+                return ResourceManager.GetString("King_DisplayName", resourceCulture);
             }
         }
         
@@ -1160,6 +1331,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Legionary with Pike.
+        /// </summary>
+        internal static string LegionaryPike_DisplayName {
+            get {
+                return ResourceManager.GetString("LegionaryPike_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1237,6 +1417,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Legionary with Sword.
+        /// </summary>
+        internal static string LegionarySword_DisplayName {
+            get {
+                return ResourceManager.GetString("LegionarySword_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1293,6 +1482,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Miner_BaseDescription {
             get {
                 return ResourceManager.GetString("Miner_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miner.
+        /// </summary>
+        internal static string Miner_DisplayName {
+            get {
+                return ResourceManager.GetString("Miner_DisplayName", resourceCulture);
             }
         }
         
@@ -1362,6 +1560,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mounted Archer.
+        /// </summary>
+        internal static string MountedArcher_DisplayName {
+            get {
+                return ResourceManager.GetString("MountedArcher_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬛⬜⬜⬜⬜
@@ -1419,6 +1626,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mounted Knight.
+        /// </summary>
+        internal static string MountedKnight_DisplayName {
+            get {
+                return ResourceManager.GetString("MountedKnight_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1472,6 +1688,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Musketeer_BaseDescription {
             get {
                 return ResourceManager.GetString("Musketeer_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Musketeer.
+        /// </summary>
+        internal static string Musketeer_DisplayName {
+            get {
+                return ResourceManager.GetString("Musketeer_DisplayName", resourceCulture);
             }
         }
         
@@ -1542,6 +1767,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ninja.
+        /// </summary>
+        internal static string Ninja_DisplayName {
+            get {
+                return ResourceManager.GetString("Ninja_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1602,6 +1836,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old wizzard.
+        /// </summary>
+        internal static string OldWizzard_DisplayName {
+            get {
+                return ResourceManager.GetString("OldWizzard_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1652,6 +1895,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Peasant_BaseDescription {
             get {
                 return ResourceManager.GetString("Peasant_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peasant.
+        /// </summary>
+        internal static string Peasant_DisplayName {
+            get {
+                return ResourceManager.GetString("Peasant_DisplayName", resourceCulture);
             }
         }
         
@@ -1710,6 +1962,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Priest_BaseDescription {
             get {
                 return ResourceManager.GetString("Priest_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Priest.
+        /// </summary>
+        internal static string Priest_DisplayName {
+            get {
+                return ResourceManager.GetString("Priest_DisplayName", resourceCulture);
             }
         }
         
@@ -1780,6 +2041,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Queen.
+        /// </summary>
+        internal static string Queen_DisplayName {
+            get {
+                return ResourceManager.GetString("Queen_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬛⬜⬜⬜⬛
@@ -1833,6 +2103,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Ranger_BaseDescription {
             get {
                 return ResourceManager.GetString("Ranger_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ranger.
+        /// </summary>
+        internal static string Ranger_DisplayName {
+            get {
+                return ResourceManager.GetString("Ranger_DisplayName", resourceCulture);
             }
         }
         
@@ -1893,6 +2172,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scout.
+        /// </summary>
+        internal static string Scout_DisplayName {
+            get {
+                return ResourceManager.GetString("Scout_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬛⬜⬜⬜⬜
@@ -1947,6 +2235,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spartan.
+        /// </summary>
+        internal static string Spartan_DisplayName {
+            get {
+                return ResourceManager.GetString("Spartan_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1997,6 +2294,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Spearman_BaseDescription {
             get {
                 return ResourceManager.GetString("Spearman_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spearman.
+        /// </summary>
+        internal static string Spearman_DisplayName {
+            get {
+                return ResourceManager.GetString("Spearman_DisplayName", resourceCulture);
             }
         }
         
@@ -2060,6 +2366,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trader.
+        /// </summary>
+        internal static string Trader_DisplayName {
+            get {
+                return ResourceManager.GetString("Trader_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -2108,6 +2423,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trench.
+        /// </summary>
+        internal static string Trench_DisplayName {
+            get {
+                return ResourceManager.GetString("Trench_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Trench_MovementDescription {
@@ -2151,6 +2475,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Viking_BaseDescription {
             get {
                 return ResourceManager.GetString("Viking_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Viking.
+        /// </summary>
+        internal static string Viking_DisplayName {
+            get {
+                return ResourceManager.GetString("Viking_DisplayName", resourceCulture);
             }
         }
         
@@ -2203,6 +2536,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wall.
+        /// </summary>
+        internal static string Wall_DisplayName {
+            get {
+                return ResourceManager.GetString("Wall_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Wall_MovementDescription {
@@ -2239,6 +2581,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string Warhammer_BaseDescription {
             get {
                 return ResourceManager.GetString("Warhammer_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warhammer.
+        /// </summary>
+        internal static string Warhammer_DisplayName {
+            get {
+                return ResourceManager.GetString("Warhammer_DisplayName", resourceCulture);
             }
         }
         
@@ -2317,6 +2668,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warrior.
+        /// </summary>
+        internal static string Warrior_DisplayName {
+            get {
+                return ResourceManager.GetString("Warrior_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -2372,6 +2732,15 @@ namespace BattleChess3.CrossFireFigures.Localization {
         internal static string YoungWizzard_BaseDescription {
             get {
                 return ResourceManager.GetString("YoungWizzard_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Young Wizzard.
+        /// </summary>
+        internal static string YoungWizzard_DisplayName {
+            get {
+                return ResourceManager.GetString("YoungWizzard_DisplayName", resourceCulture);
             }
         }
         

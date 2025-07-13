@@ -8,10 +8,12 @@
              xmlns:shared="clr-namespace:BattleChess3.UI.Shared"
              xmlns:editor="clr-namespace:BattleChess3.UI.Editor"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance editor:TeamBoardViewModel}"
+             d:DataContext="{d:DesignInstance editor:EditorViewModel}"
              d:DesignHeight="300" d:DesignWidth="300"
-             x:Name="ThisTeamBoardControl">
+             x:Name="ThisTeamBoardControl" Focusable="True">
     <ItemsControl HorizontalAlignment="Stretch"
+                  x:Name="ThisItemsControl"
+                  DataContext="{Binding TeamBoard}"
                   ItemsSource="{Binding Tiles}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
@@ -21,7 +23,7 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Button
-                    Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisTeamBoardControl}"
+                    Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisItemsControl}"
                     CommandParameter="{Binding}"
                     Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
                     d:DataContext="{d:DesignInstance shared:TileViewModel}"
@@ -29,7 +31,9 @@
                     n:DragSource.AllowedEffects="Move"
                     n:DragSource.Dragging="ChessButton_DragEnter"
                     Drop="ChessImage_Drop"
-                    AllowDrop="True">
+                    AllowDrop="True"
+                    MouseEnter="TileButton_MouseEnter"
+                    MouseLeave="TileButton_MouseLeave">
                     <Image Source="{Binding Figure.ImageUri}" />
                 </Button>
             </DataTemplate>

@@ -2,6 +2,7 @@
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
+using BattleChess3.Multiplayer;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
@@ -18,15 +19,18 @@ public class TeamBoardViewModel : ViewModelBase
     private readonly IFigureCreator _figureCreator;
     private readonly MapsViewModel _maps;
     private readonly IMapLoader _mapLoader;
+    private readonly IMultiplayerPlayerService _playerService;
 
     public TeamBoardViewModel(
         IFigureCreator figureCreator,
         MapsViewModel maps,
-        IMapLoader mapLoader)
+        IMapLoader mapLoader, 
+        IMultiplayerPlayerService playerService)
     {
         _figureCreator = figureCreator;
         _maps = maps;
         _mapLoader = mapLoader;
+        _playerService = playerService;
         
         Tiles = Enumerable.Range(0, IBoard.Length * 2)
             .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
@@ -37,6 +41,8 @@ public class TeamBoardViewModel : ViewModelBase
         EvaluateTeamBoard();
         
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
+        
+        _playerService.LoggedInPlayerChanged += PlayerServiceOnLoggedInPlayerChanged;
     }
 
     public int BoardWidth => IBoard.Length;
@@ -81,6 +87,50 @@ public class TeamBoardViewModel : ViewModelBase
     public void SaveMap()
     {
         _maps.SaveMap(Tiles);
+    }
+
+    public MapBlueprint GetMapBlueprint()
+    {
+        return new MapBlueprint
+        {
+            Figures = Tiles.Select(x => new FigureIdentifier
+            {
+                PlayerId = x.Figure.Owner.Index,
+                FigureId = x.Figure.Type.FigureId,
+                IsKing = x.Figure.IsKing
+            }).ToArray(),
+        };
+    }
+
+    private void PlayerServiceOnLoggedInPlayerChanged(object? sender, EventArgs e)
+    {
+        var loggedInPlayer = _playerService.LoggedInPlayer;
+        if (loggedInPlayer is null)
+            return;
+        
+        var mapBlueprint = GetMapBlueprint(loggedInPlayer.Map);
+        _mapLoader.LoadMap(Board, mapBlueprint);
+    }
+    
+    private static MapBlueprint GetMapBlueprint(byte[] map)
+    {
+        var figures = new FigureIdentifier[16];
+        for (var i = 0; i < figures.Length; i++)
+        {
+            var index = i * 2;
+            var playerId = map[index] % 128;
+            
+            figures[i] = new FigureIdentifier(
+                playerId,
+                map[index + 1],
+                map[index] / 128 == 1);
+        }
+
+        return new MapBlueprint
+        {
+            Figures = figures,
+            StartingPlayer = 1,
+        };
     }
 
     public void Discard()

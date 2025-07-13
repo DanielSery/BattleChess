@@ -6,7 +6,7 @@ namespace BattleChess3.Maps;
 internal class MapService : IMapService
 {
     private readonly TaskCompletionSource _taskCompletionSource = new TaskCompletionSource();
-    private MapBlueprint _map = MapBlueprint.EmptyTeam;
+    private MapBlueprint _map = MapBlueprint.ChessTeam;
 
     public MapService()
     {
@@ -28,6 +28,14 @@ internal class MapService : IMapService
 
     private void LoadMap()
     {
+        if (!Directory.Exists("Resources"))
+        {
+            Directory.CreateDirectory("Resources");
+            _map = MapBlueprint.ChessTeam;
+            _taskCompletionSource.SetResult();
+            return;
+        }
+        
         _map = Directory.GetFiles("Resources", "TeamBoard.map")
             .Where(path => File.Exists(Path.GetFullPath(path)))
             .Select(path =>
@@ -38,7 +46,7 @@ internal class MapService : IMapService
             })
             .Where(x => x is not null)
             .Select(x => x!)
-            .FirstOrDefault() ?? MapBlueprint.EmptyTeam;
+            .FirstOrDefault() ?? MapBlueprint.ChessTeam;
 
         _taskCompletionSource.TrySetResult();
     }

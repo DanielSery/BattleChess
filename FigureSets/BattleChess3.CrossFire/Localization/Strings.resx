@@ -127,6 +127,9 @@
     <value>Cross fire</value>
   </data>
     
+    <data name="Empty_DisplayName" xml:space="preserve">
+        <value>Empty</value>
+    </data>
     <data name="Empty_BaseDescription" xml:space="preserve">
         <value>Empty (Cost: 0)
 
@@ -142,6 +145,9 @@ Empty tile where units can move.</value>
         <value/>
     </data>
     
+    <data name="Alchemist_DisplayName" xml:space="preserve">
+        <value>Alchemist</value>
+    </data>
     <data name="Alchemist_BaseDescription" xml:space="preserve">
         <value>Alchemist (Cost: 4)
 
@@ -176,6 +182,9 @@ which detonate when destroyed.</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
+    <data name="Archer_DisplayName" xml:space="preserve">
+        <value>Archer</value>
+    </data>
     <data name="Archer_BaseDescription" xml:space="preserve">
         <value>Archer (Cost: 10)
 
@@ -210,6 +219,9 @@ Cannot attack when standing next to enemy.</value>
         <value/>
     </data>
     
+    <data name="Barbarian_DisplayName" xml:space="preserve">
+        <value>Barbarian</value>
+    </data>
     <data name="Barbarian_BaseDescription" xml:space="preserve">
         <value>Barbarian (Cost: 5)
 
@@ -243,6 +255,9 @@ Can push near units</value>
 ⬛⬜⬜⬛⬜⬜⬛⬜</value>
     </data>
     
+    <data name="Bard_DisplayName" xml:space="preserve">
+        <value>Bard</value>
+    </data>
     <data name="Bard_BaseDescription" xml:space="preserve">
         <value>Bard (Cost: 12)
 
@@ -276,6 +291,9 @@ Can convert enemy units.</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
+    <data name="Builder_DisplayName" xml:space="preserve">
+        <value>Builder</value>
+    </data>
     <data name="Builder_BaseDescription" xml:space="preserve">
         <value>Builder (Cost: 5)
 
@@ -310,6 +328,9 @@ Can build walls.
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
+    <data name="CamelArcher_DisplayName" xml:space="preserve">
+        <value>Camel Archer</value>
+    </data>
     <data name="CamelArcher_BaseDescription" xml:space="preserve">
         <value>Camel Archer (Cost: 9)
 
@@ -344,6 +365,9 @@ Moves like chess bishop, attacks like rook.
         <value/>
     </data>
     
+    <data name="CamelRider_DisplayName" xml:space="preserve">
+        <value>Camel Rider</value>
+    </data>
     <data name="CamelRider_BaseDescription" xml:space="preserve">
         <value>Camel Rider (Cost: 6)
 
@@ -377,6 +401,9 @@ Moves and attacks like chess bishop.</value>
         <value/>
     </data>
     
+    <data name="Cannon_DisplayName" xml:space="preserve">
+        <value>Cannon</value>
+    </data>
     <data name="Cannon_BaseDescription" xml:space="preserve">
         <value>Cannon (Cost: 14)
 
@@ -404,6 +431,9 @@ Cannot attack when standing next to enemy.
         <value/>
     </data>
     
+    <data name="Catapult_DisplayName" xml:space="preserve">
+        <value>Catapult</value>
+    </data>
     <data name="Catapult_BaseDescription" xml:space="preserve">
         <value>Catapult (Cost: 12)
 
@@ -430,6 +460,9 @@ Cannot attack when standing next to enemy.
         <value/>
     </data>
     
+    <data name="Chinese_DisplayName" xml:space="preserve">
+        <value>Chinese warrior</value>
+    </data>
     <data name="Chinese_BaseDescription" xml:space="preserve">
         <value>Chinese warrior (Cost: 7)</value>
     </data>
@@ -461,6 +494,9 @@ Cannot attack when standing next to enemy.
         <value/>
     </data>
     
+    <data name="Crossbow_Crossbow" xml:space="preserve">
+        <value>Crossbowman</value>
+    </data>
     <data name="Crossbow_BaseDescription" xml:space="preserve">
         <value>Crossbowman (Cost: 9)
 
@@ -495,6 +531,9 @@ Cannot attack when standing next to enemy.</value>
         <value />
     </data>
     
+    <data name="Explosives_DisplayName" xml:space="preserve">
+        <value>Explosives</value>
+    </data>
     <data name="Explosives_BaseDescription" xml:space="preserve">
         <value>Explosives (Cost: 1)
 
@@ -511,6 +550,9 @@ When killed destroys everything in 3x3 square.
         <value/>
     </data>
     
+    <data name="Gladiator_DisplayName" xml:space="preserve">
+        <value>Gladiator</value>
+    </data>
     <data name="Gladiator_BaseDescription" xml:space="preserve">
         <value>Gladiator (Cost: 3)</value>
     </data>
@@ -542,6 +584,9 @@ When killed destroys everything in 3x3 square.
         <value/>
     </data>
     
+    <data name="JapanArcher_DisplayName" xml:space="preserve">
+        <value>Japanese archer</value>
+    </data>
     <data name="JapanArcher_BaseDescription" xml:space="preserve">
         <value>Japanese archer (Cost: 8)
 
@@ -576,6 +621,9 @@ Cannot attack when standing next to enemy.</value>
         <value/>
     </data>
     
+    <data name="King_DisplayName" xml:space="preserve">
+        <value>King</value>
+    </data>
     <data name="King_BaseDescription" xml:space="preserve">
         <value>King (Cost: 5)
 
@@ -641,6 +689,9 @@ Can castle with any unit (not just Rook).</value>
         <value/>
     </data>
     
+    <data name="LegionaryPike_DisplayName" xml:space="preserve">
+        <value>Legionary with Pike</value>
+    </data>
     <data name="LegionaryPike_BaseDescription" xml:space="preserve">
         <value>Legionary with Pike (Cost: 4)
 
@@ -696,6 +747,9 @@ On second row:
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
+    <data name="LegionarySword_DisplayName" xml:space="preserve">
+        <value>Legionary with Sword</value>
+    </data>
     <data name="LegionarySword_BaseDescription" xml:space="preserve">
         <value>Legionary with Sword (Cost: 2)
 
@@ -742,6 +796,9 @@ On second row:
         <value/>
     </data>
     
+    <data name="Miner_DisplayName" xml:space="preserve">
+        <value>Miner</value>
+    </data>
     <data name="Miner_BaseDescription" xml:space="preserve">
         <value>Miner (Cost: 3)
 
@@ -776,6 +833,9 @@ cannot move (trench is considered a unit).</value>
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
+    <data name="MountedArcher_DisplayName" xml:space="preserve">
+        <value>Mounted Archer</value>
+    </data>
     <data name="MountedArcher_BaseDescription" xml:space="preserve">
         <value>Mounted Archer (Cost: 11)
 
@@ -809,6 +869,9 @@ Moves like chess rook, attack like bishop.</value>
         <value/>
     </data>
     
+    <data name="MountedKnight_DisplayName" xml:space="preserve">
+        <value>Mounted Knight</value>
+    </data>
     <data name="MountedKnight_BaseDescription" xml:space="preserve">
         <value>Mounted knight (Cost: 6)
 
@@ -843,6 +906,9 @@ Can kill 2 units in line.
         <value/>
     </data>
     
+    <data name="Musketeer_DisplayName" xml:space="preserve">
+        <value>Musketeer</value>
+    </data>
     <data name="Musketeer_BaseDescription" xml:space="preserve">
         <value>Musketeer (Cost: 12)
 
@@ -877,6 +943,9 @@ Cannot attack when standing next to enemy.</value>
         <value/>
     </data>
     
+    <data name="Ninja_DisplayName" xml:space="preserve">
+        <value>Ninja</value>
+    </data>
     <data name="Ninja_BaseDescription" xml:space="preserve">
         <value>Ninja (Cost: 3)</value>
     </data>
@@ -932,6 +1001,9 @@ before ninja:
         <value/>
     </data>
     
+    <data name="OldWizzard_DisplayName" xml:space="preserve">
+        <value>Old wizzard</value>
+    </data>
     <data name="OldWizzard_BaseDescription" xml:space="preserve">
         <value>Old wizzard (Cost: 22)
 
@@ -957,6 +1029,9 @@ around the wizzard.</value>
         <value/>
     </data>
     
+    <data name="Peasant_DisplayName" xml:space="preserve">
+        <value>Peasant</value>
+    </data>
     <data name="Peasant_BaseDescription" xml:space="preserve">
         <value>Peasant (Cost: 1)</value>
     </data>
@@ -988,6 +1063,9 @@ around the wizzard.</value>
         <value/>
     </data>
     
+    <data name="Queen_DisplayName" xml:space="preserve">
+        <value>Queen</value>
+    </data>
     <data name="Queen_BaseDescription" xml:space="preserve">
         <value>Queen (Cost: 18)
 
@@ -1022,6 +1100,9 @@ Moves and attacks like chess Queen.</value>
         <value/>
     </data>
     
+    <data name="Ranger_DisplayName" xml:space="preserve">
+        <value>Ranger</value>
+    </data>
     <data name="Ranger_BaseDescription" xml:space="preserve">
         <value>Ranger (Cost: 11)
 
@@ -1056,6 +1137,9 @@ Cannot attack when standing next to enemy.</value>
         <value/>
     </data>
     
+    <data name="Scout_DisplayName" xml:space="preserve">
+        <value>Scout</value>
+    </data>
     <data name="Scout_BaseDescription" xml:space="preserve">
         <value>Scout (Cost: 10)
 
@@ -1089,6 +1173,9 @@ Moves and attacks like chess rook.</value>
         <value/>
     </data>
     
+    <data name="Spartan_DisplayName" xml:space="preserve">
+        <value>Spartan</value>
+    </data>
     <data name="Spartan_BaseDescription" xml:space="preserve">
         <value>Spartan (Cost: 4)</value>
     </data>
@@ -1120,6 +1207,9 @@ Moves and attacks like chess rook.</value>
         <value/>
     </data>
     
+    <data name="Spearman_DisplayName" xml:space="preserve">
+        <value>Spearman</value>
+    </data>
     <data name="Spearman_BaseDescription" xml:space="preserve">
         <value>Spearman (Cost: 2)</value>
     </data>
@@ -1151,6 +1241,9 @@ Moves and attacks like chess rook.</value>
         <value/>
     </data>
     
+    <data name="Trader_DisplayName" xml:space="preserve">
+        <value>Trader</value>
+    </data>
     <data name="Trader_BaseDescription" xml:space="preserve">
         <value>Trader (Cost: 7)
 
@@ -1187,6 +1280,9 @@ allied unit on the board.</value>
         <value/>
     </data>
     
+    <data name="Trench_DisplayName" xml:space="preserve">
+        <value>Trench</value>
+    </data>
     <data name="Trench_BaseDescription" xml:space="preserve">
         <value>Trench (Cost: 0)
 
@@ -1203,6 +1299,9 @@ Can be destroyed.
         <value/>
     </data>
     
+    <data name="Viking_DisplayName" xml:space="preserve">
+        <value>Viking</value>
+    </data>
     <data name="Viking_BaseDescription" xml:space="preserve">
         <value>Viking (Cost: 6)
 
@@ -1236,6 +1335,9 @@ Moves and attacks like a knight in chess.</value>
         <value/>
     </data>
     
+    <data name="Wall_DisplayName" xml:space="preserve">
+        <value>Wall</value>
+    </data>
     <data name="Wall_BaseDescription" xml:space="preserve">
         <value>Wall (Cost: 1)
 
@@ -1252,6 +1354,9 @@ and Warhammer.</value>
         <value/>
     </data>
     
+    <data name="Warhammer_DisplayName" xml:space="preserve">
+        <value>Warhammer</value>
+    </data>
     <data name="Warhammer_BaseDescription" xml:space="preserve">
         <value>Warhammer (Cost: 6)
 
@@ -1296,6 +1401,9 @@ kills multiple units.
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
+    <data name="Warrior_DisplayName" xml:space="preserve">
+        <value>Warrior</value>
+    </data>
     <data name="Warrior_BaseDescription" xml:space="preserve">
         <value>Warrior (Cost: 16)
 
@@ -1329,6 +1437,9 @@ Can kill upt to 3 units in line.</value>
         <value/>
     </data>
     
+    <data name="YoungWizzard_DisplayName" xml:space="preserve">
+        <value>Young Wizzard</value>
+    </data>
     <data name="YoungWizzard_BaseDescription" xml:space="preserve">
         <value>Young Wizzard (Cost: 20)
             
@@ -1366,6 +1477,9 @@ kills units in specific shape.
         <value/>
     </data>
     
+    <data name="Fire_DisplayName" xml:space="preserve">
+        <value>Fire</value>
+    </data>
     <data name="Fire_BaseDescription" xml:space="preserve">
         <value>Fire (Cost: 0)
             
@@ -1383,6 +1497,9 @@ and the fire extinguished.
         <value/>
     </data>
     
+    <data name="Dragon_DisplayName" xml:space="preserve">
+        <value>Dragon</value>
+    </data>
     <data name="Dragon_BaseDescription" xml:space="preserve">
         <value>Dragon (Cost: 20)
             
@@ -1418,6 +1535,9 @@ Can walk on fire without harm.
 ⬜⬛⬜⬜⬜⬛⬜⬜</value>
     </data>
     
+    <data name="Elephant_DisplayName" xml:space="preserve">
+        <value>Elephant</value>
+    </data>
     <data name="Elephant_BaseDescription" xml:space="preserve">
         <value>Elephant (Cost: 8)
             
@@ -1452,6 +1572,9 @@ Kills everything in 1-3 tile line.
         <value/>
     </data>
     
+    <data name="Priest_DisplayName" xml:space="preserve">
+        <value>Priest</value>
+    </data>
     <data name="Priest_BaseDescription" xml:space="preserve">
         <value>Priest (Cost: 9)
             

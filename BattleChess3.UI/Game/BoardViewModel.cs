@@ -37,7 +37,7 @@ public sealed class BoardViewModel : ViewModelBase
             .ToArray();
         Board = new Board(Tiles.Cast<ITile>().ToArray());
         
-        SinglePlayerLoadMap(MapBlueprint.EmptyTeam);
+        SinglePlayerLoadMap(MapBlueprint.ChessTeam);
         _multiplayerGameService.RequestPlayMove += MultiplayerGameServiceOnRequestPlayMove;
     }
 
@@ -79,11 +79,7 @@ public sealed class BoardViewModel : ViewModelBase
             : MouseOnTile;
     }
 
-    public int BoardWidth
-    {
-        get => IBoard.Length;
-    }
-
+    public int BoardWidth => IBoard.Length;
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
     
@@ -94,12 +90,6 @@ public sealed class BoardViewModel : ViewModelBase
 
     public event EventHandler? RequestSwitchToMenu;
     public event EventHandler? RequestSwitchToGame;
-
-    public void ClearSelectedTile()
-    {
-        SelectedTile = NoneTileViewModel.Instance;
-        ClearPossibleActions();
-    }
 
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
@@ -229,6 +219,16 @@ public sealed class BoardViewModel : ViewModelBase
         {
             MouseOnTile = NoneTileViewModel.Instance;
         }
+    }
+
+    public void OnActivation()
+    {
+    }
+
+    public void OnDeactivation()
+    {
+        SelectedTile = NoneTileViewModel.Instance;
+        ClearPossibleActions();
     }
 
     private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to, TimeSpan turnTimeSpent) e)

@@ -1,9 +1,8 @@
-﻿using BattleChess3.Game.Board;
-using BattleChess3.Game.Figures;
+﻿using BattleChess3.Game.Figures;
 
 namespace BattleChess3.UI.Editor;
 
-public sealed class FigureTypeViewModel
+public sealed class FigureTypeViewModel : IFigureInfo
 {
     public FigureTypeViewModel(IFigureType figureType, bool isUnlocked)
     {

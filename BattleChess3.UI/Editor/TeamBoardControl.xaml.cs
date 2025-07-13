@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using BattleChess3.Game.Figures;
 using BattleChess3.UI.Shared;
@@ -16,6 +17,7 @@ public partial class TeamBoardControl
 
     private void ChessImage_Drop(object sender, DragEventArgs e)
     {
+        Focus();
         if (e.Data.GetDataPresent("BattleChess3.Game.Figures.FigureIdentifier"))
         {
             var figureIdentifier = (FigureIdentifier)e.Data.GetData("BattleChess3.Game.Figures.FigureIdentifier");
@@ -67,5 +69,21 @@ public partial class TeamBoardControl
         } while (current != null);
 
         return null;
+    }
+
+    private void TileButton_MouseEnter(object sender, MouseEventArgs e)
+    {
+        var button = (Button)sender;
+        var stackPanel = FindAncestor<TeamBoardControl>(button);
+        var editorViewModel = (EditorViewModel)stackPanel.DataContext;
+        editorViewModel.EditorUnits.TileMouseEnterCommand.Execute(button.CommandParameter);
+    }
+
+    private void TileButton_MouseLeave(object sender, MouseEventArgs e)
+    {
+        var button = (Button)sender;
+        var stackPanel = FindAncestor<TeamBoardControl>(button);
+        var editorViewModel = (EditorViewModel)stackPanel.DataContext;
+        editorViewModel.EditorUnits.TileMouseExitCommand.Execute(button.CommandParameter);
     }
 }

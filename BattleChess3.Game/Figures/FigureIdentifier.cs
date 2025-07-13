@@ -19,7 +19,7 @@ public class FigureIdentifier
     public FigureIdentifier(Figure figure)
     {
         PlayerId = figure.Owner.Index;
-        FigureId = ((IFigureType)figure).FigureId;
+        FigureId = figure.Type.FigureId;
         IsKing = figure.IsKing;
     }
 
@@ -31,7 +31,7 @@ public class FigureIdentifier
     }
 
     public int PlayerId { get; set; } = Player.Neutral.Index;
-    public int FigureId { get; set; } = ((IFigureType)NoneFigureType.Instance).FigureId;
+    public int FigureId { get; set; } = NoneFigureType.Instance.FigureId;
     public bool IsKing { get; set; }
 
     public override string ToString()
