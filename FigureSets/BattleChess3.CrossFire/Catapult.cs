@@ -15,7 +15,6 @@ public class Catapult : ICrossFireFigureType
     [
         new (-1, 2), new (1, 2),
         new (-2, 3), new (0, 3), new (2, 3),
-        new (-1, 4), new (1, 4),
     ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)

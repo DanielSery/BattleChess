@@ -46,6 +46,10 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                 return Task.FromResult(Result.Fail<(bool, RankedGame, RankedGameJoin)>("No player logged in"));
             }
             
+            var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer!.UnlockedFigures;
+            if (!myMap.IsValid(unlockedFigures))
+                return Task.FromResult(Result.Fail<(bool, RankedGame, RankedGameJoin)>("Setup has units which weren't unlocked yet"));
+            
             var random = new Random();
             var isHostStarting = random.Next(0, 1) == 1;
             

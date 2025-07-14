@@ -11,7 +11,7 @@ public class Archer : ICrossFireFigureType
     
     int IFigureType.FigureId => 27;
     
-    private static readonly Position[] Directions =
+    private static readonly Position[] MovePositions =
     [
         new(-1, 0), new(1, 0),
         new(0, -1), new(0, 1)
@@ -19,15 +19,10 @@ public class Archer : ICrossFireFigureType
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var direction in Directions)
+        foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
         {
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 2, board, unitTile))
-            {
-                if (unitTile.CanMoveTo(targetTile))
-                    yield return unitTile.CreateMoveAction(targetTile, board);
-                else
-                    break;
-            }
+            if (unitTile.CanMoveTo(targetTile))
+                yield return unitTile.CreateMoveAction(targetTile, board);
         }
         
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
@@ -36,7 +31,7 @@ public class Archer : ICrossFireFigureType
                 yield break;
         }
         
-        foreach (var direction in Directions)
+        foreach (var direction in MovePositions)
         {
             foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 3, board, unitTile))
             {

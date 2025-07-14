@@ -4,10 +4,10 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class YoungWizzard : ICrossFireFigureType
+public class Mage : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 20;
+    public int FigureValue { get; } = 16;
     
     int IFigureType.FigureId => 14;
     
@@ -18,30 +18,24 @@ public class YoungWizzard : ICrossFireFigureType
         new(2, -2), new(2, 0), new(2, 2)
     ];
 
-    private static readonly Position[] AttackPositions =
-    [
-        new(-2, -2), new(-2, 2),
-        new(2, -2), new(2, 2)
-    ];
-
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var targetTile in MovementPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
-                yield return unitTile.CreateMoveAction(targetTile, board);
-        }
-
-        foreach (var targetTile in AttackPositions.GetRelativeTiles(board, unitTile))
-        {
-            if (unitTile.CanAttack(targetTile))
-                yield return unitTile.CreateKillWithMove(targetTile, board);
+            {
+                yield return new FigureAction(
+                    FigureActionTypes.Move,
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () => MoveAction(unitTile, targetTile, board));
+            }
         }
     }
 
-    void IFigureType.OnMoved(ITile unitTile, ITile targetTile, IBoard board)
+    private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
     {
-        targetTile.OnMovedTo();
+        unitTile.MoveToTile(targetTile, board);
         var movement = targetTile.Position - unitTile.Position;
         if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {

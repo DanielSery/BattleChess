@@ -115,7 +115,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(e.won.Index == 1);
         if (!string.IsNullOrEmpty(unlockedUnit))
         {
-            NotificationService.ShowMessage(ShownMessage.MessageType.Success, $"Unlocked {unlockedUnit}");
+            NotificationService.ShowMessage(ShownMessage.MessageType.Success, $"Unlocked {unlockedUnit}.");
         }
     }
 

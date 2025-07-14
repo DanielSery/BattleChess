@@ -11,40 +11,25 @@ public class Spartan : ICrossFireFigureType
     
     int IFigureType.FigureId => 12;
     
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (unitTile.TryCreateKillWithMove(board, new Position(1, 1), out var attackAction1))
-            yield return attackAction1;
-        else if (unitTile.TryCreateMoveAction(board, new Position(1, 1), out var moveAction1))
-            yield return moveAction1;
-
-        if (unitTile.TryCreateKillWithMove(board, new Position(-1, 1), out var attackAction2))
-            yield return attackAction2;
-        else if (unitTile.TryCreateMoveAction(board, new Position(-1, 1), out var moveAction2))
-            yield return moveAction2;
-        
-        if (unitTile.TryCreateMoveAction(board, new Position(0, -1), out var moveAction3))
-            yield return moveAction3;
-
-        if (unitTile.TryCreateMoveAction(board, new Position(0, 1), out var moveAction4))
+        foreach (var targetTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
-            yield return moveAction4;
-
-            if (unitTile.TryCreateMoveAction(board, new Position(0, 2), out var attackAction3))
+            if (unitTile.CanMoveTo(targetTile))
             {
-                yield return attackAction3;
+                yield return new FigureAction(
+                    FigureActionTypes.Move,
+                    unitTile.AbsolutePosition,
+                    targetTile.AbsolutePosition,
+                    () => MoveAction(unitTile, targetTile, board));
             }
-        }
-        else
-        {
-            yield break;
-        }
-
-        if (unitTile.Position.Y == 1 &&
-            unitTile.TryCreateMoveAction(board, new Position(0, 2), out var moveAction5))
-        {
-            yield return moveAction5;
         }
     }
 
+    private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
+    {
+        unitTile.MoveToTile(targetTile, board);
+        var movement = targetTile.Position - unitTile.Position;
+        targetTile.TryDestroyTile(board, movement);
+    }
 }

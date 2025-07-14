@@ -7,15 +7,13 @@ namespace BattleChess3.CrossFireFigures;
 public class Cannon : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 14;
+    public int FigureValue { get; } = 12;
     
     int IFigureType.FigureId => 36;
     
     private static readonly Position[] AttackPositions =
     [
-        new(0, 2), 
-        new(-1, 3), new(0, 3), new(1, 3),
-        new(-1, 4), new(0, 4), new(1, 4),
+        new(0, 2), new(0, 3), new(0, 4),
     ];
     
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)

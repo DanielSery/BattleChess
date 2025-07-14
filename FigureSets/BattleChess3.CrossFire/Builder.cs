@@ -8,7 +8,7 @@ namespace BattleChess3.CrossFireFigures;
 public class Builder : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 5;
+    public int FigureValue { get; } = 4;
     
     int IFigureType.FigureId => 4;
     

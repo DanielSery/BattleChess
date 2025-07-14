@@ -7,7 +7,7 @@ namespace BattleChess3.CrossFireFigures;
 public class MountedArcher : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 11;
+    public int FigureValue { get; } = 10;
     
     int IFigureType.FigureId => 17;
     

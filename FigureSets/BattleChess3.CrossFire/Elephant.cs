@@ -7,7 +7,7 @@ namespace BattleChess3.CrossFireFigures;
 public class Elephant : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 8;
+    public int FigureValue { get; } = 10;
     
     int IFigureType.FigureId => 41;
     

@@ -7,35 +7,71 @@ namespace BattleChess3.CrossFireFigures;
 public class Knight : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 5;
+    public int FigureValue { get; } = 10;
     
     int IFigureType.FigureId => 19;
     
-    private static readonly Position[] MoveDirections =
+    private static readonly Position[] MovePositions =
     [
         new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
 
-    private static readonly Position[] AttackPositions =
+    private static readonly Position[] AttackDirections =
     [
-        new(-2, -2), new(-1, -1),
-        new(-2, 2), new(-1, 1),
-        new(2, -2), new(1, -1),
-        new(2, 2), new(1, 1)
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
 
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in MoveDirections.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
+            else
+                break;
         }
-
-        foreach (var targetTile in AttackPositions.GetRelativeTiles(board, unitTile))
+        
+        foreach (var direction in AttackDirections)
         {
-            if (unitTile.CanAttack(targetTile))
-                yield return unitTile.CreateKillWithMove(targetTile, board);
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 3, board, unitTile))
+            {
+                if (unitTile.CanAttack(targetTile))
+                {
+                    yield return new FigureAction(
+                        FigureActionTypes.Attack, 
+                        unitTile.AbsolutePosition,
+                        targetTile.AbsolutePosition,
+                        () => AttackAction(unitTile, targetTile, board));
+                }
+                else if (!unitTile.CanMoveTo(targetTile))
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    private void AttackAction(ITile unitTile, ITile targetTile, IBoard board)
+    {
+        var move = targetTile.Position - unitTile.Position;
+
+        if (Math.Abs(move.X) <= 1 &&
+            Math.Abs(move.Y) <= 1)
+        {
+            unitTile.KillWithMove(targetTile, board);
+        }
+        else if (Math.Abs(move.X) <= 2 &&
+                 Math.Abs(move.Y) <= 2)
+        {
+            var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
+            var sourcePosition = unitTile.Position;
+            
+            unitTile.KillWithMove(board[sourcePosition + smallMove], board);
+            unitTile = board[sourcePosition + smallMove];
+            if (!unitTile.Figure.Type.Equals(this))
+                return;
+           
+            unitTile.KillWithMove(targetTile, board); 
         }
     }
 }

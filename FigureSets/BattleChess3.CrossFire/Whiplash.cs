@@ -4,7 +4,7 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Viking : ICrossFireFigureType
+public class Whiplash : ICrossFireFigureType
 {
     /// <inheritdoc />
     public int FigureValue { get; } = 6;

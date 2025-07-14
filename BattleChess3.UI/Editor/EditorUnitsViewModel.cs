@@ -150,7 +150,7 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
         
         Figures = _figureService.GetFigureGroups()
             .SelectMany(x => x.FigureTypes)
-            .Select(x => new FigureTypeViewModel(x, unlockedFiguresBitArray.Get(x.FigureId)))
+            .Select(x => new FigureTypeViewModel(x, true))
             .ToArray();
     }
 

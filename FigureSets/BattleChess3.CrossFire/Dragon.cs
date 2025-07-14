@@ -8,7 +8,7 @@ namespace BattleChess3.CrossFireFigures;
 public class Dragon : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 20;
+    public int FigureValue { get; } = 12;
     
     int IFigureType.FigureId => 39;
     

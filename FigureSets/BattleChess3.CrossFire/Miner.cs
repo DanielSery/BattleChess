@@ -9,69 +9,51 @@ public class Miner : ICrossFireFigureType
 {
     /// <inheritdoc />
     public int FigureValue { get; } = 3;
-    
+
     int IFigureType.FigureId => 29;
-    
-    private static readonly Position[] MovePosition =
+
+    private static readonly Position[] Directions =
     [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
+        new(0, -1), new(0, 1),
+        new(-1, 0), new(1, 0)
     ];
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+
+    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movement in MovePosition)
+        foreach (var targetTile in Directions.GetRelativeTiles(board, unitTile))
         {
-            if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
+            if (unitTile.CanAttack(targetTile))
+                yield return unitTile.CreateKillWithMove(targetTile, board);
+        }
+        
+        foreach (var direction in Directions)
+        {
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 7, board, unitTile))
+            {
+                if (unitTile.CanMoveTo(targetTile))
+                    yield return new FigureAction(
+                        FigureActionTypes.Move,
+                        unitTile.AbsolutePosition,
+                        targetTile.AbsolutePosition,
+                        () => MoveAction(direction, unitTile, targetTile, board));
+                else
+                    break;
+            }
+        }
+    }
+
+    private void MoveAction(Position direction, ITile unitTile, ITile targetTile, IBoard board)
+    {
+        unitTile.MoveToTile(targetTile, board);
+        for (var position = unitTile.Position; position != targetTile.Position; position += direction)
+        {
+            if (!board.TryGetTile(position, out var createdTile) ||
+                !createdTile.IsEmpty())
+            {
                 continue;
+            }
             
-            if (unitTile.CanMoveTo(targetTile))
-            {
-                yield return new FigureAction(
-                    FigureActionTypes.Move, 
-                    unitTile.AbsolutePosition,
-                    targetTile.AbsolutePosition,
-                    () =>
-                    {
-                        MoveShield(unitTile, movement, board);
-                        unitTile.MoveToTile(targetTile, board);
-                    });
-            }
-
-            if (targetTile.Figure.Type is Trench)
-            {
-                yield return new FigureAction(
-                    FigureActionTypes.Move,
-                    unitTile.AbsolutePosition,
-                    targetTile.AbsolutePosition,
-                    () =>
-                    {
-                        targetTile.Die(board);
-                        MoveShield(unitTile, movement, board);
-                        unitTile.MoveToTile(targetTile, board);
-                    });
-            }
+            createdTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Trench, false), board);
         }
-    }
-
-    private static void MoveShield(ITile sourceTile, Position move, IBoard board)
-    {
-        var movedPositions = GetMovedPositions(move);
-        foreach (var targetTile in movedPositions.GetRelativeTiles(board, sourceTile))
-        {
-            if (targetTile.IsEmpty())
-                targetTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Trench, false), board);
-        }
-    }
-
-    private static Position[] GetMovedPositions(Position move)
-    {
-        return move switch
-        {
-            (0, 1) => [new Position(-1, 2), new Position(0, 2), new Position(1, 2)],
-            (1, 0) => [new Position(2, -1), new Position(2, 0), new Position(2, 1)],
-            (0, -1) => [new Position(-1, -2), new Position(0, -2), new Position(1, -2)],
-            (-1, 0) => [new Position(-2, -1), new Position(-2, 0), new Position(-2, 1)],
-            _ => throw new ArgumentException($"Unexpected move of Builder {move}")
-        };
     }
 }

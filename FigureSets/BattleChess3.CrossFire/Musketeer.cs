@@ -13,23 +13,11 @@ public class Musketeer : ICrossFireFigureType
     
     private static readonly Position[] AttackDirections =
     [
-        new(-1, -1), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 1)
+        new(-1, 1), new(0, 1), new(1, 1)
     ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        if (unitTile.TryCreateMoveAction(board, new Position(-1, 0), out var move1Action))
-        {
-            yield return move1Action;
-        }
-        
-        if (unitTile.TryCreateMoveAction(board, new Position(1, 0), out var move2Action))
-        {
-            yield return move2Action;
-        }
-        
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.IsEnemyTo(neighbourTile))
@@ -38,7 +26,7 @@ public class Musketeer : ICrossFireFigureType
         
         foreach (var direction in AttackDirections)
         {
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 7, board, unitTile))
+            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 3, board, unitTile))
             {
                 if (unitTile.CanAttack(targetTile))
                     yield return unitTile.CreateKillWithoutMove(targetTile, board);

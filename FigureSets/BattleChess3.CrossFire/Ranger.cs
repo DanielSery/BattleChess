@@ -7,7 +7,7 @@ namespace BattleChess3.CrossFireFigures;
 public class Ranger : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 11;
+    public int FigureValue { get; } = 10;
     
     int IFigureType.FigureId => 13;
     
@@ -17,22 +17,17 @@ public class Ranger : ICrossFireFigureType
         new(1, -1), new(1, 1)
     ];
 
-    private static readonly Position[] MoveDirections =
+    private static readonly Position[] MovePositions =
     [
         new(-1, 0), new(0, -1), new(0, 1), new(1, 0)
     ];
     
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var direction in MoveDirections)
+        foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
         {
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 2, board, unitTile))
-            {
-                if (unitTile.CanMoveTo(targetTile))
-                    yield return unitTile.CreateMoveAction(targetTile, board);
-                else
-                    break;
-            }
+            if (unitTile.CanMoveTo(targetTile))
+                yield return unitTile.CreateMoveAction(targetTile, board);
         }
         
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))

@@ -7,7 +7,7 @@ namespace BattleChess3.CrossFireFigures;
 public class Barbarian : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 5;
+    public int FigureValue { get; } = 4;
     
     int IFigureType.FigureId => 8;
     

@@ -7,7 +7,7 @@ namespace BattleChess3.CrossFireFigures;
 public class CamelArcher : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 9;
+    public int FigureValue { get; } = 8;
     
     int IFigureType.FigureId => 18;
     

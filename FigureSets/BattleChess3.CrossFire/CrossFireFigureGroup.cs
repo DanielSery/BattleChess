@@ -9,7 +9,7 @@ public class CrossFireFigureGroup : IFigureGroup
 
     public static readonly IFigureType Wall = new Wall();
     public static readonly IFigureType Explosives = new Explosives();
-    public static readonly IFigureType Knight = new Knight();
+    public static readonly IFigureType Blade = new Blade();
     public static readonly IFigureType Trench = new Trench();
     public static readonly IFigureType LegionarySword = new LegionarySword();
     public static readonly IFigureType Empty = new Empty();
@@ -25,44 +25,49 @@ public class CrossFireFigureGroup : IFigureGroup
         
         new Peasant(),
         new Spearman(),
-        new Gladiator(),
-        new Ninja(),
+        new Pikeman(),
         LegionarySword,
         new LegionaryPike(),
-        new Spartan(),
         
-        new Warhammer(),
-        new King(),
-        new Viking(),
-        Knight,
         new MountedKnight(),
-        new Chinese(),
         new CamelRider(),
-        new Scout(),
         new MountedArcher(),
         new CamelArcher(),
+        new Scout(),
+        new Dogs(),
+        new Queen(),
+        
+        new Knight(),
+        new Samurai(),
+        new Chinese(),
+        new Nordguard(),
+        Blade,
         new Elephant(),
         
-        new Crossbow(),
-        new Ranger(),
-        new JapanArcher(),
         new Archer(),
+        new JapanArcher(),
+        new Ranger(),
+        new Crossbow(),
         new Musketeer(),
         new Cannon(),
         new Catapult(),
         
-        new Builder(),
+        new Spartan(),
+        new Warhammer(),
+        new BattleAxe(),
+        new Mage(),
+        new Wizzard(),
+        
+        new King(),
         new Trader(),
         new Bard(),
-        new Alchemist(),
         new Barbarian(),
-        new Miner(),
+        new Whiplash(),
         new Priest(),
         
-        new OldWizzard(),
-        new YoungWizzard(),
-        new Warrior(),
-        new Queen(),
+        new Builder(),
+        new Alchemist(),
+        new Miner(),
         new Dragon()
     ];
 }

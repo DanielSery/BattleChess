@@ -94,7 +94,7 @@ public class LegionaryPike : ICrossFireFigureType
                 () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Knight, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;
@@ -123,7 +123,7 @@ public class LegionaryPike : ICrossFireFigureType
                 targetTile.AbsolutePosition,
                 () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Knight, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;

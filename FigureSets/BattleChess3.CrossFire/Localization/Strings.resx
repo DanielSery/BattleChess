@@ -869,16 +869,16 @@ Moves like chess rook, attack like bishop.</value>
         <value/>
     </data>
     
-    <data name="MountedKnight_DisplayName" xml:space="preserve">
+    <data name="Temp_DisplayName" xml:space="preserve">
         <value>Mounted Knight</value>
     </data>
-    <data name="MountedKnight_BaseDescription" xml:space="preserve">
+    <data name="Temp_BaseDescription" xml:space="preserve">
         <value>Mounted knight (Cost: 6)
 
 Can kill 2 units in line.
 </value>
     </data>
-    <data name="MountedKnight_MovementDescription" xml:space="preserve">
+    <data name="Temp_MovementDescription" xml:space="preserve">
         <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -890,7 +890,7 @@ Can kill 2 units in line.
 ⬛⬜⬜⬜⬛⬜⬜⬜
 ⬜⬛⬜⬛⬜⬜⬜⬜</value>
     </data>
-    <data name="MountedKnight_AttackDescription" xml:space="preserve">
+    <data name="Temp_AttackDescription" xml:space="preserve">
         <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -902,7 +902,7 @@ Can kill 2 units in line.
 ⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬛⬜⬜⬜⬛⬜⬜</value>
     </data>
-    <data name="MountedKnight_SpecialDescription" xml:space="preserve">
+    <data name="Temp_SpecialDescription" xml:space="preserve">
         <value/>
     </data>
     
@@ -1001,16 +1001,16 @@ before ninja:
         <value/>
     </data>
     
-    <data name="OldWizzard_DisplayName" xml:space="preserve">
-        <value>Old wizzard</value>
+    <data name="Wizzard_DisplayName" xml:space="preserve">
+        <value>Wizzard</value>
     </data>
-    <data name="OldWizzard_BaseDescription" xml:space="preserve">
-        <value>Old wizzard (Cost: 22)
+    <data name="Wizzard_BaseDescription" xml:space="preserve">
+        <value>Wizzard (Cost: 22)
 
 After move explosion kills everything 
 around the wizzard.</value>
     </data>
-    <data name="OldWizzard_MovementDescription" xml:space="preserve">
+    <data name="Wizzard_MovementDescription" xml:space="preserve">
         <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1022,10 +1022,10 @@ around the wizzard.</value>
 ⬜⬜⬜▩▩▩⬜⬜
 ⬛⬜⬛⬜⬛⬜⬜⬜</value>
     </data>
-    <data name="OldWizzard_AttackDescription" xml:space="preserve">
+    <data name="Wizzard_AttackDescription" xml:space="preserve">
         <value/>
     </data>
-    <data name="OldWizzard_SpecialDescription" xml:space="preserve">
+    <data name="Wizzard_SpecialDescription" xml:space="preserve">
         <value/>
     </data>
     
@@ -1137,15 +1137,15 @@ Cannot attack when standing next to enemy.</value>
         <value/>
     </data>
     
-    <data name="Scout_DisplayName" xml:space="preserve">
-        <value>Scout</value>
+    <data name="MountedKnight_DisplayName" xml:space="preserve">
+        <value>MountedKnight</value>
     </data>
-    <data name="Scout_BaseDescription" xml:space="preserve">
-        <value>Scout (Cost: 10)
+    <data name="MountedKnight_BaseDescription" xml:space="preserve">
+        <value>Mounted Knight (Cost: 10)
 
 Moves and attacks like chess rook.</value>
     </data>
-    <data name="Scout_MovementDescription" xml:space="preserve">
+    <data name="MountedKnight_MovementDescription" xml:space="preserve">
         <value>Move:
 
 ⬜⬜⬜⬛⬜⬜⬜⬜
@@ -1157,7 +1157,7 @@ Moves and attacks like chess rook.</value>
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜</value>
     </data>
-    <data name="Scout_AttackDescription" xml:space="preserve">
+    <data name="MountedKnight_AttackDescription" xml:space="preserve">
         <value>Attack:
 
 ⬜⬜⬜⬛⬜⬜⬜⬜
@@ -1169,7 +1169,7 @@ Moves and attacks like chess rook.</value>
 ⬜⬜⬜⬛⬜⬜⬜⬜
 ⬜⬜⬜⬛⬜⬜⬜⬜</value>
     </data>
-    <data name="Scout_SpecialDescription" xml:space="preserve">
+    <data name="MountedKnight_SpecialDescription" xml:space="preserve">
         <value/>
     </data>
     
@@ -1299,15 +1299,15 @@ Can be destroyed.
         <value/>
     </data>
     
-    <data name="Viking_DisplayName" xml:space="preserve">
-        <value>Viking</value>
+    <data name="Whiplash_DisplayName" xml:space="preserve">
+        <value>Whiplash</value>
     </data>
-    <data name="Viking_BaseDescription" xml:space="preserve">
-        <value>Viking (Cost: 6)
+    <data name="Whiplash_BaseDescription" xml:space="preserve">
+        <value>Whiplash (Cost: 6)
 
 Moves and attacks like a knight in chess.</value>
     </data>
-    <data name="Viking_MovementDescription" xml:space="preserve">
+    <data name="Whiplash_MovementDescription" xml:space="preserve">
         <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1319,7 +1319,7 @@ Moves and attacks like a knight in chess.</value>
 ⬛⬜⬜⬜⬛⬜⬜⬜
 ⬜⬛⬜⬛⬜⬜⬜⬜</value>
     </data>
-    <data name="Viking_AttackDescription" xml:space="preserve">
+    <data name="Whiplash_AttackDescription" xml:space="preserve">
         <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1331,7 +1331,7 @@ Moves and attacks like a knight in chess.</value>
 ⬛⬜⬜⬜⬛⬜⬜⬜
 ⬜⬛⬜⬛⬜⬜⬜⬜</value>
     </data>
-    <data name="Viking_SpecialDescription" xml:space="preserve">
+    <data name="Whiplash_SpecialDescription" xml:space="preserve">
         <value/>
     </data>
     
@@ -1401,15 +1401,15 @@ kills multiple units.
 ⬜⬜⬜⬜⬜⬜⬜⬜</value>
     </data>
     
-    <data name="Warrior_DisplayName" xml:space="preserve">
-        <value>Warrior</value>
+    <data name="Blade_DisplayName" xml:space="preserve">
+        <value>Blade</value>
     </data>
-    <data name="Warrior_BaseDescription" xml:space="preserve">
-        <value>Warrior (Cost: 16)
+    <data name="Blade_BaseDescription" xml:space="preserve">
+        <value>Blade (Cost: 16)
 
 Can kill upt to 3 units in line.</value>
     </data>
-    <data name="Warrior_MovementDescription" xml:space="preserve">
+    <data name="Blade_MovementDescription" xml:space="preserve">
         <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1421,7 +1421,7 @@ Can kill upt to 3 units in line.</value>
 ⬛⬜⬜⬜⬛⬜⬜⬜
 ⬜⬛⬜⬛⬜⬜⬜⬜</value>
     </data>
-    <data name="Warrior_AttackDescription" xml:space="preserve">
+    <data name="Blade_AttackDescription" xml:space="preserve">
         <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1433,21 +1433,21 @@ Can kill upt to 3 units in line.</value>
 ⬜⬜⬛⬜⬛⬜⬜⬜
 ⬜⬛⬜⬜⬜⬛⬜⬜</value>
     </data>
-    <data name="Warrior_SpecialDescription" xml:space="preserve">
+    <data name="Blade_SpecialDescription" xml:space="preserve">
         <value/>
     </data>
     
-    <data name="YoungWizzard_DisplayName" xml:space="preserve">
-        <value>Young Wizzard</value>
+    <data name="Mage_DisplayName" xml:space="preserve">
+        <value>Mage</value>
     </data>
-    <data name="YoungWizzard_BaseDescription" xml:space="preserve">
-        <value>Young Wizzard (Cost: 20)
+    <data name="Mage_BaseDescription" xml:space="preserve">
+        <value>Mage (Cost: 20)
             
 When moving or attacking, explosion 
 kills units in specific shape.
 </value>
     </data>
-    <data name="YoungWizzard_MovementDescription" xml:space="preserve">
+    <data name="Mage_MovementDescription" xml:space="preserve">
         <value>Move:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1460,7 +1460,7 @@ kills units in specific shape.
 ⬛⬜⬛⬜⬛⬜⬜⬜
 </value>
     </data>
-    <data name="YoungWizzard_AttackDescription" xml:space="preserve">
+    <data name="Mage_AttackDescription" xml:space="preserve">
         <value>Attack:
 
 ⬜⬜⬜⬜⬜⬜⬜⬜
@@ -1473,7 +1473,7 @@ kills units in specific shape.
 ⬛⬜⬜⬜⬛⬜⬜⬜
 </value>
     </data>
-    <data name="YoungWizzard_SpecialDescription" xml:space="preserve">
+    <data name="Mage_SpecialDescription" xml:space="preserve">
         <value/>
     </data>
     

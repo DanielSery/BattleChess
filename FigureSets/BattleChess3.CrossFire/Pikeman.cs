@@ -4,21 +4,21 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Spearman : ICrossFireFigureType
+public class Pikeman : ICrossFireFigureType
 {
     /// <inheritdoc />
     public int FigureValue { get; } = 3;
 
-    int IFigureType.FigureId => 32;
+    int IFigureType.FigureId => 1;
 
     private static readonly Position[] AttackPositions =
     [
-        new(-1, 0), new(1, 0), new(0, 1)
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
 
     private static readonly Position[] MovePositions =
     [
-        new(-1, 1), new(1, 1), new(-1, -1), new(1, -1)
+        new(-1, 1), new(1, 1)
     ];
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

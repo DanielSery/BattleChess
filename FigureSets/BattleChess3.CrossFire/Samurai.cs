@@ -4,21 +4,21 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Chinese : ICrossFireFigureType
+public class Samurai : ICrossFireFigureType
 {
     /// <inheritdoc />
     public int FigureValue { get; } = 10;
     
-    int IFigureType.FigureId => 21;
+    int IFigureType.FigureId => 43;
     
     private static readonly Position[] MovePositions =
     [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
+        new(-1, -1), new(1, -1), new(1, -1), new(1, 1)
     ];
 
     private static readonly Position[] AttackDirections =
     [
-        new(-1, -1), new(-1, 1), new(1, -1), new(1, 1)
+        new(-1, -1), new(1, -1), new(1, -1), new(1, 1)
     ];
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)

@@ -4,26 +4,21 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class Warrior : ICrossFireFigureType
+public class Nordguard: ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 16;
+    public int FigureValue { get; } = 10;
     
-    int IFigureType.FigureId => 21;
+    int IFigureType.FigureId => 44;
     
     private static readonly Position[] MovePositions =
     [
-        new(-2, -1), new(-2, 1),
-        new(-1, -2), new(-1, 2),
-        new(1, -2), new(1, 2),
-        new(2, -1), new(2, 1)
+        new(-1, -1), new(1, -1), new(1, -1), new(1, 1)
     ];
 
     private static readonly Position[] AttackDirections =
     [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
@@ -32,6 +27,8 @@ public class Warrior : ICrossFireFigureType
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
+            else
+                break;
         }
         
         foreach (var direction in AttackDirections)
@@ -75,23 +72,6 @@ public class Warrior : ICrossFireFigureType
                 return;
            
             unitTile.KillWithMove(targetTile, board); 
-        }
-        else
-        {
-            var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.Position;
-            
-            unitTile.KillWithMove(board[sourcePosition + smallMove], board);
-            unitTile = board[sourcePosition + smallMove];
-            if (!unitTile.Figure.Type.Equals(this))
-                return;
-            
-            unitTile.KillWithMove(board[sourcePosition + 2 * smallMove], board);
-            unitTile = board[sourcePosition + 2 * smallMove];
-            if (!unitTile.Figure.Type.Equals(this))
-                return;
-            
-            unitTile.KillWithMove(targetTile, board);
         }
     }
 }

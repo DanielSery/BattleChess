@@ -155,6 +155,10 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             {
                 try
                 {
+                    var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+                    if (!myMap.IsValid(unlockedFigures))
+                        return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
+                    
                     Console.WriteLine($"Searching for lobby with name: {lobbyName}");
                     var filter = Builders<GameLobby>.Filter.And(
                         Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
@@ -254,7 +258,11 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             return _scheduler.QueueTask(async () =>
             {
                 try
-                {         
+                {
+                    var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+                    if (!myMap.IsValid(unlockedFigures))
+                        return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
+                    
                     Console.WriteLine($"Searching for lobby with name: {lobbyName}");
                     var filter = Builders<GameLobby>.Filter.And(
                         Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
@@ -267,7 +275,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     var hash = GetHash(password, lobby.PasswordSalt);
                     if (hash != lobby.PasswordHash)
                     {
-                        return  Result.Fail<GameLobby>("Password doesn't match");
+                        return Result.Fail<GameLobby>("Password doesn't match");
                     }
 
                     var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
