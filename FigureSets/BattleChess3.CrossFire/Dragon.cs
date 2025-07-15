@@ -14,18 +14,13 @@ public class Dragon : ICrossFireFigureType
     
     private static readonly Position[] MovePositions =
     [
-        new(-2, -1), new(-2, 1),
-        new(-1, -2), new(-1, 0), new(-1, 2),
-        new(0, -1), new(0, 1),
-        new(1, -2), new(1, 0), new(1, 2),
-        new(2, -1), new(2, 1),
+        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
     
     private static readonly Position[] FireDirections =
     [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
+        new(-1, -1), new(-1, 1),
+        new(1, -1), new(1, 1)
     ];
 
     IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)

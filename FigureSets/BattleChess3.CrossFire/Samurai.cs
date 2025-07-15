@@ -7,7 +7,7 @@ namespace BattleChess3.CrossFireFigures;
 public class Samurai : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 10;
+    public int FigureValue { get; } = 6;
     
     int IFigureType.FigureId => 43;
     

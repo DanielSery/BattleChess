@@ -7,7 +7,7 @@ namespace BattleChess3.CrossFireFigures;
 public class Chinese : ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 10;
+    public int FigureValue { get; } = 8;
     
     int IFigureType.FigureId => 21;
     

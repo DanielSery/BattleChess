@@ -69,7 +69,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alchemist (Cost: 4)
+        ///   Looks up a localized string similar to Alchemist (Cost: {0})
         ///
         ///After move creates explosives 
         ///which detonate when destroyed..
@@ -144,7 +144,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archer (Cost: 10)
+        ///   Looks up a localized string similar to Archer (Cost: {0})
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -170,11 +170,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬛⬛▣⬛⬛⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Archer_MovementDescription {
             get {
@@ -201,7 +201,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Barbarian (Cost: 5)
+        ///   Looks up a localized string similar to Barbarian (Cost: {0})
         ///
         ///Can push near units.
         /// </summary>
@@ -266,7 +266,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bard (Cost: 12)
+        ///   Looks up a localized string similar to Bard (Cost: {0})
         ///
         ///Can convert enemy units..
         /// </summary>
@@ -291,9 +291,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
@@ -322,16 +322,84 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string BattleAxe_AttackDescription {
+            get {
+                return ResourceManager.GetString("BattleAxe_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Battle axe (Cost: {0})
+        ///
+        ///With move swings with axe and
+        ///kills multiple units.
+        ///.
+        /// </summary>
+        internal static string BattleAxe_BaseDescription {
+            get {
+                return ResourceManager.GetString("BattleAxe_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Battle axe.
+        /// </summary>
+        internal static string BattleAxe_DisplayName {
+            get {
+                return ResourceManager.GetString("BattleAxe_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        /// </summary>
+        internal static string BattleAxe_MovementDescription {
+            get {
+                return ResourceManager.GetString("BattleAxe_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Movement examples:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜▦▦⬜⬜
+        ///⬜⬜⬜⬜⬛▦⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///.
+        /// </summary>
+        internal static string BattleAxe_SpecialDescription {
+            get {
+                return ResourceManager.GetString("BattleAxe_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬜⬜⬛⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜.
         /// </summary>
         internal static string Blade_AttackDescription {
             get {
@@ -340,7 +408,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Blade (Cost: 16)
+        ///   Looks up a localized string similar to Blade (Cost: {0})
         ///
         ///Can kill upt to 3 units in line..
         /// </summary>
@@ -365,11 +433,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬛⬜⬜⬜
-        ///⬜⬜▣⬜⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬜⬜⬜.
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜.
         /// </summary>
         internal static string Blade_MovementDescription {
             get {
@@ -396,7 +464,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Builder (Cost: 5)
+        ///   Looks up a localized string similar to Builder (Cost: {0})
         ///
         ///Can build walls.
         ///.
@@ -471,7 +539,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Camel Archer (Cost: 9)
+        ///   Looks up a localized string similar to Camel Archer (Cost: {0})
         ///
         ///Moves like chess bishop, attacks like rook.
         ///.
@@ -537,7 +605,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Camel Rider (Cost: 6)
+        ///   Looks up a localized string similar to Camel Rider (Cost: {0})
         ///
         ///Moves and attacks like chess bishop..
         /// </summary>
@@ -587,8 +655,8 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///   Looks up a localized string similar to Move:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜▦▦▦⬜⬜⬜
-        ///⬜⬜▦▦▦⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
         ///⬜⬜⬜▦⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
@@ -602,7 +670,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannon (Cost: 14)
+        ///   Looks up a localized string similar to Cannon (Cost: {0})
         ///
         ///Kills multiple units at once.
         ///Can destroy anything.
@@ -646,7 +714,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///   Looks up a localized string similar to Attack:
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬛⬜⬛⬜⬛⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -661,7 +729,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Catapult (Cost: 12)
+        ///   Looks up a localized string similar to Catapult (Cost: {0})
         ///
         ///Can destroy any unit.
         ///Cannot attack when standing next to enemy.
@@ -706,11 +774,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬛⬜⬛⬛⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬛⬛⬜⬛⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜.
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜.
         /// </summary>
         internal static string Chinese_AttackDescription {
             get {
@@ -719,7 +787,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chinese warrior (Cost: 7).
+        ///   Looks up a localized string similar to Chinese warrior (Cost: {0}).
         /// </summary>
         internal static string Chinese_BaseDescription {
             get {
@@ -782,7 +850,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crossbowman (Cost: 9)
+        ///   Looks up a localized string similar to Crossbowman (Cost: {0})
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -808,11 +876,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Crossbow_MovementDescription {
             get {
@@ -839,6 +907,72 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬛
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///.
+        /// </summary>
+        internal static string Dogs_AttackDescription {
+            get {
+                return ResourceManager.GetString("Dogs_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hunting dogs (Cost: {0})
+        ///
+        ///Moves like chess King, attacks like chess Queen..
+        /// </summary>
+        internal static string Dogs_BaseDescription {
+            get {
+                return ResourceManager.GetString("Dogs_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hunting dogs.
+        /// </summary>
+        internal static string Dogs_DisplayName {
+            get {
+                return ResourceManager.GetString("Dogs_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Dogs_MovementDescription {
+            get {
+                return ResourceManager.GetString("Dogs_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Dogs_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Dogs_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Dragon_AttackDescription {
@@ -848,7 +982,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dragon (Cost: 20)
+        ///   Looks up a localized string similar to Dragon (Cost: {0})
         ///            
         ///Can create line of 1-2 tiles of fire.
         ///Can walk on fire without harm.
@@ -875,11 +1009,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬛⬜⬜⬜
-        ///⬜⬜▣⬜⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬜⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬛▣⬛⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Dragon_MovementDescription {
             get {
@@ -924,7 +1058,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Elephant (Cost: 8)
+        ///   Looks up a localized string similar to Elephant (Cost: {0})
         ///            
         ///Kills everything in 1-3 tile line.
         ///.
@@ -981,7 +1115,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty (Cost: 0)
+        ///   Looks up a localized string similar to Empty (Cost: {0})
         ///
         ///Empty tile where units can move..
         /// </summary>
@@ -1028,7 +1162,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Explosives (Cost: 1)
+        ///   Looks up a localized string similar to Explosives (Cost: {0})
         ///
         ///When killed destroys everything in 3x3 square.
         ///.
@@ -1076,7 +1210,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fire (Cost: 0)
+        ///   Looks up a localized string similar to Fire (Cost: {0})
         ///            
         ///When unit walks into fire, it is killed
         ///and the fire extinguished.
@@ -1120,74 +1254,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
-        /// </summary>
-        internal static string Gladiator_AttackDescription {
-            get {
-                return ResourceManager.GetString("Gladiator_AttackDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gladiator (Cost: 3).
-        /// </summary>
-        internal static string Gladiator_BaseDescription {
-            get {
-                return ResourceManager.GetString("Gladiator_BaseDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gladiator.
-        /// </summary>
-        internal static string Gladiator_DisplayName {
-            get {
-                return ResourceManager.GetString("Gladiator_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
-        /// </summary>
-        internal static string Gladiator_MovementDescription {
-            get {
-                return ResourceManager.GetString("Gladiator_MovementDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string Gladiator_SpecialDescription {
-            get {
-                return ResourceManager.GetString("Gladiator_SpecialDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attack:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬛⬜⬜⬜⬜⬜⬛⬜
         ///⬜⬛⬜⬜⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬛⬜⬜⬜⬛⬜⬜.
         /// </summary>
         internal static string JapanArcher_AttackDescription {
@@ -1197,7 +1268,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Japanese archer (Cost: 8)
+        ///   Looks up a localized string similar to Japanese archer (Cost: {0})
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -1223,11 +1294,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string JapanArcher_MovementDescription {
             get {
@@ -1263,7 +1334,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to King (Cost: 5)
+        ///   Looks up a localized string similar to King (Cost: {0})
         ///
         ///Moves and attacks like chess King.
         ///Can castle with any unit (not just Rook)..
@@ -1316,11 +1387,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜.
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
         /// </summary>
         internal static string Knight_AttackDescription {
             get {
@@ -1329,7 +1400,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Knight (Cost: 5).
+        ///   Looks up a localized string similar to Knight (Cost: {0}).
         /// </summary>
         internal static string Knight_BaseDescription {
             get {
@@ -1343,11 +1414,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
         /// </summary>
         internal static string Knight_MovementDescription {
             get {
@@ -1383,10 +1454,10 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Legionary with Pike (Cost: 4)
+        ///   Looks up a localized string similar to Legionary with Pike (Cost: {0})
         ///
         ///Moves and attacks like chess Pawn.
-        ///When on last tile, turns to Knight.
+        ///When on last tile, turns to Blade.
         ///Can throw pike and range attack..
         /// </summary>
         internal static string LegionaryPike_BaseDescription {
@@ -1470,10 +1541,10 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Legionary with Sword (Cost: 2)
+        ///   Looks up a localized string similar to Legionary with Sword (Cost: {0})
         ///
         ///Moves and attacks like chess Pawn.
-        ///When on last tile, turns to Knight..
+        ///When on last tile, turns to Blade..
         /// </summary>
         internal static string LegionarySword_BaseDescription {
             get {
@@ -1530,16 +1601,24 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attack:
+        ///   Looks up a localized string similar to On move:
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬜⬜▣⬜⬜⬜⬜⬜
+        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜▩⬜⬜⬜
-        ///⬛⬜⬜▩⬛▩⬜⬜
+        ///⬜⬜⬜▩▣▩⬜⬜
         ///⬜⬜⬜⬜▩⬜⬜⬜
-        ///⬜⬜▣⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///.
         /// </summary>
         internal static string Mage_AttackDescription {
@@ -1549,7 +1628,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mage (Cost: 20)
+        ///   Looks up a localized string similar to Mage (Cost: {0})
         ///            
         ///When moving or attacking, explosion 
         ///kills units in specific shape.
@@ -1575,9 +1654,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬛⬜⬛⬜⬛⬜⬜⬜
-        ///⬜▩⬜▩⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬛⬜▣⬜⬛⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬛⬜⬛⬜⬛⬜⬜⬜
@@ -1608,7 +1687,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Miner (Cost: 3)
+        ///   Looks up a localized string similar to Miner (Cost: {0})
         ///
         ///After move creates trenches where units 
         ///cannot move (trench is considered a unit)..
@@ -1631,14 +1710,14 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Move:
         ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
         /// </summary>
         internal static string Miner_MovementDescription {
             get {
@@ -1649,11 +1728,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         /// <summary>
         ///   Looks up a localized string similar to After move
         ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜▦▦▦⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
+        ///⬜⬜⬜▦⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜.
@@ -1683,7 +1762,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mounted Archer (Cost: 11)
+        ///   Looks up a localized string similar to Mounted Archer (Cost: {0})
         ///
         ///Moves like chess rook, attack like bishop..
         /// </summary>
@@ -1748,7 +1827,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mounted Knight (Cost: 10)
+        ///   Looks up a localized string similar to Mounted Knight (Cost: {0})
         ///
         ///Moves and attacks like chess rook..
         /// </summary>
@@ -1813,7 +1892,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Musketeer (Cost: 12)
+        ///   Looks up a localized string similar to Musketeer (Cost: {0})
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -1834,16 +1913,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string Musketeer_MovementDescription {
             get {
@@ -1867,44 +1937,33 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///
-        ///Attack with figure
-        ///before ninja:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///.
         /// </summary>
-        internal static string Ninja_AttackDescription {
+        internal static string Nordguard_AttackDescription {
             get {
-                return ResourceManager.GetString("Ninja_AttackDescription", resourceCulture);
+                return ResourceManager.GetString("Nordguard_AttackDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ninja (Cost: 3).
+        ///   Looks up a localized string similar to Nordguard (Cost: {0}).
         /// </summary>
-        internal static string Ninja_BaseDescription {
+        internal static string Nordguard_BaseDescription {
             get {
-                return ResourceManager.GetString("Ninja_BaseDescription", resourceCulture);
+                return ResourceManager.GetString("Nordguard_BaseDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ninja.
+        ///   Looks up a localized string similar to Nordguard.
         /// </summary>
-        internal static string Ninja_DisplayName {
+        internal static string Nordguard_DisplayName {
             get {
-                return ResourceManager.GetString("Ninja_DisplayName", resourceCulture);
+                return ResourceManager.GetString("Nordguard_DisplayName", resourceCulture);
             }
         }
         
@@ -1915,35 +1974,24 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///
-        ///Move with figure
-        ///before ninja:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▦⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///.
         /// </summary>
-        internal static string Ninja_MovementDescription {
+        internal static string Nordguard_MovementDescription {
             get {
-                return ResourceManager.GetString("Ninja_MovementDescription", resourceCulture);
+                return ResourceManager.GetString("Nordguard_MovementDescription", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        internal static string Ninja_SpecialDescription {
+        internal static string Nordguard_SpecialDescription {
             get {
-                return ResourceManager.GetString("Ninja_SpecialDescription", resourceCulture);
+                return ResourceManager.GetString("Nordguard_SpecialDescription", resourceCulture);
             }
         }
         
@@ -1966,7 +2014,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Peasant (Cost: 1).
+        ///   Looks up a localized string similar to Peasant (Cost: {0}).
         /// </summary>
         internal static string Peasant_BaseDescription {
             get {
@@ -2015,6 +2063,69 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Pikeman_AttackDescription {
+            get {
+                return ResourceManager.GetString("Pikeman_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pikeman (Cost: {0}).
+        /// </summary>
+        internal static string Pikeman_BaseDescription {
+            get {
+                return ResourceManager.GetString("Pikeman_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pikeman.
+        /// </summary>
+        internal static string Pikeman_DisplayName {
+            get {
+                return ResourceManager.GetString("Pikeman_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        /// </summary>
+        internal static string Pikeman_MovementDescription {
+            get {
+                return ResourceManager.GetString("Pikeman_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Pikeman_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Pikeman_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬛
         ///⬛⬜⬜⬜⬜⬜⬛⬜
         ///⬜⬛⬜⬜⬜⬛⬜⬜
@@ -2029,7 +2140,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Priest (Cost: 9)
+        ///   Looks up a localized string similar to Priest (Cost: {0})
         ///            
         ///Can make unit a king.
         ///Can convert enemy unit and make it a king.
@@ -2106,7 +2217,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queen (Cost: 18)
+        ///   Looks up a localized string similar to Queen (Cost: {0})
         ///
         ///Moves and attacks like chess Queen..
         /// </summary>
@@ -2171,7 +2282,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ranger (Cost: 11)
+        ///   Looks up a localized string similar to Ranger (Cost: {0})
         ///
         ///Does not move with attack.
         ///Cannot attack when standing next to enemy..
@@ -2197,11 +2308,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬛⬛▣⬛⬛⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Ranger_MovementDescription {
             get {
@@ -2225,9 +2336,149 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
         ///⬜⬜⬛⬜⬛⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///.
+        /// </summary>
+        internal static string Samurai_AttackDescription {
+            get {
+                return ResourceManager.GetString("Samurai_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Samurai (Cost: {0}).
+        /// </summary>
+        internal static string Samurai_BaseDescription {
+            get {
+                return ResourceManager.GetString("Samurai_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Samurai.
+        /// </summary>
+        internal static string Samurai_DisplayName {
+            get {
+                return ResourceManager.GetString("Samurai_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬛⬜⬜⬜⬛⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///.
+        /// </summary>
+        internal static string Samurai_MovementDescription {
+            get {
+                return ResourceManager.GetString("Samurai_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Samurai_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Samurai_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///.
+        /// </summary>
+        internal static string Scout_AttackDescription {
+            get {
+                return ResourceManager.GetString("Scout_AttackDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scout (Cost: {0})
+        ///
+        ///Moves like chess Queen, attacks like chess King..
+        /// </summary>
+        internal static string Scout_BaseDescription {
+            get {
+                return ResourceManager.GetString("Scout_BaseDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scout.
+        /// </summary>
+        internal static string Scout_DisplayName {
+            get {
+                return ResourceManager.GetString("Scout_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move:
+        ///
+        ///⬜⬜⬜⬛⬜⬜⬜⬛
+        ///⬛⬜⬜⬛⬜⬜⬛⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬛⬛⬛▣⬛⬛⬛⬛
+        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬛⬜⬜⬛⬜⬜⬛⬜.
+        /// </summary>
+        internal static string Scout_MovementDescription {
+            get {
+                return ResourceManager.GetString("Scout_MovementDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Scout_SpecialDescription {
+            get {
+                return ResourceManager.GetString("Scout_SpecialDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attack:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬛⬜
+        ///⬜⬜⬜⬜⬜▣⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Spartan_AttackDescription {
@@ -2237,7 +2488,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spartan (Cost: 4).
+        ///   Looks up a localized string similar to Spartan (Cost: {0}).
         /// </summary>
         internal static string Spartan_BaseDescription {
             get {
@@ -2261,10 +2512,10 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬛⬛⬜⬜⬜
         ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Spartan_MovementDescription {
             get {
@@ -2288,9 +2539,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Spearman_AttackDescription {
@@ -2300,7 +2551,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spearman (Cost: 2).
+        ///   Looks up a localized string similar to Spearman (Cost: {0}).
         /// </summary>
         internal static string Spearman_BaseDescription {
             get {
@@ -2325,9 +2576,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬛⬜⬜⬜⬜
-        ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜.
+        ///⬜⬜⬛⬜⬛⬜⬜⬜
+        ///⬜⬜⬜▣⬜⬜⬜⬜
+        ///⬜⬜⬛⬜⬛⬜⬜⬜.
         /// </summary>
         internal static string Spearman_MovementDescription {
             get {
@@ -2350,72 +2601,6 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬜⬜⬛⬜⬜.
-        /// </summary>
-        internal static string Temp_AttackDescription {
-            get {
-                return ResourceManager.GetString("Temp_AttackDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mounted knight (Cost: 6)
-        ///
-        ///Can kill 2 units in line.
-        ///.
-        /// </summary>
-        internal static string Temp_BaseDescription {
-            get {
-                return ResourceManager.GetString("Temp_BaseDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mounted Knight.
-        /// </summary>
-        internal static string Temp_DisplayName {
-            get {
-                return ResourceManager.GetString("Temp_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬛⬜⬜⬜
-        ///⬜⬜▣⬜⬜⬜⬜⬜
-        ///⬛⬜⬜⬜⬛⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬜⬜⬜.
-        /// </summary>
-        internal static string Temp_MovementDescription {
-            get {
-                return ResourceManager.GetString("Temp_MovementDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string Temp_SpecialDescription {
-            get {
-                return ResourceManager.GetString("Temp_SpecialDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attack:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬛⬛⬜⬜⬜
@@ -2429,7 +2614,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trader (Cost: 7)
+        ///   Looks up a localized string similar to Trader (Cost: {0})
         ///
         ///Moves and attacks like chess king.
         ///
@@ -2488,7 +2673,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trench (Cost: 0)
+        ///   Looks up a localized string similar to Trench (Cost: {0})
         ///
         ///Can be destroyed.
         ///.
@@ -2536,7 +2721,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wall (Cost: 1)
+        ///   Looks up a localized string similar to Wall (Cost: {0})
         ///
         ///Can be destroyed by siege, explosions
         ///and Warhammer..
@@ -2584,7 +2769,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warhammer (Cost: 6)
+        ///   Looks up a localized string similar to Warhammer (Cost: {0})
         ///
         ///With move swings with hammer and
         ///kills multiple units.
@@ -2613,9 +2798,9 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜
+        ///⬜⬜⬜⬛⬜⬜⬜⬜
         ///⬜⬜⬛▣⬛⬜⬜⬜
-        ///⬜⬜⬛⬛⬛⬜⬜⬜.
+        ///⬜⬜⬜⬛⬜⬜⬜⬜.
         /// </summary>
         internal static string Warhammer_MovementDescription {
             get {
@@ -2625,15 +2810,6 @@ namespace BattleChess3.CrossFireFigures.Localization {
         
         /// <summary>
         ///   Looks up a localized string similar to Movement examples:
-        ///
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜▦▦⬜⬜
-        ///⬜⬜⬜⬜⬛▦⬜⬜
-        ///⬜⬜⬜▣⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
@@ -2669,7 +2845,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Whiplash (Cost: 6)
+        ///   Looks up a localized string similar to Whiplash (Cost: {0})
         ///
         ///Moves and attacks like a knight in chess..
         /// </summary>
@@ -2716,7 +2892,27 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 
+        ///On move:
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜▩⬜▩⬜⬜
+        ///⬜⬜⬜⬜▣⬜⬜⬜
+        ///⬜⬜⬜▩⬜▩⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜▩⬜⬜⬜⬜⬜
+        ///⬜▩▣▩⬜⬜⬜⬜
+        ///⬜⬜▩⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///.
         /// </summary>
         internal static string Wizzard_AttackDescription {
             get {
@@ -2725,7 +2921,7 @@ namespace BattleChess3.CrossFireFigures.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wizzard (Cost: 22)
+        ///   Looks up a localized string similar to Wizzard (Cost: {0})
         ///
         ///After move explosion kills everything 
         ///around the wizzard..
@@ -2750,11 +2946,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬜⬜⬜⬜⬜⬜⬜
+        ///⬜⬜⬜▩⬜▩⬜⬜
         ///⬛⬜⬛⬜⬛⬜⬜⬜
-        ///⬜⬜⬜▩▩▩⬜⬜
-        ///⬛⬜▣▩⬛▩⬜⬜
-        ///⬜⬜⬜▩▩▩⬜⬜
+        ///⬜⬜⬜▩⬜▩⬜⬜
+        ///⬛⬜▣⬜⬛⬜⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬛⬜⬛⬜⬛⬜⬜⬜.
         /// </summary>
         internal static string Wizzard_MovementDescription {

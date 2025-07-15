@@ -7,13 +7,13 @@ namespace BattleChess3.CrossFireFigures;
 public class Nordguard: ICrossFireFigureType
 {
     /// <inheritdoc />
-    public int FigureValue { get; } = 10;
+    public int FigureValue { get; } = 8;
     
     int IFigureType.FigureId => 44;
     
     private static readonly Position[] MovePositions =
     [
-        new(-1, -1), new(1, -1), new(1, -1), new(1, 1)
+        new(-1, -1), new(1, -1), new(-1, 1), new(1, 1)
     ];
 
     private static readonly Position[] AttackDirections =
