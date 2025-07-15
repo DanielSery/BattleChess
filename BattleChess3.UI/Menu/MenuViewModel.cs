@@ -1,4 +1,5 @@
 ﻿using BattleChess3.UI.Game;
+using BattleChess3.UI.Services;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
@@ -7,10 +8,12 @@ namespace BattleChess3.UI.Menu;
 
 public class MenuViewModel : ViewModelBase
 {
+    private readonly ISoundService _soundService;
     private readonly MapsViewModel _mapsViewModel;
     private readonly BoardViewModel _boardViewModel;
 
     public MenuViewModel(
+        ISoundService soundService,
         BoardViewModel boardViewModel,
         MapsViewModel mapsViewModel,
         SignUpViewModel signUpViewModel,
@@ -18,6 +21,7 @@ public class MenuViewModel : ViewModelBase
         MultiplayerViewModel multiplayerViewModel,
         LeaderboardViewModel leaderboardViewModel)
     {
+        _soundService = soundService;
         _boardViewModel = boardViewModel;
         _mapsViewModel = mapsViewModel;
         SignUpViewModel = signUpViewModel;
@@ -53,6 +57,7 @@ public class MenuViewModel : ViewModelBase
             if (SetProperty(ref _selectedMenuTab, value,
                     onChanging: _ => OnDeactivation()))
             {
+                _soundService.PlaySoundEffect(SoundEffectType.SmallMenuAnimation);
                 SelectedTabChanged?.Invoke(this, (previousTab, value));
                 OnActivation();
             }

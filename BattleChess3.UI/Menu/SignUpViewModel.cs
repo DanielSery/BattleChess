@@ -8,6 +8,7 @@ using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.MainWindow;
+using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
@@ -15,6 +16,8 @@ namespace BattleChess3.UI.Menu;
 
 public class SignUpViewModel : ViewModelBase
 {
+    private readonly ISoundService _soundService;
+    
     private readonly LoginViewModel _loginViewModel;
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly INotificationService _notificationService;
@@ -27,13 +30,15 @@ public class SignUpViewModel : ViewModelBase
         IMultiplayerPlayerService multiplayerPlayerService,
         INotificationService notificationService,
         ILoadingService loadingService,
-        TeamBoardViewModel teamBoardViewModel)
+        TeamBoardViewModel teamBoardViewModel,
+        ISoundService soundService)
     {
         _loginViewModel = loginViewModel;
         _multiplayerPlayerService = multiplayerPlayerService;
         _notificationService = notificationService;
         _loadingService = loadingService;
         _teamBoardViewModel = teamBoardViewModel;
+        _soundService = soundService;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
         RequestEndCommand = new RelayCommand(CallRequestEnd);
@@ -86,18 +91,21 @@ public class SignUpViewModel : ViewModelBase
         if (Name.Length < 5)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Name is too short.");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         
         if (SecurePassword1.Length < 6)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Password is too short.");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
 
         if (!string.Equals(EmailVerificationCode.Trim(), _privateVerificationCode, StringComparison.Ordinal))
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Invalid verification code.");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         
@@ -108,6 +116,7 @@ public class SignUpViewModel : ViewModelBase
         if (password1Hash != password2Hash)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Passwords do not match.");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         
@@ -117,6 +126,7 @@ public class SignUpViewModel : ViewModelBase
         if (result.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Error, result.Errors[0].Message);
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         else
@@ -144,12 +154,14 @@ public class SignUpViewModel : ViewModelBase
         {
             Console.WriteLine(e);
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Invalid email address format");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         catch (ArgumentException e)
         {
             Console.WriteLine(e);
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Invalid email address");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         
@@ -159,6 +171,7 @@ public class SignUpViewModel : ViewModelBase
         if (result.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, result.Errors[0].Message);
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         
@@ -187,11 +200,13 @@ public class SignUpViewModel : ViewModelBase
         {
             Console.WriteLine(e);
             _notificationService.ShowMessage(ShownMessage.MessageType.Error, "Failed to send verification email");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         
         _notificationService.ShowMessage(ShownMessage.MessageType.Success, "Verification email sent");
         VerificationInProgress = true;
+        _soundService.PlaySoundEffect(SoundEffectType.Button);
     }
 
     private static string GetHash(string str, string saltString)

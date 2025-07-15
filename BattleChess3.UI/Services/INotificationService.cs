@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.UI.MainWindow;
+﻿namespace BattleChess3.UI.Services;
 
 public interface INotificationService
 {

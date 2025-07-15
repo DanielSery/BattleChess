@@ -1,6 +1,7 @@
 ﻿using BattleChess3.Multiplayer;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.UI.MainWindow;
+using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 

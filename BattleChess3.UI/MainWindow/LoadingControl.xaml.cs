@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using BattleChess3.UI.Services;
 
 namespace BattleChess3.UI.MainWindow;
 

@@ -3,6 +3,7 @@ using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
+using BattleChess3.UI.Services;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
@@ -14,6 +15,7 @@ public sealed class BoardViewModel : ViewModelBase
     private readonly IPlayerService _playerService;
     private readonly IMapLoader _mapLoader;
     private readonly IMultiplayerGameService _multiplayerGameService;
+    private readonly ISoundService _soundService;
 
     private TileViewModel _mouseOnTile = NoneTileViewModel.Instance;
     private TileViewModel _selectedTile = NoneTileViewModel.Instance;
@@ -21,11 +23,13 @@ public sealed class BoardViewModel : ViewModelBase
     public BoardViewModel(
         IPlayerService playerService,
         IMapLoader mapLoader,
-        IMultiplayerGameService multiplayerGameService)
+        IMultiplayerGameService multiplayerGameService,
+        ISoundService soundService)
     {
         _playerService = playerService;
         _mapLoader = mapLoader;
         _multiplayerGameService = multiplayerGameService;
+        _soundService = soundService;
 
         SurrenderCommand = new RelayCommand(Surrender);
         PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
@@ -127,6 +131,7 @@ public sealed class BoardViewModel : ViewModelBase
         if (_playerService.IsMultiplayer &&
             (_playerService.CanMove || _playerService.IsWaitingForMove))
         {
+            _soundService.PlaySoundEffect(SoundEffectType.Button);
             _playerService.Surrender();
         }
         else
@@ -138,12 +143,12 @@ public sealed class BoardViewModel : ViewModelBase
     private void PlayTile(TileViewModel? clickedTile)
     {
         ArgumentNullException.ThrowIfNull(clickedTile);
-        
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
             var timeSpent = _playerService.EndTurn();
             _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position, timeSpent);
             clickedTile.PossibleAction.Action.Invoke();
+            _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTile = NoneTileViewModel.Instance;
             _playerService.NextTurn();
             if (_playerService.IsWaitingForMove)
@@ -259,6 +264,7 @@ public sealed class BoardViewModel : ViewModelBase
         _playerService.EndTurn(e.turnTimeSpent);
         var toTile = Tiles[e.to.Index];
         toTile.PossibleAction.Action.Invoke();
+        _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
         SelectedTile = NoneTileViewModel.Instance;
         _playerService.NextTurn();
         if (_playerService.IsWaitingForMove)

@@ -7,6 +7,7 @@ using BattleChess3.UI.Editor;
 using BattleChess3.UI.Game;
 using BattleChess3.UI.MainWindow;
 using BattleChess3.UI.Menu;
+using BattleChess3.UI.Services;
 using CommonServiceLocator;
 
 namespace BattleChess3.UI.Shared;
@@ -40,6 +41,9 @@ public static class DependenciesBuilder
             .SingleInstance();
         builder.RegisterType<LoadingService>()
             .As<ILoadingService>()
+            .SingleInstance();
+        builder.RegisterType<SoundService>()
+            .As<ISoundService>()
             .SingleInstance();
         
         builder.RegisterType<MapsViewModel>()

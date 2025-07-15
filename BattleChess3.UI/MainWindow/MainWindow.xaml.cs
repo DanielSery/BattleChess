@@ -139,7 +139,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = -parentHeight / 4, 
             To = -parentHeight,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -152,7 +152,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0,
             To = parentHeight * 3 / 4,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -165,7 +165,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = -parentHeight * 3 / 4,
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -178,7 +178,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 1,
             To = 0.85,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(teamBoardOpacityAnimation, TeamBoardControl);
@@ -190,7 +190,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 1,
             To = 0.85,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             FillBehavior = FillBehavior.Stop
         };
         Storyboard.SetTarget(outerControlOpacityAnimation, GameBoardOuterControl);
@@ -202,7 +202,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0,
             To = ParentGameSideControl.ActualHeight,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -215,7 +215,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = -ParentMenuSideControl.ActualHeight,
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -275,7 +275,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = -parentHeight, 
             To = -parentHeight / 4,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -288,7 +288,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = parentHeight * 3 / 4,
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -301,7 +301,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0,
             To = -parentHeight * 3 / 4,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -314,7 +314,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0.85,
             To = 1,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -327,7 +327,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0.85,
             To = 1,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -340,7 +340,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0,
             To = -ParentMenuSideControl.ActualHeight,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -353,7 +353,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = ParentGameSideControl.ActualHeight,
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -412,7 +412,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = -parentHeight * 3 / 4, 
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -425,7 +425,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = parentHeight * 3 / 4,
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -438,7 +438,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0,
             To = -parentHeight * 3 / 4,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -451,7 +451,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0.85,
             To = 1,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -464,7 +464,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = 0,
             To = -ParentMenuSideControl.ActualHeight,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -477,7 +477,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             From = ParentEditorSideControl.ActualHeight,
             To = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -534,7 +534,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             To = -parentHeight * 3 / 4, 
             From = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -547,7 +547,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             To = parentHeight * 3 / 4,
             From = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -560,7 +560,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             To = 0,
             From = -parentHeight * 3 / 4,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -573,7 +573,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             To = 0.85,
             From = 1,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -586,7 +586,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             To = 0,
             From = -ParentMenuSideControl.ActualHeight,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -599,7 +599,7 @@ public partial class MainWindow
             BeginTime = TimeSpan.Zero,
             To = ParentEditorSideControl.ActualHeight,
             From = 0,
-            Duration = TimeSpan.FromMilliseconds(600),
+            Duration = TimeSpan.FromMilliseconds(1000),
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
             FillBehavior = FillBehavior.Stop
         };
@@ -672,7 +672,7 @@ public partial class MainWindow
                     BeginTime = TimeSpan.Zero,
                     From = 0,
                     To = -parentHeight, 
-                    Duration = TimeSpan.FromMilliseconds(600),
+                    Duration = TimeSpan.FromMilliseconds(1000),
                     EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
                     FillBehavior = FillBehavior.Stop
                 };
@@ -691,7 +691,7 @@ public partial class MainWindow
                     BeginTime = TimeSpan.Zero,
                     From = parentHeight,
                     To = 0, 
-                    Duration = TimeSpan.FromMilliseconds(600),
+                    Duration = TimeSpan.FromMilliseconds(1000),
                     EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut },
                     FillBehavior = FillBehavior.Stop
                 };

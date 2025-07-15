@@ -3,6 +3,7 @@ using System.Security;
 using System.Security.Cryptography;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.MainWindow;
+using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
@@ -13,15 +14,18 @@ public class LoginViewModel : ViewModelBase
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly INotificationService _notificationService;
     private readonly ILoadingService _loadingService;
+    private readonly ISoundService _soundService;
     
     public LoginViewModel(
         IMultiplayerPlayerService multiplayerPlayerService,
         INotificationService notificationService,
-        ILoadingService loadingService)
+        ILoadingService loadingService,
+        ISoundService soundService)
     {
         _multiplayerPlayerService = multiplayerPlayerService;
         _notificationService = notificationService;
         _loadingService = loadingService;
+        _soundService = soundService;
         
         LoginCommand = new AsyncRelayCommand(LogIn);
         RequestEndCommand = new RelayCommand(CallRequestEnd);
@@ -55,6 +59,7 @@ public class LoginViewModel : ViewModelBase
         if (saltResult.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Invalid username or password");
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
             return;
         }
         
@@ -63,6 +68,7 @@ public class LoginViewModel : ViewModelBase
         if (result.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, result.Errors[0].Message);
+            _soundService.PlaySoundEffect(SoundEffectType.Error);
         }
         else
         {

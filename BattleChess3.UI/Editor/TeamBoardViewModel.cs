@@ -3,6 +3,7 @@ using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
+using BattleChess3.UI.Services;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
@@ -20,17 +21,20 @@ public class TeamBoardViewModel : ViewModelBase
     private readonly MapsViewModel _maps;
     private readonly IMapLoader _mapLoader;
     private readonly IMultiplayerPlayerService _playerService;
+    private readonly ISoundService _soundService;
 
     public TeamBoardViewModel(
         IFigureCreator figureCreator,
         MapsViewModel maps,
         IMapLoader mapLoader, 
-        IMultiplayerPlayerService playerService)
+        IMultiplayerPlayerService playerService,
+        ISoundService soundService)
     {
         _figureCreator = figureCreator;
         _maps = maps;
         _mapLoader = mapLoader;
         _playerService = playerService;
+        _soundService = soundService;
         
         Tiles = Enumerable.Range(0, IBoard.Length * 2)
             .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
@@ -72,6 +76,7 @@ public class TeamBoardViewModel : ViewModelBase
     {
         tile.Figure.Owner.Figures.Remove(tile.Figure);
         tile.Figure = _figureCreator.CreateFigure(figureIdentifier);
+        _soundService.PlaySoundEffect(SoundEffectType.Button);
         EvaluateTeamBoard();
     }
 
@@ -145,6 +150,7 @@ public class TeamBoardViewModel : ViewModelBase
         if (tile.Figure.Owner.Equals(Player.Neutral))
             return;
 
+        _soundService.PlaySoundEffect(SoundEffectType.Button);
         if (tile.Figure.IsKing)
         {
             var demotedFigureId = tile.Figure.Type.FigureId;

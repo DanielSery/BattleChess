@@ -2,10 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <BitmapImage x:Key="Preview"
-                 UriSource="pack://application:,,,/BattleChess3;component/Images/Preview.png" />
+                 UriSource="pack://application:,,,/BattleChess3;component/Resources/Images/Preview.png" />
     <ImageBrush x:Key="ApplicationBackground"
                 Stretch="UniformToFill"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ApplicationBackground.jpg" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ApplicationBackground.jpg" />
 
     <SolidColorBrush x:Key="DefaultObjectForeground" Color="Black" />
     <SolidColorBrush x:Key="DefaultObjectMouseOnForeground" Color="#292944" />
@@ -13,70 +13,70 @@
     <SolidColorBrush x:Key="DefaultObjectDisabledForeground" Color="#6D3651" />
 
     <ImageBrush x:Key="DefaultButtonBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/DefaultButton.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/DefaultButton.png" />
     <ImageBrush x:Key="DefaultButtonMouseOnBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/DefaultButtonMouseOn.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/DefaultButtonMouseOn.png" />
 
     <ImageBrush x:Key="ChessTileOutsideBoardBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileOutsideBoard.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileOutsideBoard.png" />
     <ImageBrush x:Key="ChessTileMouseOnBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileMouseOn.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileMouseOn.png" />
     <ImageBrush x:Key="ChessTileSelectedBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileSelected.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileSelected.png" />
     <ImageBrush x:Key="ChessTileSpecialBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileSpecial.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileSpecial.png" />
     <ImageBrush x:Key="ChessTileCanGoBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileCanGo.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileCanGo.png" />
     <ImageBrush x:Key="ChessTileDangeredBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileDangered.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileDangered.png" />
 
     <ImageBrush x:Key="ChessTileKingBaseBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileKingBase.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileKingBase.png" />
     <ImageBrush x:Key="ChessTileKingMouseOnBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileKingMouseOn.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileKingMouseOn.png" />
     <ImageBrush x:Key="ChessTileKingSelectedBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileKingSelected.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileKingSelected.png" />
     <ImageBrush x:Key="ChessTileKingSpecialBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileKingSpecial.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileKingSpecial.png" />
     <ImageBrush x:Key="ChessTileKingDangeredBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ChessTileKingDangered.png" />
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileKingDangered.png" />
     
     <ImageBrush x:Key="ButtonBlueBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonBlueBackground.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonBlueBackground.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonGreenBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonGreenBackground.jpg"
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonGreenBackground.jpg"
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonGreen2Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonGreen2Background.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonGreen2Background.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonGreen3Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonGreen3Background.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonGreen3Background.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonRedBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonRedBackground.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonRedBackground.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonRed2Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonRed2Background.png" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonRed2Background.png" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonOrangeBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonOrangeBackground.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonOrangeBackground.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonOrange2Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonOrange2Background.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonOrange2Background.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonOrange3Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonOrange3Background.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonOrange3Background.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonPurpleBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonPurpleBackground.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonPurpleBackground.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonPurple2Background"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonPurple2Background.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonPurple2Background.jpg" 
                 Stretch="UniformToFill"/>
     
     <ImageBrush x:Key="ButtonWhiteBackground"
-                ImageSource="pack://application:,,,/BattleChess3;component/Images/ButtonWhiteBackground.jpg" 
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonWhiteBackground.jpg" 
                 Stretch="UniformToFill"/>
 
     <Style TargetType="TabControl">

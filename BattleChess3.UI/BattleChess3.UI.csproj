@@ -21,14 +21,47 @@
 
     <ItemGroup>
         <None Remove="BattleChess3.deps.json"/>
+        <None Update="Resources\Sounds\Chess1.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Chess2.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Chess3.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Chess4.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Chess5.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Chess6.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Rolling.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Rolling1.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Rolling2.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Button1.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Error.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="8.0.0"/>
-        <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0"/>
-        <PackageReference Include="CommonServiceLocator" Version="2.0.7"/>
+        <PackageReference Include="Autofac" Version="8.0.0" />
+        <PackageReference Include="Autofac.Extras.CommonServiceLocator" Version="6.1.0" />
+        <PackageReference Include="CommonServiceLocator" Version="2.0.7" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Nicenis" Version="1.3.6" />
     </ItemGroup>
 
@@ -136,9 +169,36 @@
     <ItemGroup>
         <Resource Include="Images\*" />
         <None Remove="Images\*" />
+        <Resource Include="Resources\Images\ApplicationBackground.jpg" />
+        <Resource Include="Resources\Images\ButtonBlueBackground.jpg" />
+        <Resource Include="Resources\Images\ButtonGreen2Background.jpg" />
+        <Resource Include="Resources\Images\ButtonGreen3Background.jpg" />
+        <Resource Include="Resources\Images\ButtonGreenBackground.jpg" />
+        <Resource Include="Resources\Images\ButtonOrange2Background.jpg" />
+        <Resource Include="Resources\Images\ButtonOrange3Background.jpg" />
+        <Resource Include="Resources\Images\ButtonOrangeBackground.jpg" />
+        <Resource Include="Resources\Images\ButtonPurple2Background.jpg" />
+        <Resource Include="Resources\Images\ButtonPurpleBackground.jpg" />
+        <Resource Include="Resources\Images\ButtonRed2Background.png" />
+        <Resource Include="Resources\Images\ButtonRedBackground.jpg" />
+        <Resource Include="Resources\Images\ButtonWhiteBackground.jpg" />
+        <Resource Include="Resources\Images\ChessTileCanGo.png" />
+        <Resource Include="Resources\Images\ChessTileDangered.png" />
+        <Resource Include="Resources\Images\ChessTileKingBase.png" />
+        <Resource Include="Resources\Images\ChessTileKingDangered.png" />
+        <Resource Include="Resources\Images\ChessTileKingMouseOn.png" />
+        <Resource Include="Resources\Images\ChessTileKingSelected.png" />
+        <Resource Include="Resources\Images\ChessTileKingSpecial.png" />
+        <Resource Include="Resources\Images\ChessTileMouseOn.png" />
+        <Resource Include="Resources\Images\ChessTileOutsideBoard.png" />
+        <Resource Include="Resources\Images\ChessTileSelected.png" />
+        <Resource Include="Resources\Images\ChessTileSpecial.png" />
+        <Resource Include="Resources\Images\DefaultButton.png" />
+        <Resource Include="Resources\Images\DefaultButtonMouseOn.png" />
+        <Resource Include="Resources\Images\Preview.png" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\" />
+      <Folder Include="Resources\Sounds\" />
     </ItemGroup>
 </Project>
