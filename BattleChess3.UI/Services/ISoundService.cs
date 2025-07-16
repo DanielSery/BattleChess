@@ -2,5 +2,7 @@
 
 public interface ISoundService
 {
+    void ContinueBackgroundMusic();
+    void PauseBackgroundMusic();
     void PlaySoundEffect(SoundEffectType effectType);
 }

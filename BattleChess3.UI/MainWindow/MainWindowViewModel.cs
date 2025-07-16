@@ -55,6 +55,15 @@ public sealed class MainWindowViewModel : ViewModelBase
             if (SetProperty(ref _selectedTab, value,
                     onChanging: _ => OnDeactivation()))
             {
+                if (value == SelectedMainWindowTab.Game)
+                {
+                    _soundService.PauseBackgroundMusic();
+                }
+                else
+                {
+                    _soundService.ContinueBackgroundMusic();
+                }
+                
                 _soundService.PlaySoundEffect(SoundEffectType.MenuAnimation);
                 SelectedTabChanged?.Invoke(this, (previousTab, value));
                 OnActivation();

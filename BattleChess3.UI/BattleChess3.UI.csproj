@@ -54,6 +54,27 @@
         <None Update="Resources\Sounds\Error.wav">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Resources\Sounds\Background1.mp3">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Background2.mp3">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Background3.mp3">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Background4.mp3">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Background5.mp3">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Background6.mp3">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Resources\Sounds\Background7.mp3">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -196,9 +217,5 @@
         <Resource Include="Resources\Images\DefaultButton.png" />
         <Resource Include="Resources\Images\DefaultButtonMouseOn.png" />
         <Resource Include="Resources\Images\Preview.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Resources\Sounds\" />
     </ItemGroup>
 </Project>
