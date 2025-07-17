@@ -51,7 +51,7 @@ public class SoundService : ISoundService
                     if (_musicPlayer.Volume >= maxVolume * i / 20)
                         continue;
                     
-                    await Task.Delay(50, _backgroundMusicCancellationTokenSource.Token);
+                    await Task.Delay(30, _backgroundMusicCancellationTokenSource.Token);
                     _musicPlayer.Volume = maxVolume * i / 20;
                 }
             }
@@ -72,7 +72,7 @@ public class SoundService : ISoundService
                 if (_musicPlayer.Volume <= maxVolume * (20 - i) / 20)
                     continue;
                 
-                await Task.Delay(50, _backgroundMusicCancellationTokenSource.Token);
+                await Task.Delay(30, _backgroundMusicCancellationTokenSource.Token);
                 _musicPlayer.Volume = maxVolume * (20 - i) / 20;
             }
 
@@ -108,7 +108,7 @@ public class SoundService : ISoundService
 
     private void StartNextBackgroundSong()
     {
-        var path = $"./Resources/Sounds/Background{_random.Next(2, 8)}.mp3";
+        var path = $"./Resources/Sounds/Background{_random.Next(2, 7)}.mp3";
         _musicPlayer.Volume = GetActualMusicVolume();
         _musicPlayer.Open(new Uri(path, UriKind.RelativeOrAbsolute));
         _musicPlayer.Play();
