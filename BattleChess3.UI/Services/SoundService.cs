@@ -110,6 +110,7 @@ public class SoundService : ISoundService
     {
         var path = $"./Resources/Sounds/Background{_random.Next(2, 7)}.mp3";
         _musicPlayer.Volume = GetActualMusicVolume();
+        Console.WriteLine($"Starting background music for {path}");
         _musicPlayer.Open(new Uri(path, UriKind.RelativeOrAbsolute));
         _musicPlayer.Play();
         _backgroundMusicPlaying = true;
