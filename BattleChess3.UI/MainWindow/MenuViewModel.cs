@@ -1,10 +1,14 @@
-﻿using BattleChess3.UI.Game;
+﻿using System.Windows;
+using BattleChess3.UI.Game;
+using BattleChess3.UI.Menu;
+using BattleChess3.UI.Multiplayer;
 using BattleChess3.UI.Services;
+using BattleChess3.UI.Settings;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
-namespace BattleChess3.UI.Menu;
+namespace BattleChess3.UI.MainWindow;
 
 public class MenuViewModel : ViewModelBase
 {
@@ -19,7 +23,8 @@ public class MenuViewModel : ViewModelBase
         SignUpViewModel signUpViewModel,
         LoginViewModel loginViewModel,
         MultiplayerViewModel multiplayerViewModel,
-        LeaderboardViewModel leaderboardViewModel)
+        LeaderboardViewModel leaderboardViewModel,
+        SettingsViewModel settingsViewModel)
     {
         _soundService = soundService;
         _boardViewModel = boardViewModel;
@@ -28,6 +33,7 @@ public class MenuViewModel : ViewModelBase
         LoginViewModel = loginViewModel;
         MultiplayerViewModel = multiplayerViewModel;
         LeaderboardViewModel = leaderboardViewModel;
+        SettingsViewModel = settingsViewModel;
         
         LocalGameCommand = new RelayCommand(LocalGame);
         SelectEditorCommand = new RelayCommand(SelectEditor);
@@ -35,17 +41,21 @@ public class MenuViewModel : ViewModelBase
         ShowLoginCommand = new RelayCommand(ShowLogin);
         ShowSignUpCommand = new RelayCommand(ShowSignUp);
         ShowLeaderboardCommand = new RelayCommand(ShowLeaderboard);
+        ShowSettingsCommand = new RelayCommand(ShowSettings);
+        ExitCommand = new RelayCommand(Exit);
         
         SignUpViewModel.RequestEndSignUp += HideSideMenu;
         LoginViewModel.RequestEndLogin += HideSideMenu;
         LeaderboardViewModel.RequestEnd += HideSideMenu;
         MultiplayerViewModel.RequestEnd += HideSideMenu;
+        SettingsViewModel.RequestEnd += HideSideMenu;
     }
 
     public LoginViewModel LoginViewModel { get; }
     public SignUpViewModel SignUpViewModel { get; }
     public MultiplayerViewModel MultiplayerViewModel { get; }
     public LeaderboardViewModel LeaderboardViewModel { get; }
+    public SettingsViewModel SettingsViewModel { get; }
 
     private SelectedMenuTab _selectedMenuTab = SelectedMenuTab.None;
     public SelectedMenuTab SelectedMenuTab
@@ -71,6 +81,8 @@ public class MenuViewModel : ViewModelBase
     public RelayCommand ShowLoginCommand { get; }
     public RelayCommand ShowLobbiesCommand { get; }
     public RelayCommand ShowLeaderboardCommand { get; }
+    public RelayCommand ShowSettingsCommand { get; }
+    public RelayCommand ExitCommand { get; }
 
     public event EventHandler? RequestSwitchToGame;
     public event EventHandler? RequestSwitchToEditor;
@@ -105,6 +117,16 @@ public class MenuViewModel : ViewModelBase
     private void ShowLeaderboard()
     {
         SelectedMenuTab = SelectedMenuTab.Leaderboard;
+    }
+
+    private void ShowSettings()
+    {
+        SelectedMenuTab = SelectedMenuTab.Settings;
+    }
+
+    private void Exit()
+    {
+        Application.Current.Shutdown();
     }
 
     public void OnActivation()

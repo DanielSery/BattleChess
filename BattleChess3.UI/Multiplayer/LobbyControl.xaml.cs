@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using BattleChess3.Multiplayer.Tables;
 
-namespace BattleChess3.UI.Menu;
+namespace BattleChess3.UI.Multiplayer;
 
 public partial class MultiplayerLobbyControl : UserControl
 {

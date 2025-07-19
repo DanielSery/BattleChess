@@ -13,16 +13,23 @@ public class SoundService : ISoundService
     private Task _backgroundMusicTask = Task.CompletedTask;
     private CancellationTokenSource _backgroundMusicCancellationTokenSource = new CancellationTokenSource();
 
-    public SoundService()
+    private double _musicVolume;
+    private double _soundsVolume;
+    private double _totalVolume;
+
+    public void Initialize()
     {
         StartInitialBackgroundMusic();
     }
 
-    public double MusicVolume { get; set; } = 1.0;
-
     private double GetActualMusicVolume()
     {
-        return MusicVolume * 0.15;
+        return _musicVolume * _totalVolume * 0.42;
+    }
+
+    private double GetSoundsVolume()
+    {
+        return _soundsVolume * _totalVolume * 0.8;
     }
 
     private void StartInitialBackgroundMusic()
@@ -108,7 +115,7 @@ public class SoundService : ISoundService
 
     private void StartNextBackgroundSong()
     {
-        var path = $"./Resources/Sounds/Background{_random.Next(2, 7)}.mp3";
+        var path = $"./Resources/Sounds/Background{_random.Next(2, 6)}.mp3";
         _musicPlayer.Volume = GetActualMusicVolume();
         Console.WriteLine($"Starting background music for {path}");
         _musicPlayer.Open(new Uri(path, UriKind.RelativeOrAbsolute));
@@ -147,6 +154,7 @@ public class SoundService : ISoundService
 
         _soundEffectPlayer.Open(new Uri(path, UriKind.RelativeOrAbsolute));
         _soundEffectPlayer.Play();
+        _soundEffectPlayer.Volume = GetSoundsVolume();
         _soundEffectPlayer.MediaEnded += OnSoundEffectPlayerOnMediaEnded;
 
         void OnSoundEffectPlayerOnMediaEnded(object? o, EventArgs eventArgs)
@@ -154,5 +162,31 @@ public class SoundService : ISoundService
             _soundEffectPlayer.MediaEnded -= OnSoundEffectPlayerOnMediaEnded;
             _soundEffectPlayer.Close();
         }
+    }
+
+    /// <inheritdoc />
+    public void SetVolume(double value)
+    {
+        _totalVolume = value;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            _musicPlayer.Volume = GetActualMusicVolume();
+        });
+    }
+
+    /// <inheritdoc />
+    public void SetSoundsVolume(double value)
+    {
+        _soundsVolume = value;
+    }
+
+    /// <inheritdoc />
+    public void SetMusicVolume(double value)
+    {
+        _musicVolume = value;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            _musicPlayer.Volume = GetActualMusicVolume();
+        });
     }
 }

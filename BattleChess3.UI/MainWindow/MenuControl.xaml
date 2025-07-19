@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
-             xmlns:menu="clr-namespace:BattleChess3.UI.Menu"
-             d:DataContext="{d:DesignInstance menu:MenuViewModel}"
+             xmlns:mainWindow="clr-namespace:BattleChess3.UI.MainWindow"
+             d:DataContext="{d:DesignInstance mainWindow:MenuViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="350" d:DesignWidth="350">
     <Grid SnapsToDevicePixels="True">
@@ -35,12 +35,15 @@
 
                 <Border Grid.Row="1" Grid.Column="0" Background="#33000000" />
                 <Border Grid.Row="1" Grid.Column="2" Background="#33000000" />
+                <Border Grid.Row="1" Grid.Column="4" Background="#33000000" />
+                <Border Grid.Row="1" Grid.Column="6" Background="#33000000" />
+                
                 <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"
-                        DockPanel.Dock="Top"
+                        Margin="5"
                         FontSize="35"
                         Command="{Binding LocalGameCommand}"
                         BorderThickness="6"
-                        Background="{StaticResource ButtonBlueBackground}"
+                        Background="{StaticResource ButtonYellowBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
@@ -49,15 +52,19 @@
                                    FontSize="35"/>
                     </Border>
                 </Button>
-                <Border Grid.Row="1" Grid.Column="6" Background="#33000000" />
+                
+                <Border Grid.Row="2" Grid.Column="1" Background="#33000000" />
+                <Border Grid.Row="2" Grid.Column="3" Background="#33000000" />
+                <Border Grid.Row="2" Grid.Column="5" Background="#33000000" />
+                <Border Grid.Row="2" Grid.Column="7" Background="#33000000" />
 
-                <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-                        DockPanel.Dock="Top"
+                <Button Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="2"
                         FontSize="35"
                         BorderThickness="6"
+                        Margin="5"
                         Visibility="{Binding LoginViewModel.IsLoggedIn, Converter={converters:BooleanMultiValueConverter TrueValue=Visible, FalseValue=Collapsed}}"
                         Command="{Binding MultiplayerViewModel.RankedGameCommand}"
-                        Background="{StaticResource ButtonOrangeBackground}"
+                        Background="{StaticResource ButtonGreen2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
@@ -67,13 +74,13 @@
                     </Border>
                 </Button>
 
-                <Button Grid.Row="2" Grid.Column="1"
-                        DockPanel.Dock="Top"
+                <Button Grid.Row="2" Grid.Column="5"
                         FontSize="35"
+                        Margin="5 5 0 5"
                         BorderThickness="6, 6, 3, 6"
                         Visibility="{Binding LoginViewModel.IsLoggedIn, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                         Command="{Binding ShowLoginCommand}"
-                        Background="{StaticResource ButtonOrangeBackground}"
+                        Background="{StaticResource ButtonGreenBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="112" MinHeight="40">
@@ -83,13 +90,13 @@
                     </Border>
                 </Button>
 
-                <Button Grid.Row="2" Grid.Column="2"
-                        DockPanel.Dock="Top"
+                <Button Grid.Row="2" Grid.Column="6"
                         FontSize="35"
+                        Margin="0 5 5 5"
                         BorderThickness="3, 6, 6, 6"
                         Visibility="{Binding LoginViewModel.IsLoggedIn, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}"
                         Command="{Binding ShowSignUpCommand}"
-                        Background="{StaticResource ButtonOrange2Background}"
+                        Background="{StaticResource ButtonGreen2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="112" MinHeight="40">
@@ -98,13 +105,12 @@
                                    FontSize="35"/>
                     </Border>
                 </Button>
-                <Border Grid.Row="2" Grid.Column="3" Background="#33000000" />
-                <Button Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="2"
-                        DockPanel.Dock="Top"
+                <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
                         FontSize="35"
+                        Margin="5"
                         BorderThickness="6, 6, 6, 6"
                         Command="{Binding ShowLobbiesCommand}"
-                        Background="{StaticResource ButtonGreenBackground}"
+                        Background="{StaticResource ButtonOrange2Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
@@ -113,16 +119,19 @@
                                    FontSize="35"/>
                     </Border>
                 </Button>
-                <Border Grid.Row="2" Grid.Column="7" Background="#33000000" />
 
                 <Border Grid.Row="3" Grid.Column="0" Background="#33000000" />
                 <Border Grid.Row="3" Grid.Column="2" Background="#33000000" />
-                <Button Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2"
+                <Border Grid.Row="3" Grid.Column="4" Background="#33000000" />
+                <Border Grid.Row="3" Grid.Column="6" Background="#33000000" />
+                
+                <Button Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2"
                         DockPanel.Dock="Top"
                         FontSize="35"
+                        Margin="5"
                         Command="{Binding SelectEditorCommand}"
                         BorderThickness="6, 6, 6, 6"
-                        Background="{StaticResource ButtonPurple2Background}"
+                        Background="{StaticResource ButtonGreen3Background}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
@@ -131,28 +140,14 @@
                                    FontSize="35"/>
                     </Border>
                 </Button>
-                <Border Grid.Row="3" Grid.Column="6" Background="#33000000" />
-
-                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                
+                <Button Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2"
                         DockPanel.Dock="Top"
                         FontSize="35"
                         BorderThickness="6, 6, 6, 6"
-                        Command="{Binding ShowLeaderboardCommand}"
-                        Background="{StaticResource ButtonOrange3Background}"
-                        Style="{StaticResource ScalingButtonStyle}">
-                    <Border HorizontalAlignment="Center" VerticalAlignment="Center"
-                            MinWidth="225" MinHeight="40">
-                        <TextBlock Text="Leaderboard"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   FontSize="35"/>
-                    </Border>
-                </Button>
-                <Border Grid.Row="4" Grid.Column="3" Background="#33000000" />
-                <Button Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2"
-                        DockPanel.Dock="Top"
-                        FontSize="35"
-                        BorderThickness="6, 6, 6, 6"
-                        Background="{StaticResource ButtonGreen2Background}"
+                        Margin="5"
+                        Command="{Binding ShowSettingsCommand}"
+                        Background="{StaticResource ButtonOrangeBackground}"
                         Style="{StaticResource ScalingButtonStyle}">
                     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                             MinWidth="225" MinHeight="40">
@@ -161,7 +156,42 @@
                                    FontSize="35"/>
                     </Border>
                 </Button>
+
+                <Border Grid.Row="4" Grid.Column="1" Background="#33000000" />
+                <Border Grid.Row="4" Grid.Column="3" Background="#33000000" />
+                <Border Grid.Row="4" Grid.Column="5" Background="#33000000" />
                 <Border Grid.Row="4" Grid.Column="7" Background="#33000000" />
+                
+                <Button Grid.Row="4" Grid.Column="5" Grid.ColumnSpan="2"
+                        DockPanel.Dock="Top"
+                        FontSize="35"
+                        BorderThickness="6, 6, 6, 6"
+                        Margin="5"
+                        Command="{Binding ShowLeaderboardCommand}"
+                        Background="{StaticResource ButtonBlue2Background}"
+                        Style="{StaticResource ScalingButtonStyle}">
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                            MinWidth="225" MinHeight="40">
+                        <TextBlock Text="Leaderboard"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontSize="35"/>
+                    </Border>
+                </Button>
+                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                        DockPanel.Dock="Top"
+                        FontSize="35"
+                        Margin="5"
+                        BorderThickness="6, 6, 6, 6"
+                        Command="{Binding ExitCommand}"
+                        Background="{StaticResource ButtonOrange3Background}"
+                        Style="{StaticResource ScalingButtonStyle}">
+                    <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                            MinWidth="225" MinHeight="40">
+                        <TextBlock Text="Exit"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontSize="35"/>
+                    </Border>
+                </Button>
 
                 <Border Grid.Row="5" Grid.Column="0" Background="#33000000" BorderBrush="Black" BorderThickness="0 0 0 6" />
                 <Border Grid.Row="5" Grid.Column="1" Background="Transparent" BorderBrush="Black" BorderThickness="0 0 0 6" />

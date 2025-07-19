@@ -3,16 +3,13 @@ using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
-using BattleChess3.Game.Figures;
-using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Editor;
-using BattleChess3.UI.MainWindow;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
-namespace BattleChess3.UI.Menu;
+namespace BattleChess3.UI.Multiplayer;
 
 public class SignUpViewModel : ViewModelBase
 {

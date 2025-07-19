@@ -2,12 +2,11 @@
 using System.Security;
 using System.Security.Cryptography;
 using BattleChess3.Multiplayer;
-using BattleChess3.UI.MainWindow;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 
-namespace BattleChess3.UI.Menu;
+namespace BattleChess3.UI.Multiplayer;
 
 public class LoginViewModel : ViewModelBase
 {

@@ -1,13 +1,11 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
-namespace BattleChess3.UI.Editor;
+namespace BattleChess3.UI.Multiplayer;
 
-/// <summary>
-///     Interaction logic for EditorControl.xaml
-/// </summary>
-public partial class EditorRightControl
+public partial class LeaderboardControl : UserControl
 {
-    public EditorRightControl()
+    public LeaderboardControl()
     {
         InitializeComponent();
         IsVisibleChanged += OnIsVisibleChanged;

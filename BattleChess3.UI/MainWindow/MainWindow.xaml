@@ -4,21 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
-        xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
         xmlns:menu="clr-namespace:BattleChess3.UI.Menu"
         xmlns:game="clr-namespace:BattleChess3.UI.Game"
         xmlns:editor="clr-namespace:BattleChess3.UI.Editor"
         xmlns:mainWindow="clr-namespace:BattleChess3.UI.MainWindow"
         xmlns:shared="clr-namespace:BattleChess3.UI.Shared"
+        xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
+        xmlns:multiplayer="clr-namespace:BattleChess3.UI.Multiplayer"
+        xmlns:settings="clr-namespace:BattleChess3.UI.Settings"
         mc:Ignorable="d"
         Title="{localization:Loc MainWindow_Title}" Height="800" Width="1035" MinHeight="600" MinWidth="1035"
         d:DataContext="{d:DesignInstance mainWindow:MainWindowViewModel}"
         DataContext="{Binding Source={x:Static shared:ViewModelLocator.MainWindowViewModel}}"
         Style="{StaticResource MainWindowStyle}"
-        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize">
+        WindowStyle="None" AllowsTransparency="True" 
+        ResizeMode="{Binding MenuViewModel.SettingsViewModel.IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=NoResize, FalseValue=CanResizeWithGrip}}"
+        WindowState="{Binding MenuViewModel.SettingsViewModel.WindowState}">
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Top"
-              Height="30">
+              Height="30"
+              Visibility="{Binding MenuViewModel.SettingsViewModel.IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -188,25 +193,31 @@
                             <Border.RenderTransform>
                                 <TranslateTransform x:Name="LoginSideTransform" />
                             </Border.RenderTransform>
-                            <menu:LoginControl DataContext="{Binding LoginViewModel}"/>
+                            <multiplayer:LoginControl DataContext="{Binding LoginViewModel}"/>
                         </Border>
                         <Border x:Name="SignupSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
                             <Border.RenderTransform>
                                 <TranslateTransform x:Name="SignupSideTransform" />
                             </Border.RenderTransform>
-                            <menu:SignUpControl DataContext="{Binding SignUpViewModel}"/>
+                            <multiplayer:SignUpControl DataContext="{Binding SignUpViewModel}"/>
                         </Border>
                         <Border x:Name="LobbySideControl" CacheMode="BitmapCache" Visibility="Collapsed">
                             <Border.RenderTransform>
                                 <TranslateTransform x:Name="LobbySideTransform" />
                             </Border.RenderTransform>
-                            <menu:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"/>
+                            <multiplayer:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"/>
                         </Border>
                         <Border x:Name="LeaderboardSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
                             <Border.RenderTransform>
                                 <TranslateTransform x:Name="LeaderboardSideTransform" />
                             </Border.RenderTransform>
-                            <menu:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"/>
+                            <multiplayer:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"/>
+                        </Border>
+                        <Border x:Name="SettingsSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="SettingsSideTransform" />
+                            </Border.RenderTransform>
+                            <settings:SettingsSideControl DataContext="{Binding SettingsViewModel}"/>
                         </Border>
                     </Grid>
                 </Border>
@@ -234,7 +245,7 @@
                     <Border.RenderTransform>
                         <TranslateTransform x:Name="EditorSideTransform" />
                     </Border.RenderTransform>
-                    <editor:EditorRightControl DataContext="{Binding EditorViewModel}" />
+                    <editor:EditorSideControl DataContext="{Binding EditorViewModel}" />
                 </Border>
             </Grid>
 

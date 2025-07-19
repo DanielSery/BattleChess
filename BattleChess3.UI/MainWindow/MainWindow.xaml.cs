@@ -137,9 +137,6 @@ public partial class MainWindow
         void StoryBoardOnCompleted(object? sender, EventArgs e)
         {
             _storyBoard = null;
-            TeamBoardControl.Visibility = Visibility.Visible;
-            MenuControl.Visibility = Visibility.Visible;
-            MenuSideControl.Visibility = Visibility.Visible;
             GameBoardOuterControl.Visibility = Visibility.Collapsed;
             GameSideControl.Visibility = Visibility.Collapsed;
             
@@ -172,8 +169,6 @@ public partial class MainWindow
         void StoryBoardOnCompleted(object? sender, EventArgs e)
         {
             _storyBoard = null;
-            GameBoardOuterControl.Visibility = Visibility.Visible;
-            GameSideControl.Visibility = Visibility.Visible;
             MenuControl.Visibility = Visibility.Collapsed;
             TeamBoardControl.Visibility = Visibility.Collapsed;
             MenuSideControl.Visibility = Visibility.Collapsed;
@@ -207,9 +202,6 @@ public partial class MainWindow
         void StoryBoardOnCompleted(object? sender, EventArgs e)
         {
             _storyBoard = null;
-            EditorUnitsOuterControl.Visibility = Visibility.Visible;
-            EditorSideControl.Visibility = Visibility.Visible;
-            TeamBoardControl.Visibility = Visibility.Visible;
             MenuControl.Visibility = Visibility.Collapsed;
             MenuSideControl.Visibility = Visibility.Collapsed;
 
@@ -245,9 +237,6 @@ public partial class MainWindow
             _storyBoard = null;
             EditorUnitsOuterControl.Visibility = Visibility.Collapsed;
             EditorSideControl.Visibility = Visibility.Collapsed;
-            TeamBoardControl.Visibility = Visibility.Visible;
-            MenuControl.Visibility = Visibility.Visible;
-            MenuSideControl.Visibility = Visibility.Visible;
 
             MenuTransform.Y = 0;
             MenuSideTransform.Y = 0;
@@ -256,7 +245,7 @@ public partial class MainWindow
             TeamBoardControl.IsEnabled = false;
         }
     }
-
+    
     private void ParentSubMenuSideControl_OnLoaded(object sender, RoutedEventArgs e)
         => SideAreaAppearAnimation(null, sender);
 
@@ -328,6 +317,7 @@ public partial class MainWindow
             SelectedMenuTab.Lobby => (LobbySideControl, LobbySideTransform),
             SelectedMenuTab.Login => (LoginSideControl, LoginSideTransform),
             SelectedMenuTab.SignUp => (SignupSideControl, SignupSideTransform),
+            SelectedMenuTab.Settings => (SettingsSideControl, SettingsSideTransform),
             SelectedMenuTab.Leaderboard => (LeaderboardSideControl, LeaderboardSideTransform),
             _ => throw new ArgumentOutOfRangeException(nameof(selectedMenuTab), selectedMenuTab, null)
         };

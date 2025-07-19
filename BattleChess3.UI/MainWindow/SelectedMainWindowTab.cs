@@ -5,5 +5,4 @@ public enum SelectedMainWindowTab
     Menu,
     Game,
     Editor,
-    Settings
 }

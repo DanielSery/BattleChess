@@ -3,6 +3,7 @@ using BattleChess3.Multiplayer;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.Game;
 using BattleChess3.UI.Menu;
+using BattleChess3.UI.Multiplayer;
 using BattleChess3.UI.Services;
 using Nicenis.Windows.ViewModels;
 
@@ -37,14 +38,13 @@ public sealed class MainWindowViewModel : ViewModelBase
         PlayersViewModel = playersViewModel;
 
         _playerService.PlayerWon += PlayerServiceOnPlayerWon;
-        EditorViewModel.RequestSwitchToMainView += OnRequestSwitchToMainView;
-
+        EditorViewModel.RequestSwitchToMenu += OnRequestSwitchToMenu;
         MenuViewModel.RequestSwitchToGame += OnRequestSwitchToGame;
         MenuViewModel.RequestSwitchToEditor += OnRequestSwitchToEditor;
         BoardViewModel.RequestSwitchToGame += OnRequestSwitchToGame;
-        BoardViewModel.RequestSwitchToMenu += OnRequestSwitchToMainView;
+        BoardViewModel.RequestSwitchToMenu += OnRequestSwitchToMenu;
     }
-    
+
     private SelectedMainWindowTab _selectedTab = SelectedMainWindowTab.Menu;
     public SelectedMainWindowTab SelectedTab
     {
@@ -149,7 +149,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             MenuViewModel.OnDeactivation();
     }
 
-    private void OnRequestSwitchToMainView(object? sender, EventArgs e)
+    private void OnRequestSwitchToMenu(object? sender, EventArgs e)
     {
         SelectedTab = SelectedMainWindowTab.Menu;
     }

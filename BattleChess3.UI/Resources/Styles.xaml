@@ -41,8 +41,14 @@
     <ImageBrush x:Key="ChessTileKingDangeredBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ChessTileKingDangered.png" />
     
+    <ImageBrush x:Key="ButtonYellowBackground"
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonYellowBackground.jpg" 
+                Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonBlueBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonBlueBackground.jpg" 
+                Stretch="UniformToFill"/>
+    <ImageBrush x:Key="ButtonBlue2Background"
+                ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonBlue2Background.jpg" 
                 Stretch="UniformToFill"/>
     <ImageBrush x:Key="ButtonGreenBackground"
                 ImageSource="pack://application:,,,/BattleChess3;component/Resources/Images/ButtonGreenBackground.jpg"
@@ -466,6 +472,56 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+    
+    <Style TargetType="Slider">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid VerticalAlignment="Center" Margin="5 0 5 0 ">
+                            <!-- Black Track Line -->
+                            <Rectangle Height="3" Fill="Black" VerticalAlignment="Center"/>
+                            
+                            <!-- Track with only Thumb -->
+                            <Track x:Name="PART_Track"
+                                   VerticalAlignment="Center"
+                                   IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                   Maximum="{TemplateBinding Maximum}"
+                                   Minimum="{TemplateBinding Minimum}"
+                                   Value="{TemplateBinding Value}">
+                                <Track.Thumb>
+                                    <Thumb Width="6" Height="15">
+                                        <Thumb.Style>
+                                            <Style TargetType="Thumb">
+                                                <Setter Property="Background" Value="Black"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Opacity" Value="1"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Thumb">
+                                                            <Rectangle Fill="{TemplateBinding Background}"
+                                                                       Opacity="{TemplateBinding Opacity}"
+                                                                       Width="{TemplateBinding Width}"
+                                                                       Height="{TemplateBinding Height}"/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Opacity" Value="0.7"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Thumb.Style>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Height" Value="20"/>
+        </Style>
     
     <!-- DataGrid Style -->
     <Style TargetType="DataGrid">

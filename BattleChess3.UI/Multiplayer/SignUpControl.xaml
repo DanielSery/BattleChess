@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="BattleChess3.UI.Menu.SignUpControl"
+﻿<UserControl x:Class="BattleChess3.UI.Multiplayer.SignUpControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
-             xmlns:menu="clr-namespace:BattleChess3.UI.Menu"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance menu:SignUpViewModel}"
+             xmlns:multiplayer="clr-namespace:BattleChess3.UI.Multiplayer"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance multiplayer:SignUpViewModel}"
              d:DesignHeight="300" d:DesignWidth="300"
              Focusable="True">
     <UserControl.InputBindings>
@@ -26,6 +26,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -122,10 +123,18 @@
 
         <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
                 Content="Sign up"
-                BorderThickness="2 4 2 4"
+                BorderThickness="2 4 2 2"
                 FontSize="25"
                 Command="{Binding SignUpCommand}"
                 Background="{StaticResource ButtonGreen3Background}"
+                Padding="10" />
+
+        <Button Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                Content="Back"
+                BorderThickness="2 2 2 4"
+                FontSize="25"
+                Command="{Binding RequestEndCommand}"
+                Background="{StaticResource ButtonOrangeBackground}"
                 Padding="10" />
     </Grid>
 </UserControl>

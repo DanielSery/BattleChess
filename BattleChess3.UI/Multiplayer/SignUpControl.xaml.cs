@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace BattleChess3.UI.Menu;
+namespace BattleChess3.UI.Multiplayer;
 
 public partial class SignUpControl : UserControl
 {

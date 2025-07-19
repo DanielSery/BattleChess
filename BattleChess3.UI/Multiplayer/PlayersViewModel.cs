@@ -1,7 +1,7 @@
 ﻿using BattleChess3.Game.Players;
 using Nicenis.Windows.ViewModels;
 
-namespace BattleChess3.UI.Menu;
+namespace BattleChess3.UI.Multiplayer;
 
 public class PlayersViewModel : ViewModelBase
 {

@@ -36,7 +36,7 @@ public sealed class EditorViewModel : ViewModelBase
     public AsyncRelayCommand SaveGameCommand { get; }
     public RelayCommand CancelCommand { get; }
 
-    public event EventHandler? RequestSwitchToMainView;
+    public event EventHandler? RequestSwitchToMenu;
 
     private async Task SaveGameAsync()
     {
@@ -55,12 +55,12 @@ public sealed class EditorViewModel : ViewModelBase
             TeamBoard.SaveMap();
         }
         
-        RequestSwitchToMainView?.Invoke(this, EventArgs.Empty);
+        RequestSwitchToMenu?.Invoke(this, EventArgs.Empty);
     }
 
     private void Cancel()
     {
         TeamBoard.Discard();
-        RequestSwitchToMainView?.Invoke(this, EventArgs.Empty);
+        RequestSwitchToMenu?.Invoke(this, EventArgs.Empty);
     }
 }
