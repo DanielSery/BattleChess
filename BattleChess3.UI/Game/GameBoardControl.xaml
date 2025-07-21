@@ -8,7 +8,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Border BorderBrush="Black" BorderThickness="0 0 4 0"
             Margin="0 0 -1 0"
-            SnapsToDevicePixels="True"
             x:Name="ThisGameBoardControl"
             Width="{Binding ActualHeight, ElementName=ThisGameBoardControl}">
         <ItemsControl HorizontalAlignment="Stretch"

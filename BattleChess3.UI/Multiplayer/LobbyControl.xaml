@@ -67,7 +67,6 @@
                   SelectionUnit="FullRow"
                   SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
                   MouseDoubleClick="Control_OnMouseDoubleClick"
-                  SnapsToDevicePixels="True"
                   AutoGenerateColumns="False"
                   FontSize="15"
                   IsReadOnly="True">

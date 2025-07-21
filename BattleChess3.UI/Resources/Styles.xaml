@@ -473,6 +473,18 @@
         </Style.Triggers>
     </Style>
     
+    <Style TargetType="ResizeGrip">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ResizeGrip">
+                    <Canvas Width="16" Height="16">
+                        <Polygon Points="0,16 16,16 16,0" Fill="Black"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <Style TargetType="Slider">
             <Setter Property="Template">
                 <Setter.Value>

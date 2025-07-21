@@ -20,7 +20,6 @@
         <DataGrid Grid.Row="0" ItemsSource="{Binding Leaderboard}"
                   Margin="-2"
                   SelectionUnit="FullRow"
-                  SnapsToDevicePixels="True"
                   AutoGenerateColumns="False"
                   FontSize="15"
                   IsReadOnly="True">
@@ -34,7 +33,7 @@
         
         <Button Grid.Row="1"
                 Content="Back"
-                BorderThickness="2 2 2 4"
+                BorderThickness="2 4 2 4"
                 FontSize="25"
                 Command="{Binding RequestEndCommand}"
                 Background="{StaticResource ButtonOrangeBackground}"
