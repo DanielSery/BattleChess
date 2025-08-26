@@ -1,7 +1,7 @@
 ﻿using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 
-namespace BattleChess3.Game.Board;
+namespace BattleChess3.Game.GameBoard;
 
 public class NoneTile : ITile
 {

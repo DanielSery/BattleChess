@@ -1,6 +1,6 @@
 ﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.GameBoard;
 
 namespace BattleChess3.CrossFireFigures;
 
@@ -28,36 +28,36 @@ public class King : ICrossFireFigureType
             yield break;
         }
         
-        var rook1Tile = board[0, 0];
+        var rook1Tile = board[new(0, 0)];
         if (rook1Tile.IsAllyTo(unitTile) &&
-            board[1, 0].IsEmpty() &&
-            board[2, 0].IsEmpty() &&
-            board[3, 0].IsEmpty())
+            board[new(1, 0)].IsEmpty() &&
+            board[new(2, 0)].IsEmpty() &&
+            board[new(3, 0)].IsEmpty())
         {
             yield return new FigureAction(
                 FigureActionTypes.Special, 
                 unitTile.AbsolutePosition,
-                board[2, 0].AbsolutePosition,
+                board[new(2, 0)].AbsolutePosition,
                 () =>
                 {
-                    unitTile.MoveToTile(board[2, 0], board);
-                    rook1Tile.MoveToTile(board[3, 0], board);
+                    unitTile.MoveToTile(board[new(2, 0)], board);
+                    rook1Tile.MoveToTile(board[new(3, 0)], board);
                 });
         }
 
-        var rook2Tile = board[7, 0];
+        var rook2Tile = board[new(7, 0)];
         if (rook2Tile.IsAllyTo(unitTile) &&
-            board[5, 0].IsEmpty() &&
-            board[6, 0].IsEmpty())
+            board[new(5, 0)].IsEmpty() &&
+            board[new(6, 0)].IsEmpty())
         {
             yield return new FigureAction(
                 FigureActionTypes.Special,
                 unitTile.AbsolutePosition,
-                board[6, 0].AbsolutePosition,
+                board[new(6, 0)].AbsolutePosition,
                 () =>
                 {
-                    unitTile.MoveToTile(board[6, 0], board);
-                    rook2Tile.MoveToTile(board[5, 0], board);
+                    unitTile.MoveToTile(board[new(6, 0)], board);
+                    rook2Tile.MoveToTile(board[new(5, 0)], board);
                 });
         }
     }

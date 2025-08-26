@@ -1,6 +1,6 @@
 ﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.GameBoard;
 
 namespace BattleChess3.CrossFireFigures;
 
@@ -86,7 +86,7 @@ public class Elephant : ICrossFireFigureType
             if (!step1Tile.Figure.Type.Equals(this))
                 return;
             
-            var step2Tile = board[sourcePosition + 2 * smallMove];
+            var step2Tile = board[sourcePosition + smallMove * 2];
             if (step1Tile.CanMoveTo(step2Tile))
                 step1Tile.MoveToTile(step2Tile, board);
             else step1Tile.KillWithMove(step2Tile, board);

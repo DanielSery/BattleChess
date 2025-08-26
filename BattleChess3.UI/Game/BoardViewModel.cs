@@ -1,5 +1,7 @@
-﻿using BattleChess3.Game.Board;
+﻿using BattleChess3.Game;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
@@ -36,7 +38,7 @@ public sealed class BoardViewModel : ViewModelBase
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
         MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
 
-        Tiles = Enumerable.Range(0, IBoard.TilesCount)
+        Tiles = Enumerable.Range(0, Constants.FullBoardTilesCount)
             .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
             .ToArray();
         Board = new Board(Tiles.Cast<ITile>().ToArray());
@@ -83,7 +85,7 @@ public sealed class BoardViewModel : ViewModelBase
             : MouseOnTile;
     }
 
-    public int BoardWidth => IBoard.Length;
+    public int BoardWidth => Constants.BoardLength;
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
     
@@ -192,20 +194,20 @@ public sealed class BoardViewModel : ViewModelBase
         
         foreach (var possibleAction in possibleActions)
         {
-            Tiles[possibleAction.TargetPosition.Index].PossibleAction = possibleAction;
+            Tiles[possibleAction.TargetPosition.GetIndex()].PossibleAction = possibleAction;
         }
     }
 
     private static IBoard GetPlayerPOVBoard(Player player, IReadOnlyList<ITile> board)
     {
-        var povBoard = new ITile[IBoard.TilesCount];
+        var povBoard = new ITile[Constants.FullBoardTilesCount];
         var absoluteBoard = board.Select(x => x.GetPovTile(player)).ToArray();
 
-        for (var i = 0; i < IBoard.Length; i++)
-        for (var j = 0; j < IBoard.Length; j++)
+        for (var i = 0; i < Constants.BoardLength; i++)
+        for (var j = 0; j < Constants.BoardLength; j++)
         {
             var position = new Position(j, i);
-            povBoard[position.GetPlayerPOVPosition(player).Index] = absoluteBoard[position.Index];
+            povBoard[PlayerPositionHelper.GetPlayerPOVPosition(player, position).GetIndex()] = absoluteBoard[position.GetIndex()];
         }
 
         return new Board(povBoard);
@@ -241,7 +243,7 @@ public sealed class BoardViewModel : ViewModelBase
         SelectedTile = NoneTileViewModel.Instance;
         ClearPossibleActions();
 
-        switch (e.from.Index)
+        switch (e.from.GetIndex())
         {
             case IMultiplayerGameService.NotRespondingMessage:
                 _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.NotResponding, true);
@@ -257,12 +259,12 @@ public sealed class BoardViewModel : ViewModelBase
                 return;
         }
 
-        var fromTile = Tiles[e.from.Index];
+        var fromTile = Tiles[e.from.GetIndex()];
         SelectedTile = fromTile;
         SetPossibleActions(fromTile, true);
         
         _playerService.EndTurn(e.turnTimeSpent);
-        var toTile = Tiles[e.to.Index];
+        var toTile = Tiles[e.to.GetIndex()];
         toTile.PossibleAction.Action.Invoke();
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
         SelectedTile = NoneTileViewModel.Instance;

@@ -1,5 +1,6 @@
-﻿using BattleChess3.Game.Board;
-using BattleChess3.Game.Figures;
+﻿using BattleChess3.Game.Figures;
+using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Helpers;
 
 namespace BattleChess3.Maps;
 
@@ -14,9 +15,10 @@ internal class MapLoader : IMapLoader
     
     public void LoadMap(IBoard board, MapBlueprint map)
     {
-        for (var i = 0; i < board.Count; i++)
+        var index = 0;
+        foreach (var tile in board)
         {
-            board[i].Figure = _figureCreator.CreateFigure(map.Figures[i]);
+            tile.Figure = _figureCreator.CreateFigure(map.Figures[index++]);
         }
     }
 
@@ -30,13 +32,13 @@ internal class MapLoader : IMapLoader
             var oppositeFigure = map.Figures[i].PlayerId == 0 
                 ? redFigure
                 : new FigureIdentifier(2, redFigure.FigureId, redFigure.IsKing);
-            board[redPosition.GetPlayerPOVPosition(1)].Figure = _figureCreator.CreateFigure(oppositeFigure);
-            board[redPosition.Index].Figure = _figureCreator.CreateFigure(redFigure);
+            board[PlayerPositionHelper.GetPlayerPOVPosition(1, redPosition)].Figure = _figureCreator.CreateFigure(oppositeFigure);
+            board[redPosition].Figure = _figureCreator.CreateFigure(redFigure);
         }
         
         for (var i = 16; i < 48; i++)
         {
-            board[i].Figure = _figureCreator.CreateEmptyFigure();
+            board[Position.FromIndex(i)].Figure = _figureCreator.CreateEmptyFigure();
         }
     }
 }

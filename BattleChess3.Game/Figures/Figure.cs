@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using BattleChess3.Game.Board;
+using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.Figures;

@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.Board;
+﻿using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
@@ -260,8 +261,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                     var gameTurn = new GameTurn()
                     {
                         GameId = GameId,
-                        FromIndex = (byte)from.Index,
-                        ToIndex = (byte)to.Index,
+                        FromIndex = (byte)from.GetIndex(),
+                        ToIndex = (byte)to.GetIndex(),
                         CreatedAt = DateTime.UtcNow,
                         TimeSpentInSeconds = timeSpent.TotalSeconds
                     };
@@ -421,8 +422,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return Position.FromIndex(index)
-            .GetPlayerPOVPosition(1);
+        return PlayerPositionHelper.GetPlayerPOVPosition(1, Position.FromIndex(index));
     }
 
     private async Task<Result> DeleteGameTurnsAsync()

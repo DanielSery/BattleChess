@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace BattleChess3.Game.Board;
+namespace BattleChess3.Game.GameBoard;
 
 public class Board : IBoard
 {
@@ -10,6 +10,10 @@ public class Board : IBoard
     {
         _tiles = tiles;
     }
+
+    public int Count => _tiles.Length;
+
+    public ITile this[Position position] => _tiles[position.GetIndex()];
 
     public IEnumerator<ITile> GetEnumerator()
     {
@@ -21,18 +25,15 @@ public class Board : IBoard
         return GetEnumerator();
     }
 
-    public int Count => _tiles.Length;
-
-    public ITile this[int index] => _tiles[index];
-    public ITile this[Position position] => _tiles[position.Index];
-    public ITile this[int x, int y] => _tiles[new Position(x, y).Index];
+    public bool HasTileOnPosition(Position position)
+    {
+        var index = position.GetIndex();
+        return index >= 0 && index < _tiles.Length;
+    }
 
     public bool TryGetTile(Position position, out ITile tile)
     {
-        if (position.X < 0 ||
-            position.X >= 8 ||
-            position.Y < 0 ||
-            position.Y >= 8)
+        if (!HasTileOnPosition(position))
         {
             tile = NoneTile.Instance;
             return false;
@@ -40,10 +41,5 @@ public class Board : IBoard
 
         tile = this[position];
         return true;
-    }
-
-    public bool TryGetTile(int x, int y, out ITile tile)
-    {
-        return TryGetTile(new Position(x, y), out tile);
     }
 }

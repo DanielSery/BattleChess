@@ -1,7 +1,8 @@
 ﻿using BattleChess3.Game.Figures;
+using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 
-namespace BattleChess3.Game.Board;
+namespace BattleChess3.Game.GameBoard;
 
 public class PovTile : ITile
 {
@@ -14,7 +15,7 @@ public class PovTile : ITile
         _player = player;
     }
 
-    public Position Position => _innerTile.Position.GetPlayerPOVPosition(_player);
+    public Position Position => PlayerPositionHelper.GetPlayerPOVPosition(_player, _innerTile.Position);
     public Position AbsolutePosition => _innerTile.Position;
 
     public Figure Figure

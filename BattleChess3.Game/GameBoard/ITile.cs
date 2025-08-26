@@ -1,7 +1,7 @@
 ﻿using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
 
-namespace BattleChess3.Game.Board;
+namespace BattleChess3.Game.GameBoard;
 
 public interface ITile
 {
@@ -25,16 +25,15 @@ public interface ITile
     /// </summary>
     ITile GetPovTile(Player player);
 
+    void OnDied();
+    void OnMovedTo();
+    void OnCreated();
+
     /// <summary>
     ///     ToString for debugging
     /// </summary>
-    /// <returns></returns>
     string? ToString()
     {
         return $"{Position}:{Figure}";
     }
-
-    void OnDied();
-    void OnMovedTo();
-    void OnCreated();
 }

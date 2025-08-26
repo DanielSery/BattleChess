@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using BattleChess3.Game.Board;
+using BattleChess3.Game.GameBoard;
 using BattleChess3.UI.Shared;
 
 namespace BattleChess3.UI.Game;

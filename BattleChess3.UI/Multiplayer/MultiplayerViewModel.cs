@@ -2,8 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Windows;
-using BattleChess3.Game.Board;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
@@ -309,13 +310,12 @@ public class MultiplayerViewModel : ViewModelBase
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return Position.FromIndex(index)
-            .GetPlayerPOVPosition(1);
+        return PlayerPositionHelper.GetPlayerPOVPosition(1, Position.FromIndex(index));
     }
 
     private static int GetIndexOfOppositePlayer(int index)
     {
-        return GetPositionOfOppositePlayer(index).Index;
+        return GetPositionOfOppositePlayer(index).GetIndex();
     }
 
     private CancellationTokenSource? _lobbyWatchCancellation;

@@ -1,5 +1,6 @@
-﻿using BattleChess3.Game.Board;
+﻿using BattleChess3.Game;
 using BattleChess3.Game.Figures;
+using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
@@ -36,7 +37,7 @@ public class TeamBoardViewModel : ViewModelBase
         _playerService = playerService;
         _soundService = soundService;
         
-        Tiles = Enumerable.Range(0, IBoard.Length * 2)
+        Tiles = Enumerable.Range(0, Constants.BoardLength * 2)
             .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
             .ToArray();
         
@@ -49,7 +50,7 @@ public class TeamBoardViewModel : ViewModelBase
         _playerService.LoggedInPlayerChanged += PlayerServiceOnLoggedInPlayerChanged;
     }
 
-    public int BoardWidth => IBoard.Length;
+    public int BoardWidth => Constants.BoardLength;
     public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
 
