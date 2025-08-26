@@ -28,14 +28,14 @@ internal static class BoardHelper
 
     public static bool TryGetRelativeTile(this IBoard board, ITile fromTile, Position relativePosition, out ITile tile)
     {
-        var targetPosition = fromTile.Position + relativePosition;
+        var targetPosition = fromTile.RelativePosition + relativePosition;
         return board.TryGetTile(targetPosition, out tile);
     }
 
     public static bool TryGetRelativeDirectionTile(this IBoard board, ITile fromTile, Position direction, int index,
         out ITile tile)
     {
-        var targetPosition = fromTile.Position + direction * index;
+        var targetPosition = fromTile.RelativePosition + direction * index;
         return board.TryGetTile(targetPosition, out tile);
     }
 

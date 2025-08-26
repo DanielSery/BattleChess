@@ -7,7 +7,7 @@ public class NoneTile : ITile
 {
     public static readonly ITile Instance = new NoneTile();
     
-    public Position Position => Position.None;
+    public Position RelativePosition => Position.None;
     public Position AbsolutePosition => Position.None;
 
     public Figure Figure
@@ -16,7 +16,7 @@ public class NoneTile : ITile
         set { }
     }
 
-    public ITile GetRelativeTile(PlayerInfo player)
+    public ITile GetRelativeTile(Player player)
     {
         return Instance;
     }

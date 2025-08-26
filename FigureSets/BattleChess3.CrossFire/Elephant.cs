@@ -46,7 +46,7 @@ public class Elephant : ICrossFireFigureType
 
     private void AttackAction(ITile unitTile, ITile targetTile, IBoard board)
     {
-        var move = targetTile.Position - unitTile.Position;
+        var move = targetTile.RelativePosition - unitTile.RelativePosition;
 
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
@@ -59,7 +59,7 @@ public class Elephant : ICrossFireFigureType
                  Math.Abs(move.Y) <= 2)
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.Position;
+            var sourcePosition = unitTile.RelativePosition;
             var step1Tile = board[sourcePosition + smallMove];
 
             if (unitTile.CanMoveTo(step1Tile))
@@ -76,7 +76,7 @@ public class Elephant : ICrossFireFigureType
         else
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.Position;
+            var sourcePosition = unitTile.RelativePosition;
             
             var step1Tile = board[sourcePosition + smallMove];
             if (unitTile.CanMoveTo(step1Tile))

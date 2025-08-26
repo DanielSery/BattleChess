@@ -53,7 +53,7 @@ public class Samurai : ICrossFireFigureType
 
     private void AttackAction(ITile unitTile, ITile targetTile, IBoard board)
     {
-        var move = targetTile.Position - unitTile.Position;
+        var move = targetTile.RelativePosition - unitTile.RelativePosition;
 
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
@@ -64,7 +64,7 @@ public class Samurai : ICrossFireFigureType
                  Math.Abs(move.Y) <= 2)
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.Position;
+            var sourcePosition = unitTile.RelativePosition;
             
             unitTile.KillWithMove(board[sourcePosition + smallMove], board);
             unitTile = board[sourcePosition + smallMove];

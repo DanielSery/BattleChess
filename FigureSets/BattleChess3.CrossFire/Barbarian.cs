@@ -53,7 +53,7 @@ public class Barbarian : ICrossFireFigureType
             
             foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 7, board, unitTile))
             {
-                if (targetTile.Position == movedTile.Position)
+                if (targetTile.RelativePosition == movedTile.RelativePosition)
                 {
                 }
                 else if (targetTile.IsEmpty())

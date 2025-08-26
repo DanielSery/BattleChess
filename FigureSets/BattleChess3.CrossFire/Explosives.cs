@@ -25,14 +25,14 @@ public class Explosives : ICrossFireFigureType
 
     void IFigureType.OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)
     {
-        SilentDie(board, unitTile.Position + new Position(-1, -1));
-        SilentDie(board, unitTile.Position + new Position(-1, 0));
-        SilentDie(board, unitTile.Position + new Position(-1, 1));
-        SilentDie(board, unitTile.Position + new Position(0, -1));
-        SilentDie(board, unitTile.Position + new Position(0, 1));
-        SilentDie(board, unitTile.Position + new Position(1, -1));
-        SilentDie(board, unitTile.Position + new Position(1, 0));
-        SilentDie(board, unitTile.Position + new Position(1, 1));
+        SilentDie(board, unitTile.RelativePosition + new Position(-1, -1));
+        SilentDie(board, unitTile.RelativePosition + new Position(-1, 0));
+        SilentDie(board, unitTile.RelativePosition + new Position(-1, 1));
+        SilentDie(board, unitTile.RelativePosition + new Position(0, -1));
+        SilentDie(board, unitTile.RelativePosition + new Position(0, 1));
+        SilentDie(board, unitTile.RelativePosition + new Position(1, -1));
+        SilentDie(board, unitTile.RelativePosition + new Position(1, 0));
+        SilentDie(board, unitTile.RelativePosition + new Position(1, 1));
     }
 
     void IFigureType.OnKilled(ITile unitTile, ITile attackingTile, IBoard board)

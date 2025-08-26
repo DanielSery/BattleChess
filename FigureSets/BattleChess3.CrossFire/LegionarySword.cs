@@ -32,7 +32,7 @@ public class LegionarySword : ICrossFireFigureType
             yield break;
         }
 
-        if (unitTile.Position.Y == 1 &&
+        if (unitTile.RelativePosition.Y == 1 &&
             TryGetMoveAction(unitTile, board, new Position(0, 2), out var moveAction2))
         {
             yield return moveAction2;
@@ -41,7 +41,7 @@ public class LegionarySword : ICrossFireFigureType
 
     private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
-        var attackPosition = unitTile.Position + relativePosition;
+        var attackPosition = unitTile.RelativePosition + relativePosition;
         if (!board.TryGetTile(attackPosition, out var targetTile) ||
             !unitTile.CanAttack(targetTile))
         {
@@ -70,7 +70,7 @@ public class LegionarySword : ICrossFireFigureType
 
     private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
             !unitTile.CanMoveTo(targetTile))
         {

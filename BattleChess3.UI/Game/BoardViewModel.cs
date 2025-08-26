@@ -148,7 +148,7 @@ public sealed class BoardViewModel : ViewModelBase
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
             var timeSpent = _gameService.EndTurn();
-            _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position, timeSpent);
+            _multiplayerGameService.PlayedMoveAsync(SelectedTile.RelativePosition, clickedTile.RelativePosition, timeSpent);
             clickedTile.PossibleAction.Action.Invoke();
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTile = NoneTileViewModel.Instance;
@@ -188,8 +188,8 @@ public sealed class BoardViewModel : ViewModelBase
         if (!_gameService.CurrentPlayerInfo.Equals(clickedTile.Figure.Owner))
             return;
         
-        var relativeBoard = GetPlayerRelativeBoard(clickedTile.Figure.Owner, Tiles);
-        var relativeClickedTile = clickedTile.GetRelativeTile(clickedTile.Figure.Owner);
+        var relativeBoard = GetPlayerRelativeBoard(clickedTile.Figure.Owner.Player, Tiles);
+        var relativeClickedTile = clickedTile.GetRelativeTile(clickedTile.Figure.Owner.Player);
         var possibleActions = clickedTile.Figure.GetPossibleActions(relativeClickedTile, relativeBoard);
 
         foreach (var possibleAction in possibleActions)
@@ -198,7 +198,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private static IBoard GetPlayerRelativeBoard(PlayerInfo player, IReadOnlyList<ITile> board)
+    private static IBoard GetPlayerRelativeBoard(Player player, IReadOnlyList<ITile> board)
     {
         var povBoard = new ITile[Constants.FullBoardTilesCount];
         var absoluteBoard = board.Select(x => x.GetRelativeTile(player)).ToArray();
@@ -207,7 +207,7 @@ public sealed class BoardViewModel : ViewModelBase
         for (var j = 0; j < Constants.BoardLength; j++)
         {
             var position = new Position(j, i);
-            povBoard[PlayerPositionHelper.GetPlayerRelativePosition(player, position).GetIndex()] = absoluteBoard[position.GetIndex()];
+            povBoard[PlayerPositionHelper.GetRelativePosition(player, position).GetIndex()] = absoluteBoard[position.GetIndex()];
         }
 
         return new Board(povBoard);

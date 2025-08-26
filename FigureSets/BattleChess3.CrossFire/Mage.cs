@@ -36,7 +36,7 @@ public class Mage : ICrossFireFigureType
     private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         unitTile.MoveToTile(targetTile, board);
-        var movement = targetTile.Position - unitTile.Position;
+        var movement = targetTile.RelativePosition - unitTile.RelativePosition;
         if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {
             targetTile.TryDestroyTile(board, new Position(1, 0));

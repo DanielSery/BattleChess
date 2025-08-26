@@ -34,7 +34,7 @@ public class BattleAxe : ICrossFireFigureType
     private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
     {
         unitTile.MoveToTile(targetTile, board);
-        var movement = targetTile.Position - unitTile.Position;
+        var movement = targetTile.RelativePosition - unitTile.RelativePosition;
         switch (movement)
         {
             case { Y: 1, X: 1 }:

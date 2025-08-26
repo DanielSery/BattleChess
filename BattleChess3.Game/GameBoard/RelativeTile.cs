@@ -7,16 +7,16 @@ namespace BattleChess3.Game.GameBoard;
 public class RelativeTile : ITile
 {
     private readonly ITile _innerTile;
-    private readonly PlayerInfo _playerInfo;
+    private readonly Player _player;
 
-    public RelativeTile(ITile innerTile, PlayerInfo player)
+    public RelativeTile(ITile innerTile, Player player)
     {
         _innerTile = innerTile;
-        _playerInfo = player;
+        _player = player;
     }
 
-    public Position Position => PlayerPositionHelper.GetPlayerRelativePosition(_playerInfo, _innerTile.AbsolutePosition);
-    public Position AbsolutePosition => _innerTile.Position;
+    public Position RelativePosition => PlayerPositionHelper.GetRelativePosition(_player, _innerTile.AbsolutePosition);
+    public Position AbsolutePosition => _innerTile.AbsolutePosition;
 
     public Figure Figure
     {
@@ -24,9 +24,9 @@ public class RelativeTile : ITile
         set => _innerTile.Figure = value;
     }
 
-    public ITile GetRelativeTile(PlayerInfo player)
+    public ITile GetRelativeTile(Player player)
     {
-        return new RelativeTile(this, player);
+        return new RelativeTile(_innerTile, player);
     }
 
     /// <inheritdoc />

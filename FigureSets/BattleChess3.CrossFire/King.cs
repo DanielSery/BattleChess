@@ -22,7 +22,7 @@ public class King : ICrossFireFigureType
                 yield return unitTile.CreateKillWithMove(targetTile, board);
         }
 
-        if (unitTile.Position.Y != 0 ||
+        if (unitTile.RelativePosition.Y != 0 ||
             unitTile.AbsolutePosition.X != 4)
         {
             yield break;

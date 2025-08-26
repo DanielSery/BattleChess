@@ -19,13 +19,13 @@ public class NoneTileTest
     public void AfterSettingNoneTileHasNoneFigure()
     {
         var noneTile = NoneTile.Instance;
-        noneTile.Figure = new Figure(new PlayerInfo("", "", null, 0), Mock.Of<IFigureType>(), false);
+        noneTile.Figure = new Figure(new PlayerInfo("", "", null, 0), NoneFigureType.Instance, false);
         Assert.Equal(Figure.None.Id, noneTile.Figure.Id);
     }
 
     [Fact]
     public void NonTilePositionIndexIsOutsideOfBoard()
     {
-        Assert.NotInRange(NoneTile.Instance.Position.GetIndex(), 0, 63);
+        Assert.NotInRange(NoneTile.Instance.RelativePosition.GetIndex(), 0, 63);
     }
 }

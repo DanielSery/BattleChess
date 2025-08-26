@@ -14,7 +14,7 @@ public class BoardTest
         var tiles = Enumerable.Range(0, 32).Select(index =>
         {
             var tile = new Mock<ITile>();
-            tile.Setup(x => x.Position).Returns(Position.FromIndex(index));
+            tile.Setup(x => x.RelativePosition).Returns(Position.FromIndex(index));
             tile.Setup(x => x.AbsolutePosition).Returns(Position.FromIndex(index));
             return tile.Object;
         }).ToArray();
@@ -27,7 +27,7 @@ public class BoardTest
     {
         foreach (var tile in _halfBoard)
         {
-            Assert.True(_halfBoard.HasTileOnPosition(tile.Position));
+            Assert.True(_halfBoard.HasTileOnPosition(tile.RelativePosition));
         }
     }
 
@@ -36,7 +36,7 @@ public class BoardTest
     {
         foreach (var tile in _halfBoard)
         {
-            Assert.True(_halfBoard[tile.Position].Position == tile.Position);
+            Assert.True(_halfBoard[tile.RelativePosition].RelativePosition == tile.RelativePosition);
         }
     }
 
@@ -45,8 +45,8 @@ public class BoardTest
     {
         foreach (var tile in _halfBoard)
         {
-            if (_halfBoard.TryGetTile(tile.Position, out var retrievedTile))
-                Assert.Equal(tile.Position, retrievedTile.Position);
+            if (_halfBoard.TryGetTile(tile.RelativePosition, out var retrievedTile))
+                Assert.Equal(tile.RelativePosition, retrievedTile.RelativePosition);
             else
                 Assert.Fail("All tiles should be retrievable when enumerating board");
         }

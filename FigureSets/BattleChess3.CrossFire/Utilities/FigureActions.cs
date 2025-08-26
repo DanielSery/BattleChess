@@ -9,14 +9,14 @@ internal static class AdvancedFigureActions
 
     public static bool CanDestroy(this ITile unitTile, IBoard board, Position relativePosition)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         return board.TryGetTile(movePosition, out var targetTile) &&
                !targetTile.IsEmpty();
     }
     
     public static void TryDestroyTile(this ITile unitTile, IBoard board, Position positionDiff)
     {
-        if (!board.TryGetTile(unitTile.Position + positionDiff, out var targetTile))
+        if (!board.TryGetTile(unitTile.RelativePosition + positionDiff, out var targetTile))
             return;
 
         unitTile.KillWithoutMove(targetTile, board);
@@ -24,14 +24,14 @@ internal static class AdvancedFigureActions
 
     public static bool CanAttack(this ITile unitTile, IBoard board, Position relativePosition)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         return board.TryGetTile(movePosition, out var targetTile) &&
                unitTile.CanAttack(targetTile);
     }
     
     public static bool TryCreateKillWithMove(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
             !unitTile.CanAttack(targetTile))
         {
@@ -45,7 +45,7 @@ internal static class AdvancedFigureActions
     
     public static bool TryCreateKillWithoutMove(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
             !unitTile.CanAttack(targetTile))
         {
@@ -59,14 +59,14 @@ internal static class AdvancedFigureActions
 
     public static bool CanMoveTo(this ITile unitTile, IBoard board, Position relativePosition)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         return board.TryGetTile(movePosition, out var targetTile) &&
                unitTile.CanMoveTo(targetTile);
     }
 
     public static bool TryCreateMoveAction(this ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
             !unitTile.CanMoveTo(targetTile))
         {
@@ -82,7 +82,7 @@ internal static class AdvancedFigureActions
         PlayerInfo player, IFigureType figureType,
         out FigureAction action)
     {
-        var movePosition = unitTile.Position + relativePosition;
+        var movePosition = unitTile.RelativePosition + relativePosition;
         if (!board.TryGetTile(movePosition, out var targetTile) ||
             !targetTile.IsEmpty())
         {

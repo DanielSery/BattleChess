@@ -6,9 +6,9 @@ namespace BattleChess3.Game.GameBoard;
 public interface ITile
 {
     /// <summary>
-    ///     Position of tile in board
+    ///     RelativePosition of tile in board
     /// </summary>
-    Position Position { get; }
+    Position RelativePosition { get; }
 
     /// <summary>
     ///     Absolute position of tile in board.
@@ -23,7 +23,7 @@ public interface ITile
     /// <summary>
     ///     Gets tile with position according to players point of view.
     /// </summary>
-    ITile GetRelativeTile(PlayerInfo player);
+    ITile GetRelativeTile(Player player);
 
     void OnDied();
     void OnMovedFrom();
@@ -35,6 +35,6 @@ public interface ITile
     /// </summary>
     string? ToString()
     {
-        return $"{Position}:{Figure}";
+        return $"{RelativePosition}:{Figure}";
     }
 }

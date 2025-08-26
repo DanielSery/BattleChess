@@ -20,12 +20,12 @@ public class TileViewModel : ViewModelBase, ITile
 
     public TileViewModel(Position position)
     {
-        Position = position;
+        RelativePosition = position;
         IsBlack = position.X % 2 == 0 ^ position.Y % 2 == 0;
     }
 
-    public Position Position { get; }
-    public Position AbsolutePosition => Position;
+    public Position RelativePosition { get; }
+    public Position AbsolutePosition => RelativePosition;
 
     public event EventHandler? MovedFrom;
     public event EventHandler? MovedTo;
@@ -86,7 +86,7 @@ public class TileViewModel : ViewModelBase, ITile
         set => SetProperty(ref _figure, value);
     }
 
-    public ITile GetRelativeTile(PlayerInfo player)
+    public ITile GetRelativeTile(Player player)
     {
         return new RelativeTile(this, player);
     }

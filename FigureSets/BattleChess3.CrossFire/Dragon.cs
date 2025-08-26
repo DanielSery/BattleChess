@@ -59,7 +59,7 @@ public class Dragon : ICrossFireFigureType
 
     private void FireAction(ITile unitTile, ITile targetTile, IBoard board)
     {
-        var move = targetTile.Position - unitTile.Position;
+        var move = targetTile.RelativePosition - unitTile.RelativePosition;
 
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
@@ -70,7 +70,7 @@ public class Dragon : ICrossFireFigureType
                  Math.Abs(move.Y) <= 2)
         {
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.Position;
+            var sourcePosition = unitTile.RelativePosition;
             
             board[sourcePosition + smallMove].CreateFigure(new Figure(PlayerInfo.Neutral, CrossFireFigureGroup.Fire, false), board);
             targetTile.CreateFigure(new Figure(PlayerInfo.Neutral, CrossFireFigureGroup.Fire, false), board);

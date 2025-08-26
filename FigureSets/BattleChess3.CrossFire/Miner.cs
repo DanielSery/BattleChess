@@ -45,7 +45,7 @@ public class Miner : ICrossFireFigureType
     private void MoveAction(Position direction, ITile unitTile, ITile targetTile, IBoard board)
     {
         unitTile.MoveToTile(targetTile, board);
-        for (var position = unitTile.Position; position != targetTile.Position; position += direction)
+        for (var position = unitTile.RelativePosition; position != targetTile.RelativePosition; position += direction)
         {
             if (!board.TryGetTile(position, out var createdTile) ||
                 !createdTile.IsEmpty())

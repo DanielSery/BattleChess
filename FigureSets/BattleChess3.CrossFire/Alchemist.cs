@@ -52,12 +52,12 @@ public class Alchemist : ICrossFireFigureType
     {
         var movedPosition = move * 2;
         {
-            if (!board.HasTileOnPosition(sourceTile.Position + movedPosition))
+            if (!board.HasTileOnPosition(sourceTile.RelativePosition + movedPosition))
             {
                 return;
             }
 
-            var shieldTile = board[sourceTile.Position + movedPosition];
+            var shieldTile = board[sourceTile.RelativePosition + movedPosition];
             if (shieldTile.IsEmpty())
             {
                 shieldTile.CreateFigure(new Figure(PlayerInfo.Neutral, CrossFireFigureGroup.Explosives, false), board);

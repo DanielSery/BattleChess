@@ -22,17 +22,6 @@ public sealed class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
         IsKing = isKing;
     }
 
-    public Figure(Guid id, PlayerInfo owner, IFigureType type, bool isKing)
-    {
-        Debug.Assert(type == NoneFigureType.Instance ||
-                     type.ImageUris.ContainsKey(owner.Player.ToInt()));
-
-        Id = id;
-        Owner = owner;
-        Type = type;
-        IsKing = isKing;
-    }
-
     public Guid Id { get; }
     public PlayerInfo Owner { get; }
     public IFigureType Type { get; }

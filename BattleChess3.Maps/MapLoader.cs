@@ -33,7 +33,7 @@ internal class MapLoader : IMapLoader
             var oppositeFigure = map.Figures[i].Player == 0
                 ? redFigure
                 : new FigureIdentifier(Player.Black, redFigure.FigureId, redFigure.IsKing);
-            board[PlayerPositionHelper.GetPlayerRelativePosition(Player.White, redPosition)].Figure = _figureCreator.CreateFigure(oppositeFigure);
+            board[PlayerPositionHelper.GetRelativePosition(Player.White, redPosition)].Figure = _figureCreator.CreateFigure(oppositeFigure);
             board[redPosition].Figure = _figureCreator.CreateFigure(redFigure);
         }
         
