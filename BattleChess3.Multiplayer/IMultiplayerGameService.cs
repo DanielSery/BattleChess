@@ -17,6 +17,6 @@ public interface IMultiplayerGameService
 
     public void StartGame(MultiplayerGameType gameType, string? rankedGameId);
     public Task<Result> HandleHisTurnAsync();
-    public Task<Result<string?>> HandleWinAsync(bool notifyOther, WinType winType, Player won, Player lost);
+    public Task<Result<string?>> HandleWinAsync(bool notifyOther, WinType winType, PlayerInfo won, PlayerInfo lost);
     public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent);
 }

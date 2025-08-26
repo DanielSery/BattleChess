@@ -70,7 +70,7 @@ public static class DependenciesBuilder
             .SingleInstance();
         builder.RegisterType<SignUpViewModel>()
             .SingleInstance();
-        builder.RegisterType<PlayersViewModel>()
+        builder.RegisterType<GameViewModel>()
             .SingleInstance();
         builder.RegisterType<MainWindowViewModel>()
             .SingleInstance();

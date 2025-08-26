@@ -1,4 +1,5 @@
-﻿using BattleChess3.Maps;
+﻿using BattleChess3.Game.Helpers;
+using BattleChess3.Maps;
 
 namespace BattleChess3.Multiplayer.Utilities;
 
@@ -10,7 +11,7 @@ public static class MapBlueprintHelpers
         for (var i = 0; i < map.Figures.Length; i++)
         {
             var index = i * 2;
-            myMapData[index] = (byte)(map.Figures[i].PlayerId + (map.Figures[i].IsKing ? 128 : 0));
+            myMapData[index] = (byte)(map.Figures[i].Player.ToInt() + (map.Figures[i].IsKing ? 128 : 0));
             myMapData[index + 1] = (byte)(map.Figures[i].FigureId);
         }
 

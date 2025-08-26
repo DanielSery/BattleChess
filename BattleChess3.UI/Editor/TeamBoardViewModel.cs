@@ -1,6 +1,7 @@
 ﻿using BattleChess3.Game;
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
@@ -101,7 +102,7 @@ public class TeamBoardViewModel : ViewModelBase
         {
             Figures = Tiles.Select(x => new FigureIdentifier
             {
-                PlayerId = x.Figure.Owner.Index,
+                Player = x.Figure.Owner.Player,
                 FigureId = x.Figure.Type.FigureId,
                 IsKing = x.Figure.IsKing
             }).ToArray(),
@@ -124,10 +125,9 @@ public class TeamBoardViewModel : ViewModelBase
         for (var i = 0; i < figures.Length; i++)
         {
             var index = i * 2;
-            var playerId = map[index] % 128;
-            
+            var playerType = PlayerSerializationHelper.ToPlayer(map[index] % 128);
             figures[i] = new FigureIdentifier(
-                playerId,
+                playerType,
                 map[index + 1],
                 map[index] / 128 == 1);
         }
@@ -135,7 +135,7 @@ public class TeamBoardViewModel : ViewModelBase
         return new MapBlueprint
         {
             Figures = figures,
-            StartingPlayer = 1,
+            StartingPlayer = Player.White,
         };
     }
 
@@ -148,7 +148,7 @@ public class TeamBoardViewModel : ViewModelBase
     {
         ArgumentNullException.ThrowIfNull(tile);
 
-        if (tile.Figure.Owner.Equals(Player.Neutral))
+        if (tile.Figure.Owner.Equals(PlayerInfo.Neutral))
             return;
 
         _soundService.PlaySoundEffect(SoundEffectType.Button);
@@ -156,7 +156,7 @@ public class TeamBoardViewModel : ViewModelBase
         {
             var demotedFigureId = tile.Figure.Type.FigureId;
             tile.Figure.Owner.Figures.Remove(tile.Figure);
-            tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(tile.Figure.Owner.Index, demotedFigureId, false));
+            tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(tile.Figure.Owner.Player, demotedFigureId, false));
             
             HasKing = false;
             RaisePropertyChanged(nameof(CanSave));
@@ -172,12 +172,12 @@ public class TeamBoardViewModel : ViewModelBase
             
             var demotedFigureId = checkedTile.Figure.Type.FigureId;
             checkedTile.Figure.Owner.Figures.Remove(checkedTile.Figure);
-            checkedTile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Index, demotedFigureId, false));
+            checkedTile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Player, demotedFigureId, false));
         }
         
         var upgradedFigureId = tile.Figure.Type.FigureId;
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Index, upgradedFigureId, true));
+        tile.Figure = _figureCreator.CreateFigure(new FigureIdentifier(owner.Player, upgradedFigureId, true));
         
         HasKing = true;
         RaisePropertyChanged(nameof(CanSave));

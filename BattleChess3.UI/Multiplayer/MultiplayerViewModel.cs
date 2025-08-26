@@ -129,7 +129,7 @@ public class MultiplayerViewModel : ViewModelBase
             var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearchJoin.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new Player(null, "Blue player", null, 2);
+                : new PlayerInfo(null, "Blue player", null, Player.Black);
                 
             var hisMap = GetFigures(gameSearchJoin.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
@@ -144,7 +144,7 @@ public class MultiplayerViewModel : ViewModelBase
             var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearch.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new Player(null, "Blue player", null, 2);
+                : new PlayerInfo(null, "Blue player", null, Player.Black);
             
             var hisMap = GetFigures(gameSearch.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
@@ -196,7 +196,7 @@ public class MultiplayerViewModel : ViewModelBase
         var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameJoin.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new Player(null, "Blue player", null, 2);
+            : new PlayerInfo(null, "Blue player", null, Player.Black);
 
         var hisMap = GetFigures(gameJoin.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, lobby.IsHostStarting);
@@ -236,7 +236,7 @@ public class MultiplayerViewModel : ViewModelBase
         var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(lobby.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new Player(null, "Blue player", null, 2);
+            : new PlayerInfo(null, "Blue player", null, Player.Black);
         
         var hisMap = GetFigures(lobby.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !lobby.IsHostStarting);
@@ -267,7 +267,7 @@ public class MultiplayerViewModel : ViewModelBase
         var figures = new FigureIdentifier[64];
         var blueprint = new MapBlueprint
         {
-            StartingPlayer = amStarting ? 1 : 2,
+            StartingPlayer = amStarting ? Player.White : Player.Black,
             Figures = figures
         };
             
@@ -300,7 +300,7 @@ public class MultiplayerViewModel : ViewModelBase
                 playerId = 3 - playerId;
             
             figures[i] = new FigureIdentifier(
-                playerId,
+                PlayerSerializationHelper.ToPlayer(playerId),
                 map[index + 1],
                 map[index] / 128 == 1);
         }
@@ -310,7 +310,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return PlayerPositionHelper.GetPlayerPOVPosition(1, Position.FromIndex(index));
+        return PlayerPositionHelper.GetPlayerRelativePosition(Player.White, Position.FromIndex(index));
     }
 
     private static int GetIndexOfOppositePlayer(int index)

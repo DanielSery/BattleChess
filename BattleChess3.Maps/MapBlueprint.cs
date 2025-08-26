@@ -1,4 +1,5 @@
 ﻿using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.Maps;
 
@@ -6,16 +7,16 @@ namespace BattleChess3.Maps;
 public class MapBlueprint
 {
     private static readonly FigureIdentifier[] ChessTeamFigures = [
-        new(1, 22, false), new(1, 22, false), new(1, 22, false), new(1, 22, false), new(1, 22, false), new(1, 22, false), new(1, 22, false), new(1, 22, false),
-        new(1, 16, false), new(1, 25, false), new(1, 15, false), new(1, 23, true), new(1, 24, false), new(1, 15, false), new(1, 25, false), new(1, 16, false)
+        new(Player.White, 22, false), new(Player.White,22, false), new(Player.White,22, false), new(Player.White,22, false), new(Player.White,22, false), new(Player.White,22, false), new(Player.White,22, false), new(Player.White,22, false),
+        new(Player.White,16, false), new(Player.White,25, false), new(Player.White,15, false), new(Player.White,23, true), new(Player.White,24, false), new(Player.White,15, false), new(Player.White,25, false), new(Player.White,16, false)
     ];
 
     public static readonly MapBlueprint ChessTeam = new()
     {
         Figures = ChessTeamFigures,
-        StartingPlayer = 1
+        StartingPlayer = Player.White
     };
     
-    public int StartingPlayer { get; init; } = 1;
+    public Player StartingPlayer { get; init; } = Player.White;
     public FigureIdentifier[] Figures { get; init; } = [];
 }

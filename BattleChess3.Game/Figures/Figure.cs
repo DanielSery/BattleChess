@@ -1,24 +1,32 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.Figures;
 
-public class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
+public sealed class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
 {
-    public static readonly Figure None = new(Player.Neutral, NoneFigureType.Instance, false);
+    public static readonly Figure None = new(PlayerInfo.Neutral, NoneFigureType.Instance, false);
 
-    public Figure(Player owner, IFigureType type, bool isKing)
+    public Figure(PlayerInfo owner, IFigureType type, bool isKing)
     {
+        Debug.Assert(type == NoneFigureType.Instance ||
+            type.ImageUris.ContainsKey(owner.Player.ToInt()));
+
         Id = Guid.NewGuid();
         Owner = owner;
         Type = type;
         IsKing = isKing;
     }
 
-    public Figure(Guid id, Player owner, IFigureType type, bool isKing)
+    public Figure(Guid id, PlayerInfo owner, IFigureType type, bool isKing)
     {
+        Debug.Assert(type == NoneFigureType.Instance ||
+                     type.ImageUris.ContainsKey(owner.Player.ToInt()));
+
         Id = id;
         Owner = owner;
         Type = type;
@@ -26,12 +34,11 @@ public class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
     }
 
     public Guid Id { get; }
-    public Player Owner { get; }
+    public PlayerInfo Owner { get; }
     public IFigureType Type { get; }
     public bool IsKing { get; }
     public int FigureValue => Type.FigureValue;
-    public Uri ImageUri => Type.ImageUris[Owner.Index];
-    public int FigureId => Type.FigureId;
+    public Uri ImageUri => Type.ImageUris[Owner.Player.ToInt()];
     public string DisplayName => Type.DisplayName;
     public string BaseDescription => Type.BaseDescription;
     public string MovementDescription => Type.MovementDescription;
@@ -61,21 +68,8 @@ public class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
 
     public override string ToString()
     {
-        return $"{Type.DisplayName}:{Owner.Index}";
+        return $"{Type.DisplayName}:{Owner.Player}";
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
 }

@@ -62,7 +62,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var figureType = (FigureTypeViewModel)button.DataContext;
-        e.Data = new FigureIdentifier(figureType.PlayerId, figureType.FigureId, false);
+        e.Data = new FigureIdentifier(figureType.Player, figureType.FigureId, false);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

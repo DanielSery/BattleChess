@@ -1,6 +1,6 @@
 ﻿namespace BattleChess3.Game.Players;
 
-public interface IPlayerService
+public interface IGameService
 {
     public event EventHandler? PlayersChanged;
     public event EventHandler? TurnStarted;
@@ -8,7 +8,7 @@ public interface IPlayerService
     /// <summary>
     /// Occurs when any player wins the game.
     /// </summary>
-    public event EventHandler<(bool notifyOther, WinType winType, Player? won, Player? lost)> PlayerWon;
+    public event EventHandler<(bool notifyOther, WinType winType, PlayerInfo? won, PlayerInfo? lost)> PlayerWon;
     
     bool CanMove { get; }
     
@@ -17,7 +17,7 @@ public interface IPlayerService
     /// <summary>
     ///     Gets current player.
     /// </summary>
-    Player CurrentPlayer { get; }
+    PlayerInfo CurrentPlayerInfo { get; }
 
     bool IsMultiplayer { get; }
     bool HasTimer { get; }
@@ -25,25 +25,25 @@ public interface IPlayerService
     /// <summary>
     ///     Gets player with id.
     /// </summary>
-    Player GetPlayer(int id);
+    PlayerInfo GetPlayerInfo(Player player);
 
-    Player[] GetPlayers();
+    PlayerInfo[] GetPlayerInfos();
 
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void InitializePlayers(Player player1, Player player2, int currentPlayerId, bool multiplayer, bool hasTimer);
+    void StartGame(PlayerInfo player1, PlayerInfo player2, Player currentPlayer, bool multiplayer, bool hasTimer);
 
     TimeSpan EndTurn(TimeSpan? forcedTime = null);
 
     /// <summary>
-    ///     Sets next player as <see cref="CurrentPlayer" />.
+    ///     Sets next player as <see cref="CurrentPlayerInfo" />.
     /// </summary>
     void NextTurn();
 
     void Surrender();
     
-    void PlayerLost(Player player, WinType winType, bool notifyOther);
+    void PlayerLost(PlayerInfo player, WinType winType, bool notifyOther);
     
-    void PlayerWin(Player player, WinType winType, bool notifyOther);
+    void PlayerWin(PlayerInfo player, WinType winType, bool notifyOther);
 }

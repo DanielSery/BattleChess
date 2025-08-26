@@ -8,7 +8,6 @@ public class NoneFigureType : IFigureType
 
     public int FigureValue => 0;
     public int FigureId => -1;
-    public int SetId => -1;
     public string DisplayName => string.Empty;
     public string BaseDescription => string.Empty;
     public string MovementDescription => string.Empty;

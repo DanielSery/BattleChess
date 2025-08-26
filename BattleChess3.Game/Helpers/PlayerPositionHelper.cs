@@ -5,16 +5,16 @@ namespace BattleChess3.Game.Helpers;
 
 public static class PlayerPositionHelper
 {
-    public static Position GetPlayerPOVPosition(in int playerId, Position pos)
+    public static Position GetPlayerRelativePosition(in Player player, Position pos)
     {
-        return playerId switch
+        return player switch
         {
-            1 => new Position(pos.X, Constants.BoardLength - pos.Y - 1),
-            2 => new Position(pos.X, pos.Y),
-            _ => throw new ArgumentOutOfRangeException(nameof(playerId))
+            Player.White => new Position(pos.X, Constants.BoardLength - pos.Y - 1),
+            Player.Black => new Position(pos.X, pos.Y),
+            _ => throw new ArgumentOutOfRangeException(nameof(player))
         };
     }
 
-    public static Position GetPlayerPOVPosition(in Player currentPlayer, Position pos)
-        => GetPlayerPOVPosition(currentPlayer.Index, pos);
+    public static Position GetPlayerRelativePosition(in PlayerInfo currentPlayerInfo, Position pos)
+        => GetPlayerRelativePosition(currentPlayerInfo.Player, pos);
 }

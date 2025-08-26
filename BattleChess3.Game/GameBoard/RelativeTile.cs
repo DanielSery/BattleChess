@@ -4,18 +4,18 @@ using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.GameBoard;
 
-public class PovTile : ITile
+public class RelativeTile : ITile
 {
     private readonly ITile _innerTile;
-    private readonly Player _player;
+    private readonly PlayerInfo _playerInfo;
 
-    public PovTile(ITile innerTile, Player player)
+    public RelativeTile(ITile innerTile, PlayerInfo player)
     {
         _innerTile = innerTile;
-        _player = player;
+        _playerInfo = player;
     }
 
-    public Position Position => PlayerPositionHelper.GetPlayerPOVPosition(_player, _innerTile.Position);
+    public Position Position => PlayerPositionHelper.GetPlayerRelativePosition(_playerInfo, _innerTile.AbsolutePosition);
     public Position AbsolutePosition => _innerTile.Position;
 
     public Figure Figure
@@ -24,15 +24,20 @@ public class PovTile : ITile
         set => _innerTile.Figure = value;
     }
 
-    public ITile GetPovTile(Player player)
+    public ITile GetRelativeTile(PlayerInfo player)
     {
-        return new PovTile(this, player);
+        return new RelativeTile(this, player);
     }
 
     /// <inheritdoc />
     public void OnDied()
     {
         _innerTile.OnDied();
+    }
+
+    public void OnMovedFrom()
+    {
+        _innerTile.OnMovedFrom();
     }
 
     /// <inheritdoc />

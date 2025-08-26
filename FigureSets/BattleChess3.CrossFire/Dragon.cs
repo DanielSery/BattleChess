@@ -64,7 +64,7 @@ public class Dragon : ICrossFireFigureType
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
         {
-            targetTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Fire, false), board);
+            targetTile.CreateFigure(new Figure(PlayerInfo.Neutral, CrossFireFigureGroup.Fire, false), board);
         }
         else if (Math.Abs(move.X) <= 2 &&
                  Math.Abs(move.Y) <= 2)
@@ -72,8 +72,8 @@ public class Dragon : ICrossFireFigureType
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
             var sourcePosition = unitTile.Position;
             
-            board[sourcePosition + smallMove].CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Fire, false), board);
-            targetTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Fire, false), board);
+            board[sourcePosition + smallMove].CreateFigure(new Figure(PlayerInfo.Neutral, CrossFireFigureGroup.Fire, false), board);
+            targetTile.CreateFigure(new Figure(PlayerInfo.Neutral, CrossFireFigureGroup.Fire, false), board);
         }
     }
 }

@@ -88,6 +88,7 @@ public interface IFigureType : IEquatable<IFigureType>
 
     void OnMoved(ITile from, ITile to, IBoard board)
     {
+        from.OnMovedFrom();
         to.OnMovedTo();
     }
 

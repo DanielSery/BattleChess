@@ -8,8 +8,8 @@ public static class GameModule
 {
     public static void RegisterGamesModule(this ContainerBuilder builder)
     {
-        builder.RegisterType<PlayerService>()
-            .As<IPlayerService>()
+        builder.RegisterType<GameService>()
+            .As<IGameService>()
             .SingleInstance();
         builder.RegisterType<FigureService>()
             .As<IFigureService>()

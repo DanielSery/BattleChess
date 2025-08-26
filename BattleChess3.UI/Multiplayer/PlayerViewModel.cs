@@ -7,14 +7,14 @@ namespace BattleChess3.UI.Multiplayer;
 
 public class PlayerViewModel : ViewModelBase
 {
-    private readonly Player _player;
-    private readonly IPlayerService _playerService;
+    private readonly PlayerInfo _playerInfo;
+    private readonly IGameService _gameService;
     private readonly DispatcherTimer _timer;
     
-    public int Index => _player.Index;
-    public string FullName => _player.Elo is null ? _player.Name : $"{_player.Name} ({_player.Elo})";
-    public string Name => _player.Name;
-    public int? Elo => _player.Elo;
+    public Player Player => _playerInfo.Player;
+    public string FullName => _playerInfo.Elo is null ? _playerInfo.Name : $"{_playerInfo.Name} ({_playerInfo.Elo})";
+    public string Name => _playerInfo.Name;
+    public int? Elo => _playerInfo.Elo;
 
     private bool _isHisTurn;
     public bool IsHisTurn
@@ -45,10 +45,10 @@ public class PlayerViewModel : ViewModelBase
         }
     }
 
-    public PlayerViewModel(Player player, IPlayerService playerService)
+    public PlayerViewModel(PlayerInfo player, IGameService gameService)
     {
-        _player = player;
-        _playerService = playerService;
+        _playerInfo = player;
+        _gameService = gameService;
 
         _timer = new DispatcherTimer
         {
@@ -89,9 +89,9 @@ public class PlayerViewModel : ViewModelBase
 
     private void UpdateTimerText()
     {
-        if (_playerService is { IsMultiplayer: true, HasTimer: false })
+        if (_gameService is { IsMultiplayer: true, HasTimer: false })
         {
-            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _player.CurrentStopwatch.Elapsed;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.CurrentStopwatch.Elapsed;
             if (idleTimeRemaining.TotalSeconds > 0)
             {
                 IdleTime = idleTimeRemaining.ToString(@"m\:ss\.f");
@@ -100,16 +100,16 @@ public class PlayerViewModel : ViewModelBase
             {
                 _timer.Stop();
                 IdleTime = "00:00";
-                if (_player.Index == 1)
+                if (_playerInfo.Player == Player.White)
                 {
-                    _playerService.PlayerLost(_player, WinType.NotResponding, false);
+                    _gameService.PlayerLost(_playerInfo, WinType.NotResponding, false);
                 }
             }
         }
-        else if (_playerService is { IsMultiplayer: true, HasTimer: true })
+        else if (_gameService is { IsMultiplayer: true, HasTimer: true })
         {
-            var timeRemaining = _player.RemainingTime - _player.CurrentStopwatch.Elapsed;
-            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _player.CurrentStopwatch.Elapsed;
+            var timeRemaining = _playerInfo.RemainingTime - _playerInfo.CurrentStopwatch.Elapsed;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.CurrentStopwatch.Elapsed;
         
             if (timeRemaining.TotalSeconds > 0 && idleTimeRemaining.TotalSeconds > 0)
             {
@@ -120,15 +120,15 @@ public class PlayerViewModel : ViewModelBase
             {
                 _timer.Stop();
                 RemainingTime = "0:00";
-                _playerService.PlayerLost(_player, WinType.OutOfTime, _player.Index == 1);
+                _gameService.PlayerLost(_playerInfo, WinType.OutOfTime, _playerInfo.Player == Player.White);
             }
             else if (idleTimeRemaining.TotalMinutes <= 0)
             {
                 _timer.Stop();
                 IdleTime = "0:00";
-                if (_player.Index == 1)
+                if (_playerInfo.Player == Player.White)
                 {
-                    _playerService.PlayerLost(_player, WinType.NotResponding, false);
+                    _gameService.PlayerLost(_playerInfo, WinType.NotResponding, false);
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using BattleChess3.Game.GameBoard;
+using Moq;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -12,7 +13,7 @@ public class BoardTest
     {
         var tiles = Enumerable.Range(0, 32).Select(index =>
         {
-            var tile = new Moq.Mock<ITile>();
+            var tile = new Mock<ITile>();
             tile.Setup(x => x.Position).Returns(Position.FromIndex(index));
             tile.Setup(x => x.AbsolutePosition).Returns(Position.FromIndex(index));
             return tile.Object;

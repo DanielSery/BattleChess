@@ -1,4 +1,5 @@
 ﻿using BattleChess3.Game.Figures;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.UI.Editor;
 
@@ -16,17 +17,17 @@ public sealed class FigureTypeViewModel : IFigureInfo
 
         if (figureType.ImageUris.TryGetValue(1, out var redUri))
         {
-            PlayerId = 1;
+            Player = Player.White;
             ImageUri = redUri;
         }
         else if (figureType.ImageUris.TryGetValue(0, out var neutralUri))
         {
-            PlayerId = 0;
+            Player = Player.Neutral;
             ImageUri = neutralUri;
         }
     }
 
-    public int PlayerId { get;}
+    public Player Player { get;}
     public int FigureId { get; }
     public string DisplayName { get; }
     public string BaseDescription { get; }

@@ -11,22 +11,22 @@ namespace BattleChess3.UI.MainWindow;
 
 public sealed class MainWindowViewModel : ViewModelBase
 {
-    private readonly IPlayerService _playerService;
+    private readonly IGameService _gameService;
     private readonly IMultiplayerGameService _multiplayerGameService;
     private readonly ISoundService _soundService;
 
     public MainWindowViewModel(
         BoardViewModel boardViewModel,
         EditorViewModel editorViewModel,
-        IPlayerService playerService,
+        IGameService gameService,
         MenuViewModel menuViewModel,
-        PlayersViewModel playersViewModel,
+        GameViewModel gameViewModel,
         IMultiplayerGameService multiplayerGameService,
         INotificationService notificationService,
         ILoadingService loadingService,
         ISoundService soundService)
     {
-        _playerService = playerService;
+        _gameService = gameService;
         _multiplayerGameService = multiplayerGameService;
         _soundService = soundService;
         
@@ -35,9 +35,9 @@ public sealed class MainWindowViewModel : ViewModelBase
         EditorViewModel = editorViewModel;
         MenuViewModel = menuViewModel;
         LoadingService = loadingService;
-        PlayersViewModel = playersViewModel;
+        GameViewModel = gameViewModel;
 
-        _playerService.PlayerWon += PlayerServiceOnPlayerWon;
+        _gameService.PlayerWon += GameServiceOnGameWon;
         EditorViewModel.RequestSwitchToMenu += OnRequestSwitchToMenu;
         MenuViewModel.RequestSwitchToGame += OnRequestSwitchToGame;
         MenuViewModel.RequestSwitchToEditor += OnRequestSwitchToEditor;
@@ -74,27 +74,27 @@ public sealed class MainWindowViewModel : ViewModelBase
     public MenuViewModel MenuViewModel { get; }
     public BoardViewModel BoardViewModel { get; }
     public EditorViewModel EditorViewModel { get; }
-    public PlayersViewModel PlayersViewModel { get; }
+    public GameViewModel GameViewModel { get; }
     public ILoadingService LoadingService { get; }
     public INotificationService NotificationService { get; }
 
     public event EventHandler<(SelectedMainWindowTab, SelectedMainWindowTab)>? SelectedTabChanged;
 
-    private async void PlayerServiceOnPlayerWon(object? sender, (bool notifyOther, WinType winType, Player? won, Player? lost) e)
+    private async void GameServiceOnGameWon(object? sender, (bool notifyOther, WinType winType, PlayerInfo? won, PlayerInfo? lost) e)
     {
         if (e.won is null || e.lost is null)
             return;
 
         var messageType = ShownMessage.MessageType.Info;
-        if (!_playerService.IsMultiplayer)
+        if (!_gameService.IsMultiplayer)
         {
             messageType = ShownMessage.MessageType.Info;
         }
-        else if (e.won.Index == 1)
+        else if (e.won.Player == Player.White)
         {
             messageType = ShownMessage.MessageType.Success;
         }
-        else if (e.won.Index == 2)
+        else if (e.won.Player == Player.Black)
         {
             messageType = ShownMessage.MessageType.Warning;
         }
@@ -126,7 +126,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             NotificationService.ShowMessage(messageType, result.Value);
         }
         
-        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(e.won.Index == 1);
+        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(e.won.Player == Player.White);
         if (!string.IsNullOrEmpty(unlockedUnit))
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Success, $"Unlocked {unlockedUnit}.");

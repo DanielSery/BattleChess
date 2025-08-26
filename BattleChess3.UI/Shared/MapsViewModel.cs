@@ -1,5 +1,6 @@
 ﻿using BattleChess3.Game.Figures;
 using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Players;
 using BattleChess3.Maps;
 using Nicenis.Windows.ViewModels;
 
@@ -29,11 +30,11 @@ public sealed class MapsViewModel : ViewModelBase
         {
             Figures = board.Select(x => new FigureIdentifier
             {
-                PlayerId = x.Figure.Owner.Index,
+                Player = x.Figure.Owner.Player,
                 FigureId = x.Figure.Type.FigureId,
                 IsKing = x.Figure.IsKing
             }).ToArray(),
-            StartingPlayer = 1
+            StartingPlayer = Player.White
         };
 
         _mapService.Save(map);

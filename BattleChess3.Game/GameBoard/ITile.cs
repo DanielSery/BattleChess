@@ -23,9 +23,10 @@ public interface ITile
     /// <summary>
     ///     Gets tile with position according to players point of view.
     /// </summary>
-    ITile GetPovTile(Player player);
+    ITile GetRelativeTile(PlayerInfo player);
 
     void OnDied();
+    void OnMovedFrom();
     void OnMovedTo();
     void OnCreated();
 

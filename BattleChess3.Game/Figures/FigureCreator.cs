@@ -4,21 +4,21 @@ namespace BattleChess3.Game.Figures;
 
 internal class FigureCreator : IFigureCreator
 {
-    private readonly IPlayerService _playerService;
+    private readonly IGameService _gameService;
     private readonly IFigureService _figureService;
 
     public FigureCreator(
-        IPlayerService playerService,
+        IGameService gameService,
         IFigureService figureService)
     {
-        _playerService = playerService;
+        _gameService = gameService;
         _figureService = figureService;
     }
 
     public Figure CreateFigure(FigureIdentifier figureIdentifier)
     {
         var figureType = _figureService.GetFigureByUniqueUnitId(figureIdentifier.FigureId);
-        var player = _playerService.GetPlayer(figureIdentifier.PlayerId);
+        var player = _gameService.GetPlayerInfo(figureIdentifier.Player);
         var figure = new Figure(player, figureType, figureIdentifier.IsKing);
         player.Figures.Add(figure);
         return figure;
@@ -28,6 +28,6 @@ internal class FigureCreator : IFigureCreator
     {
         var figureIdentifier = new FigureIdentifier(0, 0, false);
         var figureType = _figureService.GetFigureByUniqueUnitId(figureIdentifier.FigureId);
-        return new Figure(Player.Neutral, figureType, figureIdentifier.IsKing);
+        return new Figure(PlayerInfo.Neutral, figureType, figureIdentifier.IsKing);
     }
 }

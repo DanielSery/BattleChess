@@ -14,7 +14,7 @@ namespace BattleChess3.UI.Game;
 
 public sealed class BoardViewModel : ViewModelBase
 {
-    private readonly IPlayerService _playerService;
+    private readonly IGameService _gameService;
     private readonly IMapLoader _mapLoader;
     private readonly IMultiplayerGameService _multiplayerGameService;
     private readonly ISoundService _soundService;
@@ -23,12 +23,12 @@ public sealed class BoardViewModel : ViewModelBase
     private TileViewModel _selectedTile = NoneTileViewModel.Instance;
 
     public BoardViewModel(
-        IPlayerService playerService,
+        IGameService gameService,
         IMapLoader mapLoader,
         IMultiplayerGameService multiplayerGameService,
         ISoundService soundService)
     {
-        _playerService = playerService;
+        _gameService = gameService;
         _mapLoader = mapLoader;
         _multiplayerGameService = multiplayerGameService;
         _soundService = soundService;
@@ -99,9 +99,9 @@ public sealed class BoardViewModel : ViewModelBase
 
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
-        _playerService.InitializePlayers(
-            new Player(null, "Red player", null, 1),
-            new Player(null, "Blue player", null, 2),
+        _gameService.StartGame(
+            new PlayerInfo(null, "Red player", null, Player.White),
+            new PlayerInfo(null, "Blue player", null, Player.Black),
             map.StartingPlayer, false, false);
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
@@ -110,19 +110,19 @@ public sealed class BoardViewModel : ViewModelBase
     public void MultiplayerLoadMap(
         MultiplayerGameType gameType, 
         string? gameId, 
-        Player player1,
-        Player player2,
+        PlayerInfo player1,
+        PlayerInfo player2,
         MapBlueprint map, 
         bool hasTimer)
     {
-        _playerService.InitializePlayers(
+        _gameService.StartGame(
             player1, player2,
             map.StartingPlayer, true, hasTimer);
         _mapLoader.LoadMap(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
         
         _multiplayerGameService.StartGame(gameType, gameId);
-        if (_playerService.IsWaitingForMove)
+        if (_gameService.IsWaitingForMove)
         {
             _multiplayerGameService.HandleHisTurnAsync();
         }
@@ -130,11 +130,11 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void Surrender()
     {
-        if (_playerService.IsMultiplayer &&
-            (_playerService.CanMove || _playerService.IsWaitingForMove))
+        if (_gameService.IsMultiplayer &&
+            (_gameService.CanMove || _gameService.IsWaitingForMove))
         {
             _soundService.PlaySoundEffect(SoundEffectType.Button);
-            _playerService.Surrender();
+            _gameService.Surrender();
         }
         else
         {
@@ -147,18 +147,18 @@ public sealed class BoardViewModel : ViewModelBase
         ArgumentNullException.ThrowIfNull(clickedTile);
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
-            var timeSpent = _playerService.EndTurn();
+            var timeSpent = _gameService.EndTurn();
             _multiplayerGameService.PlayedMoveAsync(SelectedTile.Position, clickedTile.Position, timeSpent);
             clickedTile.PossibleAction.Action.Invoke();
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTile = NoneTileViewModel.Instance;
-            _playerService.NextTurn();
-            if (_playerService.IsWaitingForMove)
+            _gameService.NextTurn();
+            if (_gameService.IsWaitingForMove)
             {
                 _multiplayerGameService.HandleHisTurnAsync();
             }
         }
-        else if (clickedTile.Figure.Owner.Equals(_playerService.CurrentPlayer))
+        else if (clickedTile.Figure.Owner.Equals(_gameService.CurrentPlayerInfo))
         {
             SelectedTile = clickedTile;
         }
@@ -182,32 +182,32 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void SetPossibleActions(TileViewModel clickedTile, bool remote)
     {
-        if (!_playerService.CanMove && !remote)
+        if (!_gameService.CanMove && !remote)
             return;
         
-        if (!_playerService.CurrentPlayer.Equals(clickedTile.Figure.Owner))
+        if (!_gameService.CurrentPlayerInfo.Equals(clickedTile.Figure.Owner))
             return;
         
-        var povBoard = GetPlayerPOVBoard(clickedTile.Figure.Owner, Tiles);
-        var povClickedTile = clickedTile.GetPovTile(clickedTile.Figure.Owner);
-        var possibleActions = clickedTile.Figure.GetPossibleActions(povClickedTile, povBoard);
-        
+        var relativeBoard = GetPlayerRelativeBoard(clickedTile.Figure.Owner, Tiles);
+        var relativeClickedTile = clickedTile.GetRelativeTile(clickedTile.Figure.Owner);
+        var possibleActions = clickedTile.Figure.GetPossibleActions(relativeClickedTile, relativeBoard);
+
         foreach (var possibleAction in possibleActions)
         {
             Tiles[possibleAction.TargetPosition.GetIndex()].PossibleAction = possibleAction;
         }
     }
 
-    private static IBoard GetPlayerPOVBoard(Player player, IReadOnlyList<ITile> board)
+    private static IBoard GetPlayerRelativeBoard(PlayerInfo player, IReadOnlyList<ITile> board)
     {
         var povBoard = new ITile[Constants.FullBoardTilesCount];
-        var absoluteBoard = board.Select(x => x.GetPovTile(player)).ToArray();
+        var absoluteBoard = board.Select(x => x.GetRelativeTile(player)).ToArray();
 
         for (var i = 0; i < Constants.BoardLength; i++)
         for (var j = 0; j < Constants.BoardLength; j++)
         {
             var position = new Position(j, i);
-            povBoard[PlayerPositionHelper.GetPlayerPOVPosition(player, position).GetIndex()] = absoluteBoard[position.GetIndex()];
+            povBoard[PlayerPositionHelper.GetPlayerRelativePosition(player, position).GetIndex()] = absoluteBoard[position.GetIndex()];
         }
 
         return new Board(povBoard);
@@ -246,16 +246,16 @@ public sealed class BoardViewModel : ViewModelBase
         switch (e.from.GetIndex())
         {
             case IMultiplayerGameService.NotRespondingMessage:
-                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.NotResponding, true);
+                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.White), WinType.NotResponding, true);
                 return;
             case IMultiplayerGameService.NotRespondingLostMessage:
-                _playerService.PlayerWin(_playerService.GetPlayer(2), WinType.NotResponding, false);
+                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.Black), WinType.NotResponding, false);
                 return;
             case IMultiplayerGameService.OutOfTimeMessage:
-                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.OutOfTime, false);
+                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.White), WinType.OutOfTime, false);
                 return;
             case IMultiplayerGameService.SurrenderMessage:
-                _playerService.PlayerWin(_playerService.GetPlayer(1), WinType.Surrender, false);
+                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.White), WinType.Surrender, false);
                 return;
         }
 
@@ -263,13 +263,13 @@ public sealed class BoardViewModel : ViewModelBase
         SelectedTile = fromTile;
         SetPossibleActions(fromTile, true);
         
-        _playerService.EndTurn(e.turnTimeSpent);
+        _gameService.EndTurn(e.turnTimeSpent);
         var toTile = Tiles[e.to.GetIndex()];
         toTile.PossibleAction.Action.Invoke();
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
         SelectedTile = NoneTileViewModel.Instance;
-        _playerService.NextTurn();
-        if (_playerService.IsWaitingForMove)
+        _gameService.NextTurn();
+        if (_gameService.IsWaitingForMove)
         {
             _multiplayerGameService.HandleHisTurnAsync();
         }

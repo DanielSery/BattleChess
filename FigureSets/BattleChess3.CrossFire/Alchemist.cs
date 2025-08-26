@@ -60,7 +60,7 @@ public class Alchemist : ICrossFireFigureType
             var shieldTile = board[sourceTile.Position + movedPosition];
             if (shieldTile.IsEmpty())
             {
-                shieldTile.CreateFigure(new Figure(Player.Neutral, CrossFireFigureGroup.Explosives, false), board);
+                shieldTile.CreateFigure(new Figure(PlayerInfo.Neutral, CrossFireFigureGroup.Explosives, false), board);
             }
         }
     }

@@ -27,6 +27,7 @@ public class TileViewModel : ViewModelBase, ITile
     public Position Position { get; }
     public Position AbsolutePosition => Position;
 
+    public event EventHandler? MovedFrom;
     public event EventHandler? MovedTo;
     public event EventHandler? Died;
     public event EventHandler? Created;
@@ -85,15 +86,20 @@ public class TileViewModel : ViewModelBase, ITile
         set => SetProperty(ref _figure, value);
     }
 
-    public ITile GetPovTile(Player player)
+    public ITile GetRelativeTile(PlayerInfo player)
     {
-        return new PovTile(this, player);
+        return new RelativeTile(this, player);
     }
 
     /// <inheritdoc />
     public void OnDied()
     {
         Died?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void OnMovedFrom()
+    {
+        MovedFrom?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc />
