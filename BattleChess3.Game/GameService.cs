@@ -1,6 +1,7 @@
 ﻿using BattleChess3.Game.Helpers;
+using BattleChess3.Game.Players;
 
-namespace BattleChess3.Game.Players;
+namespace BattleChess3.Game;
 
 internal class GameService : IGameService
 {
@@ -9,8 +10,8 @@ internal class GameService : IGameService
     public GameService()
     {
         _players[0] = PlayerInfo.Neutral;
-        _players[1] = new PlayerInfo(null, string.Empty, null, Player.White);
-        _players[2] = new PlayerInfo(null, string.Empty, null, Player.Black);
+        _players[1] = new PlayerInfo(Player.White, string.Empty, null, null);
+        _players[2] = new PlayerInfo(Player.Black, string.Empty, null, null);
 
         CurrentPlayerInfo = _players[0];
         WaitingPlayerInfo = _players[1];
@@ -31,8 +32,8 @@ internal class GameService : IGameService
     /// <inheritdoc />
     public event EventHandler<(bool notifyOther, WinType winType, PlayerInfo? won, PlayerInfo? lost)>? PlayerWon;
 
-    public PlayerInfo CurrentPlayerInfo { get; private set; } = PlayerInfo.Neutral;
-    public PlayerInfo WaitingPlayerInfo { get; private set; } = PlayerInfo.Neutral;
+    public PlayerInfo CurrentPlayerInfo { get; private set; }
+    private PlayerInfo WaitingPlayerInfo { get; set; }
 
     public PlayerInfo GetPlayerInfo(Player player) => _players[player.ToInt()];
 
@@ -62,8 +63,8 @@ internal class GameService : IGameService
         CanMove = CurrentPlayerInfo.Player == Player.White || !IsMultiplayer;
         IsWaitingForMove = CurrentPlayerInfo.Player == Player.Black && IsMultiplayer;
         
-        EvaluateLost(CurrentPlayerInfo, WaitingPlayerInfo);
-        EvaluateLost(WaitingPlayerInfo, CurrentPlayerInfo);
+        CheckCapturedKing(CurrentPlayerInfo, WaitingPlayerInfo);
+        CheckCapturedKing(WaitingPlayerInfo, CurrentPlayerInfo);
 
         if (CanMove || IsWaitingForMove)
         {
@@ -103,7 +104,7 @@ internal class GameService : IGameService
             : (notifyOther, winType, _players[2], _players[1]));
     }
 
-    private void EvaluateLost(PlayerInfo evaluatedPlayerInfo, PlayerInfo otherPlayerInfo)
+    private void CheckCapturedKing(PlayerInfo evaluatedPlayerInfo, PlayerInfo otherPlayerInfo)
     {
         if (!CanMove && !IsWaitingForMove)
             return;
@@ -118,6 +119,7 @@ internal class GameService : IGameService
 
     private void StartTurn()
     {
+        CurrentPlayerInfo.AddTime(TimeSpan.FromSeconds(10));
         CurrentPlayerInfo.StartTurn();
         TurnStarted?.Invoke(this, EventArgs.Empty);
     }

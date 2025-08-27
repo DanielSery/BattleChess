@@ -100,8 +100,8 @@ public sealed class BoardViewModel : ViewModelBase
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
         _gameService.StartGame(
-            new PlayerInfo(null, "Red player", null, Player.White),
-            new PlayerInfo(null, "Blue player", null, Player.Black),
+            new PlayerInfo(Player.White, "Red player", null, null),
+            new PlayerInfo(Player.Black, "Blue player", null, null),
             map.StartingPlayer, false, false);
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);

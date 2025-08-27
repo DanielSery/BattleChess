@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.GameBoard;
+﻿using BattleChess3.Game;
+using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Players;
 using FluentResults;
 

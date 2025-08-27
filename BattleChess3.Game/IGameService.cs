@@ -1,4 +1,6 @@
-﻿namespace BattleChess3.Game.Players;
+﻿using BattleChess3.Game.Players;
+
+namespace BattleChess3.Game;
 
 public interface IGameService
 {

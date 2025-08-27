@@ -1,4 +1,5 @@
 ﻿using System.Windows.Threading;
+using BattleChess3.Game;
 using BattleChess3.Game.Players;
 using BattleChess3.Multiplayer;
 using Nicenis.Windows.ViewModels;

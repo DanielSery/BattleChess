@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.Game.Players;
+﻿namespace BattleChess3.Game;
 
 public enum WinType
 {

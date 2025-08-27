@@ -129,7 +129,7 @@ public class MultiplayerViewModel : ViewModelBase
             var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearchJoin.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new PlayerInfo(null, "Blue player", null, Player.Black);
+                : new PlayerInfo(Player.Black, "Blue player", null, null);
                 
             var hisMap = GetFigures(gameSearchJoin.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
@@ -144,7 +144,7 @@ public class MultiplayerViewModel : ViewModelBase
             var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearch.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new PlayerInfo(null, "Blue player", null, Player.Black);
+                : new PlayerInfo(Player.Black, "Blue player", null, null);
             
             var hisMap = GetFigures(gameSearch.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
@@ -196,7 +196,7 @@ public class MultiplayerViewModel : ViewModelBase
         var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameJoin.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new PlayerInfo(null, "Blue player", null, Player.Black);
+            : new PlayerInfo(Player.Black, "Blue player", null, null);
 
         var hisMap = GetFigures(gameJoin.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, lobby.IsHostStarting);
@@ -236,7 +236,7 @@ public class MultiplayerViewModel : ViewModelBase
         var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(lobby.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new PlayerInfo(null, "Blue player", null, Player.Black);
+            : new PlayerInfo(Player.Black, "Blue player", null, null);
         
         var hisMap = GetFigures(lobby.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !lobby.IsHostStarting);

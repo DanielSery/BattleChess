@@ -5,9 +5,9 @@ namespace BattleChess3.Game.Players;
 
 public class PlayerInfo
 {
-    public static readonly PlayerInfo Neutral = new(null, "Neutral", 0, 0);
+    public static readonly PlayerInfo Neutral = new(Player.Neutral, "Neutral", null, null);
 
-    public PlayerInfo(string? playerId, string playerName, int? elo, Player player)
+    public PlayerInfo(Player player, string playerName, string? playerId, int? elo)
     {
         Player = player;
         PlayerId = playerId;
@@ -25,22 +25,27 @@ public class PlayerInfo
     public Stopwatch CurrentStopwatch { get; }
     public TimeSpan RemainingTime { get; private set; }
 
-    public override string ToString()
-    {
-        return Name;
-    }
-
     public void StartTurn()
     {
-        RemainingTime += TimeSpan.FromSeconds(10);
         CurrentStopwatch.Start();
     }
 
     public TimeSpan OnEndingTurn(TimeSpan? forcedTime)
     {
         CurrentStopwatch.Stop();
-        RemainingTime -= forcedTime ?? CurrentStopwatch.Elapsed;
+        var turnDuration = forcedTime ?? CurrentStopwatch.Elapsed;
+        RemainingTime -= turnDuration;
         CurrentStopwatch.Reset();
-        return CurrentStopwatch.Elapsed;
+        return turnDuration;
+    }
+
+    public void AddTime(TimeSpan timeSpan)
+    {
+        RemainingTime += timeSpan;
+    }
+
+    public override string ToString()
+    {
+        return Name;
     }
 }

@@ -26,6 +26,7 @@ public sealed class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
     public PlayerInfo Owner { get; }
     public IFigureType Type { get; }
     public bool IsKing { get; }
+
     public int FigureValue => Type.FigureValue;
     public Uri ImageUri => Type.ImageUris[Owner.Player.ToInt()];
     public string DisplayName => Type.DisplayName;
@@ -33,22 +34,8 @@ public sealed class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
     public string MovementDescription => Type.MovementDescription;
     public string AttackDescription => Type.AttackDescription;
     public string SpecialDescription => Type.SpecialDescription;
-    public IDictionary<int, Uri> ImageUris => Type.ImageUris;
 
-    public void OnDied(ITile unitTile, IBoard board)
-    {
-        unitTile.OnDied();
-    }
-
-    public void OnMoved(ITile from, ITile to, IBoard board)
-    {
-        to.OnMovedTo();
-    }
-
-    public void OnCreated(ITile tile, IBoard board)
-    {
-        tile.OnCreated();
-    }
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
@@ -59,6 +46,4 @@ public sealed class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
     {
         return $"{Type.DisplayName}:{Owner.Player}";
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 }

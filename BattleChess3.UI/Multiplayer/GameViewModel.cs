@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.Players;
+﻿using BattleChess3.Game;
+using BattleChess3.Game.Players;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.Multiplayer;

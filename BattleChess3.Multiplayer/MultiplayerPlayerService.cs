@@ -109,9 +109,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public PlayerInfo GetCurrentPlayer()
     {
         if (LoggedInPlayer is null)
-            return new PlayerInfo(null, "Red player", null, Player.White);
+            return new PlayerInfo(Player.White, "Red player", null, null);
 
-        return new PlayerInfo(LoggedInPlayer.Id, LoggedInPlayer.Name, LoggedInPlayer.Elo, Player.White);
+        return new PlayerInfo(Player.White, LoggedInPlayer.Name, LoggedInPlayer.Id, LoggedInPlayer.Elo);
     }
 
     public Task<Result<PlayerInfo>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken)
@@ -133,7 +133,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     }
                     
                     Console.WriteLine($"Found user with id: {foundPlayer.Id}");
-                    return Result.Ok(new PlayerInfo(playerId, foundPlayer.Name, foundPlayer.Elo, Player.Black));
+                    return Result.Ok(new PlayerInfo(Player.Black, foundPlayer.Name, playerId, foundPlayer.Elo));
                 }
                 catch (Exception ex)
                 {
