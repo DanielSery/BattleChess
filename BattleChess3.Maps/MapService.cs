@@ -1,5 +1,5 @@
-﻿using BattleChess3.Maps.Utilities;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using BattleChess3.Maps.Utilities;
 
 namespace BattleChess3.Maps;
 
@@ -21,7 +21,7 @@ internal class MapService : IMapService
 
     public void Save(MapBlueprint map)
     {
-        var text = JsonConvert.SerializeObject(map);
+        var text = JsonSerializer.Serialize(map);
         text = CompressionHelper.Compress(text);
         File.WriteAllText("Resources/TeamBoard.map", text);
     }
@@ -42,7 +42,7 @@ internal class MapService : IMapService
             {
                 var text = File.ReadAllText(Path.GetFullPath(path));
                 text = CompressionHelper.Decompress(text);
-                return JsonConvert.DeserializeObject<MapBlueprint>(text);
+                return JsonSerializer.Deserialize<MapBlueprint>(text);
             })
             .Where(x => x is not null)
             .Select(x => x!)

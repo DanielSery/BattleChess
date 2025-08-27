@@ -1,5 +1,8 @@
-﻿namespace BattleChess3.Game.GameBoard;
+﻿using System.Diagnostics;
 
+namespace BattleChess3.Game.GameBoard;
+
+[DebuggerDisplay("({X},{Y})")]
 public readonly record struct Position
 {
     public static readonly Position None = new(-1, -1);
@@ -32,10 +35,5 @@ public readonly record struct Position
     public static Position FromIndex(int index)
     {
         return new Position(index % Constants.BoardLength, index / Constants.BoardLength);
-    }
-
-    public override string ToString()
-    {
-        return $"({X},{Y})";
     }
 }

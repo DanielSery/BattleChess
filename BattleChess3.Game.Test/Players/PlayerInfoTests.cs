@@ -43,4 +43,14 @@ public class PlayerInfoTests
 
         Assert.Equal(timeBefore, playerInfo.RemainingTime);
     }
+
+    [Fact]
+    public void AddTimeWorks()
+    {
+        var playerInfo = new PlayerInfo(Player.White, string.Empty, null, null);
+
+        playerInfo.AddTime(TimeSpan.FromMinutes(1));
+
+        Assert.Equal(TimeSpan.FromMinutes(6), playerInfo.RemainingTime);
+    }
 }

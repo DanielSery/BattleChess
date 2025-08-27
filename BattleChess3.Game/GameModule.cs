@@ -1,6 +1,4 @@
 ﻿using Autofac;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game;
 

@@ -16,57 +16,12 @@
         <ProjectReference Include="..\BattleChess3.Game\BattleChess3.Game.csproj" />
         <ProjectReference Include="..\BattleChess3.Maps\BattleChess3.Maps.csproj" />
         <ProjectReference Include="..\BattleChess3.Multiplayer\BattleChess3.Multiplayer.csproj" />
-        <ProjectReference Include="..\FigureSets\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj"/>
+        <ProjectReference Include="..\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <None Remove="BattleChess3.deps.json"/>
-        <None Update="Resources\Sounds\Chess1.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Chess2.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Chess3.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Chess4.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Chess5.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Chess6.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Rolling.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Rolling1.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Rolling2.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Button1.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Error.wav">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Background1.mp3">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Background2.mp3">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Background3.mp3">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Background4.mp3">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Resources\Sounds\Background5.mp3">
+        <None Update="Resources\Sounds\*">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -187,38 +142,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="Images\*" />
-        <None Remove="Images\*" />
-        <Resource Include="Resources\Images\ApplicationBackground.jpg" />
-        <Resource Include="Resources\Images\ButtonBlueBackground.jpg" />
-        <Resource Include="Resources\Images\ButtonGreen2Background.jpg" />
-        <Resource Include="Resources\Images\ButtonGreen3Background.jpg" />
-        <Resource Include="Resources\Images\ButtonGreenBackground.jpg" />
-        <Resource Include="Resources\Images\ButtonOrange2Background.jpg" />
-        <Resource Include="Resources\Images\ButtonOrange3Background.jpg" />
-        <Resource Include="Resources\Images\ButtonOrangeBackground.jpg" />
-        <Resource Include="Resources\Images\ButtonPurple2Background.jpg" />
-        <Resource Include="Resources\Images\ButtonPurpleBackground.jpg" />
-        <Resource Include="Resources\Images\ButtonRed2Background.png" />
-        <Resource Include="Resources\Images\ButtonRedBackground.jpg" />
-        <Resource Include="Resources\Images\ButtonWhiteBackground.jpg" />
-        <Resource Include="Resources\Images\ChessTileCanGo.png" />
-        <Resource Include="Resources\Images\ChessTileDangered.png" />
-        <Resource Include="Resources\Images\ChessTileKingBase.png" />
-        <Resource Include="Resources\Images\ChessTileKingDangered.png" />
-        <Resource Include="Resources\Images\ChessTileKingMouseOn.png" />
-        <Resource Include="Resources\Images\ChessTileKingSelected.png" />
-        <Resource Include="Resources\Images\ChessTileKingSpecial.png" />
-        <Resource Include="Resources\Images\ChessTileMouseOn.png" />
-        <Resource Include="Resources\Images\ChessTileOutsideBoard.png" />
-        <Resource Include="Resources\Images\ChessTileSelected.png" />
-        <Resource Include="Resources\Images\ChessTileSpecial.png" />
-        <Resource Include="Resources\Images\DefaultButton.png" />
-        <Resource Include="Resources\Images\DefaultButtonMouseOn.png" />
-        <Resource Include="Resources\Images\Preview.png" />
-        <None Remove="Resources\Images\ButtonBlue2Background.jpg" />
-        <Resource Include="Resources\Images\ButtonBlue2Background.jpg" />
-        <None Remove="Resources\Images\ButtonYellowBackground.jpg" />
-        <Resource Include="Resources\Images\ButtonYellowBackground.jpg" />
+        <None Remove="Resources\Images\*" />
+        <Resource Include="Resources\Images\*" />
     </ItemGroup>
 </Project>

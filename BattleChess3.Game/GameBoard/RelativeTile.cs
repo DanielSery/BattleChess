@@ -1,9 +1,11 @@
-﻿using BattleChess3.Game.Figures;
+﻿using System.Diagnostics;
+using BattleChess3.Game.Figures;
 using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.GameBoard;
 
+[DebuggerDisplay("{RelativePosition}:{Figure}")]
 public class RelativeTile : ITile
 {
     private readonly ITile _innerTile;

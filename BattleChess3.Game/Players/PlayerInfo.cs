@@ -3,6 +3,7 @@ using BattleChess3.Game.Figures;
 
 namespace BattleChess3.Game.Players;
 
+[DebuggerDisplay("{Name}")]
 public class PlayerInfo
 {
     public static readonly PlayerInfo Neutral = new(Player.Neutral, "Neutral", null, null);
@@ -42,10 +43,5 @@ public class PlayerInfo
     public void AddTime(TimeSpan timeSpan)
     {
         RemainingTime += timeSpan;
-    }
-
-    public override string ToString()
-    {
-        return Name;
     }
 }

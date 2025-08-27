@@ -29,12 +29,4 @@ public interface ITile
     void OnMovedFrom();
     void OnMovedTo();
     void OnCreated();
-
-    /// <summary>
-    ///     ToString for debugging
-    /// </summary>
-    string? ToString()
-    {
-        return $"{RelativePosition}:{Figure}";
-    }
 }

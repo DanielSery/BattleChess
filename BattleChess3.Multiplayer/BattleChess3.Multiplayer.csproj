@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BattleChess3.Game\BattleChess3.Game.csproj" />
       <ProjectReference Include="..\BattleChess3.Maps\BattleChess3.Maps.csproj" />
     </ItemGroup>
 
