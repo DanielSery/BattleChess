@@ -11,11 +11,5 @@ public static class GameModule
         builder.RegisterType<GameService>()
             .As<IGameService>()
             .SingleInstance();
-        builder.RegisterType<FigureService>()
-            .As<IFigureService>()
-            .SingleInstance();
-        builder.RegisterType<FigureCreator>()
-            .As<IFigureCreator>()
-            .SingleInstance();
     }
 }

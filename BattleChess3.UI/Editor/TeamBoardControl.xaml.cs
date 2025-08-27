@@ -32,11 +32,11 @@ public partial class TeamBoardControl
         else if (e.Data.GetDataPresent("System.ValueTuple`2[[BattleChess3.UI.Editor.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.Shared.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]"))
         {
             var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.Editor.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.Shared.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]");
-            var sourceFigureIdentifier = new FigureIdentifier(sourceTile.Figure.Owner.Player, sourceTile.Figure.Type, sourceTile.Figure.IsKing);
+            var sourceFigureIdentifier = new FigureIdentifier(sourceTile.Figure.Owner.Player, sourceTile.Figure.Type.FigureId, sourceTile.Figure.IsKing);
             
             var tileButton = (Button)sender;
             var targetTile = (TileViewModel)tileButton.DataContext;
-            var targetFigureIdentifier = new FigureIdentifier(targetTile.Figure.Owner.Player, targetTile.Figure.Type, targetTile.Figure.IsKing);
+            var targetFigureIdentifier = new FigureIdentifier(targetTile.Figure.Owner.Player, targetTile.Figure.Type.FigureId, targetTile.Figure.IsKing);
             
             teamBoard.CreateFigure(sourceTile, targetFigureIdentifier);
             teamBoard.CreateFigure(targetTile, sourceFigureIdentifier);

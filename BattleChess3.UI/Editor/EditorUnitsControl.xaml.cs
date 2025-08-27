@@ -54,7 +54,7 @@ public partial class EditorUnitsControl
         {
             var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.Editor.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.Shared.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]");
 
-            teamBoard.CreateFigure(sourceTile, new FigureIdentifier(0, CrossFireFigureGroup.Empty, false));
+            teamBoard.CreateFigure(sourceTile, new FigureIdentifier(0, CrossFireFigureIds.EmptyId, false));
         }
     }
 

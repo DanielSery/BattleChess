@@ -12,5 +12,11 @@ public static class MapsModule
         builder.RegisterType<MapLoader>()
             .As<IMapLoader>()
             .SingleInstance();
+        builder.RegisterType<FigureCreator>()
+            .As<IFigureCreator>()
+            .SingleInstance();
+        builder.RegisterType<FigureService>()
+            .As<IFigureService>()
+            .SingleInstance();
     }
 }

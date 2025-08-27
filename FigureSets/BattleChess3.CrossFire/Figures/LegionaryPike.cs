@@ -1,0 +1,132 @@
+﻿using BattleChess3.CrossFireFigures.Utilities;
+using BattleChess3.Game.Figures;
+using BattleChess3.Game.GameBoard;
+
+namespace BattleChess3.CrossFireFigures.Figures;
+
+public class LegionaryPike : ICrossFireFigureType
+{
+    /// <inheritdoc />
+    public int FigureValue { get; } = 4;
+    
+    int IFigureType.FigureId => CrossFireFigureIds.LegionaryPikeId;
+
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    {
+        if (TryGetPikeAttackAction(unitTile, board, new Position(1, 2), out var pikeAttackAction1))
+        {
+            yield return pikeAttackAction1;
+        }
+
+        if (TryGetPikeAttackAction(unitTile, board, new Position(-1, 2), out var pikeAttackAction2))
+        {
+            yield return pikeAttackAction2;
+        }
+
+        if (TryGetAttackAction(unitTile, board, new Position(1, 1), out var attackAction1))
+        {
+            yield return attackAction1;
+        }
+
+        if (TryGetAttackAction(unitTile, board, new Position(-1, 1), out var attackAction2))
+        {
+            yield return attackAction2;
+        }
+
+        if (TryGetMoveAction(unitTile, board, new Position(0, 1), out var moveAction1))
+        {
+            yield return moveAction1;
+        }
+        else
+        {
+            yield break;
+        }
+
+        if (unitTile.RelativePosition.Y == 1 &&
+            TryGetMoveAction(unitTile, board, new Position(0, 2), out var moveAction2))
+        {
+            yield return moveAction2;
+        }
+    }
+
+    private static bool TryGetPikeAttackAction(ITile unitTile, IBoard board, Position relativePosition,
+        out FigureAction action)
+    {
+        var attackPosition = unitTile.RelativePosition + relativePosition;
+        if (!board.TryGetTile(attackPosition, out var targetTile) ||
+            !unitTile.CanAttack(targetTile))
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        action = new FigureAction(
+            FigureActionTypes.Special,
+            targetTile.AbsolutePosition,
+            () =>
+            {
+                unitTile.KillWithoutMove(targetTile, board);
+                var owner = unitTile.Figure.Owner;
+                unitTile.Die(board);
+                unitTile.CreateFigure(new Figure(owner, CrossFireFigureGroup.LegionarySword, false), board);
+            });
+        return true;
+    }
+
+    private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition,
+        out FigureAction action)
+    {
+        var attackPosition = unitTile.RelativePosition + relativePosition;
+        if (!board.TryGetTile(attackPosition, out var targetTile) ||
+            !unitTile.CanAttack(targetTile))
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        if (attackPosition.Y == 7)
+        {
+            action = new FigureAction(
+                FigureActionTypes.Special,
+                targetTile.AbsolutePosition,
+                () =>
+                {
+                    unitTile.KillWithoutMove(targetTile, board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    unitTile.Die(board);
+                });
+            return true;
+        }
+
+        action = unitTile.CreateKillWithMove(targetTile, board);
+        return true;
+    }
+
+    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition,
+        out FigureAction action)
+    {
+        var movePosition = unitTile.RelativePosition + relativePosition;
+        if (!board.TryGetTile(movePosition, out var targetTile) ||
+            !unitTile.CanMoveTo(targetTile))
+        {
+            action = FigureAction.None;
+            return false;
+        }
+
+        if (movePosition.Y == 7)
+        {
+            action = new FigureAction(
+                FigureActionTypes.Special,
+                targetTile.AbsolutePosition,
+                () =>
+                {
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    unitTile.Die(board);
+                });
+            return true;
+        }
+
+        action = unitTile.CreateMoveAction(targetTile, board);
+        return true;
+    }
+}

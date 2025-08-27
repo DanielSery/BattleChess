@@ -6,7 +6,6 @@ namespace BattleChess3.CrossFireFigures.Utilities;
 
 internal static class AdvancedFigureActions
 {
-
     public static bool CanDestroy(this ITile unitTile, IBoard board, Position relativePosition)
     {
         var movePosition = unitTile.RelativePosition + relativePosition;
@@ -98,7 +97,6 @@ internal static class AdvancedFigureActions
         return new FigureAction(
             FigureActionTypes.Special, 
             targetTile.AbsolutePosition,
-            targetTile.AbsolutePosition,
             () => targetTile.CreateFigure(new Figure(player, figureType, false), board));
     }
 
@@ -106,7 +104,6 @@ internal static class AdvancedFigureActions
     {
         return new FigureAction(
             FigureActionTypes.Move, 
-            unitTile.AbsolutePosition,
             targetTile.AbsolutePosition,
             () => unitTile.MoveToTile(targetTile, board));
     }
@@ -115,7 +112,6 @@ internal static class AdvancedFigureActions
     {
         return new FigureAction(
             FigureActionTypes.Attack, 
-            unitTile.AbsolutePosition,
             targetTile.AbsolutePosition,
             () => unitTile.KillWithoutMove(targetTile, board));
     }
@@ -124,20 +120,10 @@ internal static class AdvancedFigureActions
     {
         return new FigureAction(
             FigureActionTypes.Attack, 
-            unitTile.AbsolutePosition,
             targetTile.AbsolutePosition,
             () =>
             {
                 unitTile.KillWithMove(targetTile, board);
             });
-    }
-
-    public static FigureAction CreatePassTurn(this ITile tile)
-    {
-        return new FigureAction(
-            FigureActionTypes.Special, 
-            tile.AbsolutePosition,
-            tile.AbsolutePosition,
-            () => { });
     }
 }

@@ -1,19 +1,20 @@
-﻿using BattleChess3.CrossFireFigures.Localization;
+﻿using BattleChess3.CrossFireFigures.Figures;
+using BattleChess3.CrossFireFigures.Localization;
 using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 
-public class CrossFireFigureGroup : IFigureGroup
+public sealed class CrossFireFigureGroup : IFigureGroup
 {
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrossFireFigureGroup)}_Name"];
 
-    public static readonly IFigureType Wall = new Wall();
-    public static readonly IFigureType Explosives = new Explosives();
-    public static readonly IFigureType Blade = new Blade();
-    public static readonly IFigureType Trench = new Trench();
-    public static readonly IFigureType LegionarySword = new LegionarySword();
-    public static readonly IFigureType Empty = new Empty();
-    public static readonly IFigureType Fire = new Fire();
+    internal static readonly IFigureType Wall = new Wall();
+    internal static readonly IFigureType Explosives = new Explosives();
+    internal static readonly IFigureType Blade = new Blade();
+    internal static readonly IFigureType Trench = new Trench();
+    internal static readonly IFigureType LegionarySword = new LegionarySword();
+    internal static readonly IFigureType Empty = new Empty();
+    internal static readonly IFigureType Fire = new Fire();
 
     public IFigureType[] FigureTypes { get; } =
     [

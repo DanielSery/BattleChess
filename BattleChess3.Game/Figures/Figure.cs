@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.Figures;
 
-public sealed class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
+public sealed class Figure : IFigureInfo, INotifyPropertyChanged
 {
     public static readonly Figure None = new(PlayerInfo.Neutral, NoneFigureType.Instance, false);
 

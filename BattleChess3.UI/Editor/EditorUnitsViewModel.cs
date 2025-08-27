@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using System.Windows.Documents;
 using BattleChess3.Game.Figures;
+using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
@@ -8,7 +8,7 @@ using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.Editor;
 
-public class EditorUnitsViewModel : ViewModelBase, IDisposable
+public class EditorUnitsViewModel : ViewModelBase
 {
     private readonly IFigureService _figureService;
     private readonly IMultiplayerPlayerService _playerService;
@@ -23,7 +23,6 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
         IMultiplayerPlayerService playerService)
     {
         _figureService = figureService;
-        _figureService.FigureGroupsChanged += OnFigureGroupsChanged;
         _playerService = playerService;
         _playerService.LoggedInPlayerChanged += PlayerServiceOnLoggedInPlayerChanged;
 
@@ -148,24 +147,14 @@ public class EditorUnitsViewModel : ViewModelBase, IDisposable
                               ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
         var unlockedFiguresBitArray = new BitArray(unlockedFigures);
         
-        Figures = _figureService.GetFigureGroups()
+        Figures = _figureService.FigureGroups
             .SelectMany(x => x.FigureTypes)
-            .Select(x => new FigureTypeViewModel(x, true))
+            .Select(x => new FigureTypeViewModel(x, unlockedFiguresBitArray[x.FigureId]))
             .ToArray();
     }
 
     private void PlayerServiceOnLoggedInPlayerChanged(object? sender, EventArgs e)
     {
         RefreshFigures();
-    }
-
-    private void OnFigureGroupsChanged(object? sender, IList<IFigureGroup> groups)
-    {
-        RefreshFigures();
-    }
-
-    public void Dispose()
-    {
-        _figureService.FigureGroupsChanged -= OnFigureGroupsChanged;
     }
 }

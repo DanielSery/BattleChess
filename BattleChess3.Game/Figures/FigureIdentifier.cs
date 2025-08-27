@@ -16,23 +16,9 @@ public class FigureIdentifier
         IsKing = isKing;
     }
 
-    public FigureIdentifier(Figure figure)
-    {
-        Player = figure.Owner.Player;
-        FigureId = figure.Type.FigureId;
-        IsKing = figure.IsKing;
-    }
-
-    public FigureIdentifier(Player player, IFigureType figureType, bool isKing)
-    {
-        Player = player;
-        FigureId = figureType.FigureId;
-        IsKing = isKing;
-    }
-
-    public Player Player { get; set; } = Player.Neutral;
-    public int FigureId { get; set; } = NoneFigureType.Instance.FigureId;
-    public bool IsKing { get; set; }
+    public Player Player { get; init; } = Player.Neutral;
+    public int FigureId { get; init; } = NoneFigureType.Instance.FigureId;
+    public bool IsKing { get; init; }
 
     public override string ToString()
     {

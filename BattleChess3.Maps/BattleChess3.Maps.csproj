@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BattleChess3.Game\BattleChess3.Game.csproj" />
+      <ProjectReference Include="..\FigureSets\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj" />
     </ItemGroup>
 
     <ItemGroup>
