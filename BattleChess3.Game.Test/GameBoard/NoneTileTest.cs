@@ -1,7 +1,6 @@
 ﻿using BattleChess3.Game.Figures;
 using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Players;
-using Moq;
 using Xunit;
 using Assert = Xunit.Assert;
 

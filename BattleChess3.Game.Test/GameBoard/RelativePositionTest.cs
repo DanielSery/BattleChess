@@ -3,7 +3,7 @@ using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Players;
 using Moq;
 using Xunit;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test.GameBoard;
 
@@ -28,11 +28,11 @@ public class RelativePositionTest
     {
         var relative = new RelativeTile(_tile, Player.White);
 
-        Assert.AreEqual(1, relative.RelativePosition.X, "rel x");
-        Assert.AreEqual(6, relative.RelativePosition.Y, "rel y");
-        Assert.AreEqual(1, relative.AbsolutePosition.X, "abs X");
-        Assert.AreEqual(1, relative.AbsolutePosition.Y, "abs Y");
-        Assert.AreEqual(_figure, relative.Figure, "figure");
+        Assert.Equal(1, relative.RelativePosition.X);
+        Assert.Equal(6, relative.RelativePosition.Y);
+        Assert.Equal(1, relative.AbsolutePosition.X);
+        Assert.Equal(1, relative.AbsolutePosition.Y);
+        Assert.Equal(_figure, relative.Figure);
     }
 
     [Fact]
@@ -40,11 +40,11 @@ public class RelativePositionTest
     {
         var relative = new RelativeTile(_tile, Player.Black);
 
-        Assert.AreEqual(1, relative.RelativePosition.X, "rel x");
-        Assert.AreEqual(1, relative.RelativePosition.Y, "rel y");
-        Assert.AreEqual(1, relative.AbsolutePosition.X, "abs X");
-        Assert.AreEqual(1, relative.AbsolutePosition.Y, "abs Y");
-        Assert.AreEqual(_figure, relative.Figure, "figure");
+        Assert.Equal(1, relative.RelativePosition.X);
+        Assert.Equal(1, relative.RelativePosition.Y);
+        Assert.Equal(1, relative.AbsolutePosition.X);
+        Assert.Equal(1, relative.AbsolutePosition.Y);
+        Assert.Equal(_figure, relative.Figure);
     }
 
     [Fact]
@@ -53,11 +53,11 @@ public class RelativePositionTest
         ITile relative = new RelativeTile(_tile, Player.White);
         relative = relative.GetRelativeTile(Player.White);
 
-        Assert.AreEqual(1, relative.RelativePosition.X, "rel x");
-        Assert.AreEqual(6, relative.RelativePosition.Y, "rel y");
-        Assert.AreEqual(1, relative.AbsolutePosition.X, "abs X");
-        Assert.AreEqual(1, relative.AbsolutePosition.Y, "abs Y");
-        Assert.AreEqual(_figure, relative.Figure, "figure");
+        Assert.Equal(1, relative.RelativePosition.X);
+        Assert.Equal(6, relative.RelativePosition.Y);
+        Assert.Equal(1, relative.AbsolutePosition.X);
+        Assert.Equal(1, relative.AbsolutePosition.Y);
+        Assert.Equal(_figure, relative.Figure);
     }
 
     [Fact]
@@ -66,10 +66,10 @@ public class RelativePositionTest
         ITile relative = new RelativeTile(_tile, Player.White);
         relative = relative.GetRelativeTile(Player.Black);
 
-        Assert.AreEqual(1, relative.RelativePosition.X, "rel x");
-        Assert.AreEqual(1, relative.RelativePosition.Y, "rel y");
-        Assert.AreEqual(1, relative.AbsolutePosition.X, "abs X");
-        Assert.AreEqual(1, relative.AbsolutePosition.Y, "abs Y");
-        Assert.AreEqual(_figure, relative.Figure, "figure");
+        Assert.Equal(1, relative.RelativePosition.X);
+        Assert.Equal(1, relative.RelativePosition.Y);
+        Assert.Equal(1, relative.AbsolutePosition.X);
+        Assert.Equal(1, relative.AbsolutePosition.Y);
+        Assert.Equal(_figure, relative.Figure);
     }
 }

@@ -81,9 +81,9 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public event EventHandler<(SelectedMainWindowTab, SelectedMainWindowTab)>? SelectedTabChanged;
 
-    private async void GameServiceOnGameWon(object? sender, (bool notifyOther, WinType winType, PlayerInfo? won, PlayerInfo? lost) e)
+    private async void GameServiceOnGameWon(object? sender, WinResult e)
     {
-        if (e.won is null || e.lost is null)
+        if (e.Won is null || e.Lost is null)
             return;
 
         var messageType = ShownMessage.MessageType.Info;
@@ -91,33 +91,33 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             messageType = ShownMessage.MessageType.Info;
         }
-        else if (e.won.Player == Player.White)
+        else if (e.Won.Player == Player.White)
         {
             messageType = ShownMessage.MessageType.Success;
         }
-        else if (e.won.Player == Player.Black)
+        else if (e.Won.Player == Player.Black)
         {
             messageType = ShownMessage.MessageType.Warning;
         }
 
-        if (e.winType == WinType.NotResponding)
+        if (e.WinType == WinType.NotResponding)
         {
-            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name} did not play in time.");
+            NotificationService.ShowMessage(messageType, $"{e.Won.Name} won! {e.Lost.Name} did not play in time.");
         }
-        else if (e.winType == WinType.Surrender)
+        else if (e.WinType == WinType.Surrender)
         {
-            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name} surrendered.");
+            NotificationService.ShowMessage(messageType, $"{e.Won.Name} won! {e.Lost.Name} surrendered.");
         }
-        else if (e.winType == WinType.OutOfTime)
+        else if (e.WinType == WinType.OutOfTime)
         {
-            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name} ran out of time.");
+            NotificationService.ShowMessage(messageType, $"{e.Won.Name} won! {e.Lost.Name} ran out of time.");
         }
-        else if (e.winType == WinType.CapturedKing)
+        else if (e.WinType == WinType.CapturedKing)
         {
-            NotificationService.ShowMessage(messageType, $"{e.won.Name} won! {e.lost.Name}'s king was captured.");
+            NotificationService.ShowMessage(messageType, $"{e.Won.Name} won! {e.Lost.Name}'s king was captured.");
         }
 
-        var result = await _multiplayerGameService.HandleWinAsync(e.notifyOther, e.winType, e.won, e.lost);
+        var result = await _multiplayerGameService.HandleWinAsync(e.PublishResult, e.WinType, e.Won, e.Lost);
         if (result.IsFailed)
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
@@ -127,7 +127,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             NotificationService.ShowMessage(messageType, result.Value);
         }
         
-        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(e.won.Player == Player.White);
+        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(e.Won.Player == Player.White);
         if (!string.IsNullOrEmpty(unlockedUnit))
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Success, $"Unlocked {unlockedUnit}.");

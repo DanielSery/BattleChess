@@ -152,7 +152,8 @@ public sealed class BoardViewModel : ViewModelBase
             clickedTile.PossibleAction.Action.Invoke();
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTile = NoneTileViewModel.Instance;
-            _gameService.NextTurn();
+            _gameService.StartTurn();
+
             if (_gameService.IsWaitingForMove)
             {
                 _multiplayerGameService.HandleHisTurnAsync();
@@ -268,7 +269,7 @@ public sealed class BoardViewModel : ViewModelBase
         toTile.PossibleAction.Action.Invoke();
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
         SelectedTile = NoneTileViewModel.Instance;
-        _gameService.NextTurn();
+        _gameService.StartTurn();
         if (_gameService.IsWaitingForMove)
         {
             _multiplayerGameService.HandleHisTurnAsync();

@@ -93,7 +93,7 @@ public class GameViewModel : ViewModelBase
         RaisePropertyChanged(nameof(CanEndGame));
     }
 
-    private void GameServiceOnGameWon(object? sender, (bool notifyOther, WinType winType, PlayerInfo? won, PlayerInfo? lost) e)
+    private void GameServiceOnGameWon(object? sender, WinResult e)
     {
         CanExit = true;
         RaisePropertyChanged(nameof(CanEndGame));

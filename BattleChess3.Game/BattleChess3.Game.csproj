@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="BattleChess3.Game.Test" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Autofac" Version="8.0.0" />
     </ItemGroup>
 </Project>

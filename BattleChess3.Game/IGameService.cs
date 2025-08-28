@@ -10,7 +10,7 @@ public interface IGameService
     /// <summary>
     /// Occurs when any player wins the game.
     /// </summary>
-    public event EventHandler<(bool notifyOther, WinType winType, PlayerInfo? won, PlayerInfo? lost)> PlayerWon;
+    public event EventHandler<WinResult> PlayerWon;
     
     bool CanMove { get; }
     
@@ -34,18 +34,18 @@ public interface IGameService
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void StartGame(PlayerInfo player1, PlayerInfo player2, Player currentPlayer, bool multiplayer, bool hasTimer);
-
-    TimeSpan EndTurn(TimeSpan? forcedTime = null);
+    void StartGame(PlayerInfo player1, PlayerInfo player2, Player startingPlayer, bool multiplayer, bool hasTimer);
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayerInfo" />.
     /// </summary>
-    void NextTurn();
+    void StartTurn();
+
+    TimeSpan EndTurn(TimeSpan? forcedTime = null);
 
     void Surrender();
     
-    void PlayerLost(PlayerInfo player, WinType winType, bool notifyOther);
+    void PlayerLost(PlayerInfo player, WinType winType, bool publishResult);
     
-    void PlayerWin(PlayerInfo player, WinType winType, bool notifyOther);
+    void PlayerWin(PlayerInfo player, WinType winType, bool publishResult);
 }
