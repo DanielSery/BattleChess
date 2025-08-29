@@ -19,22 +19,19 @@ public interface IGameService
     /// <summary>
     ///     Gets current player.
     /// </summary>
-    PlayerInfo CurrentPlayerInfo { get; }
-
-    bool IsMultiplayer { get; }
-    bool HasTimer { get; }
+    IPlayerInfo CurrentPlayerInfo { get; }
 
     /// <summary>
     ///     Gets player with id.
     /// </summary>
-    PlayerInfo GetPlayerInfo(Player player);
+    IPlayerInfo GetPlayerInfo(Player player);
 
-    PlayerInfo[] GetPlayerInfos();
+    IPlayerInfo[] GetPlayerInfos();
 
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void StartGame(PlayerInfo player1, PlayerInfo player2, Player startingPlayer, bool multiplayer, bool hasTimer);
+    void StartGame(PlayerInfo player1, PlayerInfo player2, Player startingPlayer);
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayerInfo" />.
@@ -45,7 +42,7 @@ public interface IGameService
 
     void Surrender();
     
-    void PlayerLost(PlayerInfo player, WinType winType, bool publishResult);
+    void PlayerLost(IPlayerInfo player, WinType winType, bool publishResult);
     
-    void PlayerWin(PlayerInfo player, WinType winType, bool publishResult);
+    void PlayerWin(IPlayerInfo player, WinType winType, bool publishResult);
 }

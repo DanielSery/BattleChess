@@ -11,7 +11,7 @@ public sealed class Figure : IFigureInfo, INotifyPropertyChanged
 {
     public static readonly Figure None = new(PlayerInfo.Neutral, NoneFigureType.Instance, false);
 
-    public Figure(PlayerInfo owner, IFigureType type, bool isKing)
+    public Figure(IFigureOwner owner, IFigureType type, bool isKing)
     {
         if (type != NoneFigureType.Instance &&
             !type.ImageUris.ContainsKey(owner.Player.ToInt()))
@@ -26,7 +26,7 @@ public sealed class Figure : IFigureInfo, INotifyPropertyChanged
     }
 
     public Guid Id { get; }
-    public PlayerInfo Owner { get; }
+    public IFigureOwner Owner { get; }
     public IFigureType Type { get; }
     public bool IsKing { get; }
 
