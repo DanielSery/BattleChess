@@ -148,7 +148,7 @@ public class TeamBoardViewModel : ViewModelBase
     {
         ArgumentNullException.ThrowIfNull(tile);
 
-        if (tile.Figure.Owner.Equals(LocalPlayerInfo.Neutral))
+        if (tile.Figure.Owner.Equals(NeutralPlayerInfo.Instance))
             return;
 
         _soundService.PlaySoundEffect(SoundEffectType.Button);

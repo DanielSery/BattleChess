@@ -6,14 +6,14 @@ using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test.Helpers;
 
-public class PlayerPositionHelperTest
+public class RelativePositionHelperTest
 {
     [Fact]
     public void WhenBlack_DoesNotChange()
     {
         var position = new Position(3, 3);
 
-        var relative = PlayerPositionHelper.GetRelativePosition(Player.Black, position);
+        var relative = RelativePositionHelper.GetRelative(Player.Black, position);
 
         Assert.Equal(relative, new Position(3, 3));
     }
@@ -23,7 +23,7 @@ public class PlayerPositionHelperTest
     {
         var position = new Position(3, 3);
 
-        var relative = PlayerPositionHelper.GetRelativePosition(Player.White, position);
+        var relative = RelativePositionHelper.GetRelative(Player.White, position);
 
         Assert.Equal(relative, new Position(3, 4));
     }
@@ -33,7 +33,7 @@ public class PlayerPositionHelperTest
     {
         var position = new Position(3, 3);
 
-        Action action = () => PlayerPositionHelper.GetRelativePosition(Player.Neutral, position);
+        Action action = () => RelativePositionHelper.GetRelative(Player.Neutral, position);
 
         Assert.Throws<ArgumentOutOfRangeException>(action);
     }

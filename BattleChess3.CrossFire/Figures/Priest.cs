@@ -68,7 +68,7 @@ public class Priest : ICrossFireFigureType
 
     private void MakeUnitKing(IBoard board, ITile targetTile)
     {
-        if (targetTile.Figure.Owner.Equals(LocalPlayerInfo.Neutral))
+        if (targetTile.Figure.Owner.Equals(NeutralPlayerInfo.Instance))
             return;
         
         var owner = targetTile.Figure.Owner;

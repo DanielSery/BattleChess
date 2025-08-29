@@ -17,7 +17,7 @@ public class RelativeTile : ITile
         _player = player;
     }
 
-    public Position RelativePosition => PlayerPositionHelper.GetRelativePosition(_player, _innerTile.AbsolutePosition);
+    public Position RelativePosition => RelativePositionHelper.GetRelative(_player, _innerTile.AbsolutePosition);
     public Position AbsolutePosition => _innerTile.AbsolutePosition;
 
     public Figure Figure

@@ -3,9 +3,9 @@ using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.Helpers;
 
-public static class PlayerPositionHelper
+public static class RelativePositionHelper
 {
-    public static Position GetRelativePosition(Player player, Position absPosition)
+    public static Position GetRelative(Player player, Position absPosition)
     {
         return player switch
         {

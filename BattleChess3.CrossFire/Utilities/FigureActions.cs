@@ -92,7 +92,7 @@ internal static class AdvancedFigureActions
         action = unitTile.CreateNewFigureAction(targetTile, player, figureType, board);
         return true;
     }
-    public static FigureAction CreateNewFigureAction(this ITile unitTile, ITile targetTile, LocalPlayerInfo player, IFigureType figureType, IBoard board)
+    public static FigureAction CreateNewFigureAction(this ITile unitTile, ITile targetTile, IFigureOwner player, IFigureType figureType, IBoard board)
     {
         return new FigureAction(
             FigureActionTypes.Special, 

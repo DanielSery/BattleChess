@@ -310,7 +310,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return PlayerPositionHelper.GetRelativePosition(Player.White, Position.FromIndex(index));
+        return RelativePositionHelper.GetRelative(Player.White, Position.FromIndex(index));
     }
 
     private static int GetIndexOfOppositePlayer(int index)

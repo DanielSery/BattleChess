@@ -11,8 +11,6 @@ public class Board : IBoard
         _tiles = tiles;
     }
 
-    public int Count => _tiles.Length;
-
     public ITile this[Position position] => _tiles[position.GetIndex()];
 
     public IEnumerator<ITile> GetEnumerator()

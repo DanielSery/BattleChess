@@ -6,6 +6,7 @@ namespace BattleChess3.Game.GameBoard;
 public readonly record struct Position
 {
     public static readonly Position None = new(-1, -1);
+
     public int X { get; }
     public int Y { get; }
 

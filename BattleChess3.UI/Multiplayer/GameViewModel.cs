@@ -71,7 +71,7 @@ public class GameViewModel : ViewModelBase
     private void GameServiceOnGamesChanged(object? sender, EventArgs e)
     {
         Players = _gameService.PlayerInfos
-            .Where(x => !x.Equals(LocalPlayerInfo.Neutral))
+            .Where(x => !x.Equals(NeutralPlayerInfo.Instance))
             .Select(x => new PlayerViewModel(x, _gameService))
             .ToArray();
 

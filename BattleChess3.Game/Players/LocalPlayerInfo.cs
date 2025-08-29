@@ -7,8 +7,6 @@ namespace BattleChess3.Game.Players;
 [DebuggerDisplay("{Name}")]
 public class LocalPlayerInfo : ILocalPlayerInfo
 {
-    public static readonly LocalPlayerInfo Neutral = new(Player.Neutral, "Neutral");
-
     public LocalPlayerInfo(Player player, string playerName)
     {
         Player = player;

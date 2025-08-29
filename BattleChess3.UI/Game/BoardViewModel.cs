@@ -22,6 +22,7 @@ public sealed class BoardViewModel : ViewModelBase
 
     private TileViewModel _mouseOnTile = NoneTileViewModel.Instance;
     private TileViewModel _selectedTile = NoneTileViewModel.Instance;
+    private readonly IBoard _board;
 
     public BoardViewModel(
         IGameService gameService,
@@ -42,7 +43,7 @@ public sealed class BoardViewModel : ViewModelBase
         Tiles = Enumerable.Range(0, Constants.FullBoardTilesCount)
             .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
             .ToArray();
-        Board = new Board(Tiles.Cast<ITile>().ToArray());
+        _board = new Board(Tiles.Cast<ITile>().ToArray());
         
         SinglePlayerLoadMap(MapBlueprint.ChessTeam);
         _multiplayerGameService.RequestPlayMove += MultiplayerGameServiceOnRequestPlayMove;
@@ -87,7 +88,6 @@ public sealed class BoardViewModel : ViewModelBase
     }
 
     public int BoardWidth => Constants.BoardLength;
-    public IBoard Board { get; }
     public TileViewModel[] Tiles { get; }
     
     public RelayCommand SurrenderCommand { get; }
@@ -105,7 +105,7 @@ public sealed class BoardViewModel : ViewModelBase
             new LocalPlayerInfo(Player.Black, "Blue player"),
             map.StartingPlayer);
         
-        _mapLoader.LoadMapExtendedFor2Players(Board, map);
+        _mapLoader.LoadMapExtendedFor2Players(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
@@ -130,14 +130,14 @@ public sealed class BoardViewModel : ViewModelBase
             player1, player2,
             map.StartingPlayer);
         
-        _mapLoader.LoadMap(Board, map);
+        _mapLoader.LoadMap(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
         _multiplayerGameService.StartGame(gameType, gameId);
     }
 
     private void Surrender()
     {
-        if (_gameService.GameRunning)
+        if (_gameService.GameRunning && _gameService.PlayerInfos.Any(x => x is IOnlinePlayerInfo))
         {
             _soundService.PlaySoundEffect(SoundEffectType.Button);
             _gameService.Surrender();
@@ -215,7 +215,7 @@ public sealed class BoardViewModel : ViewModelBase
         for (var j = 0; j < Constants.BoardLength; j++)
         {
             var position = new Position(j, i);
-            povBoard[PlayerPositionHelper.GetRelativePosition(player, position).GetIndex()] = absoluteBoard[position.GetIndex()];
+            povBoard[RelativePositionHelper.GetRelative(player, position).GetIndex()] = absoluteBoard[position.GetIndex()];
         }
 
         return new Board(povBoard);

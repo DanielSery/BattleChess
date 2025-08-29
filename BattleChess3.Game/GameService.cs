@@ -9,14 +9,13 @@ internal class GameService : IGameService
 {
     public GameService()
     {
-        PlayerInfos[0] = LocalPlayerInfo.Neutral;
+        PlayerInfos[0] = NeutralPlayerInfo.Instance;
         PlayerInfos[1] = new LocalPlayerInfo(Player.White, string.Empty);
         PlayerInfos[2] = new LocalPlayerInfo(Player.Black, string.Empty);
 
         CurrentPlayerInfo = PlayerInfos[0];
         WaitingPlayerInfo = PlayerInfos[1];
     }
-
 
     public bool GameRunning { get; private set; }
     public IPlayerInfo CurrentPlayerInfo { get; private set; }
@@ -32,7 +31,7 @@ internal class GameService : IGameService
 
     public void StartGame(IPlayerInfo player1, IPlayerInfo player2, Player startingPlayer)
     {
-        PlayerInfos[0] = LocalPlayerInfo.Neutral;
+        PlayerInfos[0] = NeutralPlayerInfo.Instance;
         PlayerInfos[1] = player1;
         PlayerInfos[2] = player2;
         
