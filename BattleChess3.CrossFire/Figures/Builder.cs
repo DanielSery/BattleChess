@@ -33,7 +33,7 @@ public class Builder : ICrossFireFigureType
         foreach (var targetTile in ShieldPositions.GetRelativeTiles(board, unitTile))
         {
             if (targetTile.IsEmpty())
-                yield return unitTile.CreateNewFigureAction(targetTile, LocalHumanPlayerInfo.Neutral, CrossFireFigureGroup.Wall, board);
+                yield return unitTile.CreateNewFigureAction(targetTile, LocalPlayerInfo.Neutral, CrossFireFigureGroup.Wall, board);
 
             if (targetTile.Figure.Type is Wall)
                 yield return unitTile.CreateKillWithoutMove(targetTile, board);

@@ -8,4 +8,6 @@ public interface IOnlinePlayerInfo : IPlayerInfo
 {
     public string? PlayerId { get; }
     public int? Elo { get; }
+
+    public void SetGameService(IMultiplayerGameService gameService);
 }

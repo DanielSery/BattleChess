@@ -1,5 +1,7 @@
 ﻿using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
+using BattleChess3.Game.Timers;
+using Moq;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -11,154 +13,76 @@ public class GameServiceTest
     public void StartGame_SetsCorrect_ForSingleWhite()
     {
         var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
+        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
+        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.White, multiplayer: false, hasTimer: false);
+        gameService.StartGame(player1, player2, Player.White);
 
-        Assert.True(gameService.CanMove, "gameService.CanMove");
-        Assert.False(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.False(gameService.HasTimer, "gameService.HasTimer");
-        Assert.False(gameService.IsMultiplayer, "gameService.IsMultiplayer");
+        Assert.True(gameService.GameRunning, "gameService.GameRunning");
         Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        Assert.False(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
+        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Once);
+        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Never);
     }
 
     [Fact]
     public void StartGame_SetsCorrect_ForSingleBlack()
     {
         var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
+        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
+        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.Black, multiplayer: false, hasTimer: true);
+        gameService.StartGame(player1, player2, Player.Black);
 
-        Assert.True(gameService.CanMove, "gameService.CanMove");
-        Assert.False(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.True(gameService.HasTimer, "gameService.HasTimer");
-        Assert.False(gameService.IsMultiplayer, "gameService.IsMultiplayer");
-        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
-        Assert.True(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
-    }
-
-    [Fact]
-    public void StartGame_SetsCorrect_ForMultiplayerWhite()
-    {
-        var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
-
-        gameService.StartGame(player1, player2, Player.White, multiplayer: true, hasTimer: true);
-
-        Assert.True(gameService.CanMove, "gameService.CanMove");
-        Assert.False(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.True(gameService.HasTimer, "gameService.HasTimer");
-        Assert.True(gameService.IsMultiplayer, "gameService.IsMultiplayer");
+        Assert.True(gameService.GameRunning, "gameService.GameRunning");
         Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        Assert.True(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
-    }
-
-    [Fact]
-    public void StartGame_SetsCorrect_ForMultiplayerBlack()
-    {
-        var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
-
-        gameService.StartGame(player1, player2, Player.Black, multiplayer: true, hasTimer: false);
-
-        Assert.False(gameService.CanMove, "gameService.CanMove");
-        Assert.True(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.False(gameService.HasTimer, "gameService.HasTimer");
-        Assert.True(gameService.IsMultiplayer, "gameService.IsMultiplayer");
-        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
-        Assert.False(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
+        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Never);
+        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Once);
     }
 
     [Fact]
     public void StartTurn_SetsCorrect_ForSingleWhite()
     {
         var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
+        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
+        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.White, multiplayer: false, hasTimer: false);
+        gameService.StartGame(player1, player2, Player.White);
         gameService.EndTurn();
         gameService.StartTurn();
 
-        Assert.True(gameService.CanMove, "gameService.CanMove");
-        Assert.False(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.False(gameService.HasTimer, "gameService.HasTimer");
-        Assert.False(gameService.IsMultiplayer, "gameService.IsMultiplayer");
-        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
-        Assert.False(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
+        Assert.True(gameService.GameRunning, "gameService.GameRunning");
+        Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
+        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Once);
+        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Once);
     }
 
     [Fact]
     public void StartTurn_SetsCorrect_ForSingleBlack()
     {
         var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
+        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
+        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.Black, multiplayer: false, hasTimer: true);
+        gameService.StartGame(player1, player2, Player.Black);
         gameService.EndTurn();
         gameService.StartTurn();
 
-        Assert.True(gameService.CanMove, "gameService.CanMove");
-        Assert.False(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.True(gameService.HasTimer, "gameService.HasTimer");
-        Assert.False(gameService.IsMultiplayer, "gameService.IsMultiplayer");
+        Assert.True(gameService.GameRunning, "gameService.GameRunning");
         Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        Assert.True(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
+        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Once);
+        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Once);
     }
 
-    [Fact]
-    public void StartTurn_SetsCorrect_ForMultiplayerWhite()
+    private static (LocalPlayerInfo, Mock<IPlayerTimer>) CreatePlayer(Player player, bool hasKing)
     {
-        var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
-
-        gameService.StartGame(player1, player2, Player.White, multiplayer: true, hasTimer: true);
-        gameService.EndTurn();
-        gameService.StartTurn();
-
-        Assert.False(gameService.CanMove, "gameService.CanMove");
-        Assert.True(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.True(gameService.HasTimer, "gameService.HasTimer");
-        Assert.True(gameService.IsMultiplayer, "gameService.IsMultiplayer");
-        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
-        Assert.True(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
-    }
-
-    [Fact]
-    public void StartTurn_SetsCorrect_ForMultiplayerBlack()
-    {
-        var gameService = new GameService();
-        var player1 = CreatePlayer(Player.White, true);
-        var player2 = CreatePlayer(Player.Black, true);
-
-        gameService.StartGame(player1, player2, Player.Black, multiplayer: true, hasTimer: false);
-        gameService.EndTurn();
-        gameService.StartTurn();
-
-        Assert.True(gameService.CanMove, "gameService.CanMove");
-        Assert.False(gameService.IsWaitingForMove, "gameService.IsWaitingForMove");
-        Assert.False(gameService.HasTimer, "gameService.HasTimer");
-        Assert.True(gameService.IsMultiplayer, "gameService.IsMultiplayer");
-        Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        Assert.False(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
-    }
-
-    private static LocalHumanPlayerInfo CreatePlayer(Player player, bool hasKing)
-    {
-        var playerInfo = new LocalHumanPlayerInfo(player, string.Empty, null, null);
+        var timerMock = new Mock<IPlayerTimer>();
+        var playerInfo = new LocalPlayerInfo(player, string.Empty);
+        playerInfo.SetTimer(timerMock.Object);
         if (hasKing)
         {
             playerInfo.Figures.Add(new Figure(playerInfo, NoneFigureType.Instance, true));
         }
         
-        return playerInfo;
+        return (playerInfo, timerMock);
     }
 }

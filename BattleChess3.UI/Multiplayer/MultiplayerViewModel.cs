@@ -125,18 +125,18 @@ public class MultiplayerViewModel : ViewModelBase
         var (isHost, gameSearch, gameSearchJoin) = request.Value;
         if (isHost)
         {
-            var player = _multiplayerPlayerService.GetCurrentPlayer(new PlayerTimer5min10());
-            var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearchJoin.PlayerId!, new PlayerTimer5min10(), loadingOperation.CancellationToken);
+            var player = _multiplayerPlayerService.GetCurrentPlayer();
+            var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearchJoin.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null, new PlayerTimer5min10());
+                : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
                 
             var hisMap = GetFigures(gameSearchJoin.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
             _boardViewModel.MultiplayerLoadMap(
-                MultiplayerGameType.Ranked | MultiplayerGameType.Host, gameSearch.Id, 
+                MultiplayerGameType.Ranked | MultiplayerGameType.Host, gameSearch.Id,
                 player, player2,
-                playedMap);
+                playedMap, true);
         }
         else
         {
@@ -144,14 +144,14 @@ public class MultiplayerViewModel : ViewModelBase
             var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearch.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null, new PlayerTimer5min10());
+                : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
             
             var hisMap = GetFigures(gameSearch.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
             _boardViewModel.MultiplayerLoadMap(
                 MultiplayerGameType.Ranked, gameSearch.Id, 
                 player1, player2,
-                playedMap);
+                playedMap, true);
         }
     }
 
@@ -192,11 +192,11 @@ public class MultiplayerViewModel : ViewModelBase
         }
         var gameJoin = gameJoinResult.Value;
         
-        var player1 = _multiplayerPlayerService.GetCurrentPlayer(InfinitePlayerTimer.Instance);
-        var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameJoin.PlayerId!, InfinitePlayerTimer.Instance, loadingOperation.CancellationToken);
+        var player1 = _multiplayerPlayerService.GetCurrentPlayer();
+        var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameJoin.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new LocalHumanPlayerInfo(Player.Black, "Blue player", null, null);
+            : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
 
         var hisMap = GetFigures(gameJoin.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, lobby.IsHostStarting);
@@ -236,7 +236,7 @@ public class MultiplayerViewModel : ViewModelBase
         var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(lobby.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new LocalHumanPlayerInfo(Player.Black, "Blue player", null, null);
+            : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
         
         var hisMap = GetFigures(lobby.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !lobby.IsHostStarting);

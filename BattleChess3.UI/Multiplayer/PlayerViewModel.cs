@@ -1,6 +1,7 @@
 ﻿using System.Windows.Threading;
 using BattleChess3.Game;
 using BattleChess3.Game.Players;
+using BattleChess3.Game.Timers;
 using BattleChess3.Multiplayer;
 using Nicenis.Windows.ViewModels;
 
@@ -97,9 +98,12 @@ public class PlayerViewModel : ViewModelBase
 
     private void UpdateTimerText()
     {
-        if (_gameService is { IsMultiplayer: true, HasTimer: false })
+        var isMultiplayer = _gameService.PlayerInfos.Any(x => x is IOnlinePlayerInfo);
+        var hasTimer = _gameService.PlayerInfos.Any(x => x.Timer is not InfinitePlayerTimer);
+
+        if (isMultiplayer && !hasTimer)
         {
-            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.Timer.CurrentStopwatch.Elapsed;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.Timer.LastTurnElapsedTime;
             if (idleTimeRemaining.TotalSeconds > 0)
             {
                 IdleTime = idleTimeRemaining.ToString(@"m\:ss\.f");
@@ -114,10 +118,10 @@ public class PlayerViewModel : ViewModelBase
                 }
             }
         }
-        else if (_gameService is { IsMultiplayer: true, HasTimer: true })
+        else if (isMultiplayer && hasTimer)
         {
-            var timeRemaining = _playerInfo.RemainingTime - _playerInfo.CurrentStopwatch.Elapsed;
-            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.CurrentStopwatch.Elapsed;
+            var timeRemaining = _playerInfo.Timer.RemainingTime - _playerInfo.Timer.LastTurnElapsedTime;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.Timer.LastTurnElapsedTime;
         
             if (timeRemaining.TotalSeconds > 0 && idleTimeRemaining.TotalSeconds > 0)
             {

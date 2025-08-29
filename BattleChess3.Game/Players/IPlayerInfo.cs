@@ -1,5 +1,7 @@
 // Copyright (c) Veeam Software Group GmbH
 
+using BattleChess3.Game.Timers;
+
 namespace BattleChess3.Game.Players;
 
 public interface IPlayerInfo : IFigureOwner
@@ -8,7 +10,5 @@ public interface IPlayerInfo : IFigureOwner
     
     string Name { get; }
     
-    void StartTurn();
-
-    void EndTurn(TimeSpan? forcedTurnDuration = null);
+    void SetTimer(IPlayerTimer timer);
 }

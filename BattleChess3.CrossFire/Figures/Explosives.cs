@@ -46,6 +46,6 @@ public class Explosives : ICrossFireFigureType
             return;
 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(LocalHumanPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
+        tile.Figure = new Figure(LocalPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
     }
 }

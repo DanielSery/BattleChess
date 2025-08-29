@@ -45,7 +45,7 @@ internal static class FiguresHelper
     public static bool IsEnemyTo(this ITile yoursTile, ITile checkedTile)
     {
         return !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner) &&
-               !checkedTile.Figure.Owner.Equals(LocalHumanPlayerInfo.Neutral);
+               !checkedTile.Figure.Owner.Equals(LocalPlayerInfo.Neutral);
     }
 
     public static void CreateFigure(this ITile tile, Figure createdFigure, IBoard board)
@@ -60,7 +60,7 @@ internal static class FiguresHelper
         var figureType = tile.Figure.Type;
         figureType.OnDying(tile, board); 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(LocalHumanPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
+        tile.Figure = new Figure(LocalPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
         figureType.OnDied(tile, board);
     }
 
@@ -85,7 +85,7 @@ internal static class FiguresHelper
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = from.Figure;
-        from.Figure = new Figure(LocalHumanPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
+        from.Figure = new Figure(LocalPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
         
         movingFigure.OnMoved(from, to, board);
     }
@@ -100,7 +100,7 @@ internal static class FiguresHelper
         killedFigure.OnBeingAttacked(to, from, board);
         
         to.Figure.Owner.Figures.Remove(to.Figure);
-        to.Figure = new Figure(LocalHumanPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
+        to.Figure = new Figure(LocalPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
         
         killedFigure.OnDied(to, board);
         killedFigure.OnKilled(to, from, board);
@@ -119,7 +119,7 @@ internal static class FiguresHelper
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = from.Figure;
-        from.Figure = new Figure(LocalHumanPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
+        from.Figure = new Figure(LocalPlayerInfo.Neutral, CrossFireFigureGroup.Empty, false);
         
         attackingFigure.OnMoved(from, to, board);
         killedFigure.OnDied(to, board);

@@ -14,7 +14,7 @@ public class RelativePositionTest
 
     public RelativePositionTest()
     {
-        _figure = new Figure(LocalHumanPlayerInfo.Neutral, NoneFigureType.Instance, false);
+        _figure = new Figure(LocalPlayerInfo.Neutral, NoneFigureType.Instance, false);
 
         var tileMock = new Mock<ITile>();
         tileMock.Setup(x => x.RelativePosition).Returns(new Position(1, 1));

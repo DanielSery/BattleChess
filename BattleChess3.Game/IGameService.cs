@@ -19,12 +19,12 @@ public interface IGameService
     /// </summary>
     IPlayerInfo CurrentPlayerInfo { get; }
 
+    IPlayerInfo[] PlayerInfos { get; }
+
     /// <summary>
     ///     Gets player with id.
     /// </summary>
     IPlayerInfo GetPlayerInfo(Player player);
-
-    IPlayerInfo[] GetPlayerInfos();
     
     /// <summary>
     ///     Set current players.

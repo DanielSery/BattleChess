@@ -3,6 +3,7 @@ using BattleChess3.Game.Figures;
 using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
+using BattleChess3.Game.Timers;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Services;
@@ -100,8 +101,8 @@ public sealed class BoardViewModel : ViewModelBase
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
         _gameService.StartGame(
-            new LocalHumanPlayerInfo(Player.White, "Red player", InfinitePlayerTimer.Instance),
-            new LocalHumanPlayerInfo(Player.Black, "Blue player", InfinitePlayerTimer.Instance),
+            new LocalPlayerInfo(Player.White, "Red player"),
+            new LocalPlayerInfo(Player.Black, "Blue player"),
             map.StartingPlayer);
         
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
@@ -113,8 +114,18 @@ public sealed class BoardViewModel : ViewModelBase
         string? gameId, 
         IOnlinePlayerInfo player1,
         IOnlinePlayerInfo player2,
-        MapBlueprint map)
+        MapBlueprint map,
+        bool hasTimer)
     {
+        if (hasTimer)
+        {
+            player1.SetTimer(new ChessTimer(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10)));
+            player2.SetTimer(new ChessTimer(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10)));
+        }
+
+        player1.SetGameService(_multiplayerGameService);
+        player2.SetGameService(_multiplayerGameService);
+
         _gameService.StartGame(
             player1, player2,
             map.StartingPlayer);

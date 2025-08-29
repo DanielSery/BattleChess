@@ -2,25 +2,25 @@
 
 using BattleChess3.Game.Figures;
 using BattleChess3.Game.Players;
+using BattleChess3.Game.Timers;
 
 namespace BattleChess3.Multiplayer;
 
 public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlledPlayerInfo
 {
-    private readonly IMultiplayerGameService _gameService;
+    private IMultiplayerGameService? _gameService;
 
-    public RemoteOnlinePlayerInfo(Player player, string playerName, string playerId, int elo, IPlayerTimer timer, IMultiplayerGameService gameService)
+    public RemoteOnlinePlayerInfo(Player player, string playerName, string? playerId, int? elo)
     {
         Player = player;
         Name = playerName;
-        Timer = timer;
         PlayerId = playerId;
         Elo = elo;
-        _gameService = gameService;
+        Timer = InfinitePlayerTimer.Instance;
     }
 
     public Player Player { get; }
-    public IPlayerTimer Timer { get; }
+    public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
     public List<Figure> Figures { get; } = [];
     public string? PlayerId { get; }
@@ -29,6 +29,8 @@ public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlle
     /// <inheritdoc />
     public void StartTurn()
     {
+        if (_gameService == null) throw new ArgumentNullException(nameof(_gameService));
+
         Timer.StartTurnTimer();
         _gameService.HandleHisTurnAsync();
     }
@@ -37,5 +39,17 @@ public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlle
     public void EndTurn(TimeSpan? forcedTurnDuration = null)
     {
         Timer.EndTurnTimer(forcedTurnDuration);
+    }
+
+    /// <inheritdoc />
+    public void SetTimer(IPlayerTimer timer)
+    {
+        Timer = timer;
+    }
+
+    /// <inheritdoc />
+    public void SetGameService(IMultiplayerGameService gameService)
+    {
+        _gameService = gameService;
     }
 }

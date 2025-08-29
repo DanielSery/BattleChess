@@ -1,5 +1,6 @@
 ﻿using BattleChess3.Game;
 using BattleChess3.Game.Players;
+using BattleChess3.Game.Timers;
 using BattleChess3.Multiplayer;
 using Nicenis.Windows.ViewModels;
 
@@ -57,7 +58,7 @@ public class GameViewModel : ViewModelBase
     {
         get
         {
-            var isMultiplayer = _gameService.GetPlayerInfos().Any(x => x is IOnlinePlayerInfo);
+            var isMultiplayer = _gameService.PlayerInfos.Any(x => x is IOnlinePlayerInfo);
             if (!isMultiplayer)
             {
                 return true;
@@ -69,13 +70,13 @@ public class GameViewModel : ViewModelBase
 
     private void GameServiceOnGamesChanged(object? sender, EventArgs e)
     {
-        Players = _gameService.GetPlayerInfos()
-            .Where(x => !x.Equals(LocalHumanPlayerInfo.Neutral))
+        Players = _gameService.PlayerInfos
+            .Where(x => !x.Equals(LocalPlayerInfo.Neutral))
             .Select(x => new PlayerViewModel(x, _gameService))
             .ToArray();
 
-        var isMultiplayer = _gameService.GetPlayerInfos().Any(x => x is IOnlinePlayerInfo);
-        var hasTimer = _gameService.GetPlayerInfos().Any(x => x.Timer is not InfinitePlayerTimer);
+        var isMultiplayer = _gameService.PlayerInfos.Any(x => x is IOnlinePlayerInfo);
+        var hasTimer = _gameService.PlayerInfos.Any(x => x.Timer is not InfinitePlayerTimer);
 
         CanExit = !isMultiplayer;
         RaisePropertyChanged(nameof(CanEndGame));

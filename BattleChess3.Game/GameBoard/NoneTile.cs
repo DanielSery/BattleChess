@@ -6,6 +6,8 @@ namespace BattleChess3.Game.GameBoard;
 public class NoneTile : ITile
 {
     public static readonly ITile Instance = new NoneTile();
+
+    private NoneTile() { }
     
     public Position RelativePosition => Position.None;
     public Position AbsolutePosition => Position.None;

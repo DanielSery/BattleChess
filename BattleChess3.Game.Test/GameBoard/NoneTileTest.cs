@@ -18,7 +18,7 @@ public class NoneTileTest
     public void AfterSettingNoneTileHasNoneFigure()
     {
         var noneTile = NoneTile.Instance;
-        noneTile.Figure = new Figure(new LocalHumanPlayerInfo(Player.Neutral, "", "", 0), NoneFigureType.Instance, false);
+        noneTile.Figure = new Figure(new LocalPlayerInfo(Player.Neutral, ""), NoneFigureType.Instance, false);
         Assert.Equal(Figure.None.Id, noneTile.Figure.Id);
     }
 

@@ -2,7 +2,6 @@
 
 namespace BattleChess3.Game.Players;
 
-public interface ILocalHumanPlayerInfo : IPlayerInfo
+public interface ILocalPlayerInfo : IPlayerInfo
 {
-    
 }

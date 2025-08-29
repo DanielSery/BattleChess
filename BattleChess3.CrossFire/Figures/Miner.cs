@@ -52,7 +52,7 @@ public class Miner : ICrossFireFigureType
                 continue;
             }
             
-            createdTile.CreateFigure(new Figure(LocalHumanPlayerInfo.Neutral, CrossFireFigureGroup.Trench, false), board);
+            createdTile.CreateFigure(new Figure(LocalPlayerInfo.Neutral, CrossFireFigureGroup.Trench, false), board);
         }
     }
 }

@@ -2,19 +2,27 @@
 
 using System.Diagnostics;
 
-namespace BattleChess3.Game.Players;
+namespace BattleChess3.Game.Timers;
 
-public class PlayerTimer5min10 : IPlayerTimer
+public class ChessTimer : IPlayerTimer
 {
     private readonly Stopwatch _currentStopwatch = new();
-    public TimeSpan RemainingTime { get; private set; } = TimeSpan.FromMinutes(5);
+    private readonly TimeSpan _eachTurn;
+
+    public ChessTimer(TimeSpan initial, TimeSpan eachTurn)
+    {
+        RemainingTime = initial;
+        _eachTurn = eachTurn;
+    }
+
+    public TimeSpan RemainingTime { get; private set; }
 
     /// <inheritdoc />
     public TimeSpan LastTurnElapsedTime { get; private set; }
 
     public void StartTurnTimer()
     {
-        RemainingTime += TimeSpan.FromSeconds(10);
+        RemainingTime += _eachTurn;
         _currentStopwatch.Start();
     }
 

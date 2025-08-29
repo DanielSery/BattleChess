@@ -78,7 +78,7 @@ internal static class AdvancedFigureActions
     }
 
     public static bool TryCreateNewFigureAction(this ITile unitTile, IBoard board, Position relativePosition, 
-        LocalHumanPlayerInfo player, IFigureType figureType,
+        LocalPlayerInfo player, IFigureType figureType,
         out FigureAction action)
     {
         var movePosition = unitTile.RelativePosition + relativePosition;
@@ -92,7 +92,7 @@ internal static class AdvancedFigureActions
         action = unitTile.CreateNewFigureAction(targetTile, player, figureType, board);
         return true;
     }
-    public static FigureAction CreateNewFigureAction(this ITile unitTile, ITile targetTile, LocalHumanPlayerInfo player, IFigureType figureType, IBoard board)
+    public static FigureAction CreateNewFigureAction(this ITile unitTile, ITile targetTile, LocalPlayerInfo player, IFigureType figureType, IBoard board)
     {
         return new FigureAction(
             FigureActionTypes.Special, 

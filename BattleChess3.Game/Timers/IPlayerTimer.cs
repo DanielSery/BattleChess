@@ -1,6 +1,6 @@
 // Copyright (c) Veeam Software Group GmbH
 
-namespace BattleChess3.Game.Players;
+namespace BattleChess3.Game.Timers;
 
 public interface IPlayerTimer
 {

@@ -1,10 +1,12 @@
 // Copyright (c) Veeam Software Group GmbH
 
-namespace BattleChess3.Game.Players;
+namespace BattleChess3.Game.Timers;
 
 public class InfinitePlayerTimer : IPlayerTimer
 {
     public static readonly InfinitePlayerTimer Instance = new InfinitePlayerTimer();
+
+    private InfinitePlayerTimer() { }
 
     /// <inheritdoc />
     public TimeSpan RemainingTime => TimeSpan.MaxValue;

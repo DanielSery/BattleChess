@@ -7,43 +7,41 @@ public record WinResult(bool PublishResult, WinType WinType, IPlayerInfo? Won, I
 
 internal class GameService : IGameService
 {
-    private readonly IPlayerInfo[] _players = new IPlayerInfo[3];
-
     public GameService()
     {
-        _players[0] = LocalHumanPlayerInfo.Neutral;
-        _players[1] = new LocalHumanPlayerInfo(Player.White, string.Empty, InfinitePlayerTimer.Instance);
-        _players[2] = new LocalHumanPlayerInfo(Player.Black, string.Empty, InfinitePlayerTimer.Instance);
+        PlayerInfos[0] = LocalPlayerInfo.Neutral;
+        PlayerInfos[1] = new LocalPlayerInfo(Player.White, string.Empty);
+        PlayerInfos[2] = new LocalPlayerInfo(Player.Black, string.Empty);
 
-        CurrentPlayerInfo = _players[0];
-        WaitingPlayerInfo = _players[1];
+        CurrentPlayerInfo = PlayerInfos[0];
+        WaitingPlayerInfo = PlayerInfos[1];
     }
 
 
     public bool GameRunning { get; private set; }
     public IPlayerInfo CurrentPlayerInfo { get; private set; }
     private IPlayerInfo WaitingPlayerInfo { get; set; }
+    public IPlayerInfo[] PlayerInfos { get; } = new IPlayerInfo[3];
 
     public event EventHandler? PlayersChanged;
     public event EventHandler? TurnStarted;
     public event EventHandler? TurnEnded;
     public event EventHandler<WinResult>? PlayerWon;
 
-    public IPlayerInfo GetPlayerInfo(Player player) => _players[player.ToInt()];
-    public IPlayerInfo[] GetPlayerInfos() => _players;
+    public IPlayerInfo GetPlayerInfo(Player player) => PlayerInfos[player.ToInt()];
 
     public void StartGame(IPlayerInfo player1, IPlayerInfo player2, Player startingPlayer)
     {
-        _players[0] = LocalHumanPlayerInfo.Neutral;
-        _players[1] = player1;
-        _players[2] = player2;
+        PlayerInfos[0] = LocalPlayerInfo.Neutral;
+        PlayerInfos[1] = player1;
+        PlayerInfos[2] = player2;
         
         CurrentPlayerInfo = startingPlayer == player1.Player ? player1 : player2;
         WaitingPlayerInfo = startingPlayer == player1.Player ? player2 : player1;
         GameRunning = true;
 
         PlayersChanged?.Invoke(this, EventArgs.Empty);
-        CurrentPlayerInfo.StartTurn();
+        CurrentPlayerInfo.Timer.StartTurnTimer();
         TurnStarted?.Invoke(this, EventArgs.Empty);
     }
 
@@ -57,38 +55,38 @@ internal class GameService : IGameService
         if (!GameRunning)
             return;
 
-        CurrentPlayerInfo.StartTurn();
+        CurrentPlayerInfo.Timer.StartTurnTimer();
         TurnStarted?.Invoke(this, EventArgs.Empty);
     }
 
     public void EndTurn(TimeSpan? forcedTime = null)
     {
-        CurrentPlayerInfo.EndTurn(forcedTime);
+        CurrentPlayerInfo.Timer.EndTurnTimer(forcedTime);
         TurnEnded?.Invoke(this, EventArgs.Empty);
     }
 
     public void Surrender()
     {
         GameRunning = false;
-        PlayerWon?.Invoke(this, _players.All(x => x is ILocalHumanPlayerInfo)
+        PlayerWon?.Invoke(this, PlayerInfos.All(x => x is ILocalPlayerInfo)
             ? new WinResult(false, WinType.Surrender, WaitingPlayerInfo, CurrentPlayerInfo)
-            : new WinResult(true, WinType.Surrender, _players[2], _players[1]));
+            : new WinResult(true, WinType.Surrender, PlayerInfos[2], PlayerInfos[1]));
     }
 
     public void PlayerLost(IPlayerInfo player, WinType winType, bool notifyOther)
     {
         GameRunning = false;
         PlayerWon?.Invoke(this, player.Player == Player.White
-            ? new WinResult(notifyOther, winType, _players[2], _players[1])
-            : new WinResult(notifyOther, winType, _players[1], _players[2]));
+            ? new WinResult(notifyOther, winType, PlayerInfos[2], PlayerInfos[1])
+            : new WinResult(notifyOther, winType, PlayerInfos[1], PlayerInfos[2]));
     }
 
     public void PlayerWin(IPlayerInfo player, WinType winType, bool publishResult)
     {
         GameRunning = false;
         PlayerWon?.Invoke(this, player.Player == Player.White
-            ? new WinResult(publishResult, winType, _players[1], _players[2])
-            : new WinResult(publishResult, winType, _players[2], _players[1]));
+            ? new WinResult(publishResult, winType, PlayerInfos[1], PlayerInfos[2])
+            : new WinResult(publishResult, winType, PlayerInfos[2], PlayerInfos[1]));
     }
 
     private void CheckCapturedKing(IPlayerInfo evaluatedPlayerInfo, IPlayerInfo otherPlayerInfo)
