@@ -9,7 +9,7 @@ namespace BattleChess3.Game.Figures;
 [DebuggerDisplay("{Type.DisplayName}:{Owner.Player}")]
 public sealed class Figure : IFigureInfo, INotifyPropertyChanged
 {
-    public static readonly Figure None = new(PlayerInfo.Neutral, NoneFigureType.Instance, false);
+    public static readonly Figure None = new(LocalHumanPlayerInfo.Neutral, NoneFigureType.Instance, false);
 
     public Figure(IFigureOwner owner, IFigureType type, bool isKing)
     {

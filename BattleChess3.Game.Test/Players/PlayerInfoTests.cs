@@ -9,7 +9,7 @@ public class PlayerInfoTests
     [Fact]
     public void WhenInTurn_TimeDecreases()
     {
-        var playerInfo = new PlayerInfo(Player.White, string.Empty, null, null);
+        var playerInfo = new LocalHumanPlayerInfo(Player.White, string.Empty, null, null);
         var timeBefore = playerInfo.RemainingTime;
 
         playerInfo.StartTurn();
@@ -23,7 +23,7 @@ public class PlayerInfoTests
     [Fact]
     public void WhenInTurn_CanForceTimeDiff()
     {
-        var playerInfo = new PlayerInfo(Player.White, string.Empty, null, null);
+        var playerInfo = new LocalHumanPlayerInfo(Player.White, string.Empty, null, null);
         var timeBefore = playerInfo.RemainingTime;
 
         playerInfo.StartTurn();
@@ -36,7 +36,7 @@ public class PlayerInfoTests
     [Fact]
     public void WhenNotInTurn_TimeNotDecreases()
     {
-        var playerInfo = new PlayerInfo(Player.White, string.Empty, null, null);
+        var playerInfo = new LocalHumanPlayerInfo(Player.White, string.Empty, null, null);
         var timeBefore = playerInfo.RemainingTime;
 
         Thread.Sleep(50);
@@ -47,7 +47,7 @@ public class PlayerInfoTests
     [Fact]
     public void AddTimeWorks()
     {
-        var playerInfo = new PlayerInfo(Player.White, string.Empty, null, null);
+        var playerInfo = new LocalHumanPlayerInfo(Player.White, string.Empty, null, null);
 
         playerInfo.AddTime(TimeSpan.FromMinutes(1));
 

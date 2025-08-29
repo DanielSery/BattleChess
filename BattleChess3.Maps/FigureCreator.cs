@@ -30,6 +30,6 @@ internal class FigureCreator : IFigureCreator
     {
         var figureIdentifier = new FigureIdentifier(0, 0, false);
         var figureType = _figureService.GetFigureByUniqueUnitId(figureIdentifier.FigureId);
-        return new Figure(PlayerInfo.Neutral, figureType, figureIdentifier.IsKing);
+        return new Figure(LocalHumanPlayerInfo.Neutral, figureType, figureIdentifier.IsKing);
     }
 }

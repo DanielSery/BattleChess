@@ -151,9 +151,9 @@ public class GameServiceTest
         Assert.False(gameService.CurrentPlayerInfo.CurrentStopwatch.IsRunning);
     }
 
-    private static PlayerInfo CreatePlayer(Player player, bool hasKing)
+    private static LocalHumanPlayerInfo CreatePlayer(Player player, bool hasKing)
     {
-        var playerInfo = new PlayerInfo(player, string.Empty, null, null);
+        var playerInfo = new LocalHumanPlayerInfo(player, string.Empty, null, null);
         if (hasKing)
         {
             playerInfo.Figures.Add(new Figure(playerInfo, NoneFigureType.Instance, true));

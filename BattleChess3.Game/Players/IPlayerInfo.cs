@@ -7,4 +7,8 @@ public interface IPlayerInfo : IFigureOwner
     IPlayerTimer Timer { get; }
     
     string Name { get; }
+    
+    void StartTurn();
+
+    void EndTurn(TimeSpan? forcedTurnDuration = null);
 }

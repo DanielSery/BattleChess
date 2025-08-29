@@ -1,5 +1,6 @@
 ﻿using BattleChess3.Game;
 using BattleChess3.Game.Players;
+using BattleChess3.Multiplayer;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.Multiplayer;
@@ -56,33 +57,37 @@ public class GameViewModel : ViewModelBase
     {
         get
         {
-            if (!_gameService.IsMultiplayer)
+            var isMultiplayer = _gameService.GetPlayerInfos().Any(x => x is IOnlinePlayerInfo);
+            if (!isMultiplayer)
             {
                 return true;
             }
 
-            return !_gameService.IsWaitingForMove;
+            return _gameService.CurrentPlayerInfo is not IAutomaticallyControlledPlayerInfo;
         }
     }
 
     private void GameServiceOnGamesChanged(object? sender, EventArgs e)
     {
         Players = _gameService.GetPlayerInfos()
-            .Where(x => !x.Equals(PlayerInfo.Neutral))
+            .Where(x => !x.Equals(LocalHumanPlayerInfo.Neutral))
             .Select(x => new PlayerViewModel(x, _gameService))
             .ToArray();
 
-        CanExit = !_gameService.IsMultiplayer;
+        var isMultiplayer = _gameService.GetPlayerInfos().Any(x => x is IOnlinePlayerInfo);
+        var hasTimer = _gameService.GetPlayerInfos().Any(x => x.Timer is not InfinitePlayerTimer);
+
+        CanExit = !isMultiplayer;
         RaisePropertyChanged(nameof(CanEndGame));
-        IsRanked = _gameService is { IsMultiplayer: true, HasTimer: true };
-        IsLobby = _gameService is { IsMultiplayer: true, HasTimer: false };
-        IsLocalGame = !_gameService.IsMultiplayer;
+        IsRanked = isMultiplayer && hasTimer;
+        IsLobby = isMultiplayer  && !hasTimer;
+        IsLocalGame = !isMultiplayer;
     }
 
     private void GameServiceOnTurnStarted(object? sender, EventArgs e)
     {
         var currentPlayer = Players.FirstOrDefault(x => x.Player == _gameService.CurrentPlayerInfo.Player);
-        currentPlayer?.StartTurn(_gameService.CurrentPlayerInfo.RemainingTime);
+        currentPlayer?.StartTurn(_gameService.CurrentPlayerInfo.Timer.RemainingTime);
         RaisePropertyChanged(nameof(CanEndGame));
     }
 

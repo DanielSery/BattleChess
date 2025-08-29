@@ -10,13 +10,15 @@ public class InfinitePlayerTimer : IPlayerTimer
     public TimeSpan RemainingTime => TimeSpan.MaxValue;
 
     /// <inheritdoc />
+    public TimeSpan LastTurnElapsedTime => TimeSpan.Zero;
+
+    /// <inheritdoc />
     public void StartTurnTimer()
     {
     }
 
     /// <inheritdoc />
-    public TimeSpan EndTurnTimer(TimeSpan? forcedTime)
+    public void EndTurnTimer(TimeSpan? forcedTime)
     {
-        return TimeSpan.Zero;
     }
 }

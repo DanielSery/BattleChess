@@ -100,9 +100,10 @@ public sealed class BoardViewModel : ViewModelBase
     public void SinglePlayerLoadMap(MapBlueprint map)
     {
         _gameService.StartGame(
-            new PlayerInfo(Player.White, "Red player", null, null),
-            new PlayerInfo(Player.Black, "Blue player", null, null),
-            map.StartingPlayer, false, false);
+            new LocalHumanPlayerInfo(Player.White, "Red player", InfinitePlayerTimer.Instance),
+            new LocalHumanPlayerInfo(Player.Black, "Blue player", InfinitePlayerTimer.Instance),
+            map.StartingPlayer);
+        
         _mapLoader.LoadMapExtendedFor2Players(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
@@ -110,28 +111,22 @@ public sealed class BoardViewModel : ViewModelBase
     public void MultiplayerLoadMap(
         MultiplayerGameType gameType, 
         string? gameId, 
-        PlayerInfo player1,
-        PlayerInfo player2,
-        MapBlueprint map, 
-        bool hasTimer)
+        IOnlinePlayerInfo player1,
+        IOnlinePlayerInfo player2,
+        MapBlueprint map)
     {
         _gameService.StartGame(
             player1, player2,
-            map.StartingPlayer, true, hasTimer);
+            map.StartingPlayer);
+        
         _mapLoader.LoadMap(Board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
-        
         _multiplayerGameService.StartGame(gameType, gameId);
-        if (_gameService.IsWaitingForMove)
-        {
-            _multiplayerGameService.HandleHisTurnAsync();
-        }
     }
 
     private void Surrender()
     {
-        if (_gameService.IsMultiplayer &&
-            (_gameService.CanMove || _gameService.IsWaitingForMove))
+        if (_gameService.GameRunning)
         {
             _soundService.PlaySoundEffect(SoundEffectType.Button);
             _gameService.Surrender();
@@ -147,17 +142,15 @@ public sealed class BoardViewModel : ViewModelBase
         ArgumentNullException.ThrowIfNull(clickedTile);
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
-            var timeSpent = _gameService.EndTurn();
-            _multiplayerGameService.PlayedMoveAsync(SelectedTile.RelativePosition, clickedTile.RelativePosition, timeSpent);
+            _gameService.EndTurn();
+            _multiplayerGameService.PlayedMoveAsync(
+                SelectedTile.RelativePosition, 
+                clickedTile.RelativePosition, 
+                _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime);
             clickedTile.PossibleAction.Action.Invoke();
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTile = NoneTileViewModel.Instance;
             _gameService.StartTurn();
-
-            if (_gameService.IsWaitingForMove)
-            {
-                _multiplayerGameService.HandleHisTurnAsync();
-            }
         }
         else if (clickedTile.Figure.Owner.Equals(_gameService.CurrentPlayerInfo))
         {
@@ -181,9 +174,12 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private void SetPossibleActions(TileViewModel clickedTile, bool remote)
+    private void SetPossibleActions(TileViewModel clickedTile, bool automatic)
     {
-        if (!_gameService.CanMove && !remote)
+        if (!_gameService.GameRunning)
+            return;
+        
+        if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo && !automatic)
             return;
         
         if (!_gameService.CurrentPlayerInfo.Equals(clickedTile.Figure.Owner))
@@ -270,10 +266,6 @@ public sealed class BoardViewModel : ViewModelBase
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
         SelectedTile = NoneTileViewModel.Instance;
         _gameService.StartTurn();
-        if (_gameService.IsWaitingForMove)
-        {
-            _multiplayerGameService.HandleHisTurnAsync();
-        }
         ClearPossibleActions();
     }
 }

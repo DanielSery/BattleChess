@@ -44,7 +44,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         TurnId = null;
     }
 
-    public Task<Result<string?>> HandleWinAsync(bool nofityOther, WinType winType, PlayerInfo won, PlayerInfo lost)
+    public Task<Result<string?>> HandleWinAsync(bool nofityOther, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
     {
         lock (_scheduler.SyncLock)
         {
@@ -127,7 +127,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         }
     }
 
-    private async Task<Result<string?>> GetUpdatedElo(PlayerInfo lost)
+    private async Task<Result<string?>> GetUpdatedElo(IOnlinePlayerInfo lost)
     {
         Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
         var updatedPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
@@ -155,7 +155,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
     }
 
-    private async Task<RegisteredPlayer?> WaitForEloUpdate(PlayerInfo lost)
+    private async Task<RegisteredPlayer?> WaitForEloUpdate(IOnlinePlayerInfo lost)
     {
         try
         {
@@ -190,7 +190,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         }
     }
 
-    private async Task<Result<string?>> UpdatePlayersElo(PlayerInfo won, PlayerInfo lost)
+    private async Task<Result<string?>> UpdatePlayersElo(IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
     {
         Console.WriteLine($"Searching for winning player with id: {won.PlayerId}");
         var winningPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, won.PlayerId);

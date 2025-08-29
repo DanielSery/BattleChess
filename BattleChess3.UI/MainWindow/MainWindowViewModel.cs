@@ -3,7 +3,6 @@ using BattleChess3.Game.Players;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.Game;
-using BattleChess3.UI.Menu;
 using BattleChess3.UI.Multiplayer;
 using BattleChess3.UI.Services;
 using Nicenis.Windows.ViewModels;
@@ -83,23 +82,17 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private async void GameServiceOnGameWon(object? sender, WinResult e)
     {
+        if (e is { Won: IOnlinePlayerInfo onlineWonPlayer, Lost: IOnlinePlayerInfo onlineLostPlayer })
+            await OnMultiplayerGameWon(e.PublishResult, e.WinType, onlineWonPlayer, onlineLostPlayer);
+        else OnLocalGameWon(e);
+    }
+
+    private void OnLocalGameWon(WinResult e)
+    {
         if (e.Won is null || e.Lost is null)
             return;
-
-        var messageType = ShownMessage.MessageType.Info;
-        if (!_gameService.IsMultiplayer)
-        {
-            messageType = ShownMessage.MessageType.Info;
-        }
-        else if (e.Won.Player == Player.White)
-        {
-            messageType = ShownMessage.MessageType.Success;
-        }
-        else if (e.Won.Player == Player.Black)
-        {
-            messageType = ShownMessage.MessageType.Warning;
-        }
-
+        
+        const ShownMessage.MessageType messageType = ShownMessage.MessageType.Info;
         if (e.WinType == WinType.NotResponding)
         {
             NotificationService.ShowMessage(messageType, $"{e.Won.Name} won! {e.Lost.Name} did not play in time.");
@@ -116,8 +109,38 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             NotificationService.ShowMessage(messageType, $"{e.Won.Name} won! {e.Lost.Name}'s king was captured.");
         }
+    }
 
-        var result = await _multiplayerGameService.HandleWinAsync(e.PublishResult, e.WinType, e.Won, e.Lost);
+    private async Task OnMultiplayerGameWon(bool publishResults, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
+    {
+        var messageType = ShownMessage.MessageType.Info;
+        if (won.Player == Player.White)
+        {
+            messageType = ShownMessage.MessageType.Success;
+        }
+        else if (won.Player == Player.Black)
+        {
+            messageType = ShownMessage.MessageType.Warning;
+        }
+
+        if (winType == WinType.NotResponding)
+        {
+            NotificationService.ShowMessage(messageType, $"{won.Name} won! {lost.Name} did not play in time.");
+        }
+        else if (winType == WinType.Surrender)
+        {
+            NotificationService.ShowMessage(messageType, $"{won.Name} won! {lost.Name} surrendered.");
+        }
+        else if (winType == WinType.OutOfTime)
+        {
+            NotificationService.ShowMessage(messageType, $"{won.Name} won! {lost.Name} ran out of time.");
+        }
+        else if (winType == WinType.CapturedKing)
+        {
+            NotificationService.ShowMessage(messageType, $"{won.Name} won! {lost.Name}'s king was captured.");
+        }
+
+        var result = await _multiplayerGameService.HandleWinAsync(publishResults, winType, won, lost);
         if (result.IsFailed)
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
@@ -127,7 +150,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             NotificationService.ShowMessage(messageType, result.Value);
         }
         
-        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(e.Won.Player == Player.White);
+        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(won.Player == Player.White);
         if (!string.IsNullOrEmpty(unlockedUnit))
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Success, $"Unlocked {unlockedUnit}.");

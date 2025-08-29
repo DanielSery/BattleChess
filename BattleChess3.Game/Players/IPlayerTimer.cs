@@ -6,7 +6,9 @@ public interface IPlayerTimer
 {
     TimeSpan RemainingTime { get; }
     
+    TimeSpan LastTurnElapsedTime { get; }
+    
     void StartTurnTimer();
 
-    TimeSpan EndTurnTimer(TimeSpan? forcedTime);
+    void EndTurnTimer(TimeSpan? forcedTime);
 }

@@ -8,14 +8,12 @@ namespace BattleChess3.UI.Multiplayer;
 
 public class PlayerViewModel : ViewModelBase
 {
-    private readonly PlayerInfo _playerInfo;
+    private readonly IPlayerInfo _playerInfo;
     private readonly IGameService _gameService;
     private readonly DispatcherTimer _timer;
     
     public Player Player => _playerInfo.Player;
-    public string FullName => _playerInfo.Elo is null ? _playerInfo.Name : $"{_playerInfo.Name} ({_playerInfo.Elo})";
-    public string Name => _playerInfo.Name;
-    public int? Elo => _playerInfo.Elo;
+    public string FullName { get; }
 
     private bool _isHisTurn;
     public bool IsHisTurn
@@ -46,8 +44,17 @@ public class PlayerViewModel : ViewModelBase
         }
     }
 
-    public PlayerViewModel(PlayerInfo player, IGameService gameService)
+    public PlayerViewModel(IPlayerInfo player, IGameService gameService)
     {
+        if (player is IOnlinePlayerInfo { Elo: not null } onlinePlayerInfo)
+        {
+            FullName = $"{onlinePlayerInfo.Name} ({onlinePlayerInfo.Elo})";
+        }
+        else
+        {
+            FullName = player.Name;
+        }
+        
         _playerInfo = player;
         _gameService = gameService;
 
@@ -92,7 +99,7 @@ public class PlayerViewModel : ViewModelBase
     {
         if (_gameService is { IsMultiplayer: true, HasTimer: false })
         {
-            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.CurrentStopwatch.Elapsed;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.Timer.CurrentStopwatch.Elapsed;
             if (idleTimeRemaining.TotalSeconds > 0)
             {
                 IdleTime = idleTimeRemaining.ToString(@"m\:ss\.f");

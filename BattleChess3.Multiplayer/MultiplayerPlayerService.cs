@@ -13,10 +13,12 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 {
     private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
     private readonly IMultiplayerScheduler _scheduler;
+    private readonly IMultiplayerGameService _multiplayerGameService;
 
-    public MultiplayerPlayerService(IMultiplayerScheduler scheduler)
+    public MultiplayerPlayerService(IMultiplayerScheduler scheduler, IMultiplayerGameService multiplayerGameService)
     {
         _scheduler = scheduler;
+        _multiplayerGameService = multiplayerGameService;
         var client = new MongoClient(Secrets.ConnectionString);
         var database = client.GetDatabase("BattleChess");
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
@@ -106,15 +108,15 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }).ToList();
     }
 
-    public PlayerInfo GetCurrentPlayer()
+    public IOnlinePlayerInfo GetCurrentPlayer(IPlayerTimer playerTimer)
     {
         if (LoggedInPlayer is null)
-            return new PlayerInfo(Player.White, "Red player", null, null);
+            return new LocalOnlinePlayerInfo(Player.White, "Red player", null, null, playerTimer);
 
-        return new PlayerInfo(Player.White, LoggedInPlayer.Name, LoggedInPlayer.Id, LoggedInPlayer.Elo);
+        return new LocalOnlinePlayerInfo(Player.White, LoggedInPlayer.Name, LoggedInPlayer.Id, LoggedInPlayer.Elo, playerTimer);
     }
 
-    public Task<Result<PlayerInfo>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken)
+    public Task<Result<IOnlinePlayerInfo>> GetOpponentPlayerAsync(string playerId, IPlayerTimer playerTimer, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -133,7 +135,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     }
                     
                     Console.WriteLine($"Found user with id: {foundPlayer.Id}");
-                    return Result.Ok(new PlayerInfo(Player.Black, foundPlayer.Name, playerId, foundPlayer.Elo));
+                    return Result.Ok<IOnlinePlayerInfo>(new RemoteOnlinePlayerInfo(Player.Black, foundPlayer.Name, playerId, foundPlayer.Elo, playerTimer, _multiplayerGameService));
                 }
                 catch (Exception ex)
                 {

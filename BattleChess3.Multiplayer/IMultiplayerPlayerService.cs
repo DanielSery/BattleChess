@@ -14,8 +14,8 @@ public interface IMultiplayerPlayerService
     RegisteredPlayer? LoggedInPlayer { get; }
 
     Task<List<PublicPlayerData>> GetLeaderboard(CancellationToken cancellationToken);
-    PlayerInfo GetCurrentPlayer();
-    Task<Result<PlayerInfo>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken);
+    IOnlinePlayerInfo GetCurrentPlayer(IPlayerTimer playerTimer);
+    Task<Result<IOnlinePlayerInfo>> GetOpponentPlayerAsync(string playerId, IPlayerTimer playerTimer, CancellationToken cancellationToken);
     Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken);
     Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken);
     Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, MapBlueprint myMap, CancellationToken cancellationToken);

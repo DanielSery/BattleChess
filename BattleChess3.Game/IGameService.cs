@@ -12,9 +12,7 @@ public interface IGameService
     /// </summary>
     public event EventHandler<WinResult> PlayerWon;
     
-    bool CanMove { get; }
-    
-    bool IsWaitingForMove { get; }
+    bool GameRunning { get; }
     
     /// <summary>
     ///     Gets current player.
@@ -27,18 +25,18 @@ public interface IGameService
     IPlayerInfo GetPlayerInfo(Player player);
 
     IPlayerInfo[] GetPlayerInfos();
-
+    
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void StartGame(PlayerInfo player1, PlayerInfo player2, Player startingPlayer);
+    void StartGame(IPlayerInfo player1, IPlayerInfo player2, Player startingPlayer);
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayerInfo" />.
     /// </summary>
     void StartTurn();
 
-    TimeSpan EndTurn(TimeSpan? forcedTime = null);
+    void EndTurn(TimeSpan? forcedTime = null);
 
     void Surrender();
     
