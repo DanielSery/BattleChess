@@ -1,5 +1,5 @@
-﻿using BattleChess3.Game.Players;
-using BattleChess3.Maps;
+﻿using BattleChess3.Game.GameBoard;
+using BattleChess3.Game.Players;
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
 

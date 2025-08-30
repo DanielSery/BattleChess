@@ -1,12 +1,12 @@
 ﻿using Autofac;
 using Autofac.Extras.CommonServiceLocator;
+using BattleChess3.CrossFireFigures;
 using BattleChess3.Game;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.Game;
 using BattleChess3.UI.MainWindow;
-using BattleChess3.UI.Menu;
 using BattleChess3.UI.Multiplayer;
 using BattleChess3.UI.Services;
 using BattleChess3.UI.Settings;
@@ -32,6 +32,7 @@ public static class DependenciesBuilder
     private static void SetUpComponents(ContainerBuilder builder)
     {
         builder.RegisterGamesModule();
+        builder.RegisterCrossFireFiguresModule();
         builder.RegisterMapsComponent();
         builder.RegisterMultiplayerModule();
     }

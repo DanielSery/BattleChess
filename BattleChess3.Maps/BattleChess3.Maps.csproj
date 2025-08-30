@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BattleChess3.CrossFire\BattleChess3.CrossFireFigures.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <None Remove="Resources\Maps\**"/>
         <Content Include="Resources\Maps\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -24,6 +20,10 @@
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BattleChess3.Game\BattleChess3.Game.csproj" />
     </ItemGroup>
 
 </Project>

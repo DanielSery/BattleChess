@@ -1,4 +1,6 @@
-﻿namespace BattleChess3.Maps;
+﻿using BattleChess3.Game.GameBoard;
+
+namespace BattleChess3.Maps;
 
 /// <summary>
 ///     Service for handling maps loading.

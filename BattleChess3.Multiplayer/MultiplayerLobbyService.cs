@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using BattleChess3.Maps;
+using BattleChess3.Game.GameBoard;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.Multiplayer.Utilities;
 using FluentResults;
