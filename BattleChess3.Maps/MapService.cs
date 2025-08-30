@@ -7,20 +7,20 @@ namespace BattleChess3.Maps;
 internal class MapService : IMapService
 {
     private readonly TaskCompletionSource _taskCompletionSource = new TaskCompletionSource();
-    private MapBlueprint _map = MapBlueprint.ChessTeam;
+    private BoardBlueprint _map = BoardBlueprint.ChessTeam;
 
     public MapService()
     {
         Task.Run(LoadMap);
     }
 
-    public MapBlueprint GetCurrentMap()
+    public BoardBlueprint GetCurrentMap()
     {
         _taskCompletionSource.Task.Wait();
         return _map;
     }
 
-    public void Save(MapBlueprint map)
+    public void Save(BoardBlueprint map)
     {
         var text = JsonSerializer.Serialize(map);
         text = CompressionHelper.Compress(text);
@@ -32,7 +32,7 @@ internal class MapService : IMapService
         if (!Directory.Exists("Resources"))
         {
             Directory.CreateDirectory("Resources");
-            _map = MapBlueprint.ChessTeam;
+            _map = BoardBlueprint.ChessTeam;
             _taskCompletionSource.SetResult();
             return;
         }
@@ -43,11 +43,11 @@ internal class MapService : IMapService
             {
                 var text = File.ReadAllText(Path.GetFullPath(path));
                 text = CompressionHelper.Decompress(text);
-                return JsonSerializer.Deserialize<MapBlueprint>(text);
+                return JsonSerializer.Deserialize<BoardBlueprint>(text);
             })
             .Where(x => x is not null)
             .Select(x => x!)
-            .FirstOrDefault() ?? MapBlueprint.ChessTeam;
+            .FirstOrDefault() ?? BoardBlueprint.ChessTeam;
 
         _taskCompletionSource.TrySetResult();
     }

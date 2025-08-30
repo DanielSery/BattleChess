@@ -5,9 +5,9 @@ namespace BattleChess3.Multiplayer.Utilities;
 
 public static class UnlockedFiguresHelper
 {
-    public static bool IsValid(this MapBlueprint mapBlueprint, byte[] unlockedFigures)
+    public static bool IsValid(this BoardBlueprint boardBlueprint, byte[] unlockedFigures)
     {
         var bitArray = new BitArray(unlockedFigures);
-        return mapBlueprint.Figures.All(x => bitArray[x.FigureId]);
+        return boardBlueprint.Figures.All(x => bitArray[x.FigureId]);
     }
 }

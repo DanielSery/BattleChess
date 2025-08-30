@@ -143,7 +143,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         string password,
-        MapBlueprint myMap,
+        BoardBlueprint myMap,
         CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
@@ -250,7 +250,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
         string password,
-        MapBlueprint myMap,
+        BoardBlueprint myMap,
         CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)

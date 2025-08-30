@@ -45,7 +45,7 @@ public sealed class BoardViewModel : ViewModelBase
             .ToArray();
         _board = new Board(Tiles.Cast<ITile>().ToArray());
         
-        SinglePlayerLoadMap(MapBlueprint.ChessTeam);
+        SinglePlayerLoadMap(BoardBlueprint.ChessTeam);
         _multiplayerGameService.RequestPlayMove += MultiplayerGameServiceOnRequestPlayMove;
     }
 
@@ -98,7 +98,7 @@ public sealed class BoardViewModel : ViewModelBase
     public event EventHandler? RequestSwitchToMenu;
     public event EventHandler? RequestSwitchToGame;
 
-    public void SinglePlayerLoadMap(MapBlueprint map)
+    public void SinglePlayerLoadMap(BoardBlueprint map)
     {
         _gameService.StartGame(
             new LocalPlayerInfo(Player.White, "Red player"),
@@ -114,7 +114,7 @@ public sealed class BoardViewModel : ViewModelBase
         string? gameId, 
         IOnlinePlayerInfo player1,
         IOnlinePlayerInfo player2,
-        MapBlueprint map,
+        BoardBlueprint map,
         bool hasTimer)
     {
         if (hasTimer)

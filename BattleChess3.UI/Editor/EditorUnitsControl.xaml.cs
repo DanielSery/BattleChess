@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using BattleChess3.CrossFireFigures;
 using BattleChess3.Game.Figures;
+using BattleChess3.Maps;
 using BattleChess3.UI.Shared;
 using Nicenis.Windows;
 

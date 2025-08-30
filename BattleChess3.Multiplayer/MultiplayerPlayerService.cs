@@ -211,7 +211,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     }
 
     /// <inheritdoc />
-    public Task<Result> UpdateCurrentPlayerMapAsync(MapBlueprint map, CancellationToken cancellationToken)
+    public Task<Result> UpdateCurrentPlayerMapAsync(BoardBlueprint map, CancellationToken cancellationToken)
     {
         if (LoggedInPlayer is null)
             return Task.FromResult(Result.Fail("No logged in player"));
@@ -327,7 +327,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         }
     }
 
-    public Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, MapBlueprint myMap, CancellationToken cancellationToken)
+    public Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, BoardBlueprint myMap, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -354,7 +354,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
                     var mapData = myMap.IsValid(IMultiplayerPlayerService.DefaultUnlockedFigures) 
                         ? myMap.GetByteData() 
-                        : MapBlueprint.ChessTeam.GetByteData();
+                        : BoardBlueprint.ChessTeam.GetByteData();
                     
                     Console.WriteLine($"Creating new player with name: {name}");
                     var player = new RegisteredPlayer

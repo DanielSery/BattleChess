@@ -10,7 +10,7 @@ public sealed class MapsViewModel : ViewModelBase
 {
     private readonly IMapService _mapService;
 
-    private MapBlueprint _teamMap;
+    private BoardBlueprint _teamMap;
 
     public MapsViewModel(IMapService mapService)
     {
@@ -18,7 +18,7 @@ public sealed class MapsViewModel : ViewModelBase
         _teamMap = _mapService.GetCurrentMap();
     }
 
-    public MapBlueprint TeamMap
+    public BoardBlueprint TeamMap
     {
         get => _teamMap;
         set => SetProperty(ref _teamMap, value);
@@ -26,7 +26,7 @@ public sealed class MapsViewModel : ViewModelBase
 
     internal void SaveMap(IEnumerable<ITile> board)
     {
-        var map = new MapBlueprint
+        var map = new BoardBlueprint
         {
             Figures = board.Select(x => new FigureIdentifier
             {

@@ -262,10 +262,10 @@ public class MultiplayerViewModel : ViewModelBase
         }
     }
 
-    private static MapBlueprint GetJoinedMapBlueprint(FigureIdentifier[] myFigures, FigureIdentifier[] hisFigures, bool amStarting)
+    private static BoardBlueprint GetJoinedMapBlueprint(FigureIdentifier[] myFigures, FigureIdentifier[] hisFigures, bool amStarting)
     {
         var figures = new FigureIdentifier[64];
-        var blueprint = new MapBlueprint
+        var blueprint = new BoardBlueprint
         {
             StartingPlayer = amStarting ? Player.White : Player.Black,
             Figures = figures

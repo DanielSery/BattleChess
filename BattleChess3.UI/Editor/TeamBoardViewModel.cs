@@ -96,9 +96,9 @@ public class TeamBoardViewModel : ViewModelBase
         _maps.SaveMap(Tiles);
     }
 
-    public MapBlueprint GetMapBlueprint()
+    public BoardBlueprint GetMapBlueprint()
     {
-        return new MapBlueprint
+        return new BoardBlueprint
         {
             Figures = Tiles.Select(x => new FigureIdentifier
             {
@@ -119,7 +119,7 @@ public class TeamBoardViewModel : ViewModelBase
         _mapLoader.LoadMap(Board, mapBlueprint);
     }
     
-    private static MapBlueprint GetMapBlueprint(byte[] map)
+    private static BoardBlueprint GetMapBlueprint(byte[] map)
     {
         var figures = new FigureIdentifier[16];
         for (var i = 0; i < figures.Length; i++)
@@ -132,7 +132,7 @@ public class TeamBoardViewModel : ViewModelBase
                 map[index] / 128 == 1);
         }
 
-        return new MapBlueprint
+        return new BoardBlueprint
         {
             Figures = figures,
             StartingPlayer = Player.White,

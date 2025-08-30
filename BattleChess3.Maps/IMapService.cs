@@ -10,10 +10,10 @@ public interface IMapService
     /// <summary>
     ///     Gets current maps.
     /// </summary>
-    MapBlueprint GetCurrentMap();
+    BoardBlueprint GetCurrentMap();
 
     /// <summary>
     ///     Saves specified map.
     /// </summary>
-    void Save(MapBlueprint map);
+    void Save(BoardBlueprint map);
 }

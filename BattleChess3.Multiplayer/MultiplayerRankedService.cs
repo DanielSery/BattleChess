@@ -36,7 +36,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             : -1;
     }
 
-    public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(MapBlueprint myMap, CancellationToken cancellationToken)
+    public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(BoardBlueprint myMap, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {

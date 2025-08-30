@@ -14,7 +14,7 @@ internal class MapLoader : IMapLoader
         _figureCreator = figureCreator;
     }
     
-    public void LoadMap(IBoard board, MapBlueprint map)
+    public void LoadMap(IBoard board, BoardBlueprint map)
     {
         var index = 0;
         foreach (var tile in board)
@@ -23,7 +23,7 @@ internal class MapLoader : IMapLoader
         }
     }
 
-    public void LoadMapExtendedFor2Players(IBoard board, MapBlueprint map)
+    public void LoadMapExtendedFor2Players(IBoard board, BoardBlueprint map)
     {
         for (var i = 0; i < map.Figures.Length; i++)
         {
