@@ -7,7 +7,7 @@ namespace BattleChess3.UI.Shared;
 
 public class TileViewModel : ViewModelBase, ITile
 {
-    private Figure _figure = Figure.None;
+    private IFigure _figure = BattleChess3.Game.Figures.Figure.None;
 
     private bool _isMouseOver;
     private bool _isPossibleAttack;
@@ -80,7 +80,7 @@ public class TileViewModel : ViewModelBase, ITile
         }
     }
 
-    public Figure Figure
+    public IFigure Figure
     {
         get => _figure;
         set => SetProperty(ref _figure, value);

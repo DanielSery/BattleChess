@@ -12,7 +12,7 @@ public class NeutralPlayerInfo : IPlayerInfo
     public Player Player => Player.Neutral;
     public IPlayerTimer Timer => InfinitePlayerTimer.Instance;
     public string Name => "Neutral";
-    public List<Figure> Figures { get; } = [];
+    public List<IFigure> Figures { get; } = [];
 
     /// <inheritdoc />
     public void SetTimer(IPlayerTimer timer)

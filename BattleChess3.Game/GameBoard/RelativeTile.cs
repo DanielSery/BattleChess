@@ -20,7 +20,7 @@ public class RelativeTile : ITile
     public Position RelativePosition => RelativePositionHelper.GetRelative(_player, _innerTile.AbsolutePosition);
     public Position AbsolutePosition => _innerTile.AbsolutePosition;
 
-    public Figure Figure
+    public IFigure Figure
     {
         get => _innerTile.Figure;
         set => _innerTile.Figure = value;

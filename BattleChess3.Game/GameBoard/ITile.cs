@@ -18,7 +18,7 @@ public interface ITile
     /// <summary>
     ///     Current figure on tile
     /// </summary>
-    Figure Figure { get; set; }
+    IFigure Figure { get; set; }
 
     /// <summary>
     ///     Gets tile with position according to players point of view.

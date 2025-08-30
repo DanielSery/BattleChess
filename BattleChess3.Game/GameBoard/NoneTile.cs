@@ -12,9 +12,9 @@ public class NoneTile : ITile
     public Position RelativePosition => Position.None;
     public Position AbsolutePosition => Position.None;
 
-    public Figure Figure
+    public IFigure Figure
     {
-        get => Figure.None;
+        get => BattleChess3.Game.Figures.Figure.None;
         set { }
     }
 

@@ -48,7 +48,7 @@ internal static class FiguresHelper
                !checkedTile.Figure.Owner.Equals(NeutralPlayerInfo.Instance);
     }
 
-    public static void CreateFigure(this ITile tile, Figure createdFigure, IBoard board)
+    public static void CreateFigure(this ITile tile, IFigure createdFigure, IBoard board)
     {
         tile.Figure = createdFigure;
         tile.Figure.Owner.Figures.Add(tile.Figure);

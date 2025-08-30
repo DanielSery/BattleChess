@@ -7,5 +7,5 @@ namespace BattleChess3.Game.Players;
 public interface IFigureOwner
 {
     Player Player { get; }
-    List<Figure> Figures { get; }
+    List<IFigure> Figures { get; }
 }

@@ -134,7 +134,7 @@ public class EditorUnitsViewModel : ViewModelBase
     {
         if (obj is null) return;
 
-        _mouseOnInfo = obj.Figure;
+        _mouseOnInfo = obj.Figure as IFigureInfo;
         if (_tileInfoFocused)
             return;
 

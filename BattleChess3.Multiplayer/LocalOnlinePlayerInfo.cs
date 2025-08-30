@@ -20,7 +20,7 @@ public class LocalOnlinePlayerInfo : IOnlinePlayerInfo, ILocalPlayerInfo
     public Player Player { get; }
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
-    public List<Figure> Figures { get; } = [];
+    public List<IFigure> Figures { get; } = [];
     public string? PlayerId { get; }
     public int? Elo { get; }
 

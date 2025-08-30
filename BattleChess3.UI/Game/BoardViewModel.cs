@@ -198,7 +198,7 @@ public sealed class BoardViewModel : ViewModelBase
         
         var relativeBoard = GetPlayerRelativeBoard(clickedTile.Figure.Owner.Player, Tiles);
         var relativeClickedTile = clickedTile.GetRelativeTile(clickedTile.Figure.Owner.Player);
-        var possibleActions = clickedTile.Figure.GetPossibleActions(relativeClickedTile, relativeBoard);
+        var possibleActions = clickedTile.Figure.Type.GetPossibleActions(relativeClickedTile, relativeBoard);
 
         foreach (var possibleAction in possibleActions)
         {

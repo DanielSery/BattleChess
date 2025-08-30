@@ -17,7 +17,7 @@ public class LocalPlayerInfo : ILocalPlayerInfo
     public Player Player { get; }
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
-    public List<Figure> Figures { get; } = [];
+    public List<IFigure> Figures { get; } = [];
 
     /// <inheritdoc />
     public void SetTimer(IPlayerTimer timer)

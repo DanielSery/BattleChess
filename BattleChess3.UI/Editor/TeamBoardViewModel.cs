@@ -84,7 +84,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     private void EvaluateTeamBoard()
     {
-        TotalPoints = Board.Sum(x => x.Figure.FigureValue);
+        TotalPoints = Board.Sum(x => x.Figure.Type.FigureValue);
         HasKing = Board.Any(x => x.Figure.IsKing);
         RaisePropertyChanged(nameof(PointsLeft));
         RaisePropertyChanged(nameof(PositivePoints));
