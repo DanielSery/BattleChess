@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using BattleChess3.Game.GameBoard;
+using BattleChess3.Core.GameBoard;
 using BattleChess3.Maps.Utilities;
 
 namespace BattleChess3.Maps;

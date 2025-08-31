@@ -1,5 +1,5 @@
-﻿using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Helpers;
+﻿using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Helpers;
 
 namespace BattleChess3.Multiplayer.Utilities;
 

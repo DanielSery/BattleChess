@@ -1,13 +1,16 @@
-﻿using BattleChess3.Game.Figures;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.Shared;
 
 public class TileViewModel : ViewModelBase, ITile
 {
-    private IFigure _figure = BattleChess3.Game.Figures.Figure.None;
+    public static readonly TileViewModel None = new(new Position(-1, -1));
+
+    private IFigure _figure = Core.Figures.Figure.None;
 
     private bool _isMouseOver;
     private bool _isPossibleAttack;

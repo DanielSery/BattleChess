@@ -1,5 +1,6 @@
-﻿using BattleChess3.Game.Figures;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 
 namespace BattleChess3.Game.GameBoard;
 
@@ -14,7 +15,7 @@ public class NoneTile : ITile
 
     public IFigure Figure
     {
-        get => BattleChess3.Game.Figures.Figure.None;
+        get => BattleChess3.Core.Figures.Figure.None;
         set { }
     }
 

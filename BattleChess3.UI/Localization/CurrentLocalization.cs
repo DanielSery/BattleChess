@@ -1,6 +1,6 @@
 ﻿using System.Resources;
 using System.Windows.Data;
-using BattleChess3.Game.Localization;
+using BattleChess3.Core.Localization;
 using BattleChess3.UI.Resources;
 
 namespace BattleChess3.UI.Localization;

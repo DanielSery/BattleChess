@@ -1,4 +1,5 @@
 ﻿using System.Windows.Threading;
+using BattleChess3.Core.Players;
 using BattleChess3.Game;
 using BattleChess3.Game.Players;
 using BattleChess3.Game.Timers;
@@ -98,8 +99,8 @@ public class PlayerViewModel : ViewModelBase
 
     private void UpdateTimerText()
     {
-        var isMultiplayer = _gameService.PlayerInfos.Any(x => x is IOnlinePlayerInfo);
-        var hasTimer = _gameService.PlayerInfos.Any(x => x.Timer is not InfinitePlayerTimer);
+        var isMultiplayer = _gameService.BlackPlayer is IOnlinePlayerInfo;
+        var hasTimer = _gameService.WhitePlayer.Timer is not InfinitePlayerTimer;
 
         if (isMultiplayer && !hasTimer)
         {

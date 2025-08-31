@@ -1,46 +1,52 @@
-﻿using BattleChess3.Game.Helpers;
+﻿using BattleChess3.Core;
+using BattleChess3.Core.Helpers;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game;
 
 public record WinResult(bool PublishResult, WinType WinType, IPlayerInfo? Won, IPlayerInfo? Lost);
 
-internal class GameService : IGameService
+internal class GameService : IGameService, IFigureOwnersHolder
 {
+    private readonly IFigureOwner[] _figureOwners = new IFigureOwner[3];
+
     public GameService()
     {
-        PlayerInfos[0] = NeutralPlayerInfo.Instance;
-        PlayerInfos[1] = new LocalPlayerInfo(Player.White, string.Empty);
-        PlayerInfos[2] = new LocalPlayerInfo(Player.Black, string.Empty);
+        _figureOwners[0] = NeutralFigureOwner.Instance;
+        _figureOwners[1] = WhitePlayer = new ControlledPlayerInfo(Player.White, string.Empty);
+        _figureOwners[2] = BlackPlayer = new ControlledPlayerInfo(Player.Black, string.Empty);
 
-        CurrentPlayerInfo = PlayerInfos[0];
-        WaitingPlayerInfo = PlayerInfos[1];
+        CurrentPlayerInfo = WhitePlayer;
+        WaitingPlayerInfo = BlackPlayer;
     }
 
     public bool GameRunning { get; private set; }
     public IPlayerInfo CurrentPlayerInfo { get; private set; }
     private IPlayerInfo WaitingPlayerInfo { get; set; }
-    public IPlayerInfo[] PlayerInfos { get; } = new IPlayerInfo[3];
+
+    public IPlayerInfo WhitePlayer { get; private set; }
+    public IPlayerInfo BlackPlayer { get; private set; }
 
     public event EventHandler? PlayersChanged;
     public event EventHandler? TurnStarted;
     public event EventHandler? TurnEnded;
     public event EventHandler<WinResult>? PlayerWon;
 
-    public IPlayerInfo GetPlayerInfo(Player player) => PlayerInfos[player.ToInt()];
+    public IFigureOwner GetFigureOwner(Player player) => _figureOwners[player.ToInt()];
 
     public void StartGame(IPlayerInfo player1, IPlayerInfo player2, Player startingPlayer)
     {
-        PlayerInfos[0] = NeutralPlayerInfo.Instance;
-        PlayerInfos[1] = player1;
-        PlayerInfos[2] = player2;
+        _figureOwners[0] = NeutralFigureOwner.Instance;
+        _figureOwners[1] = WhitePlayer = player1;
+        _figureOwners[2] = BlackPlayer = player2;
         
         CurrentPlayerInfo = startingPlayer == player1.Player ? player1 : player2;
         WaitingPlayerInfo = startingPlayer == player1.Player ? player2 : player1;
         GameRunning = true;
 
         PlayersChanged?.Invoke(this, EventArgs.Empty);
-        CurrentPlayerInfo.Timer.StartTurnTimer();
+        CurrentPlayerInfo.StartTurn();
         TurnStarted?.Invoke(this, EventArgs.Empty);
     }
 
@@ -54,38 +60,38 @@ internal class GameService : IGameService
         if (!GameRunning)
             return;
 
-        CurrentPlayerInfo.Timer.StartTurnTimer();
+        CurrentPlayerInfo.StartTurn();
         TurnStarted?.Invoke(this, EventArgs.Empty);
     }
 
     public void EndTurn(TimeSpan? forcedTime = null)
     {
-        CurrentPlayerInfo.Timer.EndTurnTimer(forcedTime);
+        CurrentPlayerInfo.EndTurn(forcedTime);
         TurnEnded?.Invoke(this, EventArgs.Empty);
     }
 
     public void Surrender()
     {
         GameRunning = false;
-        PlayerWon?.Invoke(this, PlayerInfos.All(x => x is ILocalPlayerInfo)
+        PlayerWon?.Invoke(this, WhitePlayer is IControlledPlayerInfo && BlackPlayer is IControlledPlayerInfo
             ? new WinResult(false, WinType.Surrender, WaitingPlayerInfo, CurrentPlayerInfo)
-            : new WinResult(true, WinType.Surrender, PlayerInfos[2], PlayerInfos[1]));
+            : new WinResult(true, WinType.Surrender, BlackPlayer, WhitePlayer));
     }
 
     public void PlayerLost(IPlayerInfo player, WinType winType, bool notifyOther)
     {
         GameRunning = false;
         PlayerWon?.Invoke(this, player.Player == Player.White
-            ? new WinResult(notifyOther, winType, PlayerInfos[2], PlayerInfos[1])
-            : new WinResult(notifyOther, winType, PlayerInfos[1], PlayerInfos[2]));
+            ? new WinResult(notifyOther, winType, BlackPlayer, WhitePlayer)
+            : new WinResult(notifyOther, winType, WhitePlayer, BlackPlayer));
     }
 
     public void PlayerWin(IPlayerInfo player, WinType winType, bool publishResult)
     {
         GameRunning = false;
         PlayerWon?.Invoke(this, player.Player == Player.White
-            ? new WinResult(publishResult, winType, PlayerInfos[1], PlayerInfos[2])
-            : new WinResult(publishResult, winType, PlayerInfos[2], PlayerInfos[1]));
+            ? new WinResult(publishResult, winType, WhitePlayer, BlackPlayer)
+            : new WinResult(publishResult, winType, BlackPlayer, WhitePlayer));
     }
 
     private void CheckCapturedKing(IPlayerInfo evaluatedPlayerInfo, IPlayerInfo otherPlayerInfo)

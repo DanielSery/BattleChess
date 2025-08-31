@@ -1,6 +1,6 @@
-﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.CrossFireFigures.Utilities;
 
 namespace BattleChess3.CrossFireFigures.Figures;
 
@@ -36,7 +36,7 @@ public class Barbarian : ICrossFireFigureType
         
         foreach (var direction in AttackDirections)
         {
-            var movedTile = NoneTile.Instance;
+            ITile? movedTile = null;
             foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 1, board, unitTile))
             {
                 if (targetTile.IsEmpty()) 
@@ -46,7 +46,7 @@ public class Barbarian : ICrossFireFigureType
                 break;
             }
             
-            if (movedTile == NoneTile.Instance)
+            if (movedTile is null)
             {
                 continue;
             }
@@ -62,10 +62,6 @@ public class Barbarian : ICrossFireFigureType
                         FigureActionTypes.Special,
                         targetTile.AbsolutePosition,
                         () => movedTile.MoveToTile(targetTile, board));
-                }
-                else if (targetTile != NoneTile.Instance)
-                {
-                    break;
                 }
             }
         }

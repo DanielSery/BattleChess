@@ -1,6 +1,6 @@
-﻿using BattleChess3.Game.GameBoard;
+﻿using BattleChess3.Core.GameBoard;
 
-namespace BattleChess3.Game.Figures;
+namespace BattleChess3.Core.Figures;
 
 public class FigureAction
 {

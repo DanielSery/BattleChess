@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace BattleChess3.Game.GameBoard;
+namespace BattleChess3.Core.GameBoard;
 
 [DebuggerDisplay("({X},{Y})")]
 public readonly record struct Position

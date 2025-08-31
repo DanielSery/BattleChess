@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using BattleChess3.Game.Figures;
+using BattleChess3.Core.Figures;
 using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Shared;

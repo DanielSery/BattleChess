@@ -1,8 +1,8 @@
 // Copyright (c) Veeam Software Group GmbH
 
-using BattleChess3.Game.Figures;
+using BattleChess3.Core.Figures;
 
-namespace BattleChess3.Game.Players;
+namespace BattleChess3.Core.Players;
 
 public interface IFigureOwner
 {

@@ -1,5 +1,5 @@
-﻿using BattleChess3.Game;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Players;
+using BattleChess3.Game;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.Game;

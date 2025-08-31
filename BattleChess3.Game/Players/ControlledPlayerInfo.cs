@@ -1,13 +1,14 @@
 ﻿using System.Diagnostics;
-using BattleChess3.Game.Figures;
+using BattleChess3.Core.Figures;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.Timers;
 
 namespace BattleChess3.Game.Players;
 
 [DebuggerDisplay("{Name}")]
-public class LocalPlayerInfo : ILocalPlayerInfo
+public class ControlledPlayerInfo : IControlledPlayerInfo
 {
-    public LocalPlayerInfo(Player player, string playerName)
+    public ControlledPlayerInfo(Player player, string playerName)
     {
         Player = player;
         Name = playerName;
@@ -23,5 +24,17 @@ public class LocalPlayerInfo : ILocalPlayerInfo
     public void SetTimer(IPlayerTimer timer)
     {
         Timer = timer;
+    }
+
+    /// <inheritdoc />
+    public void StartTurn()
+    {
+        Timer.StartTurnTimer();
+    }
+
+    /// <inheritdoc />
+    public void EndTurn(TimeSpan? forcedTurnDuration = null)
+    {
+        Timer.EndTurnTimer(forcedTurnDuration);
     }
 }

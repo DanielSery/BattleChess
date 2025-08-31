@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BattleChess3.Game\BattleChess3.Game.csproj" />
+      <ProjectReference Include="..\BattleChess3.Core\BattleChess3.Core.csproj" />
     </ItemGroup>
 
 </Project>

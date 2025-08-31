@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.Game.GameBoard;
+﻿namespace BattleChess3.Core.GameBoard;
 
 public interface IBoard : IEnumerable<ITile>
 {

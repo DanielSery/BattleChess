@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Players;
+using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game;
 
@@ -19,12 +20,9 @@ public interface IGameService
     /// </summary>
     IPlayerInfo CurrentPlayerInfo { get; }
 
-    IPlayerInfo[] PlayerInfos { get; }
+    IPlayerInfo WhitePlayer { get; }
 
-    /// <summary>
-    ///     Gets player with id.
-    /// </summary>
-    IPlayerInfo GetPlayerInfo(Player player);
+    IPlayerInfo BlackPlayer { get; }
     
     /// <summary>
     ///     Set current players.

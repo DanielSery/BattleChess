@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.UI.Menu;
+﻿namespace BattleChess3.UI.MainWindow;
 
 public enum SelectedMenuTab
 {

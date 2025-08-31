@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:localization="clr-namespace:BattleChess3.UI.Localization"
-        xmlns:menu="clr-namespace:BattleChess3.UI.Menu"
         xmlns:game="clr-namespace:BattleChess3.UI.Game"
         xmlns:editor="clr-namespace:BattleChess3.UI.Editor"
         xmlns:mainWindow="clr-namespace:BattleChess3.UI.MainWindow"
@@ -143,7 +142,7 @@
                             <Border.RenderTransform>
                                 <TranslateTransform x:Name="MenuTransform" />
                             </Border.RenderTransform>
-                            <menu:MenuControl DataContext="{Binding MenuViewModel}" />
+                            <mainWindow:MenuControl DataContext="{Binding MenuViewModel}" />
                         </Border>
                     </Border>
 

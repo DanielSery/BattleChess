@@ -14,10 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BattleChess3.Game\BattleChess3.Game.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Compile Update="Localization\Strings.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
@@ -30,6 +26,10 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Strings.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BattleChess3.Core\BattleChess3.Core.csproj" />
     </ItemGroup>
 
 </Project>

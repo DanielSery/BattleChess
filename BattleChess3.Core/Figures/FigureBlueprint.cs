@@ -1,15 +1,15 @@
-﻿using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Players;
 
-namespace BattleChess3.Game.Figures;
+namespace BattleChess3.Core.Figures;
 
-public class FigureIdentifier
+public class FigureBlueprint
 {
     // JSON serializable
-    public FigureIdentifier()
+    public FigureBlueprint()
     {
     }
 
-    public FigureIdentifier(Player player, int figureId, bool isKing)
+    public FigureBlueprint(Player player, int figureId, bool isKing)
     {
         Player = player;
         FigureId = figureId;

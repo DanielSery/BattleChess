@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.Game.Figures;
+﻿namespace BattleChess3.Core.Figures;
 
 public interface IFigureInfo
 {

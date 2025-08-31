@@ -1,4 +1,4 @@
-﻿using BattleChess3.Game.GameBoard;
+﻿using BattleChess3.Core.GameBoard;
 
 namespace BattleChess3.Maps;
 

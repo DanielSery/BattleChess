@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using BattleChess3.UI.Game;
-using BattleChess3.UI.Menu;
 using BattleChess3.UI.Multiplayer;
 using BattleChess3.UI.Services;
 using BattleChess3.UI.Settings;

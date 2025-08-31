@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
-using BattleChess3.Game.Figures;
+using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.Helpers;
-using BattleChess3.Game.Players;
 
 namespace BattleChess3.Game.GameBoard;
 

@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.Figures;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.Players;
 using BattleChess3.Game.Timers;
 using Moq;
@@ -73,10 +74,10 @@ public class GameServiceTest
         timer2Mock.Verify(x => x.StartTurnTimer(), Times.Once);
     }
 
-    private static (LocalPlayerInfo, Mock<IPlayerTimer>) CreatePlayer(Player player, bool hasKing)
+    private static (ControlledPlayerInfo, Mock<IPlayerTimer>) CreatePlayer(Player player, bool hasKing)
     {
         var timerMock = new Mock<IPlayerTimer>();
-        var playerInfo = new LocalPlayerInfo(player, string.Empty);
+        var playerInfo = new ControlledPlayerInfo(player, string.Empty);
         playerInfo.SetTimer(timerMock.Object);
         if (hasKing)
         {

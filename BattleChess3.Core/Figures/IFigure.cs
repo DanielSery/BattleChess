@@ -1,6 +1,6 @@
-﻿using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Players;
 
-namespace BattleChess3.Game.Figures;
+namespace BattleChess3.Core.Figures;
 
 public interface IFigure
 {

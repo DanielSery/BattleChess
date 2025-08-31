@@ -1,6 +1,6 @@
-﻿using BattleChess3.CrossFireFigures.Figures;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.CrossFireFigures.Figures;
 using BattleChess3.CrossFireFigures.Localization;
-using BattleChess3.Game.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 

@@ -1,10 +1,10 @@
-﻿using BattleChess3.Game.Figures;
+﻿using BattleChess3.Core.Figures;
 
 namespace BattleChess3.Maps;
 
 public interface IFigureCreator
 {
-    Figure CreateFigure(FigureIdentifier figureIdentifier);
+    Figure CreateFigure(FigureBlueprint figureBlueprint);
 
     Figure CreateEmptyFigure();
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using BattleChess3.Core;
+using BattleChess3.Core.GameBoard;
 
 namespace BattleChess3.Game.GameBoard;
 

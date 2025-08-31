@@ -1,7 +1,7 @@
-﻿using BattleChess3.CrossFireFigures.Figures;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
+using BattleChess3.CrossFireFigures.Figures;
 
 namespace BattleChess3.CrossFireFigures.Utilities;
 
@@ -45,7 +45,7 @@ internal static class FiguresHelper
     public static bool IsEnemyTo(this ITile yoursTile, ITile checkedTile)
     {
         return !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner) &&
-               !checkedTile.Figure.Owner.Equals(NeutralPlayerInfo.Instance);
+               !checkedTile.Figure.Owner.Equals(NeutralFigureOwner.Instance);
     }
 
     public static void CreateFigure(this ITile tile, IFigure createdFigure, IBoard board)
@@ -60,7 +60,7 @@ internal static class FiguresHelper
         var figureType = tile.Figure.Type;
         figureType.OnDying(tile, board); 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Empty, false);
+        tile.Figure = new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Empty, false);
         figureType.OnDied(tile, board);
     }
 
@@ -85,7 +85,7 @@ internal static class FiguresHelper
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = from.Figure;
-        from.Figure = new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Empty, false);
+        from.Figure = new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Empty, false);
         
         movingFigure.OnMoved(from, to, board);
     }
@@ -100,7 +100,7 @@ internal static class FiguresHelper
         killedFigure.OnBeingAttacked(to, from, board);
         
         to.Figure.Owner.Figures.Remove(to.Figure);
-        to.Figure = new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Empty, false);
+        to.Figure = new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Empty, false);
         
         killedFigure.OnDied(to, board);
         killedFigure.OnKilled(to, from, board);
@@ -119,7 +119,7 @@ internal static class FiguresHelper
         
         to.Figure.Owner.Figures.Remove(to.Figure);
         to.Figure = from.Figure;
-        from.Figure = new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Empty, false);
+        from.Figure = new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Empty, false);
         
         attackingFigure.OnMoved(from, to, board);
         killedFigure.OnDied(to, board);

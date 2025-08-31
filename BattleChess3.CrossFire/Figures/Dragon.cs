@@ -1,7 +1,7 @@
-﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
+using BattleChess3.CrossFireFigures.Utilities;
 
 namespace BattleChess3.CrossFireFigures.Figures;
 
@@ -63,7 +63,7 @@ public class Dragon : ICrossFireFigureType
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
         {
-            targetTile.CreateFigure(new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Fire, false), board);
+            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Fire, false), board);
         }
         else if (Math.Abs(move.X) <= 2 &&
                  Math.Abs(move.Y) <= 2)
@@ -71,8 +71,8 @@ public class Dragon : ICrossFireFigureType
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
             var sourcePosition = unitTile.RelativePosition;
             
-            board[sourcePosition + smallMove].CreateFigure(new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Fire, false), board);
-            targetTile.CreateFigure(new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Fire, false), board);
+            board[sourcePosition + smallMove].CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Fire, false), board);
+            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Fire, false), board);
         }
     }
 }

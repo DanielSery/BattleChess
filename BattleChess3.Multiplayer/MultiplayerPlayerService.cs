@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.Multiplayer.Utilities;
 using FluentResults;
@@ -109,9 +109,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public IOnlinePlayerInfo GetCurrentPlayer()
     {
         if (LoggedInPlayer is null)
-            return new LocalOnlinePlayerInfo(Player.White, "Red player", null, null);
+            return new ControlledOnlinePlayerInfo(Player.White, "Red player", null, null);
 
-        return new LocalOnlinePlayerInfo(Player.White, LoggedInPlayer.Name, LoggedInPlayer.Id, LoggedInPlayer.Elo);
+        return new ControlledOnlinePlayerInfo(Player.White, LoggedInPlayer.Name, LoggedInPlayer.Id, LoggedInPlayer.Elo);
     }
 
     public Task<Result<IOnlinePlayerInfo>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken)

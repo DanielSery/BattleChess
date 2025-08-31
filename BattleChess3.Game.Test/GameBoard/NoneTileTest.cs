@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.Figures;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Players;
 using Xunit;
@@ -18,7 +19,7 @@ public class NoneTileTest
     public void AfterSettingNoneTileHasNoneFigure()
     {
         var noneTile = NoneTile.Instance;
-        noneTile.Figure = new Figure(new LocalPlayerInfo(Player.Neutral, ""), NoneFigureType.Instance, false);
+        noneTile.Figure = new Figure(new ControlledPlayerInfo(Player.Neutral, ""), NoneFigureType.Instance, false);
         Assert.Equal(Figure.None.Id, noneTile.Figure.Id);
     }
 

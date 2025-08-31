@@ -1,6 +1,5 @@
-﻿using BattleChess3.Game;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.GameBoard;
+using BattleChess3.Game;
 using FluentResults;
 
 namespace BattleChess3.Multiplayer;

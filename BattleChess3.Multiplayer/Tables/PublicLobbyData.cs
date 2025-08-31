@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-
-namespace BattleChess3.Multiplayer.Tables;
+﻿namespace BattleChess3.Multiplayer.Tables;
 
 public class PublicLobbyData
 {

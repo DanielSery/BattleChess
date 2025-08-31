@@ -1,7 +1,8 @@
-﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿
+using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
+using BattleChess3.CrossFireFigures.Utilities;
 
 namespace BattleChess3.CrossFireFigures.Figures;
 
@@ -58,7 +59,7 @@ public class Alchemist : ICrossFireFigureType
             var shieldTile = board[sourceTile.RelativePosition + movedPosition];
             if (shieldTile.IsEmpty())
             {
-                shieldTile.CreateFigure(new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Explosives, false), board);
+                shieldTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Explosives, false), board);
             }
         }
     }

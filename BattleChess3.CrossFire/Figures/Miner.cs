@@ -1,7 +1,7 @@
-﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
+using BattleChess3.CrossFireFigures.Utilities;
 
 namespace BattleChess3.CrossFireFigures.Figures;
 
@@ -52,7 +52,7 @@ public class Miner : ICrossFireFigureType
                 continue;
             }
             
-            createdTile.CreateFigure(new Figure(NeutralPlayerInfo.Instance, CrossFireFigureGroup.Trench, false), board);
+            createdTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Trench, false), board);
         }
     }
 }

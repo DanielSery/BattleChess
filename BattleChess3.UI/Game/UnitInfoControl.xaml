@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:BattleChess3.UI.Converters"
-             xmlns:figures="clr-namespace:BattleChess3.Game.Figures;assembly=BattleChess3.Game"
+             xmlns:figures="clr-namespace:BattleChess3.Core.Figures;assembly=BattleChess3.Core"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance figures:IFigureInfo}"
              d:DesignHeight="300" d:DesignWidth="300" MinWidth="265">
 

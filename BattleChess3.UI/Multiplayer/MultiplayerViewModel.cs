@@ -2,11 +2,11 @@
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Windows;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
+using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Helpers;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.Helpers;
-using BattleChess3.Game.Players;
-using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.Multiplayer.Utilities;
@@ -262,9 +262,9 @@ public class MultiplayerViewModel : ViewModelBase
         }
     }
 
-    private static BoardBlueprint GetJoinedMapBlueprint(FigureIdentifier[] myFigures, FigureIdentifier[] hisFigures, bool amStarting)
+    private static BoardBlueprint GetJoinedMapBlueprint(FigureBlueprint[] myFigures, FigureBlueprint[] hisFigures, bool amStarting)
     {
-        var figures = new FigureIdentifier[64];
+        var figures = new FigureBlueprint[64];
         var blueprint = new BoardBlueprint
         {
             StartingPlayer = amStarting ? Player.White : Player.Black,
@@ -278,7 +278,7 @@ public class MultiplayerViewModel : ViewModelBase
 
         for (var i = 16; i < 48; i++)
         {
-            figures[i] = new FigureIdentifier(0, 0, false);
+            figures[i] = new FigureBlueprint(0, 0, false);
         }
 
         for (var i = 0; i < hisFigures.Length; i++)
@@ -289,9 +289,9 @@ public class MultiplayerViewModel : ViewModelBase
         return blueprint;
     }
     
-    private static FigureIdentifier[] GetFigures(byte[] map)
+    private static FigureBlueprint[] GetFigures(byte[] map)
     {
-        var figures = new FigureIdentifier[16];
+        var figures = new FigureBlueprint[16];
         for (var i = 0; i < figures.Length; i++)
         {
             var index = i * 2;
@@ -299,7 +299,7 @@ public class MultiplayerViewModel : ViewModelBase
             if (playerId != 0)
                 playerId = 3 - playerId;
             
-            figures[i] = new FigureIdentifier(
+            figures[i] = new FigureBlueprint(
                 PlayerSerializationHelper.ToPlayer(playerId),
                 map[index + 1],
                 map[index] / 128 == 1);

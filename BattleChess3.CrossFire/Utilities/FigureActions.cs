@@ -1,6 +1,6 @@
-﻿using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 
 namespace BattleChess3.CrossFireFigures.Utilities;
 
@@ -78,7 +78,7 @@ internal static class AdvancedFigureActions
     }
 
     public static bool TryCreateNewFigureAction(this ITile unitTile, IBoard board, Position relativePosition, 
-        LocalPlayerInfo player, IFigureType figureType,
+        IFigureOwner player, IFigureType figureType,
         out FigureAction action)
     {
         var movePosition = unitTile.RelativePosition + relativePosition;

@@ -1,5 +1,6 @@
-﻿using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.Players;
 using Moq;
 using Xunit;
@@ -12,14 +13,14 @@ public class FigureTests
     [Fact]
     public void NoneFigureType_FigureIsValid()
     {
-        var player = new LocalPlayerInfo(Player.Neutral, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Neutral, string.Empty);
         _ = new Figure(player, NoneFigureType.Instance, false);
     }
 
     [Fact]
     public void NeutralPlayer_ThrowsWhenNotHavingNeutralImage()
     {
-        var player = new LocalPlayerInfo(Player.Neutral, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Neutral, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -31,7 +32,7 @@ public class FigureTests
     [Fact]
     public void NeutralPlayer_NotThrowsWhenHavingNeutralImage()
     {
-        var player = new LocalPlayerInfo(Player.Neutral, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Neutral, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -42,7 +43,7 @@ public class FigureTests
     [Fact]
     public void WhitePlayer_ThrowsWhenNotHavingWhiteImage()
     {
-        var player = new LocalPlayerInfo(Player.White, string.Empty);
+        var player = new ControlledPlayerInfo(Player.White, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -54,7 +55,7 @@ public class FigureTests
     [Fact]
     public void WhitePlayer_NotThrowsWhenHavingWhiteImage()
     {
-        var player = new LocalPlayerInfo(Player.White, string.Empty);
+        var player = new ControlledPlayerInfo(Player.White, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -65,7 +66,7 @@ public class FigureTests
     [Fact]
     public void BlackPlayer_ThrowsWhenNotHavingBlackImage()
     {
-        var player = new LocalPlayerInfo(Player.Black, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Black, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -77,7 +78,7 @@ public class FigureTests
     [Fact]
     public void BlackPlayer_NotThrowsWhenHavingBlackImage()
     {
-        var player = new LocalPlayerInfo(Player.Black, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Black, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -88,7 +89,7 @@ public class FigureTests
     [Fact]
     public void GetsFieldsFromFigureType()
     {
-        var player = new LocalPlayerInfo(Player.Black, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Black, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -103,7 +104,7 @@ public class FigureTests
     [Fact]
     public void GetsUriFromFigureType()
     {
-        var player = new LocalPlayerInfo(Player.Black, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Black, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -118,7 +119,7 @@ public class FigureTests
     [Fact]
     public void GetsPossibleActionsFromFigureType()
     {
-        var player = new LocalPlayerInfo(Player.Black, string.Empty);
+        var player = new ControlledPlayerInfo(Player.Black, string.Empty);
         var figureTypeMock = new Mock<IFigureType>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},

@@ -1,7 +1,7 @@
-﻿using BattleChess3.Game.Figures;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.Players;
 
-namespace BattleChess3.Game.GameBoard;
+namespace BattleChess3.Core.GameBoard;
 
 // JSON serializable
 public class BoardBlueprint
@@ -31,5 +31,5 @@ public class BoardBlueprint
     };
     
     public Player StartingPlayer { get; init; } = Player.White;
-    public FigureIdentifier[] Figures { get; init; } = [];
+    public FigureBlueprint[] Figures { get; init; } = [];
 }

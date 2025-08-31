@@ -1,7 +1,6 @@
-﻿using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Helpers;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 
 namespace BattleChess3.Maps;
 
@@ -32,8 +31,8 @@ internal class MapLoader : IMapLoader
             
             var oppositeFigure = map.Figures[i].Player == 0
                 ? redFigure
-                : new FigureIdentifier(Player.Black, redFigure.FigureId, redFigure.IsKing);
-            board[RelativePositionHelper.GetRelative(Player.White, redPosition)].Figure = _figureCreator.CreateFigure(oppositeFigure);
+                : new FigureBlueprint(Player.Black, redFigure.FigureId, redFigure.IsKing);
+            board[new Position(redPosition.X, 7 - redPosition.Y)].Figure = _figureCreator.CreateFigure(oppositeFigure);
             board[redPosition].Figure = _figureCreator.CreateFigure(redFigure);
         }
         

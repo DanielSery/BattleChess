@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.Game;
+﻿namespace BattleChess3.Core;
 
 public static class Constants
 {

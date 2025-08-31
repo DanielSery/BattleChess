@@ -1,14 +1,15 @@
 // Copyright (c) Veeam Software Group GmbH
 
-using BattleChess3.Game.Figures;
+using BattleChess3.Core.Figures;
+using BattleChess3.Core.Players;
 using BattleChess3.Game.Players;
 using BattleChess3.Game.Timers;
 
 namespace BattleChess3.Multiplayer;
 
-public class LocalOnlinePlayerInfo : IOnlinePlayerInfo, ILocalPlayerInfo
+public class ControlledOnlinePlayerInfo : IOnlinePlayerInfo, IControlledPlayerInfo
 {
-    public LocalOnlinePlayerInfo(Player player, string playerName, string? playerId, int? elo)
+    public ControlledOnlinePlayerInfo(Player player, string playerName, string? playerId, int? elo)
     {
         Player = player;
         Name = playerName;

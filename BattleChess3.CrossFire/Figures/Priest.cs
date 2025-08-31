@@ -1,7 +1,7 @@
-﻿using BattleChess3.CrossFireFigures.Utilities;
-using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
+using BattleChess3.CrossFireFigures.Utilities;
 
 namespace BattleChess3.CrossFireFigures.Figures;
 
@@ -68,7 +68,7 @@ public class Priest : ICrossFireFigureType
 
     private void MakeUnitKing(IBoard board, ITile targetTile)
     {
-        if (targetTile.Figure.Owner.Equals(NeutralPlayerInfo.Instance))
+        if (targetTile.Figure.Owner.Equals(NeutralFigureOwner.Instance))
             return;
         
         var owner = targetTile.Figure.Owner;

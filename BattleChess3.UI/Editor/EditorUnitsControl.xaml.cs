@@ -2,9 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using BattleChess3.Core.Figures;
 using BattleChess3.CrossFireFigures;
-using BattleChess3.Game.Figures;
-using BattleChess3.Maps;
 using BattleChess3.UI.Shared;
 using Nicenis.Windows;
 
@@ -55,7 +54,7 @@ public partial class EditorUnitsControl
         {
             var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[BattleChess3.UI.Editor.TeamBoardViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[BattleChess3.UI.Shared.TileViewModel, BattleChess3, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]");
 
-            teamBoard.CreateFigure(sourceTile, new FigureIdentifier(0, CrossFireFigureIds.EmptyId, false));
+            teamBoard.CreateFigure(sourceTile, new FigureBlueprint(0, CrossFireFigureIds.EmptyId, false));
         }
     }
 
@@ -63,7 +62,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var figureType = (FigureTypeViewModel)button.DataContext;
-        e.Data = new FigureIdentifier(figureType.Player, figureType.FigureId, false);
+        e.Data = new FigureBlueprint(figureType.Player, figureType.FigureId, false);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

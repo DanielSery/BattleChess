@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Helpers;
-using BattleChess3.Game.Players;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Helpers;
+using BattleChess3.Core.Players;
 
-namespace BattleChess3.Game.Figures;
+namespace BattleChess3.Core.Figures;
 
 [DebuggerDisplay("{Type.DisplayName}:{Owner.Player}")]
 public sealed class Figure : IFigure, IFigureInfo, INotifyPropertyChanged
 {
-    public static readonly Figure None = new(NeutralPlayerInfo.Instance, NoneFigureType.Instance, false);
+    public static readonly Figure None = new(NeutralFigureOwner.Instance, NoneFigureType.Instance, false);
 
     public Figure(IFigureOwner owner, IFigureType type, bool isKing)
     {

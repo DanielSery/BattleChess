@@ -1,6 +1,6 @@
-﻿using BattleChess3.Game.Figures;
-using BattleChess3.Game.GameBoard;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
 using BattleChess3.Maps;
 using Nicenis.Windows.ViewModels;
 
@@ -28,7 +28,7 @@ public sealed class MapsViewModel : ViewModelBase
     {
         var map = new BoardBlueprint
         {
-            Figures = board.Select(x => new FigureIdentifier
+            Figures = board.Select(x => new FigureBlueprint
             {
                 Player = x.Figure.Owner.Player,
                 FigureId = x.Figure.Type.FigureId,

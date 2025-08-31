@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Resources;
 
-namespace BattleChess3.Game.Localization;
+namespace BattleChess3.Core.Localization;
 
 public abstract class LocalizationSourceBase : INotifyPropertyChanged
 {

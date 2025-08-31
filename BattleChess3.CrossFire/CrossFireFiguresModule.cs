@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using BattleChess3.Game.Figures;
+using BattleChess3.Core.Figures;
 
 namespace BattleChess3.CrossFireFigures;
 

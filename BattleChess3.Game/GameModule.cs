@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using BattleChess3.Core;
 
 namespace BattleChess3.Game;
 
@@ -8,6 +9,7 @@ public static class GameModule
     {
         builder.RegisterType<GameService>()
             .As<IGameService>()
+            .As<IFigureOwnersHolder>()
             .SingleInstance();
     }
 }

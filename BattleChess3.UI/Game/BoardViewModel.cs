@@ -1,5 +1,8 @@
-﻿using BattleChess3.Game;
-using BattleChess3.Game.Figures;
+﻿using BattleChess3.Core;
+using BattleChess3.Core.Figures;
+using BattleChess3.Core.GameBoard;
+using BattleChess3.Core.Players;
+using BattleChess3.Game;
 using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
@@ -20,8 +23,8 @@ public sealed class BoardViewModel : ViewModelBase
     private readonly IMultiplayerGameService _multiplayerGameService;
     private readonly ISoundService _soundService;
 
-    private TileViewModel _mouseOnTile = NoneTileViewModel.Instance;
-    private TileViewModel _selectedTile = NoneTileViewModel.Instance;
+    private TileViewModel _mouseOnTile =  TileViewModel.None;
+    private TileViewModel _selectedTile = TileViewModel.None;
     private readonly IBoard _board;
 
     public BoardViewModel(
@@ -69,7 +72,7 @@ public sealed class BoardViewModel : ViewModelBase
             _mouseOnTile.IsMouseOver = false;
             SetProperty(ref _mouseOnTile, value);
             
-            if (_selectedTile.Equals(NoneTileViewModel.Instance))
+            if (_selectedTile.Equals(TileViewModel.None))
             {                
                 ClearPossibleActions();
                 SetPossibleActions(value, false);
@@ -82,7 +85,7 @@ public sealed class BoardViewModel : ViewModelBase
 
     public TileViewModel TileInfo
     {
-        get => SelectedTile is not NoneTileViewModel
+        get => SelectedTile.Equals(TileViewModel.None)
             ? SelectedTile
             : MouseOnTile;
     }
@@ -101,8 +104,8 @@ public sealed class BoardViewModel : ViewModelBase
     public void SinglePlayerLoadMap(BoardBlueprint map)
     {
         _gameService.StartGame(
-            new LocalPlayerInfo(Player.White, "Red player"),
-            new LocalPlayerInfo(Player.Black, "Blue player"),
+            new ControlledPlayerInfo(Player.White, "Red player"),
+            new ControlledPlayerInfo(Player.Black, "Blue player"),
             map.StartingPlayer);
         
         _mapLoader.LoadMapExtendedFor2Players(_board, map);
@@ -137,7 +140,7 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void Surrender()
     {
-        if (_gameService.GameRunning && _gameService.PlayerInfos.Any(x => x is IOnlinePlayerInfo))
+        if (_gameService is { GameRunning: true, BlackPlayer: IOnlinePlayerInfo })
         {
             _soundService.PlaySoundEffect(SoundEffectType.Button);
             _gameService.Surrender();
@@ -160,7 +163,7 @@ public sealed class BoardViewModel : ViewModelBase
                 _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime);
             clickedTile.PossibleAction.Action.Invoke();
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
-            SelectedTile = NoneTileViewModel.Instance;
+            SelectedTile = TileViewModel.None;
             _gameService.StartTurn();
         }
         else if (clickedTile.Figure.Owner.Equals(_gameService.CurrentPlayerInfo))
@@ -169,7 +172,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
         else
         {
-            SelectedTile = NoneTileViewModel.Instance;
+            SelectedTile = TileViewModel.None;
         }
 
         ClearPossibleActions();
@@ -232,7 +235,7 @@ public sealed class BoardViewModel : ViewModelBase
         ArgumentNullException.ThrowIfNull(tile);
         if (MouseOnTile == tile)
         {
-            MouseOnTile = NoneTileViewModel.Instance;
+            MouseOnTile = TileViewModel.None;
         }
     }
 
@@ -242,28 +245,28 @@ public sealed class BoardViewModel : ViewModelBase
 
     public void OnDeactivation()
     {
-        SelectedTile = NoneTileViewModel.Instance;
+        SelectedTile = TileViewModel.None;
         ClearPossibleActions();
     }
 
     private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to, TimeSpan turnTimeSpent) e)
     {
-        SelectedTile = NoneTileViewModel.Instance;
+        SelectedTile = TileViewModel.None;
         ClearPossibleActions();
 
         switch (e.from.GetIndex())
         {
             case IMultiplayerGameService.NotRespondingMessage:
-                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.White), WinType.NotResponding, true);
+                _gameService.PlayerWin(_gameService.WhitePlayer, WinType.NotResponding, true);
                 return;
             case IMultiplayerGameService.NotRespondingLostMessage:
-                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.Black), WinType.NotResponding, false);
+                _gameService.PlayerWin(_gameService.BlackPlayer, WinType.NotResponding, false);
                 return;
             case IMultiplayerGameService.OutOfTimeMessage:
-                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.White), WinType.OutOfTime, false);
+                _gameService.PlayerWin(_gameService.WhitePlayer, WinType.OutOfTime, false);
                 return;
             case IMultiplayerGameService.SurrenderMessage:
-                _gameService.PlayerWin(_gameService.GetPlayerInfo(Player.White), WinType.Surrender, false);
+                _gameService.PlayerWin(_gameService.WhitePlayer, WinType.Surrender, false);
                 return;
         }
 
@@ -275,7 +278,7 @@ public sealed class BoardViewModel : ViewModelBase
         var toTile = Tiles[e.to.GetIndex()];
         toTile.PossibleAction.Action.Invoke();
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
-        SelectedTile = NoneTileViewModel.Instance;
+        SelectedTile = TileViewModel.None;
         _gameService.StartTurn();
         ClearPossibleActions();
     }

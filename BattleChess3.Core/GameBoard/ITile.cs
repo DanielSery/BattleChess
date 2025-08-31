@@ -1,7 +1,7 @@
-﻿using BattleChess3.Game.Figures;
-using BattleChess3.Game.Players;
+﻿using BattleChess3.Core.Figures;
+using BattleChess3.Core.Players;
 
-namespace BattleChess3.Game.GameBoard;
+namespace BattleChess3.Core.GameBoard;
 
 public interface ITile
 {

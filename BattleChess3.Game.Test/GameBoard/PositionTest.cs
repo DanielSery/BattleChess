@@ -1,4 +1,4 @@
-﻿using BattleChess3.Game.GameBoard;
+﻿using BattleChess3.Core.GameBoard;
 using Xunit;
 using Assert = Xunit.Assert;
 

@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using BattleChess3.UI.MainWindow;
-using BattleChess3.UI.Shared;
+﻿using BattleChess3.UI.Shared;
 
 namespace BattleChess3.UI;
 
