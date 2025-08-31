@@ -13,10 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Figures\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\BattleChess3.Core\BattleChess3.Core.csproj" />
     </ItemGroup>
 </Project>

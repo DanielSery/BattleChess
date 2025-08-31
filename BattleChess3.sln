@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.Game.Test", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.Core", "BattleChess3.Core\BattleChess3.Core.csproj", "{1ED989DD-AE82-439E-B868-83EA5A28C9D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleChess3.Core.Test", "BattleChess3.Core.Test\BattleChess3.Core.Test.csproj", "{28F2D9F9-EAE3-49A2-93CE-7E47BA397B86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{1ED989DD-AE82-439E-B868-83EA5A28C9D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ED989DD-AE82-439E-B868-83EA5A28C9D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ED989DD-AE82-439E-B868-83EA5A28C9D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F2D9F9-EAE3-49A2-93CE-7E47BA397B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F2D9F9-EAE3-49A2-93CE-7E47BA397B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F2D9F9-EAE3-49A2-93CE-7E47BA397B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F2D9F9-EAE3-49A2-93CE-7E47BA397B86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +75,6 @@ Global
 		{EDC1603E-4D88-440C-BEFF-7EB78DB64FE0} = {F8495298-BC3B-4E03-891C-BB762E223776}
 		{429BF419-ED34-4375-9332-0BABE746C68F} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 		{1ED989DD-AE82-439E-B868-83EA5A28C9D8} = {F8495298-BC3B-4E03-891C-BB762E223776}
+		{28F2D9F9-EAE3-49A2-93CE-7E47BA397B86} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 	EndGlobalSection
 EndGlobal

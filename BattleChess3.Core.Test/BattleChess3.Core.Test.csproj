@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -20,11 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BattleChess3.Game\BattleChess3.Game.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Figures\" />
+      <ProjectReference Include="..\BattleChess3.Core\BattleChess3.Core.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,7 @@
 ﻿using BattleChess3.Core.Figures;
 using BattleChess3.Core.Players;
 using BattleChess3.Game.Players;
-using BattleChess3.Game.Timers;
 using Moq;
-using Xunit;
-using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test;
 
@@ -14,76 +11,79 @@ public class GameServiceTest
     public void StartGame_SetsCorrect_ForSingleWhite()
     {
         var gameService = new GameService();
-        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
-        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
+        var player1Mock = CreatePlayer(Player.White, true);
+        var player2Mock = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.White);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, Player.White);
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
         Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Once);
-        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Never);
+        player1Mock.Verify(x => x.StartTurn(), Times.Once);
+        player2Mock.Verify(x => x.StartTurn(), Times.Never);
     }
 
     [Fact]
     public void StartGame_SetsCorrect_ForSingleBlack()
     {
         var gameService = new GameService();
-        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
-        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
+        var player1Mock = CreatePlayer(Player.White, true);
+        var player2Mock = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, Player.Black);
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
-        Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Never);
-        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Once);
+        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
+        player1Mock.Verify(x => x.StartTurn(), Times.Never);
+        player2Mock.Verify(x => x.StartTurn(), Times.Once);
     }
 
     [Fact]
     public void StartTurn_SetsCorrect_ForSingleWhite()
     {
         var gameService = new GameService();
-        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
-        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
+        var player1Mock = CreatePlayer(Player.White, true);
+        var player2Mock = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.White);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, Player.White);
         gameService.EndTurn();
         gameService.StartTurn();
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
-        Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Once);
-        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Once);
+        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
+        player1Mock.Verify(x => x.StartTurn(), Times.Once);
+        player2Mock.Verify(x => x.StartTurn(), Times.Once);
     }
 
     [Fact]
     public void StartTurn_SetsCorrect_ForSingleBlack()
     {
         var gameService = new GameService();
-        var (player1, timer1Mock) = CreatePlayer(Player.White, true);
-        var (player2, timer2Mock) = CreatePlayer(Player.Black, true);
+        var player1Mock = CreatePlayer(Player.White, true);
+        var player2Mock = CreatePlayer(Player.Black, true);
 
-        gameService.StartGame(player1, player2, Player.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, Player.Black);
         gameService.EndTurn();
         gameService.StartTurn();
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
         Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
-        timer1Mock.Verify(x => x.StartTurnTimer(), Times.Once);
-        timer2Mock.Verify(x => x.StartTurnTimer(), Times.Once);
+        player1Mock.Verify(x => x.StartTurn(), Times.Once);
+        player2Mock.Verify(x => x.StartTurn(), Times.Once);
     }
 
-    private static (ControlledPlayerInfo, Mock<IPlayerTimer>) CreatePlayer(Player player, bool hasKing)
+    private static Mock<IPlayerInfo> CreatePlayer(Player player, bool hasKing)
     {
-        var timerMock = new Mock<IPlayerTimer>();
-        var playerInfo = new ControlledPlayerInfo(player, string.Empty);
-        playerInfo.SetTimer(timerMock.Object);
+        var playerInfo = new Mock<IPlayerInfo>();
+        playerInfo.SetupGet(x => x.Player).Returns(player);
         if (hasKing)
         {
-            playerInfo.Figures.Add(new Figure(playerInfo, NoneFigureType.Instance, true));
+            playerInfo.Setup(x => x.Figures).Returns([new Figure(playerInfo.Object, NoneFigureType.Instance, true)]);
+        }
+        else
+        {
+            playerInfo.Setup(x => x.Figures).Returns([]);
         }
         
-        return (playerInfo, timerMock);
+        return playerInfo;
     }
 }

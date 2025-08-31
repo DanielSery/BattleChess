@@ -14,9 +14,5 @@ public class NoneFigureType : IFigureType
     public string AttackDescription => string.Empty;
     public string SpecialDescription => string.Empty;
     public IDictionary<int, Uri> ImageUris { get; } = new Dictionary<int, Uri>();
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        return [];
-    }
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board) => [];
 }

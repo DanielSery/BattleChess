@@ -1,9 +1,7 @@
 ﻿using BattleChess3.Core.Helpers;
 using BattleChess3.Core.Players;
-using Xunit;
-using Assert = Xunit.Assert;
 
-namespace BattleChess3.Game.Test.Helpers;
+namespace BattleChess3.Core.Test.Helpers;
 
 public class PlayerSerializationHelperTest
 {
