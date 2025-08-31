@@ -53,6 +53,24 @@ public class BoardTest
     }
 
     [Fact]
+    public void TryTileReturnsFalseForTileYOutOfBoard()
+    {
+        var resultBool = _halfBoard.TryGetTile(new Position(2, 10), out var resultTile);
+
+        Assert.False(resultBool);
+        Assert.Equal(NoneTile.Instance, resultTile);
+    }
+
+    [Fact]
+    public void TryTileReturnsFalseForTileXOutOfBoard()
+    {
+        var resultBool = _halfBoard.TryGetTile(new Position(10, 2), out var resultTile);
+
+        Assert.False(resultBool);
+        Assert.Equal(NoneTile.Instance, resultTile);
+    }
+
+    [Fact]
     public void TryTileReturnsFalseForTileOutOfBoard()
     {
         var resultBool = _halfBoard.TryGetTile(new Position(10, 10), out var resultTile);

@@ -433,11 +433,11 @@ namespace BattleChess3.CrossFireFigures.Localization {
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬜⬜⬜⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬛⬜⬜
+        ///⬜⬜⬜⬜⬜⬜⬜⬜
         ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///⬜⬛⬛▣⬛⬛⬜⬜
+        ///⬜⬜⬛▣⬛⬜⬜⬜
         ///⬜⬜⬛⬛⬛⬜⬜⬜
-        ///⬜⬛⬜⬛⬜⬛⬜⬜.
+        ///⬜⬜⬜⬜⬜⬜⬜⬜.
         /// </summary>
         internal static string Blade_MovementDescription {
             get {

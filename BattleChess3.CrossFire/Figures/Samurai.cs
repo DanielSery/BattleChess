@@ -27,8 +27,6 @@ public class Samurai : ICrossFireFigureType
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);
-            else
-                break;
         }
         
         foreach (var direction in AttackDirections)

@@ -26,7 +26,10 @@ public class Board : IBoard
     public bool HasTileOnPosition(Position position)
     {
         var index = position.GetIndex();
-        return index >= 0 && index < _tiles.Length;
+        if (index < 0 || index >= _tiles.Length)
+            return false;
+
+        return position.X is >= 0 and < Constants.BoardLength;
     }
 
     public bool TryGetTile(Position position, out ITile tile)
