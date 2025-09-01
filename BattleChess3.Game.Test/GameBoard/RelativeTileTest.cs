@@ -8,12 +8,12 @@ using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test.GameBoard;
 
-public class RelativePositionTest
+public class RelativeTileTest
 {
     private readonly ITile _tile;
     private readonly Figure _figure;
 
-    public RelativePositionTest()
+    public RelativeTileTest()
     {
         _figure = new Figure(NeutralFigureOwner.Instance, NoneFigureType.Instance, false);
 

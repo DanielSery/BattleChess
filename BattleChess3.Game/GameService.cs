@@ -52,13 +52,13 @@ internal class GameService : IGameService, IFigureOwnersHolder
 
     public void StartTurn()
     {
+        if (!GameRunning)
+            return;
+
         (CurrentPlayerInfo, WaitingPlayerInfo) = (WaitingPlayerInfo, CurrentPlayerInfo);
         
         CheckCapturedKing(CurrentPlayerInfo, WaitingPlayerInfo);
         CheckCapturedKing(WaitingPlayerInfo, CurrentPlayerInfo);
-
-        if (!GameRunning)
-            return;
 
         CurrentPlayerInfo.StartTurn();
         TurnStarted?.Invoke(this, EventArgs.Empty);
