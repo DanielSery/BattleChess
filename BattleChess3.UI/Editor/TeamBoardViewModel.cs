@@ -5,6 +5,8 @@ using BattleChess3.Core.Helpers;
 using BattleChess3.Core.Players;
 using BattleChess3.Game.GameBoard;
 using BattleChess3.Maps;
+using BattleChess3.Maps.BoardBlueprints;
+using BattleChess3.Maps.Figures;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Services;
 using BattleChess3.UI.Shared;
@@ -22,20 +24,20 @@ public class TeamBoardViewModel : ViewModelBase
     
     private readonly IFigureCreator _figureCreator;
     private readonly MapsViewModel _maps;
-    private readonly IMapLoader _mapLoader;
+    private readonly IBoardBlueprintLoader _boardBlueprintLoader;
     private readonly IMultiplayerPlayerService _playerService;
     private readonly ISoundService _soundService;
 
     public TeamBoardViewModel(
         IFigureCreator figureCreator,
         MapsViewModel maps,
-        IMapLoader mapLoader, 
+        IBoardBlueprintLoader boardBlueprintLoader, 
         IMultiplayerPlayerService playerService,
         ISoundService soundService)
     {
         _figureCreator = figureCreator;
         _maps = maps;
-        _mapLoader = mapLoader;
+        _boardBlueprintLoader = boardBlueprintLoader;
         _playerService = playerService;
         _soundService = soundService;
         
@@ -44,7 +46,7 @@ public class TeamBoardViewModel : ViewModelBase
             .ToArray();
         
         Board = new Board(Tiles.Cast<ITile>().ToArray());
-        mapLoader.LoadMap(Board, maps.TeamMap);
+        boardBlueprintLoader.LoadMap(Board, maps.TeamMap);
         EvaluateTeamBoard();
         
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
@@ -117,7 +119,7 @@ public class TeamBoardViewModel : ViewModelBase
             return;
         
         var mapBlueprint = GetMapBlueprint(loggedInPlayer.Map);
-        _mapLoader.LoadMap(Board, mapBlueprint);
+        _boardBlueprintLoader.LoadMap(Board, mapBlueprint);
     }
     
     private static BoardBlueprint GetMapBlueprint(byte[] map)
@@ -142,7 +144,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     public void Discard()
     {
-        _mapLoader.LoadMap(Board, _maps.TeamMap);
+        _boardBlueprintLoader.LoadMap(Board, _maps.TeamMap);
     }
 
     private void MakeUnitKing(TileViewModel? tile)

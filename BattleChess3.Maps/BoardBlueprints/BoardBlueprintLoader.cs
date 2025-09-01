@@ -1,14 +1,15 @@
 ﻿using BattleChess3.Core.Figures;
 using BattleChess3.Core.GameBoard;
 using BattleChess3.Core.Players;
+using BattleChess3.Maps.Figures;
 
-namespace BattleChess3.Maps;
+namespace BattleChess3.Maps.BoardBlueprints;
 
-internal class MapLoader : IMapLoader
+internal class BoardBlueprintLoader : IBoardBlueprintLoader
 {
     private readonly IFigureCreator _figureCreator;
 
-    public MapLoader(IFigureCreator figureCreator)
+    public BoardBlueprintLoader(IFigureCreator figureCreator)
     {
         _figureCreator = figureCreator;
     }

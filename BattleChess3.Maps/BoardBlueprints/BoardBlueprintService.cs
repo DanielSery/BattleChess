@@ -2,14 +2,14 @@
 using BattleChess3.Core.GameBoard;
 using BattleChess3.Maps.Utilities;
 
-namespace BattleChess3.Maps;
+namespace BattleChess3.Maps.BoardBlueprints;
 
-internal class MapService : IMapService
+internal class BoardBlueprintService : IBoardBlueprintService
 {
     private readonly TaskCompletionSource _taskCompletionSource = new TaskCompletionSource();
     private BoardBlueprint _map = BoardBlueprint.ChessTeam;
 
-    public MapService()
+    public BoardBlueprintService()
     {
         Task.Run(LoadMap);
     }

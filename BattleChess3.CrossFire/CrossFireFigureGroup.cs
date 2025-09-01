@@ -6,6 +6,7 @@ namespace BattleChess3.CrossFireFigures;
 
 public sealed class CrossFireFigureGroup : IFigureGroup
 {
+    private readonly Dictionary<int, IFigureType> _figuresDictionary;
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrossFireFigureGroup)}_Name"];
 
     internal static readonly IFigureType Wall = new Wall();
@@ -15,6 +16,11 @@ public sealed class CrossFireFigureGroup : IFigureGroup
     internal static readonly IFigureType LegionarySword = new LegionarySword();
     internal static readonly IFigureType Empty = new Empty();
     internal static readonly IFigureType Fire = new Fire();
+
+    public CrossFireFigureGroup()
+    {
+        _figuresDictionary = FigureTypes.ToDictionary(figure => figure.FigureId, figure => figure);
+    }
 
     public IFigureType[] FigureTypes { get; } =
     [
@@ -71,4 +77,10 @@ public sealed class CrossFireFigureGroup : IFigureGroup
         new Miner(),
         new Dragon()
     ];
+
+    /// <inheritdoc />
+    public IFigureType GetFigureTypeById(int uniqueUnitId)
+    {
+        return _figuresDictionary[uniqueUnitId];
+    }
 }

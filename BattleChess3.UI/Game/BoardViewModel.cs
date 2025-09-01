@@ -8,6 +8,7 @@ using BattleChess3.Game.Helpers;
 using BattleChess3.Game.Players;
 using BattleChess3.Game.Timers;
 using BattleChess3.Maps;
+using BattleChess3.Maps.BoardBlueprints;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Services;
 using BattleChess3.UI.Shared;
@@ -19,7 +20,7 @@ namespace BattleChess3.UI.Game;
 public sealed class BoardViewModel : ViewModelBase
 {
     private readonly IGameService _gameService;
-    private readonly IMapLoader _mapLoader;
+    private readonly IBoardBlueprintLoader _boardBlueprintLoader;
     private readonly IMultiplayerGameService _multiplayerGameService;
     private readonly ISoundService _soundService;
 
@@ -29,12 +30,12 @@ public sealed class BoardViewModel : ViewModelBase
 
     public BoardViewModel(
         IGameService gameService,
-        IMapLoader mapLoader,
+        IBoardBlueprintLoader boardBlueprintLoader,
         IMultiplayerGameService multiplayerGameService,
         ISoundService soundService)
     {
         _gameService = gameService;
-        _mapLoader = mapLoader;
+        _boardBlueprintLoader = boardBlueprintLoader;
         _multiplayerGameService = multiplayerGameService;
         _soundService = soundService;
 
@@ -108,7 +109,7 @@ public sealed class BoardViewModel : ViewModelBase
             new ControlledPlayerInfo(Player.Black, "Blue player"),
             map.StartingPlayer);
         
-        _mapLoader.LoadMapExtendedFor2Players(_board, map);
+        _boardBlueprintLoader.LoadMapExtendedFor2Players(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
@@ -133,7 +134,7 @@ public sealed class BoardViewModel : ViewModelBase
             player1, player2,
             map.StartingPlayer);
         
-        _mapLoader.LoadMap(_board, map);
+        _boardBlueprintLoader.LoadMap(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
         _multiplayerGameService.StartGame(gameType, gameId);
     }

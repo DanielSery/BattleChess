@@ -11,4 +11,9 @@ public interface IFigureGroup
     ///     Figure types of group
     /// </summary>
     IFigureType[] FigureTypes { get; }
+
+    /// <summary>
+    /// Bets figure type by unique unit id.
+    /// </summary>
+    IFigureType GetFigureTypeById(int uniqueUnitId);
 }

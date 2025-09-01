@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="BattleChess3.Maps.Test" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Remove="Resources\Maps\**"/>
         <Content Include="Resources\Maps\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -2,20 +2,21 @@
 using BattleChess3.Core.GameBoard;
 using BattleChess3.Core.Players;
 using BattleChess3.Maps;
+using BattleChess3.Maps.BoardBlueprints;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.Shared;
 
 public sealed class MapsViewModel : ViewModelBase
 {
-    private readonly IMapService _mapService;
+    private readonly IBoardBlueprintService _boardBlueprintService;
 
     private BoardBlueprint _teamMap;
 
-    public MapsViewModel(IMapService mapService)
+    public MapsViewModel(IBoardBlueprintService boardBlueprintService)
     {
-        _mapService = mapService;
-        _teamMap = _mapService.GetCurrentMap();
+        _boardBlueprintService = boardBlueprintService;
+        _teamMap = _boardBlueprintService.GetCurrentMap();
     }
 
     public BoardBlueprint TeamMap
@@ -37,7 +38,7 @@ public sealed class MapsViewModel : ViewModelBase
             StartingPlayer = Player.White
         };
 
-        _mapService.Save(map);
+        _boardBlueprintService.Save(map);
         TeamMap = map;
     }
 }

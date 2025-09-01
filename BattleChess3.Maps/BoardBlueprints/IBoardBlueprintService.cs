@@ -1,12 +1,12 @@
 ﻿
 using BattleChess3.Core.GameBoard;
 
-namespace BattleChess3.Maps;
+namespace BattleChess3.Maps.BoardBlueprints;
 
 /// <summary>
 ///     Service for handling maps loading.
 /// </summary>
-public interface IMapService
+public interface IBoardBlueprintService
 {
     /// <summary>
     ///     Gets current maps.

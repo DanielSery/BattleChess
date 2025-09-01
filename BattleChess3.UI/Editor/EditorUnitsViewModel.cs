@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using BattleChess3.Core.Figures;
-using BattleChess3.Maps;
 using BattleChess3.Multiplayer;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
@@ -10,7 +9,7 @@ namespace BattleChess3.UI.Editor;
 
 public class EditorUnitsViewModel : ViewModelBase
 {
-    private readonly IFigureService _figureService;
+    private readonly IFigureGroup _figureGroup;
     private readonly IMultiplayerPlayerService _playerService;
 
     private IFigureInfo _mouseOnInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
@@ -19,10 +18,10 @@ public class EditorUnitsViewModel : ViewModelBase
     private bool _tileInfoFocused;
 
     public EditorUnitsViewModel(
-        IFigureService figureService, 
+        IFigureGroup figureGroup,
         IMultiplayerPlayerService playerService)
     {
-        _figureService = figureService;
+        _figureGroup = figureGroup;
         _playerService = playerService;
         _playerService.LoggedInPlayerChanged += PlayerServiceOnLoggedInPlayerChanged;
 
@@ -147,8 +146,7 @@ public class EditorUnitsViewModel : ViewModelBase
                               ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
         var unlockedFiguresBitArray = new BitArray(unlockedFigures);
         
-        Figures = _figureService.FigureGroups
-            .SelectMany(x => x.FigureTypes)
+        Figures = _figureGroup.FigureTypes
             .Select(x => new FigureTypeViewModel(x, unlockedFiguresBitArray[x.FigureId]))
             .ToArray();
     }
