@@ -2,7 +2,7 @@
 
 public interface IMultiplayerScheduler
 {
-    object SyncLock { get; }
+    Lock SyncLock { get; }
 
     Task<T> QueueTask<T>(Func<Task<T>> getTask);
 

@@ -13,7 +13,7 @@ public class FigureCreatorTest
     {
         var figureOwnerMock = new Mock<IFigureOwner>();
         figureOwnerMock.Setup(x => x.Player).Returns(Player.Black);
-        figureOwnerMock.Setup(x => x.Figures).Returns(new List<IFigure>());
+        figureOwnerMock.Setup(x => x.Figures).Returns([]);
         var figureOwnersMock = new Mock<IFigureOwnersHolder>();
         figureOwnersMock.Setup(x => x.GetFigureOwner(Player.Black)).Returns(figureOwnerMock.Object);
 

@@ -146,7 +146,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         BoardBlueprint myMap,
         CancellationToken cancellationToken)
     {
-        lock (_scheduler.SyncLock)
+        using (_scheduler.SyncLock.EnterScope())
         {
             var random = new Random();
             var isHostStarting = random.Next(0, 1) == 1;
@@ -202,7 +202,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
 
     public Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby, CancellationToken cancellationToken)
     {
-        lock (_scheduler.SyncLock)
+        using (_scheduler.SyncLock.EnterScope())
         {
             return _scheduler.QueueTask(async () =>
             {
@@ -253,7 +253,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         BoardBlueprint myMap,
         CancellationToken cancellationToken)
     {
-        lock (_scheduler.SyncLock)
+        using (_scheduler.SyncLock.EnterScope())
         {
             return _scheduler.QueueTask(async () =>
             {

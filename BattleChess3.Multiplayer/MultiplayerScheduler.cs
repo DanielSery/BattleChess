@@ -8,7 +8,7 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
     private readonly ConcurrentQueue<IScheduledTask> _queuedTasks = new ConcurrentQueue<IScheduledTask>();
     private int _currentThreadId;
 
-    public object SyncLock { get; } = new object();
+    public Lock SyncLock { get; } = new Lock();
 
     /// <inheritdoc />
     public Task<T> QueueTask<T>(Func<Task<T>> getTask)
@@ -24,8 +24,8 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
                 Console.WriteLine(e);
             }
         }
-        
-        lock (SyncLock)
+
+        using (SyncLock.EnterScope())
         {
             var scheduledTask = new ScheduledTask<T>(getTask);
             _queuedTasks.Enqueue(scheduledTask);
@@ -48,7 +48,7 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
             }
         }
 
-        lock (SyncLock)
+        using (SyncLock.EnterScope())
         {
             var scheduledTask = new ScheduledTask(getTask);
             _queuedTasks.Enqueue(scheduledTask);
@@ -76,7 +76,7 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
 
     private bool TryGetTaskToRun(out IScheduledTask? scheduledTask)
     {
-        lock (SyncLock)
+        using (SyncLock.EnterScope())
         {
             if (_queuedTasks.TryDequeue(out var getTask))
             {

@@ -46,7 +46,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     public Task<Result<string?>> HandleWinAsync(bool nofityOther, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
     {
-        lock (_scheduler.SyncLock)
+        using (_scheduler.SyncLock.EnterScope())
         {
             if (GameId is null)
                 return Task.FromResult(Result.Ok<string?>(null));
@@ -249,7 +249,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent)
     {
-        lock (_scheduler.SyncLock)
+        using (_scheduler.SyncLock.EnterScope())
         {
             if (GameId is null)
                 return Task.FromResult(Result.Fail("Not in game"));
@@ -284,7 +284,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     public Task<Result> HandleHisTurnAsync()
     {
-        lock (_scheduler.SyncLock)
+        using (_scheduler.SyncLock.EnterScope())
         {
             if (GameId is null)
                 return Task.FromResult(Result.Fail("Not in game"));
