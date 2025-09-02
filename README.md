@@ -1,23 +1,19 @@
 # BattleChess
 
-2D Game like chess, but with special themes and special game mode. 
+2D Game like chess, but with multiple special figures and selection of your figure configuration. 
 
 Game setup:
 
-![image](https://user-images.githubusercontent.com/26441773/165458125-bc1404ec-196d-466c-b6c0-89e2d9d7d6c5.png)
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/b16ca29b-39a6-4140-bcca-8082bd698b91" />
 
 The game itself:
 
-![image](https://user-images.githubusercontent.com/26441773/165457707-c91a0a38-f92f-4b80-aa87-a65c27d15b6c.png)
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/b10aeee7-a42b-41cd-a4cb-cdcf8077c975" />
 
-Lord of the rings style:
+Team selection:
 
-![image](https://user-images.githubusercontent.com/26441773/165457871-6393ec3a-7371-4dcc-bdca-8532354fb5e8.png)
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/fb779360-158b-49e9-b56b-3d67177d40c0" />
 
 # Multiplayer
 
-This game could be played over the internet by Telegrap.Api for sending the game data. For it create public channel for telegram. Create two bots and add them to the channel. Then add api keys to the game itself.
-
-Game key format: {BotId}:{BotHash}@{RoomName}
-
-On player should host, the second should join to copy the host board. Then the board is shared between player and all clicks are transfered to the other player.
+This game supports multiplayer either by using lobbies or ranked play.
