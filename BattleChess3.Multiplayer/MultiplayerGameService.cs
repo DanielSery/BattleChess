@@ -24,8 +24,11 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     {
         _scheduler = scheduler;
         _playerService = playerService;
+
+        var settings = MongoClientSettings.FromConnectionString(Secrets.ConnectionString);
+        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+        _client = new MongoClient(settings);
         
-        _client = new MongoClient(Secrets.ConnectionString);
         var database = _client.GetDatabase("BattleChess");
         _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");

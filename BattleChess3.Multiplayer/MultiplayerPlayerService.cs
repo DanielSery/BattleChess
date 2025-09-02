@@ -17,7 +17,11 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public MultiplayerPlayerService(IMultiplayerScheduler scheduler)
     {
         _scheduler = scheduler;
-        var client = new MongoClient(Secrets.ConnectionString);
+
+        var settings = MongoClientSettings.FromConnectionString(Secrets.ConnectionString);
+        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+        var client = new MongoClient(settings);
+
         var database = client.GetDatabase("BattleChess");
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
     }

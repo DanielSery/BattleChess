@@ -25,7 +25,10 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
         
-        var client = new MongoClient(Secrets.ConnectionString);
+        var settings = MongoClientSettings.FromConnectionString(Secrets.ConnectionString);
+        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+        var client = new MongoClient(settings);
+
         var database = client.GetDatabase("BattleChess");
         _rankedGamesCollection = database.GetCollection<RankedGame>("RankedGames");
         _rankedGameJoinsCollection = database.GetCollection<RankedGameJoin>("RankedGameJoins");
