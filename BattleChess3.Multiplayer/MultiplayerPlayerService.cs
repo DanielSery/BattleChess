@@ -120,7 +120,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
     public Task<Result<IOnlinePlayerInfo>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken)
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             return _scheduler.QueueTask(async () =>
             {
@@ -150,7 +150,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
     public Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken)
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             return _scheduler.QueueTask(async () =>
             {
@@ -180,7 +180,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
     public Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken)
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             return _scheduler.QueueTask(async () =>
             {
@@ -223,7 +223,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (!map.IsValid(LoggedInPlayer.UnlockedFigures))
             return Task.FromResult(Result.Fail("Trying to save setup with not unlocked figures"));
 
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             return _scheduler.QueueTask(async () =>
             {
@@ -262,7 +262,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (LoggedInPlayer is null)
             return Task.FromResult(Result.Fail("No logged in player"));
 
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             return _scheduler.QueueTask(async () =>
             {
@@ -304,7 +304,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     /// <inheritdoc />
     public Task<Result> TryVerifyEmailAsync(string emailHash, CancellationToken cancellationToken)
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             return _scheduler.QueueTask(async () =>
             {
@@ -333,7 +333,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
     public Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, BoardBlueprint myMap, CancellationToken cancellationToken)
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             return _scheduler.QueueTask(async () =>
             {

@@ -28,7 +28,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         var settings = MongoClientSettings.FromConnectionString(Secrets.ConnectionString);
         settings.ServerApi = new ServerApi(ServerApiVersion.V1);
         _client = new MongoClient(settings);
-        
+
         var database = _client.GetDatabase("BattleChess");
         _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
         _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
@@ -49,7 +49,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     public Task<Result<string?>> HandleWinAsync(bool nofityOther, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             if (GameId is null)
                 return Task.FromResult(Result.Ok<string?>(null));
@@ -252,7 +252,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent)
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             if (GameId is null)
                 return Task.FromResult(Result.Fail("Not in game"));
@@ -287,7 +287,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     public Task<Result> HandleHisTurnAsync()
     {
-        using (_scheduler.SyncLock.EnterScope())
+        lock (_scheduler.SyncLock)
         {
             if (GameId is null)
                 return Task.FromResult(Result.Fail("Not in game"));

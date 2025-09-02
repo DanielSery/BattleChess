@@ -25,7 +25,7 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
             }
         }
 
-        using (SyncLock.EnterScope())
+        lock (SyncLock)
         {
             var scheduledTask = new ScheduledTask<T>(getTask);
             _queuedTasks.Enqueue(scheduledTask);
@@ -48,7 +48,7 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
             }
         }
 
-        using (SyncLock.EnterScope())
+        lock (SyncLock)
         {
             var scheduledTask = new ScheduledTask(getTask);
             _queuedTasks.Enqueue(scheduledTask);
@@ -76,7 +76,7 @@ internal class MultiplayerScheduler : IMultiplayerScheduler
 
     private bool TryGetTaskToRun(out IScheduledTask? scheduledTask)
     {
-        using (SyncLock.EnterScope())
+        lock (SyncLock)
         {
             if (_queuedTasks.TryDequeue(out var getTask))
             {

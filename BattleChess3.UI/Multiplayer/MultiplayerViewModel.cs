@@ -327,7 +327,7 @@ public class MultiplayerViewModel : ViewModelBase
             var lobbies = new ObservableCollection<PublicLobbyData>(await _multiplayerLobbyService.GetPublicLobbiesAsync(CancellationToken.None));
             Application.Current.Dispatcher.Invoke(() =>
             {
-                using (_lobbyLock.EnterScope())
+                lock (_lobbyLock)
                 {
                     Lobbies = lobbies;
                 }
@@ -349,7 +349,7 @@ public class MultiplayerViewModel : ViewModelBase
             if (!string.IsNullOrEmpty(lobbyData.JoinedId))
                 return;
 
-            using (_lobbyLock.EnterScope())
+            lock (_lobbyLock)
             {
                 Lobbies.Add(lobbyData);
             }
@@ -372,7 +372,7 @@ public class MultiplayerViewModel : ViewModelBase
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            using (_lobbyLock.EnterScope())
+            lock (_lobbyLock)
             {
                 for (var i = 0; i < Lobbies.Count; i++)
                 {
@@ -400,7 +400,7 @@ public class MultiplayerViewModel : ViewModelBase
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            using (_lobbyLock.EnterScope())
+            lock (_lobbyLock)
             {
                 for (var i = 0; i < Lobbies.Count; i++)
                 {
