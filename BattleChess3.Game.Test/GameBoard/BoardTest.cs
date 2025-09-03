@@ -1,8 +1,7 @@
-﻿using BattleChess3.Core.GameBoard;
+﻿using AwesomeAssertions;
+using BattleChess3.Core.GameBoard;
 using BattleChess3.Game.GameBoard;
 using Moq;
-using Xunit;
-using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test.GameBoard;
 
@@ -28,7 +27,8 @@ public class BoardTest
     {
         foreach (var tile in _halfBoard)
         {
-            Assert.True(_halfBoard.HasTileOnPosition(tile.RelativePosition));
+            var hasTileOnPosition = _halfBoard.HasTileOnPosition(tile.RelativePosition);
+            hasTileOnPosition.Should().BeTrue();
         }
     }
 
@@ -37,7 +37,8 @@ public class BoardTest
     {
         foreach (var tile in _halfBoard)
         {
-            Assert.True(_halfBoard[tile.RelativePosition].RelativePosition == tile.RelativePosition);
+            var relativePosition = _halfBoard[tile.RelativePosition].RelativePosition;
+            relativePosition.Should().Be(tile.RelativePosition);
         }
     }
 
@@ -47,7 +48,10 @@ public class BoardTest
         foreach (var tile in _halfBoard)
         {
             if (_halfBoard.TryGetTile(tile.RelativePosition, out var retrievedTile))
-                Assert.Equal(tile.RelativePosition, retrievedTile.RelativePosition);
+            {
+                var relativePosition = retrievedTile.RelativePosition;
+                relativePosition.Should().Be(tile.RelativePosition);
+            }
             else
                 Assert.Fail("All tiles should be retrievable when enumerating board");
         }
@@ -58,8 +62,8 @@ public class BoardTest
     {
         var resultBool = _halfBoard.TryGetTile(new Position(2, 10), out var resultTile);
 
-        Assert.False(resultBool);
-        Assert.Equal(NoneTile.Instance, resultTile);
+        resultBool.Should().BeFalse();
+        resultTile.Should().Be(NoneTile.Instance);
     }
 
     [Fact]
@@ -67,8 +71,8 @@ public class BoardTest
     {
         var resultBool = _halfBoard.TryGetTile(new Position(10, 2), out var resultTile);
 
-        Assert.False(resultBool);
-        Assert.Equal(NoneTile.Instance, resultTile);
+        resultBool.Should().BeFalse();
+        resultTile.Should().Be(NoneTile.Instance);
     }
 
     [Fact]
@@ -76,8 +80,8 @@ public class BoardTest
     {
         var resultBool = _halfBoard.TryGetTile(new Position(10, 10), out var resultTile);
 
-        Assert.False(resultBool);
-        Assert.Equal(NoneTile.Instance, resultTile);
+        resultBool.Should().BeFalse();
+        resultTile.Should().Be(NoneTile.Instance);
     }
 
     public static TheoryData<Position, bool> PositionInsideData()
@@ -97,7 +101,9 @@ public class BoardTest
     [MemberData(nameof(PositionInsideData))]
     public void PositionInside(Position position, bool expected)
     {
-        Assert.Equal(expected, _halfBoard.HasTileOnPosition(position));
+        var hasTileOnPosition = _halfBoard.HasTileOnPosition(position);
+
+        hasTileOnPosition.Should().Be(expected);
     }
 
     public static TheoryData<int, bool> IndexInsideData()
@@ -125,6 +131,8 @@ public class BoardTest
     {
         var position = Position.FromIndex(index);
 
-        Assert.Equal(expected, _halfBoard.HasTileOnPosition(position));
+        var hasTileOnPosition = _halfBoard.HasTileOnPosition(position);
+
+        hasTileOnPosition.Should().Be(expected);
     }
 }

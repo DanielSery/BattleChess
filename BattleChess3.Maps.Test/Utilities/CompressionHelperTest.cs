@@ -1,4 +1,5 @@
-﻿using BattleChess3.Maps.Utilities;
+﻿using AwesomeAssertions;
+using BattleChess3.Maps.Utilities;
 
 namespace BattleChess3.Maps.Test.Utilities;
 
@@ -12,7 +13,7 @@ public class CompressionHelperTest
         var compressed = CompressionHelper.Compress(inputString);
         var decompressed = CompressionHelper.Decompress(compressed);
 
-        Assert.Equal(inputString, decompressed);
+        decompressed.Should().Be(inputString);
     }
 
     [Fact]
@@ -23,6 +24,6 @@ public class CompressionHelperTest
         var compressed = CompressionHelper.Compress(inputString);
         var decompressed = CompressionHelper.Decompress(compressed);
 
-        Assert.Equal(inputString, decompressed);
+        decompressed.Should().Be(inputString);
     }
 }

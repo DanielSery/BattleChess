@@ -1,8 +1,7 @@
-﻿using BattleChess3.Core.GameBoard;
-using Xunit;
-using Assert = Xunit.Assert;
+﻿using AwesomeAssertions;
+using BattleChess3.Core.GameBoard;
 
-namespace BattleChess3.Game.Test.GameBoard;
+namespace BattleChess3.Core.Test.GameBoard;
 
 public class PositionTest
 {
@@ -19,7 +18,7 @@ public class PositionTest
     [MemberData(nameof(EqualPositionsData))]
     public void EqualPosition_EqualityTrue(Position position1, Position position2)
     {
-        Assert.Equal(position1, position2);
+        position1.Should().Be(position2);
     }
 
     public static TheoryData<Position, Position> NotEqualPositionsData()
@@ -36,7 +35,7 @@ public class PositionTest
     [MemberData(nameof(NotEqualPositionsData))]
     public void EqualPosition_EqualityFalse(Position position1, Position position2)
     {
-        Assert.NotEqual(position1, position2);
+        position1.Should().NotBe(position2);
     }
 
     public static TheoryData<Position, Position, Position> PositionAdditionData()
@@ -55,7 +54,7 @@ public class PositionTest
     {
         var result = position1 + position2;
 
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     public static TheoryData<Position, Position, Position> PositionSubtractionData()
@@ -74,7 +73,7 @@ public class PositionTest
     {
         var result = position1 - position2;
 
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 
     public static TheoryData<Position, int, Position> PositionMultiplicationData()
@@ -93,6 +92,6 @@ public class PositionTest
     {
         var result = position1 * coeff;
 
-        Assert.Equal(expected, result);
+        result.Should().Be(expected);
     }
 }

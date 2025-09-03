@@ -1,9 +1,8 @@
-﻿using BattleChess3.Core.Figures;
+﻿using AwesomeAssertions;
+using BattleChess3.Core.Figures;
 using BattleChess3.Core.Players;
 using BattleChess3.Game.GameBoard;
 using BattleChess3.Game.Players;
-using Xunit;
-using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test.GameBoard;
 
@@ -12,7 +11,9 @@ public class NoneTileTest
     [Fact]
     public void NoneTileHasNoneFigure()
     {
-        Assert.Equal(Figure.None.Id, NoneTile.Instance.Figure.Id);
+        var noneFigureId = NoneTile.Instance.Figure.Id;
+
+        noneFigureId.Should().Be(Figure.None.Id);
     }
 
     [Fact]
@@ -20,12 +21,16 @@ public class NoneTileTest
     {
         var noneTile = NoneTile.Instance;
         noneTile.Figure = new Figure(new ControlledPlayerInfo(Player.Neutral, ""), NoneFigureType.Instance, false);
-        Assert.Equal(Figure.None.Id, noneTile.Figure.Id);
+        var noneFigureId = noneTile.Figure.Id;
+
+        noneFigureId.Should().Be(Figure.None.Id);
     }
 
     [Fact]
     public void NonTilePositionIndexIsOutsideOfBoard()
     {
-        Assert.NotInRange(NoneTile.Instance.RelativePosition.GetIndex(), 0, 63);
+        var relativeIndex = NoneTile.Instance.RelativePosition.GetIndex();
+
+        relativeIndex.Should().NotBeInRange(0, 63);
     }
 }

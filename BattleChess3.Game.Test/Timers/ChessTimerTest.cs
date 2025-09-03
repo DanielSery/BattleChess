@@ -1,6 +1,5 @@
-﻿using BattleChess3.Game.Timers;
-using Xunit;
-using Assert = Xunit.Assert;
+﻿using AwesomeAssertions;
+using BattleChess3.Game.Timers;
 
 namespace BattleChess3.Game.Test.Timers;
 
@@ -16,8 +15,8 @@ public class ChessTimerTest
         Thread.Sleep(50);
         chessTimer.EndTurnTimer(null);
 
-        Assert.Equal(timeBefore - chessTimer.LastTurnElapsedTime, chessTimer.RemainingTime);
-        Assert.NotEqual(chessTimer.LastTurnElapsedTime, TimeSpan.Zero);
+        chessTimer.RemainingTime.Should().Be(timeBefore - chessTimer.LastTurnElapsedTime);
+        chessTimer.LastTurnElapsedTime.Should().NotBe(TimeSpan.Zero);
     }
 
     [Fact]
@@ -30,8 +29,8 @@ public class ChessTimerTest
         Thread.Sleep(50);
         chessTimer.EndTurnTimer(TimeSpan.FromSeconds(10));
 
-        Assert.Equal(timeBefore - TimeSpan.FromSeconds(10), chessTimer.RemainingTime);
-        Assert.Equal(chessTimer.LastTurnElapsedTime, TimeSpan.FromSeconds(10));
+        chessTimer.RemainingTime.Should().Be(timeBefore - TimeSpan.FromSeconds(10));
+        chessTimer.LastTurnElapsedTime.Should().Be(TimeSpan.FromSeconds(10));
     }
 
     [Fact]
@@ -42,8 +41,8 @@ public class ChessTimerTest
 
         Thread.Sleep(50);
 
-        Assert.Equal(timeBefore, chessTimer.RemainingTime);
-        Assert.Equal(chessTimer.LastTurnElapsedTime, TimeSpan.Zero);
+        chessTimer.RemainingTime.Should().Be(timeBefore);
+        chessTimer.LastTurnElapsedTime.Should().Be(TimeSpan.Zero);
     }
 
     [Fact]
@@ -56,7 +55,7 @@ public class ChessTimerTest
         Thread.Sleep(50);
         chessTimer.EndTurnTimer(TimeSpan.FromSeconds(0));
 
-        Assert.Equal(timeBefore + TimeSpan.FromSeconds(10), chessTimer.RemainingTime);
-        Assert.Equal(chessTimer.LastTurnElapsedTime, TimeSpan.Zero);
+        chessTimer.RemainingTime.Should().Be(timeBefore + TimeSpan.FromSeconds(10));
+        chessTimer.LastTurnElapsedTime.Should().Be(TimeSpan.Zero);
     }
 }

@@ -1,4 +1,5 @@
-﻿using BattleChess3.Game.Timers;
+﻿using AwesomeAssertions;
+using BattleChess3.Game.Timers;
 
 namespace BattleChess3.Game.Test.Timers;
 
@@ -14,8 +15,8 @@ public class InfiniteTimerTest
         Thread.Sleep(50);
         chessTimer.EndTurnTimer(null);
 
-        Assert.Equal(timeBefore, chessTimer.RemainingTime);
-        Assert.Equal(chessTimer.LastTurnElapsedTime, TimeSpan.Zero);
+        chessTimer.RemainingTime.Should().Be(timeBefore);
+        chessTimer.LastTurnElapsedTime.Should().Be(TimeSpan.Zero);
     }
 
     [Fact]
@@ -28,8 +29,8 @@ public class InfiniteTimerTest
         Thread.Sleep(50);
         chessTimer.EndTurnTimer(TimeSpan.FromSeconds(10));
 
-        Assert.Equal(timeBefore, chessTimer.RemainingTime);
-        Assert.Equal(chessTimer.LastTurnElapsedTime, TimeSpan.Zero);
+        chessTimer.RemainingTime.Should().Be(timeBefore);
+        chessTimer.LastTurnElapsedTime.Should().Be(TimeSpan.Zero);
     }
 
     [Fact]
@@ -40,12 +41,12 @@ public class InfiniteTimerTest
 
         Thread.Sleep(50);
 
-        Assert.Equal(timeBefore, chessTimer.RemainingTime);
-        Assert.Equal(chessTimer.LastTurnElapsedTime, TimeSpan.Zero);
+        chessTimer.RemainingTime.Should().Be(timeBefore);
+        chessTimer.LastTurnElapsedTime.Should().Be(TimeSpan.Zero);
     }
 
     [Fact]
-    public void AfterStart_TimeIsNotChaged()
+    public void AfterStart_TimeIsNotChanged()
     {
         var chessTimer = InfinitePlayerTimer.Instance;
         var timeBefore = chessTimer.RemainingTime;
@@ -54,7 +55,7 @@ public class InfiniteTimerTest
         Thread.Sleep(50);
         chessTimer.EndTurnTimer(TimeSpan.FromSeconds(0));
 
-        Assert.Equal(timeBefore, chessTimer.RemainingTime);
-        Assert.Equal(chessTimer.LastTurnElapsedTime, TimeSpan.Zero);
+        chessTimer.RemainingTime.Should().Be(timeBefore);
+        chessTimer.LastTurnElapsedTime.Should().Be(TimeSpan.Zero);
     }
 }

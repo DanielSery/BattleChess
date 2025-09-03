@@ -1,4 +1,5 @@
-﻿using BattleChess3.Core;
+﻿using AwesomeAssertions;
+using BattleChess3.Core;
 using BattleChess3.Core.Figures;
 using BattleChess3.Core.Players;
 using BattleChess3.Maps.Figures;
@@ -29,9 +30,9 @@ public class FigureCreatorTest
 
         var figure = figureCreator.CreateFigure(new FigureBlueprint(Player.Black, 23, true));
 
-        Assert.Equal(figureOwnerMock.Object, figure.Owner);
-        Assert.Equal(figureTypeMock.Object, figure.Type);
-        Assert.True(figure.IsKing);
+        figure.Owner.Should().Be(figureOwnerMock.Object);
+        figure.Type.Should().Be(figureTypeMock.Object);
+        figure.IsKing.Should().BeTrue();
     }
 
     [Fact]
@@ -50,8 +51,8 @@ public class FigureCreatorTest
 
         var figure = figureCreator.CreateEmptyFigure();
 
-        Assert.Equal(NeutralFigureOwner.Instance, figure.Owner);
-        Assert.Equal(figureTypeMock.Object, figure.Type);
-        Assert.False(figure.IsKing);
+        figure.Owner.Should().Be(NeutralFigureOwner.Instance);
+        figure.Type.Should().Be(figureTypeMock.Object);
+        figure.IsKing.Should().BeFalse();
     }
 }

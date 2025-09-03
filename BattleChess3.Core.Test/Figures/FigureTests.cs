@@ -1,8 +1,8 @@
-﻿using BattleChess3.Core.Figures;
+﻿using AwesomeAssertions;
+using BattleChess3.Core.Figures;
 using BattleChess3.Core.GameBoard;
 using BattleChess3.Core.Players;
 using Moq;
-using Assert = Xunit.Assert;
 
 namespace BattleChess3.Core.Test.Figures;
 
@@ -24,7 +24,10 @@ public class FigureTests
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
-        Assert.Throws<ArgumentException>(() => _ = new Figure(player, figureTypeMock.Object, false));
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -35,7 +38,10 @@ public class FigureTests
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
         });
-        _ = new Figure(player, figureTypeMock.Object, false);
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().NotThrow();
     }
 
     [Fact]
@@ -47,7 +53,10 @@ public class FigureTests
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
-        Assert.Throws<ArgumentException>(() => _ = new Figure(player, figureTypeMock.Object, false));
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -58,7 +67,10 @@ public class FigureTests
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
         });
-        _ = new Figure(player, figureTypeMock.Object, false);
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().NotThrow();
     }
 
     [Fact]
@@ -70,7 +82,10 @@ public class FigureTests
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
         });
-        Assert.Throws<ArgumentException>(() => _ = new Figure(player, figureTypeMock.Object, false));
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -81,7 +96,10 @@ public class FigureTests
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
-        _ = new Figure(player, figureTypeMock.Object, false);
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().NotThrow();
     }
 
     [Fact]
@@ -96,7 +114,7 @@ public class FigureTests
 
         var figure = new Figure(player, figureTypeMock.Object, false);
 
-        Assert.Equal("Test", figure.DisplayName);
+        figure.DisplayName.Should().Be("Test");
     }
 
     [Fact]
@@ -111,7 +129,7 @@ public class FigureTests
 
         var figure = new Figure(player, figureTypeMock.Object, false);
 
-        Assert.Equal(new Uri("component/Images/test.png", UriKind.Relative), figure.ImageUri);
+        figure.ImageUri.Should().Be(new Uri("component/Images/test.png", UriKind.Relative));
     }
 
     [Fact]
@@ -130,7 +148,7 @@ public class FigureTests
         figureTypeMock.Verify(x => x.GetPossibleActions(It.IsAny<ITile>(), It.IsAny<IBoard>()), Times.Once);
     }
 
-    private IFigureOwner GetFigureOwner(Player player)
+    private static IFigureOwner GetFigureOwner(Player player)
     {
         var mock = new Mock<IFigureOwner>();
         mock.Setup(x => x.Player).Returns(player);

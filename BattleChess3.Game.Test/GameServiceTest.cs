@@ -1,4 +1,5 @@
-﻿using BattleChess3.Core.Figures;
+﻿using AwesomeAssertions;
+using BattleChess3.Core.Figures;
 using BattleChess3.Core.Players;
 using BattleChess3.Game.Players;
 using Moq;
@@ -17,7 +18,7 @@ public class GameServiceTest
         gameService.StartGame(player1Mock.Object, player2Mock.Object, Player.White);
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
-        Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
+        gameService.CurrentPlayerInfo.Player.Should().Be(Player.White);
         player1Mock.Verify(x => x.StartTurn(), Times.Once);
         player2Mock.Verify(x => x.StartTurn(), Times.Never);
     }
@@ -32,7 +33,7 @@ public class GameServiceTest
         gameService.StartGame(player1Mock.Object, player2Mock.Object, Player.Black);
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
-        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
+        gameService.CurrentPlayerInfo.Player.Should().Be(Player.Black);
         player1Mock.Verify(x => x.StartTurn(), Times.Never);
         player2Mock.Verify(x => x.StartTurn(), Times.Once);
     }
@@ -49,7 +50,7 @@ public class GameServiceTest
         gameService.StartTurn();
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
-        Assert.Equal(Player.Black, gameService.CurrentPlayerInfo.Player);
+        gameService.CurrentPlayerInfo.Player.Should().Be(Player.Black);
         player1Mock.Verify(x => x.StartTurn(), Times.Once);
         player2Mock.Verify(x => x.StartTurn(), Times.Once);
     }
@@ -66,7 +67,7 @@ public class GameServiceTest
         gameService.StartTurn();
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
-        Assert.Equal(Player.White, gameService.CurrentPlayerInfo.Player);
+        gameService.CurrentPlayerInfo.Player.Should().Be(Player.White);
         player1Mock.Verify(x => x.StartTurn(), Times.Once);
         player2Mock.Verify(x => x.StartTurn(), Times.Once);
     }
@@ -84,8 +85,8 @@ public class GameServiceTest
         gameService.Surrender();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.Black, losingPlayer);
-        Assert.False(gameService.GameRunning);
+        losingPlayer.Should().Be(Player.Black);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -107,8 +108,8 @@ public class GameServiceTest
         gameService.Surrender();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.White, losingPlayer);
-        Assert.False(gameService.GameRunning);
+        losingPlayer.Should().Be(Player.White);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -130,8 +131,8 @@ public class GameServiceTest
         gameService.PlayerWin(player1Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.White, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.White);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -153,8 +154,8 @@ public class GameServiceTest
         gameService.PlayerWin(player2Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.Black, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.Black);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -176,8 +177,8 @@ public class GameServiceTest
         gameService.PlayerLost(player1Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.Black, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.Black);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -199,8 +200,8 @@ public class GameServiceTest
         gameService.PlayerLost(player2Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.White, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.White);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -220,10 +221,10 @@ public class GameServiceTest
         var currentPlayer = gameService.CurrentPlayerInfo;
 
         gameService.PlayerLost(player2Mock.Object, WinType.OutOfTime, true);
-        Assert.Equal(currentPlayer, gameService.CurrentPlayerInfo);
+        gameService.CurrentPlayerInfo.Should().Be(currentPlayer);
 
         gameService.StartTurn();
-        Assert.Equal(currentPlayer, gameService.CurrentPlayerInfo);
+        gameService.CurrentPlayerInfo.Should().Be(currentPlayer);
     }
 
     [Fact]
@@ -242,8 +243,8 @@ public class GameServiceTest
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.Black, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.Black);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -268,8 +269,8 @@ public class GameServiceTest
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.Black, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.Black);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -294,8 +295,8 @@ public class GameServiceTest
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.White, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.White);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -320,8 +321,8 @@ public class GameServiceTest
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.White, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.White);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -347,8 +348,8 @@ public class GameServiceTest
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.White, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.White);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)
@@ -374,8 +375,8 @@ public class GameServiceTest
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
-        Assert.Equal(Player.Black, winningPlayer);
-        Assert.False(gameService.GameRunning);
+        winningPlayer.Should().Be(Player.Black);
+        gameService.GameRunning.Should().BeFalse();
         return;
 
         void GameServiceOnPlayerWon(object? sender, WinResult e)

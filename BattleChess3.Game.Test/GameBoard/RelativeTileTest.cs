@@ -1,10 +1,9 @@
-﻿using BattleChess3.Core.Figures;
+﻿using AwesomeAssertions;
+using BattleChess3.Core.Figures;
 using BattleChess3.Core.GameBoard;
 using BattleChess3.Core.Players;
 using BattleChess3.Game.GameBoard;
 using Moq;
-using Xunit;
-using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test.GameBoard;
 
@@ -29,11 +28,11 @@ public class RelativeTileTest
     {
         var relative = new RelativeTile(_tile, Player.White);
 
-        Assert.Equal(1, relative.RelativePosition.X);
-        Assert.Equal(6, relative.RelativePosition.Y);
-        Assert.Equal(1, relative.AbsolutePosition.X);
-        Assert.Equal(1, relative.AbsolutePosition.Y);
-        Assert.Equal(_figure, relative.Figure);
+        relative.RelativePosition.X.Should().Be(1);
+        relative.RelativePosition.Y.Should().Be(6);
+        relative.AbsolutePosition.X.Should().Be(1);
+        relative.AbsolutePosition.Y.Should().Be(1);
+        relative.Figure.Should().Be(_figure);
     }
 
     [Fact]
@@ -41,11 +40,11 @@ public class RelativeTileTest
     {
         var relative = new RelativeTile(_tile, Player.Black);
 
-        Assert.Equal(1, relative.RelativePosition.X);
-        Assert.Equal(1, relative.RelativePosition.Y);
-        Assert.Equal(1, relative.AbsolutePosition.X);
-        Assert.Equal(1, relative.AbsolutePosition.Y);
-        Assert.Equal(_figure, relative.Figure);
+        relative.RelativePosition.X.Should().Be(1);
+        relative.RelativePosition.Y.Should().Be(1);
+        relative.AbsolutePosition.X.Should().Be(1);
+        relative.AbsolutePosition.Y.Should().Be(1);
+        relative.Figure.Should().Be(_figure);
     }
 
     [Fact]
@@ -54,11 +53,11 @@ public class RelativeTileTest
         ITile relative = new RelativeTile(_tile, Player.White);
         relative = relative.GetRelativeTile(Player.White);
 
-        Assert.Equal(1, relative.RelativePosition.X);
-        Assert.Equal(6, relative.RelativePosition.Y);
-        Assert.Equal(1, relative.AbsolutePosition.X);
-        Assert.Equal(1, relative.AbsolutePosition.Y);
-        Assert.Equal(_figure, relative.Figure);
+        relative.RelativePosition.X.Should().Be(1);
+        relative.RelativePosition.Y.Should().Be(6);
+        relative.AbsolutePosition.X.Should().Be(1);
+        relative.AbsolutePosition.Y.Should().Be(1);
+        relative.Figure.Should().Be(_figure);
     }
 
     [Fact]
@@ -67,10 +66,10 @@ public class RelativeTileTest
         ITile relative = new RelativeTile(_tile, Player.White);
         relative = relative.GetRelativeTile(Player.Black);
 
-        Assert.Equal(1, relative.RelativePosition.X);
-        Assert.Equal(1, relative.RelativePosition.Y);
-        Assert.Equal(1, relative.AbsolutePosition.X);
-        Assert.Equal(1, relative.AbsolutePosition.Y);
-        Assert.Equal(_figure, relative.Figure);
+        relative.RelativePosition.X.Should().Be(1);
+        relative.RelativePosition.Y.Should().Be(1);
+        relative.AbsolutePosition.X.Should().Be(1);
+        relative.AbsolutePosition.Y.Should().Be(1);
+        relative.Figure.Should().Be(_figure);
     }
 }

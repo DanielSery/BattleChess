@@ -1,8 +1,7 @@
-﻿using BattleChess3.Core.GameBoard;
+﻿using AwesomeAssertions;
+using BattleChess3.Core.GameBoard;
 using BattleChess3.Core.Players;
 using BattleChess3.Game.Helpers;
-using Xunit;
-using Assert = Xunit.Assert;
 
 namespace BattleChess3.Game.Test.Helpers;
 
@@ -15,7 +14,7 @@ public class RelativePositionHelperTest
 
         var relative = RelativePositionHelper.GetRelative(Player.Black, position);
 
-        Assert.Equal(relative, new Position(3, 3));
+        new Position(3, 3).Should().Be(relative);
     }
 
     [Fact]
@@ -25,7 +24,7 @@ public class RelativePositionHelperTest
 
         var relative = RelativePositionHelper.GetRelative(Player.White, position);
 
-        Assert.Equal(relative, new Position(3, 4));
+        new Position(3, 4).Should().Be(relative);
     }
 
     [Fact]
@@ -35,6 +34,7 @@ public class RelativePositionHelperTest
 
         Action action = () => RelativePositionHelper.GetRelative(Player.Neutral, position);
 
-        Assert.Throws<ArgumentOutOfRangeException>(action);
+        action.Should().Throw<ArgumentOutOfRangeException>();
+
     }
 }
