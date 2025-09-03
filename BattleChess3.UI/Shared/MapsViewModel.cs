@@ -16,7 +16,7 @@ public sealed class MapsViewModel : ViewModelBase
     public MapsViewModel(IBoardBlueprintService boardBlueprintService)
     {
         _boardBlueprintService = boardBlueprintService;
-        _teamMap = _boardBlueprintService.GetCurrentMap();
+        _teamMap = _boardBlueprintService.CurrentMap;
     }
 
     public BoardBlueprint TeamMap

@@ -8,10 +8,7 @@ namespace BattleChess3.Maps.BoardBlueprints;
 /// </summary>
 public interface IBoardBlueprintService
 {
-    /// <summary>
-    ///     Gets current maps.
-    /// </summary>
-    BoardBlueprint GetCurrentMap();
+    BoardBlueprint CurrentMap { get; }
 
     /// <summary>
     ///     Saves specified map.

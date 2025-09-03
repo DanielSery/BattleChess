@@ -5,11 +5,11 @@ using BattleChess3.Maps.Figures;
 
 namespace BattleChess3.Maps.BoardBlueprints;
 
-internal class BoardBlueprintLoader : IBoardBlueprintLoader
+internal class BoardLoader : IBoardLoader
 {
     private readonly IFigureCreator _figureCreator;
 
-    public BoardBlueprintLoader(IFigureCreator figureCreator)
+    public BoardLoader(IFigureCreator figureCreator)
     {
         _figureCreator = figureCreator;
     }

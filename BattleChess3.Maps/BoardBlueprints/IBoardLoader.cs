@@ -2,7 +2,7 @@
 
 namespace BattleChess3.Maps.BoardBlueprints;
 
-public interface IBoardBlueprintLoader
+public interface IBoardLoader
 {
     void LoadMap(IBoard board, BoardBlueprint map);
 

@@ -11,8 +11,8 @@ public static class MapsModule
         builder.RegisterType<BoardBlueprintService>()
             .As<IBoardBlueprintService>()
             .SingleInstance();
-        builder.RegisterType<BoardBlueprintLoader>()
-            .As<IBoardBlueprintLoader>()
+        builder.RegisterType<BoardLoader>()
+            .As<IBoardLoader>()
             .SingleInstance();
         builder.RegisterType<FigureCreator>()
             .As<IFigureCreator>()

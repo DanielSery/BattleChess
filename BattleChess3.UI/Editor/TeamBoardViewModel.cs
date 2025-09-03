@@ -24,20 +24,20 @@ public class TeamBoardViewModel : ViewModelBase
     
     private readonly IFigureCreator _figureCreator;
     private readonly MapsViewModel _maps;
-    private readonly IBoardBlueprintLoader _boardBlueprintLoader;
+    private readonly IBoardLoader _boardLoader;
     private readonly IMultiplayerPlayerService _playerService;
     private readonly ISoundService _soundService;
 
     public TeamBoardViewModel(
         IFigureCreator figureCreator,
         MapsViewModel maps,
-        IBoardBlueprintLoader boardBlueprintLoader, 
+        IBoardLoader boardLoader, 
         IMultiplayerPlayerService playerService,
         ISoundService soundService)
     {
         _figureCreator = figureCreator;
         _maps = maps;
-        _boardBlueprintLoader = boardBlueprintLoader;
+        _boardLoader = boardLoader;
         _playerService = playerService;
         _soundService = soundService;
         
@@ -46,7 +46,7 @@ public class TeamBoardViewModel : ViewModelBase
             .ToArray();
         
         Board = new Board(Tiles.Cast<ITile>().ToArray());
-        boardBlueprintLoader.LoadMap(Board, maps.TeamMap);
+        boardLoader.LoadMap(Board, maps.TeamMap);
         EvaluateTeamBoard();
         
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
@@ -119,7 +119,7 @@ public class TeamBoardViewModel : ViewModelBase
             return;
         
         var mapBlueprint = GetMapBlueprint(loggedInPlayer.Map);
-        _boardBlueprintLoader.LoadMap(Board, mapBlueprint);
+        _boardLoader.LoadMap(Board, mapBlueprint);
     }
     
     private static BoardBlueprint GetMapBlueprint(byte[] map)
@@ -144,7 +144,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     public void Discard()
     {
-        _boardBlueprintLoader.LoadMap(Board, _maps.TeamMap);
+        _boardLoader.LoadMap(Board, _maps.TeamMap);
     }
 
     private void MakeUnitKing(TileViewModel? tile)
