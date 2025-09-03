@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Elephant : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 10;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.ElephantId;
+    public int FigureValue => 10;
+
+    public int FigureId => CrossFireFigureIds.ElephantId;
     
     private static readonly Position[] Directions =
     [

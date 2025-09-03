@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Trader : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 7;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.TraderId;
+    public int FigureValue => 7;
+
+    public int FigureId => CrossFireFigureIds.TraderId;
     
     private static readonly Position[] AttackMovePositions =
     [

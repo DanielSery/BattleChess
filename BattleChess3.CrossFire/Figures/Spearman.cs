@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Spearman : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 3;
+    public int FigureValue => 3;
 
-    int IFigureType.FigureId => CrossFireFigureIds.SpearmanId;
+    public int FigureId => CrossFireFigureIds.SpearmanId;
 
     private static readonly Position[] AttackPositions =
     [

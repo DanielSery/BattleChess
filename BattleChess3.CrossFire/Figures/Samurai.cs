@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Samurai : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 6;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.SamuraiId;
+    public int FigureValue => 6;
+
+    public int FigureId => CrossFireFigureIds.SamuraiId;
     
     private static readonly Position[] MovePositions =
     [

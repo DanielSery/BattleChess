@@ -7,12 +7,11 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Explosives : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 1;
+    public int FigureValue => 1;
+
+    public int FigureId => CrossFireFigureIds.ExplosivesId;
     
-    int IFigureType.FigureId => CrossFireFigureIds.ExplosivesId;
-    
-    IDictionary<int, Uri> IFigureType.ImageUris =>
+    public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
             { 0, new Uri($"pack://application:,,,/BattleChess3.CrossFireFigures;component/Images/{GetType().Name}.png", UriKind.Absolute) },
@@ -23,7 +22,7 @@ public class Explosives : ICrossFireFigureType
         return [];
     }
 
-    void IFigureType.OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)
+    public void OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)
     {
         SilentDie(board, unitTile.RelativePosition + new Position(-1, -1));
         SilentDie(board, unitTile.RelativePosition + new Position(-1, 0));
@@ -35,7 +34,7 @@ public class Explosives : ICrossFireFigureType
         SilentDie(board, unitTile.RelativePosition + new Position(1, 1));
     }
 
-    void IFigureType.OnKilled(ITile unitTile, ITile attackingTile, IBoard board)
+    public void OnKilled(ITile unitTile, ITile attackingTile, IBoard board)
     {
         unitTile.Die(board);
     }

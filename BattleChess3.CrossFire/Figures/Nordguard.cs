@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Nordguard: ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 8;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.NordguardId;
+    public int FigureValue => 8;
+
+    public int FigureId => CrossFireFigureIds.NordguardId;
     
     private static readonly Position[] MovePositions =
     [

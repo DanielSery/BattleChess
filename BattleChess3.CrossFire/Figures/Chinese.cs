@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Chinese : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 8;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.ChineseId;
+    public int FigureValue => 8;
+
+    public int FigureId => CrossFireFigureIds.ChineseId;
     
     private static readonly Position[] MovePositions =
     [

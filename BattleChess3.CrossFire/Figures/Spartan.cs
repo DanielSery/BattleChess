@@ -6,12 +6,11 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Spartan : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 4;
+    public int FigureValue => 4;
+
+    public int FigureId => CrossFireFigureIds.SpartanId;
     
-    int IFigureType.FigureId => CrossFireFigureIds.SpartanId;
-    
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var targetTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {

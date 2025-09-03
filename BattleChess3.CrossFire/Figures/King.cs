@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class King : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 5;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.KingId;
+    public int FigureValue => 5;
+
+    public int FigureId => CrossFireFigureIds.KingId;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

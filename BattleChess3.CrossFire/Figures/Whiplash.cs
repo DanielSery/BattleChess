@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Whiplash : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 6;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.WhiplashId;
+    public int FigureValue => 6;
+
+    public int FigureId => CrossFireFigureIds.WhiplashId;
     
     private static readonly Position[] AttackMovePositions =
     [
@@ -19,7 +18,7 @@ public class Whiplash : ICrossFireFigureType
         new(2, -1), new(2, 1)
     ];
     
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var targetTile in AttackMovePositions.GetRelativeTiles(board, unitTile))
         {

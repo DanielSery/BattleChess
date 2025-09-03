@@ -8,10 +8,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Alchemist : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 4;
+    public int FigureValue => 4;
 
-    int IFigureType.FigureId => CrossFireFigureIds.AlchemistId;
+    public int FigureId => CrossFireFigureIds.AlchemistId;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

@@ -6,17 +6,16 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Musketeer : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 12;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.MusketeerId;
+    public int FigureValue => 12;
+
+    public int FigureId => CrossFireFigureIds.MusketeerId;
     
     private static readonly Position[] AttackDirections =
     [
         new(-1, 1), new(0, 1), new(1, 1)
     ];
 
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {

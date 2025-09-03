@@ -7,10 +7,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Priest : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 12;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.PriestId;
+    public int FigureValue => 12;
+
+    public int FigureId => CrossFireFigureIds.PriestId;
     
     private static readonly Position[] Directions =
     [
@@ -23,7 +22,7 @@ public class Priest : ICrossFireFigureType
         new(1, 0), new(0, 1), new(-1, 0), new(0, -1)
     ];
 
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var direction in Directions)
         {

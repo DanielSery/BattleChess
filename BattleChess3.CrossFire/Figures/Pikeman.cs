@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Pikeman : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 3;
+    public int FigureValue => 3;
 
-    int IFigureType.FigureId => CrossFireFigureIds.PikemanId;
+    public int FigureId => CrossFireFigureIds.PikemanId;
 
     private static readonly Position[] AttackPositions =
     [

@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Scout : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 10;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.ScoutId;
+    public int FigureValue => 10;
+
+    public int FigureId => CrossFireFigureIds.ScoutId;
     
     private static readonly Position[] Directions =
     [
@@ -18,7 +17,7 @@ public class Scout : ICrossFireFigureType
         new(1, -1), new(1, 0), new(1, 1)
     ];
 
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var targetTile in Directions.GetRelativeTiles(board, unitTile))
         {

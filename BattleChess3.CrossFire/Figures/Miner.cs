@@ -7,10 +7,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Miner : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 3;
+    public int FigureValue => 3;
 
-    int IFigureType.FigureId => CrossFireFigureIds.MinerId;
+    public int FigureId => CrossFireFigureIds.MinerId;
 
     private static readonly Position[] Directions =
     [
@@ -18,7 +17,7 @@ public class Miner : ICrossFireFigureType
         new(-1, 0), new(1, 0)
     ];
 
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var targetTile in Directions.GetRelativeTiles(board, unitTile))
         {

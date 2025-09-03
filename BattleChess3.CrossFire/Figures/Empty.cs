@@ -6,18 +6,17 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Empty : IFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 0;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.EmptyId;
-    
-    string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
-    string IFigureType.BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.BaseDescription)}"];
-    string IFigureType.MovementDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.MovementDescription)}"];
-    string IFigureType.AttackDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.AttackDescription)}"];
-    string IFigureType.SpecialDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.SpecialDescription)}"];
+    public int FigureValue => 0;
 
-    IDictionary<int, Uri> IFigureType.ImageUris =>
+    public int FigureId => CrossFireFigureIds.EmptyId;
+    
+    public string DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
+    public string BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.BaseDescription)}"];
+    public string MovementDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.MovementDescription)}"];
+    public string AttackDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.AttackDescription)}"];
+    public string SpecialDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.SpecialDescription)}"];
+
+    public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
             { 0, new Uri($"pack://application:,,,/BattleChess3.CrossFireFigures;component/Images/{GetType().Name}.png", UriKind.Absolute) },

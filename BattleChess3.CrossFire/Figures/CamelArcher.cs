@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class CamelArcher : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 8;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.CamelArcherId;
+    public int FigureValue => 8;
+
+    public int FigureId => CrossFireFigureIds.CamelArcherId;
     
     private static readonly Position[] MoveDirections =
     [
@@ -25,7 +24,7 @@ public class CamelArcher : ICrossFireFigureType
         new(0, 1)
     ];
 
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var direction in AttackDirections)
         {

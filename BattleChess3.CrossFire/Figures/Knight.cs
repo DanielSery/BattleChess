@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Knight : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 10;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.KnightId;
+    public int FigureValue => 10;
+
+    public int FigureId => CrossFireFigureIds.KnightId;
     
     private static readonly Position[] MovePositions =
     [

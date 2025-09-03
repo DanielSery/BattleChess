@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class LegionaryPike : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 4;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.LegionaryPikeId;
+    public int FigureValue => 4;
+
+    public int FigureId => CrossFireFigureIds.LegionaryPikeId;
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

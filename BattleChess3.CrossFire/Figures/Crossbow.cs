@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Crossbow : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 10;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.CrossbowId;
+    public int FigureValue => 10;
+
+    public int FigureId => CrossFireFigureIds.CrossbowId;
     
     private static readonly Position[] AttackDirections =
     [
@@ -22,7 +21,7 @@ public class Crossbow : ICrossFireFigureType
         new(1, -1), new(1, 1)
     ];
     
-    IEnumerable<FigureAction> IFigureType.GetPossibleActions(ITile unitTile, IBoard board)
+    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
         foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
         {

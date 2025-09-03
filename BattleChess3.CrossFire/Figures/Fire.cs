@@ -6,12 +6,11 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Fire : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 0;
+    public int FigureValue => 0;
+
+    public int FigureId => CrossFireFigureIds.FireId;
     
-    int IFigureType.FigureId => CrossFireFigureIds.FireId;
-    
-    IDictionary<int, Uri> IFigureType.ImageUris =>
+    public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
             { 0, new Uri($"pack://application:,,,/BattleChess3.CrossFireFigures;component/Images/{GetType().Name}.png", UriKind.Absolute) },
@@ -22,7 +21,7 @@ public class Fire : ICrossFireFigureType
         return [];
     }
     
-    void IFigureType.OnDied(ITile unitTile, IBoard board)
+    public void OnDied(ITile unitTile, IBoard board)
     {
         if (unitTile.Figure.Type is Dragon)
             return;

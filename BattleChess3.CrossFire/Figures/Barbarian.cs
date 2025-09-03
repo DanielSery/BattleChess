@@ -6,10 +6,9 @@ namespace BattleChess3.CrossFireFigures.Figures;
 
 public class Barbarian : ICrossFireFigureType
 {
-    /// <inheritdoc />
-    public int FigureValue { get; } = 4;
-    
-    int IFigureType.FigureId => CrossFireFigureIds.BarbarianId;
+    public int FigureValue => 4;
+
+    public int FigureId => CrossFireFigureIds.BarbarianId;
     
     private static readonly Position[] MovementPositions =
     [
