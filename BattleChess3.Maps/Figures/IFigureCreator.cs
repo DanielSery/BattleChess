@@ -4,7 +4,7 @@ namespace BattleChess3.Maps.Figures;
 
 public interface IFigureCreator
 {
-    Figure CreateFigure(FigureBlueprint figureBlueprint);
+    IFigure CreateFigure(FigureBlueprint figureBlueprint);
 
-    Figure CreateEmptyFigure();
+    IFigure CreateEmptyFigure();
 }

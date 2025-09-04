@@ -17,7 +17,7 @@ internal class FigureCreator : IFigureCreator
         _figureGroup = figureGroup;
     }
 
-    public Figure CreateFigure(FigureBlueprint figureBlueprint)
+    public IFigure CreateFigure(FigureBlueprint figureBlueprint)
     {
         var figureType = _figureGroup.GetFigureTypeById(figureBlueprint.FigureId);
         var player = _figureOwners.GetFigureOwner(figureBlueprint.Player);
@@ -26,7 +26,7 @@ internal class FigureCreator : IFigureCreator
         return figure;
     }
 
-    public Figure CreateEmptyFigure()
+    public IFigure CreateEmptyFigure()
     {
         const int emptyFigureId = 0;
         var figureType = _figureGroup.GetFigureTypeById(emptyFigureId);

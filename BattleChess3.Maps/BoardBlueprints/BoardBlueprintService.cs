@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using BattleChess3.Core.GameBoard;
+using BattleChess3.Maps.IO;
 using BattleChess3.Maps.Utilities;
 
 namespace BattleChess3.Maps.BoardBlueprints;
@@ -25,27 +26,60 @@ internal class BoardBlueprintService : IBoardBlueprintService
         CurrentMap = map;
         var text = JsonSerializer.Serialize(map);
         text = CompressionHelper.Compress(text);
-        _fileHandler.WriteAllText("Resources/TeamBoard.map", text);
+        _fileHandler.WriteAllText("Resources\\TeamBoard.map", text);
     }
 
     private BoardBlueprint LoadMap()
     {
-        if (!_directoryHandler.Exists("Resources"))
+        const string directory = "Resources";
+        const string filePath = "Resources\\TeamBoard.map";
+
+        if (!_directoryHandler.Exists(directory))
         {
-            _directoryHandler.CreateDirectory("Resources");
+            _directoryHandler.CreateDirectory(directory);
             return BoardBlueprint.ChessTeam;
         }
 
-        return _directoryHandler.GetFiles("Resources", "TeamBoard.map")
-            .Where(path => _fileHandler.Exists(Path.GetFullPath(path)))
-            .Select(path =>
-            {
-                var text = _fileHandler.ReadAllText(Path.GetFullPath(path));
-                text = CompressionHelper.Decompress(text);
-                return JsonSerializer.Deserialize<BoardBlueprint>(text);
-            })
-            .Where(x => x is not null)
-            .Select(x => x!)
-            .FirstOrDefault() ?? BoardBlueprint.ChessTeam;
+        if (!_fileHandler.Exists(filePath))
+        {
+            return BoardBlueprint.ChessTeam;
+        }
+
+        try
+        {
+            var text = _fileHandler.ReadAllText(filePath);
+            text = CompressionHelper.Decompress(text);
+
+            var deserialized = JsonSerializer.Deserialize<BoardBlueprint>(text);
+            if (deserialized is not null && IsBoardValid(deserialized))
+                return deserialized;
+
+            TryDeleteFile(filePath);
+            return BoardBlueprint.ChessTeam;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            TryDeleteFile(filePath);
+            return BoardBlueprint.ChessTeam;
+        }
+    }
+
+    private static bool IsBoardValid(BoardBlueprint board)
+    {
+        return board.Figures.Length == 16 &&
+               board.Figures.Count(x => x.IsKing) == 1;
+    }
+
+    private void TryDeleteFile(string filePath)
+    {
+        try
+        {
+            _fileHandler.Delete(filePath);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }

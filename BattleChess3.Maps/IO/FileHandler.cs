@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.Maps;
+﻿namespace BattleChess3.Maps.IO;
 
 public class FileHandler : IFileHandler
 {
@@ -18,5 +18,11 @@ public class FileHandler : IFileHandler
     public bool Exists(string? path)
     {
         return File.Exists(path);
+    }
+
+    /// <inheritdoc />
+    public void Delete(string path)
+    {
+        File.Delete(path);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.Maps;
+﻿namespace BattleChess3.Maps.IO;
 
 public class DirectoryHandler : IDirectoryHandler
 {

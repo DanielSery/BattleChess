@@ -1,4 +1,5 @@
-﻿using BattleChess3.Core.Figures;
+﻿using BattleChess3.Core;
+using BattleChess3.Core.Figures;
 using BattleChess3.Core.GameBoard;
 using BattleChess3.Core.Players;
 using BattleChess3.Maps.Figures;
@@ -16,6 +17,11 @@ internal class BoardLoader : IBoardLoader
     
     public void LoadMap(IBoard board, BoardBlueprint map)
     {
+        if (board.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
+        if (map.Figures.Length != Constants.FullBoardTilesCount) throw new ArgumentException("Map blueprint needs to have 64 tiles");
+        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.Black }) != 1) throw new ArgumentException("Map blueprint needs to have a black king");
+
         var index = 0;
         foreach (var tile in board)
         {
@@ -25,16 +31,20 @@ internal class BoardLoader : IBoardLoader
 
     public void LoadMapExtendedFor2Players(IBoard board, BoardBlueprint map)
     {
+        if (board.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
+        if (map.Figures.Length != 16) throw new ArgumentException("Partial map blueprint needs to have 16 tiles");
+        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Any(x => x is { Player: Player.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
+
         for (var i = 0; i < map.Figures.Length; i++)
         {
-            var redFigure = map.Figures[i];
-            var redPosition = Position.FromIndex(i + 64 - 16);
+            var whiteFigure = map.Figures[i];
+            var whitePosition = Position.FromIndex(i + 64 - 16);
+            board[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
             
-            var oppositeFigure = map.Figures[i].Player == 0
-                ? redFigure
-                : new FigureBlueprint(Player.Black, redFigure.FigureId, redFigure.IsKing);
-            board[new Position(redPosition.X, 7 - redPosition.Y)].Figure = _figureCreator.CreateFigure(oppositeFigure);
-            board[redPosition].Figure = _figureCreator.CreateFigure(redFigure);
+            var blackFigure = new FigureBlueprint(Player.Black, whiteFigure.FigureId, whiteFigure.IsKing);
+            var blackPosition = new Position(whitePosition.X, 7 - whitePosition.Y);
+            board[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
         }
         
         for (var i = 16; i < 48; i++)

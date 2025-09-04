@@ -24,8 +24,4 @@
       <ProjectReference Include="..\BattleChess3.Maps\BattleChess3.Maps.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="BoardBlueprints\" />
-    </ItemGroup>
-
 </Project>
