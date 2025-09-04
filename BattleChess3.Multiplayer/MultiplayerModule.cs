@@ -11,6 +11,9 @@ public static class MultiplayerModule
 {
     public static void RegisterMultiplayerModule(this ContainerBuilder builder)
     {
+        builder.RegisterType<DatabaseClient>()
+            .As<IDatabaseClient>()
+            .SingleInstance();
         builder.RegisterType<MultiplayerRankedService>()
             .As<IMultiplayerRankedService>()
             .SingleInstance();

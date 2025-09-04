@@ -24,18 +24,13 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
 
     public MultiplayerLobbyService(
         IMultiplayerScheduler scheduler,
-        IMultiplayerPlayerService multiplayerPlayerService)
+        IMultiplayerPlayerService multiplayerPlayerService,
+        IDatabaseClient databaseClient)
     {
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
-
-        var settings = MongoClientSettings.FromConnectionString(Secrets.ConnectionString);
-        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
-        var client = new MongoClient(settings);
-
-        var database = client.GetDatabase("BattleChess");
-        _gameLobbyCollection = database.GetCollection<GameLobby>("GameLobbies");
-        _gameJoinsCollection = database.GetCollection<GameLobbyJoin>("GameLobbyJoins");
+        _gameLobbyCollection = databaseClient.GameLobbies;
+        _gameJoinsCollection = databaseClient.GameJoins;
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         _version = version is not null 

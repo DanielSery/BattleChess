@@ -15,16 +15,11 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
     private readonly IMultiplayerScheduler _scheduler;
 
-    public MultiplayerPlayerService(IMultiplayerScheduler scheduler)
+    public MultiplayerPlayerService(IMultiplayerScheduler scheduler,
+        IDatabaseClient databaseClient)
     {
         _scheduler = scheduler;
-
-        var settings = MongoClientSettings.FromConnectionString(Secrets.ConnectionString);
-        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
-        var client = new MongoClient(settings);
-
-        var database = client.GetDatabase("BattleChess");
-        _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
+        _playersCollection = databaseClient.Players;
     }
 
     /// <inheritdoc />

@@ -11,15 +11,13 @@ public class DatabaseClearer
     private readonly IMongoCollection<GameLobbyJoin> _gameJoinsCollection;
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
 
-    public DatabaseClearer()
+    public DatabaseClearer(IDatabaseClient databaseClient)
     {
-        var client = new MongoClient(Secrets.ConnectionString);
-        var database = client.GetDatabase("BattleChess");
-        _rankedGamesCollection = database.GetCollection<RankedGame>("RankedGames");
-        _rankedGameJoinsCollection = database.GetCollection<RankedGameJoin>("RankedGameJoins");
-        _gameLobbyCollection = database.GetCollection<GameLobby>("GameLobbies");
-        _gameJoinsCollection = database.GetCollection<GameLobbyJoin>("GameLobbyJoins");
-        _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
+        _rankedGamesCollection = databaseClient.RankedGames;
+        _rankedGameJoinsCollection = databaseClient.RankedGameJoins;
+        _gameLobbyCollection = databaseClient.GameLobbies;
+        _gameJoinsCollection = databaseClient.GameJoins;
+        _gameTurnsCollection = databaseClient.GameTurns;
     }
 
     public void ClearDatabase()

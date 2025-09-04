@@ -18,22 +18,19 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
     private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
     private readonly IMultiplayerPlayerService _playerService;
-    private readonly MongoClient _client;
+    private readonly IDatabaseClient _databaseClient;
 
     public MultiplayerGameService(
         IMultiplayerScheduler scheduler,
-        IMultiplayerPlayerService playerService)
+        IMultiplayerPlayerService playerService,
+        IDatabaseClient databaseClient)
     {
         _scheduler = scheduler;
         _playerService = playerService;
 
-        var settings = MongoClientSettings.FromConnectionString(Secrets.ConnectionString);
-        settings.ServerApi = new ServerApi(ServerApiVersion.V1);
-        _client = new MongoClient(settings);
-
-        var database = _client.GetDatabase("BattleChess");
-        _gameTurnsCollection = database.GetCollection<GameTurn>("GameTurns");
-        _playersCollection = database.GetCollection<RegisteredPlayer>("Players");
+        _databaseClient = databaseClient;
+        _gameTurnsCollection = databaseClient.GameTurns;
+        _playersCollection = databaseClient.Players;
     }
 
     public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
@@ -436,7 +433,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         try
         {
             Console.WriteLine("Getting server time");
-            var serverTime = await GetServerTimeAsync();
+            var serverTime = await _databaseClient.GetServerTimeAsync();
             Console.WriteLine($"Current server time: {serverTime}");
 
             var oldestKeepTime = serverTime - TimeSpan.FromMinutes(20);
@@ -452,12 +449,5 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             Console.WriteLine($"Error: {ex.Message}");
             return Result.Fail(ex.Message);
         }
-    }
-
-    private async Task<DateTime> GetServerTimeAsync()
-    {
-        var command = new BsonDocument("hello", 1); // "hello" is the modern replacement for "isMaster"
-        var result = await _client.GetDatabase("admin").RunCommandAsync<BsonDocument>(command);
-        return result["localTime"].ToUniversalTime();
     }
 }
