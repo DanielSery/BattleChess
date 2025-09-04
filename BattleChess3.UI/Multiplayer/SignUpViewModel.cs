@@ -4,7 +4,9 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using BattleChess3.Multiplayer;
+using BattleChess3.Multiplayer.Mail;
 using BattleChess3.Multiplayer.Players;
+using BattleChess3.Multiplayer.Utilities;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
@@ -21,6 +23,7 @@ public class SignUpViewModel : ViewModelBase
     private readonly INotificationService _notificationService;
     private readonly ILoadingService _loadingService;
     private readonly TeamBoardViewModel _teamBoardViewModel;
+    private readonly IEmailClient _emailClient;
     private string _privateVerificationCode = string.Empty;
     
     public SignUpViewModel(
@@ -29,7 +32,8 @@ public class SignUpViewModel : ViewModelBase
         INotificationService notificationService,
         ILoadingService loadingService,
         TeamBoardViewModel teamBoardViewModel,
-        ISoundService soundService)
+        ISoundService soundService,
+        IEmailClient emailClient)
     {
         _loginViewModel = loginViewModel;
         _multiplayerPlayerService = multiplayerPlayerService;
@@ -37,6 +41,7 @@ public class SignUpViewModel : ViewModelBase
         _loadingService = loadingService;
         _teamBoardViewModel = teamBoardViewModel;
         _soundService = soundService;
+        _emailClient = emailClient;
         
         SignUpCommand = new AsyncRelayCommand(SignUp);
         RequestEndCommand = new RelayCommand(CallRequestEnd);
@@ -109,8 +114,8 @@ public class SignUpViewModel : ViewModelBase
         
         using var loading = _loadingService.StartLoadingOperation("Signing up");
         var passwordSalt = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
-        var password1Hash = GetHash(SecurePassword1, passwordSalt);
-        var password2Hash = GetHash(SecurePassword2, passwordSalt);
+        var password1Hash = HashingHelper.GetHash(SecurePassword1, passwordSalt);
+        var password2Hash = HashingHelper.GetHash(SecurePassword2, passwordSalt);
         if (password1Hash != password2Hash)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Passwords do not match.");
@@ -119,7 +124,7 @@ public class SignUpViewModel : ViewModelBase
         }
         
         var myMap = _teamBoardViewModel.GetMapBlueprint();
-        var emailHash = GetHash(Email, Secrets.EmailSalt);
+        var emailHash = HashingHelper.GetEmailHash(Email);
         var result = await _multiplayerPlayerService.TrySignUpAsync(Name, password1Hash, passwordSalt, emailHash, myMap, loading.CancellationToken);
         if (result.IsFailed)
         {
@@ -141,8 +146,7 @@ public class SignUpViewModel : ViewModelBase
     private async Task VerifyEmail()
     {
         var name = string.IsNullOrEmpty(Name) ? "New user" : Name;
-        
-        var fromAddress = new MailAddress("thebattlechess3@gmail.com", "BattleChess 3");
+
         MailAddress toAddress;
         try
         {
@@ -164,7 +168,7 @@ public class SignUpViewModel : ViewModelBase
         }
         
         using var loading = _loadingService.StartLoadingOperation("Checking existing users");
-        var emailHash = GetHash(Email, Secrets.EmailSalt);
+        var emailHash = HashingHelper.GetEmailHash(Email);
         var result = await _multiplayerPlayerService.TryVerifyEmailAsync(emailHash, loading.CancellationToken);
         if (result.IsFailed)
         {
@@ -173,26 +177,10 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
         
-        const string subject = "BattleChess 3 verification code";
-        var body = $"Hello,\n\nYour verification code is: {_privateVerificationCode}\nPaste it into the Battle Chess 3 verification field.\n\nHave a nice day!\nBattleChess 3";
-
-        var smtp = new SmtpClient
-        {
-            Host = "smtp.gmail.com",
-            Port = 587,
-            EnableSsl = true,
-            DeliveryMethod = SmtpDeliveryMethod.Network,
-            Credentials = new NetworkCredential(fromAddress.Address, Secrets.GmailString),
-            Timeout = 20000
-        };
-
         loading.Message = "Sending validation email";
-        using var message = new MailMessage(fromAddress, toAddress);
-        message.Subject = subject;
-        message.Body = body;
         try
         {
-            await smtp.SendMailAsync(message, loading.CancellationToken);
+            await _emailClient.SendVerificationEmail(toAddress, _privateVerificationCode, loading.CancellationToken);
         }
         catch (Exception e)
         {
@@ -205,35 +193,6 @@ public class SignUpViewModel : ViewModelBase
         _notificationService.ShowMessage(ShownMessage.MessageType.Success, "Verification email sent");
         VerificationInProgress = true;
         _soundService.PlaySoundEffect(SoundEffectType.Button);
-    }
-
-    private static string GetHash(string str, string saltString)
-    {
-        var salt = Convert.FromBase64String(saltString);
-        var pbkdf2 = new Rfc2898DeriveBytes(str, salt, 100000, HashAlgorithmName.SHA256);
-        var hash = pbkdf2.GetBytes(32); // 256-bit hash
-        return Convert.ToBase64String(hash);
-    }
-
-    private static string GetHash(SecureString secureString, string saltString)
-    {
-        ArgumentNullException.ThrowIfNull(secureString);
-
-        var unmanagedString = IntPtr.Zero;
-        try
-        {
-            var salt = Convert.FromBase64String(saltString);
-            unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
-            
-            var pbkdf2 = new Rfc2898DeriveBytes(Marshal.PtrToStringUni(unmanagedString)!, salt, 100000, HashAlgorithmName.SHA256);
-            var hash = pbkdf2.GetBytes(32); // 256-bit hash
-
-            return Convert.ToBase64String(hash);
-        }
-        finally
-        {
-            Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); // Clear memory
-        }
     }
 
     public void OnActivation()

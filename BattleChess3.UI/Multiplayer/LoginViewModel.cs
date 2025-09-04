@@ -3,6 +3,7 @@ using System.Security;
 using System.Security.Cryptography;
 using BattleChess3.Multiplayer;
 using BattleChess3.Multiplayer.Players;
+using BattleChess3.Multiplayer.Utilities;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
@@ -63,7 +64,7 @@ public class LoginViewModel : ViewModelBase
             return;
         }
         
-        var hash = GetHash(SecurePassword, saltResult.Value);
+        var hash = HashingHelper.GetHash(SecurePassword, saltResult.Value);
         var result = await _multiplayerPlayerService.TryLoginAsync(Name, hash, loading.CancellationToken);
         if (result.IsFailed)
         {
@@ -75,27 +76,6 @@ public class LoginViewModel : ViewModelBase
             _notificationService.ShowMessage(ShownMessage.MessageType.Success, $"Logged in as {Name}");
             RequestEndLogin?.Invoke(this, EventArgs.Empty);
             IsLoggedIn = true;
-        }
-    }
-
-    private static string GetHash(SecureString secureString, string saltString)
-    {
-        ArgumentNullException.ThrowIfNull(secureString);
-
-        var unmanagedString = IntPtr.Zero;
-        try
-        {
-            var salt = Convert.FromBase64String(saltString);
-            unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
-            
-            var pbkdf2 = new Rfc2898DeriveBytes(Marshal.PtrToStringUni(unmanagedString)!, salt, 100000, HashAlgorithmName.SHA256);
-            var hash = pbkdf2.GetBytes(32); // 256-bit hash
-
-            return Convert.ToBase64String(hash);
-        }
-        finally
-        {
-            Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); // Clear memory
         }
     }
 

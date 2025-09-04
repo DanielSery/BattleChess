@@ -19,7 +19,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         IDatabaseClient databaseClient)
     {
         _scheduler = scheduler;
-        _playersCollection = databaseClient.Players;
+        _playersCollection = databaseClient.Players!;
     }
 
     /// <inheritdoc />

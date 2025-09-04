@@ -5,17 +5,19 @@ namespace BattleChess3.Multiplayer;
 
 public interface IDatabaseClient
 {
-    IMongoCollection<GameTurn> GameTurns { get; }
+    bool IsConnected { get; }
 
-    IMongoCollection<GameLobbyJoin> GameJoins { get; }
+    IMongoCollection<GameTurn>? GameTurns { get; }
 
-    IMongoCollection<GameLobby> GameLobbies { get; }
+    IMongoCollection<GameLobbyJoin>? GameJoins { get; }
 
-    IMongoCollection<RankedGameJoin> RankedGameJoins { get; }
+    IMongoCollection<GameLobby>? GameLobbies { get; }
 
-    IMongoCollection<RankedGame> RankedGames { get; }
+    IMongoCollection<RankedGameJoin>? RankedGameJoins { get; }
 
-    IMongoCollection<RegisteredPlayer> Players { get; }
+    IMongoCollection<RankedGame>? RankedGames { get; }
+
+    IMongoCollection<RegisteredPlayer>? Players { get; }
 
     Task<DateTime> GetServerTimeAsync();
 }

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using BattleChess3.Core.GameBoard;
 using BattleChess3.Multiplayer.Players;
@@ -14,8 +13,6 @@ namespace BattleChess3.Multiplayer.Lobby;
 
 internal class MultiplayerLobbyService : IMultiplayerLobbyService
 {
-    private readonly int _version;
-    
     private readonly IMultiplayerScheduler _scheduler;
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     
@@ -29,19 +26,14 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     {
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
-        _gameLobbyCollection = databaseClient.GameLobbies;
-        _gameJoinsCollection = databaseClient.GameJoins;
-
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
-        _version = version is not null 
-            ? ((byte)version.Major) << 16 | (byte)version.Minor << 8 | (byte)version.Revision
-            : -1;
+        _gameLobbyCollection = databaseClient.GameLobbies!;
+        _gameJoinsCollection = databaseClient.GameJoins!;
     }
 
     public Task<List<PublicLobbyData>> GetPublicLobbiesAsync(CancellationToken cancellationToken)
     { 
         return _gameLobbyCollection.Aggregate()
-            .Match(l => l.Version == _version && string.IsNullOrEmpty(l.JoinedId))
+            .Match(l => l.Version == GameVersion.VersionId && string.IsNullOrEmpty(l.JoinedId))
             .Project(doc => new PublicLobbyData
             {
                 Id = doc.Id,
@@ -162,7 +154,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     Console.WriteLine($"Searching for lobby with name: {lobbyName}");
                     var filter = Builders<GameLobby>.Filter.And(
                         Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
-                        Builders<GameLobby>.Filter.Eq(g => g.Version, _version)
+                        Builders<GameLobby>.Filter.Eq(g => g.Version, GameVersion.VersionId)
                     );
                     var foundGames = await _gameLobbyCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     if (await foundGames.AnyAsync(cancellationToken: cancellationToken))
@@ -184,7 +176,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         Map = myMap.GetByteData(),
                         PlayerId = currentPlayer?.Id ?? null,
                         Elo = currentPlayer?.Elo ?? null,
-                        Version = _version,
+                        Version = GameVersion.VersionId,
                         IsHostStarting = isHostStarting,
                     };
                     await _gameLobbyCollection.InsertOneAsync(game, cancellationToken: cancellationToken);
@@ -266,7 +258,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     Console.WriteLine($"Searching for lobby with name: {lobbyName}");
                     var filter = Builders<GameLobby>.Filter.And(
                         Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
-                        Builders<GameLobby>.Filter.Eq(g => g.Version, _version)
+                        Builders<GameLobby>.Filter.Eq(g => g.Version, GameVersion.VersionId)
                     );
                     var foundGames = await _gameLobbyCollection.FindAsync(filter, cancellationToken: cancellationToken);
                     var lobby = await foundGames.FirstOrDefaultAsync(cancellationToken);

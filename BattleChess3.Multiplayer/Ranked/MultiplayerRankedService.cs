@@ -27,8 +27,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
     {
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
-        _rankedGamesCollection = databaseClient.RankedGames;
-        _rankedGameJoinsCollection = databaseClient.RankedGameJoins;
+        _rankedGamesCollection = databaseClient.RankedGames!;
+        _rankedGameJoinsCollection = databaseClient.RankedGameJoins!;
 
         var version = Assembly.GetExecutingAssembly().GetName().Version;
         _version = version is not null 
