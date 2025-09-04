@@ -29,8 +29,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         _playerService = playerService;
 
         _databaseClient = databaseClient;
-        _gameTurnsCollection = databaseClient.GameTurns;
-        _playersCollection = databaseClient.Players;
+        _gameTurnsCollection = databaseClient.GameTurns!;
+        _playersCollection = databaseClient.Players!;
     }
 
     public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
@@ -284,7 +284,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         }
     }
 
-    public Task<Result> HandleHisTurnAsync()
+    public Task<Result> HandleRemotePlayerTurnAsync()
     {
         lock (_scheduler.SyncLock)
         {
