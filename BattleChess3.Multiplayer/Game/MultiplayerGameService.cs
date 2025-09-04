@@ -2,12 +2,14 @@
 using BattleChess3.Core.Players;
 using BattleChess3.Game;
 using BattleChess3.Game.Helpers;
+using BattleChess3.Multiplayer.Players;
+using BattleChess3.Multiplayer.Scheduling;
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.Game;
 
 internal sealed class MultiplayerGameService : IMultiplayerGameService
 {

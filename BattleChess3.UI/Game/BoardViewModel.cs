@@ -10,6 +10,8 @@ using BattleChess3.Game.Timers;
 using BattleChess3.Maps;
 using BattleChess3.Maps.BoardBlueprints;
 using BattleChess3.Multiplayer;
+using BattleChess3.Multiplayer.Game;
+using BattleChess3.Multiplayer.Players;
 using BattleChess3.UI.Services;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;

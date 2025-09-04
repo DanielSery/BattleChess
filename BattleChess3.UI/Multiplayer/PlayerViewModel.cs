@@ -4,6 +4,8 @@ using BattleChess3.Game;
 using BattleChess3.Game.Players;
 using BattleChess3.Game.Timers;
 using BattleChess3.Multiplayer;
+using BattleChess3.Multiplayer.Game;
+using BattleChess3.Multiplayer.Players;
 using Nicenis.Windows.ViewModels;
 
 namespace BattleChess3.UI.Multiplayer;

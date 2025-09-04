@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.Scheduling;
 
 internal class MultiplayerScheduler : IMultiplayerScheduler
 {

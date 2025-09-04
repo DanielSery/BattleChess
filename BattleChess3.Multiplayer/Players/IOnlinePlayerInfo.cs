@@ -1,8 +1,9 @@
 // Copyright (c) Veeam Software Group GmbH
 
 using BattleChess3.Game.Players;
+using BattleChess3.Multiplayer.Game;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.Players;
 
 public interface IOnlinePlayerInfo : IPlayerInfo
 {

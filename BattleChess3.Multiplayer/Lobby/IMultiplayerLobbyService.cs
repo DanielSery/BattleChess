@@ -2,7 +2,7 @@
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.Lobby;
 
 public interface IMultiplayerLobbyService
 {

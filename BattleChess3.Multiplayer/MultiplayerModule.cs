@@ -1,4 +1,9 @@
 ﻿using Autofac;
+using BattleChess3.Multiplayer.Game;
+using BattleChess3.Multiplayer.Lobby;
+using BattleChess3.Multiplayer.Players;
+using BattleChess3.Multiplayer.Ranked;
+using BattleChess3.Multiplayer.Scheduling;
 
 namespace BattleChess3.Multiplayer;
 

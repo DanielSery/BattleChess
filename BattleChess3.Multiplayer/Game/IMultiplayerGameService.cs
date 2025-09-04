@@ -1,8 +1,9 @@
 ﻿using BattleChess3.Core.GameBoard;
 using BattleChess3.Game;
+using BattleChess3.Multiplayer.Players;
 using FluentResults;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.Game;
 
 public interface IMultiplayerGameService
 {

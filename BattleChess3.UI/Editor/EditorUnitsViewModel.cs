@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using BattleChess3.Core.Figures;
 using BattleChess3.Multiplayer;
+using BattleChess3.Multiplayer.Players;
 using BattleChess3.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;

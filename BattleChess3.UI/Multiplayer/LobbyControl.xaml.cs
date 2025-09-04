@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using BattleChess3.Multiplayer.Lobby;
 using BattleChess3.Multiplayer.Tables;
 
 namespace BattleChess3.UI.Multiplayer;

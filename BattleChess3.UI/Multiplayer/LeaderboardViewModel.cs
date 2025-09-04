@@ -1,4 +1,5 @@
 ﻿using BattleChess3.Multiplayer;
+using BattleChess3.Multiplayer.Players;
 using BattleChess3.Multiplayer.Tables;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;

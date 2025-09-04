@@ -1,4 +1,4 @@
-﻿namespace BattleChess3.Multiplayer;
+﻿namespace BattleChess3.Multiplayer.Scheduling;
 
 internal class ScheduledTask<T> : IScheduledTask
 {

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 using BattleChess3.Multiplayer;
+using BattleChess3.Multiplayer.Players;
 using BattleChess3.UI.Editor;
 using BattleChess3.UI.Services;
 using CommunityToolkit.Mvvm.Input;

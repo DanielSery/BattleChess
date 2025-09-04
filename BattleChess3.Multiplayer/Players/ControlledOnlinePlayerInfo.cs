@@ -1,15 +1,15 @@
 // Copyright (c) Veeam Software Group GmbH
 
 using BattleChess3.Core.Figures;
-using BattleChess3.Core.Players;
 using BattleChess3.Game.Players;
 using BattleChess3.Game.Timers;
+using BattleChess3.Multiplayer.Game;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.Players;
 
 public class ControlledOnlinePlayerInfo : IOnlinePlayerInfo, IControlledPlayerInfo
 {
-    public ControlledOnlinePlayerInfo(Player player, string playerName, string? playerId, int? elo)
+    public ControlledOnlinePlayerInfo(Core.Players.Player player, string playerName, string? playerId, int? elo)
     {
         Player = player;
         Name = playerName;
@@ -18,7 +18,7 @@ public class ControlledOnlinePlayerInfo : IOnlinePlayerInfo, IControlledPlayerIn
         Elo = elo;
     }
 
-    public Player Player { get; }
+    public Core.Players.Player Player { get; }
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
     public List<IFigure> Figures { get; } = [];
