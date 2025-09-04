@@ -15,13 +15,13 @@ public class GameLobby
     [BsonRepresentation(BsonType.ObjectId)]
     public string? JoinedId { get; set; }
     
-    public string LobbyName { get; set; }
-    public string PasswordHash { get; set; }
-    public string PasswordSalt { get; set; }
+    public required string LobbyName { get; set; }
+    public required string PasswordHash { get; set; }
+    public required string PasswordSalt { get; set; }
     
     public int Version { get; set; }
     public short? Elo { get; set; }
     public bool IsHostStarting { get; set; }
     
-    public byte[] Map { get; set; }
+    public required byte[] Map { get; set; }
 }

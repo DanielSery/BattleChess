@@ -10,10 +10,10 @@ public class RankedGameJoin
     public string Id { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public string GameId { get; set; }
+    public required string GameId { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
     public string? PlayerId { get; set; }
     
-    public byte[] Map { get; set; }
+    public required byte[] Map { get; set; }
 }

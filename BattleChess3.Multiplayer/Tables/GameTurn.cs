@@ -10,7 +10,7 @@ public class GameTurn
     public string Id { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]
-    public string GameId { get; set; }
+    public required string GameId { get; set; }
     
     public DateTime CreatedAt { get; set; }
     public double TimeSpentInSeconds { get; set; }

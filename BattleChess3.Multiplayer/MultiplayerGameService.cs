@@ -113,7 +113,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         try
         {
             Console.WriteLine("Creating game result");
-            var gameTurn = new GameTurn()
+            var gameTurn = new GameTurn
             {
                 GameId = GameId,
                 FromIndex = (byte)messageIndex,
