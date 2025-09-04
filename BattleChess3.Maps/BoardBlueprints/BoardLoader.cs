@@ -15,7 +15,7 @@ internal class BoardLoader : IBoardLoader
         _figureCreator = figureCreator;
     }
     
-    public void LoadMap(IBoard board, BoardBlueprint map)
+    public void LoadBoard(IBoard board, BoardBlueprint map)
     {
         if (board.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
         if (map.Figures.Length != Constants.FullBoardTilesCount) throw new ArgumentException("Map blueprint needs to have 64 tiles");
@@ -29,7 +29,20 @@ internal class BoardLoader : IBoardLoader
         }
     }
 
-    public void LoadMapExtendedFor2Players(IBoard board, BoardBlueprint map)
+    public void LoadTeamBoard(IBoard board, BoardBlueprint map)
+    {
+        if (board.Count() != map.Figures.Length) throw new ArgumentException("Source and target map size must match");
+        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Any(x => x is { Player: Player.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
+
+        var index = 0;
+        foreach (var tile in board)
+        {
+            tile.Figure = _figureCreator.CreateFigure(map.Figures[index++]);
+        }
+    }
+
+    public void LoadBoardExtendedFor2Players(IBoard board, BoardBlueprint map)
     {
         if (board.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
         if (map.Figures.Length != 16) throw new ArgumentException("Partial map blueprint needs to have 16 tiles");

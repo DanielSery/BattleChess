@@ -46,7 +46,7 @@ public class TeamBoardViewModel : ViewModelBase
             .ToArray();
         
         Board = new Board(Tiles.Cast<ITile>().ToArray());
-        boardLoader.LoadMap(Board, maps.TeamMap);
+        boardLoader.LoadTeamBoard(Board, maps.TeamMap);
         EvaluateTeamBoard();
         
         MakeUnitKingCommand = new RelayCommand<TileViewModel>(MakeUnitKing);
@@ -119,7 +119,7 @@ public class TeamBoardViewModel : ViewModelBase
             return;
         
         var mapBlueprint = GetMapBlueprint(loggedInPlayer.Map);
-        _boardLoader.LoadMap(Board, mapBlueprint);
+        _boardLoader.LoadBoard(Board, mapBlueprint);
     }
     
     private static BoardBlueprint GetMapBlueprint(byte[] map)
@@ -144,7 +144,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     public void Discard()
     {
-        _boardLoader.LoadMap(Board, _maps.TeamMap);
+        _boardLoader.LoadBoard(Board, _maps.TeamMap);
     }
 
     private void MakeUnitKing(TileViewModel? tile)

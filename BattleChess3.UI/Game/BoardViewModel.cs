@@ -109,7 +109,7 @@ public sealed class BoardViewModel : ViewModelBase
             new ControlledPlayerInfo(Player.Black, "Blue player"),
             map.StartingPlayer);
         
-        _boardLoader.LoadMapExtendedFor2Players(_board, map);
+        _boardLoader.LoadBoardExtendedFor2Players(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
@@ -134,7 +134,7 @@ public sealed class BoardViewModel : ViewModelBase
             player1, player2,
             map.StartingPlayer);
         
-        _boardLoader.LoadMap(_board, map);
+        _boardLoader.LoadBoard(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
         _multiplayerGameService.StartGame(gameType, gameId);
     }

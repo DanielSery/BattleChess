@@ -63,7 +63,7 @@ public class BoardLoaderTest
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
         boardBlueprint.Figures[1] = new FigureBlueprint(Player.Black, 1, true);
 
-        var action = () => _underTest.LoadMap(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoard(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -83,7 +83,7 @@ public class BoardLoaderTest
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
         boardBlueprint.Figures[1] = new FigureBlueprint(Player.Black, 1, true);
 
-        var action = () => _underTest.LoadMap(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoard(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -102,7 +102,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[1] = new FigureBlueprint(Player.Black, 1, true);
 
-        var action = () => _underTest.LoadMap(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoard(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -121,7 +121,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
 
-        var action = () => _underTest.LoadMap(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoard(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -141,7 +141,7 @@ public class BoardLoaderTest
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
         boardBlueprint.Figures[1] = new FigureBlueprint(Player.Black, 1, true);
 
-        _underTest.LoadMap(boardMock.Object, boardBlueprint);
+        _underTest.LoadBoard(boardMock.Object, boardBlueprint);
 
         for (var index = 0; index < tileMocks.Length; index++)
         {
@@ -165,7 +165,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
 
-        var action = () => _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -184,7 +184,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
 
-        var action = () => _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -202,7 +202,7 @@ public class BoardLoaderTest
             Figures = Enumerable.Range(0, 16).Select(x => new FigureBlueprint(Player.White, x, false)).ToArray()
         };
 
-        var action = () => _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -221,7 +221,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.Black, 1, false);
 
-        var action = () => _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        var action = () => _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         action.Should().Throw<ArgumentException>();
     }
@@ -240,7 +240,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
 
-        _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         foreach (var tileMock in tileMocks)
         {
@@ -262,7 +262,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
 
-        _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         for (var i = 16; i < 48; i++)
         {
@@ -286,7 +286,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
 
-        _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         for (var i = 48; i < 63; i++)
         {
@@ -311,7 +311,7 @@ public class BoardLoaderTest
         };
         boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
 
-        _underTest.LoadMapExtendedFor2Players(boardMock.Object, boardBlueprint);
+        _underTest.LoadBoardExtendedFor2Players(boardMock.Object, boardBlueprint);
 
         for (var i = 0; i < 8; i++)
         {
@@ -326,6 +326,86 @@ public class BoardLoaderTest
         }
 
         tileMocks.Count(x => x.Object.Figure is { IsKing: true, Owner.Player: Player.Black }).Should().Be(1);
+    }
+
+    [Fact]
+    public void LoadTeamBoard_ChecksBoardDimensions()
+    {
+        var tileMocks = CreateTileMocks(10);
+        var boardMock = new Mock<IBoard>();
+        boardMock.Setup(x => x.GetEnumerator()).Returns(tileMocks.Select(x => x.Object).GetEnumerator);
+        boardMock.Setup(x => x[It.IsAny<Position>()]).Returns<Position>(x => tileMocks[x.GetIndex()].Object);
+
+        var boardBlueprint = new BoardBlueprint
+        {
+            Figures = Enumerable.Range(1, 12).Select(x => new FigureBlueprint(Player.White, x, false)).ToArray()
+        };
+        boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
+
+        var action = () => _underTest.LoadTeamBoard(boardMock.Object, boardBlueprint);
+
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void LoadTeamBoard_ChecksWhiteKing()
+    {
+        var tileMocks = CreateTileMocks(64);
+        var boardMock = new Mock<IBoard>();
+        boardMock.Setup(x => x.GetEnumerator()).Returns(tileMocks.Select(x => x.Object).GetEnumerator);
+        boardMock.Setup(x => x[It.IsAny<Position>()]).Returns<Position>(x => tileMocks[x.GetIndex()].Object);
+
+        var boardBlueprint = new BoardBlueprint
+        {
+            Figures = Enumerable.Range(1, 64).Select(x => new FigureBlueprint(Player.White, x, false)).ToArray()
+        };
+
+        var action = () => _underTest.LoadTeamBoard(boardMock.Object, boardBlueprint);
+
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void LoadTeamBoard_ChecksBlackFigures()
+    {
+        var tileMocks = CreateTileMocks(64);
+        var boardMock = new Mock<IBoard>();
+        boardMock.Setup(x => x.GetEnumerator()).Returns(tileMocks.Select(x => x.Object).GetEnumerator);
+        boardMock.Setup(x => x[It.IsAny<Position>()]).Returns<Position>(x => tileMocks[x.GetIndex()].Object);
+
+        var boardBlueprint = new BoardBlueprint
+        {
+            Figures = Enumerable.Range(1, 64).Select(x => new FigureBlueprint(Player.White, x, false)).ToArray()
+        };
+        boardBlueprint.Figures[0] = new FigureBlueprint(Player.Black, 0, false);
+
+        var action = () => _underTest.LoadTeamBoard(boardMock.Object, boardBlueprint);
+
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void LoadTeamBoard_WhenAllValid_SetsAllTiles()
+    {
+        var tileMocks = CreateTileMocks(64);
+        var boardMock = new Mock<IBoard>();
+        boardMock.Setup(x => x.GetEnumerator()).Returns(tileMocks.Select(x => x.Object).GetEnumerator);
+        boardMock.Setup(x => x[It.IsAny<Position>()]).Returns<Position>(x => tileMocks[x.GetIndex()].Object);
+
+        var boardBlueprint = new BoardBlueprint
+        {
+            Figures = Enumerable.Range(0, 64).Select(x => new FigureBlueprint(Player.White, x, false)).ToArray()
+        };
+        boardBlueprint.Figures[0] = new FigureBlueprint(Player.White, 0, true);
+
+        _underTest.LoadTeamBoard(boardMock.Object, boardBlueprint);
+
+        for (var index = 0; index < tileMocks.Length; index++)
+        {
+            var figureId = index;
+            var tileMock = tileMocks[index];
+            tileMock.VerifySet(x => x.Figure = It.Is<IFigure>(figure => figure.Type.FigureId == figureId), Times.Once);
+        }
     }
 
     private Mock<ITile>[] CreateTileMocks(int count)
