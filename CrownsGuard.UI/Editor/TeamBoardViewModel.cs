@@ -120,7 +120,7 @@ public class TeamBoardViewModel : ViewModelBase
             return;
         
         var mapBlueprint = GetMapBlueprint(loggedInPlayer.Map);
-        _boardLoader.LoadBoard(Board, mapBlueprint);
+        _boardLoader.LoadTeamBoard(Board, mapBlueprint);
     }
     
     private static BoardBlueprint GetMapBlueprint(byte[] map)
@@ -145,7 +145,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     public void Discard()
     {
-        _boardLoader.LoadBoard(Board, _maps.TeamMap);
+        _boardLoader.LoadTeamBoard(Board, _maps.TeamMap);
     }
 
     private void MakeUnitKing(TileViewModel? tile)

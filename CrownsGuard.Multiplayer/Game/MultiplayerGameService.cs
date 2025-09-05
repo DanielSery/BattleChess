@@ -6,6 +6,7 @@ using CrownsGuard.Multiplayer.DatabaseAccess;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Scheduling;
 using CrownsGuard.Multiplayer.Tables;
+using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -48,8 +49,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         TurnId = null;
     }
 
-    public Task<Result<string?>> HandleWinAsync(bool nofityOther, WinType winType, IOnlinePlayerInfo won,
-        IOnlinePlayerInfo lost)
+    public Task<Result<string?>> HandleWinAsync(
+        bool notifyOther, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -66,7 +67,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                     }
 
                     await DeleteGameTurnsAsync();
-                    if (nofityOther)
+                    if (notifyOther)
                     {
                         await SendGameResultToOpponent(winType);
                     }
@@ -76,14 +77,14 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                         return Result.Ok<string?>(null);
                     }
 
-                    if (nofityOther)
+                    if (notifyOther)
                     {
-                        return await UpdatePlayersElo(won, lost);
+                        return await UpdatePlayersElo(won, lost, cancellationToken);
                     }
                     else
                     {
                         var updated = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost;
-                        return await GetUpdatedElo(updated);
+                        return await GetUpdatedElo(updated, cancellationToken);
                     }
                 }
                 catch (Exception ex)
@@ -104,7 +105,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             return;
 
         Console.WriteLine("Sending game result to the other player");
-        int messageIndex = winType switch
+        var messageIndex = winType switch
         {
             WinType.Surrender => IMultiplayerGameService.SurrenderMessage,
             WinType.NotResponding => IMultiplayerGameService.NotRespondingLostMessage,
@@ -132,62 +133,45 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         }
     }
 
-    private async Task<Result<string?>> GetUpdatedElo(IOnlinePlayerInfo lost)
+    private async Task<Result<string?>> GetUpdatedElo(IOnlinePlayerInfo lost, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
-        var updatedPlayerResult = await _playersCollectionHandler.FindPlayerWithId(lost.PlayerId);
-        if (updatedPlayerResult.IsFailed) return Result.Fail("Could not find losing player");
-        var updatedPlayer = updatedPlayerResult.Value;
-        Console.WriteLine($"Found guest player with id: {updatedPlayer.Id}");
+        if (lost.PlayerId is null) throw new ArgumentNullException(nameof(lost));
 
+        var updatedPlayerResult = await _playersCollectionHandler.FindPlayerById(lost.PlayerId, cancellationToken);
+        if (!updatedPlayerResult.TryGetValue(out var updatedPlayer)) return Result.Fail("Could not find losing player");
         if (updatedPlayer.Elo != lost.Elo)
         {
             _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
             return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
         }
 
-        Console.WriteLine($"Waiting for elo update of player: {lost.PlayerId}");
-        updatedPlayerResult = await _playersCollectionHandler.WaitForPlayerEloUpdate(lost.PlayerId);
-        if (updatedPlayerResult.IsFailed) return Result.Fail("Could not find losing player");
-        updatedPlayer = updatedPlayerResult.Value;
-        Console.WriteLine($"Elo updated of player: {lost.PlayerId}");
+        updatedPlayerResult = await _playersCollectionHandler.WaitForPlayerEloUpdate(lost.PlayerId, cancellationToken);
+        if (!updatedPlayerResult.TryGetValue(out updatedPlayer)) return Result.Fail("Could not find losing player");
 
         _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
         return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
     }
 
-    private async Task<Result<string?>> UpdatePlayersElo(IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
+    private async Task<Result<string?>> UpdatePlayersElo(IOnlinePlayerInfo won, IOnlinePlayerInfo lost, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Searching for winning player with id: {won.PlayerId}");
-        var winningPlayerResult = await _playersCollectionHandler.FindPlayerWithId(won.PlayerId);
-        if (winningPlayerResult.IsFailed) return Result.Fail("Could not find winning player");
-        var winningPlayer = winningPlayerResult.Value;
-        Console.WriteLine($"Found winning player with id: {winningPlayer.Id}");
+        if (won.PlayerId is null) throw new ArgumentNullException(nameof(won));
+        if (lost.PlayerId is null) throw new ArgumentNullException(nameof(lost));
 
-        Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
-        var losingPlayerResult = await _playersCollectionHandler.WaitForPlayerEloUpdate(lost.PlayerId);
-        if (losingPlayerResult.IsFailed) return Result.Fail("Could not find losing player");
-        var losingPlayer = losingPlayerResult.Value;
-        Console.WriteLine($"Found guest player with id: {losingPlayer.Id}");
+        var winningPlayerResult = await _playersCollectionHandler.FindPlayerById(won.PlayerId, cancellationToken);
+        if (!winningPlayerResult.TryGetValue(out var winningPlayer)) return Result.Fail("Could not find winning player");
+
+        var losingPlayerResult = await _playersCollectionHandler.WaitForPlayerEloUpdate(lost.PlayerId, cancellationToken);
+        if (!losingPlayerResult.TryGetValue(out var losingPlayer)) return Result.Fail("Could not find losing player");
 
         winningPlayer.Elo = (short)won.Elo!;
         losingPlayer.Elo = (short)lost.Elo!;
         UpdateElo(winningPlayer, losingPlayer, 1d);
 
-        var updateWinningPlayerResult =
-            await _playersCollectionHandler.UpdatePlayerElo(winningPlayer.Id, winningPlayer.Elo);
-        var updateLosingPlayerResult =
-            await _playersCollectionHandler.UpdatePlayerElo(losingPlayer.Id, losingPlayer.Elo);
+        var updateWinningPlayerResult = await _playersCollectionHandler.UpdatePlayerElo(winningPlayer.Id, winningPlayer.Elo, cancellationToken);
+        var updateLosingPlayerResult = await _playersCollectionHandler.UpdatePlayerElo(losingPlayer.Id, losingPlayer.Elo, cancellationToken);
 
-        if (!updateLosingPlayerResult.IsAcknowledged)
-        {
-            return Result.Fail("Could not update guest player");
-        }
-
-        if (!updateWinningPlayerResult.IsAcknowledged)
-        {
-            return Result.Fail("Failed to update game confirmation");
-        }
+        if (!updateLosingPlayerResult.IsFailed) return updateLosingPlayerResult;
+        if (!updateWinningPlayerResult.IsFailed) return updateWinningPlayerResult;
 
         var currentPlayer = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost;
         var updatedPlayer = _playerService.LoggedInPlayer!.Id == winningPlayer.Id ? winningPlayer : losingPlayer;

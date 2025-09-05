@@ -130,7 +130,7 @@ public class MultiplayerViewModel : ViewModelBase
         if (isHost)
         {
             var player = _multiplayerPlayerService.GetCurrentPlayer();
-            var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearchJoin.PlayerId!, loadingOperation.CancellationToken);
+            var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(gameSearchJoin.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
                 : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
@@ -145,7 +145,7 @@ public class MultiplayerViewModel : ViewModelBase
         else
         {
             var player1 = _multiplayerPlayerService.GetCurrentPlayer();
-            var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameSearch.PlayerId!, loadingOperation.CancellationToken);
+            var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(gameSearch.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
                 : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
@@ -197,7 +197,7 @@ public class MultiplayerViewModel : ViewModelBase
         var gameJoin = gameJoinResult.Value;
         
         var player1 = _multiplayerPlayerService.GetCurrentPlayer();
-        var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(gameJoin.PlayerId!, loadingOperation.CancellationToken);
+        var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(gameJoin.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
             : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
@@ -237,7 +237,7 @@ public class MultiplayerViewModel : ViewModelBase
         var lobby = lobbyResult.Value;
         
         var player1 = _multiplayerPlayerService.GetCurrentPlayer();
-        var player2Request = await _multiplayerPlayerService.GetOpponentPlayerAsync(lobby.PlayerId!, loadingOperation.CancellationToken);
+        var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(lobby.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
             : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);

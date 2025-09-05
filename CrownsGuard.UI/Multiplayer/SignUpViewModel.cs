@@ -180,7 +180,7 @@ public class SignUpViewModel : ViewModelBase
         loading.Message = "Sending validation email";
         try
         {
-            await _emailClient.SendVerificationEmail(toAddress, _privateVerificationCode, loading.CancellationToken);
+            await _emailClient.SendVerificationEmail(toAddress, _name, _privateVerificationCode, loading.CancellationToken);
         }
         catch (Exception e)
         {

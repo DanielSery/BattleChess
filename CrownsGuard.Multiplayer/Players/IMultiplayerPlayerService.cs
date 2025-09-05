@@ -12,9 +12,9 @@ public interface IMultiplayerPlayerService
     
     RegisteredPlayer? LoggedInPlayer { get; }
 
-    Task<List<PublicPlayerData>> GetLeaderboard(CancellationToken cancellationToken);
+    Task<Result<List<PublicPlayerData>>> GetLeaderboard(CancellationToken cancellationToken);
     IOnlinePlayerInfo GetCurrentPlayer();
-    Task<Result<IOnlinePlayerInfo>> GetOpponentPlayerAsync(string playerId, CancellationToken cancellationToken);
+    Task<Result<IOnlinePlayerInfo>> GetRemotePlayerAsync(string playerId, CancellationToken cancellationToken);
     Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken);
     Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken);
     Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, BoardBlueprint myMap, CancellationToken cancellationToken);

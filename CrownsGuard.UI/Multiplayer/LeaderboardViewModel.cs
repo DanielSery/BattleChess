@@ -39,7 +39,7 @@ public class LeaderboardViewModel : ViewModelBase
         Task.Run(async () =>
         {
             using var loading = _loadingService.StartLoadingOperation("Getting leaderboard");
-            Leaderboard = await _multiplayerPlayerService.GetLeaderboard(loading.CancellationToken);
+            Leaderboard = (await _multiplayerPlayerService.GetLeaderboard(loading.CancellationToken)).Value;
         });
     }
 

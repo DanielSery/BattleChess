@@ -1,6 +1,5 @@
 ﻿using CrownsGuard.Core.Players;
 using CrownsGuard.Game;
-using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Game;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Editor;
@@ -142,7 +141,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             NotificationService.ShowMessage(messageType, $"{won.Name} won! {lost.Name}'s king was captured.");
         }
 
-        var result = await _multiplayerGameService.HandleWinAsync(publishResults, winType, won, lost);
+        var result = await _multiplayerGameService.HandleWinAsync(publishResults, winType, won, lost, CancellationToken.None);
         if (result.IsFailed)
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Error, result.Reasons.First().Message);
