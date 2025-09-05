@@ -1,4 +1,4 @@
-# BattleChess
+# Crown's guard
 
 2D Game like chess, but with multiple special figures and selection of your figure configuration. 
 
