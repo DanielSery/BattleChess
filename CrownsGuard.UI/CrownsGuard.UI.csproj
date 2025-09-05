@@ -8,6 +8,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>CrownsGuard</AssemblyName>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
+        <ProductName>Crown's guard</ProductName>
         <LangVersion>default</LangVersion>
         <Version>4.0.2</Version>
     </PropertyGroup>
