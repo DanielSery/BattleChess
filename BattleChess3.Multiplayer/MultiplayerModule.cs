@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using BattleChess3.Multiplayer.DatabaseAccess;
 using BattleChess3.Multiplayer.Game;
 using BattleChess3.Multiplayer.Lobby;
 using BattleChess3.Multiplayer.Players;

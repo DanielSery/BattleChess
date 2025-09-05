@@ -1,7 +1,7 @@
 ﻿using BattleChess3.Multiplayer.Tables;
 using MongoDB.Driver;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.DatabaseAccess;
 
 public interface IDatabaseClient
 {

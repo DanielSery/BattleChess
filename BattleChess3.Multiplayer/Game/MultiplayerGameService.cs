@@ -2,6 +2,7 @@
 using BattleChess3.Core.Players;
 using BattleChess3.Game;
 using BattleChess3.Game.Helpers;
+using BattleChess3.Multiplayer.DatabaseAccess;
 using BattleChess3.Multiplayer.Players;
 using BattleChess3.Multiplayer.Scheduling;
 using BattleChess3.Multiplayer.Tables;
@@ -16,21 +17,22 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     private readonly IMultiplayerScheduler _scheduler;
     
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
-    private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
     private readonly IMultiplayerPlayerService _playerService;
     private readonly IDatabaseClient _databaseClient;
+    private readonly IPlayersCollectionHandler _playersCollectionHandler;
 
     public MultiplayerGameService(
         IMultiplayerScheduler scheduler,
         IMultiplayerPlayerService playerService,
+        IPlayersCollectionHandler playersCollectionHandler,
         IDatabaseClient databaseClient)
     {
         _scheduler = scheduler;
         _playerService = playerService;
+        _playersCollectionHandler = playersCollectionHandler;
 
         _databaseClient = databaseClient;
         _gameTurnsCollection = databaseClient.GameTurns!;
-        _playersCollection = databaseClient.Players!;
     }
 
     public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
@@ -132,13 +134,9 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     private async Task<Result<string?>> GetUpdatedElo(IOnlinePlayerInfo lost)
     {
         Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
-        var updatedPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
-        var updatedPlayers = await _playersCollection.FindAsync(updatedPlayerFilter);
-        var updatedPlayer = await updatedPlayers.FirstOrDefaultAsync();
-        if (updatedPlayer is null)
-        {
-            return Result.Fail("Could not find losing player");
-        }
+        var updatedPlayerResult = await _playersCollectionHandler.FindPlayerWithId(lost.PlayerId);
+        if (updatedPlayerResult.IsFailed) return Result.Fail("Could not find losing player");
+        var updatedPlayer = updatedPlayerResult.Value;
         Console.WriteLine($"Found guest player with id: {updatedPlayer.Id}");
 
         if (updatedPlayer.Elo != lost.Elo)
@@ -147,82 +145,36 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
         }
 
-        updatedPlayer = await WaitForEloUpdate(lost);
-        if (updatedPlayer is null)
-        {
-            return Result.Fail("Could not find losing player");
-        }
+        Console.WriteLine($"Waiting for elo update of player: {lost.PlayerId}");
+        updatedPlayerResult = await _playersCollectionHandler.WaitForPlayerEloUpdate(lost.PlayerId);
+        if (updatedPlayerResult.IsFailed) return Result.Fail("Could not find losing player");
+        updatedPlayer = updatedPlayerResult.Value;
+        Console.WriteLine($"Elo updated of player: {lost.PlayerId}");
 
         _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
         return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
     }
 
-    private async Task<RegisteredPlayer?> WaitForEloUpdate(IOnlinePlayerInfo lost)
-    {
-        try
-        {
-            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RegisteredPlayer>>()
-                .Match(change =>
-                    (change.OperationType == ChangeStreamOperationType.Update &&
-                     change.DocumentKey["_id"] == ObjectId.Parse(lost.PlayerId)));
-        
-            using var cursor = await _playersCollection.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
-            );
-
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    if (change.FullDocument.Id == lost.PlayerId)
-                    {
-                        return change.FullDocument;
-                    }
-                }
-            }
-
-            return null;
-        }
-        catch (OperationCanceledException)
-        {
-            return null;
-        }
-    }
-
     private async Task<Result<string?>> UpdatePlayersElo(IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
     {
         Console.WriteLine($"Searching for winning player with id: {won.PlayerId}");
-        var winningPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, won.PlayerId);
-        var winningPlayers = await _playersCollection.FindAsync(winningPlayerFilter);
-        var winningPlayer = await winningPlayers.FirstOrDefaultAsync();
-        if (winningPlayer is null)
-        {
-            return Result.Fail("Could not find winning player");
-        }
-        winningPlayer.Elo = (short)won.Elo!;
+        var winningPlayerResult = await _playersCollectionHandler.FindPlayerWithId(won.PlayerId);
+        if (winningPlayerResult.IsFailed) return Result.Fail("Could not find winning player");
+        var winningPlayer = winningPlayerResult.Value;
         Console.WriteLine($"Found winning player with id: {winningPlayer.Id}");
                     
         Console.WriteLine($"Searching for losing player with id: {lost.PlayerId}");
-        var losingPlayerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, lost.PlayerId);
-        var losingPlayers = await _playersCollection.FindAsync(losingPlayerFilter);
-        var losingPlayer = await losingPlayers.FirstOrDefaultAsync();
-        if (losingPlayer is null)
-        {
-            return Result.Fail("Could not find losing player");
-        }
-        losingPlayer.Elo = (short)lost.Elo!;
+        var losingPlayerResult = await _playersCollectionHandler.WaitForPlayerEloUpdate(lost.PlayerId);
+        if (losingPlayerResult.IsFailed) return Result.Fail("Could not find losing player");
+        var losingPlayer = losingPlayerResult.Value;
         Console.WriteLine($"Found guest player with id: {losingPlayer.Id}");
 
+        winningPlayer.Elo = (short)won.Elo!;
+        losingPlayer.Elo = (short)lost.Elo!;
         UpdateElo(winningPlayer, losingPlayer, 1d);
                         
-        var updateWinningPlayer = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, winningPlayer.Elo);
-        var updateWinningPlayerResult = await _playersCollection.UpdateOneAsync(winningPlayerFilter, updateWinningPlayer);
-                    
-        var updateLosingPlayer = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, losingPlayer.Elo);
-        var updateLosingPlayerResult = await _playersCollection.UpdateOneAsync(losingPlayerFilter, updateLosingPlayer);
+        var updateWinningPlayerResult = await _playersCollectionHandler.UpdatePlayerWithId(winningPlayer.Id, x => x.Elo, winningPlayer.Elo);
+        var updateLosingPlayerResult = await _playersCollectionHandler.UpdatePlayerWithId(losingPlayer.Id, x => x.Elo, losingPlayer.Elo);
 
         if (!updateLosingPlayerResult.IsAcknowledged)
         {

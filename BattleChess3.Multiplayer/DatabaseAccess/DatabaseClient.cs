@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace BattleChess3.Multiplayer;
+namespace BattleChess3.Multiplayer.DatabaseAccess;
 
 public class DatabaseClient : IDatabaseClient
 {
