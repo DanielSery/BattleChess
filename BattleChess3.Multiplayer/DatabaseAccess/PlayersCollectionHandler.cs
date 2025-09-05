@@ -1,6 +1,5 @@
 // Copyright (c) Veeam Software Group GmbH
 
-using System.Linq.Expressions;
 using BattleChess3.Multiplayer.Tables;
 using FluentResults;
 using MongoDB.Bson;
@@ -33,12 +32,12 @@ public class PlayersCollectionHandler : IPlayersCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<UpdateResult> UpdatePlayerWithId<TField>(string? id, Expression<Func<RegisteredPlayer, TField>> field, TField value)
+    public async Task<UpdateResult> UpdatePlayerElo(string? playerId, int newElo)
     {
         try
         {
-            var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, id);
-            var update = Builders<RegisteredPlayer>.Update.Set(field, value);
+            var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId);
+            var update = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, newElo);
             return await _playersCollection.UpdateOneAsync(playerFilter, update);
         }
         catch (Exception e)

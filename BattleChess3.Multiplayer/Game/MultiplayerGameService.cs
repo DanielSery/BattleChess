@@ -173,8 +173,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         losingPlayer.Elo = (short)lost.Elo!;
         UpdateElo(winningPlayer, losingPlayer, 1d);
                         
-        var updateWinningPlayerResult = await _playersCollectionHandler.UpdatePlayerWithId(winningPlayer.Id, x => x.Elo, winningPlayer.Elo);
-        var updateLosingPlayerResult = await _playersCollectionHandler.UpdatePlayerWithId(losingPlayer.Id, x => x.Elo, losingPlayer.Elo);
+        var updateWinningPlayerResult = await _playersCollectionHandler.UpdatePlayerElo(winningPlayer.Id, winningPlayer.Elo);
+        var updateLosingPlayerResult = await _playersCollectionHandler.UpdatePlayerElo(losingPlayer.Id, losingPlayer.Elo);
 
         if (!updateLosingPlayerResult.IsAcknowledged)
         {
