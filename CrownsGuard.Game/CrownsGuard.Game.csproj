@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+        <Version>4.0.2</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="CrownsGuard.Game.Test" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CrownsGuard.Core\CrownsGuard.Core.csproj" />
+    </ItemGroup>
+</Project>

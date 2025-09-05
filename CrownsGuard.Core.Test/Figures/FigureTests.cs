@@ -1,0 +1,157 @@
+﻿using AwesomeAssertions;
+using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Players;
+using Moq;
+
+namespace CrownsGuard.Core.Test.Figures;
+
+public class FigureTests
+{
+    [Fact]
+    public void NoneFigureType_FigureIsValid()
+    {
+        var player = GetFigureOwner(Player.Neutral);
+        _ = new Figure(player, NoneFigureType.Instance, false);
+    }
+
+    [Fact]
+    public void NeutralPlayer_ThrowsWhenNotHavingNeutralImage()
+    {
+        var player = GetFigureOwner(Player.Neutral);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {1, new Uri("component/Images/test.png", UriKind.Relative)},
+            {2, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void NeutralPlayer_NotThrowsWhenHavingNeutralImage()
+    {
+        var player = GetFigureOwner(Player.Neutral);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {0, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().NotThrow();
+    }
+
+    [Fact]
+    public void WhitePlayer_ThrowsWhenNotHavingWhiteImage()
+    {
+        var player = GetFigureOwner(Player.White);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {0, new Uri("component/Images/test.png", UriKind.Relative)},
+            {2, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void WhitePlayer_NotThrowsWhenHavingWhiteImage()
+    {
+        var player = GetFigureOwner(Player.White);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {1, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().NotThrow();
+    }
+
+    [Fact]
+    public void BlackPlayer_ThrowsWhenNotHavingBlackImage()
+    {
+        var player = GetFigureOwner(Player.Black);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {0, new Uri("component/Images/test.png", UriKind.Relative)},
+            {1, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void BlackPlayer_NotThrowsWhenHavingBlackImage()
+    {
+        var player = GetFigureOwner(Player.Black);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {2, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+
+        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+
+        createFigureAction.Should().NotThrow();
+    }
+
+    [Fact]
+    public void GetsFieldsFromFigureType()
+    {
+        var player = GetFigureOwner(Player.Black);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {2, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+        figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
+
+        var figure = new Figure(player, figureTypeMock.Object, false);
+
+        figure.DisplayName.Should().Be("Test");
+    }
+
+    [Fact]
+    public void GetsUriFromFigureType()
+    {
+        var player = GetFigureOwner(Player.Black);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {2, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+        figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
+
+        var figure = new Figure(player, figureTypeMock.Object, false);
+
+        figure.ImageUri.Should().Be(new Uri("component/Images/test.png", UriKind.Relative));
+    }
+
+    [Fact]
+    public void GetsPossibleActionsFromFigureType()
+    {
+        var player = GetFigureOwner(Player.Black);
+        var figureTypeMock = new Mock<IFigureType>();
+        figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
+            {2, new Uri("component/Images/test.png", UriKind.Relative)},
+        });
+        figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
+
+        var figure = new Figure(player, figureTypeMock.Object, false);
+        figure.GetPossibleActions(Mock.Of<ITile>(), Mock.Of<IBoard>());
+
+        figureTypeMock.Verify(x => x.GetPossibleActions(It.IsAny<ITile>(), It.IsAny<IBoard>()), Times.Once);
+    }
+
+    private static IFigureOwner GetFigureOwner(Player player)
+    {
+        var mock = new Mock<IFigureOwner>();
+        mock.Setup(x => x.Player).Returns(player);
+        return mock.Object;
+    }
+}

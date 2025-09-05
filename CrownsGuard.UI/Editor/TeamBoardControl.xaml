@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="CrownsGuard.UI.Editor.TeamBoardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:n="clr-namespace:Nicenis.Windows;assembly=Nicenis"
+             xmlns:converters="clr-namespace:CrownsGuard.UI.Converters"
+             xmlns:shared="clr-namespace:CrownsGuard.UI.Shared"
+             xmlns:editor="clr-namespace:CrownsGuard.UI.Editor"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance editor:EditorViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="ThisTeamBoardControl" Focusable="True">
+    <ItemsControl HorizontalAlignment="Stretch"
+                  x:Name="ThisItemsControl"
+                  DataContext="{Binding TeamBoard}"
+                  ItemsSource="{Binding Tiles}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding BoardWidth}" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Button
+                    Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisItemsControl}"
+                    CommandParameter="{Binding}"
+                    Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
+                    d:DataContext="{d:DesignInstance shared:TileViewModel}"
+                    n:DragSource.AllowDrag="True"
+                    n:DragSource.AllowedEffects="Move"
+                    n:DragSource.Dragging="ChessButton_DragEnter"
+                    Drop="ChessImage_Drop"
+                    AllowDrop="True"
+                    MouseEnter="TileButton_MouseEnter"
+                    MouseLeave="TileButton_MouseLeave">
+                    <Image Source="{Binding Figure.ImageUri}" />
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

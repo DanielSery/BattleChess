@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="CrownsGuard.UI.Settings.SettingsSideControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:CrownsGuard.UI.Converters"
+             xmlns:settings="clr-namespace:CrownsGuard.UI.Settings"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance settings:SettingsViewModel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Button Grid.Row="0" Grid.Column="0"
+                Content="Volume"
+                BorderThickness="2 2 2 2"
+                FontSize="25"
+                Background="{StaticResource ButtonGreenBackground}"
+                Padding="10"
+                IsEnabled="False" Opacity="0.85" />
+        
+        <Slider Grid.Row="0" Grid.Column="1"
+                Minimum="0" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Maximum="1"></Slider>
+        
+        <Button Grid.Row="1" Grid.Column="0"
+                Content="Music"
+                BorderThickness="2 2 2 2"
+                FontSize="25"
+                Background="{StaticResource ButtonGreen2Background}"
+                Padding="10"
+                IsEnabled="False" Opacity="0.85" />
+        
+        <Slider Grid.Row="1" Grid.Column="1"
+                Minimum="0" Value="{Binding MusicVolume, UpdateSourceTrigger=PropertyChanged}" Maximum="1"></Slider>
+        
+        <Button Grid.Row="2" Grid.Column="0"
+                Content="Sounds"
+                BorderThickness="2 2 2 2"
+                FontSize="25"
+                Background="{StaticResource ButtonGreen3Background}"
+                Padding="10"
+                IsEnabled="False" Opacity="0.85" />
+        
+        <Slider Grid.Row="2" Grid.Column="1"
+                Minimum="0" Value="{Binding SoundsVolume, UpdateSourceTrigger=PropertyChanged}" Maximum="1"></Slider>
+        
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                Command="{Binding ToggleFullscreenCommand}"
+                Content="{Binding IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=Window, FalseValue=Fullscreen}}"
+                BorderThickness="2 2 2 2"
+                FontSize="25"
+                Background="{Binding IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=#30000000, FalseValue=#60000000}}"
+                Padding="10" />
+
+        <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                Content="Confirm"
+                BorderThickness="2 4 2 2"
+                FontSize="25"
+                Command="{Binding ConfirmCommand}"
+                Background="{StaticResource ButtonGreen3Background}"
+                Padding="10" />
+
+        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                Content="Cancel"
+                BorderThickness="2 2 2 4"
+                FontSize="25"
+                Command="{Binding CancelCommand}"
+                Background="{StaticResource ButtonOrangeBackground}"
+                Padding="10" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="CrownsGuard.UI.Game.BoardTileControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:CrownsGuard.UI.Converters"
+             xmlns:shared="clr-namespace:CrownsGuard.UI.Shared"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <Border x:Name="Border">
+        <Border.Background>
+            <SolidColorBrush x:Name="TileAnimatedBackground" Color="Transparent"/>
+        </Border.Background>
+        <Button x:Name="Button"
+                Command="{Binding DataContext.PlayTileCommand, ElementName=ThisGameBoardControl}"
+                CommandParameter="{Binding}"
+                Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
+                d:DataContext="{d:DesignInstance shared:TileViewModel}"
+                DataContextChanged="Button_OnDataContextChanged">
+            <Image Source="{Binding Figure.ImageUri}" />
+        </Button>
+    </Border>
+</UserControl>

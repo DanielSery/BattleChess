@@ -1,0 +1,280 @@
+﻿<Window x:Class="CrownsGuard.UI.MainWindow.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localization="clr-namespace:CrownsGuard.UI.Localization"
+        xmlns:game="clr-namespace:CrownsGuard.UI.Game"
+        xmlns:editor="clr-namespace:CrownsGuard.UI.Editor"
+        xmlns:mainWindow="clr-namespace:CrownsGuard.UI.MainWindow"
+        xmlns:shared="clr-namespace:CrownsGuard.UI.Shared"
+        xmlns:converters="clr-namespace:CrownsGuard.UI.Converters"
+        xmlns:multiplayer="clr-namespace:CrownsGuard.UI.Multiplayer"
+        xmlns:settings="clr-namespace:CrownsGuard.UI.Settings"
+        mc:Ignorable="d"
+        Title="{localization:Loc MainWindow_Title}" Height="768" Width="1366" MinHeight="700" MinWidth="1000"
+        d:DataContext="{d:DesignInstance mainWindow:MainWindowViewModel}"
+        DataContext="{Binding Source={x:Static shared:ViewModelLocator.MainWindowViewModel}}"
+        Style="{StaticResource MainWindowStyle}"
+        WindowStyle="None" AllowsTransparency="True" 
+        ResizeMode="{Binding MenuViewModel.SettingsViewModel.IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=NoResize, FalseValue=CanResizeWithGrip}}"
+        WindowState="{Binding MenuViewModel.SettingsViewModel.WindowState}">
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Top"
+              Height="30" 
+              Visibility="{Binding MenuViewModel.SettingsViewModel.IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=Collapsed, FalseValue=Visible}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    PreviewMouseDown="DragButton_MouseDown"
+                    BorderThickness="4 4 2 4"
+                    Background="Transparent"
+                    MouseDoubleClick="Control_OnMouseDoubleClick">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource ScalingButtonStyle}" TargetType="Button">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource DefaultObjectForeground}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource DefaultObjectForeground}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button Grid.Column="1"
+                    Click="MinimizeButton_Click"
+                    BorderThickness="2 4 2 4"
+                    Background="#40000000"
+                    Style="{StaticResource ScalingButtonStyle}">
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                        MinWidth="65" MinHeight="40">
+                    <TextBlock Text="―"
+                               FontFamily="Segoe UI"
+                               FontWeight="Black"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               FontSize="35" />
+                </Border>
+            </Button>
+
+            <Button Grid.Column="2"
+                    Click="MaximizeButton_Click"
+                    BorderThickness="2 4 2 4"
+                    Background="Transparent"
+                    Style="{StaticResource ScalingButtonStyle}">
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                        MinWidth="65" MinHeight="40">
+                    <TextBlock x:Name="MaximizeButtonTextBlock"
+                               Text="🗖"
+                               FontFamily="Segoe UI"
+                               FontWeight="Black"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               FontSize="35" />
+                </Border>
+            </Button>
+
+            <Button Grid.Column="3"
+                    Click="CloseButton_Click"
+                    BorderThickness="2 4 4 4"
+                    Background="#40000000"
+                    Style="{StaticResource ScalingButtonStyle}">
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                        MinWidth="65" MinHeight="40">
+                    <TextBlock Text="✕"
+                               FontFamily="Segoe UI"
+                               FontWeight="Black"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               FontSize="35" />
+                </Border>
+            </Button>
+        </Grid>
+        
+        <Border x:Name="ContentToFill">
+        <Grid ClipToBounds="True">
+            <Grid.Resources>
+                <converters:BoardSizeConverter x:Key="BoardSizeConverter" />
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="1" Grid.Row="0"
+                    BorderBrush="Black" BorderThickness="0 0 4 0"></Border>
+            
+            <Border Grid.Column="1" Grid.Row="2"
+                    BorderBrush="Black" BorderThickness="0 0 4 0"></Border>
+
+            <Border Grid.Column="1" Grid.Row="1"
+                    x:Name="ThisBorderControl"
+                    Height="{Binding ActualWidth, ElementName=ThisBorderControl}"
+                    Loaded="MainArea_OnLoaded"
+                    DataContextChanged="MainArea_OnDataContextChanged"
+                    ClipToBounds="True">
+                <Border.Width>
+                    <MultiBinding Converter="{StaticResource BoardSizeConverter}" UpdateSourceTrigger="PropertyChanged">
+                        <Binding ElementName="ContentToFill" Path="ActualWidth" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding ElementName="ContentToFill" Path="ActualHeight" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </Border.Width>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" 
+                            BorderBrush="Black" BorderThickness="0 0 4 0">
+                        <Border x:Name="MenuControl"
+                                CacheMode="BitmapCache">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="MenuTransform" />
+                            </Border.RenderTransform>
+                            <mainWindow:MenuControl DataContext="{Binding MenuViewModel}" />
+                        </Border>
+                    </Border>
+
+                    <Border Grid.Row="1" 
+                            BorderBrush="Black" BorderThickness="0 0 4 0">
+                        <editor:TeamBoardControl x:Name="TeamBoardControl"
+                                                 DataContext="{Binding  EditorViewModel}"
+                                                 Opacity="0.85" IsEnabled="False"
+                                                 CacheMode="BitmapCache" />
+                    </Border>
+
+                    <Border Grid.Row="0" Grid.RowSpan="2" x:Name="ParentGameBoardBorder"
+                            BorderBrush="Black" BorderThickness="0 0 4 0">
+                        <Grid ClipToBounds="True" x:Name="GameBoardOuterControl" Opacity="0.85"
+                              CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Grid.RenderTransform>
+                                <TranslateTransform x:Name="GameBoardOuterTransform" />
+                            </Grid.RenderTransform>
+                            <Grid ClipToBounds="True" x:Name="GameBoardMiddleControl"
+                                  CacheMode="BitmapCache">
+                                <Grid.RenderTransform>
+                                    <TranslateTransform x:Name="GameBoardMiddleTransform" />
+                                </Grid.RenderTransform>
+                                <Border x:Name="GameBoardInnerControl"
+                                        CacheMode="BitmapCache">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform x:Name="GameBoardInnerTransform" />
+                                    </Border.RenderTransform>
+                                    <Border Height="{Binding ActualHeight, ElementName=ThisBorderControl}">
+                                        <game:GameBoardControl DataContext="{Binding BoardViewModel}" />
+                                    </Border>
+                                </Border>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="0" ClipToBounds="True" x:Name="EditorUnitsOuterControl" CacheMode="BitmapCache"
+                          Visibility="Collapsed">
+                        <Grid.RenderTransform>
+                            <TranslateTransform x:Name="EditorUnitsOuterTransform" />
+                        </Grid.RenderTransform>
+                        
+                        <Border x:Name="EditorUnitsInnerControl"
+                                BorderBrush="Black" BorderThickness="0 0 0 6"
+                                CacheMode="BitmapCache">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="EditorUnitsInnerTransform" />
+                            </Border.RenderTransform>
+                            <editor:EditorUnitsControl DataContext="{Binding EditorViewModel.EditorUnits}"
+                                                       Opacity="0.85" />
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" ClipToBounds="True" x:Name="ParentMenuSideControl">
+                <Border x:Name="MenuSideControl"
+                        BorderBrush="Black" BorderThickness="2 0 4 0"
+                        CacheMode="BitmapCache">
+                    <Border.RenderTransform>
+                        <TranslateTransform x:Name="MenuSideTransform" />
+                    </Border.RenderTransform>
+                    <Grid DataContext="{Binding MenuViewModel}" x:Name="ParentSubMenuSideControl"
+                          Loaded="ParentSubMenuSideControl_OnLoaded"
+                          DataContextChanged="ParentSubMenuSideControl_OnDataContextChanged">
+                        <Border x:Name="LoginSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="LoginSideTransform" />
+                            </Border.RenderTransform>
+                            <multiplayer:LoginControl DataContext="{Binding LoginViewModel}"/>
+                        </Border>
+                        <Border x:Name="SignupSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="SignupSideTransform" />
+                            </Border.RenderTransform>
+                            <multiplayer:SignUpControl DataContext="{Binding SignUpViewModel}"/>
+                        </Border>
+                        <Border x:Name="LobbySideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="LobbySideTransform" />
+                            </Border.RenderTransform>
+                            <multiplayer:MultiplayerLobbyControl DataContext="{Binding MultiplayerViewModel}"/>
+                        </Border>
+                        <Border x:Name="LeaderboardSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="LeaderboardSideTransform" />
+                            </Border.RenderTransform>
+                            <multiplayer:LeaderboardControl DataContext="{Binding LeaderboardViewModel}"/>
+                        </Border>
+                        <Border x:Name="SettingsSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="SettingsSideTransform" />
+                            </Border.RenderTransform>
+                            <settings:SettingsSideControl DataContext="{Binding SettingsViewModel}"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" ClipToBounds="True" x:Name="ParentGameSideControl">
+                <Border x:Name="GameSideControl"
+                    BorderBrush="Black" BorderThickness="2 0 4 0"
+                    CacheMode="BitmapCache"
+                    Visibility="Collapsed">
+                    <Border.RenderTransform>
+                        <TranslateTransform x:Name="GameSideTransform" />
+                    </Border.RenderTransform>
+                    <game:GameSideControl />
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" ClipToBounds="True" x:Name="ParentEditorSideControl">
+                <Border x:Name="EditorSideControl"
+                        BorderBrush="Black" BorderThickness="0 0 4 0"
+                        CacheMode="BitmapCache"
+                        Visibility="Collapsed">
+                    <Border.RenderTransform>
+                        <TranslateTransform x:Name="EditorSideTransform" />
+                    </Border.RenderTransform>
+                    <editor:EditorSideControl DataContext="{Binding EditorViewModel}" />
+                </Border>
+            </Grid>
+
+            <mainWindow:LoadingControl Grid.Row="0" Grid.RowSpan="3"
+                                       Grid.Column="0" Grid.ColumnSpan="4"
+                                       DataContext="{Binding LoadingService}" />
+
+            <mainWindow:NotificationControl Grid.Row="0" Grid.RowSpan="3"
+                                            Grid.Column="0" Grid.ColumnSpan="4"
+                                            DataContext="{Binding NotificationService}" />
+        </Grid>
+        </Border>
+
+    </DockPanel>
+</Window>
