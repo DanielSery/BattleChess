@@ -2,6 +2,7 @@
 using BattleChess3.Multiplayer.DatabaseAccess;
 using BattleChess3.Multiplayer.Game;
 using BattleChess3.Multiplayer.Lobby;
+using BattleChess3.Multiplayer.Mail;
 using BattleChess3.Multiplayer.Players;
 using BattleChess3.Multiplayer.Ranked;
 using BattleChess3.Multiplayer.Scheduling;
@@ -15,6 +16,13 @@ public static class MultiplayerModule
         builder.RegisterType<DatabaseClient>()
             .As<IDatabaseClient>()
             .SingleInstance();
+        builder.RegisterType<PlayersCollectionHandler>()
+            .As<IPlayersCollectionHandler>()
+            .SingleInstance();
+        builder.RegisterType<EmailClient>()
+            .As<IEmailClient>()
+            .SingleInstance();
+        
         builder.RegisterType<MultiplayerRankedService>()
             .As<IMultiplayerRankedService>()
             .SingleInstance();
