@@ -29,16 +29,21 @@ public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlle
     /// <inheritdoc />
     public void StartTurn()
     {
-        if (_gameService == null) throw new ArgumentNullException(nameof(_gameService));
-
         Timer.StartTurnTimer();
-        Task.Run(_gameService.HandleRemotePlayerTurnAsync);
     }
 
     /// <inheritdoc />
     public void EndTurn(TimeSpan? forcedTurnDuration = null)
     {
         Timer.EndTurnTimer(forcedTurnDuration);
+    }
+
+    /// <inheritdoc />
+    public Task HandleAutomaticTurnAsync()
+    {
+        if (_gameService == null) throw new ArgumentNullException(nameof(_gameService));
+
+        return Task.Run(_gameService.HandleRemotePlayerTurnAsync);
     }
 
     /// <inheritdoc />

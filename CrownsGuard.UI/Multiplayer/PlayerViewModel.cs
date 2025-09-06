@@ -1,4 +1,5 @@
-﻿using System.Windows.Threading;
+﻿using System.Diagnostics;
+using System.Windows.Threading;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Game;
 using CrownsGuard.Game.Players;
@@ -14,6 +15,7 @@ public class PlayerViewModel : ViewModelBase
     private readonly IPlayerInfo _playerInfo;
     private readonly IGameService _gameService;
     private readonly DispatcherTimer _timer;
+    private readonly Stopwatch  _stopwatch;
     
     public Player Player => _playerInfo.Player;
     public string FullName { get; }
@@ -49,6 +51,7 @@ public class PlayerViewModel : ViewModelBase
 
     public PlayerViewModel(IPlayerInfo player, IGameService gameService)
     {
+        _stopwatch = new Stopwatch();
         if (player is IOnlinePlayerInfo { Elo: not null } onlinePlayerInfo)
         {
             FullName = $"{onlinePlayerInfo.Name} ({onlinePlayerInfo.Elo})";
@@ -71,8 +74,9 @@ public class PlayerViewModel : ViewModelBase
     }
 
 
-    public void StartTurn(TimeSpan initialTime)
+    public void StartTurn()
     {
+        _stopwatch.Restart();
         IsHisTurn = true;
         if (!_timer.IsEnabled)
         {
@@ -82,6 +86,7 @@ public class PlayerViewModel : ViewModelBase
 
     public void EndTurn()
     {
+        _stopwatch.Stop();
         IsHisTurn = false;
         _timer.Stop();
         IdleTime = IMultiplayerGameService.TurnTimeout.ToString(@"mm\:ss");
@@ -105,7 +110,7 @@ public class PlayerViewModel : ViewModelBase
 
         if (isMultiplayer && !hasTimer)
         {
-            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.Timer.LastTurnElapsedTime;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _stopwatch.Elapsed;
             if (idleTimeRemaining.TotalSeconds > 0)
             {
                 IdleTime = idleTimeRemaining.ToString(@"m\:ss\.f");
@@ -122,8 +127,8 @@ public class PlayerViewModel : ViewModelBase
         }
         else if (isMultiplayer && hasTimer)
         {
-            var timeRemaining = _playerInfo.Timer.RemainingTime - _playerInfo.Timer.LastTurnElapsedTime;
-            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _playerInfo.Timer.LastTurnElapsedTime;
+            var timeRemaining = _playerInfo.Timer.RemainingTime - _stopwatch.Elapsed;
+            var idleTimeRemaining = IMultiplayerGameService.TurnTimeout - _stopwatch.Elapsed;
         
             if (timeRemaining.TotalSeconds > 0 && idleTimeRemaining.TotalSeconds > 0)
             {

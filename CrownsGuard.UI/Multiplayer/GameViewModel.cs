@@ -1,6 +1,5 @@
 ﻿using CrownsGuard.Game;
 using CrownsGuard.Game.Timers;
-using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Players;
 using Nicenis.Windows.ViewModels;
 
@@ -64,7 +63,8 @@ public class GameViewModel : ViewModelBase
                 return true;
             }
 
-            return _gameService.CurrentPlayerInfo is not IAutomaticallyControlledPlayerInfo;
+            return _gameService.CurrentPlayerInfo is not IAutomaticallyControlledPlayerInfo ||
+                   !_gameService.GameRunning;
         }
     }
 
@@ -89,7 +89,7 @@ public class GameViewModel : ViewModelBase
     private void GameServiceOnTurnStarted(object? sender, EventArgs e)
     {
         var currentPlayer = Players.FirstOrDefault(x => x.Player == _gameService.CurrentPlayerInfo.Player);
-        currentPlayer?.StartTurn(_gameService.CurrentPlayerInfo.Timer.RemainingTime);
+        currentPlayer?.StartTurn();
         RaisePropertyChanged(nameof(CanEndGame));
     }
 

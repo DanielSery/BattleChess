@@ -23,7 +23,6 @@ public partial class App
 
     private void CurrentDomainOnFirstChanceException(object? sender, FirstChanceExceptionEventArgs e)
     {
-        Debugger.Break();
     }
 
     private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)

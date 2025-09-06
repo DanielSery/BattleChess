@@ -40,7 +40,7 @@ public sealed class BoardViewModel : ViewModelBase
         _soundService = soundService;
 
         SurrenderCommand = new RelayCommand(Surrender);
-        PlayTileCommand = new RelayCommand<TileViewModel>(PlayTile);
+        PlayTileCommand = new AsyncRelayCommand<TileViewModel>(PlayTile);
         MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
         MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
 
@@ -95,7 +95,7 @@ public sealed class BoardViewModel : ViewModelBase
     public TileViewModel[] Tiles { get; }
 
     public RelayCommand SurrenderCommand { get; }
-    public RelayCommand<TileViewModel> PlayTileCommand { get; }
+    public AsyncRelayCommand<TileViewModel> PlayTileCommand { get; }
     public RelayCommand<TileViewModel> MouseEnterCommand { get; }
     public RelayCommand<TileViewModel> MouseExitCommand { get; }
 
@@ -134,6 +134,8 @@ public sealed class BoardViewModel : ViewModelBase
         _gameService.StartGame(
             player1, player2,
             map.StartingPlayer);
+        if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
+            _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
 
         _boardLoader.LoadBoard(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
@@ -152,34 +154,38 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private void PlayTile(TileViewModel? clickedTile)
+    private async Task PlayTile(TileViewModel? clickedTile)
     {
         ArgumentNullException.ThrowIfNull(clickedTile);
         if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
         {
             _gameService.EndTurn();
-            _multiplayerGameService.PlayedMoveAsync(
+            await _multiplayerGameService.PlayedMoveAsync(
                 SelectedTile.RelativePosition,
                 clickedTile.RelativePosition,
                 _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime,
                 CancellationToken.None);
             
             clickedTile.PossibleAction.Action.Invoke();
+            ClearPossibleActions();
+
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTile = TileViewModel.None;
             _gameService.StartTurn();
+            if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
+                _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
         }
         else if (clickedTile.Figure.Owner.Equals(_gameService.CurrentPlayerInfo))
         {
             SelectedTile = clickedTile;
+            ClearPossibleActions();
+            SetPossibleActions(clickedTile, false);
         }
         else
         {
             SelectedTile = TileViewModel.None;
+            ClearPossibleActions();
         }
-
-        ClearPossibleActions();
-        SetPossibleActions(clickedTile, false);
     }
 
 
