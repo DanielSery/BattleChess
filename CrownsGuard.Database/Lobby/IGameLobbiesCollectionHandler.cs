@@ -7,17 +7,17 @@ public interface IGameLobbiesCollectionHandler
 {
     Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken);
 
-    Task<Result<GameLobby>> FindGameLobbyByNameAsync(string lobbyName, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken);
 
-    Task<Result<GameLobby>> FindGameLobbyByIdAsync(string lobbyId, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken);
 
-    Task<Result<GameLobby>> WaitForLobbyAccept(string lobbyId, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken);
 
-    Task<Result> DeleteGameLobbies(string gameId, CancellationToken cancellationToken);
+    Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken);
 
-    Task<Result> UpdateLobbyJoin(string lobbyId, string joinId, CancellationToken cancellationToken);
+    Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken);
 
-    Task<Result> InsertGameLobby(GameLobby game, CancellationToken cancellationToken);
+    Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken);
 
-    Task WatchLobbyChanges(Func<ChangeStreamDocument<GameLobby>, Task> onLobbyChange, CancellationToken cancellationToken);
+    Task WatchChangesAsync(Func<ChangeStreamDocument<GameLobby>, Task> onLobbyChange, CancellationToken cancellationToken);
 }

@@ -8,19 +8,17 @@ namespace CrownsGuard.Database.Database;
 
 internal interface IDatabaseClient
 {
-    bool IsConnected { get; }
+    IMongoCollection<GameTurn> GameTurns { get; }
 
-    IMongoCollection<GameTurn>? GameTurns { get; }
+    IMongoCollection<GameLobbyJoin> LobbyGameJoins { get; }
 
-    IMongoCollection<GameLobbyJoin>? GameJoins { get; }
+    IMongoCollection<GameLobby> GameLobbies { get; }
 
-    IMongoCollection<GameLobby>? GameLobbies { get; }
+    IMongoCollection<RankedGameJoin> RankedGameJoins { get; }
 
-    IMongoCollection<RankedGameJoin>? RankedGameJoins { get; }
+    IMongoCollection<RankedGame> RankedGames { get; }
 
-    IMongoCollection<RankedGame>? RankedGames { get; }
-
-    IMongoCollection<RegisteredPlayer>? Players { get; }
+    IMongoCollection<RegisteredPlayer> Players { get; }
 
     Task<DateTime> GetServerTimeAsync();
 }

@@ -35,5 +35,9 @@ public static class DatabaseModule
         builder.RegisterType<RankedGamesCollectionHandler>()
             .As<IRankedGamesCollectionHandler>()
             .SingleInstance();
+
+        // builder.RegisterType<DatabaseClearer>()
+            // .As<IDatabaseClearer>()
+            // .SingleInstance();
     }
 }

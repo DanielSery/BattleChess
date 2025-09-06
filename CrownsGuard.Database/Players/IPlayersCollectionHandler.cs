@@ -6,18 +6,18 @@ namespace CrownsGuard.Database.Players;
 
 public interface IPlayersCollectionHandler
 {
-    Task<Result<RegisteredPlayer>> FindPlayerById(string id, CancellationToken cancellationToken);
+    Task<Result<RegisteredPlayer>> FindByIdAsync(string id, CancellationToken cancellationToken);
 
-    Task<Result<RegisteredPlayer>> FindPlayerByName(string name, CancellationToken cancellationToken);
+    Task<Result<RegisteredPlayer>> FindByNameAsync(string name, CancellationToken cancellationToken);
 
-    Task<Result<RegisteredPlayer>> FindPlayerByEmailHash(string emailHash, CancellationToken cancellationToken);
+    Task<Result<RegisteredPlayer>> FindByEmailHashAsync(string emailHash, CancellationToken cancellationToken);
 
-    Task<Result> InsertPlayer(RegisteredPlayer player, CancellationToken cancellationToken);
-    Task<Result> UpdatePlayerElo(string playerId, int newElo, CancellationToken cancellationToken);
-    Task<Result> UpdatePlayerSetup(string playerId, byte[] newMap, CancellationToken cancellationToken);
-    Task<Result> UpdatePlayerUnlockedFigures(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken);
+    Task<Result> InsertAsync(RegisteredPlayer player, CancellationToken cancellationToken);
+    Task<Result> UpdateEloAsync(string playerId, int newElo, CancellationToken cancellationToken);
+    Task<Result> UpdateSetupAsync(string playerId, byte[] newMap, CancellationToken cancellationToken);
+    Task<Result> UpdateUnlockedFiguresAsync(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken);
 
-    Task<Result<RegisteredPlayer>> WaitForPlayerEloUpdate(string playerId, CancellationToken cancellationToken);
-    Task<Result<List<PublicPlayerData>>> GetTopLeaderboard(CancellationToken cancellationToken);
-    Task<Result<List<PublicPlayerData>>> GetUserLeaderboard(string playerId, CancellationToken cancellationToken);
+    Task<Result<RegisteredPlayer>> WaitForEloUpdateAsync(string playerId, CancellationToken cancellationToken);
+    Task<Result<List<PublicPlayerData>>> GetTopLeaderboardAsync(CancellationToken cancellationToken);
+    Task<Result<List<PublicPlayerData>>> GetUserLeaderboardAsync(string playerId, CancellationToken cancellationToken);
 }

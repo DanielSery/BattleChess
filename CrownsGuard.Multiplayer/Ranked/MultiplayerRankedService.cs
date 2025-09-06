@@ -75,7 +75,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                             var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
                             if (waitResult == WaitResult.GameJoin)
                             {
-                                var confirmationResult = await _rankedGamesCollectionHandler.TryConfirmGameJoin(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
+                                var confirmationResult = await _rankedGamesCollectionHandler.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
                                 if (confirmationResult.IsSuccess)
                                 {
                                     return Result.Ok((true, createdGameSearch, foundSearchJoin));
@@ -119,8 +119,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
 
     private async Task DeleteGameSearch(RankedGame deletedGame)
     {
-        await _rankedGamesCollectionHandler.DeleteGameSearch(deletedGame.Id, CancellationToken.None);
-        await _rankedGameJoinsCollectionHandler.DeleteGameJoins(deletedGame.Id, CancellationToken.None);
+        await _rankedGamesCollectionHandler.DeleteGameSearchAsync(deletedGame.Id, CancellationToken.None);
+        await _rankedGameJoinsCollectionHandler.DeleteGameJoinsAsync(deletedGame.Id, CancellationToken.None);
     }
 
     private enum WaitResult
@@ -140,8 +140,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
 
-        var gameSearch = Task.Run(async () => await _rankedGamesCollectionHandler.FindRankedGame(gameId, targetElo, eloDifference, cancellationTokenSource.Token), cancellationTokenSource.Token);
-        var joinTask = Task.Run(async () => await _rankedGameJoinsCollectionHandler.WaitForGameJoin(gameId, cancellationTokenSource.Token), cancellationTokenSource.Token);
+        var gameSearch = Task.Run(async () => await _rankedGamesCollectionHandler.FindForTargetEloAsync(gameId, targetElo, eloDifference, cancellationTokenSource.Token), cancellationTokenSource.Token);
+        var joinTask = Task.Run(async () => await _rankedGameJoinsCollectionHandler.WaitForGameJoinAsync(gameId, cancellationTokenSource.Token), cancellationTokenSource.Token);
 
         var completedTask = await Task.WhenAny(gameSearch, joinTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationTokenSource.Token));
         if (completedTask == gameSearch && gameSearch.Result.IsSuccess)
@@ -170,7 +170,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             IsHostStarting = isHostStarting,
         };
 
-        var result = await _rankedGamesCollectionHandler.InsertRankedGame(game, cancellationToken);
+        var result = await _rankedGamesCollectionHandler.InsertAsync(game, cancellationToken);
         if (result.IsFailed) return result;
         return game;
     }
@@ -187,11 +187,11 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             PlayerId = currentPlayer.Id,
             Map = myMapData,
         };
-        var insertResult = await _rankedGameJoinsCollectionHandler.InsertGameJoin(gameJoin, cancellationToken);
+        var insertResult = await _rankedGameJoinsCollectionHandler.InsertAsync(gameJoin, cancellationToken);
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game join");
 
         Console.WriteLine("Waiting for join request confirmation");
-        var updatedJoinedGameResult = await _rankedGamesCollectionHandler.WaitForGameAccept(joinedGame.Id, 20, cancellationToken);
+        var updatedJoinedGameResult = await _rankedGamesCollectionHandler.WaitForAcceptAsync(joinedGame.Id, 20, cancellationToken);
         if (!updatedJoinedGameResult.TryGetValue(out var updatedJoinedGame))
         {
             await DeleteGameSearch(joinedGame);

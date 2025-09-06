@@ -7,7 +7,7 @@ public class GameLobbyJoin
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
 
     [BsonRepresentation(BsonType.ObjectId)]
     public required string GameId { get; set; }

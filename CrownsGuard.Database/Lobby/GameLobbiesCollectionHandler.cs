@@ -8,11 +8,11 @@ namespace CrownsGuard.Database.Lobby;
 
 internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
 {
-    private readonly IMongoCollection<GameLobby> _gameLobbiesCollection;
+    private readonly IDatabaseClient _client;
 
     public GameLobbiesCollectionHandler(IDatabaseClient databaseClient)
     {
-        _gameLobbiesCollection = databaseClient.GameLobbies!;
+        _client = databaseClient;
     }
 
     public async Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken)
@@ -20,7 +20,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         try
         {
             Console.WriteLine("Getting public-lobbies");
-            var publicLobbies = await _gameLobbiesCollection.Aggregate()
+            var publicLobbies = await _client.GameLobbies.Aggregate()
                 .Match(l => l.Version == GameVersion.VersionId && string.IsNullOrEmpty(l.JoinedId))
                 .Project(doc => new PublicLobbyData
                 {
@@ -41,13 +41,13 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindGameLobbyByIdAsync(string lobbyId, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine($"Searching for lobby with id: {lobbyId}");
             var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
-            var foundGames = await _gameLobbiesCollection.FindAsync(filter, cancellationToken: cancellationToken);
+            var foundGames = await _client.GameLobbies.FindAsync(filter, cancellationToken: cancellationToken);
             var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
             Console.WriteLine($"Found lobby with id: {lobbyId}");
             return foundGameResult;
@@ -60,7 +60,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindGameLobbyByNameAsync(string lobbyName, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken)
     {
         try
         {
@@ -69,7 +69,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                 Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
                 Builders<GameLobby>.Filter.Eq(g => g.Version, GameVersion.VersionId)
             );
-            var foundGames = await _gameLobbiesCollection.FindAsync(filter, cancellationToken: cancellationToken);
+            var foundGames = await _client.GameLobbies.FindAsync(filter, cancellationToken: cancellationToken);
             var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
             Console.WriteLine($"Found lobby with name: {lobbyName}");
             return foundGameResult;
@@ -81,13 +81,12 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         }
     }
 
-    public async Task<Result<GameLobby>> WaitForLobbyAccept(string lobbyId, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken)
     {
         try
         {
             using var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-            using var compositeTimeoutTokenSource =
-                CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
+            using var compositeTimeoutTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
                 .Match(change =>
                     (change.OperationType == ChangeStreamOperationType.Update ||
@@ -95,7 +94,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                     change.DocumentKey["_id"] == ObjectId.Parse(lobbyId));
 
             Console.WriteLine("Waiting for join request confirmation");
-            using var cursor = await _gameLobbiesCollection.WatchAsync(
+            using var cursor = await _client.GameLobbies.WatchAsync(
                 pipeline,
                 new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
                 compositeTimeoutTokenSource.Token
@@ -129,13 +128,13 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         }
     }
 
-    public async Task<Result> DeleteGameLobbies(string gameId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine("Deleting Lobbies");
             var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
-            var result = await _gameLobbiesCollection.DeleteManyAsync(filter, cancellationToken: cancellationToken);
+            var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted Lobbies: {result.DeletedCount}");
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete lobbies");
         }
@@ -146,14 +145,14 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         }
     }
 
-    public async Task<Result> UpdateLobbyJoin(string lobbyId, string joinId, CancellationToken cancellationToken)
+    public async Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine("Confirming game join");
             var filter = Builders<GameLobby>.Filter.Eq(l => l.Id, lobbyId);
             var update = Builders<GameLobby>.Update.Set(x => x.JoinedId, joinId);
-            var result = await _gameLobbiesCollection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+            var result = await _client.GameLobbies.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
             if (!result.IsAcknowledged) return Result.Fail("Failed to update game confirmation");
             Console.WriteLine($"Confirmed game join for request: {joinId}");
             return Result.Ok();
@@ -165,13 +164,13 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         }
     }
 
-    public async Task<Result> InsertGameLobby(GameLobby game, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken)
     {
         try
         {
             game.Version = GameVersion.VersionId;
             Console.WriteLine("Inserting game lobby");
-            await _gameLobbiesCollection.InsertOneAsync(game, cancellationToken: cancellationToken);
+            await _client.GameLobbies.InsertOneAsync(game, cancellationToken: cancellationToken);
             Console.WriteLine("Inserted game lobby");
             return Result.Ok();
         }
@@ -182,7 +181,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         }
     }
 
-    public Task WatchLobbyChanges(
+    public Task WatchChangesAsync(
         Func<ChangeStreamDocument<GameLobby>, Task> onLobbyChange,
         CancellationToken cancellationToken)
     {
@@ -194,7 +193,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                                  change.OperationType == ChangeStreamOperationType.Update ||
                                  change.OperationType == ChangeStreamOperationType.Delete);
 
-            using var cursor = await _gameLobbiesCollection.WatchAsync(pipeline, cancellationToken: cancellationToken);
+            using var cursor = await _client.GameLobbies.WatchAsync(pipeline, cancellationToken: cancellationToken);
             while (!cancellationToken.IsCancellationRequested)
             {
                 var moveResult = await cursor.MoveNextAsync(cancellationToken);

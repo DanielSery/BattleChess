@@ -15,11 +15,11 @@ internal class DatabaseClearer : IDatabaseClearer
 
     internal DatabaseClearer(IDatabaseClient databaseClient)
     {
-        _rankedGamesCollection = databaseClient.RankedGames!;
-        _rankedGameJoinsCollection = databaseClient.RankedGameJoins!;
-        _gameLobbyCollection = databaseClient.GameLobbies!;
-        _gameJoinsCollection = databaseClient.GameJoins!;
-        _gameTurnsCollection = databaseClient.GameTurns!;
+        _rankedGamesCollection = databaseClient.RankedGames;
+        _rankedGameJoinsCollection = databaseClient.RankedGameJoins;
+        _gameLobbyCollection = databaseClient.GameLobbies;
+        _gameJoinsCollection = databaseClient.LobbyGameJoins;
+        _gameTurnsCollection = databaseClient.GameTurns;
     }
 
     public void ClearDatabase()

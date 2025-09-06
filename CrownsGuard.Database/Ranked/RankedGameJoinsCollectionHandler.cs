@@ -6,19 +6,19 @@ namespace CrownsGuard.Database.Ranked;
 
 internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHandler
 {
-    private readonly IMongoCollection<RankedGameJoin> _gameJoins;
+    private readonly IDatabaseClient _client;
 
     public RankedGameJoinsCollectionHandler(IDatabaseClient databaseClient)
     {
-        _gameJoins = databaseClient.RankedGameJoins!;
+        _client = databaseClient;
     }
 
-    public async Task<Result> InsertGameJoin(RankedGameJoin gameJoin, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(RankedGameJoin gameJoin, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine($"Creating join game: {gameJoin.GameId}");
-            await _gameJoins.InsertOneAsync(gameJoin, cancellationToken: cancellationToken);
+            await _client.RankedGameJoins.InsertOneAsync(gameJoin, cancellationToken: cancellationToken);
             Console.WriteLine($"Created join request with id: {gameJoin.GameId}");
             return Result.Ok();
         }
@@ -29,15 +29,15 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
         }
     }
 
-    public async Task<Result> DeleteGameJoins(string gameId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteGameJoinsAsync(string gameId, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine("Deleting RankedJoins");
             var filter = Builders<RankedGameJoin>.Filter.Eq(gj => gj.GameId, gameId);
-            var result = await _gameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
+            var result = await _client.RankedGameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted RankedJoins: {result.DeletedCount}");
-            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete RankedJoins");;
+            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete RankedJoins");
         }
         catch (Exception ex)
         {
@@ -46,7 +46,7 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
         }
     }
 
-    public async Task<Result<RankedGameJoin>> WaitForGameJoin(string gameId, CancellationToken cancellationToken)
+    public async Task<Result<RankedGameJoin>> WaitForGameJoinAsync(string gameId, CancellationToken cancellationToken)
     {
         try
         {
@@ -54,10 +54,10 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
                 .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
                                  change.FullDocument.GameId == gameId);
 
-            using var cursor = await _gameJoins.WatchAsync(joinPipeline, cancellationToken: cancellationToken);
+            using var cursor = await _client.RankedGameJoins.WatchAsync(joinPipeline, cancellationToken: cancellationToken);
 
             var filter = Builders<RankedGameJoin>.Filter.Eq(g => g.GameId, gameId);
-            var foundGames = await _gameJoins.FindAsync(filter, cancellationToken: cancellationToken);
+            var foundGames = await _client.RankedGameJoins.FindAsync(filter, cancellationToken: cancellationToken);
             var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken);
             if (foundGame is not null)
             {

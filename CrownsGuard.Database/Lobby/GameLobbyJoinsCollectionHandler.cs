@@ -6,19 +6,19 @@ namespace CrownsGuard.Database.Lobby;
 
 internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandler
 {
-    private readonly IMongoCollection<GameLobbyJoin> _gameJoins;
+    private readonly IDatabaseClient _client;
 
     public GameLobbyJoinsCollectionHandler(IDatabaseClient databaseClient)
     {
-        _gameJoins = databaseClient.GameJoins!;
+        _client = databaseClient;
     }
 
-    public async Task<Result> InsertGameJoin(GameLobbyJoin lobbyJoin, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(GameLobbyJoin lobbyJoin, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine($"Inserting join request for game: {lobbyJoin.GameId}");
-            await _gameJoins.InsertOneAsync(lobbyJoin, cancellationToken: cancellationToken);
+            await _client.LobbyGameJoins.InsertOneAsync(lobbyJoin, cancellationToken: cancellationToken);
             Console.WriteLine($"Created join request with id: {lobbyJoin.GameId}");
             return Result.Ok();
         }
@@ -29,7 +29,7 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
         }
     }
 
-    public async Task<Result<GameLobbyJoin>> WaitForGameJoinAsync(string gameId, CancellationToken cancellationToken)
+    public async Task<Result<GameLobbyJoin>> WaitForJoinAsync(string gameId, CancellationToken cancellationToken)
     {
         try
         {
@@ -37,7 +37,7 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
                 .Match(Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter
                     .Eq(cs => cs.FullDocument.GameId, gameId));
 
-            using var cursor = await _gameJoins.WatchAsync(
+            using var cursor = await _client.LobbyGameJoins.WatchAsync(
                 pipeline,
                 new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
                 cancellationToken
@@ -69,13 +69,13 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
         }
     }
 
-    public async Task<Result> DeleteGameJoins(string gameId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteGameJoinsAsync(string gameId, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine("Deleting LobbyJoins");
             var filter = Builders<GameLobbyJoin>.Filter.Eq(gj => gj.GameId, gameId);
-            var result = await _gameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
+            var result = await _client.LobbyGameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted LobbyJoins: {result.DeletedCount}");
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete LobbyJoins");
         }

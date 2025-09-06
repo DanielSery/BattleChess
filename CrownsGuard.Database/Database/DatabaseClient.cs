@@ -9,9 +9,74 @@ namespace CrownsGuard.Database.Database;
 
 internal class DatabaseClient : IDatabaseClient
 {
-    private readonly IMongoDatabase? _adminDatabase;
+    private IMongoDatabase? _adminDatabase;
+    private IMongoCollection<GameTurn>? _gameTurns;
+    private IMongoCollection<GameLobbyJoin>? _gameJoins;
+    private IMongoCollection<GameLobby>? _gameLobbies;
+    private IMongoCollection<RankedGameJoin>? _rankedGameJoins;
+    private IMongoCollection<RankedGame>? _rankedGames;
+    private IMongoCollection<RegisteredPlayer>? _players;
 
     public DatabaseClient()
+    {
+        ConnectToDatabase();
+    }
+
+    public IMongoCollection<GameTurn> GameTurns
+    {
+        get
+        {
+            if (_gameTurns == null) ConnectToDatabase();
+            return _gameTurns!;
+        }
+    }
+
+    public IMongoCollection<GameLobbyJoin> LobbyGameJoins
+    {
+        get
+        {
+            if (_gameJoins == null) ConnectToDatabase();
+            return _gameJoins!;
+        }
+    }
+
+    public IMongoCollection<GameLobby> GameLobbies
+    {
+        get
+        {
+            if (_gameLobbies == null) ConnectToDatabase();
+            return _gameLobbies!;
+        }
+    }
+
+    public IMongoCollection<RankedGameJoin> RankedGameJoins
+    {
+        get
+        {
+            if (_rankedGameJoins == null) ConnectToDatabase();
+            return _rankedGameJoins!;
+        }
+    }
+
+    public IMongoCollection<RankedGame> RankedGames
+    {
+        get
+        {
+            if (_rankedGames == null) ConnectToDatabase();
+            return _rankedGames!;
+        }
+    }
+
+    public IMongoCollection<RegisteredPlayer> Players
+    {
+        get
+        {
+            if (_players == null) ConnectToDatabase();
+            return _players!;
+        }
+    }
+
+    private void ConnectToDatabase()
     {
         try
         {
@@ -20,52 +85,24 @@ internal class DatabaseClient : IDatabaseClient
             var client = new MongoClient(settings);
 
             var database = client.GetDatabase("BattleChess");
-            RankedGames = database.GetCollection<RankedGame>("RankedGames");
-            RankedGameJoins = database.GetCollection<RankedGameJoin>("RankedGameJoins");
-            GameLobbies = database.GetCollection<GameLobby>("GameLobbies");
-            GameJoins = database.GetCollection<GameLobbyJoin>("GameLobbyJoins");
-            GameTurns = database.GetCollection<GameTurn>("GameTurns");
-            Players = database.GetCollection<RegisteredPlayer>("Players");
+            _rankedGames = database.GetCollection<RankedGame>("RankedGames");
+            _rankedGameJoins = database.GetCollection<RankedGameJoin>("RankedGameJoins");
+            _gameLobbies = database.GetCollection<GameLobby>("GameLobbies");
+            _gameJoins = database.GetCollection<GameLobbyJoin>("GameLobbyJoins");
+            _gameTurns = database.GetCollection<GameTurn>("GameTurns");
+            _players = database.GetCollection<RegisteredPlayer>("Players");
 
             _adminDatabase = client.GetDatabase("admin");
-
-            IsConnected = true;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-
-            RankedGames = null;
-            RankedGameJoins = null;
-            GameLobbies = null;
-            GameJoins = null;
-            GameTurns = null;
-            Players = null;
-
-            _adminDatabase = null;
-
-            IsConnected = false;
         }
     }
 
-    public bool IsConnected { get; }
-
-    public IMongoCollection<GameTurn>? GameTurns { get; }
-
-    public IMongoCollection<GameLobbyJoin>? GameJoins { get; }
-
-    public IMongoCollection<GameLobby>? GameLobbies { get; }
-
-    public IMongoCollection<RankedGameJoin>? RankedGameJoins { get; }
-
-    public IMongoCollection<RankedGame>? RankedGames { get; }
-
-    public IMongoCollection<RegisteredPlayer>? Players { get; }
-
     public async Task<DateTime> GetServerTimeAsync()
     {
-        if (!IsConnected) return DateTime.MinValue;
-
+        if (_adminDatabase == null) ConnectToDatabase();
         var command = new BsonDocument("hello", 1); // "hello" is the modern replacement for "isMaster"
         var result = await _adminDatabase!.RunCommandAsync<BsonDocument>(command);
         return result["localTime"].ToUniversalTime();

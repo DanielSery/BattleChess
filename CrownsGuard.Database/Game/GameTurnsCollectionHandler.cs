@@ -7,20 +7,20 @@ namespace CrownsGuard.Database.Game;
 
 internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
 {
-    private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
+    private readonly IDatabaseClient _client;
 
     public GameTurnsCollectionHandler(IDatabaseClient databaseClient)
     {
-        _gameTurnsCollection = databaseClient.GameTurns!;
+        _client = databaseClient;
     }
 
     /// <inheritdoc />
-    public async Task<Result> InsertGameTurn(GameTurn gameTurn, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(GameTurn gameTurn, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine($"Inserting game turn {gameTurn.Id}");
-            await _gameTurnsCollection.InsertOneAsync(gameTurn, cancellationToken: cancellationToken);
+            await _client.GameTurns.InsertOneAsync(gameTurn, cancellationToken: cancellationToken);
             Console.WriteLine($"Game turn {gameTurn.Id} inserted");
             return Result.Ok();
         }
@@ -32,13 +32,13 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result> RemoveTurnsOlderThan(DateTime keepFrom, CancellationToken cancellationToken)
+    public async Task<Result> RemoveOlderThanAsync(DateTime time, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine("Deleting GameTurns");
-            var filter = Builders<GameTurn>.Filter.Lt(gj => gj.CreatedAt, keepFrom);
-            var result = await _gameTurnsCollection.DeleteManyAsync(filter, cancellationToken: cancellationToken);
+            var filter = Builders<GameTurn>.Filter.Lte(gj => gj.CreatedAt, time);
+            var result = await _client.GameTurns.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted GameTurns: {result.DeletedCount}");
             return Result.Ok();
         }
@@ -59,7 +59,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
                 .Match(filter);
 
-            using var cursor = await _gameTurnsCollection.WatchAsync(
+            using var cursor = await _client.GameTurns.WatchAsync(
                 pipeline,
                 new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
                 cancellationTokenSource.Token
@@ -105,7 +105,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
                 .Match(filter);
 
-            using var cursor = await _gameTurnsCollection.WatchAsync(
+            using var cursor = await _client.GameTurns.WatchAsync(
                 pipeline,
                 new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
                 cancellationTokenSource.Token

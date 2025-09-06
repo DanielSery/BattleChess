@@ -8,14 +8,14 @@ namespace CrownsGuard.Database.Ranked;
 
 internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
 {
-    private readonly IMongoCollection<RankedGame> _rankedGames;
+    private readonly IDatabaseClient _client;
 
     public RankedGamesCollectionHandler(IDatabaseClient databaseClient)
     {
-        _rankedGames = databaseClient.RankedGames!;
+        _client = databaseClient;
     }
 
-    public async Task<Result> TryConfirmGameJoin(string gameId, string joinId, CancellationToken cancellationToken)
+    public async Task<Result> ConfirmGameJoinAsync(string gameId, string joinId, CancellationToken cancellationToken)
     {
         try
         {
@@ -23,7 +23,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
             var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, gameId);
             var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, joinId);
 
-            var result = await _rankedGames.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+            var result = await _client.RankedGames.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
             if (!result.IsAcknowledged)
             {
                 return Result.Fail("Failed to update game confirmation");
@@ -39,13 +39,13 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         }
     }
 
-    public async Task<Result> DeleteGameSearch(string deletedGameId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteGameSearchAsync(string deletedGameId, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine("Deleting game search");
             var gameSearchFilter = Builders<RankedGame>.Filter.Eq(l => l.Id, deletedGameId);
-            var gameSearchDeletion = await _rankedGames.DeleteManyAsync(gameSearchFilter, cancellationToken);
+            var gameSearchDeletion = await _client.RankedGames.DeleteManyAsync(gameSearchFilter, cancellationToken);
             Console.WriteLine($"Deleted game search count: {gameSearchDeletion.DeletedCount}");
             return Result.Ok();
         }
@@ -56,7 +56,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         }
     }
 
-    public async Task<Result<RankedGame>> FindRankedGame(string gameId, short targetElo, int eloDifference, CancellationToken cancellationToken)
+    public async Task<Result<RankedGame>> FindForTargetEloAsync(string gameId, short targetElo, int eloDifference, CancellationToken cancellationToken)
     {
         try
         {
@@ -68,14 +68,14 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                                  string.IsNullOrEmpty(change.FullDocument.JoinedId) &&
                                  Math.Abs(change.FullDocument.Elo - targetElo) < eloDifference);
 
-            using var cursor = await _rankedGames.WatchAsync(searchesPipeline, cancellationToken: cancellationToken);
+            using var cursor = await _client.RankedGames.WatchAsync(searchesPipeline, cancellationToken: cancellationToken);
             var filter = Builders<RankedGame>.Filter.And(
                 Builders<RankedGame>.Filter.Gt(g => g.Id, gameId),
                 Builders<RankedGame>.Filter.Eq(g => g.Version, GameVersion.VersionId),
                 Builders<RankedGame>.Filter.Eq(g => g.JoinedId, null),
                 Builders<RankedGame>.Filter.Where(g => Math.Abs(g.Elo - targetElo) < eloDifference));
 
-            var foundGames = await _rankedGames.FindAsync(filter, cancellationToken: cancellationToken);
+            var foundGames = await _client.RankedGames.FindAsync(filter, cancellationToken: cancellationToken);
             var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken);
             if (foundGame is not null)
             {
@@ -103,7 +103,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         }
     }
 
-    public async Task<Result<RankedGame>> WaitForGameAccept(string joinedGameId, int timeoutSeconds, CancellationToken cancellationToken)
+    public async Task<Result<RankedGame>> WaitForAcceptAsync(string joinedGameId, int timeoutSeconds, CancellationToken cancellationToken)
     {
         try
         {
@@ -117,7 +117,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                      change.OperationType == ChangeStreamOperationType.Delete) &&
                     change.DocumentKey["_id"] == ObjectId.Parse(joinedGameId));
 
-            using var cursor = await _rankedGames.WatchAsync(
+            using var cursor = await _client.RankedGames.WatchAsync(
                 pipeline,
                 new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
                 cancellationTokenSource.Token
@@ -125,7 +125,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
 
             Console.WriteLine($"Getting game with id: {joinedGameId}");
             var filter = Builders<RankedGame>.Filter.Eq("Id", joinedGameId);
-            var foundGames = await _rankedGames.FindAsync(filter, cancellationToken: cancellationTokenSource.Token);
+            var foundGames = await _client.RankedGames.FindAsync(filter, cancellationToken: cancellationTokenSource.Token);
             var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken: cancellationTokenSource.Token);
             if (foundGame is null)
             {
@@ -166,12 +166,12 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         }
     }
 
-    public async Task<Result> InsertRankedGame(RankedGame game, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(RankedGame game, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine("Creating game request");
-            await _rankedGames.InsertOneAsync(game, cancellationToken: cancellationToken);
+            await _client.RankedGames.InsertOneAsync(game, cancellationToken: cancellationToken);
             Console.WriteLine($"Created game request: {game.Id}");
             return Result.Ok();
         }
@@ -187,7 +187,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         try
         {
             Console.WriteLine($"Searching for ranked game with elo: {searchedElo - maxDifference}-{searchedElo + maxDifference}");
-            var closestGameSearch = await _rankedGames.Aggregate()
+            var closestGameSearch = await _client.RankedGames.Aggregate()
                 .Match(l => l.Version == GameVersion.VersionId && string.IsNullOrEmpty(l.JoinedId))
                 .Project(lobby => new
                 {

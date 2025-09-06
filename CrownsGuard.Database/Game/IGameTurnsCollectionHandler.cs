@@ -4,9 +4,9 @@ namespace CrownsGuard.Database.Game;
 
 public interface IGameTurnsCollectionHandler
 {
-    Task<Result> InsertGameTurn(GameTurn gameTurn, CancellationToken cancellationToken);
+    Task<Result> InsertAsync(GameTurn gameTurn, CancellationToken cancellationToken);
 
-    Task<Result> RemoveTurnsOlderThan(DateTime keepFrom, CancellationToken cancellationToken);
+    Task<Result> RemoveOlderThanAsync(DateTime time, CancellationToken cancellationToken);
 
     Task<Result<GameTurn>> WaitForFirstTurnAsync(string gameId, TimeSpan timeout);
 
