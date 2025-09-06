@@ -16,8 +16,26 @@ public static class MultiplayerModule
         builder.RegisterType<DatabaseClient>()
             .As<IDatabaseClient>()
             .SingleInstance();
+        builder.RegisterType<DatabaseTimeProvider>()
+            .As<IDatabaseTimeProvider>()
+            .SingleInstance();
         builder.RegisterType<PlayersCollectionHandler>()
             .As<IPlayersCollectionHandler>()
+            .SingleInstance();
+        builder.RegisterType<GameTurnsCollectionHandler>()
+            .As<IGameTurnsCollectionHandler>()
+            .SingleInstance();
+        builder.RegisterType<GameLobbiesCollectionHandler>()
+            .As<IGameLobbiesCollectionHandler>()
+            .SingleInstance();
+        builder.RegisterType<GameLobbyJoinsCollectionHandler>()
+            .As<IGameLobbyJoinsCollectionHandler>()
+            .SingleInstance();
+        builder.RegisterType<RankedGameJoinsCollectionHandler>()
+            .As<IRankedGameJoinsCollectionHandler>()
+            .SingleInstance();
+        builder.RegisterType<RankedGamesCollectionHandler>()
+            .As<IRankedGamesCollectionHandler>()
             .SingleInstance();
         builder.RegisterType<EmailClient>()
             .As<IEmailClient>()

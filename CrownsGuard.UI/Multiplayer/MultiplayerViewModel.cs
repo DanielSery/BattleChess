@@ -328,7 +328,8 @@ public class MultiplayerViewModel : ViewModelBase
         Name = _loginViewModel.Name;
         Task.Run(async () =>
         {
-            var lobbies = new ObservableCollection<PublicLobbyData>(await _multiplayerLobbyService.GetPublicLobbiesAsync(CancellationToken.None));
+            var lobbies = new ObservableCollection<PublicLobbyData>(
+                (await _multiplayerLobbyService.GetPublicLobbiesAsync(CancellationToken.None)).Value);
             Application.Current.Dispatcher.Invoke(() =>
             {
                 lock (_lobbyLock)

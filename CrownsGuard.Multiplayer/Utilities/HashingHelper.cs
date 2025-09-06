@@ -6,6 +6,12 @@ namespace CrownsGuard.Multiplayer.Utilities;
 
 public static class HashingHelper
 {
+    public static string GetSalt()
+    {
+        var salt = RandomNumberGenerator.GetBytes(16); // Generate 16-byte salt
+        return Convert.ToBase64String(salt);
+    }
+
     public static string GetEmailHash(string email)
     {
         return GetHash(email, Secrets.EmailSalt);

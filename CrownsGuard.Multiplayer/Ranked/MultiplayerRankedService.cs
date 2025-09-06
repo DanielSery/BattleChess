@@ -1,40 +1,30 @@
-﻿using System.Reflection;
-using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Multiplayer.DatabaseAccess;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Scheduling;
 using CrownsGuard.Multiplayer.Tables;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace CrownsGuard.Multiplayer.Ranked;
 
 internal class MultiplayerRankedService : IMultiplayerRankedService
 {
-    private readonly int _version;
-    
     private readonly IMultiplayerScheduler _scheduler;
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
-    
-    private readonly IMongoCollection<RankedGame> _rankedGamesCollection;
-    private readonly IMongoCollection<RankedGameJoin> _rankedGameJoinsCollection;
+    private readonly IRankedGameJoinsCollectionHandler _rankedGameJoinsCollectionHandler;
+    private readonly IRankedGamesCollectionHandler _rankedGamesCollectionHandler;
 
     public MultiplayerRankedService(
         IMultiplayerScheduler scheduler,
         IMultiplayerPlayerService multiplayerPlayerService,
-        IDatabaseClient databaseClient)
+        IRankedGameJoinsCollectionHandler rankedGameJoinsCollectionHandler,
+        IRankedGamesCollectionHandler rankedGamesCollectionHandler)
     {
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
-        _rankedGamesCollection = databaseClient.RankedGames!;
-        _rankedGameJoinsCollection = databaseClient.RankedGameJoins!;
-
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
-        _version = version is not null 
-            ? ((byte)version.Major) << 16 | (byte)version.Minor << 8 | (byte)version.Revision
-            : -1;
+        _rankedGamesCollectionHandler = rankedGamesCollectionHandler;
+        _rankedGameJoinsCollectionHandler = rankedGameJoinsCollectionHandler;
     }
 
     public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(BoardBlueprint myMap, CancellationToken cancellationToken)
@@ -60,7 +50,9 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                 try
                 {
                     var eloDifference = 50;
-                    var closestGameSearch = await GetClosestGameSearchAsync(currentPlayer, eloDifference, cancellationToken);
+                    var closestGameSearchResult = await _rankedGamesCollectionHandler.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
+                    if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
+
                     while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= eloDifference)
                     {
                         var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
@@ -69,10 +61,12 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                             return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
                         }
                         
-                        closestGameSearch = await GetClosestGameSearchAsync(currentPlayer, eloDifference, cancellationToken);
+                        closestGameSearchResult = await _rankedGamesCollectionHandler.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
+                        if (!closestGameSearchResult.TryGetValue(out closestGameSearch)) closestGameSearch = null;
                     }
 
-                    var createdGameSearch = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
+                    var createdGameSearchResult = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
+                    if (!createdGameSearchResult.TryGetValue(out var createdGameSearch)) return createdGameSearchResult.ToResult();
                     try
                     {
                         while (true)
@@ -80,10 +74,10 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                             var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
                             if (waitResult == WaitResult.GameJoin)
                             {
-                                var confirmationResult = await TryConfirmGameJoin(createdGameSearch, foundSearchJoin);
+                                var confirmationResult = await _rankedGamesCollectionHandler.TryConfirmGameJoin(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
                                 if (confirmationResult.IsSuccess)
                                 {
-                                    return Result.Ok((true, createdGameSearch, foundSearchJoin!));
+                                    return Result.Ok((true, createdGameSearch, foundSearchJoin));
                                 }
                             }
                             else if (waitResult == WaitResult.GameSearch)
@@ -122,37 +116,10 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         }
     }
 
-    private async Task<Result> TryConfirmGameJoin(RankedGame createdGameSearch, RankedGameJoin? foundSearchJoin)
-    {
-        Console.WriteLine("Confirming game join");
-        var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, createdGameSearch.Id);
-        var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, foundSearchJoin!.Id);
-        // ReSharper disable once MethodSupportsCancellation
-        var result = await _rankedGamesCollection.UpdateOneAsync(filter, update);
-        if (!result.IsAcknowledged)
-        {
-            return Result.Fail("Failed to update game confirmation");
-        }
-        
-        Console.WriteLine($"Confirmed game join for request: {foundSearchJoin.Id}");
-        return Result.Ok();
-    }
-
     private async Task DeleteGameSearch(RankedGame deletedGame)
     {
-        Console.WriteLine("Deleting game search");
-        
-        var gameSearchFilter = Builders<RankedGame>.Filter.Eq(l => l.Id, deletedGame.Id);
-        var gameSearchDeletion = await _rankedGamesCollection.DeleteManyAsync(gameSearchFilter);
-                        
-        Console.WriteLine($"Deleted game search count: {gameSearchDeletion.DeletedCount}");
-        
-        Console.WriteLine("Deleting game joins");
-        
-        var gameJoinFilter = Builders<RankedGameJoin>.Filter.Eq(l => l.GameId, deletedGame.Id);
-        var gameJoinDeletion = await _rankedGameJoinsCollection.DeleteManyAsync(gameJoinFilter);
-                        
-        Console.WriteLine($"Deleted game join count: {gameJoinDeletion.DeletedCount}");
+        await _rankedGamesCollectionHandler.DeleteGameSearch(deletedGame.Id, CancellationToken.None);
+        await _rankedGameJoinsCollectionHandler.DeleteGameJoins(deletedGame.Id, CancellationToken.None);
     }
 
     private enum WaitResult
@@ -172,166 +139,38 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
 
-        var gameObjectId = ObjectId.Parse(gameId);
-        var searchesPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
-            .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
-                             change.DocumentKey["_id"] > gameObjectId &&
-                             change.FullDocument.Version == _version &&
-                             string.IsNullOrEmpty(change.FullDocument.JoinedId) &&
-                             Math.Abs(change.FullDocument.Elo - targetElo) < eloDifference);
-
-        var joinPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGameJoin>>()
-            .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
-                             change.FullDocument.GameId == gameId);
-
-        var gameSearch = Task.Run<RankedGame?>(async () =>
-        {
-            using var cursor = await _rankedGamesCollection.WatchAsync(searchesPipeline, cancellationToken: cancellationTokenSource.Token);
-
-            var filter = Builders<RankedGame>.Filter.And(
-                Builders<RankedGame>.Filter.Gt(g => g.Id, gameId),
-                Builders<RankedGame>.Filter.Eq(g => g.Version, _version),
-                Builders<RankedGame>.Filter.Eq(g => g.JoinedId, null),
-                Builders<RankedGame>.Filter.Where(g => Math.Abs(g.Elo - targetElo) < eloDifference));
-            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
-            var foundGames = await _rankedGamesCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
-            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken);
-            if (foundGame is not null)
-            {
-                return foundGame;
-            }
-            
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    return change.FullDocument;
-                }
-            }
-
-            return null;
-        }, cancellationTokenSource.Token);
-
-        var joinTask = Task.Run<RankedGameJoin?>(async () =>
-        {
-            using var cursor = await _rankedGameJoinsCollection.WatchAsync(joinPipeline, cancellationToken: cancellationTokenSource.Token);
-
-            var filter = Builders<RankedGameJoin>.Filter.Eq(g => g.GameId, gameId);
-            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
-            var foundGames = await _rankedGameJoinsCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
-            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken);
-            if (foundGame is not null)
-            {
-                return foundGame;
-            }
-            
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    return change.FullDocument;
-                }
-            }
-
-            return null;
-        }, cancellationTokenSource.Token);
+        var gameSearch = Task.Run(async () => await _rankedGamesCollectionHandler.FindRankedGame(gameId, targetElo, eloDifference, cancellationTokenSource.Token), cancellationTokenSource.Token);
+        var joinTask = Task.Run(async () => await _rankedGameJoinsCollectionHandler.WaitForGameJoin(gameId, cancellationTokenSource.Token), cancellationTokenSource.Token);
 
         var completedTask = await Task.WhenAny(gameSearch, joinTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationTokenSource.Token));
-        if (completedTask == gameSearch)
+        if (completedTask == gameSearch && gameSearch.Result.IsSuccess)
         {
             await cancellationTokenSource.CancelAsync(); // stop the other watch
-            return (WaitResult.GameSearch, gameSearch.Result, null);
+            return (WaitResult.GameSearch, gameSearch.Result.Value, null);
         }
         
-        if (completedTask == gameSearch || completedTask == joinTask)
+        if (completedTask == joinTask && joinTask.Result.IsSuccess)
         {
             await cancellationTokenSource.CancelAsync(); // stop the other watch
-            return (WaitResult.GameJoin, null, joinTask.Result);
+            return (WaitResult.GameJoin, null, joinTask.Result.Value);
         }
 
         return (WaitResult.Timeout, null, null);
     }
 
-    private async Task<RankedGame?> WaitForGameAccept(
-        RankedGame joinedGame, 
-        int timeoutSeconds, 
-        CancellationToken cancellationToken)
+    private async Task<Result<RankedGame>> CreateGameSearchAsync(byte[] myMapData, RegisteredPlayer currentPlayer, bool isHostStarting, CancellationToken cancellationToken)
     {
-        try
-        {
-            using var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
-            using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
-        
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
-                .Match(change =>
-                    (change.OperationType == ChangeStreamOperationType.Update || change.OperationType == ChangeStreamOperationType.Delete) &&
-                    change.DocumentKey["_id"] == ObjectId.Parse(joinedGame.Id));
-
-            using var cursor = await _rankedGamesCollection.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
-            );
-            
-            Console.WriteLine($"Getting game with id: {joinedGame.Id}");
-            var filter = Builders<RankedGame>.Filter.Eq("Id", joinedGame.Id);
-            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
-            var foundGames = await _rankedGamesCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            // ReSharper disable once PossiblyMistakenUseOfCancellationToken
-            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-            if (foundGame is null)
-            {
-                Console.WriteLine("Did not find game");
-                return null;
-            }
-
-            if (!string.IsNullOrEmpty(foundGame.JoinedId))
-            {
-                await cancellationTokenSource.CancelAsync();
-                return foundGame;
-            }
-            
-            Console.WriteLine($"Found game with id: {foundGame.Id}");
-
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    if (change.OperationType == ChangeStreamOperationType.Delete)
-                    {
-                        return null;
-                    }
-                    
-                    if (change.FullDocument.Id == joinedGame.Id)
-                    {
-                        return change.FullDocument;
-                    }
-                }
-            }
-
-            return null;        
-        }
-        catch (OperationCanceledException)
-        {
-            return null;
-        }
-    }
-
-    private async Task<RankedGame> CreateGameSearchAsync(byte[] myMapData, RegisteredPlayer currentPlayer, bool isHostStarting, CancellationToken cancellationToken)
-    {
-        Console.WriteLine("Creating game request");
         var game = new RankedGame()
         {
             Map = myMapData,
             PlayerId = currentPlayer.Id,
             Elo = currentPlayer.Elo,
-            Version = _version,
+            Version = GameVersion.VersionId,
             IsHostStarting = isHostStarting,
         };
-        await _rankedGamesCollection.InsertOneAsync(game, cancellationToken: cancellationToken);
-        Console.WriteLine($"Created game request: {game.Id}");
+
+        var result = await _rankedGamesCollectionHandler.InsertRankedGame(game, cancellationToken);
+        if (result.IsFailed) return result;
         return game;
     }
 
@@ -341,19 +180,18 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         byte[] myMapData, 
         CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Creating join game: {joinedGame.Id}");
         var gameJoin = new RankedGameJoin()
         {
             GameId = joinedGame.Id,
             PlayerId = currentPlayer.Id,
             Map = myMapData,
         };
-        await _rankedGameJoinsCollection.InsertOneAsync(gameJoin, cancellationToken: cancellationToken);
-        Console.WriteLine($"Created join request with id: {joinedGame.Id}"); 
-                        
+        var insertResult = await _rankedGameJoinsCollectionHandler.InsertGameJoin(gameJoin, cancellationToken);
+        if (insertResult.IsFailed) return Result.Fail("Failed to insert game join");
+
         Console.WriteLine("Waiting for join request confirmation");
-        var updatedJoinedGame = await WaitForGameAccept(joinedGame, 20, cancellationToken);
-        if (updatedJoinedGame is null)
+        var updatedJoinedGameResult = await _rankedGamesCollectionHandler.WaitForGameAccept(joinedGame.Id, 20, cancellationToken);
+        if (!updatedJoinedGameResult.TryGetValue(out var updatedJoinedGame))
         {
             await DeleteGameSearch(joinedGame);
             Console.WriteLine("Invalid game search");
@@ -370,24 +208,6 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             Console.WriteLine("The lobby is already full");
             return Result.Fail("The lobby is already full");
         }
-    }
-
-    private async Task<RankedGame?> GetClosestGameSearchAsync(RegisteredPlayer currentPlayer, int eloDifference, CancellationToken cancellationToken)
-    {
-        Console.WriteLine($"Searching for ranked game with elo: {currentPlayer.Elo - eloDifference}-{currentPlayer.Elo + eloDifference}");
-        var closestGameSearch = await _rankedGamesCollection.Aggregate()
-            .Match(l => l.Version == _version && string.IsNullOrEmpty(l.JoinedId))
-            .Project(lobby => new
-            {
-                Lobby = lobby,
-                EloDifference = Math.Abs(lobby.Elo - currentPlayer.Elo)
-            })
-            .SortBy(x => x.EloDifference)
-            .Limit(1)
-            .Project(x => x.Lobby)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        Console.WriteLine($"Closest game search elo: {closestGameSearch?.Elo ?? null}");
-        return closestGameSearch;
     }
 
 }

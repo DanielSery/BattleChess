@@ -8,8 +8,6 @@ using CrownsGuard.Multiplayer.Scheduling;
 using CrownsGuard.Multiplayer.Tables;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace CrownsGuard.Multiplayer.Game;
 
@@ -17,23 +15,23 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 {
     private readonly IMultiplayerScheduler _scheduler;
 
-    private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
     private readonly IMultiplayerPlayerService _playerService;
-    private readonly IDatabaseClient _databaseClient;
     private readonly IPlayersCollectionHandler _playersCollectionHandler;
+    private readonly IGameTurnsCollectionHandler _gameTurnsCollectionHandler;
+    private readonly IDatabaseTimeProvider _databaseTimeProvider;
 
     public MultiplayerGameService(
         IMultiplayerScheduler scheduler,
         IMultiplayerPlayerService playerService,
         IPlayersCollectionHandler playersCollectionHandler,
-        IDatabaseClient databaseClient)
+        IGameTurnsCollectionHandler gameTurnsCollectionHandler,
+        IDatabaseTimeProvider databaseTimeProvider)
     {
         _scheduler = scheduler;
         _playerService = playerService;
         _playersCollectionHandler = playersCollectionHandler;
-
-        _databaseClient = databaseClient;
-        _gameTurnsCollection = databaseClient.GameTurns!;
+        _gameTurnsCollectionHandler = gameTurnsCollectionHandler;
+        _databaseTimeProvider = databaseTimeProvider;
     }
 
     public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
@@ -66,10 +64,10 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                         return Result.Ok<string?>(null);
                     }
 
-                    await DeleteGameTurnsAsync();
+                    await DeleteGameTurnsAsync(cancellationToken);
                     if (notifyOther)
                     {
-                        await SendGameResultToOpponent(winType);
+                        await SendGameResultToOpponent(winType, cancellationToken);
                     }
 
                     if (!GameType.HasFlag(MultiplayerGameType.Ranked))
@@ -96,7 +94,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         }
     }
 
-    private async Task SendGameResultToOpponent(WinType winType)
+    private async Task SendGameResultToOpponent(WinType winType, CancellationToken cancellationToken)
     {
         if (GameId == null)
             return;
@@ -124,7 +122,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                 CreatedAt = DateTime.UtcNow,
                 TimeSpentInSeconds = 0
             };
-            await _gameTurnsCollection.InsertOneAsync(gameTurn);
+            await _gameTurnsCollectionHandler.InsertGameTurn(gameTurn, cancellationToken);
             Console.WriteLine("Created game result");
         }
         catch (Exception e)
@@ -188,7 +186,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         playerB.Elo += (short)(k * ((1 - resultA) - expectedB));
     }
 
-    public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent)
+    public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent, CancellationToken cancellationToken)
     {
         lock (_scheduler.SyncLock)
         {
@@ -208,7 +206,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                         CreatedAt = DateTime.UtcNow,
                         TimeSpentInSeconds = timeSpent.TotalSeconds
                     };
-                    await _gameTurnsCollection.InsertOneAsync(gameTurn);
+                    await _gameTurnsCollectionHandler.InsertGameTurn(gameTurn, cancellationToken);
                     Console.WriteLine($"Created game turn: {from} to {to}");
 
                     TurnId = gameTurn.Id;
@@ -237,11 +235,11 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
                     Console.WriteLine($"Waiting for his turn with id greater than: {TurnId}");
                     try
                     {
-                        var hisTurn = TurnId is null
-                            ? await WaitForNextTurnAsync(GameId, IMultiplayerGameService.TurnTimeout)
-                            : await WaitForNextTurnAsync(TurnId, GameId, IMultiplayerGameService.TurnTimeout);
+                        var hisTurnResult = TurnId is null
+                            ? await _gameTurnsCollectionHandler.WaitForFirstTurnAsync(GameId, IMultiplayerGameService.TurnTimeout)
+                            : await _gameTurnsCollectionHandler.WaitForNextTurnAsync(TurnId, GameId, IMultiplayerGameService.TurnTimeout);
 
-                        if (hisTurn is null)
+                        if (!hisTurnResult.TryGetValue(out var hisTurn))
                         {
                             RequestPlayMove?.Invoke(this,
                                 (Position.FromIndex(IMultiplayerGameService.NotRespondingMessage),
@@ -285,108 +283,17 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         }
     }
 
-    private async Task<GameTurn?> WaitForNextTurnAsync(string gameId, TimeSpan timeout)
-    {
-        try
-        {
-            var cancellationTokenSource = new CancellationTokenSource(timeout);
-            var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-                .Match(filter);
-
-            using var cursor = await _gameTurnsCollection.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
-            );
-
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    var turn = change.FullDocument;
-                    if (turn.GameId == gameId)
-                    {
-                        return turn;
-                    }
-                }
-            }
-
-            return null;
-        }
-        catch (OperationCanceledException)
-        {
-            return null;
-        }
-    }
-
-    private async Task<GameTurn?> WaitForNextTurnAsync(string turnId, string gameId, TimeSpan timeout)
-    {
-        try
-        {
-            var afterObjectId = ObjectId.Parse(turnId);
-            var cancellationTokenSource = new CancellationTokenSource(timeout);
-
-            var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
-                Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
-                Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, turnId)
-            );
-
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-                .Match(filter);
-
-            using var cursor = await _gameTurnsCollection.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
-            );
-
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    var turn = change.FullDocument;
-                    if (turn.GameId == gameId && ObjectId.Parse(turn.Id) > afterObjectId)
-                    {
-                        return turn;
-                    }
-                }
-            }
-
-            return null;
-        }
-        catch (OperationCanceledException)
-        {
-            return null;
-        }
-    }
-
     private static Position GetPositionOfOppositePlayer(int index)
     {
         return RelativePositionHelper.GetRelative(Player.White, Position.FromIndex(index));
     }
 
-    private async Task<Result> DeleteGameTurnsAsync()
+    private async Task<Result> DeleteGameTurnsAsync(CancellationToken cancellationToken)
     {
-        try
-        {
-            Console.WriteLine("Getting server time");
-            var serverTime = await _databaseClient.GetServerTimeAsync();
-            Console.WriteLine($"Current server time: {serverTime}");
+        var serverTimeResult = await _databaseTimeProvider.GetServerTimeAsync();
+        if (!serverTimeResult.TryGetValue(out var serverTime)) return Result.Fail(serverTimeResult.ToString());
 
-            var oldestKeepTime = serverTime - TimeSpan.FromMinutes(20);
-
-            Console.WriteLine("Deleting GameTurns");
-            var filter = Builders<GameTurn>.Filter.Lt(gj => gj.CreatedAt, oldestKeepTime);
-            var result = await _gameTurnsCollection.DeleteManyAsync(filter);
-            Console.WriteLine($"Deleted GameTurns: {result.DeletedCount}");
-            return Result.Ok();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-            return Result.Fail(ex.Message);
-        }
+        var oldestKeepTime = serverTime - TimeSpan.FromMinutes(20);
+        return await _gameTurnsCollectionHandler.RemoveTurnsOlderThan(oldestKeepTime, cancellationToken);
     }
 }

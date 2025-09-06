@@ -74,8 +74,9 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         {
             return _scheduler.QueueTask(async () =>
             {
-                var foundPlayerResult = await _playersCollectionHandler.FindPlayerByNameAndHash(name, hash, cancellationToken);
+                var foundPlayerResult = await _playersCollectionHandler.FindPlayerByName(name, cancellationToken);
                 if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Incorrect username or password");
+                if (foundPlayer.PasswordHash != hash)  return Result.Fail("Incorrect username or password");
                 LoggedInPlayer = foundPlayer;
                 LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
                 return Result.Ok();

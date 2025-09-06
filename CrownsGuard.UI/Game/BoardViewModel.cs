@@ -163,7 +163,9 @@ public sealed class BoardViewModel : ViewModelBase
             _multiplayerGameService.PlayedMoveAsync(
                 SelectedTile.RelativePosition,
                 clickedTile.RelativePosition,
-                _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime);
+                _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime,
+                CancellationToken.None);
+            
             clickedTile.PossibleAction.Action.Invoke();
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTile = TileViewModel.None;

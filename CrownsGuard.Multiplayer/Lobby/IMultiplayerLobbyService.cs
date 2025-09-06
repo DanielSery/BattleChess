@@ -6,8 +6,7 @@ namespace CrownsGuard.Multiplayer.Lobby;
 
 public interface IMultiplayerLobbyService
 {
-    public Task<List<PublicLobbyData>> GetPublicLobbiesAsync(
-        CancellationToken cancellationToken);
+    public Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken);
 
     Task WatchLobbiesAsync(
         Action<PublicLobbyData> onLobbyAdded,

@@ -20,5 +20,5 @@ public interface IMultiplayerGameService
     public void StartGame(MultiplayerGameType gameType, string? rankedGameId);
     public Task<Result> HandleRemotePlayerTurnAsync();
     public Task<Result<string?>> HandleWinAsync(bool notifyOther, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost, CancellationToken cancellationToken);
-    public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent);
+    public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent, CancellationToken cancellationToken);
 }

@@ -113,7 +113,7 @@ public class SignUpViewModel : ViewModelBase
         }
         
         using var loading = _loadingService.StartLoadingOperation("Signing up");
-        var passwordSalt = Convert.ToBase64String(RandomNumberGenerator.GetBytes(16));
+        var passwordSalt = HashingHelper.GetSalt();
         var password1Hash = HashingHelper.GetHash(SecurePassword1, passwordSalt);
         var password2Hash = HashingHelper.GetHash(SecurePassword2, passwordSalt);
         if (password1Hash != password2Hash)
