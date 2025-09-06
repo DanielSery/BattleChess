@@ -1,11 +1,12 @@
 ﻿using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Game;
+using CrownsGuard.Database.Players;
 using CrownsGuard.Game;
 using CrownsGuard.Game.Helpers;
-using CrownsGuard.Multiplayer.DatabaseAccess;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Scheduling;
-using CrownsGuard.Multiplayer.Tables;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 

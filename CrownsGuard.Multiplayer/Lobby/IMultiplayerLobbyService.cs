@@ -1,5 +1,5 @@
 ﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Multiplayer.Tables;
+using CrownsGuard.Database.Lobby;
 using FluentResults;
 
 namespace CrownsGuard.Multiplayer.Lobby;

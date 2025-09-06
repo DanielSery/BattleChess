@@ -1,5 +1,5 @@
 ﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Multiplayer.Tables;
+using CrownsGuard.Database.Ranked;
 using FluentResults;
 
 namespace CrownsGuard.Multiplayer.Ranked;

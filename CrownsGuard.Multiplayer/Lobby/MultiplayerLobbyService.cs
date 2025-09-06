@@ -1,8 +1,7 @@
 ﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Multiplayer.DatabaseAccess;
+using CrownsGuard.Database.Lobby;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Scheduling;
-using CrownsGuard.Multiplayer.Tables;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 using MongoDB.Driver;
@@ -76,7 +75,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     else
                     {
                         var id = change.DocumentKey["_id"].AsObjectId.ToString();
-                        var foundLobbyResult = await _gameLobbiesCollectionHandler.FindGameLobbyAsync(id, cancellationToken);
+                        var foundLobbyResult = await _gameLobbiesCollectionHandler.FindGameLobbyByIdAsync(id, cancellationToken);
                         if (foundLobbyResult.TryGetValue(out var foundLobby))
                         {
                             lobby = new PublicLobbyData
@@ -125,7 +124,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     if (!myMap.IsValid(unlockedFigures))
                         return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
 
-                    var foundLobby = _gameLobbiesCollectionHandler.FindGameLobbyAsync(lobbyName, GameVersion.VersionId, cancellationToken);
+                    var foundLobby = _gameLobbiesCollectionHandler.FindGameLobbyByNameAsync(lobbyName, cancellationToken);
                     if (foundLobby.IsCompleted) return Result.Fail("Lobby already exists");
 
                     var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
@@ -140,7 +139,6 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                         Map = myMap.GetByteData(),
                         PlayerId = currentPlayer?.Id ?? null,
                         Elo = currentPlayer?.Elo ?? null,
-                        Version = GameVersion.VersionId,
                         IsHostStarting = isHostStarting,
                     };
                     var insertResult = await _gameLobbiesCollectionHandler.InsertGameLobby(game, cancellationToken);
@@ -207,7 +205,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     if (!myMap.IsValid(unlockedFigures))
                         return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
                     
-                    var foundLobbyResult = await _gameLobbiesCollectionHandler.FindGameLobbyAsync(lobbyName, GameVersion.VersionId, cancellationToken: cancellationToken);
+                    var foundLobbyResult = await _gameLobbiesCollectionHandler.FindGameLobbyByNameAsync(lobbyName, cancellationToken: cancellationToken);
                     if (!foundLobbyResult.TryGetValue(out var lobby)) return Result.Fail<GameLobby>("Lobby not found");
 
                     var hash = HashingHelper.GetHash(password, lobby.PasswordSalt);

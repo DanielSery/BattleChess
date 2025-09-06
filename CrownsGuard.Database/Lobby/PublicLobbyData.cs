@@ -1,4 +1,4 @@
-﻿namespace CrownsGuard.Multiplayer.Lobby;
+﻿namespace CrownsGuard.Database.Lobby;
 
 public class PublicLobbyData
 {

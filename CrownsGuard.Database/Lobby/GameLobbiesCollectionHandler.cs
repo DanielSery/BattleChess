@@ -1,13 +1,12 @@
-﻿using CrownsGuard.Multiplayer.Lobby;
-using CrownsGuard.Multiplayer.Tables;
-using CrownsGuard.Multiplayer.Utilities;
+﻿using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Utilities;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Lobby;
 
-public class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
+internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
 {
     private readonly IMongoCollection<GameLobby> _gameLobbiesCollection;
 
@@ -42,7 +41,7 @@ public class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindGameLobbyAsync(string lobbyId, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> FindGameLobbyByIdAsync(string lobbyId, CancellationToken cancellationToken)
     {
         try
         {
@@ -61,14 +60,14 @@ public class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindGameLobbyAsync(string lobbyName, int gameVersion, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> FindGameLobbyByNameAsync(string lobbyName, CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine($"Searching for lobby with name: {lobbyName}");
             var filter = Builders<GameLobby>.Filter.And(
                 Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
-                Builders<GameLobby>.Filter.Eq(g => g.Version, gameVersion)
+                Builders<GameLobby>.Filter.Eq(g => g.Version, GameVersion.VersionId)
             );
             var foundGames = await _gameLobbiesCollection.FindAsync(filter, cancellationToken: cancellationToken);
             var foundGame = await foundGames.SingleAsync(cancellationToken: cancellationToken);
@@ -170,6 +169,7 @@ public class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     {
         try
         {
+            game.Version = GameVersion.VersionId;
             Console.WriteLine("Inserting game lobby");
             await _gameLobbiesCollection.InsertOneAsync(game, cancellationToken: cancellationToken);
             Console.WriteLine("Inserted game lobby");

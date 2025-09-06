@@ -1,11 +1,11 @@
-﻿using CrownsGuard.Multiplayer.Tables;
+﻿using CrownsGuard.Database.Database;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Game;
 
-public class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
+internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
 {
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
 

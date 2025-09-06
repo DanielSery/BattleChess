@@ -1,10 +1,8 @@
 // Copyright (c) Veeam Software Group GmbH
 
-using CrownsGuard.Multiplayer.Players;
-using CrownsGuard.Multiplayer.Tables;
 using FluentResults;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Players;
 
 public interface IPlayersCollectionHandler
 {

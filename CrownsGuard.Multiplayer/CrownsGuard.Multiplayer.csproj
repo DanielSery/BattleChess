@@ -14,7 +14,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CrownsGuard.Database\CrownsGuard.Database.csproj" />
       <ProjectReference Include="..\CrownsGuard.Game\CrownsGuard.Game.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DatabaseAccess\" />
     </ItemGroup>
 
 </Project>

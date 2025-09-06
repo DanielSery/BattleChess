@@ -1,12 +1,12 @@
-﻿using CrownsGuard.Multiplayer.Tables;
-using CrownsGuard.Multiplayer.Utilities;
+﻿using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Utilities;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Ranked;
 
-public class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
+internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
 {
     private readonly IMongoCollection<RankedGame> _rankedGames;
 

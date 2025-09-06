@@ -1,4 +1,4 @@
-﻿namespace CrownsGuard.Multiplayer.Players;
+﻿namespace CrownsGuard.Database.Players;
 
 public class PublicPlayerData
 {

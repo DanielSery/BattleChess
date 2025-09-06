@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace CrownsGuard.Multiplayer.Utilities;
+namespace CrownsGuard.Database.Utilities;
 
 public static class GameVersion
 {

@@ -1,8 +1,8 @@
 ﻿using FluentResults;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Database;
 
-public class DatabaseTimeProvider : IDatabaseTimeProvider
+internal class DatabaseTimeProvider : IDatabaseTimeProvider
 {
     private readonly IDatabaseClient _databaseClient;
 

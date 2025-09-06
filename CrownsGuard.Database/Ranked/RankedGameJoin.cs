@@ -1,9 +1,9 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CrownsGuard.Multiplayer.Tables;
+namespace CrownsGuard.Database.Ranked;
 
-public class GameLobbyJoin
+public class RankedGameJoin
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

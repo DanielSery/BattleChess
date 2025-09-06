@@ -1,10 +1,10 @@
-﻿using CrownsGuard.Multiplayer.Tables;
+﻿using CrownsGuard.Database.Database;
 using FluentResults;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Lobby;
 
-public class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandler
+internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandler
 {
     private readonly IMongoCollection<GameLobbyJoin> _gameJoins;
 
@@ -77,7 +77,7 @@ public class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandler
             var filter = Builders<GameLobbyJoin>.Filter.Eq(gj => gj.GameId, gameId);
             var result = await _gameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted LobbyJoins: {result.DeletedCount}");
-            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete LobbyJoins");;
+            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete LobbyJoins");
         }
         catch (Exception ex)
         {

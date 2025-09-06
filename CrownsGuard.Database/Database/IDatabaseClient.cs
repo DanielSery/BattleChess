@@ -1,9 +1,12 @@
-﻿using CrownsGuard.Multiplayer.Tables;
+﻿using CrownsGuard.Database.Game;
+using CrownsGuard.Database.Lobby;
+using CrownsGuard.Database.Players;
+using CrownsGuard.Database.Ranked;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Database;
 
-public interface IDatabaseClient
+internal interface IDatabaseClient
 {
     bool IsConnected { get; }
 

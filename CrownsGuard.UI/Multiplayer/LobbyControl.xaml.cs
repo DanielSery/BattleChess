@@ -1,8 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CrownsGuard.Multiplayer.Lobby;
-using CrownsGuard.Multiplayer.Tables;
+using CrownsGuard.Database.Lobby;
 
 namespace CrownsGuard.UI.Multiplayer;
 

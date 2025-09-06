@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Multiplayer.DatabaseAccess;
+using CrownsGuard.Database.Players;
 using CrownsGuard.Multiplayer.Scheduling;
-using CrownsGuard.Multiplayer.Tables;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 

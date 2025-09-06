@@ -1,7 +1,6 @@
-﻿using CrownsGuard.Multiplayer;
-using CrownsGuard.Multiplayer.Players;
-using CrownsGuard.Multiplayer.Tables;
+﻿using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Database.Players;
 using CrownsGuard.UI.Services;
 using Nicenis.Windows.ViewModels;
 

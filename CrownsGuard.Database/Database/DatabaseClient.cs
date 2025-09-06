@@ -1,10 +1,13 @@
-﻿using CrownsGuard.Multiplayer.Tables;
+﻿using CrownsGuard.Database.Game;
+using CrownsGuard.Database.Lobby;
+using CrownsGuard.Database.Players;
+using CrownsGuard.Database.Ranked;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Database;
 
-public class DatabaseClient : IDatabaseClient
+internal class DatabaseClient : IDatabaseClient
 {
     private readonly IMongoDatabase? _adminDatabase;
 

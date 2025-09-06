@@ -1,17 +1,15 @@
-﻿using CrownsGuard.Multiplayer.Lobby;
-using CrownsGuard.Multiplayer.Tables;
-using FluentResults;
+﻿using FluentResults;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Lobby;
 
 public interface IGameLobbiesCollectionHandler
 {
     Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken);
 
-    Task<Result<GameLobby>> FindGameLobbyAsync(string lobbyName, int gameVersion, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> FindGameLobbyByNameAsync(string lobbyName, CancellationToken cancellationToken);
 
-    Task<Result<GameLobby>> FindGameLobbyAsync(string lobbyId, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> FindGameLobbyByIdAsync(string lobbyId, CancellationToken cancellationToken);
 
     Task<Result<GameLobby>> WaitForLobbyAccept(string lobbyId, CancellationToken cancellationToken);
 

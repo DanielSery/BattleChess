@@ -1,10 +1,11 @@
-﻿using CrownsGuard.Multiplayer.DatabaseAccess;
-using CrownsGuard.Multiplayer.Tables;
+﻿using CrownsGuard.Database.Game;
+using CrownsGuard.Database.Lobby;
+using CrownsGuard.Database.Ranked;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer;
+namespace CrownsGuard.Database.Database;
 
-public class DatabaseClearer
+internal class DatabaseClearer : IDatabaseClearer
 {
     private readonly IMongoCollection<RankedGame> _rankedGamesCollection;
     private readonly IMongoCollection<RankedGameJoin> _rankedGameJoinsCollection;
@@ -12,13 +13,13 @@ public class DatabaseClearer
     private readonly IMongoCollection<GameLobbyJoin> _gameJoinsCollection;
     private readonly IMongoCollection<GameTurn> _gameTurnsCollection;
 
-    public DatabaseClearer(IDatabaseClient databaseClient)
+    internal DatabaseClearer(IDatabaseClient databaseClient)
     {
-        _rankedGamesCollection = databaseClient.RankedGames;
-        _rankedGameJoinsCollection = databaseClient.RankedGameJoins;
-        _gameLobbyCollection = databaseClient.GameLobbies;
-        _gameJoinsCollection = databaseClient.GameJoins;
-        _gameTurnsCollection = databaseClient.GameTurns;
+        _rankedGamesCollection = databaseClient.RankedGames!;
+        _rankedGameJoinsCollection = databaseClient.RankedGameJoins!;
+        _gameLobbyCollection = databaseClient.GameLobbies!;
+        _gameJoinsCollection = databaseClient.GameJoins!;
+        _gameTurnsCollection = databaseClient.GameTurns!;
     }
 
     public void ClearDatabase()

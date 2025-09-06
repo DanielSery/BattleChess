@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using CrownsGuard.Multiplayer.DatabaseAccess;
 using CrownsGuard.Multiplayer.Game;
 using CrownsGuard.Multiplayer.Lobby;
 using CrownsGuard.Multiplayer.Mail;
@@ -13,34 +12,9 @@ public static class MultiplayerModule
 {
     public static void RegisterMultiplayerModule(this ContainerBuilder builder)
     {
-        builder.RegisterType<DatabaseClient>()
-            .As<IDatabaseClient>()
-            .SingleInstance();
-        builder.RegisterType<DatabaseTimeProvider>()
-            .As<IDatabaseTimeProvider>()
-            .SingleInstance();
-        builder.RegisterType<PlayersCollectionHandler>()
-            .As<IPlayersCollectionHandler>()
-            .SingleInstance();
-        builder.RegisterType<GameTurnsCollectionHandler>()
-            .As<IGameTurnsCollectionHandler>()
-            .SingleInstance();
-        builder.RegisterType<GameLobbiesCollectionHandler>()
-            .As<IGameLobbiesCollectionHandler>()
-            .SingleInstance();
-        builder.RegisterType<GameLobbyJoinsCollectionHandler>()
-            .As<IGameLobbyJoinsCollectionHandler>()
-            .SingleInstance();
-        builder.RegisterType<RankedGameJoinsCollectionHandler>()
-            .As<IRankedGameJoinsCollectionHandler>()
-            .SingleInstance();
-        builder.RegisterType<RankedGamesCollectionHandler>()
-            .As<IRankedGamesCollectionHandler>()
-            .SingleInstance();
         builder.RegisterType<EmailClient>()
             .As<IEmailClient>()
             .SingleInstance();
-        
         builder.RegisterType<MultiplayerRankedService>()
             .As<IMultiplayerRankedService>()
             .SingleInstance();

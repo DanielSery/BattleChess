@@ -1,7 +1,6 @@
-﻿using CrownsGuard.Multiplayer.Tables;
-using FluentResults;
+﻿using FluentResults;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Ranked;
 
 public interface IRankedGamesCollectionHandler
 {

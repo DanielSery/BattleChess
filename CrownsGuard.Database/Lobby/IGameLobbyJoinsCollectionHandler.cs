@@ -1,7 +1,6 @@
-﻿using CrownsGuard.Multiplayer.Tables;
-using FluentResults;
+﻿using FluentResults;
 
-namespace CrownsGuard.Multiplayer;
+namespace CrownsGuard.Database.Lobby;
 
 public interface IGameLobbyJoinsCollectionHandler
 {

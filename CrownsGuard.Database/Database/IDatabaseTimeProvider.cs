@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Database;
 
 public interface IDatabaseTimeProvider
 {

@@ -1,9 +1,9 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CrownsGuard.Multiplayer.Tables;
+namespace CrownsGuard.Database.Lobby;
 
-public class GameTurn
+public class GameLobbyJoin
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -11,10 +11,9 @@ public class GameTurn
 
     [BsonRepresentation(BsonType.ObjectId)]
     public required string GameId { get; set; }
+
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? PlayerId { get; set; }
     
-    public DateTime CreatedAt { get; set; }
-    public double TimeSpentInSeconds { get; set; }
-    
-    public byte FromIndex { get; set; }
-    public byte ToIndex { get; set; }
+    public required byte[] Map { get; set; }
 }

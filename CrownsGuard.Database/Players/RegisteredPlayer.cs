@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CrownsGuard.Multiplayer.Tables;
+namespace CrownsGuard.Database.Players;
 
 public class RegisteredPlayer
 {

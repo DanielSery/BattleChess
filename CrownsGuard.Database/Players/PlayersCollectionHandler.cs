@@ -1,14 +1,13 @@
 // Copyright (c) Veeam Software Group GmbH
 
-using CrownsGuard.Multiplayer.Players;
-using CrownsGuard.Multiplayer.Tables;
+using CrownsGuard.Database.Database;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace CrownsGuard.Multiplayer.DatabaseAccess;
+namespace CrownsGuard.Database.Players;
 
-public class PlayersCollectionHandler : IPlayersCollectionHandler
+internal class PlayersCollectionHandler : IPlayersCollectionHandler
 {
     private readonly IMongoCollection<RegisteredPlayer> _playersCollection;
 
