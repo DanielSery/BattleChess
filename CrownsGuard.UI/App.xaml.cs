@@ -1,4 +1,6 @@
-﻿using CrownsGuard.UI.Shared;
+﻿using System.Diagnostics;
+using System.Runtime.ExceptionServices;
+using CrownsGuard.UI.Shared;
 
 namespace CrownsGuard.UI;
 
@@ -14,6 +16,18 @@ public partial class App
     {
         // new DatabaseClearer().ClearDatabase();
         DependenciesBuilder.Initialize();
+        AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+        AppDomain.CurrentDomain.FirstChanceException += CurrentDomainOnFirstChanceException;
         // AllocConsole();
+    }
+
+    private void CurrentDomainOnFirstChanceException(object? sender, FirstChanceExceptionEventArgs e)
+    {
+        Debugger.Break();
+    }
+
+    private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        Debugger.Break();
     }
 }

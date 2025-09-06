@@ -4,7 +4,6 @@ using CrownsGuard.Multiplayer.Lobby;
 using CrownsGuard.Multiplayer.Mail;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Ranked;
-using CrownsGuard.Multiplayer.Scheduling;
 
 namespace CrownsGuard.Multiplayer;
 
@@ -20,9 +19,6 @@ public static class MultiplayerModule
             .SingleInstance();
         builder.RegisterType<MultiplayerLobbyService>()
             .As<IMultiplayerLobbyService>()
-            .SingleInstance();
-        builder.RegisterType<MultiplayerScheduler>()
-            .As<IMultiplayerScheduler>()
             .SingleInstance();
         builder.RegisterType<MultiplayerPlayerService>()
             .As<IMultiplayerPlayerService>()

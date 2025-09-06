@@ -7,14 +7,12 @@ using CrownsGuard.Game.GameBoard;
 using CrownsGuard.Game.Helpers;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
-using CrownsGuard.Maps;
-using CrownsGuard.Maps.BoardBlueprints;
-using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Game;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Maps.BoardBlueprints;
 using Nicenis.Windows.ViewModels;
 
 namespace CrownsGuard.UI.Game;
@@ -132,13 +130,13 @@ public sealed class BoardViewModel : ViewModelBase
         player1.SetGameService(_multiplayerGameService);
         player2.SetGameService(_multiplayerGameService);
 
+        _multiplayerGameService.StartGame(gameType, gameId);
         _gameService.StartGame(
             player1, player2,
             map.StartingPlayer);
 
         _boardLoader.LoadBoard(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
-        _multiplayerGameService.StartGame(gameType, gameId);
     }
 
     private void Surrender()

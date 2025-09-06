@@ -32,7 +32,7 @@ public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlle
         if (_gameService == null) throw new ArgumentNullException(nameof(_gameService));
 
         Timer.StartTurnTimer();
-        _gameService.HandleRemotePlayerTurnAsync();
+        Task.Run(_gameService.HandleRemotePlayerTurnAsync);
     }
 
     /// <inheritdoc />

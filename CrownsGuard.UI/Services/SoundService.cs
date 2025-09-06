@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace CrownsGuard.UI.Services;
 
@@ -140,22 +141,25 @@ public class SoundService : ISoundService
 
     public void PlaySoundEffect(SoundEffectType effectType)
     {
-        _soundEffectPlayer?.Stop();
-        _soundEffectPlayer = new MediaPlayer();
-        var path = effectType switch
+        Application.Current.Dispatcher.Invoke(() =>
         {
-            SoundEffectType.ChessFigure => $"./Resources/Sounds/Chess{_random.Next(1, 7)}.wav",
-            SoundEffectType.MenuAnimation => "./Resources/Sounds/Rolling2.wav",
-            SoundEffectType.SmallMenuAnimation => "./Resources/Sounds/Rolling1.wav",
-            SoundEffectType.Button => "./Resources/Sounds/Button1.wav",
-            SoundEffectType.Error => "./Resources/Sounds/Error.wav",
-            _ => throw new ArgumentOutOfRangeException(nameof(effectType))
-        };
+            _soundEffectPlayer?.Stop();
+            _soundEffectPlayer = new MediaPlayer();
+            var path = effectType switch
+            {
+                SoundEffectType.ChessFigure => $"./Resources/Sounds/Chess{_random.Next(1, 7)}.wav",
+                SoundEffectType.MenuAnimation => "./Resources/Sounds/Rolling2.wav",
+                SoundEffectType.SmallMenuAnimation => "./Resources/Sounds/Rolling1.wav",
+                SoundEffectType.Button => "./Resources/Sounds/Button1.wav",
+                SoundEffectType.Error => "./Resources/Sounds/Error.wav",
+                _ => throw new ArgumentOutOfRangeException(nameof(effectType))
+            };
 
-        _soundEffectPlayer.Open(new Uri(path, UriKind.RelativeOrAbsolute));
-        _soundEffectPlayer.Play();
-        _soundEffectPlayer.Volume = GetSoundsVolume();
-        _soundEffectPlayer.MediaEnded += OnSoundEffectPlayerOnMediaEnded;
+            _soundEffectPlayer.Open(new Uri(path, UriKind.RelativeOrAbsolute));
+            _soundEffectPlayer.Play();
+            _soundEffectPlayer.Volume = GetSoundsVolume();
+            _soundEffectPlayer.MediaEnded += OnSoundEffectPlayerOnMediaEnded;
+        });
 
         void OnSoundEffectPlayerOnMediaEnded(object? o, EventArgs eventArgs)
         {

@@ -6,7 +6,6 @@ using CrownsGuard.Database.Players;
 using CrownsGuard.Game;
 using CrownsGuard.Game.Helpers;
 using CrownsGuard.Multiplayer.Players;
-using CrownsGuard.Multiplayer.Scheduling;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 
@@ -14,21 +13,17 @@ namespace CrownsGuard.Multiplayer.Game;
 
 internal sealed class MultiplayerGameService : IMultiplayerGameService
 {
-    private readonly IMultiplayerScheduler _scheduler;
-
     private readonly IMultiplayerPlayerService _playerService;
     private readonly IPlayersCollectionHandler _players;
     private readonly IGameTurnsCollectionHandler _gameTurns;
     private readonly IDatabaseTimeProvider _databaseTimeProvider;
 
     public MultiplayerGameService(
-        IMultiplayerScheduler scheduler,
         IMultiplayerPlayerService playerService,
         IPlayersCollectionHandler players,
         IGameTurnsCollectionHandler gameTurns,
         IDatabaseTimeProvider databaseTimeProvider)
     {
-        _scheduler = scheduler;
         _playerService = playerService;
         _players = players;
         _gameTurns = gameTurns;
@@ -48,42 +43,31 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         TurnId = null;
     }
 
-    public Task<Result<string?>> HandleWinAsync(
+    public async Task<Result<string?>> HandleWinAsync(
         bool notifyOther, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost, CancellationToken cancellationToken)
     {
-        lock (_scheduler.SyncLock)
+        if (GameId is null)
+            return Result.Ok<string?>(null);
+
+        await DeleteGameTurnsAsync(cancellationToken);
+        if (notifyOther)
         {
-            if (GameId is null)
-                return Task.FromResult(Result.Ok<string?>(null));
+            await SendGameResultToOpponent(winType, cancellationToken);
+        }
 
-            return _scheduler.QueueTask(async () =>
-            {
-                if (GameId is null)
-                {
-                    return Result.Ok<string?>(null);
-                }
+        if (!GameType.HasFlag(MultiplayerGameType.Ranked))
+        {
+            return Result.Ok<string?>(null);
+        }
 
-                await DeleteGameTurnsAsync(cancellationToken);
-                if (notifyOther)
-                {
-                    await SendGameResultToOpponent(winType, cancellationToken);
-                }
-
-                if (!GameType.HasFlag(MultiplayerGameType.Ranked))
-                {
-                    return Result.Ok<string?>(null);
-                }
-
-                if (notifyOther)
-                {
-                    return await UpdatePlayersElo(won, lost, cancellationToken);
-                }
-                else
-                {
-                    var updated = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost;
-                    return await GetUpdatedElo(updated, cancellationToken);
-                }
-            });
+        if (notifyOther)
+        {
+            return await UpdatePlayersElo(won, lost, cancellationToken);
+        }
+        else
+        {
+            var updated = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost;
+            return await GetUpdatedElo(updated, cancellationToken);
         }
     }
 
@@ -172,70 +156,58 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         playerB.Elo += (short)(k * ((1 - resultA) - expectedB));
     }
 
-    public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent, CancellationToken cancellationToken)
+    public async Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent, CancellationToken cancellationToken)
     {
-        lock (_scheduler.SyncLock)
-        {
-            if (GameId is null)
-                return Task.FromResult(Result.Fail("Not in game"));
+        if (GameId is null)
+            return Result.Fail("Not in game");
 
-            return _scheduler.QueueTask(async () =>
-            {
-                var gameTurn = new GameTurn()
-                {
-                    GameId = GameId,
-                    FromIndex = (byte)from.GetIndex(),
-                    ToIndex = (byte)to.GetIndex(),
-                    CreatedAt = DateTime.UtcNow,
-                    TimeSpentInSeconds = timeSpent.TotalSeconds
-                };
-                await _gameTurns.InsertAsync(gameTurn, cancellationToken);
-                TurnId = gameTurn.Id;
-                return Result.Ok();
-            });
-        }
+        var gameTurn = new GameTurn()
+        {
+            GameId = GameId,
+            FromIndex = (byte)from.GetIndex(),
+            ToIndex = (byte)to.GetIndex(),
+            CreatedAt = DateTime.UtcNow,
+            TimeSpentInSeconds = timeSpent.TotalSeconds
+        };
+        await _gameTurns.InsertAsync(gameTurn, cancellationToken);
+        TurnId = gameTurn.Id;
+        return Result.Ok();
     }
 
-    public Task<Result> HandleRemotePlayerTurnAsync()
+    public async Task<Result> HandleRemotePlayerTurnAsync()
     {
-        lock (_scheduler.SyncLock)
+        if (GameId is null)
+            return Result.Fail("Not in game");
+
+        Console.WriteLine($"Waiting for his turn with id greater than: {TurnId}");
+        var hisTurnResult = TurnId is null
+            ? await _gameTurns.WaitForFirstTurnAsync(GameId, IMultiplayerGameService.TurnTimeout)
+            : await _gameTurns.WaitForNextTurnAsync(TurnId, GameId, IMultiplayerGameService.TurnTimeout);
+
+        if (!hisTurnResult.TryGetValue(out var hisTurn))
         {
-            if (GameId is null)
-                return Task.FromResult(Result.Fail("Not in game"));
-
-            return _scheduler.QueueTask(async () =>
-            {
-                Console.WriteLine($"Waiting for his turn with id greater than: {TurnId}");
-                var hisTurnResult = TurnId is null
-                    ? await _gameTurns.WaitForFirstTurnAsync(GameId, IMultiplayerGameService.TurnTimeout)
-                    : await _gameTurns.WaitForNextTurnAsync(TurnId, GameId, IMultiplayerGameService.TurnTimeout);
-
-                if (!hisTurnResult.TryGetValue(out var hisTurn))
-                {
-                    RequestPlayMove?.Invoke(this,
-                        (Position.FromIndex(IMultiplayerGameService.NotRespondingMessage),
-                            Position.None,
-                            TimeSpan.FromMinutes(2)));
-                    return Result.Ok();
-                }
-
-                Console.WriteLine($"Found his turn with id: {hisTurn.Id}");
-                if (hisTurn.FromIndex >= 64)
-                {
-                    RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
-                        Position.FromIndex(hisTurn.FromIndex),
-                        Position.FromIndex(hisTurn.ToIndex),
-                        TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
-                    return Result.Ok();
-                }
-
-                RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
-                    GetPositionOfOppositePlayer(hisTurn.FromIndex),
-                    GetPositionOfOppositePlayer(hisTurn.ToIndex),
-                    TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
-                return Result.Ok();
-            });
+            RequestPlayMove?.Invoke(this,
+                (Position.FromIndex(IMultiplayerGameService.NotRespondingMessage),
+                    Position.None,
+                    TimeSpan.FromMinutes(2)));
+            return Result.Ok();
         }
+
+        Console.WriteLine($"Found his turn with id: {hisTurn.Id}");
+        if (hisTurn.FromIndex >= 64)
+        {
+            RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
+                Position.FromIndex(hisTurn.FromIndex),
+                Position.FromIndex(hisTurn.ToIndex),
+                TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
+            return Result.Ok();
+        }
+
+        RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
+            GetPositionOfOppositePlayer(hisTurn.FromIndex),
+            GetPositionOfOppositePlayer(hisTurn.ToIndex),
+            TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
+        return Result.Ok();
     }
 
     private static Position GetPositionOfOppositePlayer(int index)

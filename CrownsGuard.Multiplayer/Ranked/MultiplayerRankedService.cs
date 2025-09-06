@@ -3,7 +3,6 @@ using CrownsGuard.Database.Players;
 using CrownsGuard.Database.Ranked;
 using CrownsGuard.Database.Utilities;
 using CrownsGuard.Multiplayer.Players;
-using CrownsGuard.Multiplayer.Scheduling;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 
@@ -11,42 +10,35 @@ namespace CrownsGuard.Multiplayer.Ranked;
 
 internal class MultiplayerRankedService : IMultiplayerRankedService
 {
-    private readonly IMultiplayerScheduler _scheduler;
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly IRankedGameJoinsCollectionHandler _gameJoins;
     private readonly IRankedGamesCollectionHandler _gameRequests;
 
     public MultiplayerRankedService(
-        IMultiplayerScheduler scheduler,
         IMultiplayerPlayerService multiplayerPlayerService,
         IRankedGameJoinsCollectionHandler gameJoins,
         IRankedGamesCollectionHandler gameRequests)
     {
-        _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
         _gameRequests = gameRequests;
         _gameJoins = gameJoins;
     }
 
-    public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(BoardBlueprint myMap, CancellationToken cancellationToken)
+    public async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(BoardBlueprint myMap, CancellationToken cancellationToken)
     {
-        lock (_scheduler.SyncLock)
-        {
             var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
             if (currentPlayer is null)
             {
-                return Task.FromResult(Result.Fail<(bool, RankedGame, RankedGameJoin)>("No player logged in"));
+                return Result.Fail<(bool, RankedGame, RankedGameJoin)>("No player logged in");
             }
-            
+
             var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer!.UnlockedFigures;
             if (!myMap.IsValid(unlockedFigures))
-                return Task.FromResult(Result.Fail<(bool, RankedGame, RankedGameJoin)>("Setup has units which weren't unlocked yet"));
-            
+                return Result.Fail<(bool, RankedGame, RankedGameJoin)>("Setup has units which weren't unlocked yet");
+
             var random = new Random();
             var isHostStarting = random.Next(0, 1) == 1;
-            
-            return _scheduler.QueueTask(async () =>
-            {
+
                 var myMapData = myMap.GetByteData();
                 var eloDifference = 50;
                 var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
@@ -105,8 +97,6 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                         await DeleteGameSearch(createdGameSearch);
                     }
                 }
-            });
-        }
     }
 
     private async Task DeleteGameSearch(RankedGame deletedGame)
