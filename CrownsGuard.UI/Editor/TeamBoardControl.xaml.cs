@@ -18,9 +18,9 @@ public partial class TeamBoardControl
     private void ChessImage_Drop(object sender, DragEventArgs e)
     {
         Focus();
-        if (e.Data.GetDataPresent("CrownsGuard.Game.Figures.FigureBlueprint"))
+        if (e.Data.GetDataPresent(typeof(FigureBlueprint).FullName))
         {
-            var figureIdentifier = (FigureBlueprint)e.Data.GetData("CrownsGuard.Game.Figures.FigureBlueprint");
+            var figureIdentifier = (FigureBlueprint)e.Data.GetData(typeof(FigureBlueprint).FullName);
             var tileButton = (Button)sender;
             var targetTile = (TileViewModel)tileButton.DataContext;
 
@@ -29,11 +29,10 @@ public partial class TeamBoardControl
 
             teamBoard.CreateFigure(targetTile, figureIdentifier);
         }
-        else if (e.Data.GetDataPresent(
-                     "System.ValueTuple`2[[CrownsGuard.UI.Editor.TeamBoardViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[CrownsGuard.UI.Shared.TileViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]"))
+
+        else if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
         {
-            var (teamBoard, sourceTile) = ((TeamBoardViewModel, TileViewModel))e.Data.GetData(
-                "System.ValueTuple`2[[CrownsGuard.UI.Editor.TeamBoardViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[CrownsGuard.UI.Shared.TileViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]");
+            var (teamBoard, sourceTile) = ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
             var sourceFigureIdentifier = new FigureBlueprint(sourceTile.Figure.Owner.Player,
                 sourceTile.Figure.Type.FigureId, sourceTile.Figure.IsKing);
 

@@ -50,10 +50,9 @@ public partial class EditorUnitsControl
 
     private void Figures_Drop(object sender, DragEventArgs e)
     {
-        if (e.Data.GetDataPresent("System.ValueTuple`2[[CrownsGuard.UI.Editor.TeamBoardViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[CrownsGuard.UI.Shared.TileViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]"))
+        if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
         {
-            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData("System.ValueTuple`2[[CrownsGuard.UI.Editor.TeamBoardViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null],[CrownsGuard.UI.Shared.TileViewModel, CrownsGuard, Version=4.0.2.0, Culture=neutral, PublicKeyToken=null]]");
-
+            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
             teamBoard.CreateFigure(sourceTile, new FigureBlueprint(0, CrossFireFigureIds.EmptyId, false));
         }
     }
