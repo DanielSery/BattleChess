@@ -32,6 +32,11 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
             Console.WriteLine($"Confirmed game join for request: {joinId}");
             return Result.Ok();
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to confirm game join for request: {joinId}");
@@ -48,6 +53,11 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
             var gameSearchDeletion = await _client.RankedGames.DeleteManyAsync(gameSearchFilter, cancellationToken);
             Console.WriteLine($"Deleted game search count: {gameSearchDeletion.DeletedCount}");
             return Result.Ok();
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -94,7 +104,8 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         }
         catch (OperationCanceledException)
         {
-            return Result.Fail("Operation cancelled");
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -157,7 +168,8 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         }
         catch (OperationCanceledException)
         {
-            return Result.Fail("Operation cancelled");
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -174,6 +186,11 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
             await _client.RankedGames.InsertOneAsync(game, cancellationToken: cancellationToken);
             Console.WriteLine($"Created game request: {game.Id}");
             return Result.Ok();
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -200,6 +217,11 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                 .FirstAsync(cancellationToken: cancellationToken);
             Console.WriteLine($"Closest game search elo: {closestGameSearch.Elo}");
             return closestGameSearch;
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {

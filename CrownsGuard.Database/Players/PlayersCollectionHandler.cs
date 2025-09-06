@@ -31,6 +31,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             }
             return foundPlayerResult;
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to get player with id: {id}, exception: {e}");
@@ -51,6 +56,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
                 Console.WriteLine($"Found player {foundPlayerResult.Value.Name} with id: {foundPlayerResult.Value.Id}");
             }
             return foundPlayerResult;
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -73,6 +83,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             }
             return foundPlayerResult;
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to find player with email hash exception: {e}");
@@ -88,6 +103,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             await _client.Players.InsertOneAsync(player, cancellationToken: cancellationToken);
             Console.WriteLine($"Created player with id: {player.Id}");
             return Result.Ok();
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -108,6 +128,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             Console.WriteLine($"Updating elo of player with id: {playerId} was {updateResult.IsAcknowledged}");
             return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update player elo");
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to update elo of player with id: {playerId}, exception: {e}");
@@ -127,6 +152,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             Console.WriteLine($"Updating setup of player with id: {playerId} was {updateResult.IsAcknowledged}");
             return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update player setup");
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to update setup of player with id: {playerId}, exception: {e}");
@@ -145,6 +175,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: cancellationToken);
             Console.WriteLine($"Updating unlocked figures of player with id: {playerId} was {updateResult.IsAcknowledged}");
             return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update unlocked figures");
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -188,8 +223,8 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
         }
         catch (OperationCanceledException)
         {
-            Console.WriteLine($"Cancelling waiting for update of player with id: {playerId}");
-            return Result.Fail("Operation cancelled.");
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -227,6 +262,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
 
             Console.WriteLine("Retrieved top leaderboard");
             return leaderboard;
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -298,6 +338,11 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
 
             Console.WriteLine($"Retrieved leaderboard for player: {playerId}");
             return leaderboard;
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {

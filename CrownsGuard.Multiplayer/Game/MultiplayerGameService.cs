@@ -17,21 +17,21 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     private readonly IMultiplayerScheduler _scheduler;
 
     private readonly IMultiplayerPlayerService _playerService;
-    private readonly IPlayersCollectionHandler _playersCollectionHandler;
-    private readonly IGameTurnsCollectionHandler _gameTurnsCollectionHandler;
+    private readonly IPlayersCollectionHandler _players;
+    private readonly IGameTurnsCollectionHandler _gameTurns;
     private readonly IDatabaseTimeProvider _databaseTimeProvider;
 
     public MultiplayerGameService(
         IMultiplayerScheduler scheduler,
         IMultiplayerPlayerService playerService,
-        IPlayersCollectionHandler playersCollectionHandler,
-        IGameTurnsCollectionHandler gameTurnsCollectionHandler,
+        IPlayersCollectionHandler players,
+        IGameTurnsCollectionHandler gameTurns,
         IDatabaseTimeProvider databaseTimeProvider)
     {
         _scheduler = scheduler;
         _playerService = playerService;
-        _playersCollectionHandler = playersCollectionHandler;
-        _gameTurnsCollectionHandler = gameTurnsCollectionHandler;
+        _players = players;
+        _gameTurns = gameTurns;
         _databaseTimeProvider = databaseTimeProvider;
     }
 
@@ -58,38 +58,30 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
             return _scheduler.QueueTask(async () =>
             {
-                try
+                if (GameId is null)
                 {
-                    if (GameId is null)
-                    {
-                        return Result.Ok<string?>(null);
-                    }
-
-                    await DeleteGameTurnsAsync(cancellationToken);
-                    if (notifyOther)
-                    {
-                        await SendGameResultToOpponent(winType, cancellationToken);
-                    }
-
-                    if (!GameType.HasFlag(MultiplayerGameType.Ranked))
-                    {
-                        return Result.Ok<string?>(null);
-                    }
-
-                    if (notifyOther)
-                    {
-                        return await UpdatePlayersElo(won, lost, cancellationToken);
-                    }
-                    else
-                    {
-                        var updated = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost;
-                        return await GetUpdatedElo(updated, cancellationToken);
-                    }
+                    return Result.Ok<string?>(null);
                 }
-                catch (Exception ex)
+
+                await DeleteGameTurnsAsync(cancellationToken);
+                if (notifyOther)
                 {
-                    Console.WriteLine($"Error: {ex}");
-                    return Result.Fail(ex.Message);
+                    await SendGameResultToOpponent(winType, cancellationToken);
+                }
+
+                if (!GameType.HasFlag(MultiplayerGameType.Ranked))
+                {
+                    return Result.Ok<string?>(null);
+                }
+
+                if (notifyOther)
+                {
+                    return await UpdatePlayersElo(won, lost, cancellationToken);
+                }
+                else
+                {
+                    var updated = _playerService.LoggedInPlayer!.Id == won.PlayerId ? won : lost;
+                    return await GetUpdatedElo(updated, cancellationToken);
                 }
             });
         }
@@ -112,31 +104,24 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             _ => throw new ArgumentOutOfRangeException(nameof(winType), winType, null)
         };
 
-        try
+        Console.WriteLine("Creating game result");
+        var gameTurn = new GameTurn
         {
-            Console.WriteLine("Creating game result");
-            var gameTurn = new GameTurn
-            {
-                GameId = GameId,
-                FromIndex = (byte)messageIndex,
-                ToIndex = 0,
-                CreatedAt = DateTime.UtcNow,
-                TimeSpentInSeconds = 0
-            };
-            await _gameTurnsCollectionHandler.InsertAsync(gameTurn, cancellationToken);
-            Console.WriteLine("Created game result");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+            GameId = GameId,
+            FromIndex = (byte)messageIndex,
+            ToIndex = 0,
+            CreatedAt = DateTime.UtcNow,
+            TimeSpentInSeconds = 0
+        };
+        await _gameTurns.InsertAsync(gameTurn, cancellationToken);
+        Console.WriteLine("Created game result");
     }
 
     private async Task<Result<string?>> GetUpdatedElo(IOnlinePlayerInfo lost, CancellationToken cancellationToken)
     {
         if (lost.PlayerId is null) throw new ArgumentNullException(nameof(lost));
 
-        var updatedPlayerResult = await _playersCollectionHandler.FindByIdAsync(lost.PlayerId, cancellationToken);
+        var updatedPlayerResult = await _players.FindByIdAsync(lost.PlayerId, cancellationToken);
         if (!updatedPlayerResult.TryGetValue(out var updatedPlayer)) return Result.Fail("Could not find losing player");
         if (updatedPlayer.Elo != lost.Elo)
         {
@@ -144,7 +129,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
         }
 
-        updatedPlayerResult = await _playersCollectionHandler.WaitForEloUpdateAsync(lost.PlayerId, cancellationToken);
+        updatedPlayerResult = await _players.WaitForEloUpdateAsync(lost.PlayerId, cancellationToken);
         if (!updatedPlayerResult.TryGetValue(out updatedPlayer)) return Result.Fail("Could not find losing player");
 
         _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
@@ -156,18 +141,18 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         if (won.PlayerId is null) throw new ArgumentNullException(nameof(won));
         if (lost.PlayerId is null) throw new ArgumentNullException(nameof(lost));
 
-        var winningPlayerResult = await _playersCollectionHandler.FindByIdAsync(won.PlayerId, cancellationToken);
+        var winningPlayerResult = await _players.FindByIdAsync(won.PlayerId, cancellationToken);
         if (!winningPlayerResult.TryGetValue(out var winningPlayer)) return Result.Fail("Could not find winning player");
 
-        var losingPlayerResult = await _playersCollectionHandler.WaitForEloUpdateAsync(lost.PlayerId, cancellationToken);
+        var losingPlayerResult = await _players.WaitForEloUpdateAsync(lost.PlayerId, cancellationToken);
         if (!losingPlayerResult.TryGetValue(out var losingPlayer)) return Result.Fail("Could not find losing player");
 
         winningPlayer.Elo = (short)won.Elo!;
         losingPlayer.Elo = (short)lost.Elo!;
         UpdateElo(winningPlayer, losingPlayer, 1d);
 
-        var updateWinningPlayerResult = await _playersCollectionHandler.UpdateEloAsync(winningPlayer.Id, winningPlayer.Elo, cancellationToken);
-        var updateLosingPlayerResult = await _playersCollectionHandler.UpdateEloAsync(losingPlayer.Id, losingPlayer.Elo, cancellationToken);
+        var updateWinningPlayerResult = await _players.UpdateEloAsync(winningPlayer.Id, winningPlayer.Elo, cancellationToken);
+        var updateLosingPlayerResult = await _players.UpdateEloAsync(losingPlayer.Id, losingPlayer.Elo, cancellationToken);
 
         if (!updateLosingPlayerResult.IsFailed) return updateLosingPlayerResult;
         if (!updateWinningPlayerResult.IsFailed) return updateWinningPlayerResult;
@@ -196,28 +181,17 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
             return _scheduler.QueueTask(async () =>
             {
-                try
+                var gameTurn = new GameTurn()
                 {
-                    Console.WriteLine($"Creating game turn: {from} to {to}");
-                    var gameTurn = new GameTurn()
-                    {
-                        GameId = GameId,
-                        FromIndex = (byte)from.GetIndex(),
-                        ToIndex = (byte)to.GetIndex(),
-                        CreatedAt = DateTime.UtcNow,
-                        TimeSpentInSeconds = timeSpent.TotalSeconds
-                    };
-                    await _gameTurnsCollectionHandler.InsertAsync(gameTurn, cancellationToken);
-                    Console.WriteLine($"Created game turn: {from} to {to}");
-
-                    TurnId = gameTurn.Id;
-                    return Result.Ok();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex}");
-                    return Result.Fail(ex.Message);
-                }
+                    GameId = GameId,
+                    FromIndex = (byte)from.GetIndex(),
+                    ToIndex = (byte)to.GetIndex(),
+                    CreatedAt = DateTime.UtcNow,
+                    TimeSpentInSeconds = timeSpent.TotalSeconds
+                };
+                await _gameTurns.InsertAsync(gameTurn, cancellationToken);
+                TurnId = gameTurn.Id;
+                return Result.Ok();
             });
         }
     }
@@ -231,55 +205,35 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
             return _scheduler.QueueTask(async () =>
             {
-                try
+                Console.WriteLine($"Waiting for his turn with id greater than: {TurnId}");
+                var hisTurnResult = TurnId is null
+                    ? await _gameTurns.WaitForFirstTurnAsync(GameId, IMultiplayerGameService.TurnTimeout)
+                    : await _gameTurns.WaitForNextTurnAsync(TurnId, GameId, IMultiplayerGameService.TurnTimeout);
+
+                if (!hisTurnResult.TryGetValue(out var hisTurn))
                 {
-                    Console.WriteLine($"Waiting for his turn with id greater than: {TurnId}");
-                    try
-                    {
-                        var hisTurnResult = TurnId is null
-                            ? await _gameTurnsCollectionHandler.WaitForFirstTurnAsync(GameId, IMultiplayerGameService.TurnTimeout)
-                            : await _gameTurnsCollectionHandler.WaitForNextTurnAsync(TurnId, GameId, IMultiplayerGameService.TurnTimeout);
-
-                        if (!hisTurnResult.TryGetValue(out var hisTurn))
-                        {
-                            RequestPlayMove?.Invoke(this,
-                                (Position.FromIndex(IMultiplayerGameService.NotRespondingMessage),
-                                    Position.None,
-                                    TimeSpan.FromMinutes(2)));
-                            return Result.Ok();
-                        }
-
-                        Console.WriteLine($"Found his turn with id: {hisTurn.Id}");
-
-                        if (hisTurn.FromIndex >= 64)
-                        {
-                            RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
-                                Position.FromIndex(hisTurn.FromIndex),
-                                Position.FromIndex(hisTurn.ToIndex),
-                                TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
-                            return Result.Ok();
-                        }
-
-                        RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
-                            GetPositionOfOppositePlayer(hisTurn.FromIndex),
-                            GetPositionOfOppositePlayer(hisTurn.ToIndex),
-                            TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
-                        return Result.Ok();
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        RequestPlayMove?.Invoke(this,
-                            (Position.FromIndex(IMultiplayerGameService.NotRespondingMessage),
-                                Position.None,
-                                TimeSpan.FromMinutes(2)));
-                        return Result.Ok();
-                    }
+                    RequestPlayMove?.Invoke(this,
+                        (Position.FromIndex(IMultiplayerGameService.NotRespondingMessage),
+                            Position.None,
+                            TimeSpan.FromMinutes(2)));
+                    return Result.Ok();
                 }
-                catch (Exception ex)
+
+                Console.WriteLine($"Found his turn with id: {hisTurn.Id}");
+                if (hisTurn.FromIndex >= 64)
                 {
-                    Console.WriteLine($"Error: {ex}");
-                    return Result.Fail(ex.Message);
+                    RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
+                        Position.FromIndex(hisTurn.FromIndex),
+                        Position.FromIndex(hisTurn.ToIndex),
+                        TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
+                    return Result.Ok();
                 }
+
+                RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
+                    GetPositionOfOppositePlayer(hisTurn.FromIndex),
+                    GetPositionOfOppositePlayer(hisTurn.ToIndex),
+                    TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
+                return Result.Ok();
             });
         }
     }
@@ -295,6 +249,6 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         if (!serverTimeResult.TryGetValue(out var serverTime)) return Result.Fail(serverTimeResult.ToString());
 
         var oldestKeepTime = serverTime - TimeSpan.FromMinutes(20);
-        return await _gameTurnsCollectionHandler.RemoveOlderThanAsync(oldestKeepTime, cancellationToken);
+        return await _gameTurns.RemoveOlderThanAsync(oldestKeepTime, cancellationToken);
     }
 }

@@ -22,6 +22,11 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
             Console.WriteLine($"Created join request with id: {gameJoin.GameId}");
             return Result.Ok();
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to create join request with id: {gameJoin.GameId}");
@@ -38,6 +43,11 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
             var result = await _client.RankedGameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted RankedJoins: {result.DeletedCount}");
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete RankedJoins");
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception ex)
         {
@@ -73,6 +83,11 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
             }
 
             return Result.Fail("Failed to get RankedGameJoin");
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {

@@ -24,6 +24,11 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
             Console.WriteLine($"Game turn {gameTurn.Id} inserted");
             return Result.Ok();
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to insert game turn: {e}");
@@ -41,6 +46,11 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
             var result = await _client.GameTurns.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted GameTurns: {result.DeletedCount}");
             return Result.Ok();
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -81,7 +91,8 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
         }
         catch (OperationCanceledException)
         {
-            return Result.Fail<GameTurn>("Operation cancelled");
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -127,7 +138,8 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
         }
         catch (OperationCanceledException)
         {
-            return Result.Fail<GameTurn>("Operation cancelled");
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {

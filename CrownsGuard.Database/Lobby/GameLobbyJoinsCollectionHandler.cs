@@ -22,6 +22,11 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
             Console.WriteLine($"Created join request with id: {lobbyJoin.GameId}");
             return Result.Ok();
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to add join request for game: {lobbyJoin.GameId}, e: {e}");
@@ -60,7 +65,8 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
         }
         catch (OperationCanceledException)
         {
-            return Result.Fail<GameLobbyJoin>($"Game join with id: {gameId}");
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -78,6 +84,11 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
             var result = await _client.LobbyGameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted LobbyJoins: {result.DeletedCount}");
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete LobbyJoins");
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception ex)
         {

@@ -33,6 +33,11 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             Console.WriteLine("Found public-lobbies");
             return publicLobbies;
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to get public-lobbies: {e}");
@@ -51,6 +56,11 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
             Console.WriteLine($"Found lobby with id: {lobbyId}");
             return foundGameResult;
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -73,6 +83,11 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
             Console.WriteLine($"Found lobby with name: {lobbyName}");
             return foundGameResult;
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -119,7 +134,8 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         }
         catch (OperationCanceledException)
         {
-            return Result.Fail<GameLobby>("Operation cancelled");
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {
@@ -137,6 +153,11 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: cancellationToken);
             Console.WriteLine($"Deleted Lobbies: {result.DeletedCount}");
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete lobbies");
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception ex)
         {
@@ -157,6 +178,11 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             Console.WriteLine($"Confirmed game join for request: {joinId}");
             return Result.Ok();
         }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
+        }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to update game join for request: {e}");
@@ -173,6 +199,11 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             await _client.GameLobbies.InsertOneAsync(game, cancellationToken: cancellationToken);
             Console.WriteLine("Inserted game lobby");
             return Result.Ok();
+        }
+        catch (OperationCanceledException)
+        {
+            return Result.Fail("Operation cancelled")
+                .WithError(CancelledError.Instance);
         }
         catch (Exception e)
         {

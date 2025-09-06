@@ -11,14 +11,14 @@ namespace CrownsGuard.Multiplayer.Players;
 internal class MultiplayerPlayerService : IMultiplayerPlayerService
 {
     private readonly IMultiplayerScheduler _scheduler;
-    private readonly IPlayersCollectionHandler _playersCollectionHandler;
+    private readonly IPlayersCollectionHandler _players;
 
     public MultiplayerPlayerService(
         IMultiplayerScheduler scheduler,
-        IPlayersCollectionHandler playersCollectionHandler)
+        IPlayersCollectionHandler players)
     {
         _scheduler = scheduler;
-        _playersCollectionHandler = playersCollectionHandler;
+        _players = players;
     }
 
     /// <inheritdoc />
@@ -30,8 +30,8 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public Task<Result<List<PublicPlayerData>>> GetLeaderboard(CancellationToken cancellationToken)
     {
         return LoggedInPlayer is null
-            ? _playersCollectionHandler.GetTopLeaderboardAsync(cancellationToken)
-            : _playersCollectionHandler.GetUserLeaderboardAsync(LoggedInPlayer.Id, cancellationToken);
+            ? _players.GetTopLeaderboardAsync(cancellationToken)
+            : _players.GetUserLeaderboardAsync(LoggedInPlayer.Id, cancellationToken);
     }
 
     public IOnlinePlayerInfo GetCurrentPlayer()
@@ -47,7 +47,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         {
             return _scheduler.QueueTask(async () =>
             {
-                var foundPlayerResult = await _playersCollectionHandler.FindByIdAsync(playerId, cancellationToken);
+                var foundPlayerResult = await _players.FindByIdAsync(playerId, cancellationToken);
                 if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Could not find remote player");
                 return Result.Ok<IOnlinePlayerInfo>(new RemoteOnlinePlayerInfo(Player.Black, foundPlayer.Name, playerId, foundPlayer.Elo));
             });
@@ -60,7 +60,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         {
             return _scheduler.QueueTask(async () =>
             {
-                var foundPlayerResult = await _playersCollectionHandler.FindByNameAsync(name, cancellationToken);
+                var foundPlayerResult = await _players.FindByNameAsync(name, cancellationToken);
                 if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Could not find user");
                 return Result.Ok(foundPlayer.PasswordSalt);
             });
@@ -73,7 +73,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         {
             return _scheduler.QueueTask(async () =>
             {
-                var foundPlayerResult = await _playersCollectionHandler.FindByNameAsync(name, cancellationToken);
+                var foundPlayerResult = await _players.FindByNameAsync(name, cancellationToken);
                 if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Incorrect username or password");
                 if (foundPlayer.PasswordHash != hash)  return Result.Fail("Incorrect username or password");
                 LoggedInPlayer = foundPlayer;
@@ -97,7 +97,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             return _scheduler.QueueTask(async () =>
             {
                 var mapData = map.GetByteData();
-                var result = await _playersCollectionHandler.UpdateSetupAsync(LoggedInPlayer.Id, mapData, cancellationToken);
+                var result = await _players.UpdateSetupAsync(LoggedInPlayer.Id, mapData, cancellationToken);
                 if (result.IsFailed) return result;
                 LoggedInPlayer.Map = mapData;
                 LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
@@ -124,7 +124,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                 var newUnlockedFigures = new byte[LoggedInPlayer.UnlockedFigures.Length];
                 unlockedFiguresArray.CopyTo(newUnlockedFigures, 0);
 
-                var result = await _playersCollectionHandler.UpdateUnlockedFiguresAsync(LoggedInPlayer.Id, newUnlockedFigures, cancellationToken);
+                var result = await _players.UpdateUnlockedFiguresAsync(LoggedInPlayer.Id, newUnlockedFigures, cancellationToken);
                 if (result.IsFailed) return result;
                 LoggedInPlayer.UnlockedFigures = newUnlockedFigures;
                 LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
@@ -140,7 +140,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         {
             return _scheduler.QueueTask(async () =>
             {
-                var foundPlayerResult = await _playersCollectionHandler.FindByEmailHashAsync(emailHash, cancellationToken);
+                var foundPlayerResult = await _players.FindByEmailHashAsync(emailHash, cancellationToken);
                 if (!foundPlayerResult.IsFailed) return Result.Fail("User with given email already exists");
                 return Result.Ok();
             });
@@ -153,10 +153,10 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         {
             return _scheduler.QueueTask(async () =>
             {
-                var foundPlayerResult = await _playersCollectionHandler.FindByEmailHashAsync(emailHash, cancellationToken);
+                var foundPlayerResult = await _players.FindByEmailHashAsync(emailHash, cancellationToken);
                 if (!foundPlayerResult.IsFailed) Result.Fail("User with given email already exists");
 
-                foundPlayerResult = await _playersCollectionHandler.FindByNameAsync(name, cancellationToken);
+                foundPlayerResult = await _players.FindByNameAsync(name, cancellationToken);
                 if (!foundPlayerResult.IsFailed) Result.Fail("User with given name already exists");
 
                 var mapData = myMap.IsValid(IMultiplayerPlayerService.DefaultUnlockedFigures)
@@ -175,7 +175,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
                     UnlockedFigures = IMultiplayerPlayerService.DefaultUnlockedFigures,
                 };
 
-                return await _playersCollectionHandler.InsertAsync(player, cancellationToken);
+                return await _players.InsertAsync(player, cancellationToken);
             });
         }
     }

@@ -13,19 +13,19 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
 {
     private readonly IMultiplayerScheduler _scheduler;
     private readonly IMultiplayerPlayerService _multiplayerPlayerService;
-    private readonly IRankedGameJoinsCollectionHandler _rankedGameJoinsCollectionHandler;
-    private readonly IRankedGamesCollectionHandler _rankedGamesCollectionHandler;
+    private readonly IRankedGameJoinsCollectionHandler _gameJoins;
+    private readonly IRankedGamesCollectionHandler _gameRequests;
 
     public MultiplayerRankedService(
         IMultiplayerScheduler scheduler,
         IMultiplayerPlayerService multiplayerPlayerService,
-        IRankedGameJoinsCollectionHandler rankedGameJoinsCollectionHandler,
-        IRankedGamesCollectionHandler rankedGamesCollectionHandler)
+        IRankedGameJoinsCollectionHandler gameJoins,
+        IRankedGamesCollectionHandler gameRequests)
     {
         _scheduler = scheduler;
         _multiplayerPlayerService = multiplayerPlayerService;
-        _rankedGamesCollectionHandler = rankedGamesCollectionHandler;
-        _rankedGameJoinsCollectionHandler = rankedGameJoinsCollectionHandler;
+        _gameRequests = gameRequests;
+        _gameJoins = gameJoins;
     }
 
     public Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(BoardBlueprint myMap, CancellationToken cancellationToken)
@@ -48,70 +48,62 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             return _scheduler.QueueTask(async () =>
             {
                 var myMapData = myMap.GetByteData();
+                var eloDifference = 50;
+                var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
+                if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
+
+                while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= eloDifference)
+                {
+                    var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
+                    if (joinResult.IsSuccess)
+                    {
+                        return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
+                    }
+
+                    closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
+                    if (!closestGameSearchResult.TryGetValue(out closestGameSearch)) closestGameSearch = null;
+                }
+
+                var createdGameSearchResult = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
+                if (!createdGameSearchResult.TryGetValue(out var createdGameSearch)) return createdGameSearchResult.ToResult();
                 try
                 {
-                    var eloDifference = 50;
-                    var closestGameSearchResult = await _rankedGamesCollectionHandler.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
-                    if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
-
-                    while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= eloDifference)
+                    while (true)
                     {
-                        var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
-                        if (joinResult.IsSuccess)
+                        var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
+                        if (waitResult == WaitResult.GameJoin)
                         {
-                            return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
+                            var confirmationResult = await _gameRequests.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
+                            if (confirmationResult.IsSuccess)
+                            {
+                                return Result.Ok((true, createdGameSearch, foundSearchJoin));
+                            }
                         }
-                        
-                        closestGameSearchResult = await _rankedGamesCollectionHandler.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
-                        if (!closestGameSearchResult.TryGetValue(out closestGameSearch)) closestGameSearch = null;
-                    }
-
-                    var createdGameSearchResult = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
-                    if (!createdGameSearchResult.TryGetValue(out var createdGameSearch)) return createdGameSearchResult.ToResult();
-                    try
-                    {
-                        while (true)
+                        else if (waitResult == WaitResult.GameSearch)
                         {
-                            var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
-                            if (waitResult == WaitResult.GameJoin)
+                            var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
+                            if (joinResult.IsSuccess)
                             {
-                                var confirmationResult = await _rankedGamesCollectionHandler.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
-                                if (confirmationResult.IsSuccess)
-                                {
-                                    return Result.Ok((true, createdGameSearch, foundSearchJoin));
-                                }
+                                return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, foundSearch!, joinResult.Value));
                             }
-                            else if (waitResult == WaitResult.GameSearch)
-                            {
-                                var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
-                                if (joinResult.IsSuccess)
-                                {
-                                    return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, foundSearch!, joinResult.Value));
-                                }
-                            }
-                            else if (eloDifference < 300)
-                            {
-                                Console.WriteLine($"No game found with elo difference {eloDifference}, increasing to {eloDifference + 50}");
-                                eloDifference += 50;
-                            }
-                            else
-                            {
-                                Console.WriteLine($"No game found with elo difference {eloDifference}, continuing search");
-                            }
-                        }                    
-                    }
-                    finally
-                    {
-                        if (string.IsNullOrEmpty(createdGameSearch.JoinedId))
+                        }
+                        else if (eloDifference < 300)
                         {
-                            await DeleteGameSearch(createdGameSearch);
+                            Console.WriteLine($"No game found with elo difference {eloDifference}, increasing to {eloDifference + 50}");
+                            eloDifference += 50;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"No game found with elo difference {eloDifference}, continuing search");
                         }
                     }
                 }
-                catch (Exception ex)
+                finally
                 {
-                    Console.WriteLine($"Error: {ex}");
-                    return Result.Fail<(bool, RankedGame, RankedGameJoin)>("Failed to create lobby");
+                    if (string.IsNullOrEmpty(createdGameSearch.JoinedId))
+                    {
+                        await DeleteGameSearch(createdGameSearch);
+                    }
                 }
             });
         }
@@ -119,8 +111,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
 
     private async Task DeleteGameSearch(RankedGame deletedGame)
     {
-        await _rankedGamesCollectionHandler.DeleteGameSearchAsync(deletedGame.Id, CancellationToken.None);
-        await _rankedGameJoinsCollectionHandler.DeleteGameJoinsAsync(deletedGame.Id, CancellationToken.None);
+        await _gameRequests.DeleteGameSearchAsync(deletedGame.Id, CancellationToken.None);
+        await _gameJoins.DeleteGameJoinsAsync(deletedGame.Id, CancellationToken.None);
     }
 
     private enum WaitResult
@@ -140,8 +132,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
 
-        var gameSearch = Task.Run(async () => await _rankedGamesCollectionHandler.FindForTargetEloAsync(gameId, targetElo, eloDifference, cancellationTokenSource.Token), cancellationTokenSource.Token);
-        var joinTask = Task.Run(async () => await _rankedGameJoinsCollectionHandler.WaitForGameJoinAsync(gameId, cancellationTokenSource.Token), cancellationTokenSource.Token);
+        var gameSearch = Task.Run(async () => await _gameRequests.FindForTargetEloAsync(gameId, targetElo, eloDifference, cancellationTokenSource.Token), cancellationTokenSource.Token);
+        var joinTask = Task.Run(async () => await _gameJoins.WaitForGameJoinAsync(gameId, cancellationTokenSource.Token), cancellationTokenSource.Token);
 
         var completedTask = await Task.WhenAny(gameSearch, joinTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationTokenSource.Token));
         if (completedTask == gameSearch && gameSearch.Result.IsSuccess)
@@ -170,7 +162,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             IsHostStarting = isHostStarting,
         };
 
-        var result = await _rankedGamesCollectionHandler.InsertAsync(game, cancellationToken);
+        var result = await _gameRequests.InsertAsync(game, cancellationToken);
         if (result.IsFailed) return result;
         return game;
     }
@@ -187,11 +179,11 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             PlayerId = currentPlayer.Id,
             Map = myMapData,
         };
-        var insertResult = await _rankedGameJoinsCollectionHandler.InsertAsync(gameJoin, cancellationToken);
+        var insertResult = await _gameJoins.InsertAsync(gameJoin, cancellationToken);
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game join");
 
         Console.WriteLine("Waiting for join request confirmation");
-        var updatedJoinedGameResult = await _rankedGamesCollectionHandler.WaitForAcceptAsync(joinedGame.Id, 20, cancellationToken);
+        var updatedJoinedGameResult = await _gameRequests.WaitForAcceptAsync(joinedGame.Id, 20, cancellationToken);
         if (!updatedJoinedGameResult.TryGetValue(out var updatedJoinedGame))
         {
             await DeleteGameSearch(joinedGame);
