@@ -48,9 +48,9 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             Console.WriteLine($"Searching for lobby with id: {lobbyId}");
             var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
             var foundGames = await _gameLobbiesCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundGame = await foundGames.SingleAsync(cancellationToken: cancellationToken);
+            var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
             Console.WriteLine($"Found lobby with id: {lobbyId}");
-            return foundGame;
+            return foundGameResult;
         }
         catch (Exception e)
         {
@@ -70,9 +70,9 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                 Builders<GameLobby>.Filter.Eq(g => g.Version, GameVersion.VersionId)
             );
             var foundGames = await _gameLobbiesCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundGame = await foundGames.SingleAsync(cancellationToken: cancellationToken);
+            var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
             Console.WriteLine($"Found lobby with name: {lobbyName}");
-            return foundGame;
+            return foundGameResult;
         }
         catch (Exception e)
         {

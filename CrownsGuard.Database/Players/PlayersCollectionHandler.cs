@@ -1,6 +1,7 @@
 // Copyright (c) Veeam Software Group GmbH
 
 using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Utilities;
 using FluentResults;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -23,9 +24,12 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             Console.WriteLine($"Getting player with id: {id}");
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, id);
             var foundPlayers = await _playersCollection.FindAsync(playerFilter, cancellationToken: cancellationToken);
-            var foundPlayer = await foundPlayers.SingleAsync(cancellationToken: cancellationToken);
-            Console.WriteLine($"Found player {foundPlayer.Name} with id: {foundPlayer.Id}");
-            return foundPlayer;
+            var foundPlayerResult = await foundPlayers.SingleResultAsync(cancellationToken: cancellationToken);
+            if (foundPlayerResult.IsSuccess)
+            {
+                Console.WriteLine($"Found player {foundPlayerResult.Value.Name} with id: {foundPlayerResult.Value.Id}");
+            }
+            return foundPlayerResult;
         }
         catch (Exception e)
         {
@@ -41,9 +45,12 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             Console.WriteLine($"Getting player with name: {name}");
             var filter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Name, name);
             var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundPlayer = await foundPlayers.SingleAsync(cancellationToken: cancellationToken);
-            Console.WriteLine($"Found player {foundPlayer.Name} with id: {foundPlayer.Id}");
-            return foundPlayer;
+            var foundPlayerResult = await foundPlayers.SingleResultAsync(cancellationToken: cancellationToken);
+            if (foundPlayerResult.IsSuccess)
+            {
+                Console.WriteLine($"Found player {foundPlayerResult.Value.Name} with id: {foundPlayerResult.Value.Id}");
+            }
+            return foundPlayerResult;
         }
         catch (Exception e)
         {
@@ -59,35 +66,16 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             Console.WriteLine("Getting player with email hash");
             var filter = Builders<RegisteredPlayer>.Filter.Eq(g => g.EmailHash, emailHash);
             var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundPlayer = await foundPlayers.SingleAsync(cancellationToken: cancellationToken);
-            Console.WriteLine($"Found player {foundPlayer.Name} with id: {foundPlayer.Id}");
-            return foundPlayer;
+            var foundPlayerResult = await foundPlayers.SingleResultAsync(cancellationToken: cancellationToken);
+            if (foundPlayerResult.IsSuccess)
+            {
+                Console.WriteLine($"Found player {foundPlayerResult.Value.Name} with id: {foundPlayerResult.Value.Id}");
+            }
+            return foundPlayerResult;
         }
         catch (Exception e)
         {
             Console.WriteLine($"Failed to find player with email hash exception: {e}");
-            return Result.Fail(e.Message);
-        }
-    }
-
-    /// <inheritdoc />
-    public async Task<Result<RegisteredPlayer>> FindPlayerByNameAndHash(string name, string passwordHash, CancellationToken cancellationToken)
-    {
-        try
-        {
-            Console.WriteLine($"Getting player with name: {name} and password hash");
-            var filter = Builders<RegisteredPlayer>.Filter.And(
-                Builders<RegisteredPlayer>.Filter.Eq(g => g.Name, name),
-                Builders<RegisteredPlayer>.Filter.Eq(g => g.PasswordHash, passwordHash)
-            );
-            var foundPlayers = await _playersCollection.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundPlayer = await foundPlayers.SingleAsync(cancellationToken: cancellationToken);
-            Console.WriteLine($"Found player {foundPlayer.Name} with id: {foundPlayer.Id}");
-            return foundPlayer;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to find player with name: {name} and hash, exception: {e}");
             return Result.Fail(e.Message);
         }
     }
@@ -263,13 +251,14 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument("_id", targetId)))
             .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$project", new BsonDocument("Rank", 1)));
 
-        BsonDocument? rankDoc;
+        Result<BsonDocument> rankDocResult;
         try
         {
             Console.WriteLine($"Retrieving rank of user: {playerId}");
-            rankDoc = await bsonCollection
+            rankDocResult = await bsonCollection
                 .Aggregate(rankPipeline, cancellationToken: cancellationToken)
-                .SingleAsync(cancellationToken: cancellationToken);
+                .SingleResultAsync(cancellationToken: cancellationToken);
+            if (rankDocResult.IsFailed) return Result.Fail("Failed to retrieve user's rank");
             Console.WriteLine("Retrieved rank of user");
         }
         catch (Exception e)
@@ -278,7 +267,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             return Result.Fail(e.Message);
         }
 
-        var targetRank = rankDoc["Rank"].AsInt32;
+        var targetRank = rankDocResult.Value["Rank"].AsInt32;
         var minRank = Math.Max(targetRank - 100, 1);
         var maxRank = targetRank + 100;
 
