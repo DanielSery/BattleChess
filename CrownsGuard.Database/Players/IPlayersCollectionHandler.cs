@@ -1,5 +1,3 @@
-// Copyright (c) Veeam Software Group GmbH
-
 using FluentResults;
 
 namespace CrownsGuard.Database.Players;

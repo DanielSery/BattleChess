@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
@@ -7,7 +8,18 @@ public class Wall : ICrownsGuardFigureType
 {
     public int FigureValue => 1;
 
-    public int FigureId => (int)CrownsGuardFigureIds.WallId;
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    {
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        return actions.ToArrayPool(actionsCount);
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        
+    }
     
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>

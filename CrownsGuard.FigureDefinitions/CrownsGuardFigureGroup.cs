@@ -1,4 +1,5 @@
 ﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Figures;
 using CrownsGuard.FigureDefinitions.Localization;
 
@@ -6,81 +7,74 @@ namespace CrownsGuard.FigureDefinitions;
 
 public sealed class CrownsGuardFigureGroup : IFigureGroup
 {
-    private readonly Dictionary<int, IFigureType> _figuresDictionary;
+    private readonly Dictionary<FigureType, IFigureType> _figuresDictionary;
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrownsGuardFigureGroup)}_Name"];
-
-    internal static readonly IFigureType Wall = new Wall();
-    internal static readonly IFigureType Explosives = new Explosives();
-    internal static readonly IFigureType Blade = new Blade();
-    internal static readonly IFigureType Trench = new Trench();
-    internal static readonly IFigureType LegionarySword = new LegionarySword();
-    internal static readonly IFigureType Empty = new Empty();
-    internal static readonly IFigureType Fire = new Fire();
 
     public CrownsGuardFigureGroup()
     {
-        _figuresDictionary = FigureTypes.ToDictionary(figure => figure.FigureId, figure => figure);
+        _figuresDictionary = new Dictionary<FigureType, IFigureType>()
+        {
+            { FigureType.Empty, new Empty() },
+            { FigureType.Wall, new Wall() },
+            { FigureType.Explosives, new Explosives() },
+            { FigureType.Trench, new Trench() },
+            { FigureType.Fire, new Fire() },
+
+            { FigureType.Peasant, new Peasant() },
+            { FigureType.Spearman, new Spearman() },
+            { FigureType.Pikeman, new Pikeman() },
+            { FigureType.LegionarySword, new LegionarySword() },
+            { FigureType.LegionaryPike, new LegionaryPike() },
+
+            { FigureType.MountedKnight, new MountedKnight() },
+            { FigureType.CamelRider, new CamelRider() },
+            { FigureType.MountedArcher, new MountedArcher() },
+            { FigureType.CamelArcher, new CamelArcher() },
+            { FigureType.Scout, new Scout() },
+            { FigureType.Dogs, new Dogs() },
+            { FigureType.Queen, new Queen() },
+
+            { FigureType.Knight, new Knight() },
+            { FigureType.Samurai, new Samurai() },
+            { FigureType.Chinese, new Chinese() },
+            { FigureType.Nordguard, new Nordguard() },
+            { FigureType.Blade, new Blade() },
+            { FigureType.Elephant, new Elephant() },
+
+            { FigureType.Archer, new Archer() },
+            { FigureType.JapanArcher, new JapanArcher() },
+            { FigureType.Ranger, new Ranger() },
+            { FigureType.Crossbow, new Crossbow() },
+            { FigureType.Musketeer, new Musketeer() },
+            { FigureType.Cannon, new Cannon() },
+            { FigureType.Catapult, new Catapult() },
+
+            { FigureType.Spartan, new Spartan() },
+            { FigureType.Warhammer, new Warhammer() },
+            { FigureType.BattleAxe, new BattleAxe() },
+            { FigureType.Mage, new Mage() },
+            { FigureType.Wizzard, new Wizzard() },
+
+            { FigureType.King, new King() },
+            { FigureType.Trader, new Trader() },
+            { FigureType.Bard, new Bard() },
+            { FigureType.Barbarian, new Barbarian() },
+            { FigureType.Whiplash, new Whiplash() },
+            { FigureType.Priest, new Priest() },
+
+            { FigureType.Builder, new Builder() },
+            { FigureType.Alchemist, new Alchemist() },
+            { FigureType.Miner, new Miner() },
+            { FigureType.Dragon, new Dragon() },
+        };
+        FigureTypes = _figuresDictionary.Values.ToArray();
     }
 
-    public IFigureType[] FigureTypes { get; } =
-    [
-        Empty,
-        Wall,
-        Explosives,
-        Trench,
-        Fire,
-        
-        new Peasant(),
-        new Spearman(),
-        new Pikeman(),
-        LegionarySword,
-        new LegionaryPike(),
-        
-        new MountedKnight(),
-        new CamelRider(),
-        new MountedArcher(),
-        new CamelArcher(),
-        new Scout(),
-        new Dogs(),
-        new Queen(),
-        
-        new Knight(),
-        new Samurai(),
-        new Chinese(),
-        new Nordguard(),
-        Blade,
-        new Elephant(),
-        
-        new Archer(),
-        new JapanArcher(),
-        new Ranger(),
-        new Crossbow(),
-        new Musketeer(),
-        new Cannon(),
-        new Catapult(),
-        
-        new Spartan(),
-        new Warhammer(),
-        new BattleAxe(),
-        new Mage(),
-        new Wizzard(),
-        
-        new King(),
-        new Trader(),
-        new Bard(),
-        new Barbarian(),
-        new Whiplash(),
-        new Priest(),
-        
-        new Builder(),
-        new Alchemist(),
-        new Miner(),
-        new Dragon()
-    ];
+    public IFigureType[] FigureTypes { get; }
 
     /// <inheritdoc />
     public IFigureType GetFigureTypeById(int uniqueUnitId)
     {
-        return _figuresDictionary[uniqueUnitId];
+        return _figuresDictionary[(FigureType)uniqueUnitId];
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -8,66 +9,62 @@ public class Chinese : ICrownsGuardFigureType
 {
     public int FigureValue => 8;
 
-    public int FigureId => (int)CrownsGuardFigureIds.ChineseId;
-    
-    private static readonly Position[] MovePositions =
-    [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
-    ];
-
-    private static readonly Position[] AttackDirections =
-    [
-        new(-1, -1), new(-1, 1), new(1, -1), new(1, 1)
-    ];
-
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        foreach (var relative in PositionsGroups.RookDirections)
         {
-            if (unitTile.CanMoveTo(targetTile))
-                yield return unitTile.CreateMoveAction(targetTile, board);
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            
+            if (targetFigure.IsWalkable())
+                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
         }
         
-        foreach (var direction in AttackDirections)
+        foreach (var relative in PositionsGroups.BishopDirections)
         {
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 3, board, unitTile))
+            for (var i = 1; i <= 3; i++)
             {
-                if (unitTile.CanAttack(targetTile))
+                var targetPosition = sourcePosition + relative * i;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+
+                if (sourceFigure.CanAttack(targetFigure))
                 {
-                    yield return new FigureAction(
-                        FigureActionTypes.Attack, 
-                        targetTile.AbsolutePosition,
-                        () => AttackAction(unitTile, targetTile, board));
+                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
                 }
-                else if (!unitTile.CanMoveTo(targetTile))
+                else if (targetFigure.IsEmpty())
                 {
                     break;
                 }
             }
         }
+        
+        return actions.ToArrayPool(actionsCount);
     }
 
-    private void AttackAction(ITile unitTile, ITile targetTile, IBoard board)
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        var move = targetTile.RelativePosition - unitTile.RelativePosition;
+        var move = action.TargetPosition - action.SourcePosition;
 
-        if (Math.Abs(move.X) <= 1 &&
-            Math.Abs(move.Y) <= 1)
+        if (move.X is <= 1 and >= -1 &&
+            move.Y is <= 1 and >= -1)
         {
-            unitTile.KillWithMove(targetTile, board);
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
         }
-        else if (Math.Abs(move.X) <= 2 &&
-                 Math.Abs(move.Y) <= 2)
+        else if (move.X is <= 2 and >= -2 &&
+                 move.Y is <= 2 and >= -2)
         {
-            var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.RelativePosition;
+            var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
+            var sourcePosition = action.SourcePosition;
             
-            unitTile.KillWithMove(board[sourcePosition + smallMove], board);
-            unitTile = board[sourcePosition + smallMove];
-            if (!unitTile.Figure.Type.Equals(this))
+            board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
+            var figure = board[(sourcePosition + smallMove).GetIndex()];
+            if (figure.FigureType != FigureType.Blade)
                 return;
            
-            unitTile.KillWithMove(targetTile, board); 
+            board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);
         }
     }
 }

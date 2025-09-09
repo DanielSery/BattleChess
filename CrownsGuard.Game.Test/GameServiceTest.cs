@@ -392,7 +392,7 @@ public class GameServiceTest
         playerInfo.SetupGet(x => x.Player).Returns(player);
         if (hasKing)
         {
-            playerInfo.Setup(x => x.Figures).Returns([new Figure(playerInfo.Object, NoneFigureType.Instance, true)]);
+            playerInfo.Setup(x => x.Figures).Returns([new FigureInfo(playerInfo.Object, NoneFigureType.Instance, true)]);
         }
         else
         {

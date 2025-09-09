@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,42 +10,34 @@ public class Explosives : ICrownsGuardFigureType
 {
     public int FigureValue => 1;
 
-    public int FigureId => (int)CrownsGuardFigureIds.ExplosivesId;
-    
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
             { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{GetType().Name}.png", UriKind.Absolute) },
         };
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
         return [];
     }
 
-    public void OnBeingAttacked(ITile unitTile, ITile attackingTile, IBoard board)
+    public static void OnAttacked(BoardEvent boardEvent, Figure[] board, Action<BoardEvent, Figure[]> onEvent)
     {
-        SilentDie(board, unitTile.RelativePosition + new Position(-1, -1));
-        SilentDie(board, unitTile.RelativePosition + new Position(-1, 0));
-        SilentDie(board, unitTile.RelativePosition + new Position(-1, 1));
-        SilentDie(board, unitTile.RelativePosition + new Position(0, -1));
-        SilentDie(board, unitTile.RelativePosition + new Position(0, 1));
-        SilentDie(board, unitTile.RelativePosition + new Position(1, -1));
-        SilentDie(board, unitTile.RelativePosition + new Position(1, 0));
-        SilentDie(board, unitTile.RelativePosition + new Position(1, 1));
+        TryDie(board, boardEvent.Position + new Position(-1, -1), onEvent);
+        TryDie(board,boardEvent.Position + new Position(-1, 0), onEvent);
+        TryDie(board,boardEvent.Position + new Position(-1, 1), onEvent);
+        TryDie(board,boardEvent.Position + new Position(0, -1), onEvent);
+        TryDie(board,boardEvent.Position + new Position(0, 1), onEvent);
+        TryDie(board,boardEvent.Position + new Position(1, -1), onEvent);
+        TryDie(board,boardEvent.Position + new Position(1, 0), onEvent);
+        TryDie(board,boardEvent.Position + new Position(1, 1), onEvent);
     }
 
-    public void OnKilled(ITile unitTile, ITile attackingTile, IBoard board)
+    private static void TryDie(Figure[] board, Position position, Action<BoardEvent, Figure[]> onEvent)
     {
-        unitTile.Die(board);
-    }
-
-    private static void SilentDie(IBoard board, Position position)
-    {
-        if (!board.TryGetTile(position, out var tile))
+        if (!board.TryGetFigure(position, out Figure _))
             return;
-
-        tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Empty, false);
+        
+        board.Die(position, onEvent);
     }
 }

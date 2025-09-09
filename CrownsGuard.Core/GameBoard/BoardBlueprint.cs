@@ -1,5 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Players;
+﻿using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 
 namespace CrownsGuard.Core.GameBoard;
 
@@ -9,27 +9,27 @@ public class BoardBlueprint
     public static readonly BoardBlueprint ChessTeam = new()
     {
         Figures = [
-            new(Player.White, 22, false),
-            new(Player.White, 22, false),
-            new(Player.White, 22, false),
-            new(Player.White, 22, false),
-            new(Player.White, 22, false),
-            new(Player.White, 22, false),
-            new(Player.White, 22, false),
-            new(Player.White, 22, false),
+            new(Player.White, false, FigureType.LegionarySword),
+            new(Player.White, false, FigureType.LegionarySword),
+            new(Player.White, false, FigureType.LegionarySword),
+            new(Player.White, false, FigureType.LegionarySword),
+            new(Player.White, false, FigureType.LegionarySword),
+            new(Player.White, false, FigureType.LegionarySword),
+            new(Player.White, false, FigureType.LegionarySword),
+            new(Player.White, false, FigureType.LegionarySword),
             
-            new(Player.White, 16, false),
-            new(Player.White, 25, false),
-            new(Player.White, 15, false),
-            new(Player.White, 23, true),
-            new(Player.White, 24, false),
-            new(Player.White, 15, false),
-            new(Player.White, 25, false),
-            new(Player.White, 16, false)
+            new(Player.White, false, FigureType.MountedKnight),
+            new(Player.White, false, FigureType.Whiplash),
+            new(Player.White, false, FigureType.CamelRider),
+            new(Player.White, true, FigureType.King),
+            new(Player.White, false, FigureType.Queen),
+            new(Player.White, false, FigureType.CamelRider),
+            new(Player.White, false, FigureType.Whiplash),
+            new(Player.White, false, FigureType.MountedKnight),
         ],
         StartingPlayer = Player.White
     };
     
     public Player StartingPlayer { get; init; } = Player.White;
-    public FigureBlueprint[] Figures { get; init; } = [];
+    public Figure[] Figures { get; init; } = [];
 }

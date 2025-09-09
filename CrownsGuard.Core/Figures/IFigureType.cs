@@ -2,17 +2,12 @@
 
 namespace CrownsGuard.Core.Figures;
 
-public interface IFigureType : IEquatable<IFigureType>
+public interface IFigureType
 {
     /// <summary>
     /// Gets figure value.
     /// </summary>
     int FigureValue { get; }
-    
-    /// <summary>
-    /// Gets figure id.
-    /// </summary>
-    int FigureId { get; }
     
     /// <summary>
     ///     Name shown in menus and helps
@@ -43,57 +38,4 @@ public interface IFigureType : IEquatable<IFigureType>
     ///     Images of player with id
     /// </summary>
     IDictionary<int, Uri> ImageUris { get; }
-
-    /// <summary>
-    ///     Default equality comparison is based on unique unit name.
-    /// </summary>
-    bool IEquatable<IFigureType>.Equals(IFigureType? other)
-    {
-        return FigureId == other?.FigureId;
-    }
-
-    /// <summary>
-    ///     Gets possible action on tile.
-    /// </summary>
-    IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board);
-
-    void OnAttacking(ITile unitTile, ITile targetTile, IBoard board)
-    {
-    }
-
-    void OnAttacked(ITile unitTile, ITile targetTile, IBoard board)
-    {
-    }
-
-    void OnBeingAttacked(ITile tile, ITile attackingTile, IBoard board)
-    {
-    }
-
-    void OnKilled(ITile tile, ITile attackingTile, IBoard board)
-    {
-    }
-
-    void OnDying(ITile tile, IBoard board)
-    {
-    }
-    
-    void OnDied(ITile unitTile, IBoard board)
-    {
-        unitTile.OnDied();
-    }
-
-    void OnMoving(ITile from, ITile to, IBoard board)
-    {
-    }
-
-    void OnMoved(ITile from, ITile to, IBoard board)
-    {
-        from.OnMovedFrom();
-        to.OnMovedTo();
-    }
-
-    void OnCreated(ITile tile, IBoard board)
-    {
-        tile.OnCreated();
-    }
 }

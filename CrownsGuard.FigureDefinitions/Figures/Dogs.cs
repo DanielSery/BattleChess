@@ -1,5 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -8,33 +8,54 @@ public class Dogs : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
 
-    public int FigureId => (int)CrownsGuardFigureIds.DogsId;
-    
-    private static readonly Position[] Directions =
-    [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
-    ];
-
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        foreach (var targetTile in Directions.GetRelativeTiles(board, unitTile))
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        foreach (var relative in PositionsGroups.QueenDirections)
         {
-            if (unitTile.CanMoveTo(targetTile))
-                yield return unitTile.CreateMoveAction(targetTile, board);
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            
+            if (targetFigure.IsWalkable())
+                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
         }
         
-        foreach (var direction in Directions)
+        foreach (var relative in PositionsGroups.QueenDirections)
         {
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 7, board, unitTile))
+            for (var i = 1; i < 8; i++)
             {
-                if (unitTile.CanAttack(targetTile))
-                    yield return unitTile.CreateKillWithMove(targetTile, board);
+                var targetPosition = sourcePosition + relative * i;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
 
-                if (!unitTile.CanMoveTo(targetTile))
+                if (sourceFigure.CanAttack(targetFigure))
+                {
+                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+                }
+
+                if (!targetFigure.IsWalkable())
+                {
                     break;
+                }
             }
+        }
+        
+        return actions.ToArrayPool(actionsCount);
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        switch (action.FigureActionType)
+        {
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Attack:
+                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
         }
     }
 }

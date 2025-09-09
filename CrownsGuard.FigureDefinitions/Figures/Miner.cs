@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,13 +10,24 @@ public class Miner : ICrownsGuardFigureType
 {
     public int FigureValue => 3;
 
-    public int FigureId => (int)CrownsGuardFigureIds.MinerId;
-
     private static readonly Position[] Directions =
     [
         new(0, -1), new(0, 1),
         new(-1, 0), new(1, 0)
     ];
+
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    {
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        return actions.ToArrayPool(actionsCount);
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        
+    }
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
@@ -51,7 +63,7 @@ public class Miner : ICrownsGuardFigureType
                 continue;
             }
             
-            createdTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Trench, false), board);
+            createdTile.CreateFigure(new FigureInfo(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Trench, false), board);
         }
     }
 }

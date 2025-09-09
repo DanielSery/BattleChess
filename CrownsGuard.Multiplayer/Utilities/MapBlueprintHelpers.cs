@@ -12,7 +12,7 @@ public static class MapBlueprintHelpers
         {
             var index = i * 2;
             myMapData[index] = (byte)(map.Figures[i].Player.ToInt() + (map.Figures[i].IsKing ? 128 : 0));
-            myMapData[index + 1] = (byte)(map.Figures[i].FigureId);
+            myMapData[index + 1] = (byte)(map.Figures[i].FigureType);
         }
 
         return myMapData;

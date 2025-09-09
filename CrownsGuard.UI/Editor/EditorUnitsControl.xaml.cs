@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;
@@ -53,7 +54,7 @@ public partial class EditorUnitsControl
         if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
         {
             var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
-            teamBoard.CreateFigure(sourceTile, new FigureBlueprint(0, (int)CrownsGuardFigureIds.EmptyId, false));
+            teamBoard.CreateFigure(sourceTile, new FigureBlueprint(0, (int)FigureType.EmptyId, false));
         }
     }
 

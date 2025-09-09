@@ -55,7 +55,7 @@ internal class BoardLoader : IBoardLoader
             var whitePosition = Position.FromIndex(i + 64 - 16);
             board[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
             
-            var blackFigure = new FigureBlueprint(Player.Black, whiteFigure.FigureId, whiteFigure.IsKing);
+            var blackFigure = new FigureBlueprint(Player.Black, whiteFigure.FigureType, whiteFigure.IsKing);
             var blackPosition = new Position(whitePosition.X, 7 - whitePosition.Y);
             board[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
         }

@@ -6,13 +6,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 internal interface ICrownsGuardFigureType : IFigureType
 {
-    protected static readonly Position[] NeighbourPositions =
-    [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
-    ];
-
     string IFigureType.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(DisplayName)}"];
     string IFigureType.BaseDescription => string.Format(CurrentLocalization.Instance[$"{GetType().Name}_{nameof(BaseDescription)}"], FigureValue);
     string IFigureType.MovementDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(MovementDescription)}"];

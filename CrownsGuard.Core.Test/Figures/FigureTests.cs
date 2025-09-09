@@ -12,7 +12,7 @@ public class FigureTests
     public void NoneFigureType_FigureIsValid()
     {
         var player = GetFigureOwner(Player.Neutral);
-        _ = new Figure(player, NoneFigureType.Instance, false);
+        _ = new FigureInfo(player, NoneFigureType.Instance, false);
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public class FigureTests
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().Throw<ArgumentException>();
     }
@@ -39,7 +39,7 @@ public class FigureTests
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().NotThrow();
     }
@@ -54,7 +54,7 @@ public class FigureTests
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().Throw<ArgumentException>();
     }
@@ -68,7 +68,7 @@ public class FigureTests
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().NotThrow();
     }
@@ -83,7 +83,7 @@ public class FigureTests
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().Throw<ArgumentException>();
     }
@@ -97,7 +97,7 @@ public class FigureTests
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new Figure(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().NotThrow();
     }
@@ -112,7 +112,7 @@ public class FigureTests
         });
         figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
 
-        var figure = new Figure(player, figureTypeMock.Object, false);
+        var figure = new FigureInfo(player, figureTypeMock.Object, false);
 
         figure.DisplayName.Should().Be("Test");
     }
@@ -127,7 +127,7 @@ public class FigureTests
         });
         figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
 
-        var figure = new Figure(player, figureTypeMock.Object, false);
+        var figure = new FigureInfo(player, figureTypeMock.Object, false);
 
         figure.ImageUri.Should().Be(new Uri("component/Images/test.png", UriKind.Relative));
     }
@@ -142,7 +142,7 @@ public class FigureTests
         });
         figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
 
-        var figure = new Figure(player, figureTypeMock.Object, false);
+        var figure = new FigureInfo(player, figureTypeMock.Object, false);
         figure.GetPossibleActions(Mock.Of<ITile>(), Mock.Of<IBoard>());
 
         figureTypeMock.Verify(x => x.GetPossibleActions(It.IsAny<ITile>(), It.IsAny<IBoard>()), Times.Once);

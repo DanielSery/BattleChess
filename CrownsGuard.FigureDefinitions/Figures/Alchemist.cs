@@ -1,7 +1,6 @@
 ﻿
-using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -10,56 +9,48 @@ public class Alchemist : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
 
-    public int FigureId => (int)CrownsGuardFigureIds.AlchemistId;
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        foreach (var movement in ICrownsGuardFigureType.NeighbourPositions)
+        Span<FigureAction> actions = stackalloc FigureAction[8];
+        var actionsCount = 0;
+        
+        foreach (var relative in PositionsGroups.QueenDirections)
         {
-            if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
-                continue;
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out Figure targetFigure)) continue;
             
-            if (targetTile.IsEmpty())
+            if (targetFigure.IsWalkable() ||
+                targetFigure.FigureType == FigureType.Explosives)
             {
-                yield return new FigureAction(
-                    FigureActionTypes.Move, 
-                    targetTile.AbsolutePosition,
-                    () =>
-                    {
-                        CreateExplosive(unitTile, movement, board);
-                        unitTile.MoveToTile(targetTile, board);
-                    });
+                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
             }
+        }
 
-            if (targetTile.Figure.Type is Explosives)
-            {
-                yield return new FigureAction(
-                    FigureActionTypes.Move,
-                    targetTile.AbsolutePosition,
-                    () =>
-                    {
-                        targetTile.Die(board);
-                        CreateExplosive(unitTile, movement, board);
-                        unitTile.MoveToTile(targetTile, board);
-                    });
-            }
+        return actions.ToArrayPool(actionsCount);
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        switch (action.FigureActionType)
+        {
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                CreateExplosive(action.SourcePosition, action.TargetPosition - action.SourcePosition, board, onEvent);
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
         }
     }
 
-    private static void CreateExplosive(ITile sourceTile, Position move, IBoard board)
+    private static void CreateExplosive(Position sourcePosition, Position move, Figure[] board, Action<BoardEvent, Figure[]> onEvent)
     {
-        var movedPosition = move * 2;
-        {
-            if (!board.HasTileOnPosition(sourceTile.RelativePosition + movedPosition))
-            {
-                return;
-            }
+        var targetPosition = sourcePosition + move * 2;
+        if (!board.TryGetFigure(targetPosition, out var targetFigure)) return;
 
-            var shieldTile = board[sourceTile.RelativePosition + movedPosition];
-            if (shieldTile.IsEmpty())
-            {
-                shieldTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Explosives, false), board);
-            }
+        if (targetFigure.IsEmpty())
+        {
+            var sourceFigure = board[sourcePosition.GetIndex()];
+            board.CreateFigure(targetPosition, new Figure(sourceFigure.Player, false, FigureType.Explosives), onEvent);
         }
     }
 }

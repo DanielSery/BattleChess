@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,33 +10,55 @@ public class Builder : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
 
-    public int FigureId => (int)CrownsGuardFigureIds.BuilderId;
-    
-    private static readonly Position[] MovePosition =
-    [
-        new(-1, -1), new(1, -1), new(1, 1), new(-1, 1)
-    ];
-    
-    private static readonly Position[] ShieldPositions =
-    [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
-    ];
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        foreach (var targetTile in MovePosition.GetRelativeTiles(board, unitTile))
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        foreach (var relative in PositionsGroups.BishopDirections)
         {
-            if (unitTile.CanMoveTo(targetTile))
-                yield return unitTile.CreateMoveAction(targetTile, board);
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out Figure targetFigure)) continue;
+
+            if (targetFigure.IsWalkable())
+            {
+                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+            }
         }
-
-        foreach (var targetTile in ShieldPositions.GetRelativeTiles(board, unitTile))
+        
+        foreach (var relative in PositionsGroups.RookDirections)
         {
-            if (targetTile.IsEmpty())
-                yield return unitTile.CreateNewFigureAction(targetTile, NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Wall, board);
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out Figure targetFigure)) continue;
 
-            if (targetTile.Figure.Type is Wall)
-                yield return unitTile.CreateKillWithoutMove(targetTile, board);
+            if (targetFigure.IsEmpty())
+            {
+                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Special, sourcePosition, targetPosition);
+            }
+            else if (targetFigure.FigureType == FigureType.Wall)
+            {
+                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+            }
+        }
+        
+        return actions.ToArrayPool(actionsCount);
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        switch (action.FigureActionType)
+        {
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Attack:
+                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Special:
+                board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureType.Wall), onEvent);
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
         }
     }
 }

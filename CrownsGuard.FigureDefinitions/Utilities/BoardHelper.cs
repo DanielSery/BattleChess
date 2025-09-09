@@ -1,42 +1,46 @@
-﻿using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
 
 internal static class BoardHelper
 {
-    public static IEnumerable<ITile> GetRelativeTiles(this IEnumerable<Position> positions, IBoard board, ITile tile)
+    public static bool IsWalkableTile(this Figure[] board, Position position)
     {
-        foreach (var position in positions)
+        var index = position.GetIndex();
+        if (index < 0 || index >= board.Length || 
+            position.X is < 0 or >= Constants.BoardLength)
         {
-            if (board.TryGetRelativeTile(tile, position, out var resultTile))
-            {
-                yield return resultTile;
-            }
+            return false;
         }
+
+        return board[index].IsWalkable();
     }
     
-    public static IEnumerable<ITile> GetRelativeDirectionTiles(this Position direction, int fromInclusive, int toInclusive, IBoard board, ITile tile)
+    public static bool IsEmptyTile(this Figure[] board, Position position)
     {
-        for (var i = fromInclusive; i <= toInclusive; i++)
+        var index = position.GetIndex();
+        if (index < 0 || index >= board.Length || 
+            position.X is < 0 or >= Constants.BoardLength)
         {
-            if (!board.TryGetRelativeTile(tile, direction * i, out var targetTile))
-                break;
-            
-            yield return targetTile;
+            return false;
         }
+
+        return board[index].IsEmpty();
     }
 
-    public static bool TryGetRelativeTile(this IBoard board, ITile fromTile, Position relativePosition, out ITile tile)
+    public static bool TryGetFigure(this Figure[] board, Position position, out Figure tile)
     {
-        var targetPosition = fromTile.RelativePosition + relativePosition;
-        return board.TryGetTile(targetPosition, out tile);
-    }
+        var index = position.GetIndex();
+        if (index < 0 || index >= board.Length || 
+            position.X is < 0 or >= Constants.BoardLength)
+        {
+            tile = new Figure();
+            return false;
+        }
 
-    public static bool TryGetRelativeDirectionTile(this IBoard board, ITile fromTile, Position direction, int index,
-        out ITile tile)
-    {
-        var targetPosition = fromTile.RelativePosition + direction * index;
-        return board.TryGetTile(targetPosition, out tile);
+        tile = board[index];
+        return true;
     }
-
 }

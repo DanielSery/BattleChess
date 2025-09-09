@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -8,60 +9,58 @@ public class Cannon : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
 
-    public int FigureId => (int)CrownsGuardFigureIds.CannonId;
-    
     private static readonly Position[] AttackPositions =
     [
         new(0, 2), new(0, 3), new(0, 4),
     ];
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var relative in PositionsGroups.QueenDirections)
         {
-            if (unitTile.IsEnemyTo(neighbourTile))
-                yield break;
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            
+            if (sourceFigure.IsEnemyTo(targetFigure))
+                return [];
         }
         
-        if (TryGetAttackAction(unitTile, board, new Position(0, 2), out var attack1Action))
-        {
-            yield return attack1Action;
-        }
+        Span<FigureAction> actions = stackalloc FigureAction[3];
+        int actionsCount = 0;
         
-        if (TryGetAttackAction(unitTile, board, new Position(0, 3), out var attack2Action))
-        {
-            yield return attack2Action;
-        }
+        if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack1Figure) &&
+             sourceFigure.IsEnemyTo(attack1Figure))
+            actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 2));
         
-        if (TryGetAttackAction(unitTile, board, new Position(0, 4), out var attack3Action))
-        {
-            yield return attack3Action;
-        }
+        if (!board.TryGetFigure(sourcePosition + new Position(0, 3), out var attack2Figure) &&
+            sourceFigure.IsEnemyTo(attack2Figure))
+            actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 3));
+        
+        if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack3Figure) &&
+            sourceFigure.IsEnemyTo(attack3Figure))
+            actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 4));
+        
+        return actions.ToArrayPool(actionsCount);
     }
 
-    private bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        if (!board.TryGetRelativeTile(unitTile, relativePosition, out var targetTile) ||
-            targetTile.IsEmpty())
+        switch (action.FigureActionType)
         {
-            action = FigureAction.None;
-            return false;
-        }
-
-        action = new FigureAction(
-            FigureActionTypes.Attack,
-            targetTile.AbsolutePosition,
-            () =>
-            {
+            case FigureActionType.Attack:
                 foreach (var attackPosition in AttackPositions)
                 {
-                    if (board.TryGetRelativeTile(unitTile, attackPosition, out var tile) &&
-                        !tile.IsEmpty())
+                    var targetPosition = action.SourcePosition + attackPosition;
+                    if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+                    if (!targetFigure.IsEmpty())
                     {
-                        unitTile.KillWithoutMove(tile, board);
+                        board.KillWithoutMove(action.SourcePosition, targetPosition, onEvent);
                     }
                 }
-            });
-        return true;
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+        }
     }
 }

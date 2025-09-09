@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -8,8 +9,6 @@ public class Fire : ICrownsGuardFigureType
 {
     public int FigureValue => 0;
 
-    public int FigureId => (int)CrownsGuardFigureIds.FireId;
-    
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
@@ -20,12 +19,15 @@ public class Fire : ICrownsGuardFigureType
     {
         return [];
     }
-    
-    public void OnDied(ITile unitTile, IBoard board)
+
+    public static void OnDied(BoardEvent boardEvent, Figure[] board, Action<BoardEvent, Figure[]> onEvent)
     {
-        if (unitTile.Figure.Type is Dragon)
+        if (!board.TryGetFigure(boardEvent.Position, out Figure figure))
+            return;
+
+        if (figure.FigureType == FigureType.Dragon)
             return;
         
-        unitTile.Die(board);
+        board.Die(boardEvent.Position, onEvent);
     }
 } 

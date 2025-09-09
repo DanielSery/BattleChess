@@ -1,5 +1,3 @@
-// Copyright (c) Veeam Software Group GmbH
-
 namespace CrownsGuard.Game.Timers;
 
 public interface IPlayerTimer
