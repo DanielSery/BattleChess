@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -8,7 +9,19 @@ public class LegionarySword : ICrownsGuardFigureType
 {
     public int FigureValue => 2;
 
-    public int FigureId => (int)CrownsGuardFigureIds.LegionarySwordId;
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    {
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        return actions.ToArrayPool(actionsCount);
+        
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        
+    }
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
@@ -56,7 +69,7 @@ public class LegionarySword : ICrownsGuardFigureType
                 () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new FigureInfo(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;
@@ -83,7 +96,7 @@ public class LegionarySword : ICrownsGuardFigureType
                 targetTile.AbsolutePosition,
                 () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new FigureInfo(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;

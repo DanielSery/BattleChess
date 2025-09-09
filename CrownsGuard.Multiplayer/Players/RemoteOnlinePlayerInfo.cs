@@ -1,5 +1,3 @@
-// Copyright (c) Veeam Software Group GmbH
-
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Game.Timers;
 using CrownsGuard.Multiplayer.Game;

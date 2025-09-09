@@ -167,6 +167,6 @@ public class BoardBlueprintServiceTest
 
         underTest.CurrentMap.Figures.Should().HaveCount(16);
         underTest.CurrentMap.Figures.Should().ContainSingle(x => x.IsKing);
-        underTest.CurrentMap.Figures.Select(x => x.FigureId).Should().BeInAscendingOrder();
+        underTest.CurrentMap.Figures.Select(x => x.FigureType).Should().BeInAscendingOrder();
     }
 }

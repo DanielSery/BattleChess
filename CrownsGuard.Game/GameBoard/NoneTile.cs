@@ -15,7 +15,7 @@ public class NoneTile : ITile
 
     public IFigure Figure
     {
-        get => CrownsGuard.Core.Figures.Figure.None;
+        get => CrownsGuard.Core.Figures.FigureInfo.None;
         set { }
     }
 

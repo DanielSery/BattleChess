@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Localization;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -7,8 +8,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Empty : IFigureType
 {
     public int FigureValue => 0;
-
-    public int FigureId => (int)CrownsGuardFigureIds.EmptyId;
     
     public string DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
     public string BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.BaseDescription)}"];
@@ -22,7 +21,7 @@ public class Empty : IFigureType
             { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{GetType().Name}.png", UriKind.Absolute) },
         };
 
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
         return [];
     }

@@ -10,11 +10,11 @@ namespace CrownsGuard.Game.Test.GameBoard;
 public class RelativeTileTest
 {
     private readonly ITile _tile;
-    private readonly Figure _figure;
+    private readonly FigureInfo _figure;
 
     public RelativeTileTest()
     {
-        _figure = new Figure(NeutralFigureOwner.Instance, NoneFigureType.Instance, false);
+        _figure = new FigureInfo(NeutralFigureOwner.Instance, NoneFigureType.Instance, false);
 
         var tileMock = new Mock<ITile>();
         tileMock.Setup(x => x.RelativePosition).Returns(new Position(1, 1));

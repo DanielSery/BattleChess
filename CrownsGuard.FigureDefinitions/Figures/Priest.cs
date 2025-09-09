@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,8 +10,6 @@ public class Priest : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
 
-    public int FigureId => (int)CrownsGuardFigureIds.PriestId;
-    
     private static readonly Position[] Directions =
     [
         new(-1, -1), new(-1, 1),
@@ -21,6 +20,19 @@ public class Priest : ICrownsGuardFigureType
     [
         new(1, 0), new(0, 1), new(-1, 0), new(0, -1)
     ];
+
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    {
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        return actions.ToArrayPool(actionsCount);
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        
+    }
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
@@ -56,7 +68,7 @@ public class Priest : ICrownsGuardFigureType
                     {
                         var figureType = targetTile.Figure.Type;
                         targetTile.Figure.Owner.Figures.Remove(targetTile.Figure);
-                        targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, figureType, false), board);
+                        targetTile.CreateFigure(new FigureInfo(unitTile.Figure.Owner, figureType, false), board);
                         MakeUnitKing(board, targetTile);
                     });
             }
@@ -79,11 +91,11 @@ public class Priest : ICrownsGuardFigureType
             
             var downgradedFigureBackup = checkedTile.Figure;
             checkedTile.Figure.Owner.Figures.Remove(checkedTile.Figure);
-            checkedTile.CreateFigure(new Figure(downgradedFigureBackup.Owner, downgradedFigureBackup.Type, false), board);
+            checkedTile.CreateFigure(new FigureInfo(downgradedFigureBackup.Owner, downgradedFigureBackup.Type, false), board);
         }
         
         var upgradedFigureBackup = targetTile.Figure;
         targetTile.Figure.Owner.Figures.Remove(targetTile.Figure);
-        targetTile.CreateFigure(new Figure(upgradedFigureBackup.Owner, upgradedFigureBackup.Type, true), board);
+        targetTile.CreateFigure(new FigureInfo(upgradedFigureBackup.Owner, upgradedFigureBackup.Type, true), board);
     }
 }

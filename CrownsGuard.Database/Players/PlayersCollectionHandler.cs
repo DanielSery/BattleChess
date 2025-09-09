@@ -1,5 +1,3 @@
-// Copyright (c) Veeam Software Group GmbH
-
 using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Utilities;
 using FluentResults;

@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -8,92 +9,91 @@ public class Elephant : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
 
-    public int FigureId => (int)CrownsGuardFigureIds.ElephantId;
-    
     private static readonly Position[] Directions =
     [
         new(0, 1), new(0, -1)
     ];
 
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        foreach (var direction in Directions)
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        foreach (var relative in Directions)
         {
             var isAttack = false;
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 3, board, unitTile))
+            for (var i = 1; i <= 3; i++)
             {
-                if (!isAttack && unitTile.CanMoveTo(targetTile))
+                var targetPosition = sourcePosition + relative * i;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+                if (!isAttack && targetFigure.IsWalkable())
                 {
-                    yield return new FigureAction(
-                        FigureActionTypes.Move, 
-                        targetTile.AbsolutePosition,
-                        () => AttackAction(unitTile, targetTile, board));
+                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
                 }
                 else
                 {
                     isAttack = true;
-                    yield return new FigureAction(
-                        FigureActionTypes.Attack, 
-                        targetTile.AbsolutePosition,
-                        () => AttackAction(unitTile, targetTile, board));
+                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
                 }
             }
         }
+        
+        return actions.ToArrayPool(actionsCount);
     }
 
-    private void AttackAction(ITile unitTile, ITile targetTile, IBoard board)
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        var move = targetTile.RelativePosition - unitTile.RelativePosition;
+        var targetPosition = action.TargetPosition;
+        var move = action.TargetPosition - action.SourcePosition;
 
-        if (Math.Abs(move.X) <= 1 &&
-            Math.Abs(move.Y) <= 1)
+        if (move.X is <= 1 and >= -1 &&
+            move.Y is <= 1 and >= -1)
         {
-            if (unitTile.CanMoveTo(targetTile))
-                unitTile.MoveToTile(targetTile, board);
-            else unitTile.KillWithMove(targetTile, board);
+            if (board[targetPosition.GetIndex()].IsWalkable())
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+            else board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
         }
-        else if (Math.Abs(move.X) <= 2 &&
-                 Math.Abs(move.Y) <= 2)
+        else if (move.X is <= 2 and >= -2 &&
+                 move.Y is <= 2 and >= -2)
         {
-            var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.RelativePosition;
-            var step1Tile = board[sourcePosition + smallMove];
-
-            if (unitTile.CanMoveTo(step1Tile))
-                unitTile.MoveToTile(step1Tile, board);
-            else unitTile.KillWithMove(step1Tile, board);
+            var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
             
-            if (!step1Tile.Figure.Type.Equals(this))
+            var step1Position = action.SourcePosition + smallMove;
+            if (board[step1Position.GetIndex()].IsWalkable())
+                board.MoveFigure(action.SourcePosition, step1Position, onEvent);
+            else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
+
+            if (board[step1Position.GetIndex()].FigureType != FigureType.Elephant)
                 return;
            
-            if (step1Tile.CanMoveTo(targetTile))
-                step1Tile.MoveToTile(targetTile, board);
-            else step1Tile.KillWithMove(targetTile, board);
+            if (board[targetPosition.GetIndex()].IsWalkable())
+                board.MoveFigure(step1Position, action.TargetPosition, onEvent);
+            else board.KillWithMove(step1Position, action.TargetPosition, onEvent);
         }
         else
         {
-            var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.RelativePosition;
+            var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
             
-            var step1Tile = board[sourcePosition + smallMove];
-            if (unitTile.CanMoveTo(step1Tile))
-                unitTile.MoveToTile(step1Tile, board);
-            else unitTile.KillWithMove(step1Tile, board);
+            var step1Position = action.SourcePosition + smallMove;
+            if (board[step1Position.GetIndex()].IsWalkable())
+                board.MoveFigure(action.SourcePosition, step1Position, onEvent);
+            else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
             
-            if (!step1Tile.Figure.Type.Equals(this))
+            if (board[step1Position.GetIndex()].FigureType != FigureType.Elephant)
                 return;
             
-            var step2Tile = board[sourcePosition + smallMove * 2];
-            if (step1Tile.CanMoveTo(step2Tile))
-                step1Tile.MoveToTile(step2Tile, board);
-            else step1Tile.KillWithMove(step2Tile, board);
+            var step2Position = action.SourcePosition + smallMove * 2;
+            if (board[step2Position.GetIndex()].IsWalkable())
+                board.MoveFigure(step1Position, step2Position, onEvent);
+            else board.KillWithMove(step1Position, step2Position, onEvent);
             
-            if (!step2Tile.Figure.Type.Equals(this))
+            if (board[step2Position.GetIndex()].FigureType != FigureType.Elephant)
                 return;
             
-            if (step2Tile.CanMoveTo(targetTile))
-                step2Tile.MoveToTile(targetTile, board);
-            else step2Tile.KillWithMove(targetTile, board);
+            if (board[targetPosition.GetIndex()].IsWalkable())
+                board.MoveFigure(step2Position, action.TargetPosition, onEvent);
+            else board.KillWithMove(step2Position, action.TargetPosition, onEvent);
         }
     }
 }

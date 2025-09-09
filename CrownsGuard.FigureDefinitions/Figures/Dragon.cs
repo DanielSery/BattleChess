@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,69 +10,86 @@ public class Dragon : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
 
-    public int FigureId => (int)CrownsGuardFigureIds.DragonId;
-    
-    private static readonly Position[] MovePositions =
-    [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
-    ];
-    
     private static readonly Position[] FireDirections =
     [
         new(-1, -1), new(-1, 1),
         new(1, -1), new(1, 1)
     ];
 
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
-        {
-            if (unitTile.CanMoveTo(targetTile))
-                yield return unitTile.CreateMoveAction(targetTile, board);
-        }
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
         
-        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var relative in PositionsGroups.RookDirections)
         {
-            if (unitTile.IsEnemyTo(neighbourTile))
-                yield break;
-        }
-        
-        foreach (var direction in FireDirections)
-        {
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 2, board, unitTile))
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (targetFigure.IsWalkable())
             {
-                if (targetTile.IsEmpty())
+                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+            }
+        }
+
+        var currentFigure = board[sourcePosition.GetIndex()];
+        foreach (var relative in PositionsGroups.QueenDirections)
+        {
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (currentFigure.IsEnemyTo(targetFigure))
+            {
+                return actions.ToArrayPool(actionsCount);
+            }
+        }
+        
+        foreach (var direction in PositionsGroups.BishopDirections)
+        {
+            for (var i = 1; i <= 2; i++)
+            {
+                var targetPosition = sourcePosition + direction * i;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+
+                if (targetFigure.IsEmpty())
                 {
-                    yield return new FigureAction(
-                        FigureActionTypes.Special, 
-                        targetTile.AbsolutePosition,
-                        () => FireAction(unitTile, targetTile, board));
+                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Special, sourcePosition, targetPosition);
                 }
-                else 
+                else
                 {
                     break;
                 }
             }
         }
+        
+        return actions.ToArrayPool(actionsCount);
     }
 
-    private void FireAction(ITile unitTile, ITile targetTile, IBoard board)
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        var move = targetTile.RelativePosition - unitTile.RelativePosition;
-
-        if (Math.Abs(move.X) <= 1 &&
-            Math.Abs(move.Y) <= 1)
+        switch (action.FigureActionType)
         {
-            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Fire, false), board);
-        }
-        else if (Math.Abs(move.X) <= 2 &&
-                 Math.Abs(move.Y) <= 2)
-        {
-            var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
-            var sourcePosition = unitTile.RelativePosition;
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Special:
+                var move = action.TargetPosition - action.SourcePosition;
+                if (move.X is <= 1 and >= -1 &&
+                    move.Y is <= 1 and >= -1)
+                {
+                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureType.Fire), onEvent);
+                }
+                else if (move.X is <= 2 and >= -2 &&
+                         move.Y is <= 2 and >= -2)
+                {
+                    var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
             
-            board[sourcePosition + smallMove].CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Fire, false), board);
-            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Fire, false), board);
+                    board.CreateFigure(action.SourcePosition + smallMove, new Figure(Player.Neutral, false, FigureType.Fire), onEvent);
+                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureType.Fire), onEvent);
+                }
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
         }
     }
 }

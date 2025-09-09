@@ -1,129 +1,127 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using System.Runtime.CompilerServices;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.Core.SimulatedBoard;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
 
 internal static class FiguresHelper
 {
-    public static bool CanMoveTo(this ITile yourTile, ITile targetTile)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsEmpty(this Figure checkedFigure)
     {
-        return targetTile.IsEmpty() || targetTile.IsFire();
-    }
-
-    public static bool CanAttack(this ITile yourTile, ITile targetTile)
-    {
-        if (targetTile.Figure.Owner.Equals(yourTile.Figure.Owner))
-            return false;
-
-        return !targetTile.IsEmpty() &&
-               !targetTile.IsWall() &&
-               !targetTile.IsFire();
-    }
-
-    public static bool IsWall(this ITile tile)
-    {
-        return tile.Figure.Type is Wall;
-    }
-
-    public static bool IsFire(this ITile tile)
-    {
-        return tile.Figure.Type is Fire;
+        return checkedFigure.FigureType == FigureType.Empty;
     }
     
-    public static bool IsEmpty(this ITile tile)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsWalkable(this Figure checkedFigure)
     {
-        return tile.Figure.Type is Empty;
+        return checkedFigure.FigureType <= FigureType.LastWalkableFigure;
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool CanAttack(this Figure yoursFigure, Figure checkedFigure)
+    {
+        return yoursFigure.Player != checkedFigure.Player &&
+               checkedFigure.FigureType > FigureType.LastNonAttackableFigure;
     }
 
-    public static bool IsAllyTo(this ITile yoursTile, ITile checkedTile)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsAllyTo(this Figure yoursFigure, Figure checkedFigure)
     {
-        return checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner);
+        return yoursFigure.Player == checkedFigure.Player;
     }
 
-    public static bool IsEnemyTo(this ITile yoursTile, ITile checkedTile)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsEnemyTo(this Figure yoursFigure, Figure checkedFigure)
     {
-        return !checkedTile.Figure.Owner.Equals(yoursTile.Figure.Owner) &&
-               !checkedTile.Figure.Owner.Equals(NeutralFigureOwner.Instance);
+        return yoursFigure.Player != checkedFigure.Player &&
+               checkedFigure.Player != Player.Neutral;
     }
 
-    public static void CreateFigure(this ITile tile, IFigure createdFigure, IBoard board)
+    public static void CreateFigure(this Figure[] board, Position position, Figure createdFigure, Action<BoardEvent, Figure[]> onEvent)
     {
-        tile.Figure = createdFigure;
-        tile.Figure.Owner.Figures.Add(tile.Figure);
-        tile.Figure.Type.OnCreated(tile, board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Creating, position), board);
+        board[position.GetIndex()] = createdFigure;
+        onEvent.Invoke(new BoardEvent(BoardEventType.Created, position), board);
     }
 
-    public static void Die(this ITile tile, IBoard board)
+    public static void Die(this Figure[] board, Position toPosition, Action<BoardEvent, Figure[]> onEvent)
     {
-        var figureType = tile.Figure.Type;
-        figureType.OnDying(tile, board); 
-        tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Empty, false);
-        figureType.OnDied(tile, board);
+        var toIndex = toPosition.GetIndex();
+        
+        onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
+        board[toIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition), board);
     }
 
-    public static void SwapWithTile(this ITile from, ITile to, IBoard board)
+    public static void SwapTiles(this Figure[] board, Position fromPosition, Position toPosition, Action<BoardEvent, Figure[]> onEvent)
     {
-        var movingFigure = from.Figure.Type;
-        var targetFigure = to.Figure.Type;
-
-        movingFigure.OnMoving(from, to, board);
-        targetFigure.OnMoving(to, from, board);
-
-        (to.Figure, from.Figure) = (from.Figure, to.Figure);
-
-        movingFigure.OnMoved(from, to, board);
-        targetFigure.OnMoved(to, from, board);
+        var fromIndex = fromPosition.GetIndex();
+        var toIndex = toPosition.GetIndex();
+        
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moving, fromPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moving, toPosition), board);
+        
+        (board[toIndex], board[fromIndex]) = (board[fromIndex], board[toIndex]);
+        
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moved, fromPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moved, toPosition), board);
     }
 
-    public static void MoveToTile(this ITile from, ITile to, IBoard board)
+    public static void MoveFigure(this Figure[] board, Position fromPosition, Position toPosition, Action<BoardEvent, Figure[]> onEvent)
     {
-        var movingFigure = from.Figure.Type; 
-        movingFigure.OnMoving(from, to, board);
+        var fromIndex = fromPosition.GetIndex();
+        var toIndex = toPosition.GetIndex();
         
-        to.Figure.Owner.Figures.Remove(to.Figure);
-        to.Figure = from.Figure;
-        from.Figure = new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Empty, false);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moving, fromPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
         
-        movingFigure.OnMoved(from, to, board);
+        board[toIndex] = board[fromIndex];
+        board[fromIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
+        
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moved, toPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition), board);
     }
 
-    public static void KillWithoutMove(this ITile from, ITile to, IBoard board)
+    public static void KillWithoutMove(this Figure[] board, Position fromPosition, Position toPosition, Action<BoardEvent, Figure[]> onEvent)
     {
-        var attackingFigure = from.Figure.Type; 
-        var killedFigure = to.Figure.Type;
+        var toIndex = toPosition.GetIndex();
         
-        attackingFigure.OnAttacking(from, to, board);
-        killedFigure.OnDying(to, board);
-        killedFigure.OnBeingAttacked(to, from, board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Attacking, fromPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
+
+        board[toIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
         
-        to.Figure.Owner.Figures.Remove(to.Figure);
-        to.Figure = new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Empty, false);
-        
-        killedFigure.OnDied(to, board);
-        killedFigure.OnKilled(to, from, board);
-        attackingFigure.OnAttacked(from, to, board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Attacked, fromPosition), board);
     }
 
-    public static void KillWithMove(this ITile from, ITile to, IBoard board)
+    public static void KillWithMove(this Figure[] board, Position fromPosition, Position toPosition, Action<BoardEvent, Figure[]> onEvent)
     {
-        var attackingFigure = from.Figure.Type; 
-        var killedFigure = to.Figure.Type;
+        var fromIndex = fromPosition.GetIndex();
+        var toIndex = toPosition.GetIndex();
         
-        attackingFigure.OnMoving(from, to, board);
-        attackingFigure.OnAttacking(from, to, board);
-        killedFigure.OnDying(to, board);
-        killedFigure.OnBeingAttacked(to, from, board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moving, fromPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Attacking, fromPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
+
+        board[toIndex] = board[fromIndex];
+        board[fromIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
         
-        to.Figure.Owner.Figures.Remove(to.Figure);
-        to.Figure = from.Figure;
-        from.Figure = new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Empty, false);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Moving, toPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Attacked, fromPosition), board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition), board);
+    }
+
+    public static void ChangeOwner(this Figure[] board, Position fromPosition, Position toPosition, Action<BoardEvent, Figure[]> onEvent)
+    {
+        var fromIndex = fromPosition.GetIndex();
+        var toIndex = toPosition.GetIndex();
         
-        attackingFigure.OnMoved(from, to, board);
-        killedFigure.OnDied(to, board);
-        killedFigure.OnKilled(to, from, board);
-        attackingFigure.OnAttacked(from, to, board);
+        onEvent.Invoke(new BoardEvent(BoardEventType.ChangingOwner, fromPosition), board);
+        var sourceFigure = board[fromIndex];
+        board[toIndex] = new Figure(sourceFigure.Player, false, sourceFigure.FigureType);
+        onEvent.Invoke(new BoardEvent(BoardEventType.ChangedOwner, fromPosition), board);
     }
 }

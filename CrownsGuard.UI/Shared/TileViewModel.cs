@@ -10,7 +10,7 @@ public class TileViewModel : ViewModelBase, ITile
 {
     public static readonly TileViewModel None = new(new Position(-1, -1));
 
-    private IFigure _figure = Core.Figures.Figure.None;
+    private IFigure _figure = Core.Figures.FigureInfo.None;
 
     private bool _isMouseOver;
     private bool _isPossibleAttack;

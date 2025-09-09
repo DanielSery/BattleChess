@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -8,7 +9,18 @@ public class LegionaryPike : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
 
-    public int FigureId => (int)CrownsGuardFigureIds.LegionaryPikeId;
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    {
+        Span<FigureAction> actions = stackalloc FigureAction[36];
+        int actionsCount = 0;
+        
+        return actions.ToArrayPool(actionsCount);
+    }
+
+    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    {
+        
+    }
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
@@ -67,7 +79,7 @@ public class LegionaryPike : ICrownsGuardFigureType
                 unitTile.KillWithoutMove(targetTile, board);
                 var owner = unitTile.Figure.Owner;
                 unitTile.Die(board);
-                unitTile.CreateFigure(new Figure(owner, CrownsGuardFigureGroup.LegionarySword, false), board);
+                unitTile.CreateFigure(new FigureInfo(owner, CrownsGuardFigureGroup.LegionarySword, false), board);
             });
         return true;
     }
@@ -91,7 +103,7 @@ public class LegionaryPike : ICrownsGuardFigureType
                 () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new FigureInfo(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;
@@ -119,7 +131,7 @@ public class LegionaryPike : ICrownsGuardFigureType
                 targetTile.AbsolutePosition,
                 () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new FigureInfo(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;
