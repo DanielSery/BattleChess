@@ -53,7 +53,7 @@ public partial class EditorUnitsControl
         if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
         {
             var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
-            teamBoard.CreateFigure(sourceTile, new FigureBlueprint(0, CrossFireFigureIds.EmptyId, false));
+            teamBoard.CreateFigure(sourceTile, new FigureBlueprint(0, (int)CrownsGuardFigureIds.EmptyId, false));
         }
     }
 

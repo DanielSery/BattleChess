@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Whiplash : ICrossFireFigureType
+public class Whiplash : ICrownsGuardFigureType
 {
     public int FigureValue => 6;
 
-    public int FigureId => CrossFireFigureIds.WhiplashId;
+    public int FigureId => (int)CrownsGuardFigureIds.WhiplashId;
     
     private static readonly Position[] AttackMovePositions =
     [

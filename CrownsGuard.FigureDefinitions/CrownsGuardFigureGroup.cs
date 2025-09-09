@@ -4,10 +4,10 @@ using CrownsGuard.FigureDefinitions.Localization;
 
 namespace CrownsGuard.FigureDefinitions;
 
-public sealed class CrossFireFigureGroup : IFigureGroup
+public sealed class CrownsGuardFigureGroup : IFigureGroup
 {
     private readonly Dictionary<int, IFigureType> _figuresDictionary;
-    public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrossFireFigureGroup)}_Name"];
+    public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrownsGuardFigureGroup)}_Name"];
 
     internal static readonly IFigureType Wall = new Wall();
     internal static readonly IFigureType Explosives = new Explosives();
@@ -17,7 +17,7 @@ public sealed class CrossFireFigureGroup : IFigureGroup
     internal static readonly IFigureType Empty = new Empty();
     internal static readonly IFigureType Fire = new Fire();
 
-    public CrossFireFigureGroup()
+    public CrownsGuardFigureGroup()
     {
         _figuresDictionary = FigureTypes.ToDictionary(figure => figure.FigureId, figure => figure);
     }

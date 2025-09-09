@@ -5,11 +5,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Explosives : ICrossFireFigureType
+public class Explosives : ICrownsGuardFigureType
 {
     public int FigureValue => 1;
 
-    public int FigureId => CrossFireFigureIds.ExplosivesId;
+    public int FigureId => (int)CrownsGuardFigureIds.ExplosivesId;
     
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
@@ -45,6 +45,6 @@ public class Explosives : ICrossFireFigureType
             return;
 
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Empty, false);
+        tile.Figure = new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Empty, false);
     }
 }

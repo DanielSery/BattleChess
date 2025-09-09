@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class LegionarySword : ICrossFireFigureType
+public class LegionarySword : ICrownsGuardFigureType
 {
     public int FigureValue => 2;
 
-    public int FigureId => CrossFireFigureIds.LegionarySwordId;
+    public int FigureId => (int)CrownsGuardFigureIds.LegionarySwordId;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
@@ -56,7 +56,7 @@ public class LegionarySword : ICrossFireFigureType
                 () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;
@@ -83,7 +83,7 @@ public class LegionarySword : ICrossFireFigureType
                 targetTile.AbsolutePosition,
                 () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;

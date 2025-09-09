@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class CamelArcher : ICrossFireFigureType
+public class CamelArcher : ICrownsGuardFigureType
 {
     public int FigureValue => 8;
 
-    public int FigureId => CrossFireFigureIds.CamelArcherId;
+    public int FigureId => (int)CrownsGuardFigureIds.CamelArcherId;
     
     private static readonly Position[] MoveDirections =
     [

@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Chinese : ICrossFireFigureType
+public class Chinese : ICrownsGuardFigureType
 {
     public int FigureValue => 8;
 
-    public int FigureId => CrossFireFigureIds.ChineseId;
+    public int FigureId => (int)CrownsGuardFigureIds.ChineseId;
     
     private static readonly Position[] MovePositions =
     [

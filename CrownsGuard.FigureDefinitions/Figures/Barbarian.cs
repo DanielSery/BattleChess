@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Barbarian : ICrossFireFigureType
+public class Barbarian : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
 
-    public int FigureId => CrossFireFigureIds.BarbarianId;
+    public int FigureId => (int)CrownsGuardFigureIds.BarbarianId;
     
     private static readonly Position[] MovementPositions =
     [

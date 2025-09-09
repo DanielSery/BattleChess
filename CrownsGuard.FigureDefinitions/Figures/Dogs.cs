@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Dogs : ICrossFireFigureType
+public class Dogs : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
 
-    public int FigureId => CrossFireFigureIds.DogsId;
+    public int FigureId => (int)CrownsGuardFigureIds.DogsId;
     
     private static readonly Position[] Directions =
     [

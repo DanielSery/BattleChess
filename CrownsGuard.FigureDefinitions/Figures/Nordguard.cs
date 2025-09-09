@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Nordguard: ICrossFireFigureType
+public class Nordguard: ICrownsGuardFigureType
 {
     public int FigureValue => 8;
 
-    public int FigureId => CrossFireFigureIds.NordguardId;
+    public int FigureId => (int)CrownsGuardFigureIds.NordguardId;
     
     private static readonly Position[] MovePositions =
     [

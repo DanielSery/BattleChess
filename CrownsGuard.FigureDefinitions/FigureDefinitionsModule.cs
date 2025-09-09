@@ -7,7 +7,7 @@ public static class FigureDefinitionsModule
 {
     public static void RegisterFigureDefinitionsModule(this ContainerBuilder builder)
     {
-        builder.RegisterType<CrossFireFigureGroup>()
+        builder.RegisterType<CrownsGuardFigureGroup>()
             .As<IFigureGroup>()
             .SingleInstance();
     }

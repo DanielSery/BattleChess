@@ -5,11 +5,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Dragon : ICrossFireFigureType
+public class Dragon : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
 
-    public int FigureId => CrossFireFigureIds.DragonId;
+    public int FigureId => (int)CrownsGuardFigureIds.DragonId;
     
     private static readonly Position[] MovePositions =
     [
@@ -30,7 +30,7 @@ public class Dragon : ICrossFireFigureType
                 yield return unitTile.CreateMoveAction(targetTile, board);
         }
         
-        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;
@@ -62,7 +62,7 @@ public class Dragon : ICrossFireFigureType
         if (Math.Abs(move.X) <= 1 &&
             Math.Abs(move.Y) <= 1)
         {
-            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Fire, false), board);
+            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Fire, false), board);
         }
         else if (Math.Abs(move.X) <= 2 &&
                  Math.Abs(move.Y) <= 2)
@@ -70,8 +70,8 @@ public class Dragon : ICrossFireFigureType
             var smallMove = new Position(Math.Sign(move.X), Math.Sign(move.Y));
             var sourcePosition = unitTile.RelativePosition;
             
-            board[sourcePosition + smallMove].CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Fire, false), board);
-            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Fire, false), board);
+            board[sourcePosition + smallMove].CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Fire, false), board);
+            targetTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Fire, false), board);
         }
     }
 }
