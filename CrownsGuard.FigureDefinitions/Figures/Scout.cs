@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Scout : ICrossFireFigureType
+public class Scout : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
 
-    public int FigureId => CrossFireFigureIds.ScoutId;
+    public int FigureId => (int)CrownsGuardFigureIds.ScoutId;
     
     private static readonly Position[] Directions =
     [

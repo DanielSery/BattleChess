@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Ninja : ICrossFireFigureType
+public class Ninja : ICrownsGuardFigureType
 {
     public int FigureValue => 3;
 
-    public int FigureId => CrossFireFigureIds.NinjaId;
+    public int FigureId => (int)CrownsGuardFigureIds.NinjaId;
     
     private static readonly Position[] AttackPositions =
     [

@@ -4,7 +4,7 @@ using CrownsGuard.FigureDefinitions.Localization;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-internal interface ICrossFireFigureType : IFigureType
+internal interface ICrownsGuardFigureType : IFigureType
 {
     protected static readonly Position[] NeighbourPositions =
     [

@@ -8,7 +8,7 @@ public class Empty : IFigureType
 {
     public int FigureValue => 0;
 
-    public int FigureId => CrossFireFigureIds.EmptyId;
+    public int FigureId => (int)CrownsGuardFigureIds.EmptyId;
     
     public string DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.DisplayName)}"];
     public string BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureType.BaseDescription)}"];

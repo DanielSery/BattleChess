@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Wizzard : ICrossFireFigureType
+public class Wizzard : ICrownsGuardFigureType
 {
     public int FigureValue => 16;
 
-    public int FigureId => CrossFireFigureIds.WizzardId;
+    public int FigureId => (int)CrownsGuardFigureIds.WizzardId;
     
     private static readonly Position[] MovementPositions =
     [

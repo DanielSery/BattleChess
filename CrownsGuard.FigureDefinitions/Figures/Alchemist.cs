@@ -6,15 +6,15 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Alchemist : ICrossFireFigureType
+public class Alchemist : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
 
-    public int FigureId => CrossFireFigureIds.AlchemistId;
+    public int FigureId => (int)CrownsGuardFigureIds.AlchemistId;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var movement in ICrossFireFigureType.NeighbourPositions)
+        foreach (var movement in ICrownsGuardFigureType.NeighbourPositions)
         {
             if (!board.TryGetRelativeTile(unitTile, movement, out var targetTile))
                 continue;
@@ -58,7 +58,7 @@ public class Alchemist : ICrossFireFigureType
             var shieldTile = board[sourceTile.RelativePosition + movedPosition];
             if (shieldTile.IsEmpty())
             {
-                shieldTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Explosives, false), board);
+                shieldTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Explosives, false), board);
             }
         }
     }

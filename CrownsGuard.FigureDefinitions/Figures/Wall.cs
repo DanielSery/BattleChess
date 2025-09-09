@@ -3,11 +3,11 @@ using CrownsGuard.Core.GameBoard;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Wall : ICrossFireFigureType
+public class Wall : ICrownsGuardFigureType
 {
     public int FigureValue => 1;
 
-    public int FigureId => CrossFireFigureIds.WallId;
+    public int FigureId => (int)CrownsGuardFigureIds.WallId;
     
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>

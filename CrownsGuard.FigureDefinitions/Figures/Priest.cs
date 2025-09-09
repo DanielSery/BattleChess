@@ -5,11 +5,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Priest : ICrossFireFigureType
+public class Priest : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
 
-    public int FigureId => CrossFireFigureIds.PriestId;
+    public int FigureId => (int)CrownsGuardFigureIds.PriestId;
     
     private static readonly Position[] Directions =
     [

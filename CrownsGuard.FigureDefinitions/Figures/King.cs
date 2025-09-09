@@ -4,15 +4,15 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class King : ICrossFireFigureType
+public class King : ICrownsGuardFigureType
 {
     public int FigureValue => 5;
 
-    public int FigureId => CrossFireFigureIds.KingId;
+    public int FigureId => (int)CrownsGuardFigureIds.KingId;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var targetTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var targetTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.CanMoveTo(targetTile))
                 yield return unitTile.CreateMoveAction(targetTile, board);

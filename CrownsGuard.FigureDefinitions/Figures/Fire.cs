@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Fire : ICrossFireFigureType
+public class Fire : ICrownsGuardFigureType
 {
     public int FigureValue => 0;
 
-    public int FigureId => CrossFireFigureIds.FireId;
+    public int FigureId => (int)CrownsGuardFigureIds.FireId;
     
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>

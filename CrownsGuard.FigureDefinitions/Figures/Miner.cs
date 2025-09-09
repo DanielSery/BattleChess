@@ -5,11 +5,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Miner : ICrossFireFigureType
+public class Miner : ICrownsGuardFigureType
 {
     public int FigureValue => 3;
 
-    public int FigureId => CrossFireFigureIds.MinerId;
+    public int FigureId => (int)CrownsGuardFigureIds.MinerId;
 
     private static readonly Position[] Directions =
     [
@@ -51,7 +51,7 @@ public class Miner : ICrossFireFigureType
                 continue;
             }
             
-            createdTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrossFireFigureGroup.Trench, false), board);
+            createdTile.CreateFigure(new Figure(NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Trench, false), board);
         }
     }
 }

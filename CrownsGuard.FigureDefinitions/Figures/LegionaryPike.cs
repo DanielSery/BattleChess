@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class LegionaryPike : ICrossFireFigureType
+public class LegionaryPike : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
 
-    public int FigureId => CrossFireFigureIds.LegionaryPikeId;
+    public int FigureId => (int)CrownsGuardFigureIds.LegionaryPikeId;
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
@@ -67,7 +67,7 @@ public class LegionaryPike : ICrossFireFigureType
                 unitTile.KillWithoutMove(targetTile, board);
                 var owner = unitTile.Figure.Owner;
                 unitTile.Die(board);
-                unitTile.CreateFigure(new Figure(owner, CrossFireFigureGroup.LegionarySword, false), board);
+                unitTile.CreateFigure(new Figure(owner, CrownsGuardFigureGroup.LegionarySword, false), board);
             });
         return true;
     }
@@ -91,7 +91,7 @@ public class LegionaryPike : ICrossFireFigureType
                 () =>
                 {
                     unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;
@@ -119,7 +119,7 @@ public class LegionaryPike : ICrossFireFigureType
                 targetTile.AbsolutePosition,
                 () =>
                 {
-                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrossFireFigureGroup.Blade, unitTile.Figure.IsKing), board);
+                    targetTile.CreateFigure(new Figure(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
                     unitTile.Die(board);
                 });
             return true;

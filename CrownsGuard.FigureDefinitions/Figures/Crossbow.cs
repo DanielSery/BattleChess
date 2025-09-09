@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Crossbow : ICrossFireFigureType
+public class Crossbow : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
 
-    public int FigureId => CrossFireFigureIds.CrossbowId;
+    public int FigureId => (int)CrownsGuardFigureIds.CrossbowId;
     
     private static readonly Position[] AttackDirections =
     [
@@ -29,7 +29,7 @@ public class Crossbow : ICrossFireFigureType
                 yield return unitTile.CreateMoveAction(targetTile, board);
         }
         
-        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;

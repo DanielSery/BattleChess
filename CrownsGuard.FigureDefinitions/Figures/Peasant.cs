@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Peasant : ICrossFireFigureType
+public class Peasant : ICrownsGuardFigureType
 {
     public int FigureValue => 2;
 
-    public int FigureId => CrossFireFigureIds.PeasantId;
+    public int FigureId => (int)CrownsGuardFigureIds.PeasantId;
     
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {

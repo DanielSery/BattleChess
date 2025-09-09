@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Musketeer : ICrossFireFigureType
+public class Musketeer : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
 
-    public int FigureId => CrossFireFigureIds.MusketeerId;
+    public int FigureId => (int)CrownsGuardFigureIds.MusketeerId;
     
     private static readonly Position[] AttackDirections =
     [
@@ -17,7 +17,7 @@ public class Musketeer : ICrossFireFigureType
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;

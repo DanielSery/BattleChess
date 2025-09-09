@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class JapanArcher : ICrossFireFigureType
+public class JapanArcher : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
 
-    public int FigureId => CrossFireFigureIds.JapanArcherId;
+    public int FigureId => (int)CrownsGuardFigureIds.JapanArcherId;
 
     private static readonly Position[] MovePositions =
     [
@@ -24,7 +24,7 @@ public class JapanArcher : ICrossFireFigureType
                 yield return unitTile.CreateMoveAction(targetTile, board);
         }
         
-        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;

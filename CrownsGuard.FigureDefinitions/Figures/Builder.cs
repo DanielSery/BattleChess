@@ -5,11 +5,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Builder : ICrossFireFigureType
+public class Builder : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
 
-    public int FigureId => CrossFireFigureIds.BuilderId;
+    public int FigureId => (int)CrownsGuardFigureIds.BuilderId;
     
     private static readonly Position[] MovePosition =
     [
@@ -32,7 +32,7 @@ public class Builder : ICrossFireFigureType
         foreach (var targetTile in ShieldPositions.GetRelativeTiles(board, unitTile))
         {
             if (targetTile.IsEmpty())
-                yield return unitTile.CreateNewFigureAction(targetTile, NeutralFigureOwner.Instance, CrossFireFigureGroup.Wall, board);
+                yield return unitTile.CreateNewFigureAction(targetTile, NeutralFigureOwner.Instance, CrownsGuardFigureGroup.Wall, board);
 
             if (targetTile.Figure.Type is Wall)
                 yield return unitTile.CreateKillWithoutMove(targetTile, board);

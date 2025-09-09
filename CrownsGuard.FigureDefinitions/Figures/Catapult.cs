@@ -4,11 +4,11 @@ using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Catapult : ICrossFireFigureType
+public class Catapult : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
 
-    public int FigureId => CrossFireFigureIds.CatapultId;
+    public int FigureId => (int)CrownsGuardFigureIds.CatapultId;
     
     private static readonly Position[] AttackPositions =
     [
@@ -18,7 +18,7 @@ public class Catapult : ICrossFireFigureType
 
     public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
     {
-        foreach (var neighbourTile in ICrossFireFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
         {
             if (unitTile.IsEnemyTo(neighbourTile))
                 yield break;
