@@ -1,11 +1,11 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Fire : ICrownsGuardFigureType
+public class Fire : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 0;
     public FigureId FigureId => FigureId.Fire;
@@ -16,19 +16,19 @@ public class Fire : ICrownsGuardFigureType
             { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{GetType().Name}.png", UriKind.Absolute) },
         };
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        return [];
+        return ArrayPoolMemory<FigureAction>.Empty;
     }
 
-    public static void OnDied(BoardEvent boardEvent, Figure[] board, Action<BoardEvent, Figure[]> onEvent)
+    public static void OnDied(BoardEvent boardEvent, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (!board.TryGetFigure(boardEvent.Position, out Figure figure))
+        if (!board.TryGetFigure(boardEvent.SourcePosition, out Figure figure))
             return;
 
         if (figure.FigureType == FigureId.Dragon)
             return;
         
-        board.Die(boardEvent.Position, onEvent);
+        board.Die(boardEvent.SourcePosition, onEvent);
     }
 } 

@@ -1,18 +1,17 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Figures;
 using CrownsGuard.FigureDefinitions.Localization;
 
 namespace CrownsGuard.FigureDefinitions;
 
-public sealed class CrownsGuardFigureGroup : IFigureGroup
+public sealed class CrownsGuardFigureTypeInfoGroup : IFigureTypeInfoGroup
 {
-    private readonly Dictionary<FigureId, IFigureType> _figuresDictionary;
-    public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrownsGuardFigureGroup)}_Name"];
+    private readonly Dictionary<FigureId, IFigureTypeInfo> _figuresDictionary;
+    public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrownsGuardFigureTypeInfoGroup)}_Name"];
 
-    public CrownsGuardFigureGroup()
+    public CrownsGuardFigureTypeInfoGroup()
     {
-        _figuresDictionary = new Dictionary<FigureId, IFigureType>()
+        _figuresDictionary = new Dictionary<FigureId, IFigureTypeInfo>()
         {
             { FigureId.Empty, new Empty() },
             { FigureId.Wall, new Wall() },
@@ -70,10 +69,10 @@ public sealed class CrownsGuardFigureGroup : IFigureGroup
         FigureTypes = _figuresDictionary.Values.ToArray();
     }
 
-    public IFigureType[] FigureTypes { get; }
+    public IFigureTypeInfo[] FigureTypes { get; }
 
     /// <inheritdoc />
-    public IFigureType GetFigureTypeById(FigureId uniqueUnitId)
+    public IFigureTypeInfo GetFigureTypeById(FigureId uniqueUnitId)
     {
         return _figuresDictionary[uniqueUnitId];
     }

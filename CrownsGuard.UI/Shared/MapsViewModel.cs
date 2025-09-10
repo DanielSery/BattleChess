@@ -1,9 +1,9 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Maps;
 using CrownsGuard.Maps.BoardBlueprints;
+using CrownsGuard.Maps.GameBoard;
 using Nicenis.Windows.ViewModels;
 
 namespace CrownsGuard.UI.Shared;
@@ -26,12 +26,12 @@ public sealed class MapsViewModel : ViewModelBase
         set => SetProperty(ref _teamMap, value);
     }
 
-    internal void SaveMap(IEnumerable<ITile> board)
+    internal void SaveMap(IEnumerable<ITileInfo> board)
     {
         var map = new BoardBlueprint
         {
-            Figures = board.Select(x => new Figure(x.Figure.Owner.Player, x.Figure.IsKing, x.Figure.Type.FigureId)).ToArray(),
-            StartingPlayer = Player.White
+            Figures = board.Select(x => new Figure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.FigureId)).ToArray(),
+            StartingPlayerColor = PlayerColor.White
         };
 
         _boardBlueprintService.Save(map);

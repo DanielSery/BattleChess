@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;
 
@@ -23,7 +22,7 @@ public partial class TeamBoardControl
         {
             var figureIdentifier = (Figure)e.Data.GetData(typeof(Figure).FullName);
             var tileButton = (Button)sender;
-            var targetTile = (TileViewModel)tileButton.DataContext;
+            var targetTile = (TileInfoViewModel)tileButton.DataContext;
 
             var itemsControl = FindAncestor<ItemsControl>((DependencyObject)sender);
             var teamBoard = (TeamBoardViewModel)itemsControl.DataContext;
@@ -31,16 +30,16 @@ public partial class TeamBoardControl
             teamBoard.CreateFigure(targetTile, figureIdentifier);
         }
 
-        else if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
+        else if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName))
         {
-            var (teamBoard, sourceTile) = ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
-            var sourceFigureIdentifier = new Figure(sourceTile.Figure.Owner.Player,
-                sourceTile.Figure.IsKing, sourceTile.Figure.Type.FigureId);
+            var (teamBoard, sourceTile) = ((TeamBoardViewModel, TileInfoViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName);
+            var sourceFigureIdentifier = new Figure(sourceTile.Figure.Owner.PlayerColor,
+                sourceTile.Figure.IsKing, sourceTile.Figure.TypeInfo.FigureId);
 
             var tileButton = (Button)sender;
-            var targetTile = (TileViewModel)tileButton.DataContext;
-            var targetFigureIdentifier = new Figure(targetTile.Figure.Owner.Player,
-                targetTile.Figure.IsKing, targetTile.Figure.Type.FigureId);
+            var targetTile = (TileInfoViewModel)tileButton.DataContext;
+            var targetFigureIdentifier = new Figure(targetTile.Figure.Owner.PlayerColor,
+                targetTile.Figure.IsKing, targetTile.Figure.TypeInfo.FigureId);
 
             teamBoard.CreateFigure(sourceTile, targetFigureIdentifier);
             teamBoard.CreateFigure(targetTile, sourceFigureIdentifier);
@@ -50,7 +49,7 @@ public partial class TeamBoardControl
     private void ChessButton_DragEnter(object sender, DragSourceDraggingEventArgs e)
     {
         var button = (Button)sender;
-        var tileViewModel = (TileViewModel)button.DataContext;
+        var tileViewModel = (TileInfoViewModel)button.DataContext;
 
         var itemsControl = FindAncestor<ItemsControl>((DependencyObject)sender);
         var teamBoard = (TeamBoardViewModel)itemsControl.DataContext;

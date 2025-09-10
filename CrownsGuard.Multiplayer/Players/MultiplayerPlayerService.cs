@@ -1,7 +1,7 @@
 ﻿using System.Collections;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Database.Players;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
@@ -34,15 +34,15 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public IOnlinePlayerInfo GetCurrentPlayer()
     {
         return LoggedInPlayer is null
-            ? new ControlledOnlinePlayerInfo(Player.White, "Red player", null, null)
-            : new ControlledOnlinePlayerInfo(Player.White, LoggedInPlayer.Name, LoggedInPlayer.Id, LoggedInPlayer.Elo);
+            ? new ControlledOnlinePlayerInfo(PlayerColor.White, "Red player", null, null)
+            : new ControlledOnlinePlayerInfo(PlayerColor.White, LoggedInPlayer.Name, LoggedInPlayer.Id, LoggedInPlayer.Elo);
     }
 
     public async Task<Result<IOnlinePlayerInfo>> GetRemotePlayerAsync(string playerId, CancellationToken cancellationToken)
     {
         var foundPlayerResult = await _players.FindByIdAsync(playerId, cancellationToken);
         if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Could not find remote player");
-        return Result.Ok<IOnlinePlayerInfo>(new RemoteOnlinePlayerInfo(Player.Black, foundPlayer.Name, playerId, foundPlayer.Elo));
+        return Result.Ok<IOnlinePlayerInfo>(new RemoteOnlinePlayerInfo(PlayerColor.Black, foundPlayer.Name, playerId, foundPlayer.Elo));
     }
 
     public async Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken)

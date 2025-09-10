@@ -1,17 +1,17 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Miner : ICrownsGuardFigureType
+public class Miner : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 3;
     public FigureId FigureId => FigureId.Miner;
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
@@ -41,10 +41,10 @@ public class Miner : ICrownsGuardFigureType
             }
         }
         
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
         var difference = action.TargetPosition - action.SourcePosition;
@@ -55,7 +55,7 @@ public class Miner : ICrownsGuardFigureType
 
             if (targetFigure.IsEmpty())
             {
-                board.CreateFigure(position, new Figure(Player.Neutral, false, FigureId.Trench), onEvent);
+                board.CreateFigure(position, new Figure(PlayerColor.Neutral, false, FigureId.Trench), onEvent);
             }
         }
     }

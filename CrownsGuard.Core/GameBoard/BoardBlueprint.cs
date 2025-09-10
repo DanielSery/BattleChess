@@ -1,5 +1,5 @@
-﻿using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
+﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Players;
 
 namespace CrownsGuard.Core.GameBoard;
 
@@ -9,27 +9,27 @@ public class BoardBlueprint
     public static readonly BoardBlueprint ChessTeam = new()
     {
         Figures = [
-            new(Player.White, false, FigureId.LegionarySword),
-            new(Player.White, false, FigureId.LegionarySword),
-            new(Player.White, false, FigureId.LegionarySword),
-            new(Player.White, false, FigureId.LegionarySword),
-            new(Player.White, false, FigureId.LegionarySword),
-            new(Player.White, false, FigureId.LegionarySword),
-            new(Player.White, false, FigureId.LegionarySword),
-            new(Player.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
+            new(PlayerColor.White, false, FigureId.LegionarySword),
             
-            new(Player.White, false, FigureId.MountedKnight),
-            new(Player.White, false, FigureId.Whiplash),
-            new(Player.White, false, FigureId.CamelRider),
-            new(Player.White, true, FigureId.King),
-            new(Player.White, false, FigureId.Queen),
-            new(Player.White, false, FigureId.CamelRider),
-            new(Player.White, false, FigureId.Whiplash),
-            new(Player.White, false, FigureId.MountedKnight),
+            new(PlayerColor.White, false, FigureId.MountedKnight),
+            new(PlayerColor.White, false, FigureId.Whiplash),
+            new(PlayerColor.White, false, FigureId.CamelRider),
+            new(PlayerColor.White, true, FigureId.King),
+            new(PlayerColor.White, false, FigureId.Queen),
+            new(PlayerColor.White, false, FigureId.CamelRider),
+            new(PlayerColor.White, false, FigureId.Whiplash),
+            new(PlayerColor.White, false, FigureId.MountedKnight),
         ],
-        StartingPlayer = Player.White
+        StartingPlayerColor = PlayerColor.White
     };
     
-    public Player StartingPlayer { get; init; } = Player.White;
+    public PlayerColor StartingPlayerColor { get; init; } = PlayerColor.White;
     public Figure[] Figures { get; init; } = [];
 }

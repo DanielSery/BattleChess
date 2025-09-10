@@ -1,16 +1,17 @@
 ﻿
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Alchemist : ICrownsGuardFigureType
+public class Alchemist : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 4;
     public FigureId FigureId => FigureId.Alchemist;
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[8];
         var actionsCount = 0;
@@ -27,10 +28,10 @@ public class Alchemist : ICrownsGuardFigureType
             }
         }
 
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {
@@ -43,7 +44,7 @@ public class Alchemist : ICrownsGuardFigureType
         }
     }
 
-    private static void CreateExplosive(Position sourcePosition, Position move, Figure[] board, Action<BoardEvent, Figure[]> onEvent)
+    private static void CreateExplosive(Position sourcePosition, Position move, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var targetPosition = sourcePosition + move * 2;
         if (!board.TryGetFigure(targetPosition, out var targetFigure)) return;
@@ -51,7 +52,7 @@ public class Alchemist : ICrownsGuardFigureType
         if (targetFigure.IsEmpty())
         {
             var sourceFigure = board[sourcePosition.GetIndex()];
-            board.CreateFigure(targetPosition, new Figure(sourceFigure.Player, false, FigureId.Explosives), onEvent);
+            board.CreateFigure(targetPosition, new Figure(sourceFigure.PlayerColor, false, FigureId.Explosives), onEvent);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Database.Players;
 using FluentResults;
 

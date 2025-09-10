@@ -1,10 +1,12 @@
-﻿using Autofac;
+﻿using System.Buffers;
+using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using CrownsGuard.FigureDefinitions;
 using CrownsGuard.Game;
 using CrownsGuard.Maps;
 using CrownsGuard.Multiplayer;
 using CommonServiceLocator;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Database;
 using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Game;
@@ -21,6 +23,9 @@ public static class DependenciesBuilder
     {
         if (ServiceLocator.IsLocationProviderSet) 
             return;
+
+        ArrayPool<Figure>.Create(64, 50);
+        ArrayPool<FigureAction>.Create(64, 50);
         
         var builder = new ContainerBuilder();
         SetUpComponents(builder);

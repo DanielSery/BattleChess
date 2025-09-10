@@ -1,17 +1,18 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
+using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Trench : ICrownsGuardFigureType
+public class Trench : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 0;
     public FigureId FigureId => FigureId.Trench;
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        return [];
+        return ArrayPoolMemory<FigureAction>.Empty;
     }
 
     public IDictionary<int, Uri> ImageUris =>

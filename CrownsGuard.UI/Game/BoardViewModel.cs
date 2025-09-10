@@ -2,7 +2,6 @@
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Game;
-using CrownsGuard.Game.GameBoard;
 using CrownsGuard.Game.Helpers;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
@@ -11,9 +10,12 @@ using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.BoardBlueprints;
+using CrownsGuard.Maps.Figures;
+using CrownsGuard.Maps.GameBoard;
 using Nicenis.Windows.ViewModels;
 
 namespace CrownsGuard.UI.Game;
@@ -24,121 +26,134 @@ public sealed class BoardViewModel : ViewModelBase
     private readonly IBoardLoader _boardLoader;
     private readonly IMultiplayerGameService _multiplayerGameService;
     private readonly ISoundService _soundService;
+    private readonly IFigureCreator _figureCreator;
 
-    private TileViewModel _mouseOnTile = TileViewModel.None;
-    private TileViewModel _selectedTile = TileViewModel.None;
-    private readonly IBoard _board;
+    private TileInfoViewModel _mouseOnTileInfo = TileInfoViewModel.None;
+    private TileInfoViewModel _selectedTileInfo = TileInfoViewModel.None;
+    private readonly IBoardInfo _boardInfo;
 
     public BoardViewModel(
         IGameService gameService,
         IBoardLoader boardLoader,
         IMultiplayerGameService multiplayerGameService,
-        ISoundService soundService)
+        ISoundService soundService,
+        IFigureCreator figureCreator)
     {
         _gameService = gameService;
         _boardLoader = boardLoader;
         _multiplayerGameService = multiplayerGameService;
         _soundService = soundService;
+        _figureCreator = figureCreator;
 
         SurrenderCommand = new RelayCommand(Surrender);
-        PlayTileCommand = new AsyncRelayCommand<TileViewModel>(PlayTile);
-        MouseEnterCommand = new RelayCommand<TileViewModel>(MouseEnterTile);
-        MouseExitCommand = new RelayCommand<TileViewModel>(MouseExitTile);
+        PlayTileCommand = new AsyncRelayCommand<TileInfoViewModel>(PlayTile);
+        MouseEnterCommand = new RelayCommand<TileInfoViewModel>(MouseEnterTile);
+        MouseExitCommand = new RelayCommand<TileInfoViewModel>(MouseExitTile);
 
         Tiles = Enumerable.Range(0, Constants.FullBoardTilesCount)
-            .Select<int, TileViewModel>(index => new TileViewModel(Position.FromIndex(index)))
+            .Select<int, TileInfoViewModel>(index => new TileInfoViewModel(Position.FromIndex(index)))
             .ToArray();
-        _board = new Board(Tiles.Cast<ITile>().ToArray());
+        _boardInfo = new BoardInfo(Tiles.Cast<ITileInfo>().ToArray());
 
         SinglePlayerLoadMap(BoardBlueprint.ChessTeam);
         _multiplayerGameService.RequestPlayMove += MultiplayerGameServiceOnRequestPlayMove;
     }
 
-    public TileViewModel SelectedTile
+    public TileInfoViewModel SelectedTileInfo
     {
-        get => _selectedTile;
+        get => _selectedTileInfo;
         private set
         {
-            _selectedTile.IsSelected = false;
-            SetProperty(ref _selectedTile, value);
-            RaisePropertyChanged(nameof(TileInfo));
+            _selectedTileInfo.IsSelected = false;
+            SetProperty(ref _selectedTileInfo, value);
+            RaisePropertyChanged(nameof(TileInfoInfo));
             value.IsSelected = true;
         }
     }
 
-    public TileViewModel MouseOnTile
+    public TileInfoViewModel MouseOnTileInfo
     {
-        get => _mouseOnTile;
+        get => _mouseOnTileInfo;
         private set
         {
-            _mouseOnTile.IsMouseOver = false;
-            SetProperty(ref _mouseOnTile, value);
+            _mouseOnTileInfo.IsMouseOver = false;
+            SetProperty(ref _mouseOnTileInfo, value);
 
-            if (_selectedTile.Equals(TileViewModel.None))
+            if (_selectedTileInfo.Equals(TileInfoViewModel.None))
             {
                 ClearPossibleActions();
                 SetPossibleActions(value, false);
             }
 
-            RaisePropertyChanged(nameof(TileInfo));
+            RaisePropertyChanged(nameof(TileInfoInfo));
             value.IsMouseOver = true;
         }
     }
 
-    public TileViewModel TileInfo
+    public TileInfoViewModel TileInfoInfo
     {
-        get => SelectedTile.Equals(TileViewModel.None)
-            ? SelectedTile
-            : MouseOnTile;
+        get => SelectedTileInfo.Equals(TileInfoViewModel.None)
+            ? SelectedTileInfo
+            : MouseOnTileInfo;
     }
 
     public int BoardWidth => Constants.BoardLength;
-    public TileViewModel[] Tiles { get; }
+    public TileInfoViewModel[] Tiles { get; }
 
     public RelayCommand SurrenderCommand { get; }
-    public AsyncRelayCommand<TileViewModel> PlayTileCommand { get; }
-    public RelayCommand<TileViewModel> MouseEnterCommand { get; }
-    public RelayCommand<TileViewModel> MouseExitCommand { get; }
+    public AsyncRelayCommand<TileInfoViewModel> PlayTileCommand { get; }
+    public RelayCommand<TileInfoViewModel> MouseEnterCommand { get; }
+    public RelayCommand<TileInfoViewModel> MouseExitCommand { get; }
 
     public event EventHandler? RequestSwitchToMenu;
     public event EventHandler? RequestSwitchToGame;
 
     public void SinglePlayerLoadMap(BoardBlueprint map)
     {
-        _gameService.StartGame(
-            new ControlledPlayerInfo(Player.White, "Red player"),
-            new ControlledPlayerInfo(Player.Black, "Blue player"),
-            map.StartingPlayer);
+        var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
+        var blackPlayer = new ControlledPlayerInfo(PlayerColor.Black, "Blue player");
 
-        _boardLoader.LoadBoardExtendedFor2Players(_board, map);
+        _boardLoader.LoadBoardExtendedFor2Players(_boardInfo, map);
+        
+        var arrayPool = _boardInfo.Select(x => new Figure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.FigureId))
+            .ToArray().AsSpan().ToArrayPoolMemory(Constants.FullBoardTilesCount);
+        
+        _gameService.StartGame(
+            whitePlayer,
+            blackPlayer,
+            map.StartingPlayerColor, arrayPool);
+        
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
     public void MultiplayerLoadMap(
         MultiplayerGameType gameType,
         string? gameId,
-        IOnlinePlayerInfo player1,
-        IOnlinePlayerInfo player2,
+        IOnlinePlayerInfo whitePlayer,
+        IOnlinePlayerInfo blackPlayer,
         BoardBlueprint map,
         bool hasTimer)
     {
         if (hasTimer)
         {
-            player1.SetTimer(new ChessTimer(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10)));
-            player2.SetTimer(new ChessTimer(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10)));
+            whitePlayer.SetTimer(new ChessTimer(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10)));
+            blackPlayer.SetTimer(new ChessTimer(TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10)));
         }
 
-        player1.SetGameService(_multiplayerGameService);
-        player2.SetGameService(_multiplayerGameService);
-
+        whitePlayer.SetGameService(_multiplayerGameService);
+        blackPlayer.SetGameService(_multiplayerGameService);
+        
+        _boardLoader.LoadBoard(_boardInfo, map);
+        
+        var arrayPool = map.Figures.AsSpan().ToArrayPoolMemory(Constants.FullBoardTilesCount);
         _multiplayerGameService.StartGame(gameType, gameId);
         _gameService.StartGame(
-            player1, player2,
-            map.StartingPlayer);
+            whitePlayer, blackPlayer,
+            map.StartingPlayerColor, arrayPool);
+        
         if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
 
-        _boardLoader.LoadBoard(_board, map);
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
@@ -155,37 +170,41 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private async Task PlayTile(TileViewModel? clickedTile)
+    private async Task PlayTile(TileInfoViewModel? clickedTile)
     {
         ArgumentNullException.ThrowIfNull(clickedTile);
         if (clickedTile.PossibleAction.FigureActionType != FigureActionType.None)
         {
             _gameService.EndTurn();
+            
+            var selectedRelativePosition = RelativePositionHelper.GetRelative(_gameService.CurrentPlayerInfo.PlayerColor, SelectedTileInfo.Position);
+            var clickedRelativePosition = RelativePositionHelper.GetRelative(_gameService.CurrentPlayerInfo.PlayerColor, clickedTile.Position);
+            
             await _multiplayerGameService.PlayedMoveAsync(
-                SelectedTile.RelativePosition,
-                clickedTile.RelativePosition,
+                selectedRelativePosition,
+                clickedRelativePosition,
                 _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime,
                 CancellationToken.None);
 
-            var relativeBoard = GetPlayerRelativeBoard(_gameService.CurrentPlayerInfo.Player, Tiles);
-            FigureActionExecutor.ExecuteFigureAction(relativeBoard, ref clickedTile._possibleAction, (@event, figures) => {});
+            FigureActionExecutor.ExecuteFigureAction(_gameService.CurrentPlayerInfo.Board.Span, ref clickedTile._possibleAction, OnEvent);
+            _gameService.SyncBoard();
             ClearPossibleActions();
 
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
-            SelectedTile = TileViewModel.None;
+            SelectedTileInfo = TileInfoViewModel.None;
             _gameService.StartTurn();
             if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
                 _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
         }
-        else if (clickedTile.Figure.Owner.Equals(_gameService.CurrentPlayerInfo))
+        else if (clickedTile.Figure.Owner.PlayerColor == _gameService.CurrentPlayerInfo.PlayerColor)
         {
-            SelectedTile = clickedTile;
+            SelectedTileInfo = clickedTile;
             ClearPossibleActions();
             SetPossibleActions(clickedTile, false);
         }
         else
         {
-            SelectedTile = TileViewModel.None;
+            SelectedTileInfo = TileInfoViewModel.None;
             ClearPossibleActions();
         }
     }
@@ -199,7 +218,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private void SetPossibleActions(TileViewModel clickedTile, bool automatic)
+    private void SetPossibleActions(TileInfoViewModel clickedTileInfo, bool automatic)
     {
         if (!_gameService.GameRunning)
             return;
@@ -207,48 +226,31 @@ public sealed class BoardViewModel : ViewModelBase
         if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo && !automatic)
             return;
 
-        if (!_gameService.CurrentPlayerInfo.Equals(clickedTile.Figure.Owner))
+        if (_gameService.CurrentPlayerInfo.PlayerColor != clickedTileInfo.Figure.Owner.PlayerColor)
             return;
 
-        var relativeBoard = GetPlayerRelativeBoard(clickedTile.Figure.Owner.Player, Tiles);
-        var relativeClickedTile = clickedTile.GetRelativeTile(clickedTile.Figure.Owner.Player);
-        var possibleActions = FigureActionsResolver.GetPossibleActions(relativeClickedTile.RelativePosition, relativeBoard);
+        var clickedRelativePosition = RelativePositionHelper.GetRelative(_gameService.CurrentPlayerInfo.PlayerColor, clickedTileInfo.Position);
+        using var possibleActions = FigureActionsResolver.GetPossibleActions(clickedRelativePosition, _gameService.CurrentPlayerInfo.Board.Span);
 
-        foreach (var possibleAction in possibleActions)
+        foreach (var possibleAction in possibleActions.Span)
         {
-            Tiles[possibleAction.TargetPosition.GetIndex()].PossibleAction = possibleAction;
+            var relativePosition = RelativePositionHelper.GetRelative(_gameService.CurrentPlayerInfo.PlayerColor, possibleAction.TargetPosition);
+            Tiles[relativePosition.GetIndex()].PossibleAction = possibleAction;
         }
     }
 
-    private static Figure[] GetPlayerRelativeBoard(Player player, IReadOnlyList<ITile> board)
-    {
-        var povBoard = new Figure[Constants.FullBoardTilesCount];
-        var absoluteBoard = board.Select(x => x.GetRelativeTile(player)).ToArray();
-
-        for (short i = 0; i < Constants.BoardLength; i++)
-        for (short j = 0; j < Constants.BoardLength; j++)
-        {
-            var position = new Position(j, i);
-            var boardFigure = absoluteBoard[position.GetIndex()].Figure;
-            povBoard[RelativePositionHelper.GetRelative(player, position).GetIndex()] =
-                new Figure(boardFigure.Owner.Player, boardFigure.IsKing, boardFigure.Type.FigureId);
-        }
-
-        return povBoard;
-    }
-
-    private void MouseEnterTile(TileViewModel? tile)
+    private void MouseEnterTile(TileInfoViewModel? tile)
     {
         ArgumentNullException.ThrowIfNull(tile);
-        MouseOnTile = tile;
+        MouseOnTileInfo = tile;
     }
 
-    private void MouseExitTile(TileViewModel? tile)
+    private void MouseExitTile(TileInfoViewModel? tile)
     {
         ArgumentNullException.ThrowIfNull(tile);
-        if (MouseOnTile == tile)
+        if (MouseOnTileInfo == tile)
         {
-            MouseOnTile = TileViewModel.None;
+            MouseOnTileInfo = TileInfoViewModel.None;
         }
     }
 
@@ -258,14 +260,14 @@ public sealed class BoardViewModel : ViewModelBase
 
     public void OnDeactivation()
     {
-        SelectedTile = TileViewModel.None;
+        SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
     }
 
     private void MultiplayerGameServiceOnRequestPlayMove(object? sender,
         (Position from, Position to, TimeSpan turnTimeSpent) e)
     {
-        SelectedTile = TileViewModel.None;
+        SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
 
         switch (e.from.GetIndex())
@@ -285,19 +287,55 @@ public sealed class BoardViewModel : ViewModelBase
         }
 
         var fromTile = Tiles[e.from.GetIndex()];
-        SelectedTile = fromTile;
+        SelectedTileInfo = fromTile;
         SetPossibleActions(fromTile, true);
 
         _gameService.EndTurn(e.turnTimeSpent);
         var toTile = Tiles[e.to.GetIndex()];
 
-        var relativeBoard = GetPlayerRelativeBoard(_gameService.CurrentPlayerInfo.Player, Tiles);
-        FigureActionExecutor.ExecuteFigureAction(relativeBoard, ref toTile._possibleAction, (@event, figures) => {});
+        FigureActionExecutor.ExecuteFigureAction(_gameService.CurrentPlayerInfo.Board.Span, ref toTile._possibleAction, OnEvent);
+        _gameService.SyncBoard();
 
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
-        SelectedTile = TileViewModel.None;
+        SelectedTileInfo = TileInfoViewModel.None;
         _gameService.StartTurn();
         ClearPossibleActions();
+    }
+
+    private void OnEvent(BoardEvent boardEvent, Span<Figure> board)
+    {
+        var sourceIndex = RelativePositionHelper.GetRelative(_gameService.CurrentPlayerInfo.PlayerColor, boardEvent.SourcePosition).GetIndex();
+        var targetIndex = RelativePositionHelper.GetRelative(_gameService.CurrentPlayerInfo.PlayerColor, boardEvent.TargetPosition).GetIndex();
+        
+        switch (boardEvent.EventType)
+        {
+            case BoardEventType.Attacked:
+                break;
+            case BoardEventType.ChangedFigure:
+                Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
+                Tiles[targetIndex].OnCreated();
+                break;
+            case BoardEventType.ChangedOwner:
+                Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
+                Tiles[targetIndex].OnCreated();
+                break;
+            case BoardEventType.CreatedFigure:
+                Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
+                Tiles[targetIndex].OnCreated();
+                break;
+            case BoardEventType.Died:
+                Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
+                Tiles[targetIndex].OnDied();
+                break;
+            case BoardEventType.Moved:
+                Tiles[sourceIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.SourcePosition.GetIndex()]);
+                Tiles[sourceIndex].OnMovedFrom();
+                Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
+                Tiles[targetIndex].OnMovedTo();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }
   

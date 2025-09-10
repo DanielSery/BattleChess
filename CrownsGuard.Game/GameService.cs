@@ -1,4 +1,6 @@
 ﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Game.Players;
@@ -7,15 +9,15 @@ namespace CrownsGuard.Game;
 
 public record WinResult(bool PublishResult, WinType WinType, IPlayerInfo? Won, IPlayerInfo? Lost);
 
-internal class GameService : IGameService, IFigureOwnersHolder
+internal class GameService : IGameService, IPlayersOwner
 {
-    private readonly IFigureOwner[] _figureOwners = new IFigureOwner[3];
+    private readonly IPlayer[] _figureOwners = new IPlayer[3];
 
     public GameService()
     {
-        _figureOwners[0] = NeutralFigureOwner.Instance;
-        _figureOwners[1] = WhitePlayer = new ControlledPlayerInfo(Player.White, string.Empty);
-        _figureOwners[2] = BlackPlayer = new ControlledPlayerInfo(Player.Black, string.Empty);
+        _figureOwners[0] = NeutralPlayer.Instance;
+        _figureOwners[1] = WhitePlayer = new ControlledPlayerInfo(PlayerColor.White, string.Empty);
+        _figureOwners[2] = BlackPlayer = new ControlledPlayerInfo(PlayerColor.Black, string.Empty);
 
         CurrentPlayerInfo = WhitePlayer;
         WaitingPlayerInfo = BlackPlayer;
@@ -23,7 +25,7 @@ internal class GameService : IGameService, IFigureOwnersHolder
 
     public bool GameRunning { get; private set; }
     public IPlayerInfo CurrentPlayerInfo { get; private set; }
-    private IPlayerInfo WaitingPlayerInfo { get; set; }
+    public IPlayerInfo WaitingPlayerInfo { get; private set; }
 
     public IPlayerInfo WhitePlayer { get; private set; }
     public IPlayerInfo BlackPlayer { get; private set; }
@@ -33,21 +35,29 @@ internal class GameService : IGameService, IFigureOwnersHolder
     public event EventHandler? TurnEnded;
     public event EventHandler<WinResult>? PlayerWon;
 
-    public IFigureOwner GetFigureOwner(Player player) => _figureOwners[player.ToInt()];
+    public IPlayer GetPlayer(PlayerColor playerColor) => _figureOwners[playerColor.ToInt()];
 
-    public void StartGame(IPlayerInfo player1, IPlayerInfo player2, Player startingPlayer)
+    public void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, ArrayPoolMemory<Figure> board)
     {
-        _figureOwners[0] = NeutralFigureOwner.Instance;
+        _figureOwners[0] = NeutralPlayer.Instance;
         _figureOwners[1] = WhitePlayer = player1;
         _figureOwners[2] = BlackPlayer = player2;
         
-        CurrentPlayerInfo = startingPlayer == player1.Player ? player1 : player2;
-        WaitingPlayerInfo = startingPlayer == player1.Player ? player2 : player1;
+        WhitePlayer.UpdateBoard(BoardFlipper.GetFlippedBoard(board));
+        BlackPlayer.UpdateBoard(board);
+        
+        CurrentPlayerInfo = startingPlayerColor == player1.PlayerColor ? player1 : player2;
+        WaitingPlayerInfo =startingPlayerColor == player1.PlayerColor ? player2 : player1;
         GameRunning = true;
 
         PlayersChanged?.Invoke(this, EventArgs.Empty);
         CurrentPlayerInfo.StartTurn();
         TurnStarted?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void SyncBoard()
+    {
+        WaitingPlayerInfo.UpdateBoard(BoardFlipper.GetFlippedBoard(CurrentPlayerInfo.Board));
     }
 
     public void StartTurn()
@@ -56,10 +66,7 @@ internal class GameService : IGameService, IFigureOwnersHolder
             return;
 
         (CurrentPlayerInfo, WaitingPlayerInfo) = (WaitingPlayerInfo, CurrentPlayerInfo);
-        
-        CheckCapturedKing(CurrentPlayerInfo, WaitingPlayerInfo);
-        CheckCapturedKing(WaitingPlayerInfo, CurrentPlayerInfo);
-
+        CheckCapturedKings();
         CurrentPlayerInfo.StartTurn();
         TurnStarted?.Invoke(this, EventArgs.Empty);
     }
@@ -81,7 +88,7 @@ internal class GameService : IGameService, IFigureOwnersHolder
     public void PlayerLost(IPlayerInfo player, WinType winType, bool notifyOther)
     {
         GameRunning = false;
-        PlayerWon?.Invoke(this, player.Player == Player.White
+        PlayerWon?.Invoke(this, player.PlayerColor == PlayerColor.White
             ? new WinResult(notifyOther, winType, BlackPlayer, WhitePlayer)
             : new WinResult(notifyOther, winType, WhitePlayer, BlackPlayer));
     }
@@ -89,19 +96,48 @@ internal class GameService : IGameService, IFigureOwnersHolder
     public void PlayerWin(IPlayerInfo player, WinType winType, bool publishResult)
     {
         GameRunning = false;
-        PlayerWon?.Invoke(this, player.Player == Player.White
+        PlayerWon?.Invoke(this, player.PlayerColor == PlayerColor.White
             ? new WinResult(publishResult, winType, WhitePlayer, BlackPlayer)
             : new WinResult(publishResult, winType, BlackPlayer, WhitePlayer));
     }
 
-    private void CheckCapturedKing(IPlayerInfo evaluatedPlayerInfo, IPlayerInfo otherPlayerInfo)
+    private (bool whiteHasKing, bool blackHasKing) CheckKings()
+    {
+        var whiteHasKing = false;
+        var blackHasKing = false;
+        
+        foreach (var figure in CurrentPlayerInfo.Board.Span)
+        {
+            if (!figure.IsKing)
+                continue;
+            
+            if (figure.PlayerColor == PlayerColor.White)
+                whiteHasKing = true;
+            
+            if (figure.PlayerColor == PlayerColor.Black)
+                blackHasKing = true;
+        }
+        
+        return (whiteHasKing, blackHasKing);
+    }
+
+    private void CheckCapturedKings()
     {
         if (!GameRunning)
             return;
         
-        if (evaluatedPlayerInfo.Figures.Any(x => x.IsKing))
-            return;
-        
-        PlayerLost(evaluatedPlayerInfo, WinType.CapturedKing, otherPlayerInfo.Player == Player.White);
+        var (whiteHasKing, blackHasKing) = CheckKings();
+        if (!whiteHasKing && !blackHasKing)
+        {
+            PlayerWin(CurrentPlayerInfo, WinType.CapturedKing, WaitingPlayerInfo.PlayerColor == PlayerColor.White);
+        }
+        else if (!whiteHasKing)
+        {
+            PlayerWin(BlackPlayer, WinType.CapturedKing, WaitingPlayerInfo.PlayerColor == PlayerColor.White);
+        }
+        else if (!blackHasKing)
+        {
+            PlayerWin(WhitePlayer, WinType.CapturedKing, WaitingPlayerInfo.PlayerColor == PlayerColor.White);
+        }
     }
 }

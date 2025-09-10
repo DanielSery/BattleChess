@@ -11,21 +11,21 @@ public class FigureTests
     [Fact]
     public void NoneFigureType_FigureIsValid()
     {
-        var player = GetFigureOwner(Player.Neutral);
-        _ = new FigureInfo(player, NoneFigureType.Instance, false);
+        var player = GetFigureOwner(PlayerColor.Neutral);
+        _ = new FigureWithInfo(player, NoneFigureTypeInfo.Instance, false);
     }
 
     [Fact]
     public void NeutralPlayer_ThrowsWhenNotHavingNeutralImage()
     {
-        var player = GetFigureOwner(Player.Neutral);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.Neutral);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().Throw<ArgumentException>();
     }
@@ -33,13 +33,13 @@ public class FigureTests
     [Fact]
     public void NeutralPlayer_NotThrowsWhenHavingNeutralImage()
     {
-        var player = GetFigureOwner(Player.Neutral);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.Neutral);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().NotThrow();
     }
@@ -47,14 +47,14 @@ public class FigureTests
     [Fact]
     public void WhitePlayer_ThrowsWhenNotHavingWhiteImage()
     {
-        var player = GetFigureOwner(Player.White);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.White);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().Throw<ArgumentException>();
     }
@@ -62,13 +62,13 @@ public class FigureTests
     [Fact]
     public void WhitePlayer_NotThrowsWhenHavingWhiteImage()
     {
-        var player = GetFigureOwner(Player.White);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.White);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().NotThrow();
     }
@@ -76,14 +76,14 @@ public class FigureTests
     [Fact]
     public void BlackPlayer_ThrowsWhenNotHavingBlackImage()
     {
-        var player = GetFigureOwner(Player.Black);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.Black);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().Throw<ArgumentException>();
     }
@@ -91,13 +91,13 @@ public class FigureTests
     [Fact]
     public void BlackPlayer_NotThrowsWhenHavingBlackImage()
     {
-        var player = GetFigureOwner(Player.Black);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.Black);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
 
-        Action createFigureAction = () => _ = new FigureInfo(player, figureTypeMock.Object, false);
+        Action createFigureAction = () => _ = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         createFigureAction.Should().NotThrow();
     }
@@ -105,14 +105,14 @@ public class FigureTests
     [Fact]
     public void GetsFieldsFromFigureType()
     {
-        var player = GetFigureOwner(Player.Black);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.Black);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
         figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
 
-        var figure = new FigureInfo(player, figureTypeMock.Object, false);
+        var figure = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         figure.DisplayName.Should().Be("Test");
     }
@@ -120,14 +120,14 @@ public class FigureTests
     [Fact]
     public void GetsUriFromFigureType()
     {
-        var player = GetFigureOwner(Player.Black);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.Black);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
         figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
 
-        var figure = new FigureInfo(player, figureTypeMock.Object, false);
+        var figure = new FigureWithInfo(player, figureTypeMock.Object, false);
 
         figure.ImageUri.Should().Be(new Uri("component/Images/test.png", UriKind.Relative));
     }
@@ -135,23 +135,23 @@ public class FigureTests
     [Fact]
     public void GetsPossibleActionsFromFigureType()
     {
-        var player = GetFigureOwner(Player.Black);
-        var figureTypeMock = new Mock<IFigureType>();
+        var player = GetFigureOwner(PlayerColor.Black);
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
         });
         figureTypeMock.Setup(x => x.DisplayName).Returns("Test");
 
-        var figure = new FigureInfo(player, figureTypeMock.Object, false);
+        var figure = new FigureWithInfo(player, figureTypeMock.Object, false);
         figure.GetPossibleActions(Mock.Of<ITile>(), Mock.Of<IBoard>());
 
         figureTypeMock.Verify(x => x.GetPossibleActions(It.IsAny<ITile>(), It.IsAny<IBoard>()), Times.Once);
     }
 
-    private static IFigureOwner GetFigureOwner(Player player)
+    private static IPlayer GetFigureOwner(PlayerColor playerColor)
     {
-        var mock = new Mock<IFigureOwner>();
-        mock.Setup(x => x.Player).Returns(player);
+        var mock = new Mock<IPlayer>();
+        mock.Setup(x => x.PlayerColor).Returns(playerColor);
         return mock.Object;
     }
 }

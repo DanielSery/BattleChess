@@ -7,8 +7,8 @@ public static class FigureDefinitionsModule
 {
     public static void RegisterFigureDefinitionsModule(this ContainerBuilder builder)
     {
-        builder.RegisterType<CrownsGuardFigureGroup>()
-            .As<IFigureGroup>()
+        builder.RegisterType<CrownsGuardFigureTypeInfoGroup>()
+            .As<IFigureTypeInfoGroup>()
             .SingleInstance();
     }
 }

@@ -2,8 +2,8 @@
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Maps.Figures;
+using CrownsGuard.Maps.GameBoard;
 
 namespace CrownsGuard.Maps.BoardBlueprints;
 
@@ -16,54 +16,54 @@ internal class BoardLoader : IBoardLoader
         _figureCreator = figureCreator;
     }
     
-    public void LoadBoard(IBoard board, BoardBlueprint map)
+    public void LoadBoard(IBoardInfo boardInfo, BoardBlueprint map)
     {
-        if (board.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
+        if (boardInfo.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
         if (map.Figures.Length != Constants.FullBoardTilesCount) throw new ArgumentException("Map blueprint needs to have 64 tiles");
-        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
-        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.Black }) != 1) throw new ArgumentException("Map blueprint needs to have a black king");
+        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.Black }) != 1) throw new ArgumentException("Map blueprint needs to have a black king");
 
         var index = 0;
-        foreach (var tile in board)
+        foreach (var tile in boardInfo)
         {
             tile.Figure = _figureCreator.CreateFigure(map.Figures[index++]);
         }
     }
 
-    public void LoadTeamBoard(IBoard board, BoardBlueprint map)
+    public void LoadTeamBoard(IBoardInfo boardInfo, BoardBlueprint map)
     {
-        if (board.Count() != map.Figures.Length) throw new ArgumentException("Source and target map size must match");
-        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
-        if (map.Figures.Any(x => x is { Player: Player.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
+        if (boardInfo.Count() != map.Figures.Length) throw new ArgumentException("Source and target map size must match");
+        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Any(x => x is { PlayerColor: PlayerColor.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
 
         var index = 0;
-        foreach (var tile in board)
+        foreach (var tile in boardInfo)
         {
             tile.Figure = _figureCreator.CreateFigure(map.Figures[index++]);
         }
     }
 
-    public void LoadBoardExtendedFor2Players(IBoard board, BoardBlueprint map)
+    public void LoadBoardExtendedFor2Players(IBoardInfo boardInfo, BoardBlueprint map)
     {
-        if (board.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
+        if (boardInfo.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
         if (map.Figures.Length != 16) throw new ArgumentException("Partial map blueprint needs to have 16 tiles");
-        if (map.Figures.Count(x => x is { IsKing: true, Player: Player.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
-        if (map.Figures.Any(x => x is { Player: Player.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
+        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Any(x => x is { PlayerColor: PlayerColor.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
 
         for (var i = 0; i < map.Figures.Length; i++)
         {
             var whiteFigure = map.Figures[i];
             var whitePosition = Position.FromIndex(i + 64 - 16);
-            board[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
+            boardInfo[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
             
-            var blackFigure = new Figure(Player.Black, whiteFigure.IsKing, whiteFigure.FigureType);
+            var blackFigure = new Figure(PlayerColor.Black, whiteFigure.IsKing, whiteFigure.FigureType);
             var blackPosition = new Position(whitePosition.X, (short)(7 - whitePosition.Y));
-            board[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
+            boardInfo[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
         }
         
         for (var i = 16; i < 48; i++)
         {
-            board[Position.FromIndex(i)].Figure = _figureCreator.CreateEmptyFigure();
+            boardInfo[Position.FromIndex(i)].Figure = _figureCreator.CreateEmptyFigure();
         }
     }
 }

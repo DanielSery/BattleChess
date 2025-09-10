@@ -1,11 +1,11 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Mage : ICrownsGuardFigureType
+public class Mage : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 16;
     public FigureId FigureId => FigureId.Mage;
@@ -17,7 +17,7 @@ public class Mage : ICrownsGuardFigureType
         new(2, -2), new(2, 0), new(2, 2)
     ];
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
@@ -33,10 +33,10 @@ public class Mage : ICrownsGuardFigureType
             }
         }
         
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {
@@ -63,8 +63,8 @@ public class Mage : ICrownsGuardFigureType
         }
     }
 
-    private static void TryDestroyTile(Figure[] board, Position sourcePosition, Position relative,
-        Action<BoardEvent, Figure[]> onEvent)
+    private static void TryDestroyTile(Span<Figure> board, Position sourcePosition, Position relative,
+        Action<BoardEvent, Span<Figure>> onEvent)
     {
         if (!board.TryGetFigure(sourcePosition + relative, out _))
             return;

@@ -1,11 +1,11 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Catapult : ICrownsGuardFigureType
+public class Catapult : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 12;
     public FigureId FigureId => FigureId.Catapult;
@@ -16,7 +16,7 @@ public class Catapult : ICrownsGuardFigureType
         new (-2, 3), new (0, 3), new (2, 3),
     ];
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
@@ -24,7 +24,7 @@ public class Catapult : ICrownsGuardFigureType
             if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
             
             if (sourceFigure.IsEnemyTo(targetFigure))
-                return [];
+                return ArrayPoolMemory<FigureAction>.Empty;
         }
         
         Span<FigureAction> actions = stackalloc FigureAction[5];
@@ -41,10 +41,10 @@ public class Catapult : ICrownsGuardFigureType
             }
         }
         
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {

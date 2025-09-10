@@ -1,4 +1,4 @@
-namespace CrownsGuard.Core.SimulatedBoard;
+namespace CrownsGuard.Core.Figures;
 
 public enum FigureActionType : byte
 {

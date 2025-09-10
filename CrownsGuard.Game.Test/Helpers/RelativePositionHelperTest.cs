@@ -12,7 +12,7 @@ public class RelativePositionHelperTest
     {
         var position = new Position(3, 3);
 
-        var relative = RelativePositionHelper.GetRelative(Player.Black, position);
+        var relative = RelativePositionHelper.GetRelative(PlayerColor.Black, position);
 
         new Position(3, 3).Should().Be(relative);
     }
@@ -22,7 +22,7 @@ public class RelativePositionHelperTest
     {
         var position = new Position(3, 3);
 
-        var relative = RelativePositionHelper.GetRelative(Player.White, position);
+        var relative = RelativePositionHelper.GetRelative(PlayerColor.White, position);
 
         new Position(3, 4).Should().Be(relative);
     }
@@ -32,7 +32,7 @@ public class RelativePositionHelperTest
     {
         var position = new Position(3, 3);
 
-        Action action = () => RelativePositionHelper.GetRelative(Player.Neutral, position);
+        Action action = () => RelativePositionHelper.GetRelative(PlayerColor.Neutral, position);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
 

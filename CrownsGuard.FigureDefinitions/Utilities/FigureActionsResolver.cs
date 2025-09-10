@@ -1,15 +1,16 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Figures;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
 
 public static class FigureActionsResolver
 {
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Span<Figure> board)
     {
         if (!board.TryGetFigure(sourcePosition, out var sourceFigure))
-            return [];
+            return ArrayPoolMemory<FigureAction>.Empty;
 
         return sourceFigure.FigureType switch
         {

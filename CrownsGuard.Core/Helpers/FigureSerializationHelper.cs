@@ -1,4 +1,4 @@
-﻿using CrownsGuard.Core.SimulatedBoard;
+﻿using CrownsGuard.Core.Figures;
 
 namespace CrownsGuard.Core.Helpers;
 
@@ -15,9 +15,9 @@ public static class FigureSerializationHelper
     public static int ToInt(this Figure figure)
     {
         int result = 0;
-        result |= figure.Player.ToInt();
+        result |= figure.PlayerColor.ToInt();
         result |= (figure.IsKing ? 1 : 0) << 8;
-        result |= ((int)figure.FigureType & 0xFFFF) << 9; // assumes FigureId.Value is short
+        result |= ((int)figure.FigureType & 0xFFFF) << 9; 
         return result;
     }
 }

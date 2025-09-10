@@ -1,9 +1,6 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+﻿namespace CrownsGuard.Core.Figures;
 
-namespace CrownsGuard.Core.Figures;
-
-public interface IFigureType
+public interface IFigureTypeInfo
 {
     FigureId FigureId { get; }
 

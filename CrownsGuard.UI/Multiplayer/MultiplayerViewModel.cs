@@ -13,7 +13,6 @@ using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Ranked;
 using CrownsGuard.Multiplayer.Utilities;
 using CommunityToolkit.Mvvm.Input;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Database.Lobby;
 using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Game;
@@ -133,7 +132,7 @@ public class MultiplayerViewModel : ViewModelBase
             var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(gameSearchJoin.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
+                : new RemoteOnlinePlayerInfo(PlayerColor.Black, "Blue player", null, null);
                 
             var hisMap = GetFigures(gameSearchJoin.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
@@ -148,7 +147,7 @@ public class MultiplayerViewModel : ViewModelBase
             var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(gameSearch.PlayerId!, loadingOperation.CancellationToken);
             var player2 = player2Request.IsSuccess
                 ? player2Request.Value
-                : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
+                : new RemoteOnlinePlayerInfo(PlayerColor.Black, "Blue player", null, null);
             
             var hisMap = GetFigures(gameSearch.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
@@ -200,7 +199,7 @@ public class MultiplayerViewModel : ViewModelBase
         var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(gameJoin.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
+            : new RemoteOnlinePlayerInfo(PlayerColor.Black, "Blue player", null, null);
 
         var hisMap = GetFigures(gameJoin.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, lobby.IsHostStarting);
@@ -240,7 +239,7 @@ public class MultiplayerViewModel : ViewModelBase
         var player2Request = await _multiplayerPlayerService.GetRemotePlayerAsync(lobby.PlayerId!, loadingOperation.CancellationToken);
         var player2 = player2Request.IsSuccess
             ? player2Request.Value
-            : new RemoteOnlinePlayerInfo(Player.Black, "Blue player", null, null);
+            : new RemoteOnlinePlayerInfo(PlayerColor.Black, "Blue player", null, null);
         
         var hisMap = GetFigures(lobby.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !lobby.IsHostStarting);
@@ -271,7 +270,7 @@ public class MultiplayerViewModel : ViewModelBase
         var figures = new Figure[64];
         var blueprint = new BoardBlueprint
         {
-            StartingPlayer = amStarting ? Player.White : Player.Black,
+            StartingPlayerColor = amStarting ? PlayerColor.White : PlayerColor.Black,
             Figures = figures
         };
             
@@ -282,7 +281,7 @@ public class MultiplayerViewModel : ViewModelBase
 
         for (var i = 16; i < 48; i++)
         {
-            figures[i] = new Figure(Player.Neutral, false, FigureId.Empty);
+            figures[i] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
         }
 
         for (var i = 0; i < hisFigures.Length; i++)
@@ -299,8 +298,8 @@ public class MultiplayerViewModel : ViewModelBase
         for (var i = 0; i < figures.Length; i++)
         {
             var figure = FigureSerializationHelper.FromInt(map[i]);
-            if (figure.Player == Player.White)
-                figure = new Figure(Player.Black, figure.IsKing, figure.FigureType);
+            if (figure.PlayerColor == PlayerColor.White)
+                figure = new Figure(PlayerColor.Black, figure.IsKing, figure.FigureType);
 
             figures[i] = figure;
         }
@@ -310,7 +309,7 @@ public class MultiplayerViewModel : ViewModelBase
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return RelativePositionHelper.GetRelative(Player.White, Position.FromIndex(index));
+        return RelativePositionHelper.GetRelative(PlayerColor.White, Position.FromIndex(index));
     }
 
     private static int GetIndexOfOppositePlayer(int index)
