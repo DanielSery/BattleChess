@@ -39,7 +39,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             var random = new Random();
             var isHostStarting = random.Next(0, 1) == 1;
 
-                var myMapData = myMap.GetByteData();
+                var myMapData = myMap.GetIntData();
                 var eloDifference = 50;
                 var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
                 if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
@@ -141,7 +141,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return (WaitResult.Timeout, null, null);
     }
 
-    private async Task<Result<RankedGame>> CreateGameSearchAsync(byte[] myMapData, RegisteredPlayer currentPlayer, bool isHostStarting, CancellationToken cancellationToken)
+    private async Task<Result<RankedGame>> CreateGameSearchAsync(int[] myMapData, RegisteredPlayer currentPlayer, bool isHostStarting, CancellationToken cancellationToken)
     {
         var game = new RankedGame()
         {
@@ -160,7 +160,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
     private async Task<Result<RankedGameJoin>> TryToJoinGameAsync(
         RankedGame joinedGame, 
         RegisteredPlayer currentPlayer, 
-        byte[] myMapData, 
+        int[] myMapData,
         CancellationToken cancellationToken)
     {
         var gameJoin = new RankedGameJoin()

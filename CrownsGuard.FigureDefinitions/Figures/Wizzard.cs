@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Wizzard : ICrownsGuardFigureType
 {
     public int FigureValue => 16;
+    public FigureId FigureId => FigureId.Wizzard;
 
     private static readonly Position[] MovementPositions =
     [
@@ -20,46 +21,54 @@ public class Wizzard : ICrownsGuardFigureType
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
-        
+
+        foreach (var relative in MovementPositions)
+        {
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (targetFigure.IsWalkable())
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+            }
+        }
+
         return actions.ToArrayPool(actionsCount);
     }
 
     public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        
-    }
-
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        foreach (var targetTile in MovementPositions.GetRelativeTiles(board, unitTile))
+        switch (action.FigureActionType)
         {
-            if (unitTile.CanMoveTo(targetTile))
-            {
-                yield return new FigureAction(
-                    FigureActionTypes.Move,
-                    targetTile.AbsolutePosition,
-                    () => MoveAction(unitTile, targetTile, board));
-            }
+            case FigureActionType.Move:
+                var movement = action.TargetPosition - action.SourcePosition;
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                if (Math.Abs(movement.X) == Math.Abs(movement.Y))
+                {
+                    TryDestroyTile(board, action.SourcePosition, new Position(1, 0), onEvent);
+                    TryDestroyTile(board, action.SourcePosition, new Position(-1, 0), onEvent);
+                    TryDestroyTile(board, action.SourcePosition, new Position(0, 1), onEvent);
+                    TryDestroyTile(board, action.SourcePosition, new Position(0, -1), onEvent);
+                }
+                else
+                {
+                    TryDestroyTile(board, action.SourcePosition, new Position(1, -1), onEvent);
+                    TryDestroyTile(board, action.SourcePosition, new Position(-1, 1), onEvent);
+                    TryDestroyTile(board, action.SourcePosition, new Position(1, 1), onEvent);
+                    TryDestroyTile(board, action.SourcePosition, new Position(-1, -1), onEvent);
+                }
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 
-    private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
+    private static void TryDestroyTile(Figure[] board, Position sourcePosition, Position relative,
+        Action<BoardEvent, Figure[]> onEvent)
     {
-        unitTile.MoveToTile(targetTile, board);
-        var movement = targetTile.RelativePosition - unitTile.RelativePosition;
-        if (Math.Abs(movement.X) != Math.Abs(movement.Y))
-        {
-            targetTile.TryDestroyTile(board, new Position(1, 0));
-            targetTile.TryDestroyTile(board, new Position(-1, 0));
-            targetTile.TryDestroyTile(board, new Position(0, 1));
-            targetTile.TryDestroyTile(board, new Position(0, -1));
-        }
-        else
-        {
-            targetTile.TryDestroyTile(board, new Position(1, -1));
-            targetTile.TryDestroyTile(board, new Position(-1, 1));
-            targetTile.TryDestroyTile(board, new Position(1, 1));
-            targetTile.TryDestroyTile(board, new Position(-1, -1));
-        }
+        if (!board.TryGetFigure(sourcePosition + relative, out _))
+            return;
+
+        board.KillWithoutMove(sourcePosition, sourcePosition + relative, onEvent);
     }
 }

@@ -1,9 +1,12 @@
 ﻿using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 
 namespace CrownsGuard.Core.Figures;
 
 public interface IFigureType
 {
+    FigureId FigureId { get; }
+
     /// <summary>
     /// Gets figure value.
     /// </summary>

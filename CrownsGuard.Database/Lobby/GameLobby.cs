@@ -23,5 +23,5 @@ public class GameLobby
     public short? Elo { get; set; }
     public bool IsHostStarting { get; set; }
     
-    public required byte[] Map { get; set; }
+    public required int[] Map { get; set; }
 }

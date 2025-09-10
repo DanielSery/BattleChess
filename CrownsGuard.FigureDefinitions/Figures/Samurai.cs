@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Samurai : ICrownsGuardFigureType
 {
     public int FigureValue => 6;
+    public FigureId FigureId => FigureId.Samurai;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -20,10 +21,9 @@ public class Samurai : ICrownsGuardFigureType
             if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
             
             if (targetFigure.IsWalkable())
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
         }
         
-        var sourceFigure = board[sourcePosition.GetIndex()];
         foreach (var relative in PositionsGroups.BishopDirections)
         {
             for (var i = 1; i <= 3; i++)
@@ -33,7 +33,7 @@ public class Samurai : ICrownsGuardFigureType
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
                 }
                 else if (targetFigure.IsEmpty())
                 {
@@ -62,7 +62,7 @@ public class Samurai : ICrownsGuardFigureType
             
             board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
             var figure = board[(sourcePosition + smallMove).GetIndex()];
-            if (figure.FigureType != FigureType.Blade)
+            if (figure.FigureType != FigureId.Blade)
                 return;
            
             board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);

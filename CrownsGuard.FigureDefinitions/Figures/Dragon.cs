@@ -9,6 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Dragon : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
+    public FigureId FigureId => FigureId.Dragon;
 
     private static readonly Position[] FireDirections =
     [
@@ -28,17 +29,16 @@ public class Dragon : ICrownsGuardFigureType
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
         }
 
-        var currentFigure = board[sourcePosition.GetIndex()];
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
             if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
 
-            if (currentFigure.IsEnemyTo(targetFigure))
+            if (sourceFigure.IsEnemyTo(targetFigure))
             {
                 return actions.ToArrayPool(actionsCount);
             }
@@ -53,7 +53,7 @@ public class Dragon : ICrownsGuardFigureType
 
                 if (targetFigure.IsEmpty())
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Special, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, targetPosition);
                 }
                 else
                 {
@@ -77,19 +77,19 @@ public class Dragon : ICrownsGuardFigureType
                 if (move.X is <= 1 and >= -1 &&
                     move.Y is <= 1 and >= -1)
                 {
-                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureType.Fire), onEvent);
+                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureId.Fire), onEvent);
                 }
                 else if (move.X is <= 2 and >= -2 &&
                          move.Y is <= 2 and >= -2)
                 {
                     var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
             
-                    board.CreateFigure(action.SourcePosition + smallMove, new Figure(Player.Neutral, false, FigureType.Fire), onEvent);
-                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureType.Fire), onEvent);
+                    board.CreateFigure(action.SourcePosition + smallMove, new Figure(Player.Neutral, false, FigureId.Fire), onEvent);
+                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureId.Fire), onEvent);
                 }
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

@@ -15,5 +15,5 @@ public class RankedGameJoin
     [BsonRepresentation(BsonType.ObjectId)]
     public string? PlayerId { get; set; }
     
-    public required byte[] Map { get; set; }
+    public required int[] Map { get; set; }
 }

@@ -7,6 +7,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Dogs : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
+    public FigureId FigureId => FigureId.Dogs;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -19,7 +20,7 @@ public class Dogs : ICrownsGuardFigureType
             if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
             
             if (targetFigure.IsWalkable())
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
         }
         
         foreach (var relative in PositionsGroups.QueenDirections)
@@ -31,7 +32,7 @@ public class Dogs : ICrownsGuardFigureType
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
                 }
 
                 if (!targetFigure.IsWalkable())
@@ -55,7 +56,7 @@ public class Dogs : ICrownsGuardFigureType
                 board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

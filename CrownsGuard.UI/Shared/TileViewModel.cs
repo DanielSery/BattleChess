@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Game.GameBoard;
 using Nicenis.Windows.ViewModels;
 
@@ -10,7 +11,7 @@ public class TileViewModel : ViewModelBase, ITile
 {
     public static readonly TileViewModel None = new(new Position(-1, -1));
 
-    private IFigure _figure = Core.Figures.FigureInfo.None;
+    private IFigure _figure = FigureInfo.None;
 
     private bool _isMouseOver;
     private bool _isPossibleAttack;
@@ -19,7 +20,7 @@ public class TileViewModel : ViewModelBase, ITile
     private bool _isSelected;
     private bool _isBlack;
 
-    private FigureAction _possibleAction = FigureAction.None;
+    public FigureAction _possibleAction = FigureAction.None;
 
     public TileViewModel(Position position)
     {
@@ -77,9 +78,9 @@ public class TileViewModel : ViewModelBase, ITile
         set
         {
             SetProperty(ref _possibleAction, value);
-            IsPossibleAttack = value.ActionType == FigureActionTypes.Attack;
-            IsPossibleMove = value.ActionType == FigureActionTypes.Move;
-            IsPossibleSpecial = value.ActionType == FigureActionTypes.Special;
+            IsPossibleAttack = value.FigureActionType == FigureActionType.Attack;
+            IsPossibleMove = value.FigureActionType == FigureActionType.Move;
+            IsPossibleSpecial = value.FigureActionType == FigureActionType.Special;
         }
     }
 

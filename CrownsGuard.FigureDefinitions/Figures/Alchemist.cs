@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Alchemist : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
+    public FigureId FigureId => FigureId.Alchemist;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -20,9 +21,9 @@ public class Alchemist : ICrownsGuardFigureType
             if (!board.TryGetFigure(targetPosition, out Figure targetFigure)) continue;
             
             if (targetFigure.IsWalkable() ||
-                targetFigure.FigureType == FigureType.Explosives)
+                targetFigure.FigureType == FigureId.Explosives)
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
         }
 
@@ -38,7 +39,7 @@ public class Alchemist : ICrownsGuardFigureType
                 CreateExplosive(action.SourcePosition, action.TargetPosition - action.SourcePosition, board, onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 
@@ -50,7 +51,7 @@ public class Alchemist : ICrownsGuardFigureType
         if (targetFigure.IsEmpty())
         {
             var sourceFigure = board[sourcePosition.GetIndex()];
-            board.CreateFigure(targetPosition, new Figure(sourceFigure.Player, false, FigureType.Explosives), onEvent);
+            board.CreateFigure(targetPosition, new Figure(sourceFigure.Player, false, FigureId.Explosives), onEvent);
         }
     }
 }

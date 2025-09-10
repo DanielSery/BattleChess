@@ -1,4 +1,5 @@
 ﻿using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Database.Players;
 using FluentResults;
 
@@ -19,6 +20,6 @@ public interface IMultiplayerPlayerService
     Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken);
     Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, BoardBlueprint myMap, CancellationToken cancellationToken);
     Task<Result> UpdateCurrentPlayerMapAsync(BoardBlueprint map, CancellationToken cancellationToken);
-    Task<Result> UpdateCurrentPlayerUnlockedFigure(int unlockedFigureId, CancellationToken cancellationToken);
+    Task<Result> UpdateCurrentPlayerUnlockedFigure(FigureId unlockedFigureId, CancellationToken cancellationToken);
     Task<Result> TryVerifyEmailAsync(string emailHash, CancellationToken cancellationToken);
 }

@@ -1,5 +1,4 @@
 ﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Game;
@@ -12,6 +11,8 @@ using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.BoardBlueprints;
 using Nicenis.Windows.ViewModels;
 
@@ -157,7 +158,7 @@ public sealed class BoardViewModel : ViewModelBase
     private async Task PlayTile(TileViewModel? clickedTile)
     {
         ArgumentNullException.ThrowIfNull(clickedTile);
-        if (clickedTile.PossibleAction.ActionType != FigureActionTypes.None)
+        if (clickedTile.PossibleAction.FigureActionType != FigureActionType.None)
         {
             _gameService.EndTurn();
             await _multiplayerGameService.PlayedMoveAsync(
@@ -165,8 +166,9 @@ public sealed class BoardViewModel : ViewModelBase
                 clickedTile.RelativePosition,
                 _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime,
                 CancellationToken.None);
-            
-            clickedTile.PossibleAction.Action.Invoke();
+
+            var relativeBoard = GetPlayerRelativeBoard(_gameService.CurrentPlayerInfo.Player, Tiles);
+            FigureActionExecutor.ExecuteFigureAction(relativeBoard, ref clickedTile._possibleAction, (@event, figures) => {});
             ClearPossibleActions();
 
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
@@ -210,7 +212,7 @@ public sealed class BoardViewModel : ViewModelBase
 
         var relativeBoard = GetPlayerRelativeBoard(clickedTile.Figure.Owner.Player, Tiles);
         var relativeClickedTile = clickedTile.GetRelativeTile(clickedTile.Figure.Owner.Player);
-        var possibleActions = clickedTile.Figure.Type.GetPossibleActions(relativeClickedTile, relativeBoard);
+        var possibleActions = FigureActionsResolver.GetPossibleActions(relativeClickedTile.RelativePosition, relativeBoard);
 
         foreach (var possibleAction in possibleActions)
         {
@@ -218,20 +220,21 @@ public sealed class BoardViewModel : ViewModelBase
         }
     }
 
-    private static IBoard GetPlayerRelativeBoard(Player player, IReadOnlyList<ITile> board)
+    private static Figure[] GetPlayerRelativeBoard(Player player, IReadOnlyList<ITile> board)
     {
-        var povBoard = new ITile[Constants.FullBoardTilesCount];
+        var povBoard = new Figure[Constants.FullBoardTilesCount];
         var absoluteBoard = board.Select(x => x.GetRelativeTile(player)).ToArray();
 
-        for (var i = 0; i < Constants.BoardLength; i++)
-        for (var j = 0; j < Constants.BoardLength; j++)
+        for (short i = 0; i < Constants.BoardLength; i++)
+        for (short j = 0; j < Constants.BoardLength; j++)
         {
             var position = new Position(j, i);
+            var boardFigure = absoluteBoard[position.GetIndex()].Figure;
             povBoard[RelativePositionHelper.GetRelative(player, position).GetIndex()] =
-                absoluteBoard[position.GetIndex()];
+                new Figure(boardFigure.Owner.Player, boardFigure.IsKing, boardFigure.Type.FigureId);
         }
 
-        return new Board(povBoard);
+        return povBoard;
     }
 
     private void MouseEnterTile(TileViewModel? tile)
@@ -287,7 +290,10 @@ public sealed class BoardViewModel : ViewModelBase
 
         _gameService.EndTurn(e.turnTimeSpent);
         var toTile = Tiles[e.to.GetIndex()];
-        toTile.PossibleAction.Action.Invoke();
+
+        var relativeBoard = GetPlayerRelativeBoard(_gameService.CurrentPlayerInfo.Player, Tiles);
+        FigureActionExecutor.ExecuteFigureAction(relativeBoard, ref toTile._possibleAction, (@event, figures) => {});
+
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
         SelectedTile = TileViewModel.None;
         _gameService.StartTurn();

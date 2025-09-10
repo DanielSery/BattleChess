@@ -2,6 +2,7 @@
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Maps.Figures;
 
 namespace CrownsGuard.Maps.BoardBlueprints;
@@ -55,8 +56,8 @@ internal class BoardLoader : IBoardLoader
             var whitePosition = Position.FromIndex(i + 64 - 16);
             board[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
             
-            var blackFigure = new FigureBlueprint(Player.Black, whiteFigure.FigureType, whiteFigure.IsKing);
-            var blackPosition = new Position(whitePosition.X, 7 - whitePosition.Y);
+            var blackFigure = new Figure(Player.Black, whiteFigure.IsKing, whiteFigure.FigureType);
+            var blackPosition = new Position(whitePosition.X, (short)(7 - whitePosition.Y));
             board[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
         }
         

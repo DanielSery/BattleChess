@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 
 namespace CrownsGuard.UI.Editor;
 
@@ -28,7 +29,7 @@ public sealed class FigureTypeViewModel : IFigureInfo
     }
 
     public Player Player { get;}
-    public int FigureId { get; }
+    public FigureId FigureId { get; }
     public string DisplayName { get; }
     public string BaseDescription { get; }
     public string MovementDescription { get; }

@@ -139,7 +139,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateSetupAsync(string playerId, byte[] newMap, CancellationToken cancellationToken)
+    public async Task<Result> UpdateSetupAsync(string playerId, int[] newMap, CancellationToken cancellationToken)
     {
         try
         {

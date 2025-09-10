@@ -1,9 +1,13 @@
-﻿namespace CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.SimulatedBoard;
+
+namespace CrownsGuard.Core.Figures;
 
 public class NoneFigureType : IFigureType
 {
     public static NoneFigureType Instance { get; } = new();
 
+    /// <inheritdoc />
+    public FigureId FigureId => FigureId.Empty;
     public int FigureValue => 0;
     public string DisplayName => string.Empty;
     public string BaseDescription => string.Empty;

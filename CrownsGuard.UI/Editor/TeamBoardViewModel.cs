@@ -10,6 +10,7 @@ using CrownsGuard.Maps.Figures;
 using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows.ViewModels;
@@ -78,10 +79,10 @@ public class TeamBoardViewModel : ViewModelBase
     
     public RelayCommand<TileViewModel> MakeUnitKingCommand { get; }
 
-    public void CreateFigure(ITile tile, FigureBlueprint figureBlueprint)
+    public void CreateFigure(ITile tile, Figure figure)
     {
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = _figureCreator.CreateFigure(figureBlueprint);
+        tile.Figure = _figureCreator.CreateFigure(figure);
         _soundService.PlaySoundEffect(SoundEffectType.Button);
         EvaluateTeamBoard();
     }
@@ -104,12 +105,7 @@ public class TeamBoardViewModel : ViewModelBase
     {
         return new BoardBlueprint
         {
-            Figures = Tiles.Select(x => new FigureBlueprint
-            {
-                Player = x.Figure.Owner.Player,
-                FigureId = x.Figure.Type.FigureId,
-                IsKing = x.Figure.IsKing
-            }).ToArray(),
+            Figures = Tiles.Select(x => new Figure(x.Figure.Owner.Player, x.Figure.IsKing, x.Figure.Type.FigureId)).ToArray(),
         };
     }
 
@@ -123,17 +119,16 @@ public class TeamBoardViewModel : ViewModelBase
         _boardLoader.LoadTeamBoard(Board, mapBlueprint);
     }
     
-    private static BoardBlueprint GetMapBlueprint(byte[] map)
+    private static BoardBlueprint GetMapBlueprint(int[] map)
     {
-        var figures = new FigureBlueprint[16];
+        var figures = new Figure[16];
         for (var i = 0; i < figures.Length; i++)
         {
-            var index = i * 2;
-            var playerType = PlayerSerializationHelper.ToPlayer(map[index] % 128);
-            figures[i] = new FigureBlueprint(
-                playerType,
-                map[index + 1],
-                map[index] / 128 == 1);
+            var value = map[i];
+            var player = (Player)(value & 0xFF);       // lowest 8 bits
+            var isKing = ((value >> 8) & 1) != 0;    // next bit
+            var figureType = (FigureId)((value >> 9) & 0xFFFF); // next 16 bits
+            figures[i] = new Figure(player, isKing, figureType);
         }
 
         return new BoardBlueprint
@@ -160,7 +155,7 @@ public class TeamBoardViewModel : ViewModelBase
         {
             var demotedFigureId = tile.Figure.Type.FigureId;
             tile.Figure.Owner.Figures.Remove(tile.Figure);
-            tile.Figure = _figureCreator.CreateFigure(new FigureBlueprint(tile.Figure.Owner.Player, demotedFigureId, false));
+            tile.Figure = _figureCreator.CreateFigure(new Figure(tile.Figure.Owner.Player, false, demotedFigureId));
             
             HasKing = false;
             RaisePropertyChanged(nameof(CanSave));
@@ -176,12 +171,12 @@ public class TeamBoardViewModel : ViewModelBase
             
             var demotedFigureId = checkedTile.Figure.Type.FigureId;
             checkedTile.Figure.Owner.Figures.Remove(checkedTile.Figure);
-            checkedTile.Figure = _figureCreator.CreateFigure(new FigureBlueprint(owner.Player, demotedFigureId, false));
+            checkedTile.Figure = _figureCreator.CreateFigure(new Figure(owner.Player, false, demotedFigureId));
         }
         
         var upgradedFigureId = tile.Figure.Type.FigureId;
         tile.Figure.Owner.Figures.Remove(tile.Figure);
-        tile.Figure = _figureCreator.CreateFigure(new FigureBlueprint(owner.Player, upgradedFigureId, true));
+        tile.Figure = _figureCreator.CreateFigure(new Figure(owner.Player, true, upgradedFigureId));
         
         HasKing = true;
         RaisePropertyChanged(nameof(CanSave));

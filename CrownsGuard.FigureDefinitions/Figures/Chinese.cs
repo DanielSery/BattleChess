@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Chinese : ICrownsGuardFigureType
 {
     public int FigureValue => 8;
+    public FigureId FigureId => FigureId.Chinese;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -20,7 +21,7 @@ public class Chinese : ICrownsGuardFigureType
             if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
             
             if (targetFigure.IsWalkable())
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
         }
         
         foreach (var relative in PositionsGroups.BishopDirections)
@@ -32,7 +33,7 @@ public class Chinese : ICrownsGuardFigureType
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
                 }
                 else if (targetFigure.IsEmpty())
                 {
@@ -61,7 +62,7 @@ public class Chinese : ICrownsGuardFigureType
             
             board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
             var figure = board[(sourcePosition + smallMove).GetIndex()];
-            if (figure.FigureType != FigureType.Blade)
+            if (figure.FigureType != FigureId.Blade)
                 return;
            
             board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);

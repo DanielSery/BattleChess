@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Catapult : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
+    public FigureId FigureId => FigureId.Catapult;
 
     private static readonly Position[] AttackPositions =
     [
@@ -36,7 +37,7 @@ public class Catapult : ICrownsGuardFigureType
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
             }
         }
         
@@ -51,7 +52,7 @@ public class Catapult : ICrownsGuardFigureType
                 board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

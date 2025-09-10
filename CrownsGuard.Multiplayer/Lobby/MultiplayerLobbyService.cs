@@ -126,7 +126,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             LobbyName = lobbyName,
             PasswordHash = hash,
             PasswordSalt = salt,
-            Map = myMap.GetByteData(),
+            Map = myMap.GetIntData(),
             PlayerId = currentPlayer?.Id ?? null,
             Elo = currentPlayer?.Elo ?? null,
             IsHostStarting = isHostStarting,
@@ -185,7 +185,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         {
             GameId = lobby.Id,
             PlayerId = currentPlayer?.Id ?? null,
-            Map = myMap.GetByteData(),
+            Map = myMap.GetIntData(),
         };
         var gameJoinResult = await _lobbyJoins.InsertAsync(gameJoin, cancellationToken);
         if (gameJoinResult.IsFailed) return Result.Fail<GameLobby>("Failed to join game");

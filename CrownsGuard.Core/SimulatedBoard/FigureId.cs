@@ -1,6 +1,6 @@
 ﻿namespace CrownsGuard.Core.SimulatedBoard;
 
-public enum FigureType : byte
+public enum FigureId : byte
 {
     Empty = 0,
     Fire = 1,

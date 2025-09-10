@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 
 namespace CrownsGuard.Maps.Figures;
 
@@ -17,9 +18,9 @@ internal class FigureCreator : IFigureCreator
         _figureGroup = figureGroup;
     }
 
-    public IFigure CreateFigure(FigureBlueprint figureBlueprint)
+    public IFigure CreateFigure(Figure figureBlueprint)
     {
-        var figureType = _figureGroup.GetFigureTypeById(figureBlueprint.FigureId);
+        var figureType = _figureGroup.GetFigureTypeById(figureBlueprint.FigureType);
         var player = _figureOwners.GetFigureOwner(figureBlueprint.Player);
         var figure = new FigureInfo(player, figureType, figureBlueprint.IsKing);
         player.Figures.Add(figure);

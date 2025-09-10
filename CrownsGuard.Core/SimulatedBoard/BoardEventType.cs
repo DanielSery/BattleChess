@@ -16,4 +16,7 @@ public enum BoardEventType : byte
     
     ChangingOwner,
     ChangedOwner,
+
+    ChangingFigure,
+    CreatedFigure,
 }
