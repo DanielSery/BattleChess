@@ -7,6 +7,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Barbarian : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
+    public FigureId FigureId => FigureId.Barbarian;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -20,7 +21,7 @@ public class Barbarian : ICrownsGuardFigureType
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
         }
         
@@ -42,7 +43,7 @@ public class Barbarian : ICrownsGuardFigureType
 
                 if (targetFigure.IsEmpty())
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Special, movedPosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Special, movedPosition, targetPosition);
                 }
                 else
                 {
@@ -63,7 +64,7 @@ public class Barbarian : ICrownsGuardFigureType
                 board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

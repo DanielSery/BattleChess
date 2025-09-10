@@ -9,6 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Explosives : ICrownsGuardFigureType
 {
     public int FigureValue => 1;
+    public FigureId FigureId => FigureId.Explosives;
 
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>

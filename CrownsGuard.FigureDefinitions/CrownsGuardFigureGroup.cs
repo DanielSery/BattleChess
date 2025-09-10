@@ -7,65 +7,65 @@ namespace CrownsGuard.FigureDefinitions;
 
 public sealed class CrownsGuardFigureGroup : IFigureGroup
 {
-    private readonly Dictionary<FigureType, IFigureType> _figuresDictionary;
+    private readonly Dictionary<FigureId, IFigureType> _figuresDictionary;
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrownsGuardFigureGroup)}_Name"];
 
     public CrownsGuardFigureGroup()
     {
-        _figuresDictionary = new Dictionary<FigureType, IFigureType>()
+        _figuresDictionary = new Dictionary<FigureId, IFigureType>()
         {
-            { FigureType.Empty, new Empty() },
-            { FigureType.Wall, new Wall() },
-            { FigureType.Explosives, new Explosives() },
-            { FigureType.Trench, new Trench() },
-            { FigureType.Fire, new Fire() },
+            { FigureId.Empty, new Empty() },
+            { FigureId.Wall, new Wall() },
+            { FigureId.Explosives, new Explosives() },
+            { FigureId.Trench, new Trench() },
+            { FigureId.Fire, new Fire() },
 
-            { FigureType.Peasant, new Peasant() },
-            { FigureType.Spearman, new Spearman() },
-            { FigureType.Pikeman, new Pikeman() },
-            { FigureType.LegionarySword, new LegionarySword() },
-            { FigureType.LegionaryPike, new LegionaryPike() },
+            { FigureId.Peasant, new Peasant() },
+            { FigureId.Spearman, new Spearman() },
+            { FigureId.Pikeman, new Pikeman() },
+            { FigureId.LegionarySword, new LegionarySword() },
+            { FigureId.LegionaryPike, new LegionaryPike() },
 
-            { FigureType.MountedKnight, new MountedKnight() },
-            { FigureType.CamelRider, new CamelRider() },
-            { FigureType.MountedArcher, new MountedArcher() },
-            { FigureType.CamelArcher, new CamelArcher() },
-            { FigureType.Scout, new Scout() },
-            { FigureType.Dogs, new Dogs() },
-            { FigureType.Queen, new Queen() },
+            { FigureId.MountedKnight, new MountedKnight() },
+            { FigureId.CamelRider, new CamelRider() },
+            { FigureId.MountedArcher, new MountedArcher() },
+            { FigureId.CamelArcher, new CamelArcher() },
+            { FigureId.Scout, new Scout() },
+            { FigureId.Dogs, new Dogs() },
+            { FigureId.Queen, new Queen() },
 
-            { FigureType.Knight, new Knight() },
-            { FigureType.Samurai, new Samurai() },
-            { FigureType.Chinese, new Chinese() },
-            { FigureType.Nordguard, new Nordguard() },
-            { FigureType.Blade, new Blade() },
-            { FigureType.Elephant, new Elephant() },
+            { FigureId.Knight, new Knight() },
+            { FigureId.Samurai, new Samurai() },
+            { FigureId.Chinese, new Chinese() },
+            { FigureId.Nordguard, new Nordguard() },
+            { FigureId.Blade, new Blade() },
+            { FigureId.Elephant, new Elephant() },
 
-            { FigureType.Archer, new Archer() },
-            { FigureType.JapanArcher, new JapanArcher() },
-            { FigureType.Ranger, new Ranger() },
-            { FigureType.Crossbow, new Crossbow() },
-            { FigureType.Musketeer, new Musketeer() },
-            { FigureType.Cannon, new Cannon() },
-            { FigureType.Catapult, new Catapult() },
+            { FigureId.Archer, new Archer() },
+            { FigureId.JapanArcher, new JapanArcher() },
+            { FigureId.Ranger, new Ranger() },
+            { FigureId.Crossbow, new Crossbow() },
+            { FigureId.Musketeer, new Musketeer() },
+            { FigureId.Cannon, new Cannon() },
+            { FigureId.Catapult, new Catapult() },
 
-            { FigureType.Spartan, new Spartan() },
-            { FigureType.Warhammer, new Warhammer() },
-            { FigureType.BattleAxe, new BattleAxe() },
-            { FigureType.Mage, new Mage() },
-            { FigureType.Wizzard, new Wizzard() },
+            { FigureId.Spartan, new Spartan() },
+            { FigureId.Warhammer, new Warhammer() },
+            { FigureId.BattleAxe, new BattleAxe() },
+            { FigureId.Mage, new Mage() },
+            { FigureId.Wizzard, new Wizzard() },
 
-            { FigureType.King, new King() },
-            { FigureType.Trader, new Trader() },
-            { FigureType.Bard, new Bard() },
-            { FigureType.Barbarian, new Barbarian() },
-            { FigureType.Whiplash, new Whiplash() },
-            { FigureType.Priest, new Priest() },
+            { FigureId.King, new King() },
+            { FigureId.Trader, new Trader() },
+            { FigureId.Bard, new Bard() },
+            { FigureId.Barbarian, new Barbarian() },
+            { FigureId.Whiplash, new Whiplash() },
+            { FigureId.Priest, new Priest() },
 
-            { FigureType.Builder, new Builder() },
-            { FigureType.Alchemist, new Alchemist() },
-            { FigureType.Miner, new Miner() },
-            { FigureType.Dragon, new Dragon() },
+            { FigureId.Builder, new Builder() },
+            { FigureId.Alchemist, new Alchemist() },
+            { FigureId.Miner, new Miner() },
+            { FigureId.Dragon, new Dragon() },
         };
         FigureTypes = _figuresDictionary.Values.ToArray();
     }
@@ -73,8 +73,8 @@ public sealed class CrownsGuardFigureGroup : IFigureGroup
     public IFigureType[] FigureTypes { get; }
 
     /// <inheritdoc />
-    public IFigureType GetFigureTypeById(int uniqueUnitId)
+    public IFigureType GetFigureTypeById(FigureId uniqueUnitId)
     {
-        return _figuresDictionary[(FigureType)uniqueUnitId];
+        return _figuresDictionary[uniqueUnitId];
     }
 }

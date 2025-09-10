@@ -12,7 +12,7 @@ public interface IPlayersCollectionHandler
 
     Task<Result> InsertAsync(RegisteredPlayer player, CancellationToken cancellationToken);
     Task<Result> UpdateEloAsync(string playerId, int newElo, CancellationToken cancellationToken);
-    Task<Result> UpdateSetupAsync(string playerId, byte[] newMap, CancellationToken cancellationToken);
+    Task<Result> UpdateSetupAsync(string playerId, int[] newMap, CancellationToken cancellationToken);
     Task<Result> UpdateUnlockedFiguresAsync(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken);
 
     Task<Result<RegisteredPlayer>> WaitForEloUpdateAsync(string playerId, CancellationToken cancellationToken);

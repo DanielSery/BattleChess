@@ -8,38 +8,46 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Spartan : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
+    public FigureId FigureId => FigureId.Spartan;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
+
+        foreach (var relative in PositionsGroups.QueenDirections)
+        {
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (targetFigure.IsWalkable())
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+            }
+        }
         
         return actions.ToArrayPool(actionsCount);
     }
 
     public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        
-    }
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        foreach (var targetTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        switch (action.FigureActionType)
         {
-            if (unitTile.CanMoveTo(targetTile))
-            {
-                yield return new FigureAction(
-                    FigureActionTypes.Move,
-                    targetTile.AbsolutePosition,
-                    () => MoveAction(unitTile, targetTile, board));
-            }
-        }
-    }
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                var sourceFigure = board[action.SourcePosition.GetIndex()];
+                var attackedPosition = action.TargetPosition * 2 - action.SourcePosition;
 
-    private void MoveAction(ITile unitTile, ITile targetTile, IBoard board)
-    {
-        unitTile.MoveToTile(targetTile, board);
-        var movement = targetTile.RelativePosition - unitTile.RelativePosition;
-        targetTile.TryDestroyTile(board, movement);
+                if (!board.TryGetFigure(attackedPosition, out var targetFigure))
+                    return;
+
+                if (sourceFigure.CanAttack(targetFigure))
+                {
+                    board.KillWithoutMove(action.TargetPosition, attackedPosition, onEvent);
+                }
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+        }
     }
 }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CrownsGuard.UI.Converters"
              xmlns:figures="clr-namespace:CrownsGuard.Core.Figures;assembly=CrownsGuard.Core"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance figures:IFigureInfo}"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance figures:IFigureType}"
              d:DesignHeight="300" d:DesignWidth="300" MinWidth="265">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"

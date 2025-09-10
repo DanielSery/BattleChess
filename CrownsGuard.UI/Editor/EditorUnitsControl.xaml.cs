@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Players;
 using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions;
 using CrownsGuard.UI.Shared;
@@ -54,7 +55,7 @@ public partial class EditorUnitsControl
         if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
         {
             var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
-            teamBoard.CreateFigure(sourceTile, new FigureBlueprint(0, (int)FigureType.EmptyId, false));
+            teamBoard.CreateFigure(sourceTile, new Figure(Player.Neutral, false, FigureId.Empty));
         }
     }
 
@@ -62,7 +63,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var figureType = (FigureTypeViewModel)button.DataContext;
-        e.Data = new FigureBlueprint(figureType.Player, figureType.FigureId, false);
+        e.Data = new Figure(figureType.Player, false, figureType.FigureId);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

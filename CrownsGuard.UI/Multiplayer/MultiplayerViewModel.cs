@@ -13,6 +13,7 @@ using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Ranked;
 using CrownsGuard.Multiplayer.Utilities;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Database.Lobby;
 using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Game;
@@ -265,9 +266,9 @@ public class MultiplayerViewModel : ViewModelBase
         }
     }
 
-    private static BoardBlueprint GetJoinedMapBlueprint(FigureBlueprint[] myFigures, FigureBlueprint[] hisFigures, bool amStarting)
+    private static BoardBlueprint GetJoinedMapBlueprint(Figure[] myFigures, Figure[] hisFigures, bool amStarting)
     {
-        var figures = new FigureBlueprint[64];
+        var figures = new Figure[64];
         var blueprint = new BoardBlueprint
         {
             StartingPlayer = amStarting ? Player.White : Player.Black,
@@ -281,7 +282,7 @@ public class MultiplayerViewModel : ViewModelBase
 
         for (var i = 16; i < 48; i++)
         {
-            figures[i] = new FigureBlueprint(0, 0, false);
+            figures[i] = new Figure(Player.Neutral, false, FigureId.Empty);
         }
 
         for (var i = 0; i < hisFigures.Length; i++)
@@ -292,20 +293,16 @@ public class MultiplayerViewModel : ViewModelBase
         return blueprint;
     }
     
-    private static FigureBlueprint[] GetFigures(byte[] map)
+    private static Figure[] GetFigures(int[] map)
     {
-        var figures = new FigureBlueprint[16];
+        var figures = new Figure[16];
         for (var i = 0; i < figures.Length; i++)
         {
-            var index = i * 2;
-            var playerId = map[index] % 128;
-            if (playerId != 0)
-                playerId = 3 - playerId;
-            
-            figures[i] = new FigureBlueprint(
-                PlayerSerializationHelper.ToPlayer(playerId),
-                map[index + 1],
-                map[index] / 128 == 1);
+            var figure = FigureSerializationHelper.FromInt(map[i]);
+            if (figure.Player == Player.White)
+                figure = new Figure(Player.Black, figure.IsKing, figure.FigureType);
+
+            figures[i] = figure;
         }
 
         return figures;

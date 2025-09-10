@@ -8,14 +8,15 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Fire : ICrownsGuardFigureType
 {
     public int FigureValue => 0;
+    public FigureId FigureId => FigureId.Fire;
 
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
             { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{GetType().Name}.png", UriKind.Absolute) },
         };
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+
+    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
         return [];
     }
@@ -25,7 +26,7 @@ public class Fire : ICrownsGuardFigureType
         if (!board.TryGetFigure(boardEvent.Position, out Figure figure))
             return;
 
-        if (figure.FigureType == FigureType.Dragon)
+        if (figure.FigureType == FigureId.Dragon)
             return;
         
         board.Die(boardEvent.Position, onEvent);

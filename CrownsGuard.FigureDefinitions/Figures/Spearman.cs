@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Spearman : ICrownsGuardFigureType
 {
     public int FigureValue => 3;
+    public FigureId FigureId => FigureId.Spearman;
 
     private static readonly Position[] AttackPositions =
     [
@@ -24,26 +25,43 @@ public class Spearman : ICrownsGuardFigureType
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
         
+        foreach (var relative in MovePositions)
+        {
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (targetFigure.IsWalkable())
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+            }
+        }
+
+        foreach (var relative in AttackPositions)
+        {
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (sourceFigure.CanAttack(targetFigure))
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+            }
+        }
+
         return actions.ToArrayPool(actionsCount);
     }
 
     public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        
-    }
-
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        foreach (var targetTile in AttackPositions.GetRelativeTiles(board, unitTile))
+        switch (action.FigureActionType)
         {
-            if (unitTile.CanAttack(targetTile))
-                yield return unitTile.CreateKillWithMove(targetTile, board);
-        }
-        
-        foreach (var targetTile in MovePositions.GetRelativeTiles(board, unitTile))
-        {
-            if (unitTile.CanMoveTo(targetTile))
-                yield return unitTile.CreateMoveAction(targetTile, board);
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Attack:
+                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

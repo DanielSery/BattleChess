@@ -7,28 +7,16 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Wall : ICrownsGuardFigureType
 {
     public int FigureValue => 1;
+    public FigureId FigureId => FigureId.Wall;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
-        Span<FigureAction> actions = stackalloc FigureAction[36];
-        int actionsCount = 0;
-        
-        return actions.ToArrayPool(actionsCount);
+        return [];
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
-    {
-        
-    }
-    
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
             { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{GetType().Name}.png", UriKind.Absolute) },
         };
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        return [];
-    }
 }

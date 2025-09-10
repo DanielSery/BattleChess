@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class MountedKnight : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
+    public FigureId FigureId => FigureId.MountedKnight;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -23,7 +24,7 @@ public class MountedKnight : ICrownsGuardFigureType
 
                 if (targetFigure.IsWalkable())
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
                 }
                 else
                 {
@@ -32,7 +33,6 @@ public class MountedKnight : ICrownsGuardFigureType
             }
         }
         
-        var sourceFigure = board[sourcePosition.GetIndex()];
         foreach (var relative in PositionsGroups.RookDirections)
         {
             for (var i = 1; i < 7; i++)
@@ -42,7 +42,7 @@ public class MountedKnight : ICrownsGuardFigureType
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
                 }
                 else if (!targetFigure.IsWalkable())
                 {
@@ -65,7 +65,7 @@ public class MountedKnight : ICrownsGuardFigureType
                 board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

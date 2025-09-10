@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;
 
@@ -18,9 +19,9 @@ public partial class TeamBoardControl
     private void ChessImage_Drop(object sender, DragEventArgs e)
     {
         Focus();
-        if (e.Data.GetDataPresent(typeof(FigureBlueprint).FullName))
+        if (e.Data.GetDataPresent(typeof(Figure).FullName))
         {
-            var figureIdentifier = (FigureBlueprint)e.Data.GetData(typeof(FigureBlueprint).FullName);
+            var figureIdentifier = (Figure)e.Data.GetData(typeof(Figure).FullName);
             var tileButton = (Button)sender;
             var targetTile = (TileViewModel)tileButton.DataContext;
 
@@ -33,13 +34,13 @@ public partial class TeamBoardControl
         else if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
         {
             var (teamBoard, sourceTile) = ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
-            var sourceFigureIdentifier = new FigureBlueprint(sourceTile.Figure.Owner.Player,
-                sourceTile.Figure.Type.FigureId, sourceTile.Figure.IsKing);
+            var sourceFigureIdentifier = new Figure(sourceTile.Figure.Owner.Player,
+                sourceTile.Figure.IsKing, sourceTile.Figure.Type.FigureId);
 
             var tileButton = (Button)sender;
             var targetTile = (TileViewModel)tileButton.DataContext;
-            var targetFigureIdentifier = new FigureBlueprint(targetTile.Figure.Owner.Player,
-                targetTile.Figure.Type.FigureId, targetTile.Figure.IsKing);
+            var targetFigureIdentifier = new Figure(targetTile.Figure.Owner.Player,
+                targetTile.Figure.IsKing, targetTile.Figure.Type.FigureId);
 
             teamBoard.CreateFigure(sourceTile, targetFigureIdentifier);
             teamBoard.CreateFigure(targetTile, sourceFigureIdentifier);

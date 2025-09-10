@@ -7,6 +7,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Bard : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
+    public FigureId FigureId => FigureId.Bard;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -20,7 +21,7 @@ public class Bard : ICrownsGuardFigureType
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
         }
         
@@ -31,7 +32,7 @@ public class Bard : ICrownsGuardFigureType
             
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Special, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, targetPosition);
             }
         }
         
@@ -49,7 +50,7 @@ public class Bard : ICrownsGuardFigureType
                 board.ChangeOwner(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

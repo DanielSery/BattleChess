@@ -1,5 +1,4 @@
-﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
@@ -8,101 +7,105 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class LegionarySword : ICrownsGuardFigureType
 {
     public int FigureValue => 2;
+    public FigureId FigureId => FigureId.LegionarySword;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
-        
+
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 1), out var attackAction1))
+        {
+            actions[actionsCount++] = attackAction1;
+        }
+
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 1), out var attackAction2))
+        {
+            actions[actionsCount++] = attackAction2;
+        }
+
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var moveAction1))
+        {
+            actions[actionsCount++] = moveAction1;
+        }
+        else
+        {
+            return actions.ToArrayPool(actionsCount);
+        }
+
+        if (sourcePosition.Y == 1 &&
+            TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), out var moveAction2))
+        {
+            actions[actionsCount++] = moveAction2;
+        }
+
         return actions.ToArrayPool(actionsCount);
         
     }
 
     public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        
-    }
-    
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        if (TryGetAttackAction(unitTile, board, new Position(1, 1), out var attackAction1))
+        switch (action.FigureActionType)
         {
-            yield return attackAction1;
-        }
-
-        if (TryGetAttackAction(unitTile, board, new Position(-1, 1), out var attackAction2))
-        {
-            yield return attackAction2;
-        }
-
-        if (TryGetMoveAction(unitTile, board, new Position(0, 1), out var moveAction1))
-        {
-            yield return moveAction1;
-        }
-        else
-        {
-            yield break;
-        }
-
-        if (unitTile.RelativePosition.Y == 1 &&
-            TryGetMoveAction(unitTile, board, new Position(0, 2), out var moveAction2))
-        {
-            yield return moveAction2;
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Attack:
+                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Special:
+                var targetFigure = board[action.TargetPosition.GetIndex()];
+                if (targetFigure.IsWalkable())
+                {
+                    board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                    if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionaryPike)
+                        board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
+                }
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 
-    private static bool TryGetAttackAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    private static bool TryGetAttackAction(Figure[] board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+        out FigureAction action)
     {
-        var attackPosition = unitTile.RelativePosition + relativePosition;
-        if (!board.TryGetTile(attackPosition, out var targetTile) ||
-            !unitTile.CanAttack(targetTile))
+        var attackPosition = sourcePosition + relativePosition;
+        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
+            !sourceFigure.CanAttack(targetFigure))
         {
-            action = FigureAction.None;
+            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
             return false;
         }
 
         if (attackPosition.Y == 7)
         {
-            action = new FigureAction(
-                FigureActionTypes.Special,
-                targetTile.AbsolutePosition,
-                () =>
-                {
-                    unitTile.KillWithoutMove(targetTile, board);
-                    targetTile.CreateFigure(new FigureInfo(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
-                    unitTile.Die(board);
-                });
+            action = new FigureAction(FigureActionType.Special, sourcePosition, attackPosition);
             return true;
         }
 
-        action = unitTile.CreateKillWithMove(targetTile, board);
+        action = new FigureAction(FigureActionType.Attack, sourcePosition, attackPosition);
         return true;
     }
 
-    private static bool TryGetMoveAction(ITile unitTile, IBoard board, Position relativePosition, out FigureAction action)
+    private static bool TryGetMoveAction(Figure[] board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+        out FigureAction action)
     {
-        var movePosition = unitTile.RelativePosition + relativePosition;
-        if (!board.TryGetTile(movePosition, out var targetTile) ||
-            !unitTile.CanMoveTo(targetTile))
+        var attackPosition = sourcePosition + relativePosition;
+        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
+            !targetFigure.IsWalkable())
         {
-            action = FigureAction.None;
+            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
             return false;
         }
 
-        if (movePosition.Y == 7)
+        if (attackPosition.Y == 7)
         {
-            action = new FigureAction(
-                FigureActionTypes.Special,
-                targetTile.AbsolutePosition,
-                () =>
-                {
-                    targetTile.CreateFigure(new FigureInfo(unitTile.Figure.Owner, CrownsGuardFigureGroup.Blade, unitTile.Figure.IsKing), board);
-                    unitTile.Die(board);
-                });
+            action = new FigureAction(FigureActionType.Special, sourcePosition, attackPosition);
             return true;
         }
 
-        action = unitTile.CreateMoveAction(targetTile, board);
+        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition);
         return true;
-    } 
+    }
 }

@@ -8,43 +8,68 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Ninja : ICrownsGuardFigureType
 {
     public int FigureValue => 3;
-
-    private static readonly Position[] AttackPositions =
-    [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
-    ];
+    public FigureId FigureId => FigureId.Ninja;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
+
+        foreach (var relative in PositionsGroups.RookDirections)
+        {
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (sourceFigure.CanAttack(targetFigure))
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+            }
+        }
+
+
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(-1, 1), out var action))
+            actions[actionsCount++] = action;
+
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(1, 1), out action))
+            actions[actionsCount++] = action;
+
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), out action) &&
+            board.TryGetFigure(sourcePosition + new Position(0, 1), out var jumpedOver) &&
+            jumpedOver.IsAllyTo(sourceFigure))
+        {
+            actions[actionsCount++] = action;
+        }
         
         return actions.ToArrayPool(actionsCount);
     }
 
     public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        
+        switch (action.FigureActionType)
+        {
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.Attack:
+                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+        }
     }
 
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
+    private static bool TryGetMoveAction(Figure[] board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+        out FigureAction action)
     {
-        foreach (var targetTile in AttackPositions.GetRelativeTiles(board, unitTile))
+        var attackPosition = sourcePosition + relativePosition;
+        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
+            !targetFigure.IsWalkable())
         {
-            if (unitTile.CanAttack(targetTile))
-                yield return unitTile.CreateKillWithMove(targetTile, board);
+            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
+            return false;
         }
 
-        if (unitTile.TryCreateMoveAction(board, new Position(-1, 1), out var action))
-            yield return action;
-
-        if (unitTile.TryCreateMoveAction(board, new Position(1, 1), out action))
-            yield return action;
-
-        if (unitTile.CanMoveTo(board, new Position(0, 1)) &&
-            unitTile.TryCreateMoveAction(board, new Position(0, 2), out action))
-        {
-            yield return action;
-        }
+        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition);
+        return true;
     }
 }

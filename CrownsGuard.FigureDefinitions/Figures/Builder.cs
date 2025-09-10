@@ -9,6 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Builder : ICrownsGuardFigureType
 {
     public int FigureValue => 4;
+    public FigureId FigureId => FigureId.Builder;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -22,7 +23,7 @@ public class Builder : ICrownsGuardFigureType
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
         }
         
@@ -33,11 +34,11 @@ public class Builder : ICrownsGuardFigureType
 
             if (targetFigure.IsEmpty())
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Special, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, targetPosition);
             }
-            else if (targetFigure.FigureType == FigureType.Wall)
+            else if (targetFigure.FigureType == FigureId.Wall)
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
             }
         }
         
@@ -55,10 +56,10 @@ public class Builder : ICrownsGuardFigureType
                 board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             case FigureActionType.Special:
-                board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureType.Wall), onEvent);
+                board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureId.Wall), onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

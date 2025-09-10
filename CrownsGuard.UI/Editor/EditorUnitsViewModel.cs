@@ -3,6 +3,7 @@ using CrownsGuard.Core.Figures;
 using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows.ViewModels;
 
@@ -59,7 +60,7 @@ public class EditorUnitsViewModel : ViewModelBase
     {
         var random = new Random();
         var chance = isWin ? 0.015 : 0.01;
-        var potentialUnlock = new List<(int, string)>();
+        var potentialUnlock = new List<(FigureId, string)>();
         
         foreach (var figure in Figures)
         {
@@ -148,7 +149,7 @@ public class EditorUnitsViewModel : ViewModelBase
         var unlockedFiguresBitArray = new BitArray(unlockedFigures);
         
         Figures = _figureGroup.FigureTypes
-            .Select(x => new FigureTypeViewModel(x, unlockedFiguresBitArray[x.FigureId]))
+            .Select(x => new FigureTypeViewModel(x, unlockedFiguresBitArray[(int)x.FigureId]))
             .ToArray();
     }
 

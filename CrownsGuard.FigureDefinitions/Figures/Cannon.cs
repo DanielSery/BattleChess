@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Cannon : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
+    public FigureId FigureId => FigureId.Cannon;
 
     private static readonly Position[] AttackPositions =
     [
@@ -30,15 +31,15 @@ public class Cannon : ICrownsGuardFigureType
         
         if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack1Figure) &&
              sourceFigure.IsEnemyTo(attack1Figure))
-            actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 2));
+            actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 2));
         
         if (!board.TryGetFigure(sourcePosition + new Position(0, 3), out var attack2Figure) &&
             sourceFigure.IsEnemyTo(attack2Figure))
-            actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 3));
+            actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 3));
         
         if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack3Figure) &&
             sourceFigure.IsEnemyTo(attack3Figure))
-            actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 4));
+            actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 4));
         
         return actions.ToArrayPool(actionsCount);
     }
@@ -60,7 +61,7 @@ public class Cannon : ICrownsGuardFigureType
                 }
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

@@ -31,27 +31,4 @@ public class RelativeTile : ITile
     {
         return new RelativeTile(_innerTile, player);
     }
-
-    /// <inheritdoc />
-    public void OnDied()
-    {
-        _innerTile.OnDied();
-    }
-
-    public void OnMovedFrom()
-    {
-        _innerTile.OnMovedFrom();
-    }
-
-    /// <inheritdoc />
-    public void OnMovedTo()
-    {
-        _innerTile.OnMovedTo();
-    }
-
-    /// <inheritdoc />
-    public void OnCreated()
-    {
-        _innerTile.OnCreated();
-    }
 }

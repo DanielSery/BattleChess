@@ -21,5 +21,5 @@ public class RegisteredPlayer
     
     public required byte[] UnlockedFigures { get; set; }
     
-    public required byte[] Map { get; set; }
+    public required int[] Map { get; set; }
 }

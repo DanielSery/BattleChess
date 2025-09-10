@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Musketeer : ICrownsGuardFigureType
 {
     public int FigureValue => 12;
+    public FigureId FigureId => FigureId.Musketeer;
 
     private static readonly Position[] AttackDirections =
     [
@@ -16,35 +17,50 @@ public class Musketeer : ICrownsGuardFigureType
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
+        foreach (var relative in PositionsGroups.QueenDirections)
+        {
+            var targetPosition = sourcePosition + relative;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+
+            if (sourceFigure.IsEnemyTo(targetFigure))
+                return [];
+        }
+
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
+
+        foreach (var direction in AttackDirections)
+        {
+            for (var i = 1; i <= 3; i++)
+            {
+                var targetPosition = sourcePosition + direction * i;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+
+                if (sourceFigure.CanAttack(targetFigure))
+                {
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                    break;
+                }
+
+                if (!targetFigure.IsEmpty())
+                {
+                    break;
+                }
+            }
+        }
         
         return actions.ToArrayPool(actionsCount);
     }
 
     public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
     {
-        
-    }
-
-    public IEnumerable<FigureAction> GetPossibleActions(ITile unitTile, IBoard board)
-    {
-        foreach (var neighbourTile in ICrownsGuardFigureType.NeighbourPositions.GetRelativeTiles(board, unitTile))
+        switch (action.FigureActionType)
         {
-            if (unitTile.IsEnemyTo(neighbourTile))
-                yield break;
-        }
-        
-        foreach (var direction in AttackDirections)
-        {
-            foreach (var targetTile in direction.GetRelativeDirectionTiles(1, 3, board, unitTile))
-            {
-                if (unitTile.CanAttack(targetTile))
-                    yield return unitTile.CreateKillWithoutMove(targetTile, board);
-
-                if (!targetTile.IsEmpty())
-                    break;
-            }
+            case FigureActionType.Attack:
+                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            default:
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

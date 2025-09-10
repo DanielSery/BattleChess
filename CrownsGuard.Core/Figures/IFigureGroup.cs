@@ -1,4 +1,6 @@
-﻿namespace CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.SimulatedBoard;
+
+namespace CrownsGuard.Core.Figures;
 
 public interface IFigureGroup
 {
@@ -15,5 +17,5 @@ public interface IFigureGroup
     /// <summary>
     /// Bets figure type by unique unit id.
     /// </summary>
-    IFigureType GetFigureTypeById(int uniqueUnitId);
+    IFigureType GetFigureTypeById(FigureId uniqueUnitId);
 }

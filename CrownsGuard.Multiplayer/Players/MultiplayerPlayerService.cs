@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
+using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.Database.Players;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
@@ -70,7 +71,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (!map.IsValid(LoggedInPlayer.UnlockedFigures))
             return Result.Fail("Trying to save setup with not unlocked figures");
 
-        var mapData = map.GetByteData();
+        var mapData = map.GetIntData();
         var result = await _players.UpdateSetupAsync(LoggedInPlayer.Id, mapData, cancellationToken);
         if (result.IsFailed) return result;
         LoggedInPlayer.Map = mapData;
@@ -79,14 +80,14 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateCurrentPlayerUnlockedFigure(int unlockedFigureId, CancellationToken cancellationToken)
+    public async Task<Result> UpdateCurrentPlayerUnlockedFigure(FigureId unlockedFigureId, CancellationToken cancellationToken)
     {
         if (LoggedInPlayer is null)
             return Result.Fail("No logged in player");
 
         var unlockedFiguresArray = new BitArray(LoggedInPlayer.UnlockedFigures)
         {
-            [unlockedFigureId] = true
+            [(int)unlockedFigureId] = true
         };
 
         var newUnlockedFigures = new byte[LoggedInPlayer.UnlockedFigures.Length];
@@ -116,8 +117,8 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (!foundPlayerResult.IsFailed) Result.Fail("User with given name already exists");
 
         var mapData = myMap.IsValid(IMultiplayerPlayerService.DefaultUnlockedFigures)
-            ? myMap.GetByteData()
-            : BoardBlueprint.ChessTeam.GetByteData();
+            ? myMap.GetIntData()
+            : BoardBlueprint.ChessTeam.GetIntData();
 
         Console.WriteLine($"Creating new player with name: {name}");
         var player = new RegisteredPlayer

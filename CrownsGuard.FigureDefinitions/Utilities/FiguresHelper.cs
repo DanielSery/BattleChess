@@ -10,20 +10,20 @@ internal static class FiguresHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsEmpty(this Figure checkedFigure)
     {
-        return checkedFigure.FigureType == FigureType.Empty;
+        return checkedFigure.FigureType == FigureId.Empty;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsWalkable(this Figure checkedFigure)
     {
-        return checkedFigure.FigureType <= FigureType.LastWalkableFigure;
+        return checkedFigure.FigureType <= FigureId.LastWalkableFigure;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CanAttack(this Figure yoursFigure, Figure checkedFigure)
     {
         return yoursFigure.Player != checkedFigure.Player &&
-               checkedFigure.FigureType > FigureType.LastNonAttackableFigure;
+               checkedFigure.FigureType > FigureId.LastNonAttackableFigure;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -51,7 +51,7 @@ internal static class FiguresHelper
         var toIndex = toPosition.GetIndex();
         
         onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
-        board[toIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
+        board[toIndex] = new Figure(Player.Neutral, false, FigureId.Empty);
         onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition), board);
     }
 
@@ -78,7 +78,7 @@ internal static class FiguresHelper
         onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
         
         board[toIndex] = board[fromIndex];
-        board[fromIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
+        board[fromIndex] = new Figure(Player.Neutral, false, FigureId.Empty);
         
         onEvent.Invoke(new BoardEvent(BoardEventType.Moved, toPosition), board);
         onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition), board);
@@ -91,7 +91,7 @@ internal static class FiguresHelper
         onEvent.Invoke(new BoardEvent(BoardEventType.Attacking, fromPosition), board);
         onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
 
-        board[toIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
+        board[toIndex] = new Figure(Player.Neutral, false, FigureId.Empty);
         
         onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition), board);
         onEvent.Invoke(new BoardEvent(BoardEventType.Attacked, fromPosition), board);
@@ -107,7 +107,7 @@ internal static class FiguresHelper
         onEvent.Invoke(new BoardEvent(BoardEventType.Dying, toPosition), board);
 
         board[toIndex] = board[fromIndex];
-        board[fromIndex] = new Figure(Player.Neutral, false, FigureType.Empty);
+        board[fromIndex] = new Figure(Player.Neutral, false, FigureId.Empty);
         
         onEvent.Invoke(new BoardEvent(BoardEventType.Moving, toPosition), board);
         onEvent.Invoke(new BoardEvent(BoardEventType.Attacked, fromPosition), board);
@@ -123,5 +123,27 @@ internal static class FiguresHelper
         var sourceFigure = board[fromIndex];
         board[toIndex] = new Figure(sourceFigure.Player, false, sourceFigure.FigureType);
         onEvent.Invoke(new BoardEvent(BoardEventType.ChangedOwner, fromPosition), board);
+    }
+
+    public static void ChangeFigureType(this Figure[] board, Position fromPosition, Position toPosition, FigureId figureType, Action<BoardEvent, Figure[]> onEvent)
+    {
+        var fromIndex = fromPosition.GetIndex();
+        var toIndex = toPosition.GetIndex();
+
+        onEvent.Invoke(new BoardEvent(BoardEventType.ChangingFigure, fromPosition), board);
+        var sourceFigure = board[fromIndex];
+        board[toIndex] = new Figure(sourceFigure.Player, sourceFigure.IsKing, figureType);
+        onEvent.Invoke(new BoardEvent(BoardEventType.ChangingFigure, fromPosition), board);
+    }
+
+    public static void MakeUnitKing(this Figure[] board, Position fromPosition, Position toPosition, Action<BoardEvent, Figure[]> onEvent)
+    {
+        var fromIndex = fromPosition.GetIndex();
+        var toIndex = toPosition.GetIndex();
+
+        onEvent.Invoke(new BoardEvent(BoardEventType.ChangingFigure, fromPosition), board);
+        var sourceFigure = board[fromIndex];
+        board[toIndex] = new Figure(sourceFigure.Player, true, sourceFigure.FigureType);
+        onEvent.Invoke(new BoardEvent(BoardEventType.ChangingFigure, fromPosition), board);
     }
 }

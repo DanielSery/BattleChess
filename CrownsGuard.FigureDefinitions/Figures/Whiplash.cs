@@ -8,20 +8,13 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Whiplash : ICrownsGuardFigureType
 {
     public int FigureValue => 6;
-
-    private static readonly Position[] AttackMovePositions =
-    [
-        new(-2, -1), new(-2, 1),
-        new(-1, -2), new(-1, 2),
-        new(1, -2), new(1, 2),
-        new(2, -1), new(2, 1)
-    ];
+    public FigureId FigureId => FigureId.Whiplash;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
-        
+
         foreach (var relative in PositionsGroups.KnightPositions)
         {
             var targetPosition = sourcePosition + relative;
@@ -29,10 +22,10 @@ public class Whiplash : ICrownsGuardFigureType
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
         }
-        
+
         foreach (var relative in PositionsGroups.KnightPositions)
         {
             var targetPosition = sourcePosition + relative;
@@ -40,10 +33,10 @@ public class Whiplash : ICrownsGuardFigureType
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
             }
         }
-        
+
         return actions.ToArrayPool(actionsCount);
     }
 
@@ -58,7 +51,7 @@ public class Whiplash : ICrownsGuardFigureType
                 board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType} for figure {action.FigureType}");
+                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

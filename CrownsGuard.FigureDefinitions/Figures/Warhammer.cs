@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Warhammer : ICrownsGuardFigureType
 {
     public int FigureValue => 6;
+    public FigureId FigureId => FigureId.Warhammer;
 
     public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
     {
@@ -21,7 +22,7 @@ public class Warhammer : ICrownsGuardFigureType
             
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
         }
         
@@ -35,25 +36,35 @@ public class Warhammer : ICrownsGuardFigureType
         switch (movement)
         {
             case { Y: 0, X: 1 }:
-                if (board.TryGetFigure(action.TargetPosition + new Position(1, -1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(1, 0), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(1, 1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
                 break;
             case { Y: 0, X: -1 }:
-                if (board.TryGetFigure(action.TargetPosition + new Position(-1, -1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(-1, 0), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(-1, 0), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
                 if (board.TryGetFigure(action.TargetPosition + new Position(-1, 1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             case { Y: 1, X: 0 }:
-                if (board.TryGetFigure(action.TargetPosition + new Position(-1, 1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(0, 1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(1, 1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
                 break;
             case { Y: -1, X: 0 }:
-                if (board.TryGetFigure(action.TargetPosition + new Position(-1, -1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(0, -1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(1, -1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
+                TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
                 break;
         }
+    }
+
+    private static void TryDestroyTile(Figure[] board, Position sourcePosition, Position relative,
+        Action<BoardEvent, Figure[]> onEvent)
+    {
+        if (!board.TryGetFigure(sourcePosition + relative, out _))
+            return;
+
+        board.KillWithoutMove(sourcePosition, sourcePosition + relative, onEvent);
     }
 }

@@ -8,6 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Elephant : ICrownsGuardFigureType
 {
     public int FigureValue => 10;
+    public FigureId FigureId => FigureId.Elephant;
 
     private static readonly Position[] Directions =
     [
@@ -29,12 +30,12 @@ public class Elephant : ICrownsGuardFigureType
 
                 if (!isAttack && targetFigure.IsWalkable())
                 {
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Move, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
                 }
                 else
                 {
                     isAttack = true;
-                    actions[actionsCount++] = new FigureAction(sourceFigure.FigureType, FigureActionType.Attack, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
                 }
             }
         }
@@ -64,7 +65,7 @@ public class Elephant : ICrownsGuardFigureType
                 board.MoveFigure(action.SourcePosition, step1Position, onEvent);
             else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
 
-            if (board[step1Position.GetIndex()].FigureType != FigureType.Elephant)
+            if (board[step1Position.GetIndex()].FigureType != FigureId.Elephant)
                 return;
            
             if (board[targetPosition.GetIndex()].IsWalkable())
@@ -80,7 +81,7 @@ public class Elephant : ICrownsGuardFigureType
                 board.MoveFigure(action.SourcePosition, step1Position, onEvent);
             else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
             
-            if (board[step1Position.GetIndex()].FigureType != FigureType.Elephant)
+            if (board[step1Position.GetIndex()].FigureType != FigureId.Elephant)
                 return;
             
             var step2Position = action.SourcePosition + smallMove * 2;
@@ -88,7 +89,7 @@ public class Elephant : ICrownsGuardFigureType
                 board.MoveFigure(step1Position, step2Position, onEvent);
             else board.KillWithMove(step1Position, step2Position, onEvent);
             
-            if (board[step2Position.GetIndex()].FigureType != FigureType.Elephant)
+            if (board[step2Position.GetIndex()].FigureType != FigureId.Elephant)
                 return;
             
             if (board[targetPosition.GetIndex()].IsWalkable())
