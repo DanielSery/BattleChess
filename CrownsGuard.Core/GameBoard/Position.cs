@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace CrownsGuard.Core.GameBoard;
 
@@ -16,18 +17,22 @@ public readonly record struct Position
         Y = y;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int GetIndex() => Y * Constants.BoardLength + X;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Position operator +(Position left, Position right)
     {
         return new Position((sbyte)(left.X + right.X), (sbyte)(left.Y + right.Y));
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Position operator -(Position left, Position right)
     {
         return new Position((sbyte)(left.X - right.X), (sbyte)(left.Y - right.Y));
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Position operator *(Position left, int right)
     {
         return new Position((sbyte)(left.X * right), (sbyte)(left.Y * right));
