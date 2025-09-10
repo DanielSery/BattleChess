@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Warhammer : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 6;
     public FigureId FigureId => FigureId.Warhammer;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)

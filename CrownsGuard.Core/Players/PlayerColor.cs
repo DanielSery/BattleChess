@@ -1,8 +1,8 @@
 ﻿namespace CrownsGuard.Core.Players;
 
-public enum PlayerColor : byte
+public enum PlayerColor : sbyte
 {
     Neutral = 0,
     White = 1,
-    Black = 2
+    Black = -1,
 }

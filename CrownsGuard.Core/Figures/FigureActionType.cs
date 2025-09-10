@@ -4,6 +4,8 @@ public enum FigureActionType : byte
 {
     None = 0,
     Move,
+    PossibleAttack,
     Attack,
-    Special
+    PossibleSpecial,
+    Special,
 }

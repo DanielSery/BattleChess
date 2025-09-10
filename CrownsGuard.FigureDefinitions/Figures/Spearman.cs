@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Spearman : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 3;
     public FigureId FigureId => FigureId.Spearman;
 
     private static readonly Position[] AttackPositions =

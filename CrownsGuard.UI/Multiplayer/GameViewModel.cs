@@ -1,4 +1,5 @@
 ﻿using CrownsGuard.Game;
+using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
 using CrownsGuard.Multiplayer.Players;
 using Nicenis.Windows.ViewModels;

@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Whiplash : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 6;
     public FigureId FigureId => FigureId.Whiplash;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)

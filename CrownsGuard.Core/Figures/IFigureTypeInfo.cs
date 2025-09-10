@@ -5,11 +5,6 @@ public interface IFigureTypeInfo
     FigureId FigureId { get; }
 
     /// <summary>
-    /// Gets figure value.
-    /// </summary>
-    int FigureValue { get; }
-    
-    /// <summary>
     ///     Name shown in menus and helps
     /// </summary>
     string DisplayName { get; }
