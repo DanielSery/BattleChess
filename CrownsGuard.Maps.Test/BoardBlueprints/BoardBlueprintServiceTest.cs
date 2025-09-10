@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using AwesomeAssertions;
-using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Maps.BoardBlueprints;

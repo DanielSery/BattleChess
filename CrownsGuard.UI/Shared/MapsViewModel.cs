@@ -1,7 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Maps;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.GameBoard;
 using Nicenis.Windows.ViewModels;

@@ -312,13 +312,7 @@ public sealed class BoardViewModel : ViewModelBase
             case BoardEventType.Attacked:
                 break;
             case BoardEventType.ChangedFigure:
-                Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
-                Tiles[targetIndex].OnCreated();
-                break;
             case BoardEventType.ChangedOwner:
-                Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
-                Tiles[targetIndex].OnCreated();
-                break;
             case BoardEventType.CreatedFigure:
                 Tiles[targetIndex].Figure = _figureCreator.CreateFigure(board[boardEvent.TargetPosition.GetIndex()]);
                 Tiles[targetIndex].OnCreated();

@@ -1,12 +1,9 @@
 ﻿using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Maps;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Figures;
-using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
 using CrownsGuard.Maps.GameBoard;
@@ -19,6 +16,8 @@ namespace CrownsGuard.UI.Editor;
 public class TeamBoardViewModel : ViewModelBase
 {
     private const int BasePoints = 84;
+    
+    private readonly IBoardInfo _boardInfo;
 
     private bool _hasKing;
     private int _totalPoints;
@@ -46,8 +45,8 @@ public class TeamBoardViewModel : ViewModelBase
             .Select<int, TileInfoViewModel>(index => new TileInfoViewModel(Position.FromIndex(index)))
             .ToArray();
         
-        BoardInfo = new BoardInfo(Tiles.Cast<ITileInfo>().ToArray());
-        boardLoader.LoadTeamBoard(BoardInfo, maps.TeamMap);
+        _boardInfo = new BoardInfo(Tiles.Cast<ITileInfo>().ToArray());
+        boardLoader.LoadTeamBoard(_boardInfo, maps.TeamMap);
         EvaluateTeamBoard();
         
         MakeUnitKingCommand = new RelayCommand<TileInfoViewModel>(MakeUnitKing);
@@ -56,16 +55,15 @@ public class TeamBoardViewModel : ViewModelBase
     }
 
     public int BoardWidth => Constants.BoardLength;
-    public IBoardInfo BoardInfo { get; }
     public TileInfoViewModel[] Tiles { get; }
 
     public bool PositivePoints => PointsLeft >= 0;
     public int PointsLeft => BasePoints - TotalPoints;
 
-    public int TotalPoints
+    private int TotalPoints
     {
         get => _totalPoints;
-        private set => SetProperty(ref _totalPoints, value);
+        set => SetProperty(ref _totalPoints, value);
     }
 
     public bool CanSave => PositivePoints && HasKing;
@@ -87,8 +85,8 @@ public class TeamBoardViewModel : ViewModelBase
 
     private void EvaluateTeamBoard()
     {
-        TotalPoints = BoardInfo.Sum(x => x.Figure.TypeInfo.FigureValue);
-        HasKing = BoardInfo.Any(x => x.Figure.IsKing);
+        TotalPoints = _boardInfo.Sum(x => x.Figure.TypeInfo.FigureValue);
+        HasKing = _boardInfo.Any(x => x.Figure.IsKing);
         RaisePropertyChanged(nameof(PointsLeft));
         RaisePropertyChanged(nameof(PositivePoints));
         RaisePropertyChanged(nameof(CanSave));
@@ -114,7 +112,7 @@ public class TeamBoardViewModel : ViewModelBase
             return;
         
         var mapBlueprint = GetMapBlueprint(loggedInPlayer.Map);
-        _boardLoader.LoadTeamBoard(BoardInfo, mapBlueprint);
+        _boardLoader.LoadTeamBoard(_boardInfo, mapBlueprint);
     }
     
     private static BoardBlueprint GetMapBlueprint(int[] map)
@@ -138,7 +136,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     public void Discard()
     {
-        _boardLoader.LoadTeamBoard(BoardInfo, _maps.TeamMap);
+        _boardLoader.LoadTeamBoard(_boardInfo, _maps.TeamMap);
     }
 
     private void MakeUnitKing(TileInfoViewModel? tile)
@@ -160,7 +158,7 @@ public class TeamBoardViewModel : ViewModelBase
         }
         
         var owner = tile.Figure.Owner;
-        foreach (var checkedTile in BoardInfo)
+        foreach (var checkedTile in _boardInfo)
         {
             if (!checkedTile.Figure.Owner.Equals(owner) ||
                 !checkedTile.Figure.IsKing) 

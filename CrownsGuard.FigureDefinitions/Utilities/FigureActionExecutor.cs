@@ -1,6 +1,5 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Figures;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;

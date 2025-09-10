@@ -1,8 +1,5 @@
-﻿using AwesomeAssertions;
-using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Game.GameBoard;
 using Moq;
 
 namespace CrownsGuard.Game.Test.GameBoard;
