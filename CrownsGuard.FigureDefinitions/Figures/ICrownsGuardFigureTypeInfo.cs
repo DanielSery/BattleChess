@@ -1,5 +1,4 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.FigureDefinitions.Localization;
 
 namespace CrownsGuard.FigureDefinitions.Figures;

@@ -2,7 +2,6 @@
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Localization;
-using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 

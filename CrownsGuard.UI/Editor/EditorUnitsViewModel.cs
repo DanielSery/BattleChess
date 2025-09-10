@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
 using CrownsGuard.Maps.Figures;
@@ -135,7 +134,7 @@ public class EditorUnitsViewModel : ViewModelBase
     {
         if (obj is null) return;
 
-        _mouseOnInfo = obj.Figure as IFigureInfo;
+        _mouseOnInfo = obj.Figure;
         if (_tileInfoFocused)
             return;
 

@@ -1,6 +1,4 @@
-﻿using AwesomeAssertions;
-using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Game.GameBoard;
+﻿using CrownsGuard.Core.GameBoard;
 using Moq;
 
 namespace CrownsGuard.Game.Test.GameBoard;
