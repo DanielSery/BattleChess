@@ -19,10 +19,12 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out Figure targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out Figure targetFigure))
+            {
+                continue;
+            }
             
-            if (targetFigure.IsWalkable() ||
-                targetFigure.FigureType == FigureId.Explosives)
+            if (targetFigure.IsWalkable() || targetFigure.FigureType == FigureId.Explosives)
             {
                 actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
@@ -31,23 +33,26 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
+        if (action.FigureActionType == FigureActionType.Move)
         {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                CreateExplosive(action.SourcePosition, action.TargetPosition - action.SourcePosition, board, onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+            CreateExplosive(action.SourcePosition, action.TargetPosition - action.SourcePosition, board, onEvent);
+        }
+        else
+        {
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 
     private static void CreateExplosive(Position sourcePosition, Position move, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var targetPosition = sourcePosition + move * 2;
-        if (!board.TryGetFigure(targetPosition, out var targetFigure)) return;
+        if (!board.TryGetFigure(targetPosition, out var targetFigure))
+        {
+            return;
+        }
 
         if (targetFigure.IsEmpty())
         {

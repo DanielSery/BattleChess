@@ -116,7 +116,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         foundPlayerResult = await _players.FindByNameAsync(name, cancellationToken);
         if (!foundPlayerResult.IsFailed) Result.Fail("User with given name already exists");
 
-        var mapData = myMap.IsValid(IMultiplayerPlayerService.DefaultUnlockedFigures)
+        var mapData = myMap.IsValid(UnlockedFigures.DefaultUnlockedFigures)
             ? myMap.GetIntData()
             : BoardBlueprint.ChessTeam.GetIntData();
 
@@ -129,7 +129,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             EmailHash = emailHash,
             Elo = 1000,
             Map = mapData,
-            UnlockedFigures = IMultiplayerPlayerService.DefaultUnlockedFigures,
+            UnlockedFigures = UnlockedFigures.DefaultUnlockedFigures,
         };
 
         return await _players.InsertAsync(player, cancellationToken);

@@ -18,7 +18,10 @@ public class BattleAxe : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.BishopDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
             
             if (targetFigure.IsWalkable())
             {
@@ -29,32 +32,33 @@ public class BattleAxe : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
         var movement = action.TargetPosition - action.SourcePosition;
-        switch (movement)
+        if (movement is { Y: 1, X: 1 })
         {
-            case { Y: 1, X: 1 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
-                break;
-            case { Y: -1, X: 1 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
-                break;
-            case { Y: 1, X: -1 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, 0), onEvent);
-                break;
-            case { Y: -1, X: -1 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, 01), onEvent);
-                break;
+            TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
+        }
+        else if (movement is { Y: -1, X: 1 })
+        {
+            TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
+        }
+        else if (movement is { Y: 1, X: -1 })
+        {
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, 0), onEvent);
+        }
+        else if (movement is { Y: -1, X: -1 })
+        {
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, 01), onEvent);
         }
     }
 
@@ -62,7 +66,9 @@ public class BattleAxe : ICrownsGuardFigureTypeInfo
         Action<BoardEvent, Span<Figure>> onEvent)
     {
         if (!board.TryGetFigure(sourcePosition + relative, out _))
+        {
             return;
+        }
 
         board.KillWithoutMove(sourcePosition, sourcePosition + relative, onEvent);
     }

@@ -108,7 +108,7 @@ public class MultiplayerViewModel : ViewModelBase
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Finding ranked game");
         var myMap = _teamBoardViewModel.GetMapBlueprint();
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Setup has units which weren't unlocked yet");
@@ -162,7 +162,7 @@ public class MultiplayerViewModel : ViewModelBase
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Creating lobby");
         var myMap = _teamBoardViewModel.GetMapBlueprint();
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Setup has units which weren't unlocked yet");
@@ -213,7 +213,7 @@ public class MultiplayerViewModel : ViewModelBase
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Joining lobby");
         var myMap = _teamBoardViewModel.GetMapBlueprint();
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Setup has units which weren't unlocked yet");

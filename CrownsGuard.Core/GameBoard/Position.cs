@@ -7,10 +7,10 @@ public readonly record struct Position
 {
     public static readonly Position None = new(-1, -1);
 
-    public readonly short X;
-    public readonly short Y;
+    public readonly sbyte X;
+    public readonly sbyte Y;
 
-    public Position(short x, short y)
+    public Position(sbyte x, sbyte y)
     {
         X = x;
         Y = y;
@@ -20,21 +20,21 @@ public readonly record struct Position
 
     public static Position operator +(Position left, Position right)
     {
-        return new Position((short)(left.X + right.X), (short)(left.Y + right.Y));
+        return new Position((sbyte)(left.X + right.X), (sbyte)(left.Y + right.Y));
     }
 
     public static Position operator -(Position left, Position right)
     {
-        return new Position((short)(left.X - right.X), (short)(left.Y - right.Y));
+        return new Position((sbyte)(left.X - right.X), (sbyte)(left.Y - right.Y));
     }
 
     public static Position operator *(Position left, int right)
     {
-        return new Position((short)(left.X * right), (short)(left.Y * right));
+        return new Position((sbyte)(left.X * right), (sbyte)(left.Y * right));
     }
 
     public static Position FromIndex(int index)
     {
-        return new Position((short)(index % Constants.BoardLength), (short)(index / Constants.BoardLength));
+        return new Position((sbyte)(index % Constants.BoardLength), (sbyte)(index / Constants.BoardLength));
     }
 }

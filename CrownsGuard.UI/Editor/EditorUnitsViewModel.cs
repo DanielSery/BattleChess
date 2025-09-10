@@ -3,6 +3,7 @@ using CrownsGuard.Core.Figures;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
 using CrownsGuard.Maps.Figures;
+using CrownsGuard.Multiplayer.Utilities;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows.ViewModels;
 
@@ -144,7 +145,7 @@ public class EditorUnitsViewModel : ViewModelBase
     private void RefreshFigures()
     {
         var unlockedFigures = _playerService.LoggedInPlayer?.UnlockedFigures 
-                              ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+                              ?? UnlockedFigures.DefaultUnlockedFigures;
         var unlockedFiguresBitArray = new BitArray(unlockedFigures);
         
         Figures = _figureTypeInfoGroup.FigureTypes

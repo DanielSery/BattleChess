@@ -7,8 +7,6 @@ namespace CrownsGuard.Multiplayer.Players;
 
 public interface IMultiplayerPlayerService
 {
-    public static byte[] DefaultUnlockedFigures { get; } = [129, 130, 193, 19, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
     event EventHandler? LoggedInPlayerChanged;
     
     RegisteredPlayer? LoggedInPlayer { get; }

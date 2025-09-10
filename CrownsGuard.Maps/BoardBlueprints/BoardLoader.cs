@@ -57,7 +57,7 @@ internal class BoardLoader : IBoardLoader
             boardInfo[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
             
             var blackFigure = new Figure(PlayerColor.Black, whiteFigure.IsKing, whiteFigure.FigureType);
-            var blackPosition = new Position(whitePosition.X, (short)(7 - whitePosition.Y));
+            var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
             boardInfo[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
         }
         

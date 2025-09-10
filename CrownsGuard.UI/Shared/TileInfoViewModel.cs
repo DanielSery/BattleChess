@@ -19,7 +19,7 @@ public class TileInfoViewModel : ViewModelBase, ITileInfo
     private bool _isSelected;
     private bool _isBlack;
 
-    public FigureAction _possibleAction = FigureAction.None;
+    private FigureAction _possibleAction = FigureAction.None;
 
     public TileInfoViewModel(Position position)
     {

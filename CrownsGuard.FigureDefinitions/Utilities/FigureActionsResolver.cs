@@ -9,9 +9,7 @@ public static class FigureActionsResolver
 {
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Span<Figure> board)
     {
-        if (!board.TryGetFigure(sourcePosition, out var sourceFigure))
-            return ArrayPoolMemory<FigureAction>.Empty;
-
+        var sourceFigure = board[sourcePosition.GetIndex()];
         return sourceFigure.FigureType switch
         {
             FigureId.Empty => Empty.GetPossibleActions(sourcePosition, sourceFigure, board),

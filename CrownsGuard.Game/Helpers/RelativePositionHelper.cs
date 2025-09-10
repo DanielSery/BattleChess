@@ -10,7 +10,7 @@ public static class RelativePositionHelper
     {
         return playerColor switch
         {
-            PlayerColor.White => new Position(absPosition.X, (short)(Constants.BoardLength - absPosition.Y - 1)),
+            PlayerColor.White => new Position(absPosition.X, (sbyte)(Constants.BoardLength - absPosition.Y - 1)),
             PlayerColor.Black => absPosition,
             _ => throw new ArgumentOutOfRangeException(nameof(playerColor))
         };

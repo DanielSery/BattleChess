@@ -20,10 +20,15 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (sourceFigure.IsEnemyTo(targetFigure))
+            {
                 return ArrayPoolMemory<FigureAction>.Empty;
+            }
         }
 
         Span<FigureAction> actions = stackalloc FigureAction[36];
@@ -34,7 +39,10 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
             for (var i = 1; i <= 3; i++)
             {
                 var targetPosition = sourcePosition + direction * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
+                {
+                    break;
+                }
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
@@ -52,15 +60,11 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
-        {
-            case FigureActionType.Attack:
-                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
+        if (action.FigureActionType == FigureActionType.Attack)
+            board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+        else
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

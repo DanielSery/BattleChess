@@ -18,7 +18,10 @@ public class Spartan : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
             {
@@ -29,25 +32,27 @@ public class Spartan : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
+        if (action.FigureActionType == FigureActionType.Move)
         {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                var sourceFigure = board[action.SourcePosition.GetIndex()];
-                var attackedPosition = action.TargetPosition * 2 - action.SourcePosition;
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+            var sourceFigure = board[action.SourcePosition.GetIndex()];
+            var attackedPosition = action.TargetPosition * 2 - action.SourcePosition;
 
-                if (!board.TryGetFigure(attackedPosition, out var targetFigure))
-                    return;
+            if (!board.TryGetFigure(attackedPosition, out var targetFigure))
+            {
+                return;
+            }
 
-                if (sourceFigure.CanAttack(targetFigure))
-                {
-                    board.KillWithoutMove(action.TargetPosition, attackedPosition, onEvent);
-                }
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+            if (sourceFigure.CanAttack(targetFigure))
+            {
+                board.KillWithoutMove(action.TargetPosition, attackedPosition, onEvent);
+            }
+        }
+        else
+        {
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }
