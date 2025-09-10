@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -7,7 +8,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Barbarian : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 4;
     public FigureId FigureId => FigureId.Barbarian;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
@@ -58,6 +58,11 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
+    }
+
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        return Constants.MoveImpact;
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

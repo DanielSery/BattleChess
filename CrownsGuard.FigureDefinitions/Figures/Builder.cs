@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
@@ -8,7 +9,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Builder : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 4;
     public FigureId FigureId => FigureId.Builder;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
@@ -49,6 +49,22 @@ public class Builder : ICrownsGuardFigureTypeInfo
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
+    }
+
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        if (action.FigureActionType == FigureActionType.Special)
+        {
+            return Constants.BuildImpact;
+        }
+        else if (action.FigureActionType == FigureActionType.Move)
+        {
+            return Constants.MoveImpact;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

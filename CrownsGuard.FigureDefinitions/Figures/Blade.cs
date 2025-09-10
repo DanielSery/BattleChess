@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -7,7 +8,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Blade : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 16;
     public FigureId FigureId => FigureId.Blade;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
@@ -41,9 +41,13 @@ public class Blade : ICrownsGuardFigureTypeInfo
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                    actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
                 }
                 else if (targetFigure.IsEmpty())
+                {
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                }
+                else
                 {
                     break;
                 }
@@ -53,27 +57,59 @@ public class Blade : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        if (action.FigureActionType == FigureActionType.Attack)
+        {
+            var move = action.TargetPosition - action.SourcePosition;
+            if (move.X is <= 1 and >= -1 &&
+                move.Y is <= 1 and >= -1)
+            {
+                var targetUnitValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
+                return Constants.MeeleeAttackCoeff * targetUnitValue;
+            }
+            else if (move.X is <= 2 and >= -2 &&
+                     move.Y is <= 2 and >= -2)
+            {
+                var targetUnitValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
+                return Constants.MeeleeAttackCoeff * targetUnitValue + Constants.PossibleMeeleeAttackImpact;
+            }
+        }
+        else if (action.FigureActionType == FigureActionType.Move)
+        {
+            return Constants.MoveImpact;
+        }
+
+        return 0;
+    }
+
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var move = action.TargetPosition - action.SourcePosition;
-
-        if (move.X is <= 1 and >= -1 &&
-            move.Y is <= 1 and >= -1)
+        if (action.FigureActionType == FigureActionType.Move)
         {
-            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
         }
-        else if (move.X is <= 2 and >= -2 &&
-                 move.Y is <= 2 and >= -2)
+        else if (action.FigureActionType == FigureActionType.Attack)
         {
-            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
-            var sourcePosition = action.SourcePosition;
-            
-            board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
-            var figure = board[(sourcePosition + smallMove).GetIndex()];
-            if (figure.FigureType != FigureId.Blade)
-                return;
-           
-            board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);
+            var move = action.TargetPosition - action.SourcePosition;
+            if (move.X is <= 1 and >= -1 &&
+                move.Y is <= 1 and >= -1)
+            {
+                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+            }
+            else if (move.X is <= 2 and >= -2 &&
+                     move.Y is <= 2 and >= -2)
+            {
+                var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
+                var sourcePosition = action.SourcePosition;
+
+                board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
+                var figure = board[(sourcePosition + smallMove).GetIndex()];
+                if (figure.FigureType != FigureId.Blade)
+                    return;
+
+                board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);
+            }
         }
     }
 }

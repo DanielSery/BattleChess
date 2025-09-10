@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Cannon : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 12;
     public FigureId FigureId => FigureId.Cannon;
 
     private static readonly Position[] AttackPositions =

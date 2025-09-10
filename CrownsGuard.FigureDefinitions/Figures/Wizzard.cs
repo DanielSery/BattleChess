@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Wizzard : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 16;
     public FigureId FigureId => FigureId.Wizzard;
 
     private static readonly Position[] MovementPositions =

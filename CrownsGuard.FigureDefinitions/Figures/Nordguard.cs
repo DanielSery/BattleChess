@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Nordguard: ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 8;
     public FigureId FigureId => FigureId.Nordguard;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)

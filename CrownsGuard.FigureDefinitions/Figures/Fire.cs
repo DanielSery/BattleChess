@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Fire : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 0;
     public FigureId FigureId => FigureId.Fire;
 
     public IDictionary<int, Uri> ImageUris =>

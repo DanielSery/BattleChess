@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Scout : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 10;
     public FigureId FigureId => FigureId.Scout;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)

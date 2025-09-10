@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Musketeer : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 12;
     public FigureId FigureId => FigureId.Musketeer;
 
     private static readonly Position[] AttackDirections =

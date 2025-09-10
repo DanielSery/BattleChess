@@ -8,7 +8,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Miner : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 3;
     public FigureId FigureId => FigureId.Miner;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)

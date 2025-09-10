@@ -1,6 +1,4 @@
-using CrownsGuard.Game.Players;
-
-namespace CrownsGuard.Multiplayer.Players;
+namespace CrownsGuard.Game.Players;
 
 public interface IAutomaticallyControlledPlayerInfo : IPlayerInfo
 {

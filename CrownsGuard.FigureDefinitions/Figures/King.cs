@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class King : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 5;
     public FigureId FigureId => FigureId.King;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)

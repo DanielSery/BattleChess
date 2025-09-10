@@ -7,7 +7,6 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class LegionarySword : ICrownsGuardFigureTypeInfo
 {
-    public int FigureValue => 2;
     public FigureId FigureId => FigureId.LegionarySword;
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
