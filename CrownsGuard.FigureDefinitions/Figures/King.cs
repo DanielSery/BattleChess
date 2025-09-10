@@ -18,7 +18,10 @@ public class King : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
             {
@@ -32,7 +35,9 @@ public class King : ICrownsGuardFigureTypeInfo
         }
 
         if (sourcePosition.X != 4 && sourcePosition.Y != 0)
+        {
             return actions.ToArrayPoolMemory(actionsCount);
+        }
 
         if (sourceFigure.IsAllyTo(board[0]) &&
             board[1].IsEmpty() &&
@@ -52,26 +57,29 @@ public class King : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
+        if (action.FigureActionType == FigureActionType.Move)
         {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Attack:
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Special when action.TargetPosition.X == 2:
-                board.MoveFigure(new Position(4, 0), new Position(2, 0), onEvent);
-                board.MoveFigure(new Position(0, 0), new Position(3, 0), onEvent);
-                break;
-            case FigureActionType.Special when action.TargetPosition.X == 6:
-                board.MoveFigure(new Position(4, 0), new Position(6, 0), onEvent);
-                board.MoveFigure(new Position(7, 0), new Position(5, 0), onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (action.FigureActionType == FigureActionType.Attack)
+        {
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (action.FigureActionType == FigureActionType.Special && action.TargetPosition.X == 2)
+        {
+            board.MoveFigure(new Position(4, 0), new Position(2, 0), onEvent);
+            board.MoveFigure(new Position(0, 0), new Position(3, 0), onEvent);
+        }
+        else if (action.FigureActionType == FigureActionType.Special && action.TargetPosition.X == 6)
+        {
+            board.MoveFigure(new Position(4, 0), new Position(6, 0), onEvent);
+            board.MoveFigure(new Position(7, 0), new Position(5, 0), onEvent);
+        }
+        else
+        {
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

@@ -18,7 +18,10 @@ public class Trader : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
             {
@@ -43,21 +46,15 @@ public class Trader : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
-        {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Attack:
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Special:
-                board.SwapTiles(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
+        if (action.FigureActionType == FigureActionType.Move)
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        else if (action.FigureActionType == FigureActionType.Attack)
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+        else if (action.FigureActionType == FigureActionType.Special)
+            board.SwapTiles(action.SourcePosition, action.TargetPosition, onEvent);
+        else
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

@@ -25,7 +25,10 @@ public class Wizzard : ICrownsGuardFigureTypeInfo
         foreach (var relative in MovementPositions)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
             {
@@ -36,30 +39,30 @@ public class Wizzard : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
+        if (action.FigureActionType == FigureActionType.Move)
         {
-            case FigureActionType.Move:
-                var movement = action.TargetPosition - action.SourcePosition;
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                if (Math.Abs(movement.X) == Math.Abs(movement.Y))
-                {
-                    TryDestroyTile(board, action.SourcePosition, new Position(1, 0), onEvent);
-                    TryDestroyTile(board, action.SourcePosition, new Position(-1, 0), onEvent);
-                    TryDestroyTile(board, action.SourcePosition, new Position(0, 1), onEvent);
-                    TryDestroyTile(board, action.SourcePosition, new Position(0, -1), onEvent);
-                }
-                else
-                {
-                    TryDestroyTile(board, action.SourcePosition, new Position(1, -1), onEvent);
-                    TryDestroyTile(board, action.SourcePosition, new Position(-1, 1), onEvent);
-                    TryDestroyTile(board, action.SourcePosition, new Position(1, 1), onEvent);
-                    TryDestroyTile(board, action.SourcePosition, new Position(-1, -1), onEvent);
-                }
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+            var movement = action.TargetPosition - action.SourcePosition;
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+            if (Math.Abs(movement.X) == Math.Abs(movement.Y))
+            {
+                TryDestroyTile(board, action.SourcePosition, new Position(1, 0), onEvent);
+                TryDestroyTile(board, action.SourcePosition, new Position(-1, 0), onEvent);
+                TryDestroyTile(board, action.SourcePosition, new Position(0, 1), onEvent);
+                TryDestroyTile(board, action.SourcePosition, new Position(0, -1), onEvent);
+            }
+            else
+            {
+                TryDestroyTile(board, action.SourcePosition, new Position(1, -1), onEvent);
+                TryDestroyTile(board, action.SourcePosition, new Position(-1, 1), onEvent);
+                TryDestroyTile(board, action.SourcePosition, new Position(1, 1), onEvent);
+                TryDestroyTile(board, action.SourcePosition, new Position(-1, -1), onEvent);
+            }
+        }
+        else
+        {
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 

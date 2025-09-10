@@ -186,7 +186,7 @@ public sealed class BoardViewModel : ViewModelBase
                 _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime,
                 CancellationToken.None);
 
-            FigureActionExecutor.ExecuteFigureAction(_gameService.CurrentPlayerInfo.Board.Span, ref clickedTile._possibleAction, OnEvent);
+            FigureActionExecutor.ExecuteFigureAction(_gameService.CurrentPlayerInfo.Board.Span, clickedTile.PossibleAction, OnEvent);
             _gameService.SyncBoard();
             ClearPossibleActions();
 
@@ -293,7 +293,7 @@ public sealed class BoardViewModel : ViewModelBase
         _gameService.EndTurn(e.turnTimeSpent);
         var toTile = Tiles[e.to.GetIndex()];
 
-        FigureActionExecutor.ExecuteFigureAction(_gameService.CurrentPlayerInfo.Board.Span, ref toTile._possibleAction, OnEvent);
+        FigureActionExecutor.ExecuteFigureAction(_gameService.CurrentPlayerInfo.Board.Span, toTile.PossibleAction, OnEvent);
         _gameService.SyncBoard();
 
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);

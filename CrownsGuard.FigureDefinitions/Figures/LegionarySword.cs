@@ -44,27 +44,29 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
+        if (action.FigureActionType == FigureActionType.Move)
         {
-            case FigureActionType.Move:
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (action.FigureActionType == FigureActionType.Attack)
+        {
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (action.FigureActionType == FigureActionType.Special)
+        {
+            var targetFigure = board[action.TargetPosition.GetIndex()];
+            if (targetFigure.IsWalkable())
+            {
                 board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Attack:
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Special:
-                var targetFigure = board[action.TargetPosition.GetIndex()];
-                if (targetFigure.IsWalkable())
-                {
-                    board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                    if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionaryPike)
-                        board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
-                }
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionaryPike)
+                    board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
+            }
+        }
+        else
+        {
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 

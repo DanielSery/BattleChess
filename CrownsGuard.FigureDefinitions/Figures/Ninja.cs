@@ -18,7 +18,10 @@ public class Ninja : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.RookDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (sourceFigure.CanAttack(targetFigure))
             {
@@ -28,10 +31,14 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(-1, 1), out var action))
+        {
             actions[actionsCount++] = action;
+        }
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(1, 1), out action))
+        {
             actions[actionsCount++] = action;
+        }
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), out action) &&
             board.TryGetFigure(sourcePosition + new Position(0, 1), out var jumpedOver) &&
@@ -43,19 +50,14 @@ public class Ninja : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
-        {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Attack:
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
+        if (action.FigureActionType == FigureActionType.Move)
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        else if (action.FigureActionType == FigureActionType.Attack)
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+        else
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 
     private static bool TryGetMoveAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,

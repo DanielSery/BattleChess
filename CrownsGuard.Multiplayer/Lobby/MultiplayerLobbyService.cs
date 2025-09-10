@@ -110,7 +110,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         var random = new Random();
         var isHostStarting = random.Next(0, 1) == 1;
 
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
             return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
 
@@ -167,7 +167,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         BoardBlueprint myMap,
         CancellationToken cancellationToken)
     {
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
             return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
 

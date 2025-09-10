@@ -18,10 +18,15 @@ public class Knight : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.RookDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
+            {
                 actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+            }
         }
 
         foreach (var relative in PositionsGroups.RookDirections)
@@ -29,7 +34,10 @@ public class Knight : ICrownsGuardFigureTypeInfo
             for (var i = 1; i <= 3; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
+                {
+                    break;
+                }
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
@@ -45,7 +53,7 @@ public class Knight : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var move = action.TargetPosition - action.SourcePosition;
 
@@ -57,7 +65,7 @@ public class Knight : ICrownsGuardFigureTypeInfo
         else if (move.X is <= 2 and >= -2 &&
                  move.Y is <= 2 and >= -2)
         {
-            var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
+            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
             var sourcePosition = action.SourcePosition;
 
             board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);

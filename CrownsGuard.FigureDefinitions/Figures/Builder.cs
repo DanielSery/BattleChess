@@ -19,7 +19,10 @@ public class Builder : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.BishopDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out Figure targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out Figure targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
             {
@@ -30,7 +33,10 @@ public class Builder : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.RookDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out Figure targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out Figure targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsEmpty())
             {
@@ -45,21 +51,15 @@ public class Builder : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
-        {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Attack:
-                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Special:
-                board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Wall), onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
+        if (action.FigureActionType == FigureActionType.Move)
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        else if (action.FigureActionType == FigureActionType.Attack)
+            board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+        else if (action.FigureActionType == FigureActionType.Special)
+            board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Wall), onEvent);
+        else
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

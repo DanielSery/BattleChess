@@ -20,48 +20,60 @@ public class Cannon : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
-            
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
+
             if (sourceFigure.IsEnemyTo(targetFigure))
+            {
                 return ArrayPoolMemory<FigureAction>.Empty;
+            }
         }
         
         Span<FigureAction> actions = stackalloc FigureAction[3];
         int actionsCount = 0;
-        
+
         if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack1Figure) &&
-             sourceFigure.IsEnemyTo(attack1Figure))
+            sourceFigure.IsEnemyTo(attack1Figure))
+        {
             actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 2));
-        
+        }
+
         if (!board.TryGetFigure(sourcePosition + new Position(0, 3), out var attack2Figure) &&
             sourceFigure.IsEnemyTo(attack2Figure))
+        {
             actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 3));
-        
+        }
+
         if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack3Figure) &&
             sourceFigure.IsEnemyTo(attack3Figure))
+        {
             actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 4));
+        }
         
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
+        if (action.FigureActionType == FigureActionType.Attack)
         {
-            case FigureActionType.Attack:
-                foreach (var attackPosition in AttackPositions)
+            foreach (var attackPosition in AttackPositions)
+            {
+                var targetPosition = action.SourcePosition + attackPosition;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
                 {
-                    var targetPosition = action.SourcePosition + attackPosition;
-                    if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
-
-                    if (!targetFigure.IsEmpty())
-                    {
-                        board.KillWithoutMove(action.SourcePosition, targetPosition, onEvent);
-                    }
+                    continue;
                 }
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+
+                if (!targetFigure.IsEmpty())
+                {
+                    board.KillWithoutMove(action.SourcePosition, targetPosition, onEvent);
+                }
+            }
         }
+        else
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

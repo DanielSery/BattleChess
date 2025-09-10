@@ -16,33 +16,36 @@ public class Peasant : ICrownsGuardFigureTypeInfo
         int actionsCount = 0;
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var attackAction))
+        {
             actions[actionsCount++] = attackAction;
+        }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var move1Action))
+        {
             actions[actionsCount++] = move1Action;
+        }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 0), out var move2Action))
+        {
             actions[actionsCount++] = move2Action;
+        }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 0), out var move3Action))
+        {
             actions[actionsCount++] = move3Action;
+        }
         
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
-        {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Attack:
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
+        if (action.FigureActionType == FigureActionType.Move)
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        else if (action.FigureActionType == FigureActionType.Attack)
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+        else
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
     
     private static bool TryGetAttackAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,

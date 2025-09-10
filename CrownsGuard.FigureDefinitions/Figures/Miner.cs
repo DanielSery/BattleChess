@@ -19,7 +19,10 @@ public class Miner : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.RookDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
             {
@@ -32,26 +35,36 @@ public class Miner : ICrownsGuardFigureTypeInfo
             for (int i = 1; i < 7; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
+                {
+                    continue;
+                }
 
                 if (targetFigure.IsWalkable())
+                {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                }
                 else
+                {
                     break;
+                }
             }
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
         var difference = action.TargetPosition - action.SourcePosition;
-        var direction = new Position((short) Math.Sign(difference.X), (short) Math.Sign(difference.Y));
+        var direction = new Position((sbyte) Math.Sign(difference.X), (sbyte) Math.Sign(difference.Y));
         for (var position = action.SourcePosition; position != action.TargetPosition; position += direction)
         {
-            if (!board.TryGetFigure(position, out var targetFigure)) continue;
+            if (!board.TryGetFigure(position, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsEmpty())
             {

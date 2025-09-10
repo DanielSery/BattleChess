@@ -26,7 +26,10 @@ public class Elephant : ICrownsGuardFigureTypeInfo
             for (var i = 1; i <= 3; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
+                {
+                    continue;
+                }
 
                 if (!isAttack && targetFigure.IsWalkable())
                 {
@@ -43,7 +46,7 @@ public class Elephant : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var targetPosition = action.TargetPosition;
         var move = action.TargetPosition - action.SourcePosition;
@@ -58,7 +61,7 @@ public class Elephant : ICrownsGuardFigureTypeInfo
         else if (move.X is <= 2 and >= -2 &&
                  move.Y is <= 2 and >= -2)
         {
-            var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
+            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
             
             var step1Position = action.SourcePosition + smallMove;
             if (board[step1Position.GetIndex()].IsWalkable())
@@ -74,7 +77,7 @@ public class Elephant : ICrownsGuardFigureTypeInfo
         }
         else
         {
-            var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
+            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
             
             var step1Position = action.SourcePosition + smallMove;
             if (board[step1Position.GetIndex()].IsWalkable())

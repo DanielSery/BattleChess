@@ -18,7 +18,10 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.BishopDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
             
             if (targetFigure.IsWalkable())
             {
@@ -29,33 +32,35 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
         var movement = action.TargetPosition - action.SourcePosition;
-        switch (movement)
+        if (movement is { Y: 0, X: 1 })
         {
-            case { Y: 0, X: 1 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
-                break;
-            case { Y: 0, X: -1 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, 0), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
-                if (board.TryGetFigure(action.TargetPosition + new Position(-1, 1), out Figure _)) board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case { Y: 1, X: 0 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
-                break;
-            case { Y: -1, X: 0 }:
-                TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
-                TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
-                break;
+            TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
+        }
+        else if (movement is { Y: 0, X: -1 })
+        {
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, 0), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
+            if (board.TryGetFigure(action.TargetPosition + new Position(-1, 1), out Figure _))
+                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (movement is { Y: 1, X: 0 })
+        {
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
+        }
+        else if (movement is { Y: -1, X: 0 })
+        {
+            TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
+            TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
         }
     }
 
@@ -63,7 +68,9 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
         Action<BoardEvent, Span<Figure>> onEvent)
     {
         if (!board.TryGetFigure(sourcePosition + relative, out _))
+        {
             return;
+        }
 
         board.KillWithoutMove(sourcePosition, sourcePosition + relative, onEvent);
     }

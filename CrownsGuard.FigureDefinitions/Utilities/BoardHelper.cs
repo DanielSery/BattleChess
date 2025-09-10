@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core;
+﻿using System.Diagnostics;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 
@@ -8,15 +9,16 @@ internal static class BoardHelper
 {
     public static bool TryGetFigure(this Span<Figure> board, Position position, out Figure tile)
     {
-        var index = position.GetIndex();
-        if (index < 0 || index >= board.Length || 
+        Debug.Assert(board.Length > 0);
+        
+        if (position.Y is < 0 or >= Constants.BoardLength || 
             position.X is < 0 or >= Constants.BoardLength)
         {
             tile = new Figure();
             return false;
         }
 
-        tile = board[index];
+        tile = board[position.GetIndex()];
         return true;
     }
 }

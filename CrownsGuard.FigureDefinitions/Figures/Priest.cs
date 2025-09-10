@@ -20,7 +20,10 @@ public class Priest : ICrownsGuardFigureTypeInfo
             for (var i = 1; i < 7; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
+                {
+                    break;
+                }
 
                 if (targetFigure.IsWalkable())
                 {
@@ -38,13 +41,18 @@ public class Priest : ICrownsGuardFigureTypeInfo
             for (var i = 1; i < 7; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
+                {
+                    break;
+                }
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                    break;
                 }
-                else if (!targetFigure.IsWalkable())
+
+                if (!targetFigure.IsWalkable())
                 {
                     break;
                 }
@@ -54,7 +62,10 @@ public class Priest : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.RookDirections)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                break;
+            }
 
             if (sourceFigure.IsAllyTo(targetFigure) ||
                 sourceFigure.IsEnemyTo(targetFigure))
@@ -66,22 +77,24 @@ public class Priest : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
+        if (action.FigureActionType == FigureActionType.Move)
         {
-            case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Attack:
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            case FigureActionType.Special:
-                board.ChangeOwner(action.SourcePosition, action.TargetPosition, onEvent);
-                board.MakeUnitKing(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (action.FigureActionType == FigureActionType.Attack)
+        {
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (action.FigureActionType == FigureActionType.Special)
+        {
+            board.ChangeOwner(action.SourcePosition, action.TargetPosition, onEvent);
+            board.MakeUnitKing(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else
+        {
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
         }
     }
 }

@@ -18,7 +18,10 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.KnightPositions)
         {
             var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
 
             if (targetFigure.IsWalkable())
             {
@@ -29,10 +32,8 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var movedPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(movedPosition, out var movedFigure)) 
-                continue;
-
-            if (movedFigure.IsEmpty())
+            if (!board.TryGetFigure(movedPosition, out var movedFigure) ||
+                movedFigure.IsEmpty())
             {
                 continue;
             }
@@ -40,7 +41,10 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
             for (var i = 2; i < 8; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure)) break;
+                if (!board.TryGetFigure(targetPosition, out var targetFigure))
+                {
+                    break;
+                }
 
                 if (targetFigure.IsEmpty())
                 {
@@ -56,16 +60,11 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        switch (action.FigureActionType)
-        {
-            case FigureActionType.Move:
-            case FigureActionType.Special:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                break;
-            default:
-                throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
+        if (action.FigureActionType is FigureActionType.Move or FigureActionType.Special)
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        else
+            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }
