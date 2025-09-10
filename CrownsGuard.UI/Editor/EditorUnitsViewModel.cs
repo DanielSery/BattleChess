@@ -3,7 +3,7 @@ using CrownsGuard.Core.Figures;
 using CrownsGuard.Multiplayer;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Maps.Figures;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows.ViewModels;
 
@@ -11,19 +11,19 @@ namespace CrownsGuard.UI.Editor;
 
 public class EditorUnitsViewModel : ViewModelBase
 {
-    private readonly IFigureGroup _figureGroup;
+    private readonly IFigureTypeInfoGroup _figureTypeInfoGroup;
     private readonly IMultiplayerPlayerService _playerService;
 
-    private IFigureInfo _mouseOnInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
-    private IFigureInfo _tileInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
+    private IFigureInfo _mouseOnInfo = new FigureTypeViewModel(NoneFigureTypeInfo.Instance, false);
+    private IFigureInfo _tileInfo = new FigureTypeViewModel(NoneFigureTypeInfo.Instance, false);
     private FigureTypeViewModel[] _figures = [];
     private bool _tileInfoFocused;
 
     public EditorUnitsViewModel(
-        IFigureGroup figureGroup,
+        IFigureTypeInfoGroup figureTypeInfoGroup,
         IMultiplayerPlayerService playerService)
     {
-        _figureGroup = figureGroup;
+        _figureTypeInfoGroup = figureTypeInfoGroup;
         _playerService = playerService;
         _playerService.LoggedInPlayerChanged += PlayerServiceOnLoggedInPlayerChanged;
 
@@ -33,8 +33,8 @@ public class EditorUnitsViewModel : ViewModelBase
         FigureLostFocusCommand = new RelayCommand<FigureTypeViewModel>(LostFocus);
         FigureMouseEnterCommand = new RelayCommand<FigureTypeViewModel>(FigureMouseEnter);
         FigureMouseExitCommand = new RelayCommand<FigureTypeViewModel>(FigureMouseExit);
-        TileMouseEnterCommand = new RelayCommand<TileViewModel>(TileMouseEnter);
-        TileMouseExitCommand = new RelayCommand<TileViewModel>(TileMouseExit);
+        TileMouseEnterCommand = new RelayCommand<TileInfoViewModel>(TileMouseEnter);
+        TileMouseExitCommand = new RelayCommand<TileInfoViewModel>(TileMouseExit);
     }
 
     public FigureTypeViewModel[] Figures
@@ -53,8 +53,8 @@ public class EditorUnitsViewModel : ViewModelBase
     public RelayCommand<FigureTypeViewModel> FigureLostFocusCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureMouseEnterCommand { get; }
     public RelayCommand<FigureTypeViewModel> FigureMouseExitCommand { get; }
-    public RelayCommand<TileViewModel> TileMouseEnterCommand { get; }
-    public RelayCommand<TileViewModel> TileMouseExitCommand { get; }
+    public RelayCommand<TileInfoViewModel> TileMouseEnterCommand { get; }
+    public RelayCommand<TileInfoViewModel> TileMouseExitCommand { get; }
 
     public async Task<string?> PossiblyUnlockUnit(bool isWin)
     {
@@ -102,7 +102,7 @@ public class EditorUnitsViewModel : ViewModelBase
     {
         if (obj is null) return;
         
-        _mouseOnInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
+        _mouseOnInfo = new FigureTypeViewModel(NoneFigureTypeInfo.Instance, false);
         if (_tileInfoFocused)
             return;
         
@@ -120,18 +120,18 @@ public class EditorUnitsViewModel : ViewModelBase
         TileInfo = _mouseOnInfo;
     }
 
-    private void TileMouseExit(TileViewModel? obj)
+    private void TileMouseExit(TileInfoViewModel? obj)
     {
         if (obj is null) return;
 
-        _mouseOnInfo = new FigureTypeViewModel(NoneFigureType.Instance, false);
+        _mouseOnInfo = new FigureTypeViewModel(NoneFigureTypeInfo.Instance, false);
         if (_tileInfoFocused)
             return;
         
         TileInfo =  _mouseOnInfo;
     }
 
-    private void TileMouseEnter(TileViewModel? obj)
+    private void TileMouseEnter(TileInfoViewModel? obj)
     {
         if (obj is null) return;
 
@@ -148,7 +148,7 @@ public class EditorUnitsViewModel : ViewModelBase
                               ?? IMultiplayerPlayerService.DefaultUnlockedFigures;
         var unlockedFiguresBitArray = new BitArray(unlockedFigures);
         
-        Figures = _figureGroup.FigureTypes
+        Figures = _figureTypeInfoGroup.FigureTypes
             .Select(x => new FigureTypeViewModel(x, unlockedFiguresBitArray[(int)x.FigureId]))
             .ToArray();
     }

@@ -17,7 +17,7 @@
                 Command="{Binding DataContext.PlayTileCommand, ElementName=ThisGameBoardControl}"
                 CommandParameter="{Binding}"
                 Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
-                d:DataContext="{d:DesignInstance shared:TileViewModel}"
+                d:DataContext="{d:DesignInstance shared:TileInfoViewModel}"
                 DataContextChanged="Button_OnDataContextChanged">
             <Image Source="{Binding Figure.ImageUri}" />
         </Button>

@@ -1,34 +1,34 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Maps.Figures;
 
 namespace CrownsGuard.UI.Editor;
 
 public sealed class FigureTypeViewModel : IFigureInfo
 {
-    public FigureTypeViewModel(IFigureType figureType, bool isUnlocked)
+    public FigureTypeViewModel(IFigureTypeInfo figureTypeInfo, bool isUnlocked)
     {
-        FigureId = figureType.FigureId;
-        DisplayName = figureType.DisplayName;
-        BaseDescription = figureType.BaseDescription;
-        MovementDescription = figureType.MovementDescription;
-        AttackDescription = figureType.AttackDescription;
-        SpecialDescription = figureType.SpecialDescription;
+        FigureId = figureTypeInfo.FigureId;
+        DisplayName = figureTypeInfo.DisplayName;
+        BaseDescription = figureTypeInfo.BaseDescription;
+        MovementDescription = figureTypeInfo.MovementDescription;
+        AttackDescription = figureTypeInfo.AttackDescription;
+        SpecialDescription = figureTypeInfo.SpecialDescription;
         IsUnlocked = isUnlocked;
 
-        if (figureType.ImageUris.TryGetValue(1, out var redUri))
+        if (figureTypeInfo.ImageUris.TryGetValue(1, out var redUri))
         {
-            Player = Player.White;
+            PlayerColor = PlayerColor.White;
             ImageUri = redUri;
         }
-        else if (figureType.ImageUris.TryGetValue(0, out var neutralUri))
+        else if (figureTypeInfo.ImageUris.TryGetValue(0, out var neutralUri))
         {
-            Player = Player.Neutral;
+            PlayerColor = PlayerColor.Neutral;
             ImageUri = neutralUri;
         }
     }
 
-    public Player Player { get;}
+    public PlayerColor PlayerColor { get;}
     public FigureId FigureId { get; }
     public string DisplayName { get; }
     public string BaseDescription { get; }

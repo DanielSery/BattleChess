@@ -1,17 +1,18 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
+using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Wall : ICrownsGuardFigureType
+public class Wall : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 1;
     public FigureId FigureId => FigureId.Wall;
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        return [];
+        return ArrayPoolMemory<FigureAction>.Empty;
     }
 
     public IDictionary<int, Uri> ImageUris =>

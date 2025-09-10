@@ -1,11 +1,11 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Musketeer : ICrownsGuardFigureType
+public class Musketeer : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 12;
     public FigureId FigureId => FigureId.Musketeer;
@@ -15,7 +15,7 @@ public class Musketeer : ICrownsGuardFigureType
         new(-1, 1), new(0, 1), new(1, 1)
     ];
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
@@ -23,7 +23,7 @@ public class Musketeer : ICrownsGuardFigureType
             if (!board.TryGetFigure(targetPosition, out var targetFigure)) continue;
 
             if (sourceFigure.IsEnemyTo(targetFigure))
-                return [];
+                return ArrayPoolMemory<FigureAction>.Empty;
         }
 
         Span<FigureAction> actions = stackalloc FigureAction[36];
@@ -49,10 +49,10 @@ public class Musketeer : ICrownsGuardFigureType
             }
         }
         
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {

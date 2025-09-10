@@ -26,7 +26,7 @@
                     Command="{Binding DataContext.MakeUnitKingCommand, ElementName=ThisItemsControl}"
                     CommandParameter="{Binding}"
                     Style="{Binding .Figure.IsKing, Converter={converters:BooleanMultiValueConverter TrueValue={StaticResource ChessButtonKingStyle}, FalseValue={StaticResource ChessButtonStyle}}}"
-                    d:DataContext="{d:DesignInstance shared:TileViewModel}"
+                    d:DataContext="{d:DesignInstance shared:TileInfoViewModel}"
                     n:DragSource.AllowDrag="True"
                     n:DragSource.AllowedEffects="Move"
                     n:DragSource.Dragging="ChessButton_DragEnter"

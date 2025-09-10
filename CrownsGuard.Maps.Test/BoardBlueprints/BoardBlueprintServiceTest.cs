@@ -132,7 +132,7 @@ public class BoardBlueprintServiceTest
     {
         var board = new BoardBlueprint
         {
-            Figures = Enumerable.Range(0, 16).Select(x => new FigureBlueprint(Player.White, x, false)).ToArray()
+            Figures = Enumerable.Range(0, 16).Select(x => new FigureBlueprint(PlayerColor.White, x, false)).ToArray()
         };
 
         var serialized = JsonSerializer.Serialize(board);
@@ -152,9 +152,9 @@ public class BoardBlueprintServiceTest
     {
         var board = new BoardBlueprint
         {
-            Figures = Enumerable.Range(1, 16).Select(x => new FigureBlueprint(Player.White, x, false)).ToArray()
+            Figures = Enumerable.Range(1, 16).Select(x => new FigureBlueprint(PlayerColor.White, x, false)).ToArray()
         };
-        board.Figures[0] = new FigureBlueprint(Player.White, 1, true);
+        board.Figures[0] = new FigureBlueprint(PlayerColor.White, 1, true);
 
         var serialized = JsonSerializer.Serialize(board);
         var text = CompressionHelper.Compress(serialized);

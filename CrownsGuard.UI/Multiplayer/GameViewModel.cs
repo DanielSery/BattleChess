@@ -88,14 +88,14 @@ public class GameViewModel : ViewModelBase
 
     private void GameServiceOnTurnStarted(object? sender, EventArgs e)
     {
-        var currentPlayer = Players.FirstOrDefault(x => x.Player == _gameService.CurrentPlayerInfo.Player);
+        var currentPlayer = Players.FirstOrDefault(x => x.PlayerColor == _gameService.CurrentPlayerInfo.PlayerColor);
         currentPlayer?.StartTurn();
         RaisePropertyChanged(nameof(CanEndGame));
     }
 
     private void GameServiceOnTurnEnded(object? sender, EventArgs e)
     {
-        var currentPlayer = Players.FirstOrDefault(x => x.Player == _gameService.CurrentPlayerInfo.Player);
+        var currentPlayer = Players.FirstOrDefault(x => x.PlayerColor == _gameService.CurrentPlayerInfo.PlayerColor);
         currentPlayer?.EndTurn();
         RaisePropertyChanged(nameof(CanEndGame));
     }

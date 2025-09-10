@@ -1,17 +1,17 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Builder : ICrownsGuardFigureType
+public class Builder : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 4;
     public FigureId FigureId => FigureId.Builder;
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
@@ -42,10 +42,10 @@ public class Builder : ICrownsGuardFigureType
             }
         }
         
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {
@@ -56,7 +56,7 @@ public class Builder : ICrownsGuardFigureType
                 board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
                 break;
             case FigureActionType.Special:
-                board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureId.Wall), onEvent);
+                board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Wall), onEvent);
                 break;
             default:
                 throw new NotSupportedException($"Invalid action type {action.FigureActionType}");

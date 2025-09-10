@@ -1,11 +1,11 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Spearman : ICrownsGuardFigureType
+public class Spearman : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 3;
     public FigureId FigureId => FigureId.Spearman;
@@ -20,7 +20,7 @@ public class Spearman : ICrownsGuardFigureType
         new(-1, 0), new(1, 0), new(0, 1)
     ];
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
@@ -47,10 +47,10 @@ public class Spearman : ICrownsGuardFigureType
             }
         }
 
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {

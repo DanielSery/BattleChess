@@ -9,7 +9,7 @@ public static class GameModule
     {
         builder.RegisterType<GameService>()
             .As<IGameService>()
-            .As<IFigureOwnersHolder>()
+            .As<IPlayersOwner>()
             .SingleInstance();
     }
 }

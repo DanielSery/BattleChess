@@ -1,0 +1,23 @@
+﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
+
+namespace CrownsGuard.Core.Players;
+
+public class NeutralPlayer : IPlayer
+{
+    public static readonly NeutralPlayer Instance = new NeutralPlayer();
+
+    private NeutralPlayer() { }
+
+    /// <inheritdoc />
+    public PlayerColor PlayerColor => PlayerColor.Neutral;
+
+    /// <inheritdoc />
+    public ArrayPoolMemory<Figure> Board { get; } = ArrayPoolMemory<Figure>.Empty;
+
+    /// <inheritdoc />
+    public void UpdateBoard(ArrayPoolMemory<Figure> board)
+    {
+        
+    }
+}

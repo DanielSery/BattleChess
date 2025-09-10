@@ -212,7 +212,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return RelativePositionHelper.GetRelative(Player.White, Position.FromIndex(index));
+        return RelativePositionHelper.GetRelative(PlayerColor.White, Position.FromIndex(index));
     }
 
     private async Task<Result> DeleteGameTurnsAsync(CancellationToken cancellationToken)

@@ -1,4 +1,6 @@
-﻿using CrownsGuard.Core.Players;
+﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.Game.Players;
 
 namespace CrownsGuard.Game;
@@ -27,7 +29,9 @@ public interface IGameService
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void StartGame(IPlayerInfo player1, IPlayerInfo player2, Player startingPlayer);
+    void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, ArrayPoolMemory<Figure> board);
+    
+    void SyncBoard();
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayerInfo" />.

@@ -13,17 +13,17 @@ public class NoneTileTest
     {
         var noneFigureId = NoneTile.Instance.Figure.Id;
 
-        noneFigureId.Should().Be(FigureInfo.None.Id);
+        noneFigureId.Should().Be(FigureWithInfo.None.Id);
     }
 
     [Fact]
     public void AfterSettingNoneTileHasNoneFigure()
     {
         var noneTile = NoneTile.Instance;
-        noneTile.Figure = new FigureInfo(new ControlledPlayerInfo(Player.Neutral, ""), NoneFigureType.Instance, false);
+        noneTile.Figure = new FigureWithInfo(new ControlledPlayerInfo(PlayerColor.Neutral, ""), NoneFigureTypeInfo.Instance, false);
         var noneFigureId = noneTile.Figure.Id;
 
-        noneFigureId.Should().Be(FigureInfo.None.Id);
+        noneFigureId.Should().Be(FigureWithInfo.None.Id);
     }
 
     [Fact]

@@ -6,13 +6,13 @@ namespace CrownsGuard.Game.Helpers;
 
 public static class RelativePositionHelper
 {
-    public static Position GetRelative(Player player, Position absPosition)
+    public static Position GetRelative(PlayerColor playerColor, Position absPosition)
     {
-        return player switch
+        return playerColor switch
         {
-            Player.White => new Position(absPosition.X, (short)(Constants.BoardLength - absPosition.Y - 1)),
-            Player.Black => new Position(absPosition.X, absPosition.Y),
-            _ => throw new ArgumentOutOfRangeException(nameof(player))
+            PlayerColor.White => new Position(absPosition.X, (short)(Constants.BoardLength - absPosition.Y - 1)),
+            PlayerColor.Black => absPosition,
+            _ => throw new ArgumentOutOfRangeException(nameof(playerColor))
         };
     }
 }

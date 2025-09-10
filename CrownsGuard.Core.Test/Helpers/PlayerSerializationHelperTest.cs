@@ -9,7 +9,7 @@ public class PlayerSerializationHelperTest
     [Fact]
     public void ToInt_ThrowsError_WhenInvalidPlayer()
     {
-        Action toIntAction = () => ((Player)5).ToInt();
+        Action toIntAction = () => ((PlayerColor)5).ToInt();
 
         toIntAction.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -25,7 +25,7 @@ public class PlayerSerializationHelperTest
     [Fact]
     public void ConversionBack_ReturnsInitialObject()
     {
-        var player = Player.Black;
+        var player = PlayerColor.Black;
         var playerInt = player.ToInt();
         var doubleConverted = PlayerSerializationHelper.ToPlayer(playerInt);
 

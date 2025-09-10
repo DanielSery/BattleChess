@@ -1,11 +1,13 @@
-﻿using CrownsGuard.Core.SimulatedBoard;
+﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Figures;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
 
 public static class FigureActionExecutor
 {
-    public static void ExecuteFigureAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteFigureAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigure = board[action.SourcePosition.GetIndex()];
         switch (sourceFigure.FigureType)

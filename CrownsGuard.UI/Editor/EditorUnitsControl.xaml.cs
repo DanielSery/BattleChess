@@ -4,7 +4,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;
@@ -52,10 +51,10 @@ public partial class EditorUnitsControl
 
     private void Figures_Drop(object sender, DragEventArgs e)
     {
-        if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileViewModel)).FullName))
+        if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName))
         {
-            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileViewModel)).FullName);
-            teamBoard.CreateFigure(sourceTile, new Figure(Player.Neutral, false, FigureId.Empty));
+            var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileInfoViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName);
+            teamBoard.CreateFigure(sourceTile, new Figure(PlayerColor.Neutral, false, FigureId.Empty));
         }
     }
 
@@ -63,7 +62,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var figureType = (FigureTypeViewModel)button.DataContext;
-        e.Data = new Figure(figureType.Player, false, figureType.FigureId);
+        e.Data = new Figure(figureType.PlayerColor, false, figureType.FigureId);
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

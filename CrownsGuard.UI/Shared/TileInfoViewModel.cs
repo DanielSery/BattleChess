@@ -1,17 +1,17 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
-using CrownsGuard.Game.GameBoard;
+using CrownsGuard.Maps.Figures;
+using CrownsGuard.Maps.GameBoard;
 using Nicenis.Windows.ViewModels;
 
 namespace CrownsGuard.UI.Shared;
 
-public class TileViewModel : ViewModelBase, ITile
+public class TileInfoViewModel : ViewModelBase, ITileInfo
 {
-    public static readonly TileViewModel None = new(new Position(-1, -1));
+    public static readonly TileInfoViewModel None = new(new Position(-1, -1));
 
-    private IFigure _figure = FigureInfo.None;
+    private IFigureWithInfo _figure = FigureWithInfo.None;
 
     private bool _isMouseOver;
     private bool _isPossibleAttack;
@@ -22,14 +22,13 @@ public class TileViewModel : ViewModelBase, ITile
 
     public FigureAction _possibleAction = FigureAction.None;
 
-    public TileViewModel(Position position)
+    public TileInfoViewModel(Position position)
     {
-        RelativePosition = position;
+        Position = position;
         IsBlack = position.X % 2 == 0 ^ position.Y % 2 == 0;
     }
 
-    public Position RelativePosition { get; }
-    public Position AbsolutePosition => RelativePosition;
+    public Position Position { get; }
 
     public event EventHandler? MovedFrom;
     public event EventHandler? MovedTo;
@@ -84,15 +83,10 @@ public class TileViewModel : ViewModelBase, ITile
         }
     }
 
-    public IFigure Figure
+    public IFigureWithInfo Figure
     {
         get => _figure;
         set => SetProperty(ref _figure, value);
-    }
-
-    public ITile GetRelativeTile(Player player)
-    {
-        return new RelativeTile(this, player);
     }
 
     /// <inheritdoc />

@@ -1,15 +1,16 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class LegionarySword : ICrownsGuardFigureType
+public class LegionarySword : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 2;
     public FigureId FigureId => FigureId.LegionarySword;
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
@@ -30,7 +31,7 @@ public class LegionarySword : ICrownsGuardFigureType
         }
         else
         {
-            return actions.ToArrayPool(actionsCount);
+            return actions.ToArrayPoolMemory(actionsCount);
         }
 
         if (sourcePosition.Y == 1 &&
@@ -39,11 +40,11 @@ public class LegionarySword : ICrownsGuardFigureType
             actions[actionsCount++] = moveAction2;
         }
 
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
         
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {
@@ -67,7 +68,7 @@ public class LegionarySword : ICrownsGuardFigureType
         }
     }
 
-    private static bool TryGetAttackAction(Figure[] board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool TryGetAttackAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
@@ -88,7 +89,7 @@ public class LegionarySword : ICrownsGuardFigureType
         return true;
     }
 
-    private static bool TryGetMoveAction(Figure[] board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool TryGetMoveAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;

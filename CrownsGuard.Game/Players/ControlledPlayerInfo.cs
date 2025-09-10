@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Game.Timers;
 
@@ -8,17 +9,19 @@ namespace CrownsGuard.Game.Players;
 [DebuggerDisplay("{Name}")]
 public class ControlledPlayerInfo : IControlledPlayerInfo
 {
-    public ControlledPlayerInfo(Player player, string playerName)
+    public ControlledPlayerInfo(PlayerColor playerColor, string playerName)
     {
-        Player = player;
+        PlayerColor = playerColor;
         Name = playerName;
         Timer = InfinitePlayerTimer.Instance;
     }
 
-    public Player Player { get; }
+    public PlayerColor PlayerColor { get; }
+
+    public ArrayPoolMemory<Figure> Board { get; private set; } = ArrayPoolMemory<Figure>.Empty;
+    public Figure[] PlayerBoard { get; set; } = [];
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
-    public List<IFigure> Figures { get; } = [];
 
     /// <inheritdoc />
     public void SetTimer(IPlayerTimer timer)
@@ -36,5 +39,12 @@ public class ControlledPlayerInfo : IControlledPlayerInfo
     public void EndTurn(TimeSpan? forcedTurnDuration = null)
     {
         Timer.EndTurnTimer(forcedTurnDuration);
+    }
+
+    /// <inheritdoc />
+    public void UpdateBoard(ArrayPoolMemory<Figure> board)
+    {
+        Board.Dispose();
+        Board = board;
     }
 }

@@ -1,12 +1,12 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Core.SimulatedBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Dragon : ICrownsGuardFigureType
+public class Dragon : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 12;
     public FigureId FigureId => FigureId.Dragon;
@@ -17,7 +17,7 @@ public class Dragon : ICrownsGuardFigureType
         new(1, -1), new(1, 1)
     ];
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
@@ -40,7 +40,7 @@ public class Dragon : ICrownsGuardFigureType
 
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                return actions.ToArrayPool(actionsCount);
+                return actions.ToArrayPoolMemory(actionsCount);
             }
         }
         
@@ -62,10 +62,10 @@ public class Dragon : ICrownsGuardFigureType
             }
         }
         
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {
@@ -77,15 +77,15 @@ public class Dragon : ICrownsGuardFigureType
                 if (move.X is <= 1 and >= -1 &&
                     move.Y is <= 1 and >= -1)
                 {
-                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureId.Fire), onEvent);
+                    board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire), onEvent);
                 }
                 else if (move.X is <= 2 and >= -2 &&
                          move.Y is <= 2 and >= -2)
                 {
                     var smallMove = new Position((short)Math.Sign(move.X), (short)Math.Sign(move.Y));
             
-                    board.CreateFigure(action.SourcePosition + smallMove, new Figure(Player.Neutral, false, FigureId.Fire), onEvent);
-                    board.CreateFigure(action.TargetPosition, new Figure(Player.Neutral, false, FigureId.Fire), onEvent);
+                    board.CreateFigure(action.SourcePosition + smallMove, new Figure(PlayerColor.Neutral, false, FigureId.Fire), onEvent);
+                    board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire), onEvent);
                 }
                 break;
             default:

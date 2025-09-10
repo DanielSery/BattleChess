@@ -2,22 +2,22 @@
 using CrownsGuard.Core;
 using CrownsGuard.Core.GameBoard;
 
-namespace CrownsGuard.Game.GameBoard;
+namespace CrownsGuard.Maps.GameBoard;
 
-public class Board : IBoard
+public class BoardInfo : IBoardInfo
 {
-    private readonly ITile[] _tiles;
+    private readonly ITileInfo[] _tiles;
 
-    public Board(ITile[] tiles)
+    public BoardInfo(ITileInfo[] tiles)
     {
         _tiles = tiles;
     }
 
-    public ITile this[Position position] => _tiles[position.GetIndex()];
+    public ITileInfo this[Position position] => _tiles[position.GetIndex()];
 
-    public IEnumerator<ITile> GetEnumerator()
+    public IEnumerator<ITileInfo> GetEnumerator()
     {
-        return _tiles.Cast<ITile>().GetEnumerator();
+        return _tiles.Cast<ITileInfo>().GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -34,15 +34,15 @@ public class Board : IBoard
         return position.X is >= 0 and < Constants.BoardLength;
     }
 
-    public bool TryGetTile(Position position, out ITile tile)
+    public bool TryGetTile(Position position, out ITileInfo tileInfo)
     {
         if (!HasTileOnPosition(position))
         {
-            tile = NoneTile.Instance;
+            tileInfo = NoneTileInfo.Instance;
             return false;
         }
 
-        tile = this[position];
+        tileInfo = this[position];
         return true;
     }
 }

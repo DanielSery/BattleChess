@@ -115,11 +115,11 @@ public sealed class MainWindowViewModel : ViewModelBase
     private async Task OnMultiplayerGameWon(bool publishResults, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost)
     {
         var messageType = ShownMessage.MessageType.Info;
-        if (won.Player == Player.White)
+        if (won.PlayerColor == PlayerColor.White)
         {
             messageType = ShownMessage.MessageType.Success;
         }
-        else if (won.Player == Player.Black)
+        else if (won.PlayerColor == PlayerColor.Black)
         {
             messageType = ShownMessage.MessageType.Warning;
         }
@@ -151,7 +151,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             NotificationService.ShowMessage(messageType, result.Value);
         }
         
-        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(won.Player == Player.White);
+        var unlockedUnit = await EditorViewModel.EditorUnits.PossiblyUnlockUnit(won.PlayerColor == PlayerColor.White);
         if (!string.IsNullOrEmpty(unlockedUnit))
         {
             NotificationService.ShowMessage(ShownMessage.MessageType.Success, $"Unlocked {unlockedUnit}.");

@@ -12,14 +12,13 @@ public class FigureCreatorTest
     [Fact]
     public void CreateFigure_UsesInformationFromBlueprint()
     {
-        var figureOwnerMock = new Mock<IFigureOwner>();
-        figureOwnerMock.Setup(x => x.Player).Returns(Player.Black);
-        figureOwnerMock.Setup(x => x.Figures).Returns([]);
-        var figureOwnersMock = new Mock<IFigureOwnersHolder>();
-        figureOwnersMock.Setup(x => x.GetFigureOwner(Player.Black)).Returns(figureOwnerMock.Object);
+        var figureOwnerMock = new Mock<IPlayer>();
+        figureOwnerMock.Setup(x => x.PlayerColor).Returns(PlayerColor.Black);
+        var figureOwnersMock = new Mock<IPlayersOwner>();
+        figureOwnersMock.Setup(x => x.GetPlayer(PlayerColor.Black)).Returns(figureOwnerMock.Object);
 
-        var figureGroupMock = new Mock<IFigureGroup>();
-        var figureTypeMock = new Mock<IFigureType>();
+        var figureGroupMock = new Mock<IFigureTypeInfoGroup>();
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {1, new Uri("component/Images/test.png", UriKind.Relative)},
             {2, new Uri("component/Images/test.png", UriKind.Relative)},
@@ -28,20 +27,20 @@ public class FigureCreatorTest
 
         var figureCreator = new FigureCreator(figureOwnersMock.Object, figureGroupMock.Object);
 
-        var figure = figureCreator.CreateFigure(new FigureBlueprint(Player.Black, 23, true));
+        var figure = figureCreator.CreateFigure(new FigureBlueprint(PlayerColor.Black, 23, true));
 
         figure.Owner.Should().Be(figureOwnerMock.Object);
-        figure.Type.Should().Be(figureTypeMock.Object);
+        figure.TypeInfo.Should().Be(figureTypeMock.Object);
         figure.IsKing.Should().BeTrue();
     }
 
     [Fact]
     public void CreateEmptyFigure_CreatesEmptyFigure()
     {
-        var figureOwnersMock = new Mock<IFigureOwnersHolder>();
+        var figureOwnersMock = new Mock<IPlayersOwner>();
 
-        var figureGroupMock = new Mock<IFigureGroup>();
-        var figureTypeMock = new Mock<IFigureType>();
+        var figureGroupMock = new Mock<IFigureTypeInfoGroup>();
+        var figureTypeMock = new Mock<IFigureTypeInfo>();
         figureTypeMock.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>{
             {0, new Uri("component/Images/test.png", UriKind.Relative)},
         });
@@ -51,8 +50,8 @@ public class FigureCreatorTest
 
         var figure = figureCreator.CreateEmptyFigure();
 
-        figure.Owner.Should().Be(NeutralFigureOwner.Instance);
-        figure.Type.Should().Be(figureTypeMock.Object);
+        figure.Owner.Should().Be(NeutralPlayer.Instance);
+        figure.TypeInfo.Should().Be(figureTypeMock.Object);
         figure.IsKing.Should().BeFalse();
     }
 }

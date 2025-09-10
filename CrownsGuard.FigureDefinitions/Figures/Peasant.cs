@@ -1,16 +1,16 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.SimulatedBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
-public class Peasant : ICrownsGuardFigureType
+public class Peasant : ICrownsGuardFigureTypeInfo
 {
     public int FigureValue => 2;
     public FigureId FigureId => FigureId.Peasant;
 
-    public static FigureAction[] GetPossibleActions(Position sourcePosition, Figure sourceFigure, Figure[] board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
@@ -27,10 +27,10 @@ public class Peasant : ICrownsGuardFigureType
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 0), out var move3Action))
             actions[actionsCount++] = move3Action;
         
-        return actions.ToArrayPool(actionsCount);
+        return actions.ToArrayPoolMemory(actionsCount);
     }
 
-    public static void ExecuteAction(Figure[] board, ref FigureAction action, Action<BoardEvent, Figure[]> onEvent)
+    public static void ExecuteAction(Span<Figure> board, ref FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         switch (action.FigureActionType)
         {
@@ -45,7 +45,7 @@ public class Peasant : ICrownsGuardFigureType
         }
     }
     
-    private static bool TryGetAttackAction(Figure[] board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool TryGetAttackAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
@@ -60,7 +60,7 @@ public class Peasant : ICrownsGuardFigureType
         return true;
     }
 
-    private static bool TryGetMoveAction(Figure[] board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool TryGetMoveAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;

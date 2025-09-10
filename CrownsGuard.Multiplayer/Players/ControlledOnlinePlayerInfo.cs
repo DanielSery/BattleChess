@@ -1,4 +1,5 @@
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
 using CrownsGuard.Multiplayer.Game;
@@ -7,19 +8,23 @@ namespace CrownsGuard.Multiplayer.Players;
 
 public class ControlledOnlinePlayerInfo : IOnlinePlayerInfo, IControlledPlayerInfo
 {
-    public ControlledOnlinePlayerInfo(Core.Players.Player player, string playerName, string? playerId, int? elo)
+    public ControlledOnlinePlayerInfo(Core.Players.PlayerColor playerColor, string playerName, string? playerId, int? elo)
     {
-        Player = player;
+        PlayerColor = playerColor;
         Name = playerName;
         Timer = InfinitePlayerTimer.Instance;
         PlayerId = playerId;
         Elo = elo;
     }
 
-    public Core.Players.Player Player { get; }
+    public Core.Players.PlayerColor PlayerColor { get; }
+
+    /// <inheritdoc />
+    public ArrayPoolMemory<Figure> Board { get; private set; }
+
+    public Figure[] PlayerBoard { get; set; } = [];
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
-    public List<IFigure> Figures { get; } = [];
     public string? PlayerId { get; }
     public int? Elo { get; }
 
@@ -44,5 +49,12 @@ public class ControlledOnlinePlayerInfo : IOnlinePlayerInfo, IControlledPlayerIn
     /// <inheritdoc />
     public void SetGameService(IMultiplayerGameService gameService)
     {
+    }
+
+    /// <inheritdoc />
+    public void UpdateBoard(ArrayPoolMemory<Figure> board)
+    {
+        Board.Dispose();
+        Board = board;
     }
 }

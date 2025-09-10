@@ -4,20 +4,20 @@ namespace CrownsGuard.Core.Helpers;
 
 public static class PlayerSerializationHelper
 {
-    public static int ToInt(this Player player)
+    public static int ToInt(this PlayerColor playerColor)
     {
-        var value = (int)player;
-        if (value is < (int)Player.Neutral or > (int)Player.Black)
-            throw new ArgumentOutOfRangeException(nameof(player), player, $"Player {value} is out of range.");
+        var value = (int)playerColor;
+        if (value is < (int)PlayerColor.Neutral or > (int)PlayerColor.Black)
+            throw new ArgumentOutOfRangeException(nameof(playerColor), playerColor, $"Player {value} is out of range.");
 
         return value;
     }
 
-    public static Player ToPlayer(int player)
+    public static PlayerColor ToPlayer(int player)
     {
-        if (player is < (int)Player.Neutral or > (int)Player.Black)
+        if (player is < (int)PlayerColor.Neutral or > (int)PlayerColor.Black)
             throw new ArgumentOutOfRangeException(nameof(player), player, $"Player {player} is out of range.");
 
-        return (Player)player;
+        return (PlayerColor)player;
     }
 }

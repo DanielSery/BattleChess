@@ -3,7 +3,7 @@ using CrownsGuard.Game.Timers;
 
 namespace CrownsGuard.Game.Players;
 
-public interface IPlayerInfo : IFigureOwner
+public interface IPlayerInfo : IPlayer
 {
     IPlayerTimer Timer { get; }
     

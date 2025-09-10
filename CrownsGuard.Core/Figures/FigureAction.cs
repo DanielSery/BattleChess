@@ -1,6 +1,6 @@
 using CrownsGuard.Core.GameBoard;
 
-namespace CrownsGuard.Core.SimulatedBoard;
+namespace CrownsGuard.Core.Figures;
 
 public readonly struct FigureAction
 {

@@ -8,7 +8,8 @@ namespace CrownsGuard.UI.Game;
 
 public partial class BoardTileControl 
 {
-    private TileViewModel _viewModel = new TileViewModel(Position.None);
+    private TileInfoViewModel _infoViewModel = new TileInfoViewModel(Position.None);
+    private ColorAnimation? _animation;
     private static readonly Color MoveToColor = (Color)ColorConverter.ConvertFromString("#60309976");
     private static readonly Color DiedColor = (Color)ColorConverter.ConvertFromString("#40B25035");
     private static readonly Color CreatedColor = (Color)ColorConverter.ConvertFromString("#A0B28679");
@@ -20,37 +21,40 @@ public partial class BoardTileControl
 
     private void Button_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        _viewModel.Died -= ViewModelOnDied;
-        _viewModel.MovedTo -= ViewModelOnMovedTo;
-        _viewModel.Created -= ViewModelOnCreated;
+        _infoViewModel.Died -= InfoViewModelOnDied;
+        _infoViewModel.MovedTo -= InfoViewModelOnMovedTo;
+        _infoViewModel.Created -= InfoViewModelOnCreated;
 
-        if (e.NewValue is not TileViewModel tileViewModel) 
+        if (e.NewValue is not TileInfoViewModel tileViewModel) 
             return;
         
-        _viewModel = tileViewModel;
-        _viewModel.Died += ViewModelOnDied;
-        _viewModel.MovedTo += ViewModelOnMovedTo;
-        _viewModel.Created += ViewModelOnCreated;
+        _infoViewModel = tileViewModel;
+        _infoViewModel.Died += InfoViewModelOnDied;
+        _infoViewModel.MovedTo += InfoViewModelOnMovedTo;
+        _infoViewModel.Created += InfoViewModelOnCreated;
     }
 
-    private void ViewModelOnCreated(object? sender, EventArgs e)
+    private void InfoViewModelOnCreated(object? sender, EventArgs e)
     {
         Application.Current.Dispatcher.Invoke(() => AnimatedAction(CreatedColor));
     }
 
-    private void ViewModelOnMovedTo(object? sender, EventArgs e)
+    private void InfoViewModelOnMovedTo(object? sender, EventArgs e)
     {
         Application.Current.Dispatcher.Invoke(() => AnimatedAction(MoveToColor));
     }
 
-    private void ViewModelOnDied(object? sender, EventArgs e)
+    private void InfoViewModelOnDied(object? sender, EventArgs e)
     {
         Application.Current.Dispatcher.Invoke(() => AnimatedAction(DiedColor));
     }
 
     private void AnimatedAction(Color targetColor)
     {
-        var animation = new ColorAnimation
+        if (_animation is not null)
+            return;
+        
+        _animation = new ColorAnimation
         {
             From = Colors.Transparent,
             To = targetColor,
@@ -61,12 +65,12 @@ public partial class BoardTileControl
             FillBehavior = FillBehavior.Stop // Prevents storyboard from holding value
         };
 
-        animation.Completed += (_, _) =>
+        _animation.Completed += (_, _) =>
         {
-            // Freeze to final color
             TileAnimatedBackground.Color = Colors.Transparent;
+            _animation = null;
         };
 
-        TileAnimatedBackground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+        TileAnimatedBackground.BeginAnimation(SolidColorBrush.ColorProperty, _animation);
     }
 }

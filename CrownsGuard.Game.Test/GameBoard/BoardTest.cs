@@ -15,7 +15,7 @@ public class BoardTest
         {
             var tile = new Mock<ITile>();
             tile.Setup(x => x.RelativePosition).Returns(Position.FromIndex(index));
-            tile.Setup(x => x.AbsolutePosition).Returns(Position.FromIndex(index));
+            tile.Setup(x => x.Position).Returns(Position.FromIndex(index));
             return tile.Object;
         }).ToArray();
 

@@ -17,7 +17,7 @@ public class PlayerViewModel : ViewModelBase
     private readonly DispatcherTimer _timer;
     private readonly Stopwatch  _stopwatch;
     
-    public Player Player => _playerInfo.Player;
+    public PlayerColor PlayerColor => _playerInfo.PlayerColor;
     public string FullName { get; }
 
     private bool _isHisTurn;
@@ -119,7 +119,7 @@ public class PlayerViewModel : ViewModelBase
             {
                 _timer.Stop();
                 IdleTime = "00:00";
-                if (_playerInfo.Player == Player.White)
+                if (_playerInfo.PlayerColor == PlayerColor.White)
                 {
                     _gameService.PlayerLost(_playerInfo, WinType.NotResponding, false);
                 }
@@ -139,13 +139,13 @@ public class PlayerViewModel : ViewModelBase
             {
                 _timer.Stop();
                 RemainingTime = "0:00";
-                _gameService.PlayerLost(_playerInfo, WinType.OutOfTime, _playerInfo.Player == Player.White);
+                _gameService.PlayerLost(_playerInfo, WinType.OutOfTime, _playerInfo.PlayerColor == PlayerColor.White);
             }
             else if (idleTimeRemaining.TotalMinutes <= 0)
             {
                 _timer.Stop();
                 IdleTime = "0:00";
-                if (_playerInfo.Player == Player.White)
+                if (_playerInfo.PlayerColor == PlayerColor.White)
                 {
                     _gameService.PlayerLost(_playerInfo, WinType.NotResponding, false);
                 }
