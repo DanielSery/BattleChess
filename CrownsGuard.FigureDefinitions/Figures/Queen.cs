@@ -12,7 +12,7 @@ public class Queen : ICrownsGuardFigureTypeInfo
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        Span<FigureAction> actions = stackalloc FigureAction[36];
+        Span<FigureAction> actions = stackalloc FigureAction[64];
         int actionsCount = 0;
 
         foreach (var relative in PositionsGroups.QueenDirections)
