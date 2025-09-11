@@ -15,7 +15,7 @@ public static class ArrayPoolHelper
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ArrayPoolMemory<T> CloneToArrayPoolMemory<T>(this T[] actions)
+    public static ArrayPoolMemory<T> CloneToArrayPoolMemory<T>(this Span<T> actions)
     {
         var array = ArrayPool<T>.Shared.Rent(actions.Length);
         actions.CopyTo(array.AsSpan());
