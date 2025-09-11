@@ -50,13 +50,9 @@ public class CamelArcher : ICrownsGuardFigureTypeInfo
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
                 }
-                else if (targetFigure.IsWalkable())
-                {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
-                }
                 else
                 {
-                    break;
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
                 }
             }
         }

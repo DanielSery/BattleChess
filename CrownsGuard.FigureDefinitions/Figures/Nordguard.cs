@@ -42,9 +42,9 @@ public class Nordguard: ICrownsGuardFigureTypeInfo
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
                 }
-                else if (targetFigure.IsEmpty())
+                else
                 {
-                    break;
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
                 }
             }
         }

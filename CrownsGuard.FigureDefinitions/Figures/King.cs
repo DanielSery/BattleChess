@@ -32,6 +32,10 @@ public class King : ICrownsGuardFigureTypeInfo
             {
                 actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
             }
+            else
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+            }
         }
 
         if (sourcePosition.X != 4 && 

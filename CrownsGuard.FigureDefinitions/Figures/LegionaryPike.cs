@@ -26,12 +26,12 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             actions[actionsCount++] = pikeAttackAction2;
         }
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(1 * direction)), out var attackAction1))
+        if (GetAttackAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(1 * direction)), out var attackAction1))
         {
             actions[actionsCount++] = attackAction1;
         }
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var attackAction2))
+        if (GetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var attackAction2))
         {
             actions[actionsCount++] = attackAction2;
         }
@@ -84,26 +84,36 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
-            !sourceFigure.CanAttack(targetFigure))
+        if (!board.TryGetFigure(attackPosition, out var targetFigure))
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
+            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition);
             return false;
+        }
+        
+        if (!sourceFigure.CanAttack(targetFigure))
+        {
+            action = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, attackPosition);
+            return true;
         }
 
         action = new FigureAction(FigureActionType.Attack, sourcePosition, attackPosition);
         return true;
     }
 
-    private static bool TryGetAttackAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool GetAttackAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
-            !sourceFigure.CanAttack(targetFigure))
+        if (!board.TryGetFigure(attackPosition, out var targetFigure))
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
+            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition);
             return false;
+        }
+        
+        if (!sourceFigure.CanAttack(targetFigure))
+        {
+            action = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, attackPosition);
+            return true;
         }
 
         if (attackPosition.Y is 7 or 0)

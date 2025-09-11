@@ -55,12 +55,10 @@ public class Ranger : ICrownsGuardFigureTypeInfo
                 if (sourceFigure.CanAttack(targetFigure))
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
-                    break;
                 }
-                
-                if (!targetFigure.IsEmpty())
+                else
                 {
-                    break;
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
                 }
             }
         }

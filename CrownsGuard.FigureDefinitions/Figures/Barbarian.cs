@@ -52,7 +52,7 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
                 }
                 else
                 {
-                    break;
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleSpecial, movedPosition, targetPosition);
                 }
             }
         }

@@ -48,12 +48,10 @@ public class CamelRider : ICrownsGuardFigureTypeInfo
                 if (sourceFigure.CanAttack(targetFigure))
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
-                    break;
                 }
-
-                if (!targetFigure.IsWalkable())
+                else
                 {
-                    break;
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
                 }
             }
         }

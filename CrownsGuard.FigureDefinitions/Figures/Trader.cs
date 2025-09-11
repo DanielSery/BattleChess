@@ -26,10 +26,13 @@ public class Trader : ICrownsGuardFigureTypeInfo
             {
                 actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
             }
-
-            if (sourceFigure.CanAttack(targetFigure))
+            else if (sourceFigure.CanAttack(targetFigure))
             {
                 actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+            }
+            else
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
             }
         }
 

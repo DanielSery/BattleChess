@@ -59,13 +59,9 @@ public class Archer : ICrownsGuardFigureTypeInfo
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
                 }
-                else if (targetFigure.IsEmpty())
-                {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
-                }
                 else
                 {
-                    break;
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
                 }
             }
         }
