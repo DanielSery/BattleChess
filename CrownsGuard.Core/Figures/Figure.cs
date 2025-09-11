@@ -1,37 +1,22 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using CrownsGuard.Core.Players;
 
 namespace CrownsGuard.Core.Figures;
 
 [DebuggerDisplay("{PlayerColor}-{FigureType}-{IsKing}")]
-public readonly struct Figure : IEquatable<Figure>
+[StructLayout(LayoutKind.Explicit, Pack = 1)]
+public readonly struct Figure
 {
-    public readonly PlayerColor PlayerColor;
-    public readonly bool IsKing;
-    public readonly FigureId FigureType;
+    [FieldOffset(0)] public readonly int IntValue;
+    [FieldOffset(0)] public readonly PlayerColor PlayerColor;
+    [FieldOffset(1)] public readonly bool IsKing;
+    [FieldOffset(2)] public readonly FigureId FigureType;
 
     public Figure(PlayerColor playerColor, bool isKing, FigureId figureType)
     {
         PlayerColor = playerColor;
         IsKing = isKing;
         FigureType = figureType;
-    }
-
-    /// <inheritdoc />
-    public bool Equals(Figure other)
-    {
-        return PlayerColor == other.PlayerColor && IsKing == other.IsKing && FigureType == other.FigureType;
-    }
-
-    /// <inheritdoc />
-    public override bool Equals(object? obj)
-    {
-        return obj is Figure other && Equals(other);
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode()
-    {
-        return HashCode.Combine((int)PlayerColor, IsKing, (int)FigureType);
     }
 }

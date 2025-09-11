@@ -2,23 +2,23 @@
 
 public static class Constants
 {
-    public const int KingValue = 100_000_000;
+    public const int KingValue = 1_000_000_000;
     
-    public const int FigureValueCoeff = 500;
-    public const int UpgradeFigureImpact = 40;
+    public const int FigureValueCoeff = 5000;
+    public const int UpgradeFigureImpact = 400;
     
-    public const int RangedConvertCoeff = 60;
-    public const int RangedAttackCoeff = 40;
-    public const int HalfRangedAttackCoeff = 20;
-    public const int MeeleeAttackCoeff = 15;
+    public const int RangedConvertCoeff = 600;
+    public const int RangedAttackCoeff = 400;
+    public const int HalfRangedAttackCoeff = 200;
+    public const int MeeleeAttackCoeff = 150;
 
-    public const int PossibleRangedConvertCoeff = 40;
-    public const int PossibleRangedAttackImpact = 20;
-    public const int PossibleHalfRangedAttackImpact = 15;
-    public const int PossibleMeeleeAttackImpact = 10;
+    public const int PossibleRangedConvertCoeff = 400;
+    public const int PossibleRangedAttackImpact = 200;
+    public const int PossibleHalfRangedAttackImpact = 150;
+    public const int PossibleMeeleeAttackImpact = 100;
 
-    public const int BuildImpact = 4;
-    public const int MoveImpact = 1;
+    public const int BuildImpact = 40;
+    public const int MoveImpact = 10;
 
     public const int BoardLength = 8;
     public const int FullBoardTilesCount = 64;

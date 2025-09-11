@@ -100,11 +100,10 @@ internal static class FiguresHelper
 
     public static void ChangeOwner(this Span<Figure> board, Position fromPosition, Position toPosition, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var fromIndex = fromPosition.GetIndex();
         var toIndex = toPosition.GetIndex();
         
-        var sourceFigure = board[fromIndex];
-        board[toIndex] = new Figure(sourceFigure.PlayerColor, false, sourceFigure.FigureType);
+        var targetFigure = board[toIndex];
+        board[toIndex] = new Figure(targetFigure.PlayerColor, false, targetFigure.FigureType);
         onEvent.Invoke(new BoardEvent(BoardEventType.ChangedOwner, fromPosition, toPosition), board);
     }
 

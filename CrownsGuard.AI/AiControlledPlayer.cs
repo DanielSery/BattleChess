@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
@@ -65,13 +67,12 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         var sw = new Stopwatch();
         sw.Start();
 
+
         var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
-        var resultActions = new List<(int value, FigureAction action)>();
-        var alpha = int.MinValue;
-        const int beta = int.MaxValue;
+        var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
         var depth = _difficulty;
 
-        for (var i = 0; i < _board.Length; i++)
+        Parallel.For(0, _board.Length, i =>
         {
             var figure = _board[i];
             if (figure.PlayerColor == PlayerColor.Black)
@@ -84,20 +85,21 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 
                     using var clonedBoard = _board.AsSpan().CloneToArrayPoolMemory();
                     FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, false, analysis);
+                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, int.MinValue, int.MaxValue, false, analysis);
                     resultActions.Add((eval, action));
-                    alpha = Math.Max(alpha, eval);
                 }
             }
-        }
+        });
 
+        var resultArray = resultActions.ToList();
+        var alpha = resultArray.Max(x => x.value);
         for (var i = resultActions.Count - 1; i >= 0; i--)
         {
-            if (resultActions[i].value < alpha - 50)
-                resultActions.RemoveAt(i);
+            if (resultArray[i].value < alpha - 500)
+                resultArray.RemoveAt(i);
         }
 
-        var executedAction = resultActions[_random.Next(0, resultActions.Count)];
+        var executedAction = resultArray[_random.Next(0, resultArray.Count)];
         Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
         _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
     }
@@ -108,12 +110,10 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         sw.Start();
 
         var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
-        var resultActions = new List<(int value, FigureAction action)>();
-        const int alpha = int.MinValue;
-        var beta = int.MaxValue;
+        var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
         var depth = _difficulty;
 
-        for (var i = 0; i < _board.Length; i++)
+        Parallel.For(0, _board.Length, i =>
         {
             var figure = _board[i];
             if (figure.PlayerColor == PlayerColor.White)
@@ -126,25 +126,26 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 
                     using var clonedBoard = _board.AsSpan().CloneToArrayPoolMemory();
                     FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, true, analysis);
+                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, int.MinValue, int.MaxValue, true, analysis);
                     resultActions.Add((eval, action));
-                    beta = Math.Min(beta, eval);
                 }
             }
-        }
+        });
 
+        var resultArray = resultActions.ToList();
+        var beta = resultArray.Min(x => x.value);
         for (var i = resultActions.Count - 1; i >= 0; i--)
         {
-            if (resultActions[i].value > beta + 50)
-                resultActions.RemoveAt(i);
+            if (resultArray[i].value > beta + 500)
+                resultArray.RemoveAt(i);
         }
 
-        var executedAction = resultActions[_random.Next(0, resultActions.Count)];
+        var executedAction = resultArray[_random.Next(0, resultArray.Count)];
         Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
         _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
     }
 
-    private int AlphaBeta(Span<Figure> board, int depth, int alpha, int beta, bool maximizingPlayer, Dictionary<Figure, int[]> analysis)
+    private int AlphaBeta(Span<Figure> board, int depth, int alpha, int beta, bool maximizingPlayer, Dictionary<int, int[]> analysis)
     {
         var check = EvaluateBoard(board, analysis);
         if (depth == 0 || Math.Abs(check) > 10_000_000)
@@ -207,16 +208,48 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         }
     }
 
-    private void OnEvent(BoardEvent arg1, Span<Figure> arg2)
+    private void OnEvent(BoardEvent boardEvent, Span<Figure> board)
     {
     }
 
-    private static int EvaluateBoard(Span<Figure> board, Dictionary<Figure, int[]> analysis)
+    private static int EvaluateBoard(Span<Figure> board, Dictionary<int, int[]> analysis)
     {
         var evaluation = 0;
         for (var i = 0; i < board.Length; i++)
         {
-            evaluation += analysis[board[i]][i];
+            var figure = board[i];
+            evaluation += analysis[figure.IntValue][i];
+        }
+
+        if (Math.Abs(evaluation) > 10_000_000)
+        {
+            return evaluation;
+        }
+
+        for (var i = 0; i < board.Length; i++)
+        {
+            var figure = board[i];
+            if (figure.PlayerColor == PlayerColor.Neutral)
+            {
+                continue;
+            }
+
+            if (figure.PlayerColor == PlayerColor.White)
+            {
+                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
+                foreach (var action in actions.Span)
+                {
+                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, figure);
+                }
+            }
+            else
+            {
+                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
+                foreach (var action in actions.Span)
+                {
+                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action, figure);
+                }
+            }
         }
         return evaluation;
     }

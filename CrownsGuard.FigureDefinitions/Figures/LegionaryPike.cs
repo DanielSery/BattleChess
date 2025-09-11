@@ -81,10 +81,6 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
             return Constants.MeeleeAttackCoeff * figureValue;
         }
-        else if (action.FigureActionType == FigureActionType.Special)
-        {
-            return Constants.UpgradeFigureImpact;
-        }
         else
         {
             return 0;
