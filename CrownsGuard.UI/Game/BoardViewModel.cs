@@ -55,7 +55,6 @@ public sealed class BoardViewModel : ViewModelBase
             .ToArray();
         _boardInfo = new BoardInfo(Tiles.Cast<ITileInfo>().ToArray());
 
-        SinglePlayerLoadMap(BoardBlueprint.ChessTeam);
         _multiplayerGameService.RequestPlayMove += MultiplayerGameServiceOnRequestPlayMove;
     }
 
@@ -116,11 +115,14 @@ public sealed class BoardViewModel : ViewModelBase
         
         var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
         var blackPlayer = new AiControlledPlayer(PlayerColor.Black, board, RequestPlayMove, 4);
+
+        var random = new Random();
+        var startingPlayer = random.Next(0, 2) == 1 ? PlayerColor.White : PlayerColor.Black;
         
         _gameService.StartGame(
             whitePlayer,
             blackPlayer,
-            PlayerColor.Black, board);
+            startingPlayer, board);
         
         if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();

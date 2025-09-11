@@ -90,16 +90,17 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             }
 
             var executedAction = resultActions[_random.Next(0, resultActions.Count)];
-            Console.WriteLine($"Time for turn: {sw.Elapsed}");
+            Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
             _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
         });
     }
     
     private int AlphaBeta(Span<Figure> board, int depth, int alpha, int beta, bool maximizingPlayer, Dictionary<Figure, int[]> analysis)
     {
-        if (depth == 0)
+        var check = EvaluateBoard(board, analysis);
+        if (depth == 0 || Math.Abs(check) > 10_000_000)
         {
-            return EvaluateBoard(board, analysis);
+            return check;
         }
 
         if (maximizingPlayer)
@@ -119,11 +120,7 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                         using var clonedBoard = board.CloneToArrayPoolMemory();
                         FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
                         var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, false, analysis);
-                        if (eval > maxEval)
-                        {
-                            maxEval = eval;
-                        }
-                        
+                        maxEval = Math.Max(maxEval, eval);
                         alpha = Math.Max(alpha, eval);
                         if (beta <= alpha)
                             break; // Beta cut-off
@@ -149,11 +146,7 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                         using var clonedBoard = board.CloneToArrayPoolMemory();
                         FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
                         var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, true, analysis);
-                        if (eval < minEval)
-                        {
-                            minEval = eval;
-                        }
-                        
+                        minEval = Math.Min(minEval, eval);
                         beta = Math.Min(beta, eval);
                         if (beta <= alpha)
                             break; // Alpha cut-off
