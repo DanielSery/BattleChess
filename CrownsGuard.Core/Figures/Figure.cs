@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using CrownsGuard.Core.Players;
 
 namespace CrownsGuard.Core.Figures;
 
+[DebuggerDisplay("{PlayerColor}-{FigureType}-{IsKing}")]
 public readonly struct Figure : IEquatable<Figure>
 {
     public readonly PlayerColor PlayerColor;
