@@ -14,12 +14,13 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 {
     private readonly Figure[] _board;
     private readonly Action<Position, Position, TimeSpan> _requestMove;
-    private int _level = 1;
+    private readonly int _difficulty;
 
-    public AiControlledPlayer(PlayerColor playerColor, Figure[] board, Action<Position, Position, TimeSpan> requestMove)
+    public AiControlledPlayer(PlayerColor playerColor, Figure[] board, Action<Position, Position, TimeSpan> requestMove, int difficulty)
     {
         _board = board;
         _requestMove = requestMove;
+        _difficulty = difficulty;
         PlayerColor = playerColor;
     }
 
@@ -59,6 +60,7 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             
             var maxImpact = int.MinValue;
             var maxAction = new FigureAction(FigureActionType.None, Position.None, Position.None);
+            var level = _difficulty;
  
             for (var i = 0; i < board.Length; i++)
             {
@@ -68,21 +70,12 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                     using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
                     foreach (var action in actions.Span)
                     {
-                        if (action.FigureActionType is FigureActionType.PossibleAttack or FigureActionType.PossibleSpecial or FigureActionType.None)
+                        if (!action.FigureActionType.IsExecutable())
                             continue;
 
-                        using var clonedBoard = board.CloneToArrayPoolMemory();
+                        using var clonedBoard = board.AsSpan().CloneToArrayPoolMemory();
                         FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-                        if (action.FigureActionType is FigureActionType.Special)
-                        {
-                            Console.WriteLine("Special");
-                        }
-                        else if (action.FigureActionType is FigureActionType.Attack)
-                        {
-                            Console.WriteLine("Attack");
-                        }
-                        
-                        var impact = EvaluateBoard(clonedBoard.Span);
+                        var impact = EvaluateAfterWhiteAction(clonedBoard.Span, level);
                         if (impact > maxImpact)
                         {
                             maxImpact = impact;
@@ -95,6 +88,66 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             Console.WriteLine($"Time for turn: {sw.Elapsed}");
             _requestMove.Invoke(maxAction.SourcePosition, maxAction.TargetPosition, TimeSpan.Zero);
         });
+    }
+
+    private int EvaluateAfterBlackAction(Span<Figure> board, int level)
+    {
+        if (level == 0) return EvaluateBoard(board);
+        
+        var maxImpact = int.MinValue;
+        for (var i = 0; i < board.Length; i++)
+        {
+            var figure = board[i];
+            if (figure.PlayerColor == PlayerColor.Black)
+            {
+                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
+                foreach (var action in actions.Span)
+                {
+                    if (!action.FigureActionType.IsExecutable())
+                        continue;
+
+                    using var clonedBoard = board.CloneToArrayPoolMemory();
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
+                    var impact = EvaluateAfterWhiteAction(clonedBoard.Span, level - 1);
+                    if (impact > maxImpact)
+                    {
+                        maxImpact = impact;
+                    }
+                }
+            }
+        }
+
+        return maxImpact;
+    }
+
+    private int EvaluateAfterWhiteAction(Span<Figure> board, int level)
+    {
+        if (level == 0) return EvaluateBoard(board);
+        
+        var minImpact = int.MaxValue;
+        for (var i = 0; i < board.Length; i++)
+        {
+            var figure = board[i];
+            if (figure.PlayerColor == PlayerColor.White)
+            {
+                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
+                foreach (var action in actions.Span)
+                {
+                    if (!action.FigureActionType.IsExecutable())
+                        continue;
+
+                    using var clonedBoard = board.CloneToArrayPoolMemory();
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
+                    var impact = EvaluateAfterBlackAction(clonedBoard.Span, level - 1);
+                    if (impact < minImpact)
+                    {
+                        minImpact= impact;
+                    }
+                }
+            }
+        }
+        
+        return minImpact;
     }
 
     private void OnEvent(BoardEvent arg1, Span<Figure> arg2)
@@ -121,9 +174,6 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
                 foreach (var action in actions.Span)
                 {
-                    if (action.FigureActionType is FigureActionType.PossibleAttack or FigureActionType.PossibleSpecial)
-                        continue;
-                        
                     evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, figure);
                 }
             }
@@ -135,9 +185,6 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
                 foreach (var action in actions.Span)
                 {
-                    if (action.FigureActionType is FigureActionType.PossibleAttack or FigureActionType.PossibleSpecial)
-                        continue;
-                        
                     evaluation += ActionImpactEvaluator.EvaluateAction(board, action, figure);
                 }
             }

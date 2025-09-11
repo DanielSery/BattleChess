@@ -39,26 +39,55 @@ public class King : ICrownsGuardFigureTypeInfo
             }
         }
 
-        if (sourcePosition.X != 4 && 
-            (sourcePosition.Y != 0 || sourceFigure.PlayerColor != PlayerColor.Black) && 
-            (sourcePosition.Y != 7 || sourceFigure.PlayerColor != PlayerColor.White))
+        if (sourcePosition.X != 4)
         {
             return actions.ToArrayPoolMemory(actionsCount);
         }
 
-        if (sourceFigure.IsAllyTo(board[0]) &&
-            board[1].IsEmpty() &&
-            board[2].IsEmpty() &&
-            board[3].IsEmpty())
+        if (sourceFigure.PlayerColor == PlayerColor.Black)
         {
-            actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(2, sourcePosition.Y));
+            if (sourcePosition.Y != 0)
+            {
+                return actions.ToArrayPoolMemory(actionsCount);
+            }
+
+            if (sourceFigure.IsAllyTo(board[0]) &&
+                board[1].IsEmpty() &&
+                board[2].IsEmpty() &&
+                board[3].IsEmpty())
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(2, 0));
+            }
+
+            if (sourceFigure.IsAllyTo(board[7]) &&
+                board[5].IsEmpty() &&
+                board[6].IsEmpty())
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(6, 0));
+            }
         }
 
-        if (sourceFigure.IsAllyTo(board[7]) &&
-            board[5].IsEmpty() &&
-            board[6].IsEmpty())
+        if (sourceFigure.PlayerColor == PlayerColor.White)
         {
-            actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(6, sourcePosition.Y));
+            if (sourcePosition.Y != 7)
+            {
+                return actions.ToArrayPoolMemory(actionsCount);
+            }
+
+            if (sourceFigure.IsAllyTo(board[new Position(0, 7).GetIndex()]) &&
+                board[new Position(1, 7).GetIndex()].IsEmpty() &&
+                board[new Position(2, 7).GetIndex()].IsEmpty() &&
+                board[new Position(3, 7).GetIndex()].IsEmpty())
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(2, 7));
+            }
+
+            if (sourceFigure.IsAllyTo(board[new Position(7, 7).GetIndex()]) &&
+                board[new Position(5, 7).GetIndex()].IsEmpty() &&
+                board[new Position(6, 7).GetIndex()].IsEmpty())
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(6, 7));
+            }
         }
 
         return actions.ToArrayPoolMemory(actionsCount);
@@ -101,13 +130,13 @@ public class King : ICrownsGuardFigureTypeInfo
         }
         else if (action is { FigureActionType: FigureActionType.Special, TargetPosition.X: 2 })
         {
-            board.MoveFigure(new Position(4, 0), new Position(2, 0), onEvent);
-            board.MoveFigure(new Position(0, 0), new Position(3, 0), onEvent);
+            board.MoveFigure(new Position(4, action.TargetPosition.Y), new Position(2, action.TargetPosition.Y), onEvent);
+            board.MoveFigure(new Position(0, action.TargetPosition.Y), new Position(3, action.TargetPosition.Y), onEvent);
         }
         else if (action is { FigureActionType: FigureActionType.Special, TargetPosition.X: 6 })
         {
-            board.MoveFigure(new Position(4, 0), new Position(6, 0), onEvent);
-            board.MoveFigure(new Position(7, 0), new Position(5, 0), onEvent);
+            board.MoveFigure(new Position(4, action.TargetPosition.Y), new Position(6, action.TargetPosition.Y), onEvent);
+            board.MoveFigure(new Position(7, action.TargetPosition.Y), new Position(5, action.TargetPosition.Y), onEvent);
         }
         else
         {

@@ -17,8 +17,8 @@ public static class Constants
     public const int PossibleHalfRangedAttackImpact = 10;
     public const int PossibleMeeleeAttackImpact = 8;
 
-    public const int BuildImpact = 2;
-    public const int MoveImpact = 1;
+    public const int BuildImpact = 4;
+    public const int MoveImpact = 2;
 
     public const int BoardLength = 8;
     public const int FullBoardTilesCount = 64;

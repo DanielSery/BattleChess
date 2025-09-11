@@ -3,9 +3,11 @@ namespace CrownsGuard.Core.Figures;
 public enum FigureActionType : byte
 {
     None = 0,
-    Move,
     PossibleAttack,
-    Attack,
     PossibleSpecial,
+    LastNonExecutable = 2,
+    
+    Move,
+    Attack,
     Special,
 }

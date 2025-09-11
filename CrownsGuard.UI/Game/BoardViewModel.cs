@@ -11,6 +11,7 @@ using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using CrownsGuard.AI;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Figures;
@@ -114,7 +115,7 @@ public sealed class BoardViewModel : ViewModelBase
             .ToArray();
         
         var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
-        var blackPlayer = new AiControlledPlayer(PlayerColor.Black, board, RequestPlayMove);
+        var blackPlayer = new AiControlledPlayer(PlayerColor.Black, board, RequestPlayMove, 2);
         
         _gameService.StartGame(
             whitePlayer,
@@ -280,15 +281,22 @@ public sealed class BoardViewModel : ViewModelBase
 
         var fromTile = Tiles[from.GetIndex()];
         SelectedTileInfo = fromTile;
-        SetPossibleActions(fromTile, true);
+        var actions = FigureActionsResolver.GetPossibleActions(from, _gameService.Board);
+        foreach (var action in actions.Span)
+        {
+            if (action.SourcePosition == from &&
+                action.TargetPosition == to &&
+                action.FigureActionType.IsExecutable())
+            {
+                _gameService.EndTurn(turnTimeSpent);
+                FigureActionExecutor.ExecuteFigureAction(_gameService.Board, action, OnEvent);
+                break;
+            }
+        }
 
-        _gameService.EndTurn(turnTimeSpent);
-        var toTile = Tiles[to.GetIndex()];
-
-        FigureActionExecutor.ExecuteFigureAction(_gameService.Board, toTile.PossibleAction, OnEvent);
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
-        SelectedTileInfo = TileInfoViewModel.None;
         _gameService.StartTurn();
+        SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
     }
 
