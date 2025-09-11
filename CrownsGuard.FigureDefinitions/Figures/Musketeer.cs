@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,9 +10,14 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Musketeer;
 
-    private static readonly Position[] AttackDirections =
+    private static readonly Position[] BlackAttackDirections =
     [
         new(-1, 1), new(0, 1), new(1, 1)
+    ];
+
+    private static readonly Position[] WhiteAttackDirections =
+    [
+        new(-1, -1), new(0, -1), new(1, -1)
     ];
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
@@ -32,8 +38,9 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
 
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
+        var attackDirections = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackDirections : WhiteAttackDirections;
 
-        foreach (var direction in AttackDirections)
+        foreach (var direction in attackDirections)
         {
             for (var i = 1; i <= 3; i++)
             {

@@ -1,10 +1,9 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Game;
 using CrownsGuard.Database.Players;
 using CrownsGuard.Game;
-using CrownsGuard.Game.Helpers;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
@@ -212,7 +211,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return RelativePositionHelper.GetRelative(PlayerColor.White, Position.FromIndex(index));
+        var position = Position.FromIndex(index);
+        return new Position(position.X, (sbyte)(Constants.BoardLength - position.Y - 1));
     }
 
     private async Task<Result> DeleteGameTurnsAsync(CancellationToken cancellationToken)

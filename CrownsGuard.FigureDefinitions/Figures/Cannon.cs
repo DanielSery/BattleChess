@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,7 +10,12 @@ public class Cannon : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Cannon;
 
-    private static readonly Position[] AttackPositions =
+    private static readonly Position[] BlackAttackPositions =
+    [
+        new(0, 2), new(0, 3), new(0, 4),
+    ];
+
+    private static readonly Position[] WhiteAttackPositions =
     [
         new(0, 2), new(0, 3), new(0, 4),
     ];
@@ -32,23 +38,14 @@ public class Cannon : ICrownsGuardFigureTypeInfo
         
         Span<FigureAction> actions = stackalloc FigureAction[3];
         int actionsCount = 0;
-
-        if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack1Figure) &&
-            sourceFigure.IsEnemyTo(attack1Figure))
+        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
+        foreach (Position attackPosition in attackPositions)
         {
-            actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 2));
-        }
-
-        if (!board.TryGetFigure(sourcePosition + new Position(0, 3), out var attack2Figure) &&
-            sourceFigure.IsEnemyTo(attack2Figure))
-        {
-            actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 3));
-        }
-
-        if (!board.TryGetFigure(sourcePosition + new Position(0, 2), out var attack3Figure) &&
-            sourceFigure.IsEnemyTo(attack3Figure))
-        {
-            actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 4));
+            if (!board.TryGetFigure(sourcePosition + attackPosition, out var attack1Figure) &&
+                sourceFigure.IsEnemyTo(attack1Figure))
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 2));
+            }
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
@@ -56,9 +53,11 @@ public class Cannon : ICrownsGuardFigureTypeInfo
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
+        var sourceFigure = board[action.SourcePosition.GetIndex()];
+        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
         if (action.FigureActionType == FigureActionType.Attack)
         {
-            foreach (var attackPosition in AttackPositions)
+            foreach (var attackPosition in attackPositions)
             {
                 var targetPosition = action.SourcePosition + attackPosition;
                 if (!board.TryGetFigure(targetPosition, out var targetFigure))

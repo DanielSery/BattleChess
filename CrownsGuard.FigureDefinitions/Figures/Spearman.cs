@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -14,9 +15,14 @@ public class Spearman : ICrownsGuardFigureTypeInfo
         new(-1, 1), new(1, 1), new(-1, -1), new(1, -1)
     ];
 
-    private static readonly Position[] MovePositions =
+    private static readonly Position[] BlackMovePositions =
     [
         new(-1, 0), new(1, 0), new(0, 1)
+    ];
+
+    private static readonly Position[] WhiteMovePositions =
+    [
+        new(-1, 0), new(1, 0), new(0, -1)
     ];
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
@@ -24,7 +30,8 @@ public class Spearman : ICrownsGuardFigureTypeInfo
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
         
-        foreach (var relative in MovePositions)
+        var movePositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackMovePositions : WhiteMovePositions;
+        foreach (var relative in movePositions)
         {
             var targetPosition = sourcePosition + relative;
             if (!board.TryGetFigure(targetPosition, out var targetFigure))

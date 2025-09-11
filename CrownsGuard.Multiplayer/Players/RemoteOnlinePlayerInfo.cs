@@ -20,9 +20,6 @@ public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlle
     }
 
     public Core.Players.PlayerColor PlayerColor { get; }
-    public ArrayPoolMemory<Figure> Board { get; private set; }
-
-    public Figure[] PlayerBoard { get; set; } = [];
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
     public string? PlayerId { get; }
@@ -58,12 +55,5 @@ public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlle
     public void SetGameService(IMultiplayerGameService gameService)
     {
         _gameService = gameService;
-    }
-
-    /// <inheritdoc />
-    public void UpdateBoard(ArrayPoolMemory<Figure> board)
-    {
-        Board.Dispose();
-        Board = board;
     }
 }

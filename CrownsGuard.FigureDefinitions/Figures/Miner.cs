@@ -31,7 +31,7 @@ public class Miner : ICrownsGuardFigureTypeInfo
 
         foreach (var relative in PositionsGroups.RookDirections)
         {
-            for (int i = 1; i < 7; i++)
+            for (int i = 1; i <= 7; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
                 if (!board.TryGetFigure(targetPosition, out var targetFigure))

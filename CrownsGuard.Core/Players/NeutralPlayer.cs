@@ -11,13 +11,4 @@ public class NeutralPlayer : IPlayer
 
     /// <inheritdoc />
     public PlayerColor PlayerColor => PlayerColor.Neutral;
-
-    /// <inheritdoc />
-    public ArrayPoolMemory<Figure> Board { get; } = ArrayPoolMemory<Figure>.Empty;
-
-    /// <inheritdoc />
-    public void UpdateBoard(ArrayPoolMemory<Figure> board)
-    {
-        
-    }
 }

@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,7 +10,12 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Pikeman;
 
-    private static readonly Position[] AttackPositions =
+    private static readonly Position[] BlackAttackPositions =
+    [
+        new(-1, 1), new(1, 1)
+    ];
+
+    private static readonly Position[] WhiteAttackPositions =
     [
         new(-1, 1), new(1, 1)
     ];
@@ -38,7 +44,8 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
             }
         }
 
-        foreach (var relative in AttackPositions)
+        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
+        foreach (var relative in attackPositions)
         {
             var targetPosition = sourcePosition + relative;
             if (!board.TryGetFigure(targetPosition, out var targetFigure))

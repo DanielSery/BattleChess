@@ -17,9 +17,6 @@ public class ControlledPlayerInfo : IControlledPlayerInfo
     }
 
     public PlayerColor PlayerColor { get; }
-
-    public ArrayPoolMemory<Figure> Board { get; private set; } = ArrayPoolMemory<Figure>.Empty;
-    public Figure[] PlayerBoard { get; set; } = [];
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
 
@@ -39,12 +36,5 @@ public class ControlledPlayerInfo : IControlledPlayerInfo
     public void EndTurn(TimeSpan? forcedTurnDuration = null)
     {
         Timer.EndTurnTimer(forcedTurnDuration);
-    }
-
-    /// <inheritdoc />
-    public void UpdateBoard(ArrayPoolMemory<Figure> board)
-    {
-        Board.Dispose();
-        Board = board;
     }
 }
