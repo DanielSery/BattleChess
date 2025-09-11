@@ -21,19 +21,19 @@ public static class FigureImpactAnalyzer
 
     public static Dictionary<Figure, int[]> AnalyzeFigures(Span<Figure> board)
     {
-        var averageAnalysis = new int[Constants.FullBoardTilesCount];
+        var tileImportance = new int[Constants.FullBoardTilesCount];
         foreach (Figure figure in board)
         {
             var whiteFigure = new Figure(PlayerColor.White, false, figure.FigureType);
-            AnalyzeAverageTile(whiteFigure, averageAnalysis);
+            AnalyzeTileImportance(whiteFigure, tileImportance);
             
             var blackFigure = new Figure(PlayerColor.Black, false, figure.FigureType);
-            AnalyzeAverageTile(blackFigure, averageAnalysis);
+            AnalyzeTileImportance(blackFigure, tileImportance);
         }
         
-        for (var i = 0; i < averageAnalysis.Length; i++)
+        for (var i = 0; i < tileImportance.Length; i++)
         {
-            averageAnalysis[i] = averageAnalysis[i] / board.Length / 2;
+            tileImportance[i] = tileImportance[i] / board.Length / 2;
         }
         
         var analysis = new Dictionary<Figure, int[]>();
@@ -43,22 +43,22 @@ public static class FigureImpactAnalyzer
             analysis[neutralFigure] = new int[Constants.FullBoardTilesCount]; 
             
             var whiteFigure = new Figure(PlayerColor.White, false, figureType.FigureId);
-            analysis[whiteFigure] = AnalyzeFigureImpact(whiteFigure, averageAnalysis);
+            analysis[whiteFigure] = AnalyzeFigureImpact(whiteFigure, tileImportance);
             
             var whiteKingFigure = new Figure(PlayerColor.White, true, figureType.FigureId);
-            analysis[whiteKingFigure] = AnalyzeFigureImpact(whiteKingFigure, averageAnalysis);
+            analysis[whiteKingFigure] = AnalyzeFigureImpact(whiteKingFigure, tileImportance);
             
             var blackFigure = new Figure(PlayerColor.Black, false, figureType.FigureId);
-            analysis[blackFigure] = AnalyzeFigureImpact(blackFigure, averageAnalysis);
+            analysis[blackFigure] = AnalyzeFigureImpact(blackFigure, tileImportance);
             
             var blackKingFigure = new Figure(PlayerColor.Black, true, figureType.FigureId);
-            analysis[blackKingFigure] = AnalyzeFigureImpact(blackKingFigure, averageAnalysis);
+            analysis[blackKingFigure] = AnalyzeFigureImpact(blackKingFigure, tileImportance);
         }
         
         return analysis;
     }
 
-    private static int[] AnalyzeAverageTile(Figure figure, int[] array)
+    private static int[] AnalyzeTileImportance(Figure figure, int[] array)
     {
         var board = new Figure[Constants.FullBoardTilesCount];
         for (var j = 0; j < board.Length; j++)
@@ -105,9 +105,17 @@ public static class FigureImpactAnalyzer
                 impact += ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard.Span[i]) * averageValue[i];
             }
 
-            if (figure.IsKing) impact += Constants.KingValue;
-            impact += figure.FigureType.GetFigureValue() * Constants.FigureValueCoeff;
+            if (figure.IsKing)
+            {
+                array[i] = figure.PlayerColor switch
+                {
+                    PlayerColor.Black => Constants.KingValue,
+                    PlayerColor.White => -Constants.KingValue,
+                    _ => array[i]
+                };
+            }
 
+            impact += figure.FigureType.GetFigureValue() * (Constants.FigureValueCoeff - averageValue[i]);
             array[i] = figure.PlayerColor switch
             {
                 PlayerColor.Black => impact,

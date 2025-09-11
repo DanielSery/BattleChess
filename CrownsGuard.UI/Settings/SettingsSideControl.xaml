@@ -28,7 +28,7 @@
                 FontSize="25"
                 Background="{StaticResource ButtonGreenBackground}"
                 Padding="10"
-                IsEnabled="False" Opacity="0.85" />
+                IsEnabled="False" Opacity="0.8" />
         
         <Slider Grid.Row="0" Grid.Column="1"
                 Minimum="0" Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged}" Maximum="1"></Slider>
@@ -39,7 +39,7 @@
                 FontSize="25"
                 Background="{StaticResource ButtonGreen2Background}"
                 Padding="10"
-                IsEnabled="False" Opacity="0.85" />
+                IsEnabled="False" Opacity="0.8" />
         
         <Slider Grid.Row="1" Grid.Column="1"
                 Minimum="0" Value="{Binding MusicVolume, UpdateSourceTrigger=PropertyChanged}" Maximum="1"></Slider>
@@ -50,7 +50,7 @@
                 FontSize="25"
                 Background="{StaticResource ButtonGreen3Background}"
                 Padding="10"
-                IsEnabled="False" Opacity="0.85" />
+                IsEnabled="False" Opacity="0.8" />
         
         <Slider Grid.Row="2" Grid.Column="1"
                 Minimum="0" Value="{Binding SoundsVolume, UpdateSourceTrigger=PropertyChanged}" Maximum="1"></Slider>
@@ -60,7 +60,7 @@
                 Content="{Binding IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=Window, FalseValue=Fullscreen}}"
                 BorderThickness="2 2 2 2"
                 FontSize="25"
-                Background="{Binding IsFullScreen, Converter={converters:BooleanMultiValueConverter TrueValue=#30000000, FalseValue=#60000000}}"
+                Background="{StaticResource ButtonGreenBackground}"
                 Padding="10" />
 
         <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"

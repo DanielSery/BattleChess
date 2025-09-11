@@ -80,6 +80,8 @@ public static class DependenciesBuilder
             .SingleInstance();
         builder.RegisterType<GameViewModel>()
             .SingleInstance();
+        builder.RegisterType<GameSetupViewModel>()
+            .SingleInstance();
         builder.RegisterType<MainWindowViewModel>()
             .SingleInstance();
     }

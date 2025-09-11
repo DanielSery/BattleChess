@@ -7,5 +7,6 @@ public enum SelectedMenuTab
     SignUp,
     Lobby,
     Leaderboard,
-    Settings
+    Settings,
+    GameSetup
 }
