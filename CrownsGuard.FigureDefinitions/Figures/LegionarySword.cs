@@ -75,11 +75,16 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
-            !sourceFigure.CanAttack(targetFigure))
+        if (!board.TryGetFigure(attackPosition, out var targetFigure))
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
+            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition);
             return false;
+        }
+        
+        if (!sourceFigure.CanAttack(targetFigure))
+        {
+            action = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, attackPosition);
+            return true;
         }
 
         if (attackPosition.Y is 7 or 0)

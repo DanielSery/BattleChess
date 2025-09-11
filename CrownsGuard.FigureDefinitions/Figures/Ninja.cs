@@ -28,8 +28,11 @@ public class Ninja : ICrownsGuardFigureTypeInfo
             {
                 actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
             }
+            else
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+            }
         }
-
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var action))
         {

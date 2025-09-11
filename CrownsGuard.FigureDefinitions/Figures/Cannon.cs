@@ -41,10 +41,19 @@ public class Cannon : ICrownsGuardFigureTypeInfo
         var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
         foreach (Position attackPosition in attackPositions)
         {
-            if (!board.TryGetFigure(sourcePosition + attackPosition, out var attack1Figure) &&
-                sourceFigure.IsEnemyTo(attack1Figure))
+            var targetPosition = sourcePosition + attackPosition;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, sourcePosition + new Position(0, 2));
+                continue;
+            }
+            
+            if (sourceFigure.IsEnemyTo(targetFigure))
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+            }
+            else
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
             }
         }
         

@@ -54,6 +54,10 @@ public class Catapult : ICrownsGuardFigureTypeInfo
             {
                 actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
             }
+            else
+            {
+                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+            }
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
