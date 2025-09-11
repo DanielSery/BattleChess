@@ -154,42 +154,13 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     {
     }
 
-    public int EvaluateBoard(Span<Figure> board)
+    private static int EvaluateBoard(Span<Figure> board)
     {
         var evaluation = 0;
-        
         for (var i = 0; i < board.Length; i++)
         {
-            var figure = board[i];
-            if (figure.PlayerColor == PlayerColor.Neutral)
-            {
-                continue;
-            }
-
-            if (figure.PlayerColor == PlayerColor.White)
-            {
-                if (figure.IsKing) evaluation -= Constants.KingValue;
-                evaluation -= figure.FigureType.GetFigureValue() * Constants.FigureValueCoeff;
-                
-                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
-                foreach (var action in actions.Span)
-                {
-                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, figure);
-                }
-            }
-            else
-            {
-                if (figure.IsKing) evaluation += Constants.KingValue;
-                evaluation += figure.FigureType.GetFigureValue() * Constants.FigureValueCoeff;
-                
-                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board);
-                foreach (var action in actions.Span)
-                {
-                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action, figure);
-                }
-            }
+            evaluation += FigureImpactAnalyzer.GetFigureImpact(board[i], i);
         }
-
         return evaluation;
     }
 }
