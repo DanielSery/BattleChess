@@ -17,17 +17,17 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         int actionsCount = 0;
         var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(1 * direction)), out var attackAction1))
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(direction)), out var attackAction1))
         {
             actions[actionsCount++] = attackAction1;
         }
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var attackAction2))
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(direction)), out var attackAction2))
         {
             actions[actionsCount++] = attackAction2;
         }
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var moveAction1))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(direction)), out var moveAction1))
         {
             actions[actionsCount++] = moveAction1;
         }
@@ -60,10 +60,6 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         {
             var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
             return Constants.MeeleeAttackCoeff * figureValue;
-        }
-        else if (action.FigureActionType == FigureActionType.Special)
-        {
-            return Constants.UpgradeFigureImpact;
         }
         else
         {
