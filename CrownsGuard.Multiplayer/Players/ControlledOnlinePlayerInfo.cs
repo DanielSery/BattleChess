@@ -18,11 +18,6 @@ public class ControlledOnlinePlayerInfo : IOnlinePlayerInfo, IControlledPlayerIn
     }
 
     public Core.Players.PlayerColor PlayerColor { get; }
-
-    /// <inheritdoc />
-    public ArrayPoolMemory<Figure> Board { get; private set; }
-
-    public Figure[] PlayerBoard { get; set; } = [];
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
     public string? PlayerId { get; }
@@ -49,12 +44,5 @@ public class ControlledOnlinePlayerInfo : IOnlinePlayerInfo, IControlledPlayerIn
     /// <inheritdoc />
     public void SetGameService(IMultiplayerGameService gameService)
     {
-    }
-
-    /// <inheritdoc />
-    public void UpdateBoard(ArrayPoolMemory<Figure> board)
-    {
-        Board.Dispose();
-        Board = board;
     }
 }

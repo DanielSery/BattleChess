@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -13,28 +14,29 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
+        var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
 
-        if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(1, 2), out var pikeAttackAction1))
+        if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(2 * direction)), out var pikeAttackAction1))
         {
             actions[actionsCount++] = pikeAttackAction1;
         }
 
-        if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 2), out var pikeAttackAction2))
+        if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(2 * direction)), out var pikeAttackAction2))
         {
             actions[actionsCount++] = pikeAttackAction2;
         }
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 1), out var attackAction1))
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(1 * direction)), out var attackAction1))
         {
             actions[actionsCount++] = attackAction1;
         }
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 1), out var attackAction2))
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var attackAction2))
         {
             actions[actionsCount++] = attackAction2;
         }
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var moveAction1))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var moveAction1))
         {
             actions[actionsCount++] = moveAction1;
         }
@@ -43,7 +45,7 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             return actions.ToArrayPoolMemory(actionsCount);
         }
 
-        if (sourcePosition.Y == 1 &&
+        if (sourcePosition.Y is 1 or 6 &&
             TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), out var moveAction2))
         {
             actions[actionsCount++] = moveAction2;
@@ -104,7 +106,7 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             return false;
         }
 
-        if (attackPosition.Y == 7)
+        if (attackPosition.Y is 7 or 0)
         {
             action = new FigureAction(FigureActionType.Special, sourcePosition, attackPosition);
             return true;
@@ -125,7 +127,7 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             return false;
         }
 
-        if (attackPosition.Y == 7)
+        if (attackPosition.Y is 7 or 0)
         {
             action = new FigureAction(FigureActionType.Special, sourcePosition, attackPosition);
             return true;

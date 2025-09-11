@@ -26,12 +26,12 @@ public interface IGameService
 
     IPlayerInfo BlackPlayer { get; }
     
+    Figure[] Board { get; }
+    
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, ArrayPoolMemory<Figure> board);
-    
-    void SyncBoard();
+    void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, Figure[] board);
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayerInfo" />.

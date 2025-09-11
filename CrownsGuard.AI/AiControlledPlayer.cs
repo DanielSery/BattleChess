@@ -20,9 +20,6 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     public PlayerColor PlayerColor { get; }
 
     /// <inheritdoc />
-    public ArrayPoolMemory<Figure> Board { get; private set; } = ArrayPoolMemory<Figure>.Empty;
-
-    /// <inheritdoc />
     public IPlayerTimer Timer { get; } = InfinitePlayerTimer.Instance;
 
     /// <inheritdoc />
@@ -44,12 +41,5 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     public Task HandleAutomaticTurnAsync()
     {
         return Task.CompletedTask;
-    }
-
-    /// <inheritdoc />
-    public void UpdateBoard(ArrayPoolMemory<Figure> board)
-    {
-        Board.Dispose();
-        Board = board;
     }
 }

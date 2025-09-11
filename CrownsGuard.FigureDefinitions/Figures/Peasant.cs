@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -13,13 +14,14 @@ public class Peasant : ICrownsGuardFigureTypeInfo
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
+        var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var attackAction))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var attackAction))
         {
             actions[actionsCount++] = attackAction;
         }
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var move1Action))
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var move1Action))
         {
             actions[actionsCount++] = move1Action;
         }

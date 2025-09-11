@@ -16,7 +16,7 @@ public class Priest : ICrownsGuardFigureTypeInfo
         
         foreach (var relative in PositionsGroups.BishopDirections)
         {
-            for (var i = 1; i < 7; i++)
+            for (var i = 1; i <= 7; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
                 if (!board.TryGetFigure(targetPosition, out var targetFigure))
@@ -37,7 +37,7 @@ public class Priest : ICrownsGuardFigureTypeInfo
 
         foreach (var relative in PositionsGroups.BishopDirections)
         {
-            for (var i = 1; i < 7; i++)
+            for (var i = 1; i <= 7; i++)
             {
                 var targetPosition = sourcePosition + relative * i;
                 if (!board.TryGetFigure(targetPosition, out var targetFigure))

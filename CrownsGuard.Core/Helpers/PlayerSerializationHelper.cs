@@ -6,18 +6,23 @@ public static class PlayerSerializationHelper
 {
     public static int ToInt(this PlayerColor playerColor)
     {
-        var value = (int)playerColor;
-        if (value is < (int)PlayerColor.Neutral or > (int)PlayerColor.Black)
-            throw new ArgumentOutOfRangeException(nameof(playerColor), playerColor, $"Player {value} is out of range.");
-
-        return value;
+        return playerColor switch
+        {
+            PlayerColor.Black => 2,
+            PlayerColor.Neutral => 0,
+            PlayerColor.White => 1,
+            _ => throw new ArgumentOutOfRangeException(nameof(playerColor), playerColor, null)
+        };
     }
 
     public static PlayerColor ToPlayer(int player)
     {
-        if (player is < (int)PlayerColor.Neutral or > (int)PlayerColor.Black)
-            throw new ArgumentOutOfRangeException(nameof(player), player, $"Player {player} is out of range.");
-
-        return (PlayerColor)player;
+        return player switch
+        {
+            0 => PlayerColor.Neutral,
+            1 => PlayerColor.White,
+            2 => PlayerColor.Black,
+            _ => throw new ArgumentOutOfRangeException(nameof(player), player, null)
+        };
     }
 }

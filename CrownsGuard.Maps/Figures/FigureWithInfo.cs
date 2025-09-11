@@ -28,7 +28,6 @@ public sealed class FigureWithInfo : IFigureWithInfo, INotifyPropertyChanged
     public IFigureTypeInfo TypeInfo { get; }
     public bool IsKing { get; }
 
-    public int FigureValue => TypeInfo.FigureValue;
     public Uri ImageUri => TypeInfo.ImageUris[Owner.PlayerColor.ToInt()];
     public string DisplayName => TypeInfo.DisplayName;
     public string BaseDescription => TypeInfo.BaseDescription;

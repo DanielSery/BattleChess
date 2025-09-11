@@ -6,13 +6,13 @@ using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Game.Helpers;
 using CrownsGuard.Multiplayer.Game;
 using CrownsGuard.Multiplayer.Lobby;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Ranked;
 using CrownsGuard.Multiplayer.Utilities;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core;
 using CrownsGuard.Database.Lobby;
 using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Game;
@@ -309,7 +309,8 @@ public class MultiplayerViewModel : ViewModelBase
 
     private static Position GetPositionOfOppositePlayer(int index)
     {
-        return RelativePositionHelper.GetRelative(PlayerColor.White, Position.FromIndex(index));
+        var position = Position.FromIndex(index);
+        return new Position(position.X, (sbyte)(Constants.BoardLength - position.Y - 1));
     }
 
     private static int GetIndexOfOppositePlayer(int index)

@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -33,7 +34,9 @@ public class King : ICrownsGuardFigureTypeInfo
             }
         }
 
-        if (sourcePosition.X != 4 && sourcePosition.Y != 0)
+        if (sourcePosition.X != 4 && 
+            (sourcePosition.Y != 0 || sourceFigure.PlayerColor != PlayerColor.Black) && 
+            (sourcePosition.Y != 7 || sourceFigure.PlayerColor != PlayerColor.White))
         {
             return actions.ToArrayPoolMemory(actionsCount);
         }
@@ -43,14 +46,14 @@ public class King : ICrownsGuardFigureTypeInfo
             board[2].IsEmpty() &&
             board[3].IsEmpty())
         {
-            actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(2, 0));
+            actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(2, sourcePosition.Y));
         }
 
         if (sourceFigure.IsAllyTo(board[7]) &&
             board[5].IsEmpty() &&
             board[6].IsEmpty())
         {
-            actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(6, 0));
+            actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, new Position(6, sourcePosition.Y));
         }
 
         return actions.ToArrayPoolMemory(actionsCount);
@@ -66,12 +69,12 @@ public class King : ICrownsGuardFigureTypeInfo
         {
             board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
         }
-        else if (action.FigureActionType == FigureActionType.Special && action.TargetPosition.X == 2)
+        else if (action is { FigureActionType: FigureActionType.Special, TargetPosition.X: 2 })
         {
             board.MoveFigure(new Position(4, 0), new Position(2, 0), onEvent);
             board.MoveFigure(new Position(0, 0), new Position(3, 0), onEvent);
         }
-        else if (action.FigureActionType == FigureActionType.Special && action.TargetPosition.X == 6)
+        else if (action is { FigureActionType: FigureActionType.Special, TargetPosition.X: 6 })
         {
             board.MoveFigure(new Position(4, 0), new Position(6, 0), onEvent);
             board.MoveFigure(new Position(7, 0), new Position(5, 0), onEvent);

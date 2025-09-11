@@ -6,6 +6,7 @@ using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Figures;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.GameBoard;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
@@ -85,7 +86,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     private void EvaluateTeamBoard()
     {
-        TotalPoints = _boardInfo.Sum(x => x.Figure.TypeInfo.FigureValue);
+        TotalPoints = _boardInfo.Sum(x => x.Figure.TypeInfo.FigureId.GetFigureValue());
         HasKing = _boardInfo.Any(x => x.Figure.IsKing);
         RaisePropertyChanged(nameof(PointsLeft));
         RaisePropertyChanged(nameof(PositivePoints));

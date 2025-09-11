@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -9,10 +10,16 @@ public class Catapult : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Catapult;
 
-    private static readonly Position[] AttackPositions =
+    private static readonly Position[] BlackAttackPositions =
     [
         new (-1, 2), new (1, 2),
         new (-2, 3), new (0, 3), new (2, 3),
+    ];
+
+    private static readonly Position[] WhiteAttackPositions =
+    [
+        new (-1, -2), new (1, -2),
+        new (-2, -3), new (0, -3), new (2, -3),
     ];
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
@@ -33,8 +40,9 @@ public class Catapult : ICrownsGuardFigureTypeInfo
         
         Span<FigureAction> actions = stackalloc FigureAction[5];
         int actionsCount = 0;
+        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
         
-        foreach (var relative in AttackPositions)
+        foreach (var relative in attackPositions)
         {
             var targetPosition = sourcePosition + relative;
             if (!board.TryGetFigure(targetPosition, out var targetFigure))

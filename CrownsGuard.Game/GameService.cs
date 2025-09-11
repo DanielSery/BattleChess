@@ -29,6 +29,8 @@ internal class GameService : IGameService, IPlayersOwner
     public IPlayerInfo WhitePlayer { get; private set; }
     public IPlayerInfo BlackPlayer { get; private set; }
 
+    public Figure[] Board { get; private set; } = [];
+
     public event EventHandler? PlayersChanged;
     public event EventHandler? TurnStarted;
     public event EventHandler? TurnEnded;
@@ -36,15 +38,13 @@ internal class GameService : IGameService, IPlayersOwner
 
     public IPlayer GetPlayer(PlayerColor playerColor) => _figureOwners[playerColor.ToInt()];
 
-    public void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, ArrayPoolMemory<Figure> board)
+    public void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, Figure[] board)
     {
         _figureOwners[0] = NeutralPlayer.Instance;
         _figureOwners[1] = WhitePlayer = player1;
         _figureOwners[2] = BlackPlayer = player2;
-        
-        WhitePlayer.UpdateBoard(BoardFlipper.GetFlippedBoard(board));
-        BlackPlayer.UpdateBoard(board);
-        
+
+        Board = board;
         CurrentPlayerInfo = startingPlayerColor == player1.PlayerColor ? player1 : player2;
         WaitingPlayerInfo =startingPlayerColor == player1.PlayerColor ? player2 : player1;
         GameRunning = true;
@@ -52,11 +52,6 @@ internal class GameService : IGameService, IPlayersOwner
         PlayersChanged?.Invoke(this, EventArgs.Empty);
         CurrentPlayerInfo.StartTurn();
         TurnStarted?.Invoke(this, EventArgs.Empty);
-    }
-
-    public void SyncBoard()
-    {
-        WaitingPlayerInfo.UpdateBoard(BoardFlipper.GetFlippedBoard(CurrentPlayerInfo.Board));
     }
 
     public void StartTurn()
@@ -105,7 +100,7 @@ internal class GameService : IGameService, IPlayersOwner
         var whiteHasKing = false;
         var blackHasKing = false;
         
-        foreach (var figure in CurrentPlayerInfo.Board.Span)
+        foreach (var figure in Board)
         {
             if (!figure.IsKing)
                 continue;

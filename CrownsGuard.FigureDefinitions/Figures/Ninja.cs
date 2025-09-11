@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -13,6 +14,7 @@ public class Ninja : ICrownsGuardFigureTypeInfo
     {
         Span<FigureAction> actions = stackalloc FigureAction[36];
         int actionsCount = 0;
+        var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
 
         foreach (var relative in PositionsGroups.RookDirections)
         {
@@ -29,18 +31,18 @@ public class Ninja : ICrownsGuardFigureTypeInfo
         }
 
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(-1, 1), out var action))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var action))
         {
             actions[actionsCount++] = action;
         }
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(1, 1), out action))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(1 * direction)), out action))
         {
             actions[actionsCount++] = action;
         }
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), out action) &&
-            board.TryGetFigure(sourcePosition + new Position(0, 1), out var jumpedOver) &&
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(2 * direction)), out action) &&
+            board.TryGetFigure(sourcePosition + new Position(0, (sbyte)(1 * direction)), out var jumpedOver) &&
             jumpedOver.IsAllyTo(sourceFigure))
         {
             actions[actionsCount++] = action;
