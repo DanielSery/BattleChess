@@ -55,10 +55,19 @@ internal class BoardLoader : IBoardLoader
             var whiteFigure = map.Figures[i];
             var whitePosition = Position.FromIndex(i + 64 - 16);
             boardInfo[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
-            
-            var blackFigure = new Figure(PlayerColor.Black, whiteFigure.IsKing, whiteFigure.FigureType);
-            var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
-            boardInfo[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
+
+            if (whiteFigure.PlayerColor == PlayerColor.White)
+            {
+                var blackFigure = new Figure(PlayerColor.Black, whiteFigure.IsKing, whiteFigure.FigureType);
+                var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
+                boardInfo[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
+            }
+            else
+            {
+                var blackFigure = new Figure(PlayerColor.Neutral, whiteFigure.IsKing, whiteFigure.FigureType);
+                var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
+                boardInfo[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
+            }
         }
         
         for (var i = 16; i < 48; i++)
