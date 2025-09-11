@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -36,6 +37,33 @@ public class Mage : ICrownsGuardFigureTypeInfo
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
+    }
+
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        var movement = action.TargetPosition - action.SourcePosition;
+        if (Math.Abs(movement.X) == Math.Abs(movement.Y))
+        {
+            return GetImpact(board, action.TargetPosition + new Position(1, 0)) +
+                   GetImpact(board, action.TargetPosition + new Position(-1, 0)) +
+                   GetImpact(board, action.TargetPosition + new Position(0, 1)) +
+                   GetImpact(board, action.TargetPosition + new Position(0, -1)) +
+                   Constants.MoveImpact;
+        }
+        else
+        {
+            return GetImpact(board, action.TargetPosition + new Position(1, -1)) +
+                   GetImpact(board, action.TargetPosition + new Position(-1, 1)) +
+                   GetImpact(board, action.TargetPosition + new Position(1, 1)) +
+                   GetImpact(board, action.TargetPosition + new Position(-1, -1)) +
+                   Constants.MoveImpact;
+        }
+    }
+
+    private static int GetImpact(Span<Figure> board, Position targetPosition)
+    {
+        return board.TryGetFigure(targetPosition, out _)
+            ? Constants.PossibleHalfRangedAttackImpact : 0;
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

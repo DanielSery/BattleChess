@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -31,6 +32,49 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
         return actions.ToArrayPoolMemory(actionsCount);
     }
 
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        var movement = action.TargetPosition - action.SourcePosition;
+        if (movement is { Y: 1, X: 1 })
+        {
+            return GetImpact(board, action.TargetPosition + new Position(1, -1)) +
+                   GetImpact(board, action.TargetPosition + new Position(1, 0)) +
+                   GetImpact(board, action.TargetPosition + new Position(1, 1)) +
+                   Constants.MoveImpact;
+        }
+        else if (movement is { Y: -1, X: 1 })
+        {
+            return GetImpact(board, action.TargetPosition + new Position(-1, -1)) +
+                   GetImpact(board, action.TargetPosition + new Position(-1, 0)) +
+                   GetImpact(board, action.TargetPosition + new Position(-1, 1)) +
+                   Constants.MoveImpact;
+        }
+        else if (movement is { Y: 1, X: -1 })
+        {
+            return GetImpact(board, action.TargetPosition + new Position(-1, 1)) +
+                   GetImpact(board, action.TargetPosition + new Position(0, 1)) +
+                   GetImpact(board, action.TargetPosition + new Position(1, 1)) +
+                   Constants.MoveImpact;
+        }
+        else if (movement is { Y: -1, X: -1 })
+        {
+            return GetImpact(board, action.TargetPosition + new Position(-1, -1)) +
+                   GetImpact(board, action.TargetPosition + new Position(0, -1)) +
+                   GetImpact(board, action.TargetPosition + new Position(1, -1)) +
+                   Constants.MoveImpact;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    private static int GetImpact(Span<Figure> board, Position targetPosition)
+    {
+        return board.TryGetFigure(targetPosition, out _)
+            ? Constants.PossibleHalfRangedAttackImpact : 0;
+    }
+
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
@@ -46,8 +90,6 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
             TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
             TryDestroyTile(board, action.TargetPosition, new Position(-1, 0), onEvent);
             TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
-            if (board.TryGetFigure(action.TargetPosition + new Position(-1, 1), out Figure _))
-                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
         }
         else if (movement is { Y: 1, X: 0 })
         {

@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -29,6 +30,18 @@ public class Spartan : ICrownsGuardFigureTypeInfo
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
+    }
+
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        if (action.FigureActionType == FigureActionType.Move)
+        {
+            return Constants.MoveImpact + Constants.PossibleHalfRangedAttackImpact;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

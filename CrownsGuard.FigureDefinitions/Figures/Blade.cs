@@ -42,6 +42,7 @@ public class Blade : ICrownsGuardFigureTypeInfo
                 if (sourceFigure.CanAttack(targetFigure))
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                    break;
                 }
                 else if (targetFigure.IsEmpty())
                 {

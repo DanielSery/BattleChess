@@ -9,6 +9,7 @@ using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.AI;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.BoardBlueprints;
@@ -108,13 +109,12 @@ public sealed class BoardViewModel : ViewModelBase
 
     public void SinglePlayerLoadMap(BoardBlueprint map)
     {
-        var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
-        var blackPlayer = new ControlledPlayerInfo(PlayerColor.Black, "Blue player");
-
         _boardLoader.LoadBoardExtendedFor2Players(_boardInfo, map);
-        
         var board = _boardInfo.Select(x => new Figure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.FigureId))
             .ToArray();
+        
+        var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
+        var blackPlayer = new AiControlledPlayer(PlayerColor.Black, board, RequestPlayMove);
         
         _gameService.StartGame(
             whitePlayer,
@@ -225,6 +225,9 @@ public sealed class BoardViewModel : ViewModelBase
         using var possibleActions = FigureActionsResolver.GetPossibleActions(clickedTileInfo.Position, _gameService.Board);
         foreach (var possibleAction in possibleActions.Span)
         {
+            if (possibleAction.FigureActionType is FigureActionType.PossibleAttack or FigureActionType.PossibleSpecial)
+                continue;
+            
             Tiles[possibleAction.TargetPosition.GetIndex()].PossibleAction = possibleAction;
         }
     }
@@ -254,13 +257,12 @@ public sealed class BoardViewModel : ViewModelBase
         ClearPossibleActions();
     }
 
-    private void MultiplayerGameServiceOnRequestPlayMove(object? sender,
-        (Position from, Position to, TimeSpan turnTimeSpent) e)
+    private void RequestPlayMove(Position from, Position to, TimeSpan turnTimeSpent)
     {
         SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
 
-        switch (e.from.GetIndex())
+        switch (from.GetIndex())
         {
             case IMultiplayerGameService.NotRespondingMessage:
                 _gameService.PlayerWin(_gameService.WhitePlayer, WinType.NotResponding, true);
@@ -276,18 +278,23 @@ public sealed class BoardViewModel : ViewModelBase
                 return;
         }
 
-        var fromTile = Tiles[e.from.GetIndex()];
+        var fromTile = Tiles[from.GetIndex()];
         SelectedTileInfo = fromTile;
         SetPossibleActions(fromTile, true);
 
-        _gameService.EndTurn(e.turnTimeSpent);
-        var toTile = Tiles[e.to.GetIndex()];
+        _gameService.EndTurn(turnTimeSpent);
+        var toTile = Tiles[to.GetIndex()];
 
         FigureActionExecutor.ExecuteFigureAction(_gameService.Board, toTile.PossibleAction, OnEvent);
         _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
         SelectedTileInfo = TileInfoViewModel.None;
         _gameService.StartTurn();
         ClearPossibleActions();
+    }
+
+    private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to, TimeSpan turnTimeSpent) e)
+    {
+        RequestPlayMove(e.from, e.to, e.turnTimeSpent);
     }
 
     private void OnEvent(BoardEvent boardEvent, Span<Figure> board)
