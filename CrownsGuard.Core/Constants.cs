@@ -2,6 +2,8 @@
 
 public static class Constants
 {
+    public const int UpgradeFigureImpact = 1000;
+    
     public const int RangedConvertCoeff = 80;
     public const int RangedAttackCoeff = 40;
     public const int HalfRangedAttackCoeff = 20;

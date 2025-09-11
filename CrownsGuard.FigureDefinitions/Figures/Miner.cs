@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
@@ -51,6 +52,24 @@ public class Miner : ICrownsGuardFigureTypeInfo
         }
         
         return actions.ToArrayPoolMemory(actionsCount);
+    }
+
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        var move = action.TargetPosition - action.SourcePosition;
+        var absX = Math.Abs(move.X);
+        if (absX != 0)
+        {
+            return Constants.MoveImpact + absX * Constants.BuildImpact;
+        }
+        
+        var absY = Math.Abs(move.Y);
+        if (absY != 0)
+        {
+            return Constants.MoveImpact + absY * Constants.BuildImpact;
+        }
+
+        return 0;
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

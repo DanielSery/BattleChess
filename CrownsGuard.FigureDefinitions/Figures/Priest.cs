@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -48,10 +49,15 @@ public class Priest : ICrownsGuardFigureTypeInfo
                 if (sourceFigure.CanAttack(targetFigure))
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                    break;
+                }
+                else if (targetFigure.IsWalkable())
+                {
+                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
                 }
                 else
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                    break;
                 }
             }
         }
@@ -72,6 +78,27 @@ public class Priest : ICrownsGuardFigureTypeInfo
         }
 
         return actions.ToArrayPoolMemory(actionsCount);
+    }
+
+    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    {
+        if (action.FigureActionType == FigureActionType.Move)
+        {
+            return Constants.MoveImpact;
+        }
+        else if (action.FigureActionType == FigureActionType.PossibleAttack)
+        {
+            return Constants.PossibleMeeleeAttackImpact;
+        }
+        else if (action.FigureActionType == FigureActionType.Attack)
+        {
+            var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
+            return Constants.MeeleeAttackCoeff * figureValue;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

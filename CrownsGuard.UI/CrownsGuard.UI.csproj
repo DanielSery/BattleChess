@@ -14,6 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\CrownsGuard.AI\CrownsGuard.AI.csproj" />
         <ProjectReference Include="..\CrownsGuard.Game\CrownsGuard.Game.csproj" />
         <ProjectReference Include="..\CrownsGuard.Maps\CrownsGuard.Maps.csproj" />
         <ProjectReference Include="..\CrownsGuard.Multiplayer\CrownsGuard.Multiplayer.csproj" />
