@@ -107,30 +107,28 @@ public sealed class BoardViewModel : ViewModelBase
     public event EventHandler? RequestSwitchToMenu;
     public event EventHandler? RequestSwitchToGame;
 
-    public void SinglePlayerLoadMap(BoardBlueprint map)
+    public void StartLocalGame(
+        BoardBlueprint map,
+        IPlayerInfo whitePlayer,
+        IPlayerInfo blackPlayer)
     {
-        _boardLoader.LoadBoardExtendedFor2Players(_boardInfo, map);
-        var board = _boardInfo.Select(x => new Figure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.FigureId))
-            .ToArray();
-        
-        var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
-        var blackPlayer = new AiControlledPlayer(PlayerColor.Black, board, RequestPlayMove, 4);
+        _boardLoader.LoadBoard(_boardInfo, map);
 
         var random = new Random();
         var startingPlayer = random.Next(0, 2) == 1 ? PlayerColor.White : PlayerColor.Black;
-        
+
         _gameService.StartGame(
             whitePlayer,
             blackPlayer,
-            startingPlayer, board);
+            startingPlayer, map.Figures);
         
-        if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
+        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
         
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
 
-    public void MultiplayerLoadMap(
+    public void StartMultiplayerGame(
         MultiplayerGameType gameType,
         string? gameId,
         IOnlinePlayerInfo whitePlayer,
@@ -153,8 +151,8 @@ public sealed class BoardViewModel : ViewModelBase
         _gameService.StartGame(
             whitePlayer, blackPlayer,
             map.StartingPlayerColor, map.Figures);
-        
-        if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
+
+        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
 
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
@@ -192,7 +190,8 @@ public sealed class BoardViewModel : ViewModelBase
             _soundService.PlaySoundEffect(SoundEffectType.ChessFigure);
             SelectedTileInfo = TileInfoViewModel.None;
             _gameService.StartTurn();
-            if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
+
+            if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
                 _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
         }
         else if (clickedTile.Figure.Owner.PlayerColor == _gameService.CurrentPlayerInfo.PlayerColor)
@@ -263,7 +262,7 @@ public sealed class BoardViewModel : ViewModelBase
         ClearPossibleActions();
     }
 
-    private void RequestPlayMove(Position from, Position to, TimeSpan turnTimeSpent)
+    public void RequestPlayMove(Position from, Position to, TimeSpan turnTimeSpent)
     {
         SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
@@ -303,6 +302,9 @@ public sealed class BoardViewModel : ViewModelBase
         _gameService.StartTurn();
         SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
+
+        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
+            _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
     }
 
     private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to, TimeSpan turnTimeSpent) e)

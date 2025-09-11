@@ -317,6 +317,7 @@ public partial class MainWindow
             SelectedMenuTab.Login => (LoginSideControl, LoginSideTransform),
             SelectedMenuTab.SignUp => (SignupSideControl, SignupSideTransform),
             SelectedMenuTab.Settings => (SettingsSideControl, SettingsSideTransform),
+            SelectedMenuTab.GameSetup => (GameSetupSideControl, GameSetupTransform),
             SelectedMenuTab.Leaderboard => (LeaderboardSideControl, LeaderboardSideTransform),
             _ => throw new ArgumentOutOfRangeException(nameof(selectedMenuTab), selectedMenuTab, null)
         };

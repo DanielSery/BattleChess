@@ -238,6 +238,12 @@
                             </Border.RenderTransform>
                             <settings:SettingsSideControl DataContext="{Binding SettingsViewModel}"/>
                         </Border>
+                        <Border x:Name="GameSetupSideControl" CacheMode="BitmapCache" Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="GameSetupTransform" />
+                            </Border.RenderTransform>
+                            <game:GameSetupControl DataContext="{Binding GameSetupViewModel}"/>
+                        </Border>
                     </Grid>
                 </Border>
             </Grid>

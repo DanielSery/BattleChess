@@ -54,47 +54,96 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     {
         return Task.Run(() =>
         {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
-            var resultActions = new List<(int value, FigureAction action)>();
-            var alpha = int.MinValue;
-            const int beta = int.MaxValue;
-            var depth = _difficulty;
-            
-            for (var i = 0; i < _board.Length; i++)
-            {
-                var figure = _board[i];
-                if (figure.PlayerColor == PlayerColor.Black)
-                {
-                    using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), _board);
-                    foreach (var action in actions.Span)
-                    {
-                        if (!action.FigureActionType.IsExecutable())
-                            continue;
-
-                        using var clonedBoard = _board.AsSpan().CloneToArrayPoolMemory();
-                        FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-                        var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, false, analysis);
-                        resultActions.Add((eval, action));
-                        alpha = Math.Max(alpha, eval);
-                    }
-                }
-            }
-
-            for (var i = resultActions.Count - 1; i >= 0; i--)
-            {
-                if (resultActions[i].value < alpha - 50)
-                    resultActions.RemoveAt(i);
-            }
-
-            var executedAction = resultActions[_random.Next(0, resultActions.Count)];
-            Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
-            _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
+            if (PlayerColor == PlayerColor.White)
+                HandleWhitePlayer();
+            else HandleBlackPlayer();
         });
     }
-    
+
+    private void HandleBlackPlayer()
+    {
+        var sw = new Stopwatch();
+        sw.Start();
+
+        var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
+        var resultActions = new List<(int value, FigureAction action)>();
+        var alpha = int.MinValue;
+        const int beta = int.MaxValue;
+        var depth = _difficulty;
+
+        for (var i = 0; i < _board.Length; i++)
+        {
+            var figure = _board[i];
+            if (figure.PlayerColor == PlayerColor.Black)
+            {
+                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), _board);
+                foreach (var action in actions.Span)
+                {
+                    if (!action.FigureActionType.IsExecutable())
+                        continue;
+
+                    using var clonedBoard = _board.AsSpan().CloneToArrayPoolMemory();
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
+                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, false, analysis);
+                    resultActions.Add((eval, action));
+                    alpha = Math.Max(alpha, eval);
+                }
+            }
+        }
+
+        for (var i = resultActions.Count - 1; i >= 0; i--)
+        {
+            if (resultActions[i].value < alpha - 50)
+                resultActions.RemoveAt(i);
+        }
+
+        var executedAction = resultActions[_random.Next(0, resultActions.Count)];
+        Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
+        _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
+    }
+
+    private void HandleWhitePlayer()
+    {
+        var sw = new Stopwatch();
+        sw.Start();
+
+        var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
+        var resultActions = new List<(int value, FigureAction action)>();
+        const int alpha = int.MinValue;
+        var beta = int.MaxValue;
+        var depth = _difficulty;
+
+        for (var i = 0; i < _board.Length; i++)
+        {
+            var figure = _board[i];
+            if (figure.PlayerColor == PlayerColor.White)
+            {
+                using var actions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), _board);
+                foreach (var action in actions.Span)
+                {
+                    if (!action.FigureActionType.IsExecutable())
+                        continue;
+
+                    using var clonedBoard = _board.AsSpan().CloneToArrayPoolMemory();
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
+                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, true, analysis);
+                    resultActions.Add((eval, action));
+                    beta = Math.Min(beta, eval);
+                }
+            }
+        }
+
+        for (var i = resultActions.Count - 1; i >= 0; i--)
+        {
+            if (resultActions[i].value > beta + 50)
+                resultActions.RemoveAt(i);
+        }
+
+        var executedAction = resultActions[_random.Next(0, resultActions.Count)];
+        Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
+        _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
+    }
+
     private int AlphaBeta(Span<Figure> board, int depth, int alpha, int beta, bool maximizingPlayer, Dictionary<Figure, int[]> analysis)
     {
         var check = EvaluateBoard(board, analysis);

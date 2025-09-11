@@ -136,7 +136,7 @@ public class MultiplayerViewModel : ViewModelBase
                 
             var hisMap = GetFigures(gameSearchJoin.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, gameSearch.IsHostStarting);
-            _boardViewModel.MultiplayerLoadMap(
+            _boardViewModel.StartMultiplayerGame(
                 MultiplayerGameType.Ranked | MultiplayerGameType.Host, gameSearch.Id,
                 player, player2,
                 playedMap, true);
@@ -151,7 +151,7 @@ public class MultiplayerViewModel : ViewModelBase
             
             var hisMap = GetFigures(gameSearch.Map);
             var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !gameSearch.IsHostStarting);
-            _boardViewModel.MultiplayerLoadMap(
+            _boardViewModel.StartMultiplayerGame(
                 MultiplayerGameType.Ranked, gameSearch.Id, 
                 player1, player2,
                 playedMap, true);
@@ -203,7 +203,7 @@ public class MultiplayerViewModel : ViewModelBase
 
         var hisMap = GetFigures(gameJoin.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, lobby.IsHostStarting);
-        _boardViewModel.MultiplayerLoadMap(
+        _boardViewModel.StartMultiplayerGame(
             MultiplayerGameType.Lobby | MultiplayerGameType.Host, lobby.Id, 
             player1, player2,
             playedMap, false);
@@ -243,7 +243,7 @@ public class MultiplayerViewModel : ViewModelBase
         
         var hisMap = GetFigures(lobby.Map);
         var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !lobby.IsHostStarting);
-        _boardViewModel.MultiplayerLoadMap(
+        _boardViewModel.StartMultiplayerGame(
             MultiplayerGameType.Lobby, lobby.Id, 
             player1, player2,
             playedMap, false);

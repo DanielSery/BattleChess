@@ -42,37 +42,4 @@ internal class BoardLoader : IBoardLoader
             tile.Figure = _figureCreator.CreateFigure(map.Figures[index++]);
         }
     }
-
-    public void LoadBoardExtendedFor2Players(IBoardInfo boardInfo, BoardBlueprint map)
-    {
-        if (boardInfo.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
-        if (map.Figures.Length != 16) throw new ArgumentException("Partial map blueprint needs to have 16 tiles");
-        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
-        if (map.Figures.Any(x => x is { PlayerColor: PlayerColor.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
-
-        for (var i = 0; i < map.Figures.Length; i++)
-        {
-            var whiteFigure = map.Figures[i];
-            var whitePosition = Position.FromIndex(i + 64 - 16);
-            boardInfo[whitePosition].Figure = _figureCreator.CreateFigure(whiteFigure);
-
-            if (whiteFigure.PlayerColor == PlayerColor.White)
-            {
-                var blackFigure = new Figure(PlayerColor.Black, whiteFigure.IsKing, whiteFigure.FigureType);
-                var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
-                boardInfo[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
-            }
-            else
-            {
-                var blackFigure = new Figure(PlayerColor.Neutral, whiteFigure.IsKing, whiteFigure.FigureType);
-                var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
-                boardInfo[blackPosition].Figure = _figureCreator.CreateFigure(blackFigure);
-            }
-        }
-        
-        for (var i = 16; i < 48; i++)
-        {
-            boardInfo[Position.FromIndex(i)].Figure = _figureCreator.CreateEmptyFigure();
-        }
-    }
 }

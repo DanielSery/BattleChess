@@ -110,6 +110,12 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
                 if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionaryPike)
                     board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
             }
+            else
+            {
+                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionaryPike)
+                    board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
+            }
         }
         else
         {

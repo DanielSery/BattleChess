@@ -33,7 +33,7 @@
                 FontSize="25"
                 Background="{StaticResource ButtonBlueBackground}"
                 Padding="10"
-                IsEnabled="False" Opacity="0.85" />
+                IsEnabled="False" Opacity="0.8" />
 
         <TextBox Grid.Row="0" Grid.Column="1"
                  BorderThickness="2 2 4 2"
@@ -41,7 +41,7 @@
                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                  Background="#40000000"
                  Padding="10"
-                 Opacity="0.85" />
+                 Opacity="0.8" />
 
         <Button Grid.Row="1" Grid.Column="0"
                 Content="Password"
@@ -49,7 +49,7 @@
                 FontSize="25"
                 Background="{StaticResource ButtonPurple2Background}"
                 Padding="10"
-                IsEnabled="False" Opacity="0.85" />
+                IsEnabled="False" Opacity="0.8" />
 
         <PasswordBox Grid.Row="1" Grid.Column="1"
                      BorderThickness="2 2 4 4"
@@ -57,7 +57,7 @@
                      Background="#40000000"
                      Padding="10"
                      Password=""
-                     Opacity="0.85" 
+                     Opacity="0.8" 
                      PasswordChanged="PasswordBox_OnPasswordChanged"/>
         
         <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"

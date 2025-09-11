@@ -149,7 +149,7 @@ public class EditorUnitsViewModel : ViewModelBase
         var unlockedFiguresBitArray = new BitArray(unlockedFigures);
         
         Figures = _figureTypeInfoGroup.FigureTypes
-            .Select(x => new FigureTypeViewModel(x, unlockedFiguresBitArray[(int)x.FigureId]))
+            .Select(x => new FigureTypeViewModel(x, true))
             .ToArray();
     }
 

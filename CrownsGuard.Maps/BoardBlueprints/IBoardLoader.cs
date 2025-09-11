@@ -8,6 +8,4 @@ public interface IBoardLoader
     void LoadBoard(IBoardInfo boardInfo, BoardBlueprint map);
 
     void LoadTeamBoard(IBoardInfo boardInfo, BoardBlueprint map);
-
-    void LoadBoardExtendedFor2Players(IBoardInfo boardInfo, BoardBlueprint map);
 }

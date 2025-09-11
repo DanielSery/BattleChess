@@ -12,27 +12,23 @@ namespace CrownsGuard.UI.MainWindow;
 public class MenuViewModel : ViewModelBase
 {
     private readonly ISoundService _soundService;
-    private readonly MapsViewModel _mapsViewModel;
-    private readonly BoardViewModel _boardViewModel;
 
     public MenuViewModel(
         ISoundService soundService,
-        BoardViewModel boardViewModel,
-        MapsViewModel mapsViewModel,
         SignUpViewModel signUpViewModel,
         LoginViewModel loginViewModel,
         MultiplayerViewModel multiplayerViewModel,
         LeaderboardViewModel leaderboardViewModel,
-        SettingsViewModel settingsViewModel)
+        SettingsViewModel settingsViewModel,
+        GameSetupViewModel gameSetupViewModel)
     {
         _soundService = soundService;
-        _boardViewModel = boardViewModel;
-        _mapsViewModel = mapsViewModel;
         SignUpViewModel = signUpViewModel;
         LoginViewModel = loginViewModel;
         MultiplayerViewModel = multiplayerViewModel;
         LeaderboardViewModel = leaderboardViewModel;
         SettingsViewModel = settingsViewModel;
+        GameSetupViewModel = gameSetupViewModel;
         
         LocalGameCommand = new RelayCommand(LocalGame);
         SelectEditorCommand = new RelayCommand(SelectEditor);
@@ -48,6 +44,7 @@ public class MenuViewModel : ViewModelBase
         LeaderboardViewModel.RequestEnd += HideSideMenu;
         MultiplayerViewModel.RequestEnd += HideSideMenu;
         SettingsViewModel.RequestEnd += HideSideMenu;
+        GameSetupViewModel.RequestEnd += HideSideMenu;
     }
 
     public LoginViewModel LoginViewModel { get; }
@@ -55,6 +52,7 @@ public class MenuViewModel : ViewModelBase
     public MultiplayerViewModel MultiplayerViewModel { get; }
     public LeaderboardViewModel LeaderboardViewModel { get; }
     public SettingsViewModel SettingsViewModel { get; }
+    public GameSetupViewModel GameSetupViewModel { get; }
 
     private SelectedMenuTab _selectedMenuTab = SelectedMenuTab.None;
     public SelectedMenuTab SelectedMenuTab
@@ -89,8 +87,7 @@ public class MenuViewModel : ViewModelBase
     
     private void LocalGame()
     {
-        _boardViewModel.SinglePlayerLoadMap(_mapsViewModel.TeamMap);
-        RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
+        SelectedMenuTab = SelectedMenuTab.GameSetup;
     }
 
     private void SelectEditor()
