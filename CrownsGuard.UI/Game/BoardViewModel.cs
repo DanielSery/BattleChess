@@ -115,12 +115,15 @@ public sealed class BoardViewModel : ViewModelBase
             .ToArray();
         
         var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
-        var blackPlayer = new AiControlledPlayer(PlayerColor.Black, board, RequestPlayMove, 2);
+        var blackPlayer = new AiControlledPlayer(PlayerColor.Black, board, RequestPlayMove, 4);
         
         _gameService.StartGame(
             whitePlayer,
             blackPlayer,
-            map.StartingPlayerColor, board);
+            PlayerColor.Black, board);
+        
+        if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer)
+            _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
         
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
     }
