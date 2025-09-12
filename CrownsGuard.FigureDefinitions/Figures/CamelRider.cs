@@ -18,14 +18,8 @@ public class CamelRider : ICrownsGuardFigureTypeInfo
         
         foreach (var relative in PositionsGroups.BishopDirections)
         {
-            for (var i = 1; i <= 7; i++)
+            for (var targetPosition = sourcePosition + relative; board.TryGetFigure(targetPosition, out var targetFigure); targetPosition += relative)
             {
-                var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    break;
-                }
-
                 if (targetFigure.IsWalkable())
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
@@ -39,14 +33,8 @@ public class CamelRider : ICrownsGuardFigureTypeInfo
         
         foreach (var relative in PositionsGroups.BishopDirections)
         {
-            for (var i = 1; i <= 7; i++)
+            for (var targetPosition = sourcePosition + relative; board.TryGetFigure(targetPosition, out var targetFigure); targetPosition += relative)
             {
-                var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    break;
-                }
-
                 if (sourceFigure.CanAttack(targetFigure))
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);

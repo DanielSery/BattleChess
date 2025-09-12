@@ -30,11 +30,6 @@ public readonly record struct Position
         return new Position((sbyte)(left.X - right.X), (sbyte)(left.Y - right.Y));
     }
 
-    public static Position operator *(Position left, int right)
-    {
-        return new Position((sbyte)(left.X * right), (sbyte)(left.Y * right));
-    }
-
     public static Position FromIndex(int index)
     {
         return new Position((sbyte)(index % Constants.BoardLength), (sbyte)(index / Constants.BoardLength));

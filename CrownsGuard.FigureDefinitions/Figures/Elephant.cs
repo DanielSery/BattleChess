@@ -24,9 +24,10 @@ public class Elephant : ICrownsGuardFigureTypeInfo
         foreach (var relative in Directions)
         {
             var isAttack = false;
+            var targetPosition = sourcePosition;
             for (var i = 1; i <= 3; i++)
             {
-                var targetPosition = sourcePosition + relative * i;
+                targetPosition += relative;
                 if (!board.TryGetFigure(targetPosition, out var targetFigure))
                 {
                     continue;
@@ -120,7 +121,7 @@ public class Elephant : ICrownsGuardFigureTypeInfo
             if (board[step1Position.GetIndex()].FigureType != FigureId.Elephant)
                 return;
             
-            var step2Position = action.SourcePosition + smallMove * 2;
+            var step2Position = action.SourcePosition + smallMove + smallMove;
             if (board[step2Position.GetIndex()].IsWalkable())
                 board.MoveFigure(step1Position, step2Position, onEvent);
             else board.KillWithMove(step1Position, step2Position, onEvent);

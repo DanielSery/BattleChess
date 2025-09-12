@@ -44,11 +44,12 @@ public class Ranger : ICrownsGuardFigureTypeInfo
             }
         }
         
-        foreach (var direction in PositionsGroups.RookDirections)
+        foreach (var relative in PositionsGroups.RookDirections)
         {
+            var targetPosition = sourcePosition;
             for (var i = 1; i <= 3; i++)
             {
-                var targetPosition = sourcePosition + direction * i;
+                targetPosition += relative;
                 if (!board.TryGetFigure(targetPosition, out var targetFigure))
                 {
                     break;
