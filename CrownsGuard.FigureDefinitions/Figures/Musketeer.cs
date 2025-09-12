@@ -21,7 +21,7 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
         new(-1, -1), new(0, -1), new(1, -1)
     ];
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
@@ -33,15 +33,11 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                return ArrayPoolMemory<FigureAction>.Empty;
+                return;
             }
         }
 
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
         var attackDirections = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackDirections : WhiteAttackDirections;
-
         foreach (var relative in attackDirections)
         {
             var targetPosition = sourcePosition;
@@ -55,12 +51,12 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                    actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
                     break;
                 }
                 else if (targetFigure.IsWalkable())
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                    actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
                 }
                 else
                 {
@@ -69,7 +65,7 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)

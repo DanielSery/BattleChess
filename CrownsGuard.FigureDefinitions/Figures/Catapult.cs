@@ -23,7 +23,7 @@ public class Catapult : ICrownsGuardFigureTypeInfo
         new (-2, -3), new (0, -3), new (2, -3),
     ];
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
@@ -35,13 +35,10 @@ public class Catapult : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                return ArrayPoolMemory<FigureAction>.Empty;
+                return;
             }
         }
         
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(5);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
         var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
         
         foreach (var relative in attackPositions)
@@ -54,15 +51,15 @@ public class Catapult : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
             }
             else
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)

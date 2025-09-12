@@ -10,12 +10,8 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Barbarian;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-        
         foreach (var relative in PositionsGroups.KnightPositions)
         {
             var targetPosition = sourcePosition + relative;
@@ -26,7 +22,7 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
             }
         }
         
@@ -43,16 +39,16 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
             {
                 if (targetFigure.IsEmpty())
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.Special, movedPosition, targetPosition);
+                    actions.Push(new FigureAction(FigureActionType.Special, movedPosition, targetPosition));
                 }
                 else
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleSpecial, movedPosition, targetPosition);
+                    actions.Push(new FigureAction(FigureActionType.PossibleSpecial, movedPosition, targetPosition));
                 }
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction()

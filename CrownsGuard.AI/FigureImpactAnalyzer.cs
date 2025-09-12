@@ -72,15 +72,17 @@ public static class FigureImpactAnalyzer
         {
             using var clonedBoard = board.AsSpan().CloneToArrayPoolMemory();
             clonedBoard.Span[i] = figure;
-            using var possibleActions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard.Span);
-            
+
+            var actionsStack = new Stack<FigureAction>();
             var impact = 0;
-            foreach (var possibleAction in possibleActions.Span)
+            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard.Span, actionsStack);
+
+            foreach (var possibleAction in actionsStack)
             {
                 var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard.Span[i]));
                 impact += value;
             }
-            
+
             tileImportance[i] += impact;
         }
     }
@@ -98,10 +100,11 @@ public static class FigureImpactAnalyzer
         {
             using var clonedBoard = board.AsSpan().CloneToArrayPoolMemory();
             clonedBoard.Span[i] = figure;
-            using var possibleActions = FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard.Span);
-            
+
             var impact = 0;
-            foreach (var possibleAction in possibleActions.Span)
+            var actionsStack = new Stack<FigureAction>();
+            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard.Span, actionsStack);
+            foreach (var possibleAction in actionsStack)
             {
                 impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard.Span[i]) * tileImportance[i]) / 1000;
             }

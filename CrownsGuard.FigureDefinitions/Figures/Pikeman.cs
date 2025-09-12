@@ -26,12 +26,8 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
         new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
     ];
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-
         foreach (var relative in MovePositions)
         {
             var targetPosition = sourcePosition + relative;
@@ -42,7 +38,7 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
             }
         }
 
@@ -57,15 +53,15 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
             }
             else
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
             }
         }
 
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)

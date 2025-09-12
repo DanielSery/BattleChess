@@ -11,12 +11,8 @@ public class Builder : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Builder;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-        
         foreach (var relative in PositionsGroups.BishopDirections)
         {
             var targetPosition = sourcePosition + relative;
@@ -27,7 +23,7 @@ public class Builder : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
             }
         }
         
@@ -41,15 +37,15 @@ public class Builder : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsEmpty())
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Special, sourcePosition, targetPosition));
             }
             else if (targetFigure.FigureType == FigureId.Wall)
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction(FigureAction action)

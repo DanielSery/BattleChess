@@ -11,34 +11,30 @@ public class Peasant : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Peasant;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
         var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
-
         if (TryGetMoveAction(board, sourcePosition, new Position(0, (sbyte)(1 * direction)), out var attackAction))
         {
-            actions[actionsCount++] = attackAction;
+            actions.Push(attackAction);
         }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var move1Action))
         {
-            actions[actionsCount++] = move1Action;
+            actions.Push(move1Action);
         }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 0), out var move2Action))
         {
-            actions[actionsCount++] = move2Action;
+            actions.Push(move2Action);
         }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 0), out var move3Action))
         {
-            actions[actionsCount++] = move3Action;
+            actions.Push(move3Action);
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
