@@ -297,9 +297,11 @@ public class MultiplayerViewModel : ViewModelBase
         var figures = new Figure[16];
         for (var i = 0; i < figures.Length; i++)
         {
-            var figure = FigureSerializationHelper.FromInt(map[i]);
+            var figure = new Figure(map[i]);
             if (figure.PlayerColor == PlayerColor.White)
+            {
                 figure = new Figure(PlayerColor.Black, figure.IsKing, figure.FigureType);
+            }
 
             figures[i] = figure;
         }

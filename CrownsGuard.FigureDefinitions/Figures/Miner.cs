@@ -13,7 +13,8 @@ public class Miner : ICrownsGuardFigureTypeInfo
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        Span<FigureAction> actions = stackalloc FigureAction[36];
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
+        var actions = actionsMemory.Span;
         int actionsCount = 0;
 
         foreach (var relative in PositionsGroups.RookDirections)
@@ -51,7 +52,7 @@ public class Miner : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actions.ToArrayPoolMemory(actionsCount);
+        return actionsMemory.WithCount(actionsCount);;
     }
 
     public static int EvaluateAction(Span<Figure> board, FigureAction action)

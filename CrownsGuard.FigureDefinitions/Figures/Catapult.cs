@@ -39,7 +39,8 @@ public class Catapult : ICrownsGuardFigureTypeInfo
             }
         }
         
-        Span<FigureAction> actions = stackalloc FigureAction[5];
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(5);
+        var actions = actionsMemory.Span;
         int actionsCount = 0;
         var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
         
@@ -61,7 +62,7 @@ public class Catapult : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actions.ToArrayPoolMemory(actionsCount);
+        return actionsMemory.WithCount(actionsCount);;
     }
 
     public static int EvaluateAction(Span<Figure> board, FigureAction action)

@@ -37,7 +37,8 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
             }
         }
 
-        Span<FigureAction> actions = stackalloc FigureAction[36];
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
+        var actions = actionsMemory.Span;
         int actionsCount = 0;
         var attackDirections = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackDirections : WhiteAttackDirections;
 
@@ -67,7 +68,7 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actions.ToArrayPoolMemory(actionsCount);
+        return actionsMemory.WithCount(actionsCount);;
     }
 
     public static int EvaluateAction(Span<Figure> board, FigureAction action)

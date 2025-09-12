@@ -37,7 +37,8 @@ public class Cannon : ICrownsGuardFigureTypeInfo
             }
         }
         
-        Span<FigureAction> actions = stackalloc FigureAction[3];
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(3);
+        var actions = actionsMemory.Span;
         int actionsCount = 0;
         var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
         foreach (Position attackPosition in attackPositions)
@@ -58,7 +59,7 @@ public class Cannon : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actions.ToArrayPoolMemory(actionsCount);
+        return actionsMemory.WithCount(actionsCount);;
     }
 
     public static int EvaluateAction(Span<Figure> board, FigureAction action)
