@@ -51,7 +51,7 @@ public class Spartan : ICrownsGuardFigureTypeInfo
         {
             board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
             var sourceFigure = board[action.SourcePosition.GetIndex()];
-            var attackedPosition = action.TargetPosition * 2 - action.SourcePosition;
+            var attackedPosition = action.TargetPosition + action.TargetPosition - action.SourcePosition;
 
             if (!board.TryGetFigure(attackedPosition, out var targetFigure))
             {

@@ -18,14 +18,8 @@ public class Scout : ICrownsGuardFigureTypeInfo
 
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            for (var i = 1; i < 8; i++)
+            for (var targetPosition = sourcePosition + relative; board.TryGetFigure(targetPosition, out var targetFigure); targetPosition += relative)
             {
-                var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    continue;
-                }
-
                 if (targetFigure.IsWalkable())
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);

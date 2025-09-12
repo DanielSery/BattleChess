@@ -61,7 +61,7 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
 
     private static void CreateExplosive(Position sourcePosition, Position move, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var targetPosition = sourcePosition + move * 2;
+        var targetPosition = sourcePosition + move + move;
         if (!board.TryGetFigure(targetPosition, out var targetFigure))
         {
             return;

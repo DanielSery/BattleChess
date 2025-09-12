@@ -13,22 +13,28 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
+        if (sourceFigure.PlayerColor == PlayerColor.White)
+            return GetPossibleWhiteActions(sourcePosition, sourceFigure, board);
+        else return GetPossibleBlackActions(sourcePosition, sourceFigure, board);
+    }
+
+    public static ArrayPoolMemory<FigureAction> GetPossibleBlackActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    {
         var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
         var actions = actionsMemory.Span;
         int actionsCount = 0;
-        var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(direction)), out var attackAction1))
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 1), out var attackAction1))
         {
             actions[actionsCount++] = attackAction1;
         }
 
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(direction)), out var attackAction2))
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 1), out var attackAction2))
         {
             actions[actionsCount++] = attackAction2;
         }
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(direction)), out var moveAction1))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var moveAction1))
         {
             actions[actionsCount++] = moveAction1;
         }
@@ -37,12 +43,46 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
             return actionsMemory.WithCount(actionsCount);;
         }
 
-        if (sourcePosition.Y is 1 or 6 &&
-            TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(2 * direction)), out var moveAction2))
+        if (sourcePosition.Y == 1 &&
+            TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), out var moveAction2))
         {
             actions[actionsCount++] = moveAction2;
         }
+        
+        return actionsMemory.WithCount(actionsCount);;
+    }
 
+    public static ArrayPoolMemory<FigureAction> GetPossibleWhiteActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    {
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
+        var actions = actionsMemory.Span;
+        int actionsCount = 0;
+
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, -1), out var attackAction1))
+        {
+            actions[actionsCount++] = attackAction1;
+        }
+
+        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, -1), out var attackAction2))
+        {
+            actions[actionsCount++] = attackAction2;
+        }
+
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, -1), out var moveAction1))
+        {
+            actions[actionsCount++] = moveAction1;
+        }
+        else
+        {
+            return actionsMemory.WithCount(actionsCount);;
+        }
+
+        if (sourcePosition.Y == 6 &&
+            TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, -2), out var moveAction2))
+        {
+            actions[actionsCount++] = moveAction2;
+        }
+        
         return actionsMemory.WithCount(actionsCount);;
     }
 

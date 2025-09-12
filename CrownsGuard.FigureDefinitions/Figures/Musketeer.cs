@@ -42,11 +42,12 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
         int actionsCount = 0;
         var attackDirections = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackDirections : WhiteAttackDirections;
 
-        foreach (var direction in attackDirections)
+        foreach (var relative in attackDirections)
         {
+            var targetPosition = sourcePosition;
             for (var i = 1; i <= 3; i++)
             {
-                var targetPosition = sourcePosition + direction * i;
+                targetPosition += relative;
                 if (!board.TryGetFigure(targetPosition, out var targetFigure))
                 {
                     break;

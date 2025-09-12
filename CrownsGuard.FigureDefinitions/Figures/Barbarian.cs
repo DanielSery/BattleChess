@@ -39,14 +39,8 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
                 continue;
             }
 
-            for (var i = 2; i < 8; i++)
+            for (var targetPosition = sourcePosition + relative + relative; board.TryGetFigure(targetPosition, out var targetFigure); targetPosition += relative)
             {
-                var targetPosition = sourcePosition + relative * i;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    break;
-                }
-
                 if (targetFigure.IsEmpty())
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Special, movedPosition, targetPosition);
