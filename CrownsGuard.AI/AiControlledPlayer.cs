@@ -2,6 +2,7 @@
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
@@ -12,12 +13,13 @@ using CrownsGuard.Game.Timers;
 
 namespace CrownsGuard.AI;
 
-public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
+public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 {
     private readonly Figure[] _board;
     private readonly Action<Position, Position, TimeSpan> _requestMove;
     private readonly int _difficulty;
     private readonly Random _random;
+    private FrozenDictionary<int, int[]> _analysis;
 
     public AiControlledPlayer(PlayerColor playerColor, Figure[] board, Action<Position, Position, TimeSpan> requestMove, int difficulty)
     {
@@ -25,6 +27,7 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         _board = board;
         _requestMove = requestMove;
         _difficulty = difficulty;
+        _analysis = FrozenDictionary<int, int[]>.Empty;
         PlayerColor = playerColor;
     }
 
@@ -68,7 +71,7 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         var sw = new Stopwatch();
         sw.Start();
 
-        var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
+        _analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
         var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
 
         var checkedActions = new Stack<FigureAction>();
@@ -92,9 +95,18 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 
         Parallel.ForEach(checkedActions, action =>
         {
-            using var clonedBoard = _board.AsSpan().CloneToArrayPoolMemory();
-            FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-            var eval = AlphaBeta(clonedBoard.Span, _difficulty - 1, int.MinValue, int.MaxValue, false, analysis, new Stack<FigureAction>(64));
+            var actionsStack = new Stack<FigureAction>(64);
+            var boardPool = new Figure[_difficulty][];
+            for (var i = 0; i < _difficulty; i++)
+            {
+                boardPool[i] = new Figure[Constants.FullBoardTilesCount];
+            }
+
+            var clonedBoard = new Figure[Constants.FullBoardTilesCount];
+            _board.CopyTo(clonedBoard, 0);
+
+            FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+            var eval = AlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, false, actionsStack, boardPool);
             resultActions.Add((eval, action));
             // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
         });
@@ -117,7 +129,7 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         var sw = new Stopwatch();
         sw.Start();
 
-        var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
+        _analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
         var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
 
         var checkedActions = new Stack<FigureAction>();
@@ -141,9 +153,18 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 
         Parallel.ForEach(checkedActions, action =>
         {
-            using var clonedBoard = _board.AsSpan().CloneToArrayPoolMemory();
-            FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-            var eval = AlphaBeta(clonedBoard.Span, _difficulty - 1, int.MinValue, int.MaxValue, true, analysis, new Stack<FigureAction>(64));
+            var actionsStack = new Stack<FigureAction>(64);
+            var boardPool = new Figure[_difficulty][];
+            for (var i = 0; i < _difficulty; i++)
+            {
+                boardPool[i] = new Figure[Constants.FullBoardTilesCount];
+            }
+
+            var clonedBoard = new Figure[Constants.FullBoardTilesCount];
+            _board.CopyTo(clonedBoard, 0);
+
+            FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+            var eval = AlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, true, actionsStack, boardPool);
             resultActions.Add((eval, action));
             // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
         });
@@ -161,9 +182,13 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
     }
 
-    private int AlphaBeta(ReadOnlySpan<Figure> board, int depth, int alpha, int beta, bool maximizingPlayer, FrozenDictionary<int, int[]> analysis, Stack<FigureAction> actionsStack)
+    private int AlphaBeta(
+        Figure[] currentBoard,
+        int depth, int alpha, int beta, bool maximizingPlayer,
+        Stack<FigureAction> actionsStack,
+        Figure[][] boardPool)
     {
-        var check = EvaluateBoard(board, analysis, actionsStack);
+        var check = EvaluateBoard(currentBoard, actionsStack);
         if (depth == 0 || Math.Abs(check) > 10_000_000)
         {
             return check;
@@ -172,14 +197,14 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         if (maximizingPlayer)
         {
             var maxEval = int.MinValue;
-            for (var i = 0; i < board.Length; i++)
+            for (var i = 0; i < currentBoard.Length; i++)
             {
-                var figure = board[i];
+                var figure = currentBoard[i];
                 if (figure.PlayerColor != PlayerColor.Black)
                     continue;
 
                 var oldCount = actionsStack.Count;
-                FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board, actionsStack);
+                FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), currentBoard, actionsStack);
                 var added = actionsStack.Count - oldCount;
                 for (var j = 0; j < added; j++)
                 {
@@ -190,9 +215,10 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                     if (!action.FigureActionType.IsExecutable())
                         continue;
 
-                    using var clonedBoard = board.CloneToArrayPoolMemory();
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, false, analysis, actionsStack);
+                    var clonedBoard = boardPool[depth];
+                    currentBoard.CopyTo(clonedBoard, 0);
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                    var eval = AlphaBeta(clonedBoard, depth - 1, alpha, beta, false, actionsStack, boardPool);
                     maxEval = Math.Max(maxEval, eval);
                     alpha = Math.Max(alpha, eval);
                 }
@@ -202,14 +228,14 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         else
         {
             var minEval = int.MaxValue;
-            for (var i = 0; i < board.Length; i++)
+            for (var i = 0; i < currentBoard.Length; i++)
             {
-                var figure = board[i];
+                var figure = currentBoard[i];
                 if (figure.PlayerColor != PlayerColor.White)
                     continue;
 
                 var oldCount = actionsStack.Count;
-                FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board, actionsStack);
+                FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), currentBoard, actionsStack);
                 var added = actionsStack.Count - oldCount;
                 for (var j = 0; j < added; j++)
                 {
@@ -220,9 +246,10 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                     if (!action.FigureActionType.IsExecutable())
                         continue;
 
-                    using var clonedBoard = board.CloneToArrayPoolMemory();
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard.Span, action, OnEvent);
-                    var eval = AlphaBeta(clonedBoard.Span, depth - 1, alpha, beta, true, analysis, actionsStack);
+                    var clonedBoard = boardPool[depth];
+                    currentBoard.CopyTo(clonedBoard, 0);
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                    var eval = AlphaBeta(clonedBoard, depth - 1, alpha, beta, true, actionsStack, boardPool);
                     minEval = Math.Min(minEval, eval);
                     beta = Math.Min(beta, eval);
                 }
@@ -237,8 +264,9 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     }
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    private static int EvaluateBoard(ReadOnlySpan<Figure> board, FrozenDictionary<int, int[]> analysis, Stack<FigureAction> actionsStack)
+    private int EvaluateBoard(ReadOnlySpan<Figure> board, Stack<FigureAction> actionsStack)
     {
+        var analysis = _analysis;
         var evaluation = 0;
         for (var i = 0; i < board.Length; i++)
         {
