@@ -11,14 +11,14 @@ public class Peasant : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Peasant;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
         var actions = actionsMemory.Span;
         int actionsCount = 0;
         var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var attackAction))
+        if (TryGetMoveAction(board, sourcePosition, new Position(0, (sbyte)(1 * direction)), out var attackAction))
         {
             actions[actionsCount++] = attackAction;
         }
@@ -38,10 +38,10 @@ public class Peasant : ICrownsGuardFigureTypeInfo
             actions[actionsCount++] = move3Action;
         }
         
-        return actionsMemory.WithCount(actionsCount);;
+        return actionsMemory.WithCount(actionsCount);
     }
 
-    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
     {
         if (action.FigureActionType == FigureActionType.Move)
         {
@@ -72,7 +72,7 @@ public class Peasant : ICrownsGuardFigureTypeInfo
             throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
     
-    private static bool TryGetAttackAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool TryGetAttackAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
@@ -92,7 +92,7 @@ public class Peasant : ICrownsGuardFigureTypeInfo
         return true;
     }
 
-    private static bool TryGetMoveAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;

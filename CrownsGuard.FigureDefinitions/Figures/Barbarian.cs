@@ -10,7 +10,7 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Barbarian;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
         var actions = actionsMemory.Span;
@@ -52,10 +52,10 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);;
+        return actionsMemory.WithCount(actionsCount);
     }
 
-    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    public static int EvaluateAction()
     {
         return Constants.MoveImpact;
     }

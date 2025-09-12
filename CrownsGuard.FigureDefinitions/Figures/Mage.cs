@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core;
+﻿using System.Runtime.CompilerServices;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
@@ -17,7 +18,7 @@ public class Mage : ICrownsGuardFigureTypeInfo
         new(2, -2), new(2, 0), new(2, 2)
     ];
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
         var actions = actionsMemory.Span;
@@ -37,34 +38,34 @@ public class Mage : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);;
+        return actionsMemory.WithCount(actionsCount);
     }
 
-    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    public static int EvaluateAction(FigureAction action)
     {
         var movement = action.TargetPosition - action.SourcePosition;
         if (Math.Abs(movement.X) == Math.Abs(movement.Y))
         {
-            return GetImpact(board, action.TargetPosition + new Position(1, 0)) +
-                   GetImpact(board, action.TargetPosition + new Position(-1, 0)) +
-                   GetImpact(board, action.TargetPosition + new Position(0, 1)) +
-                   GetImpact(board, action.TargetPosition + new Position(0, -1)) +
+            return GetImpact(action.TargetPosition + new Position(1, 0)) +
+                   GetImpact(action.TargetPosition + new Position(-1, 0)) +
+                   GetImpact(action.TargetPosition + new Position(0, 1)) +
+                   GetImpact(action.TargetPosition + new Position(0, -1)) +
                    Constants.MoveImpact;
         }
         else
         {
-            return GetImpact(board, action.TargetPosition + new Position(1, -1)) +
-                   GetImpact(board, action.TargetPosition + new Position(-1, 1)) +
-                   GetImpact(board, action.TargetPosition + new Position(1, 1)) +
-                   GetImpact(board, action.TargetPosition + new Position(-1, -1)) +
+            return GetImpact(action.TargetPosition + new Position(1, -1)) +
+                   GetImpact(action.TargetPosition + new Position(-1, 1)) +
+                   GetImpact(action.TargetPosition + new Position(1, 1)) +
+                   GetImpact(action.TargetPosition + new Position(-1, -1)) +
                    Constants.MoveImpact;
         }
     }
 
-    private static int GetImpact(Span<Figure> board, Position targetPosition)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int GetImpact(Position targetPosition)
     {
-        return board.TryGetFigure(targetPosition, out _)
-            ? Constants.PossibleHalfRangedAttackImpact : 0;
+        return targetPosition.IsInBoard() ? Constants.PossibleHalfRangedAttackImpact : 0;
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

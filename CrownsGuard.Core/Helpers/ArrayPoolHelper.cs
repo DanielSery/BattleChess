@@ -13,7 +13,15 @@ public static class ArrayPoolHelper
         var array = ArrayPool<T>.Shared.Rent(count);
         return new ArrayPoolMemory<T>(array, count);
     }
-    
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ArrayPoolMemory<T> CloneToArrayPoolMemory<T>(this ReadOnlySpan<T> actions)
+    {
+        var array = ArrayPool<T>.Shared.Rent(actions.Length);
+        actions.CopyTo(array.AsSpan());
+        return new ArrayPoolMemory<T>(array, actions.Length);
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ArrayPoolMemory<T> CloneToArrayPoolMemory<T>(this Span<T> actions)
     {

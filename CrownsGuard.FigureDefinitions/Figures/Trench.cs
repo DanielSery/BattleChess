@@ -8,7 +8,7 @@ public class Trench : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Trench;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         return ArrayPoolMemory<FigureAction>.Empty;
     }

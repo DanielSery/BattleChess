@@ -79,6 +79,11 @@ internal class GameService : IGameService, IPlayersOwner
             : new WinResult(true, WinType.Surrender, BlackPlayer, WhitePlayer));
     }
 
+    public void StopGame()
+    {
+        GameRunning = false;
+    }
+
     public void PlayerLost(IPlayerInfo player, WinType winType, bool notifyOther)
     {
         GameRunning = false;

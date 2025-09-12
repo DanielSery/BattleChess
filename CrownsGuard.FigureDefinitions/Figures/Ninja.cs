@@ -11,7 +11,7 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Ninja;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
         var actions = actionsMemory.Span;
@@ -56,7 +56,7 @@ public class Ninja : ICrownsGuardFigureTypeInfo
         return actionsMemory.WithCount(actionsCount);;
     }
 
-    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
     {
         if (action.FigureActionType == FigureActionType.Move)
         {
@@ -87,7 +87,7 @@ public class Ninja : ICrownsGuardFigureTypeInfo
             throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 
-    private static bool TryGetMoveAction(Span<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;

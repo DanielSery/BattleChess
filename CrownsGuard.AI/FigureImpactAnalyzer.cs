@@ -1,5 +1,6 @@
 // Copyright (c) Veeam Software Group GmbH
 
+using System.Collections.Frozen;
 using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
@@ -19,7 +20,7 @@ public static class FigureImpactAnalyzer
         FigureTypes = new CrownsGuardFigureTypeInfoGroup();
     }
 
-    public static Dictionary<int, int[]> AnalyzeFigures(Span<Figure> board)
+    public static FrozenDictionary<int, int[]> AnalyzeFigures(Span<Figure> board)
     {
         var tileImportance = new int[Constants.FullBoardTilesCount];
         foreach (Figure figure in board)
@@ -56,7 +57,7 @@ public static class FigureImpactAnalyzer
             analysis[blackKingFigure.IntValue] = AnalyzeFigureImpact(blackKingFigure, tileImportance);
         }
         
-        return analysis;
+        return analysis.ToFrozenDictionary();
     }
 
     private static void AnalyzeTileImportance(Figure figure, int[] tileImportance)
