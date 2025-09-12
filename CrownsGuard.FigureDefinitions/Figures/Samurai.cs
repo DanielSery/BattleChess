@@ -44,7 +44,6 @@ public class Samurai : ICrownsGuardFigureTypeInfo
                 if (sourceFigure.CanAttack(targetFigure))
                 {
                     actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
-                    break;
                 }
                 else if (targetFigure.IsWalkable())
                 {

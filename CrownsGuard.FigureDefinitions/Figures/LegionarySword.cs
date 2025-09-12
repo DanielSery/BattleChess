@@ -125,13 +125,13 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
             {
                 board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
                 if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionarySword)
-                    board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
+                    board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Blade, onEvent);
             }
             else
             {
                 board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
                 if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionarySword)
-                    board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
+                    board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Blade, onEvent);
             }
         }
         else
