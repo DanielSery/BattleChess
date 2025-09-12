@@ -228,8 +228,9 @@ public sealed class BoardViewModel : ViewModelBase
         if (_gameService.CurrentPlayerInfo.PlayerColor != clickedTileInfo.Figure.Owner.PlayerColor)
             return;
 
-        using var possibleActions = FigureActionsResolver.GetPossibleActions(clickedTileInfo.Position, _gameService.Board);
-        foreach (var possibleAction in possibleActions.Span)
+        var actionsStack = new Stack<FigureAction>();
+        FigureActionsResolver.GetPossibleActions(clickedTileInfo.Position, _gameService.Board, actionsStack);
+        foreach (var possibleAction in actionsStack)
         {
             if (possibleAction.FigureActionType is FigureActionType.PossibleAttack or FigureActionType.PossibleSpecial)
                 continue;
@@ -286,8 +287,9 @@ public sealed class BoardViewModel : ViewModelBase
 
         var fromTile = Tiles[from.GetIndex()];
         SelectedTileInfo = fromTile;
-        var actions = FigureActionsResolver.GetPossibleActions(from, _gameService.Board);
-        foreach (var action in actions.Span)
+        var actionsStack = new Stack<FigureAction>();
+        FigureActionsResolver.GetPossibleActions(from, _gameService.Board, actionsStack);
+        foreach (var action in actionsStack)
         {
             if (action.SourcePosition == from &&
                 action.TargetPosition == to &&

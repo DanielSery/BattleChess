@@ -11,13 +11,9 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Ninja;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
         var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
-
         foreach (var relative in PositionsGroups.RookDirections)
         {
             var targetPosition = sourcePosition + relative;
@@ -28,32 +24,32 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
             }
             else
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
             }
         }
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var action))
         {
-            actions[actionsCount++] = action;
+            actions.Push(action);
         }
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(1 * direction)), out action))
         {
-            actions[actionsCount++] = action;
+            actions.Push(action);
         }
 
         if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(2 * direction)), out action) &&
             board.TryGetFigure(sourcePosition + new Position(0, (sbyte)(1 * direction)), out var jumpedOver) &&
             jumpedOver.IsAllyTo(sourceFigure))
         {
-            actions[actionsCount++] = action;
+            actions.Push(action);
         }
         
-        return actionsMemory.WithCount(actionsCount);;
+        return;;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)

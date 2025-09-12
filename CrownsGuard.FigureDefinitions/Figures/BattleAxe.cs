@@ -11,12 +11,8 @@ public class BattleAxe : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.BattleAxe;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(4);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-
         foreach (var relative in PositionsGroups.BishopDirections)
         {
             var targetPosition = sourcePosition + relative;
@@ -27,11 +23,11 @@ public class BattleAxe : ICrownsGuardFigureTypeInfo
             
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)

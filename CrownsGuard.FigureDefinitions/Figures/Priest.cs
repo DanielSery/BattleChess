@@ -10,19 +10,15 @@ public class Priest : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Priest;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-        
         foreach (var relative in PositionsGroups.BishopDirections)
         {
             for (var targetPosition = sourcePosition + relative; board.TryGetFigure(targetPosition, out var targetFigure); targetPosition += relative)
             {
                 if (targetFigure.IsWalkable())
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                    actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
                 }
                 else
                 {
@@ -37,12 +33,12 @@ public class Priest : ICrownsGuardFigureTypeInfo
             {
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                    actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
                     break;
                 }
                 else if (targetFigure.IsWalkable())
                 {
-                    actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                    actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
                 }
                 else
                 {
@@ -62,11 +58,11 @@ public class Priest : ICrownsGuardFigureTypeInfo
             if (sourceFigure.IsAllyTo(targetFigure) ||
                 sourceFigure.IsEnemyTo(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Special, sourcePosition, targetPosition));
             }
         }
 
-        return actionsMemory.WithCount(actionsCount);;
+        return;;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)

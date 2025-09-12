@@ -11,12 +11,8 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Alchemist;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(8);
-        var actions = actionsMemory.Span;
-        var actionsCount = 0;
-        
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
@@ -27,11 +23,9 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
             
             if (targetFigure.IsWalkable() || targetFigure.FigureType == FigureId.Explosives)
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
             }
         }
-
-        return actionsMemory.WithCount(actionsCount);
     }
 
     public static int EvaluateAction(FigureAction action)

@@ -11,99 +11,93 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.LegionaryPike;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         if (sourceFigure.PlayerColor == PlayerColor.White)
-            return GetPossibleWhiteActions(sourcePosition, sourceFigure, board);
-        else return GetPossibleBlackActions(sourcePosition, sourceFigure, board);
+            GetPossibleWhiteActions(sourcePosition, sourceFigure, board, actions);
+        else GetPossibleBlackActions(sourcePosition, sourceFigure, board, actions);
     }
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleBlackActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleBlackActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board,
+        Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-
         if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(1, 2), out var pikeAttackAction1))
         {
-            actions[actionsCount++] = pikeAttackAction1;
+            actions.Push(pikeAttackAction1);
         }
 
         if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 2), out var pikeAttackAction2))
         {
-            actions[actionsCount++] = pikeAttackAction2;
+            actions.Push(pikeAttackAction2);
         }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 1), out var attackAction1))
         {
-            actions[actionsCount++] = attackAction1;
+            actions.Push(attackAction1);
         }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 1), out var attackAction2))
         {
-            actions[actionsCount++] = attackAction2;
+            actions.Push(attackAction2);
         }
 
         if (TryGetMoveAction(board, sourcePosition, new Position(0, 1), out var moveAction1))
         {
-            actions[actionsCount++] = moveAction1;
+            actions.Push(moveAction1);
         }
         else
         {
-            return actionsMemory.WithCount(actionsCount);
+            return;
         }
 
         if (sourcePosition.Y == 1 &&
             TryGetMoveAction(board, sourcePosition, new Position(0, 2), out var moveAction2))
         {
-            actions[actionsCount++] = moveAction2;
+            actions.Push(moveAction2);
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleWhiteActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleWhiteActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board,
+        Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-
         if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(1, -2), out var pikeAttackAction1))
         {
-            actions[actionsCount++] = pikeAttackAction1;
+            actions.Push(pikeAttackAction1);
         }
 
         if (TryGetPikeAttackAction(board, sourcePosition, sourceFigure, new Position(-1, -2), out var pikeAttackAction2))
         {
-            actions[actionsCount++] = pikeAttackAction2;
+            actions.Push(pikeAttackAction2);
         }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, -1), out var attackAction1))
         {
-            actions[actionsCount++] = attackAction1;
+            actions.Push(attackAction1);
         }
 
         if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, -1), out var attackAction2))
         {
-            actions[actionsCount++] = attackAction2;
+            actions.Push(attackAction2);
         }
 
         if (TryGetMoveAction(board, sourcePosition, new Position(0, -1), out var moveAction1))
         {
-            actions[actionsCount++] = moveAction1;
+            actions.Push(moveAction1);
         }
         else
         {
-            return actionsMemory.WithCount(actionsCount);
+            return;
         }
 
         if (sourcePosition.Y == 6 &&
             TryGetMoveAction(board, sourcePosition, new Position(0, -2), out var moveAction2))
         {
-            actions[actionsCount++] = moveAction2;
+            actions.Push(moveAction2);
         }
         
-        return actionsMemory.WithCount(actionsCount);
+        return;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)

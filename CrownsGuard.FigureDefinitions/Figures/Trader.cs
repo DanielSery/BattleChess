@@ -10,12 +10,8 @@ public class Trader : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Trader;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
+    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
-        var actions = actionsMemory.Span;
-        int actionsCount = 0;
-
         foreach (var relative in PositionsGroups.QueenDirections)
         {
             var targetPosition = sourcePosition + relative;
@@ -26,15 +22,15 @@ public class Trader : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Move, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
             }
             else if (sourceFigure.CanAttack(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
             }
             else
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition);
+                actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
             }
         }
 
@@ -43,11 +39,11 @@ public class Trader : ICrownsGuardFigureTypeInfo
             var targetFigure = board[i];
             if (sourceFigure.IsAllyTo(targetFigure))
             {
-                actions[actionsCount++] = new FigureAction(FigureActionType.Special, sourcePosition, Position.FromIndex(i));
+                actions.Push(new FigureAction(FigureActionType.Special, sourcePosition, Position.FromIndex(i)));
             }
         }
 
-        return actionsMemory.WithCount(actionsCount);;
+        return;;
     }
 
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
