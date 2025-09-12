@@ -67,7 +67,6 @@ public class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         var sw = new Stopwatch();
         sw.Start();
 
-
         var analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
         var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
         var depth = _difficulty;

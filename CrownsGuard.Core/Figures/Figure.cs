@@ -19,4 +19,9 @@ public readonly struct Figure
         IsKing = isKing;
         FigureType = figureType;
     }
+
+    public Figure(int intValue)
+    {
+        IntValue = intValue;
+    }
 }

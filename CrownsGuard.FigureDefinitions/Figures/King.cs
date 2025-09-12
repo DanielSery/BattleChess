@@ -13,7 +13,8 @@ public class King : ICrownsGuardFigureTypeInfo
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        Span<FigureAction> actions = stackalloc FigureAction[36];
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
+        var actions = actionsMemory.Span;
         int actionsCount = 0;
 
         foreach (var relative in PositionsGroups.QueenDirections)
@@ -41,14 +42,14 @@ public class King : ICrownsGuardFigureTypeInfo
 
         if (sourcePosition.X != 4)
         {
-            return actions.ToArrayPoolMemory(actionsCount);
+            return actionsMemory.WithCount(actionsCount);;
         }
 
         if (sourceFigure.PlayerColor == PlayerColor.Black)
         {
             if (sourcePosition.Y != 0)
             {
-                return actions.ToArrayPoolMemory(actionsCount);
+                return actionsMemory.WithCount(actionsCount);;
             }
 
             if (sourceFigure.IsAllyTo(board[0]) &&
@@ -71,7 +72,7 @@ public class King : ICrownsGuardFigureTypeInfo
         {
             if (sourcePosition.Y != 7)
             {
-                return actions.ToArrayPoolMemory(actionsCount);
+                return actionsMemory.WithCount(actionsCount);;
             }
 
             if (sourceFigure.IsAllyTo(board[new Position(0, 7).GetIndex()]) &&
@@ -90,7 +91,7 @@ public class King : ICrownsGuardFigureTypeInfo
             }
         }
 
-        return actions.ToArrayPoolMemory(actionsCount);
+        return actionsMemory.WithCount(actionsCount);;
     }
 
     public static int EvaluateAction(Span<Figure> board, FigureAction action)

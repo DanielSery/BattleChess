@@ -12,7 +12,8 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        Span<FigureAction> actions = stackalloc FigureAction[4];
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(4);
+        var actions = actionsMemory.Span;
         int actionsCount = 0;
 
         foreach (var relative in PositionsGroups.BishopDirections)
@@ -29,7 +30,7 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actions.ToArrayPoolMemory(actionsCount);
+        return actionsMemory.WithCount(actionsCount);;
     }
 
     public static int EvaluateAction(Span<Figure> board, FigureAction action)

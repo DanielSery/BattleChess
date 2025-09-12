@@ -13,7 +13,8 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
 
     public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
     {
-        Span<FigureAction> actions = stackalloc FigureAction[36];
+        var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
+        var actions = actionsMemory.Span;
         int actionsCount = 0;
         var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
 
@@ -33,7 +34,7 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         }
         else
         {
-            return actions.ToArrayPoolMemory(actionsCount);
+            return actionsMemory.WithCount(actionsCount);;
         }
 
         if (sourcePosition.Y is 1 or 6 &&
@@ -42,7 +43,7 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
             actions[actionsCount++] = moveAction2;
         }
 
-        return actions.ToArrayPoolMemory(actionsCount);
+        return actionsMemory.WithCount(actionsCount);;
     }
 
     public static int EvaluateAction(Span<Figure> board, FigureAction action)
@@ -83,13 +84,13 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
             if (targetFigure.IsWalkable())
             {
                 board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionaryPike)
+                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionarySword)
                     board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
             }
             else
             {
                 board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionaryPike)
+                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionarySword)
                     board.ChangeFigureType(action.SourcePosition, action.TargetPosition, FigureId.Blade, onEvent);
             }
         }

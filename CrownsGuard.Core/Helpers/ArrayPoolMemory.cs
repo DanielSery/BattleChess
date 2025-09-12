@@ -18,7 +18,11 @@ public readonly struct ArrayPoolMemory<T> : IDisposable
     }
     
     public Span<T> Span => _memory.Span;
-    public int Length => _memory.Length;
+
+    public ArrayPoolMemory<T> WithCount(int count)
+    {
+        return new ArrayPoolMemory<T>(_array, count);
+    }
 
     public void Dispose()
     {
