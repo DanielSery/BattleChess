@@ -41,6 +41,8 @@ public interface IGameService
     void EndTurn(TimeSpan? forcedTime = null);
 
     void Surrender();
+
+    void StopGame();
     
     void PlayerLost(IPlayerInfo player, WinType winType, bool publishResult);
     

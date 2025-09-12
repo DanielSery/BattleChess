@@ -43,7 +43,7 @@
                 IsEnabled="False" Opacity="0.8" />
 
         <Slider Grid.Row="1" Grid.Column="1"
-                Minimum="1" Value="{Binding Difficulty, UpdateSourceTrigger=PropertyChanged}" Maximum="4"></Slider>
+                Minimum="1" Value="{Binding Difficulty, UpdateSourceTrigger=PropertyChanged}" Maximum="6"></Slider>
 
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                 Content="Hot seat game"

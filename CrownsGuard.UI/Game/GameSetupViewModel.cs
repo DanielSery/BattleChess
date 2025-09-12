@@ -10,7 +10,7 @@ namespace CrownsGuard.UI.Game;
 
 public class GameSetupViewModel : ViewModelBase
 {
-    private int _difficulty;
+    private int _difficulty = 3;
     private bool _randomSetup;
     private readonly BoardViewModel _boardViewModel;
     private readonly MapsViewModel _mapsViewModel;

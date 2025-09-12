@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using System.Runtime.CompilerServices;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Figures;
@@ -7,7 +8,8 @@ namespace CrownsGuard.FigureDefinitions.Utilities;
 
 public static class FigureActionsResolver
 {
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Span<Figure> board)
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, ReadOnlySpan<Figure> board)
     {
         var sourceFigure = board[sourcePosition.GetIndex()];
         return sourceFigure.FigureType switch

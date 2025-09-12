@@ -23,7 +23,7 @@ public class Catapult : ICrownsGuardFigureTypeInfo
         new (-2, -3), new (0, -3), new (2, -3),
     ];
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
@@ -62,10 +62,10 @@ public class Catapult : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);;
+        return actionsMemory.WithCount(actionsCount);
     }
 
-    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
     {
         if (action.FigureActionType == FigureActionType.PossibleAttack)
         {

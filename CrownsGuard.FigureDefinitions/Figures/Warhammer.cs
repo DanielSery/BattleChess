@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core;
+﻿using System.Runtime.CompilerServices;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
@@ -10,7 +11,7 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.Warhammer;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(4);
         var actions = actionsMemory.Span;
@@ -30,38 +31,38 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
             }
         }
         
-        return actionsMemory.WithCount(actionsCount);;
+        return actionsMemory.WithCount(actionsCount);
     }
 
-    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
     {
         var movement = action.TargetPosition - action.SourcePosition;
         if (movement is { Y: 1, X: 1 })
         {
-            return GetImpact(board, action.TargetPosition + new Position(1, -1)) +
-                   GetImpact(board, action.TargetPosition + new Position(1, 0)) +
-                   GetImpact(board, action.TargetPosition + new Position(1, 1)) +
+            return GetImpact(action.TargetPosition + new Position(1, -1)) +
+                   GetImpact(action.TargetPosition + new Position(1, 0)) +
+                   GetImpact(action.TargetPosition + new Position(1, 1)) +
                    Constants.MoveImpact;
         }
         else if (movement is { Y: -1, X: 1 })
         {
-            return GetImpact(board, action.TargetPosition + new Position(-1, -1)) +
-                   GetImpact(board, action.TargetPosition + new Position(-1, 0)) +
-                   GetImpact(board, action.TargetPosition + new Position(-1, 1)) +
+            return GetImpact(action.TargetPosition + new Position(-1, -1)) +
+                   GetImpact(action.TargetPosition + new Position(-1, 0)) +
+                   GetImpact(action.TargetPosition + new Position(-1, 1)) +
                    Constants.MoveImpact;
         }
         else if (movement is { Y: 1, X: -1 })
         {
-            return GetImpact(board, action.TargetPosition + new Position(-1, 1)) +
-                   GetImpact(board, action.TargetPosition + new Position(0, 1)) +
-                   GetImpact(board, action.TargetPosition + new Position(1, 1)) +
+            return GetImpact(action.TargetPosition + new Position(-1, 1)) +
+                   GetImpact(action.TargetPosition + new Position(0, 1)) +
+                   GetImpact(action.TargetPosition + new Position(1, 1)) +
                    Constants.MoveImpact;
         }
         else if (movement is { Y: -1, X: -1 })
         {
-            return GetImpact(board, action.TargetPosition + new Position(-1, -1)) +
-                   GetImpact(board, action.TargetPosition + new Position(0, -1)) +
-                   GetImpact(board, action.TargetPosition + new Position(1, -1)) +
+            return GetImpact(action.TargetPosition + new Position(-1, -1)) +
+                   GetImpact(action.TargetPosition + new Position(0, -1)) +
+                   GetImpact(action.TargetPosition + new Position(1, -1)) +
                    Constants.MoveImpact;
         }
         else
@@ -70,10 +71,10 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
         }
     }
 
-    private static int GetImpact(Span<Figure> board, Position targetPosition)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int GetImpact(Position targetPosition)
     {
-        return board.TryGetFigure(targetPosition, out _)
-            ? Constants.PossibleHalfRangedAttackImpact : 0;
+        return targetPosition.IsInBoard() ? Constants.PossibleHalfRangedAttackImpact : 0;
     }
 
     public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)

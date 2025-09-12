@@ -11,7 +11,7 @@ public class King : ICrownsGuardFigureTypeInfo
 {
     public FigureId FigureId => FigureId.King;
 
-    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, Span<Figure> board)
+    public static ArrayPoolMemory<FigureAction> GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board)
     {
         var actionsMemory = ArrayPoolHelper.Rent<FigureAction>(36);
         var actions = actionsMemory.Span;
@@ -42,14 +42,14 @@ public class King : ICrownsGuardFigureTypeInfo
 
         if (sourcePosition.X != 4)
         {
-            return actionsMemory.WithCount(actionsCount);;
+            return actionsMemory.WithCount(actionsCount);
         }
 
         if (sourceFigure.PlayerColor == PlayerColor.Black)
         {
             if (sourcePosition.Y != 0)
             {
-                return actionsMemory.WithCount(actionsCount);;
+                return actionsMemory.WithCount(actionsCount);
             }
 
             if (sourceFigure.IsAllyTo(board[0]) &&
@@ -72,7 +72,7 @@ public class King : ICrownsGuardFigureTypeInfo
         {
             if (sourcePosition.Y != 7)
             {
-                return actionsMemory.WithCount(actionsCount);;
+                return actionsMemory.WithCount(actionsCount);
             }
 
             if (sourceFigure.IsAllyTo(board[new Position(0, 7).GetIndex()]) &&
@@ -91,10 +91,10 @@ public class King : ICrownsGuardFigureTypeInfo
             }
         }
 
-        return actionsMemory.WithCount(actionsCount);;
+        return actionsMemory.WithCount(actionsCount);
     }
 
-    public static int EvaluateAction(Span<Figure> board, FigureAction action)
+    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
     {
         if (action.FigureActionType == FigureActionType.Move)
         {

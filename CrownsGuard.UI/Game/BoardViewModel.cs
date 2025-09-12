@@ -167,6 +167,7 @@ public sealed class BoardViewModel : ViewModelBase
         }
         else
         {
+            _gameService.StopGame();
             RequestSwitchToMenu?.Invoke(this, EventArgs.Empty);
         }
     }

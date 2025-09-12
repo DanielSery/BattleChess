@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using System.Runtime.CompilerServices;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.FigureDefinitions.Figures;
 
@@ -6,6 +7,7 @@ namespace CrownsGuard.FigureDefinitions.Utilities;
 
 public static class FigureActionExecutor
 {
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public static void ExecuteFigureAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigure = board[action.SourcePosition.GetIndex()];
