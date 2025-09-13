@@ -12,14 +12,21 @@ public class ActionImpactEvaluator
     {
         if (action.FigureActionType.HasFlag(FigureActionType.IsTargetDependantMovingAttack))
         {
-            var sourceFigureValue = board[action.SourcePosition.GetIndex()].FigureType.GetFigureValue();
-            var targetFigureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
+            var sourceFigure = board[action.SourcePosition.GetIndex()];
+            var targetFigure = board[action.TargetPosition.GetIndex()];
+            var sourceFigureValue = sourceFigure.FigureType.GetFigureValue();
+            var targetFigureValue = targetFigure.FigureType.GetFigureValue();
+
+            if (sourceFigure.PlayerColor == targetFigure.PlayerColor)
+            {
+                return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * sourceFigureValue * sourceFigureValue / (targetFigureValue + sourceFigureValue);
+            }
+
             return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * targetFigureValue * targetFigureValue / (targetFigureValue + sourceFigureValue);
         }
         else if (action.FigureActionType.HasFlag(FigureActionType.IsMovingAttack))
         {
-            var sourceFigureValue = board[action.SourcePosition.GetIndex()].FigureType.GetFigureValue();
-            return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * 5 / (5 + sourceFigureValue);
+            return (int)(action.FigureActionType & FigureActionType.ActionValueMask);
         }
         else if (action.FigureActionType.HasFlag(FigureActionType.IsTargetDependant))
         {

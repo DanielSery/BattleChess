@@ -325,7 +325,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             evaluation += analysis[figure.IntValue][i];
         }
 
-        if (Math.Abs(evaluation) > 100_000_000)
+        if (Math.Abs(evaluation) > 800_000_000)
         {
             return evaluation;
         }
