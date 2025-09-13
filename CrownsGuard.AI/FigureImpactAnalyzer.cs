@@ -22,8 +22,8 @@ public static class FigureImpactAnalyzer
 
     public static FrozenDictionary<int, int[]> AnalyzeFigures(Span<Figure> board)
     {
-        var tileImportance = new int[Constants.FullBoardTilesCount];
-        foreach (Figure figure in board)
+        using var rentedTileImportance = BoardPool<int>.Rent(out var tileImportance);
+        foreach (var figure in board)
         {
             var whiteFigure = new Figure(PlayerColor.White, false, figure.FigureType);
             AnalyzeTileImportance(whiteFigure, tileImportance);
@@ -62,24 +62,28 @@ public static class FigureImpactAnalyzer
 
     private static void AnalyzeTileImportance(Figure figure, int[] tileImportance)
     {
-        var board = new Figure[Constants.FullBoardTilesCount];
+        using var rentedBoard = BoardPool<Figure>.Rent(out var board);
         for (var j = 0; j < board.Length; j++)
         {
             board[j] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
         }
-        
+
+        using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
+        using var rentedActionsStack = ActionStackPool.Rent(out var actionsStack);
         for (var i = 0; i < tileImportance.Length; i++)
         {
-            using var clonedBoard = board.AsSpan().CloneToArrayPoolMemory();
-            clonedBoard.Span[i] = figure;
+            board.CopyTo(clonedBoard, 0);
+            clonedBoard[i] = figure;
 
-            var actionsStack = new Stack<FigureAction>();
             var impact = 0;
-            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard.Span, actionsStack);
+            var countBefore = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard, actionsStack);
+            var addedElements = actionsStack.Count - countBefore;
 
-            foreach (var possibleAction in actionsStack)
+            for (var j = 0; j < addedElements; j++)
             {
-                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard.Span[i]));
+                var possibleAction = actionsStack.Pop();
+                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard[i]));
                 impact += value;
             }
 
@@ -89,46 +93,51 @@ public static class FigureImpactAnalyzer
 
     private static int[] AnalyzeFigureImpact(Figure figure, int[] tileImportance)
     {
-        var board = new Figure[Constants.FullBoardTilesCount];
+        using var rentedBoard = BoardPool<Figure>.Rent(out var board);
         for (var j = 0; j < board.Length; j++)
         {
             board[j] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
         }
-        
-        var array = new int[Constants.FullBoardTilesCount];
-        for (var i = 0; i < array.Length; i++)
+
+        using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
+        using var rentedActionsStack = ActionStackPool.Rent(out var actionsStack);
+        _ = BoardPool<int>.Rent(out var result);
+        for (var i = 0; i < result.Length; i++)
         {
-            using var clonedBoard = board.AsSpan().CloneToArrayPoolMemory();
-            clonedBoard.Span[i] = figure;
+            board.CopyTo(clonedBoard, 0);
+            clonedBoard[i] = figure;
 
             var impact = 0;
-            var actionsStack = new Stack<FigureAction>();
-            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard.Span, actionsStack);
-            foreach (var possibleAction in actionsStack)
+            var countBefore = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard, actionsStack);
+            var addedElements = actionsStack.Count - countBefore;
+
+            for (var j = 0; j < addedElements; j++)
             {
-                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard.Span[i]) * tileImportance[i]) / 1000;
+                var possibleAction = actionsStack.Pop();
+                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard[i]) * tileImportance[i]) / 1000;
             }
 
             if (figure.IsKing)
             {
-                array[i] = figure.PlayerColor switch
+                result[i] = figure.PlayerColor switch
                 {
                     PlayerColor.Black => Constants.KingValue - tileImportance[i],
                     PlayerColor.White => -(Constants.KingValue - tileImportance[i]),
-                    _ => array[i]
+                    _ => result[i]
                 };
                 continue;
             }
 
             impact += figure.FigureType.GetFigureValue() * (Constants.FigureValueCoeff - tileImportance[i]);
-            array[i] = figure.PlayerColor switch
+            result[i] = figure.PlayerColor switch
             {
                 PlayerColor.Black => impact,
                 PlayerColor.White => -impact,
-                _ => array[i]
+                _ => result[i]
             };
         }
         
-        return array;
+        return result;
     }
 }

@@ -72,56 +72,80 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         sw.Start();
 
         _analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
-        var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
-
-        var checkedActions = new Stack<FigureAction>();
-        for (var i = 0; i < _board.Length; i++)
+        try
         {
-            var index = i;
-            var figure = _board[i];
-            if (figure.PlayerColor != PlayerColor.Black)
-                continue;
+            var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
+            using var rentedCheckedActions = ActionStackPool.Rent(out var checkedActions);
+            using var rentedCurrentActions = ActionStackPool.Rent(out var currentActions);
 
-            var actionsStack = new Stack<FigureAction>(64);
-            FigureActionsResolver.GetPossibleActions(Position.FromIndex(index), _board, actionsStack);
-            foreach (var action in actionsStack)
+            for (var i = 0; i < _board.Length; i++)
             {
-                if (!action.FigureActionType.IsExecutable())
+                var figure = _board[i];
+                if (figure.PlayerColor != PlayerColor.Black)
                     continue;
 
-                checkedActions.Push(action);
-            }
-        }
+                var countBefore = currentActions.Count;
+                FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), _board, currentActions);
+                var added = currentActions.Count - countBefore;
 
-        Parallel.ForEach(checkedActions, action =>
-        {
-            var actionsStack = new Stack<FigureAction>(64);
-            var boardPool = new Figure[_difficulty][];
-            for (var i = 0; i < _difficulty; i++)
+                for (var j = 0; j < added; j++)
+                {
+                    var action = currentActions.Pop();
+                    if (!action.FigureActionType.IsExecutable())
+                        continue;
+
+                    checkedActions.Push(action);
+                }
+            }
+
+            Parallel.ForEach(checkedActions, action =>
             {
-                boardPool[i] = new Figure[Constants.FullBoardTilesCount];
+                using var rentedActionsStack = ActionStackPool.Rent(out var actionsStack);
+                var boardPool = new Figure[_difficulty][];
+                try
+                {
+                    for (var i = 0; i < _difficulty; i++)
+                    {
+                        _ = BoardPool<Figure>.Rent(out var board);
+                        boardPool[i] = board;
+                    }
+
+                    using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
+                    _board.CopyTo(clonedBoard, 0);
+
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                    var eval = AlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, false, actionsStack, boardPool);
+                    resultActions.Add((eval, action));
+                    // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
+                }
+                finally
+                {
+                    for (var i = 0; i < _difficulty; i++)
+                    {
+                        BoardPool<Figure>.Return(boardPool[i]);
+                    }
+                }
+            });
+
+            var resultArray = resultActions.ToList();
+            var alpha = resultArray.Max(x => x.value);
+            for (var i = resultActions.Count - 1; i >= 0; i--)
+            {
+                if (resultArray[i].value < alpha - 900)
+                    resultArray.RemoveAt(i);
             }
 
-            var clonedBoard = new Figure[Constants.FullBoardTilesCount];
-            _board.CopyTo(clonedBoard, 0);
-
-            FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-            var eval = AlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, false, actionsStack, boardPool);
-            resultActions.Add((eval, action));
-            // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
-        });
-
-        var resultArray = resultActions.ToList();
-        var alpha = resultArray.Max(x => x.value);
-        for (var i = resultActions.Count - 1; i >= 0; i--)
-        {
-            if (resultArray[i].value < alpha - 900)
-                resultArray.RemoveAt(i);
+            var executedAction = resultArray[_random.Next(0, resultArray.Count)];
+            Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
+            _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
         }
-
-        var executedAction = resultArray[_random.Next(0, resultArray.Count)];
-        Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
-        _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
+        finally
+        {
+            foreach (var analysisValue in _analysis.Values)
+            {
+                BoardPool<int>.Return(analysisValue);
+            }
+        }
     }
 
     private void HandleWhitePlayer()
@@ -130,56 +154,80 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         sw.Start();
 
         _analysis = FigureImpactAnalyzer.AnalyzeFigures(_board);
-        var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
-
-        var checkedActions = new Stack<FigureAction>();
-        for (var i = 0; i < _board.Length; i++)
+        try
         {
-            var index = i;
-            var figure = _board[i];
-            if (figure.PlayerColor != PlayerColor.White)
-                continue;
+            var resultActions = new ConcurrentBag<(int value, FigureAction action)>();
+            using var rentedCheckedActions = ActionStackPool.Rent(out var checkedActions);
+            using var rentedCurrentActions = ActionStackPool.Rent(out var currentActions);
 
-            var actionsStack = new Stack<FigureAction>(64);
-            FigureActionsResolver.GetPossibleActions(Position.FromIndex(index), _board, actionsStack);
-            foreach (var action in actionsStack)
+            for (var i = 0; i < _board.Length; i++)
             {
-                if (!action.FigureActionType.IsExecutable())
+                var figure = _board[i];
+                if (figure.PlayerColor != PlayerColor.White)
                     continue;
 
-                checkedActions.Push(action);
-            }
-        }
+                var countBefore = currentActions.Count;
+                FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), _board, currentActions);
+                var added = currentActions.Count - countBefore;
 
-        Parallel.ForEach(checkedActions, action =>
-        {
-            var actionsStack = new Stack<FigureAction>(64);
-            var boardPool = new Figure[_difficulty][];
-            for (var i = 0; i < _difficulty; i++)
+                for (var j = 0; j < added; j++)
+                {
+                    var action = currentActions.Pop();
+                    if (!action.FigureActionType.IsExecutable())
+                        continue;
+
+                    checkedActions.Push(action);
+                }
+            }
+
+            Parallel.ForEach(checkedActions, action =>
             {
-                boardPool[i] = new Figure[Constants.FullBoardTilesCount];
+                var boardPool = new Figure[_difficulty][];
+                try
+                {
+                    using var rentedActionsStack = ActionStackPool.Rent(out var actionsStack);
+                    for (var i = 0; i < _difficulty; i++)
+                    {
+                        _ = BoardPool<Figure>.Rent(out var board);
+                        boardPool[i] = board;
+                    }
+
+                    using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
+                    _board.CopyTo(clonedBoard, 0);
+
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                    var eval = AlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, true, actionsStack, boardPool);
+                    resultActions.Add((eval, action));
+                    // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
+                }
+                finally
+                {
+                    for (var i = 0; i < _difficulty; i++)
+                    {
+                        BoardPool<Figure>.Return(boardPool[i]);
+                    }
+                }
+            });
+
+            var resultArray = resultActions.ToList();
+            var beta = resultArray.Min(x => x.value);
+            for (var i = resultActions.Count - 1; i >= 0; i--)
+            {
+                if (resultArray[i].value > beta + 900)
+                    resultArray.RemoveAt(i);
             }
 
-            var clonedBoard = new Figure[Constants.FullBoardTilesCount];
-            _board.CopyTo(clonedBoard, 0);
-
-            FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-            var eval = AlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, true, actionsStack, boardPool);
-            resultActions.Add((eval, action));
-            // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
-        });
-
-        var resultArray = resultActions.ToList();
-        var beta = resultArray.Min(x => x.value);
-        for (var i = resultActions.Count - 1; i >= 0; i--)
-        {
-            if (resultArray[i].value > beta + 900)
-                resultArray.RemoveAt(i);
+            var executedAction = resultArray[_random.Next(0, resultArray.Count)];
+            Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
+            _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
         }
-
-        var executedAction = resultArray[_random.Next(0, resultArray.Count)];
-        Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
-        _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
+        finally
+        {
+            foreach (var analysisValue in _analysis.Values)
+            {
+                BoardPool<int>.Return(analysisValue);
+            }
+        }
     }
 
     private int AlphaBeta(
