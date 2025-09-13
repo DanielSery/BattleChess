@@ -37,42 +37,12 @@ public class Builder : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsEmpty())
             {
-                actions.Push(new FigureAction(FigureActionType.Special, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.BuildWall, sourcePosition, targetPosition));
             }
             else if (targetFigure.FigureType == FigureId.Wall)
             {
-                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
             }
         }
-        
-        return;
-    }
-
-    public static int EvaluateAction(FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.Special)
-        {
-            return Constants.BuildImpact;
-        }
-        else if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveImpact;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        else if (action.FigureActionType == FigureActionType.Attack)
-            board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-        else if (action.FigureActionType == FigureActionType.Special)
-            board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Wall), onEvent);
-        else
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

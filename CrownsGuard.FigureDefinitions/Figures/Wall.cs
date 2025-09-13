@@ -10,7 +10,6 @@ public class Wall : ICrownsGuardFigureTypeInfo
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        return;
     }
 
     public IDictionary<int, Uri> ImageUris =>

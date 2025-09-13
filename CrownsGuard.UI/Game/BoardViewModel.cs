@@ -232,7 +232,7 @@ public sealed class BoardViewModel : ViewModelBase
         FigureActionsResolver.GetPossibleActions(clickedTileInfo.Position, _gameService.Board, actionsStack);
         foreach (var possibleAction in actionsStack)
         {
-            if (possibleAction.FigureActionType is FigureActionType.PossibleAttack or FigureActionType.PossibleSpecial)
+            if (!possibleAction.FigureActionType.IsExecutable())
                 continue;
             
             Tiles[possibleAction.TargetPosition.GetIndex()].PossibleAction = possibleAction;

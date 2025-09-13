@@ -98,7 +98,7 @@ internal static class FiguresHelper
         onEvent.Invoke(new BoardEvent(BoardEventType.Moved, fromPosition, toPosition), board);
     }
 
-    public static void ChangeOwner(this Span<Figure> board, Position fromPosition, Position toPosition, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ConvertUnit(this Span<Figure> board, Position fromPosition, Position toPosition, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var toIndex = toPosition.GetIndex();
         

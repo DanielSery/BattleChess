@@ -54,7 +54,7 @@ public class Dragon : ICrownsGuardFigureTypeInfo
 
                 if (targetFigure.IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Special, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.BreatheFire, sourcePosition, targetPosition));
                 }
                 else
                 {
@@ -62,63 +62,26 @@ public class Dragon : ICrownsGuardFigureTypeInfo
                 }
             }
         }
-        
-        return;
     }
 
-    public static int EvaluateAction(FigureAction action)
+    public static void ExecuteBreatheFire(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (action.FigureActionType == FigureActionType.Special)
+        var move = action.TargetPosition - action.SourcePosition;
+        if (move.X is <= 1 and >= -1 &&
+            move.Y is <= 1 and >= -1)
         {
-            var move = action.TargetPosition - action.SourcePosition;
-            if (move.X is <= 1 and >= -1 &&
-                move.Y is <= 1 and >= -1)
-            {
-                return Constants.BuildImpact;
-            }
-            else if (move.X is <= 2 and >= -2 &&
-                     move.Y is <= 2 and >= -2)
-            {
-                return Constants.BuildImpact * 2;
-            }
+            board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire),
+                onEvent);
         }
-        else if (action.FigureActionType == FigureActionType.Move)
+        else if (move.X is <= 2 and >= -2 &&
+                 move.Y is <= 2 and >= -2)
         {
-            return Constants.MoveImpact;
-        }
-        
-        return 0;
-    }
+            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
 
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        }
-        else if (action.FigureActionType == FigureActionType.Special)
-        {
-            var move = action.TargetPosition - action.SourcePosition;
-            if (move.X is <= 1 and >= -1 &&
-                move.Y is <= 1 and >= -1)
-            {
-                board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire),
-                    onEvent);
-            }
-            else if (move.X is <= 2 and >= -2 &&
-                     move.Y is <= 2 and >= -2)
-            {
-                var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
-
-                board.CreateFigure(action.SourcePosition + smallMove,
-                    new Figure(PlayerColor.Neutral, false, FigureId.Fire), onEvent);
-                board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire),
-                    onEvent);
-            }
-        }
-        else
-        {
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
+            board.CreateFigure(action.SourcePosition + smallMove,
+                new Figure(PlayerColor.Neutral, false, FigureId.Fire), onEvent);
+            board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire),
+                onEvent);
         }
     }
 }

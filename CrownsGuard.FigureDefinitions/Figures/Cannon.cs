@@ -18,7 +18,7 @@ public class Cannon : ICrownsGuardFigureTypeInfo
 
     private static readonly Position[] WhiteAttackPositions =
     [
-        new(0, 2), new(0, 3), new(0, 4),
+        new(0, -2), new(0, -3), new(0, -4),
     ];
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
@@ -48,55 +48,32 @@ public class Cannon : ICrownsGuardFigureTypeInfo
             
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.CannonAttack, sourcePosition, targetPosition));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleCannonAttack, sourcePosition, targetPosition));
             }
         }
-        
-        return;
     }
 
-    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.PossibleAttack)
-        {
-            return Constants.PossibleRangedAttackImpact;
-        }
-        else if (action.FigureActionType == FigureActionType.Attack)
-        {
-            var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
-            return Constants.RangedAttackCoeff * figureValue + 2 * Constants.PossibleRangedAttackImpact;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigure = board[action.SourcePosition.GetIndex()];
         var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
-        if (action.FigureActionType == FigureActionType.Attack)
-        {
-            foreach (var attackPosition in attackPositions)
-            {
-                var targetPosition = action.SourcePosition + attackPosition;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    continue;
-                }
 
-                if (!targetFigure.IsEmpty())
-                {
-                    board.KillWithoutMove(action.SourcePosition, targetPosition, onEvent);
-                }
+        foreach (var attackPosition in attackPositions)
+        {
+            var targetPosition = action.SourcePosition + attackPosition;
+            if (!board.TryGetFigure(targetPosition, out var targetFigure))
+            {
+                continue;
+            }
+
+            if (!targetFigure.IsEmpty())
+            {
+                board.KillWithoutMove(action.SourcePosition, targetPosition, onEvent);
             }
         }
-        else
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

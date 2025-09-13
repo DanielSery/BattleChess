@@ -10,6 +10,6 @@ public static class FigureActionHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsExecutable(this FigureActionType figureActionType)
     {
-        return figureActionType > FigureActionType.LastNonExecutable;
+        return figureActionType.HasFlag(FigureActionType.IsExecutable);
     }
 }

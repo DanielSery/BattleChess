@@ -76,9 +76,9 @@ public class TileInfoViewModel : ViewModelBase, ITileInfo
         set
         {
             SetProperty(ref _possibleAction, value);
-            IsPossibleAttack = value.FigureActionType == FigureActionType.Attack;
-            IsPossibleMove = value.FigureActionType == FigureActionType.Move;
-            IsPossibleSpecial = value.FigureActionType == FigureActionType.Special;
+            IsPossibleAttack = value.FigureActionType.HasFlag(FigureActionType.IsAttack);
+            IsPossibleMove = value.FigureActionType.HasFlag(FigureActionType.IsMove);
+            IsPossibleSpecial = value.FigureActionType.HasFlag(FigureActionType.IsSpecial);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
@@ -23,34 +24,15 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
             
             if (targetFigure.IsWalkable() || targetFigure.FigureType == FigureId.Explosives)
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.AlchemistMove, sourcePosition, targetPosition));
             }
         }
     }
 
-    public static int EvaluateAction(FigureAction action)
+    public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveImpact + Constants.BuildImpact;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-            CreateExplosive(action.SourcePosition, action.TargetPosition - action.SourcePosition, board, onEvent);
-        }
-        else
-        {
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
+        board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+        CreateExplosive(action.SourcePosition, action.TargetPosition - action.SourcePosition, board, onEvent);
     }
 
     private static void CreateExplosive(Position sourcePosition, Position move, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)

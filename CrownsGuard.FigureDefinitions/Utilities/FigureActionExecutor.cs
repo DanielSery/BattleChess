@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Figures;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
@@ -10,51 +11,144 @@ public static class FigureActionExecutor
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public static void ExecuteFigureAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var sourceFigure = board[action.SourcePosition.GetIndex()];
-        switch (sourceFigure.FigureType)
+        switch (action.FigureActionType)
         {
-            case FigureId.Alchemist: Alchemist.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Archer: Archer.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Barbarian: Barbarian.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Bard: Bard.ExecuteAction(board, action, onEvent); break;
-            case FigureId.BattleAxe: BattleAxe.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Blade: Blade.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Builder: Builder.ExecuteAction(board, action, onEvent); break;
-            case FigureId.CamelArcher: CamelArcher.ExecuteAction(board, action, onEvent); break;
-            case FigureId.CamelRider: CamelRider.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Cannon: Cannon.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Catapult: Catapult.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Chinese: Chinese.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Crossbow: Crossbow.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Dogs: Dogs.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Dragon: Dragon.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Elephant: Elephant.ExecuteAction(board, action, onEvent); break;
-            case FigureId.JapanArcher: JapanArcher.ExecuteAction(board, action, onEvent); break;
-            case FigureId.King: King.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Knight: Knight.ExecuteAction(board, action, onEvent); break;
-            case FigureId.LegionaryPike: LegionaryPike.ExecuteAction(board, action, onEvent); break;
-            case FigureId.LegionarySword: LegionarySword.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Mage: Mage.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Miner: Miner.ExecuteAction(board, action, onEvent); break;
-            case FigureId.MountedArcher: MountedArcher.ExecuteAction(board, action, onEvent); break;
-            case FigureId.MountedKnight: MountedKnight.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Musketeer: Musketeer.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Ninja: Ninja.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Nordguard: Nordguard.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Peasant: Peasant.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Pikeman: Pikeman.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Priest: Priest.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Queen: Queen.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Ranger: Ranger.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Samurai: Samurai.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Scout: Scout.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Spartan: Spartan.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Spearman: Spearman.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Trader: Trader.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Warhammer: Warhammer.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Whiplash: Whiplash.ExecuteAction(board, action, onEvent); break;
-            case FigureId.Wizzard: Wizzard.ExecuteAction(board, action, onEvent); break;
-            default: throw new ArgumentOutOfRangeException();
-        };
+            case FigureActionType.PushFigure:
+            case FigureActionType.Move:
+                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.MeeleeAttack:
+                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.RangedAttack:
+                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.AlchemistMove:
+                Alchemist.ExecuteMove(board, action, onEvent);
+                break;
+            case FigureActionType.BuildWall:
+                board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Wall), onEvent);
+                break;
+            case FigureActionType.BattleAxeMove:
+                BattleAxe.ExecuteMove(board, action, onEvent);
+                break;
+            case FigureActionType.BreatheFire:
+                Dragon.ExecuteBreatheFire(board, action, onEvent);
+                break;
+            case FigureActionType.CannonAttack:
+                Cannon.ExecuteAttack(board, action, onEvent);
+                break;
+            case FigureActionType.Castling:
+                King.ExecuteCastle(board, action, onEvent);
+                break;
+            case FigureActionType.ChangeToQueen:
+                ChangeToQueen(board, action, onEvent);
+                break;
+            case FigureActionType.ConvertUnit:
+                board.ConvertUnit(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.MageMove:
+                Mage.ExecuteMove(board, action, onEvent);
+                break;
+            case FigureActionType.MinerMove:
+                Miner.ExecuteMove(board, action, onEvent);
+                break;
+            case FigureActionType.MakeUnitKing:
+                Priest.ExecuteMakeKing(board, action, onEvent);
+                break;
+            case FigureActionType.MeeleePierceAttack:
+                MeeleePierceAttack(board, action, onEvent);
+                break;
+            case FigureActionType.SpartanMove:
+                Spartan.ExecuteMove(board, action, onEvent);
+                break;
+            case FigureActionType.SwapWithFigure:
+                board.SwapTiles(action.SourcePosition, action.TargetPosition, onEvent);
+                break;
+            case FigureActionType.WarhammerMove:
+                Warhammer.ExecuteMove(board, action, onEvent);
+                break;
+            case FigureActionType.WizzardMove:
+                Wizzard.ExecuteMove(board, action, onEvent);
+                break;
+            case FigureActionType.PossibleCannonAttack:
+            case FigureActionType.PossibleConvertUnit:
+            case FigureActionType.PossibleMeeleeAttack:
+            case FigureActionType.PossibleMeeleePierceAttack:
+            case FigureActionType.PossiblePushFigure:
+            case FigureActionType.PossibleRangedAttack:
+            case FigureActionType.IsExecutable:
+            case FigureActionType.IsTargetDependant:
+                throw new InvalidOperationException();
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private static void ChangeToQueen(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    {
+        var sourceFigureType = board[action.SourcePosition.GetIndex()].FigureType;
+        var targetIndex = action.TargetPosition.GetIndex();
+        var targetFigure = board[targetIndex];
+
+        if (targetFigure.IsWalkable())
+        {
+            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+            if (board[targetIndex].FigureType == sourceFigureType)
+                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Queen, onEvent);
+        }
+        else
+        {
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+            if (board[targetIndex].FigureType == sourceFigureType)
+                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Queen, onEvent);
+        }
+    }
+
+    private static void MeeleePierceAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    {
+        var move = action.TargetPosition - action.SourcePosition;
+        if (move.X is <= 1 and >= -1 &&
+            move.Y is <= 1 and >= -1)
+        {
+            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+        }
+        else if (move.X is <= 2 and >= -2 &&
+                 move.Y is <= 2 and >= -2)
+        {
+            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
+            var sourcePosition = action.SourcePosition;
+
+            board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
+            var figure = board[(sourcePosition + smallMove).GetIndex()];
+            if (figure.FigureType != FigureId.Blade)
+                return;
+
+            board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);
+        }
+        else
+        {
+            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
+
+            var step1Position = action.SourcePosition + smallMove;
+            if (board[step1Position.GetIndex()].IsWalkable())
+                board.MoveFigure(action.SourcePosition, step1Position, onEvent);
+            else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
+
+            if (board[step1Position.GetIndex()].FigureType != FigureId.Elephant)
+                return;
+
+            var step2Position = action.SourcePosition + smallMove + smallMove;
+            if (board[step2Position.GetIndex()].IsWalkable())
+                board.MoveFigure(step1Position, step2Position, onEvent);
+            else board.KillWithMove(step1Position, step2Position, onEvent);
+
+            if (board[step2Position.GetIndex()].FigureType != FigureId.Elephant)
+                return;
+
+            if (board[action.TargetPosition.GetIndex()].IsWalkable())
+                board.MoveFigure(step2Position, action.TargetPosition, onEvent);
+            else board.KillWithMove(step2Position, action.TargetPosition, onEvent);
+        }
     }
 }

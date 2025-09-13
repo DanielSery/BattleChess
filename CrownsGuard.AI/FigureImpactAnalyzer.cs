@@ -83,7 +83,7 @@ public static class FigureImpactAnalyzer
             for (var j = 0; j < addedElements; j++)
             {
                 var possibleAction = actionsStack.Pop();
-                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard[i]));
+                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction));
                 impact += value;
             }
 
@@ -115,7 +115,7 @@ public static class FigureImpactAnalyzer
             for (var j = 0; j < addedElements; j++)
             {
                 var possibleAction = actionsStack.Pop();
-                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction, clonedBoard[i]) * tileImportance[i]) / 1000;
+                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction) * tileImportance[i]) / 1000;
             }
 
             if (figure.IsKing)

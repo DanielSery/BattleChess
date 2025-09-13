@@ -30,41 +30,12 @@ public class Wizzard : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.WizzardMove, sourcePosition, targetPosition));
             }
         }
-
-        return;;
     }
 
-    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
-    {
-        var movement = action.TargetPosition - action.SourcePosition;
-        if (Math.Abs(movement.X) == Math.Abs(movement.Y))
-        {
-            return GetImpact(action.TargetPosition + new Position(1, 0)) +
-                   GetImpact(action.TargetPosition + new Position(-1, 0)) +
-                   GetImpact(action.TargetPosition + new Position(0, 1)) +
-                   GetImpact(action.TargetPosition + new Position(0, -1)) +
-                   Constants.MoveImpact;
-        }
-        else
-        {
-            return GetImpact(action.TargetPosition + new Position(1, -1)) +
-                   GetImpact(action.TargetPosition + new Position(-1, 1)) +
-                   GetImpact(action.TargetPosition + new Position(1, 1)) +
-                   GetImpact(action.TargetPosition + new Position(-1, -1)) +
-                   Constants.MoveImpact;
-        }
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int GetImpact(Position targetPosition)
-    {
-        return targetPosition.IsInBoard() ? Constants.PossibleHalfRangedAttackImpact : 0;
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         if (action.FigureActionType == FigureActionType.Move)
         {
