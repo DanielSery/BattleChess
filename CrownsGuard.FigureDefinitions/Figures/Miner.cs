@@ -33,7 +33,7 @@ public class Miner : ICrownsGuardFigureTypeInfo
             {
                 if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.MinerMove, sourcePosition, targetPosition));
                 }
                 else
                 {
@@ -41,29 +41,9 @@ public class Miner : ICrownsGuardFigureTypeInfo
                 }
             }
         }
-        
-        return;
     }
 
-    public static int EvaluateAction(FigureAction action)
-    {
-        var move = action.TargetPosition - action.SourcePosition;
-        var absX = Math.Abs(move.X);
-        if (absX != 0)
-        {
-            return Constants.MoveImpact + absX * Constants.BuildImpact;
-        }
-        
-        var absY = Math.Abs(move.Y);
-        if (absY != 0)
-        {
-            return Constants.MoveImpact + absY * Constants.BuildImpact;
-        }
-
-        return 0;
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
         var difference = action.TargetPosition - action.SourcePosition;

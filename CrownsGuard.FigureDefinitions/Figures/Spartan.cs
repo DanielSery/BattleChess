@@ -25,23 +25,9 @@ public class Spartan : ICrownsGuardFigureTypeInfo
                 actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
             }
         }
-        
-        return;;
     }
 
-    public static int EvaluateAction(FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveImpact + Constants.PossibleHalfRangedAttackImpact;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         if (action.FigureActionType == FigureActionType.Move)
         {

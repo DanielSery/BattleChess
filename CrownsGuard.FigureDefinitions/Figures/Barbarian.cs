@@ -39,28 +39,13 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
             {
                 if (targetFigure.IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Special, movedPosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.PushFigure, movedPosition, targetPosition));
                 }
                 else
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleSpecial, movedPosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.PossiblePushFigure, movedPosition, targetPosition));
                 }
             }
         }
-        
-        return;
-    }
-
-    public static int EvaluateAction()
-    {
-        return Constants.MoveImpact;
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType is FigureActionType.Move or FigureActionType.Special)
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        else
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

@@ -45,8 +45,6 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         {
             actions.Push(moveAction2);
         }
-        
-        return;
     }
 
     public static void GetPossibleWhiteActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board,
@@ -76,61 +74,6 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         {
             actions.Push(moveAction2);
         }
-        
-        return;
-    }
-
-    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveImpact;
-        }
-        else if (action is { FigureActionType: FigureActionType.PossibleAttack })
-        {
-            return Constants.PossibleMeeleeAttackImpact;
-        }
-        else if (action is { FigureActionType: FigureActionType.Attack })
-        {
-            var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
-            return Constants.MeeleeAttackCoeff * figureValue;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        }
-        else if (action.FigureActionType == FigureActionType.Attack)
-        {
-            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-        }
-        else if (action.FigureActionType == FigureActionType.Special)
-        {
-            var targetFigure = board[action.TargetPosition.GetIndex()];
-            if (targetFigure.IsWalkable())
-            {
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionarySword)
-                    board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Blade, onEvent);
-            }
-            else
-            {
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-                if (board[action.TargetPosition.GetIndex()].FigureType == FigureId.LegionarySword)
-                    board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Blade, onEvent);
-            }
-        }
-        else
-        {
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
-        }
     }
 
     private static bool TryGetAttackAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
@@ -145,17 +88,17 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            action = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition);
             return true;
         }
 
         if (attackPosition.Y is 7 or 0)
         {
-            action = new FigureAction(FigureActionType.Special, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition);
             return true;
         }
 
-        action = new FigureAction(FigureActionType.Attack, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition);
         return true;
     }
 
@@ -172,7 +115,7 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
 
         if (attackPosition.Y is 7 or 0)
         {
-            action = new FigureAction(FigureActionType.Special, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition);
             return true;
         }
 

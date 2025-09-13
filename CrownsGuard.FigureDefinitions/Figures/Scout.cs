@@ -37,45 +37,12 @@ public class Scout : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition));
             }
         }
-
-        return;;
-    }
-
-    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveImpact;
-        }
-        else if (action.FigureActionType == FigureActionType.PossibleAttack)
-        {
-            return Constants.PossibleMeeleeAttackImpact;
-        }
-        else if (action.FigureActionType == FigureActionType.Attack)
-        {
-            var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
-            return Constants.MeeleeAttackCoeff * figureValue;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        else if (action.FigureActionType == FigureActionType.Attack)
-            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-        else
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

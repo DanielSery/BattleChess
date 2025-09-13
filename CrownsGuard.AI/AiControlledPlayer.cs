@@ -2,7 +2,6 @@
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
@@ -131,12 +130,14 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             var alpha = resultArray.Max(x => x.value);
             for (var i = resultActions.Count - 1; i >= 0; i--)
             {
-                if (resultArray[i].value < alpha - 900)
+                if (resultArray[i].value < alpha - 0)
                     resultArray.RemoveAt(i);
             }
 
             var executedAction = resultArray[_random.Next(0, resultArray.Count)];
             Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
+            if (sw.Elapsed < TimeSpan.FromSeconds(1))
+                Thread.Sleep(TimeSpan.FromSeconds(1) - sw.Elapsed);
             _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
         }
         finally
@@ -213,12 +214,14 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             var beta = resultArray.Min(x => x.value);
             for (var i = resultActions.Count - 1; i >= 0; i--)
             {
-                if (resultArray[i].value > beta + 900)
+                if (resultArray[i].value > beta + 0)
                     resultArray.RemoveAt(i);
             }
 
             var executedAction = resultArray[_random.Next(0, resultArray.Count)];
             Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
+            if (sw.Elapsed < TimeSpan.FromSeconds(1))
+                Thread.Sleep(TimeSpan.FromSeconds(1) - sw.Elapsed);
             _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
         }
         finally
@@ -343,7 +346,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 for (var j = 0; j < added; j++)
                 {
                     var action = actionsStack.Pop();
-                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, figure);
+                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action);
                 }
             }
             else
@@ -351,7 +354,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 for (var j = 0; j < added; j++)
                 {
                     var action = actionsStack.Pop();
-                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action, figure);
+                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action);
                 }
             }
         }

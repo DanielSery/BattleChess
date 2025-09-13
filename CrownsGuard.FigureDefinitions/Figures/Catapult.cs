@@ -51,39 +51,12 @@ public class Catapult : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.Attack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.RangedAttack, sourcePosition, targetPosition));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, targetPosition));
             }
         }
-        
-        return;
-    }
-
-    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.PossibleAttack)
-        {
-            return Constants.PossibleRangedAttackImpact;
-        }
-        else if (action.FigureActionType == FigureActionType.Attack)
-        {
-            var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
-            return Constants.RangedAttackCoeff * figureValue;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Attack)
-            board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
-        else
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

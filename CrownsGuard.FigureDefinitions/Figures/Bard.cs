@@ -36,45 +36,12 @@ public class Bard : ICrownsGuardFigureTypeInfo
             
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.Special, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.ConvertUnit, sourcePosition, targetPosition));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleSpecial, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleConvertUnit, sourcePosition, targetPosition));
             }
         }
-        
-        return;
-    }
-
-    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.Special)
-        {
-            var targetFigure = board[action.TargetPosition.GetIndex()];
-            return targetFigure.FigureType.GetFigureValue() * Constants.RangedConvertCoeff;
-        }
-        else if (action.FigureActionType == FigureActionType.PossibleSpecial)
-        {
-            return Constants.PossibleRangedConvertCoeff;
-        }
-        else if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveImpact;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        else if (action.FigureActionType == FigureActionType.Special)
-            board.ChangeOwner(action.SourcePosition, action.TargetPosition, onEvent);
-        else
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
 }

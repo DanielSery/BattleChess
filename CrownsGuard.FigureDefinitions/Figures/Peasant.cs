@@ -33,39 +33,6 @@ public class Peasant : ICrownsGuardFigureTypeInfo
         {
             actions.Push(move3Action);
         }
-        
-        return;
-    }
-
-    public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveImpact;
-        }
-        else if (action.FigureActionType == FigureActionType.PossibleAttack)
-        {
-            return Constants.PossibleMeeleeAttackImpact;
-        }
-        else if (action.FigureActionType == FigureActionType.Attack)
-        {
-            var figureValue = board[action.TargetPosition.GetIndex()].FigureType.GetFigureValue();
-            return Constants.MeeleeAttackCoeff * figureValue;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public static void ExecuteAction(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
-    {
-        if (action.FigureActionType == FigureActionType.Move)
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        else if (action.FigureActionType == FigureActionType.Attack)
-            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-        else
-            throw new NotSupportedException($"Invalid action type {action.FigureActionType}");
     }
     
     private static bool TryGetAttackAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
@@ -80,11 +47,11 @@ public class Peasant : ICrownsGuardFigureTypeInfo
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            action = new FigureAction(FigureActionType.PossibleAttack, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition);
             return false;
         }
 
-        action = new FigureAction(FigureActionType.Attack, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition);
         return true;
     }
 
