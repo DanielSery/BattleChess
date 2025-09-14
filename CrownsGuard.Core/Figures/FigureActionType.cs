@@ -5,36 +5,35 @@ public enum FigureActionType : ushort
 {
     None = 0,
     
-    Move = 50 | IsExecutable | IsMove,
-    
-    PossiblePushFigure = 11,
-    PushFigure = 11 | IsExecutable | IsSpecial,
-    ChangeToQueen = 12 | IsExecutable | IsSpecial, // Due to 8x more evaluation
+    Move = 20 | IsExecutable | IsMove,
 
-    SwapWithFigure = 20 | IsExecutable | IsSpecial,
+    PossiblePushFigure = 21,
+    PushFigure = 22 | IsExecutable | IsSpecial,
+    ChangeToQueen = 23 | IsExecutable | IsSpecial, // Due to 8x more evaluation
     
     MakeUnitKing = 30 | IsExecutable | IsSpecial,
     BuildWall = 31  | IsExecutable | IsSpecial,
     MinerMove = 32 | IsExecutable | IsMove,
     BreatheFire = 33 | IsExecutable | IsSpecial,
     AlchemistMove = 34 | IsExecutable | IsMove,
+    SwapWithFigure = 35 | IsExecutable | IsSpecial,
+
+    PossibleCastling = 50,
+    Castling = 50 | IsExecutable | IsSpecial,
     
     PossibleMeeleeAttack = 100 | IsMovingAttack,
     MeeleeAttack = 100  | IsExecutable | IsTargetDependant | IsAttack | IsMovingAttack,
 
     SpartanMove = 200 | IsExecutable | IsMove | IsMovingAttack,
 
-    PossibleCastling = 202,
-    Castling = 202 | IsExecutable | IsSpecial,
+    PossibleMeeleePierceAttack = 203,
+    MeeleePierceAttack = 203 | IsExecutable | IsTargetDependant | IsAttack | IsMovingAttack,
 
     BattleAxeMove = 300 | IsExecutable | IsMove | IsMovingAttack,
     WarhammerMove = 301 | IsExecutable | IsMove | IsMovingAttack,
     
     PossibleRangedAttack = 400,
     RangedAttack = 400 | IsExecutable | IsTargetDependant | IsAttack,
-
-    PossibleMeeleePierceAttack = 401,
-    MeeleePierceAttack = 401 | IsExecutable | IsTargetDependant | IsAttack | IsMovingAttack,
 
     MageMove = 501 | IsExecutable | IsMove | IsMovingAttack,
     WizzardMove = 502 | IsExecutable | IsMove | IsMovingAttack,

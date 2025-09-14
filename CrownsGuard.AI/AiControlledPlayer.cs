@@ -239,7 +239,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         Stack<FigureAction> actionsStack,
         Figure[][] boardPool)
     {
-        var check = EvaluateBoard(currentBoard, actionsStack);
+        var check = EvaluateBoard(currentBoard, actionsStack, maximizingPlayer ? PlayerColor.Black : PlayerColor.White);
         if (depth == 0 || Math.Abs(check) > 10_000_000)
         {
             return check;
@@ -315,7 +315,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     }
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    private int EvaluateBoard(ReadOnlySpan<Figure> board, Stack<FigureAction> actionsStack)
+    private int EvaluateBoard(ReadOnlySpan<Figure> board, Stack<FigureAction> actionsStack, PlayerColor currentPlayerColor)
     {
         var analysis = _analysis;
         var evaluation = 0;
@@ -346,7 +346,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 for (var j = 0; j < added; j++)
                 {
                     var action = actionsStack.Pop();
-                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action);
+                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, currentPlayerColor);
                 }
             }
             else
@@ -354,7 +354,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 for (var j = 0; j < added; j++)
                 {
                     var action = actionsStack.Pop();
-                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action);
+                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action, currentPlayerColor);
                 }
             }
         }
