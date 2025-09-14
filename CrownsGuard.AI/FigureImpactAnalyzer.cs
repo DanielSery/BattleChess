@@ -83,7 +83,7 @@ public static class FigureImpactAnalyzer
             for (var j = 0; j < addedElements; j++)
             {
                 var possibleAction = actionsStack.Pop();
-                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction));
+                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction, figure.PlayerColor));
                 impact += value;
             }
 
@@ -115,7 +115,7 @@ public static class FigureImpactAnalyzer
             for (var j = 0; j < addedElements; j++)
             {
                 var possibleAction = actionsStack.Pop();
-                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction) * tileImportance[i]) / 1000;
+                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction, figure.PlayerColor) * tileImportance[i]) / 2000;
             }
 
             if (figure.IsKing)
@@ -129,7 +129,7 @@ public static class FigureImpactAnalyzer
                 continue;
             }
 
-            impact += figure.FigureType.GetFigureValue() * (Constants.FigureValueCoeff - tileImportance[i]);
+            impact += figure.FigureType.GetFigureValue() * Constants.FigureValueCoeff;
             result[i] = figure.PlayerColor switch
             {
                 PlayerColor.Black => impact,
