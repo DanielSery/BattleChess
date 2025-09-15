@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
+using CrownsGuard.Core.Helpers;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
 
@@ -10,33 +10,33 @@ internal static class FiguresHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsEmpty(this Figure checkedFigure)
     {
-        return checkedFigure.FigureType == FigureId.Empty;
+        return checkedFigure.GetFigureType() == Figure.Empty;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsWalkable(this Figure checkedFigure)
     {
-        return checkedFigure.FigureType <= FigureId.LastWalkableFigure;
+        return checkedFigure.GetFigureType() <= Figure.LastWalkableFigure;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CanAttack(this Figure yoursFigure, Figure checkedFigure)
     {
-        return yoursFigure.PlayerColor != checkedFigure.PlayerColor &&
-               checkedFigure.FigureType > FigureId.LastNonAttackableFigure;
+        return yoursFigure.GetFigureColor() != checkedFigure.GetFigureColor() &&
+               checkedFigure.GetFigureType() > Figure.LastNonAttackableFigure;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAllyTo(this Figure yoursFigure, Figure checkedFigure)
     {
-        return yoursFigure.PlayerColor == checkedFigure.PlayerColor;
+        return yoursFigure.GetFigureColor() == checkedFigure.GetFigureColor();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsEnemyTo(this Figure yoursFigure, Figure checkedFigure)
     {
-        return yoursFigure.PlayerColor != checkedFigure.PlayerColor &&
-               checkedFigure.PlayerColor != PlayerColor.Neutral;
+        return yoursFigure.GetFigureColor() != checkedFigure.GetFigureColor() &&
+               !checkedFigure.IsNeutral();
     }
 
     public static void CreateFigure(this Span<Figure> board, Position position, Figure createdFigure, Action<BoardEvent, Span<Figure>> onEvent)
@@ -49,7 +49,7 @@ internal static class FiguresHelper
     {
         var toIndex = toPosition.GetIndex();
         
-        board[toIndex] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+        board[toIndex] = Figure.Empty;
         onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition, toPosition), board);
     }
 
@@ -70,7 +70,7 @@ internal static class FiguresHelper
         var toIndex = toPosition.GetIndex();
         
         board[toIndex] = board[fromIndex];
-        board[fromIndex] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+        board[fromIndex] = Figure.Empty;
         
         onEvent.Invoke(new BoardEvent(BoardEventType.Moved, fromPosition, toPosition), board);
     }
@@ -79,7 +79,7 @@ internal static class FiguresHelper
     {
         var toIndex = toPosition.GetIndex();
         
-        board[toIndex] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+        board[toIndex] = Figure.Empty;
         
         onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition, toPosition), board);
         onEvent.Invoke(new BoardEvent(BoardEventType.Attacked, fromPosition, toPosition), board);
@@ -91,7 +91,7 @@ internal static class FiguresHelper
         var toIndex = toPosition.GetIndex();
         
         board[toIndex] = board[fromIndex];
-        board[fromIndex] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+        board[fromIndex] = Figure.Empty;
         
         onEvent.Invoke(new BoardEvent(BoardEventType.Attacked, fromPosition, toPosition), board);
         onEvent.Invoke(new BoardEvent(BoardEventType.Died, toPosition, toPosition), board);
@@ -103,17 +103,17 @@ internal static class FiguresHelper
         var toIndex = toPosition.GetIndex();
         
         var targetFigure = board[toIndex];
-        board[toIndex] = new Figure(targetFigure.PlayerColor, false, targetFigure.FigureType);
+        board[toIndex] = targetFigure.GetFigureColor() | targetFigure.GetFigureType();
         onEvent.Invoke(new BoardEvent(BoardEventType.ChangedOwner, fromPosition, toPosition), board);
     }
 
-    public static void ChangeFigureType(this Span<Figure> board, Position fromPosition, Position toPosition, FigureId figureType, Action<BoardEvent, Span<Figure>> onEvent)
+    public static void ChangeFigureType(this Span<Figure> board, Position fromPosition, Position toPosition, Figure figureType, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var fromIndex = fromPosition.GetIndex();
         var toIndex = toPosition.GetIndex();
 
         var sourceFigure = board[fromIndex];
-        board[toIndex] = new Figure(sourceFigure.PlayerColor, sourceFigure.IsKing, figureType);
+        board[toIndex] = sourceFigure.GetFigureColor() | sourceFigure.GetIsKing() | figureType;
         onEvent.Invoke(new BoardEvent(BoardEventType.ChangedFigure, fromPosition, toPosition), board);
     }
 
@@ -123,7 +123,7 @@ internal static class FiguresHelper
         var toIndex = toPosition.GetIndex();
 
         var sourceFigure = board[fromIndex];
-        board[toIndex] = new Figure(sourceFigure.PlayerColor, true, sourceFigure.FigureType);
+        board[toIndex] = sourceFigure.GetFigureColor() | Figure.IsKing | sourceFigure.GetFigureType();
         onEvent.Invoke(new BoardEvent(BoardEventType.ChangedFigure, fromPosition, toPosition), board);
     }
 }

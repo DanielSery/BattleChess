@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Maps.Figures;
 using CrownsGuard.Maps.GameBoard;
@@ -20,8 +21,8 @@ internal class BoardLoader : IBoardLoader
     {
         if (boardInfo.Count() != Constants.FullBoardTilesCount) throw new ArgumentException("Full board needs to have 64 tiles");
         if (map.Figures.Length != Constants.FullBoardTilesCount) throw new ArgumentException("Map blueprint needs to have 64 tiles");
-        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
-        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.Black }) != 1) throw new ArgumentException("Map blueprint needs to have a black king");
+        if (map.Figures.Count(x => x.IsKing() && x.IsWhite()) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Count(x => x.IsKing() && x.IsBlack()) != 1) throw new ArgumentException("Map blueprint needs to have a black king");
 
         var index = 0;
         foreach (var tile in boardInfo)
@@ -33,8 +34,8 @@ internal class BoardLoader : IBoardLoader
     public void LoadTeamBoard(IBoardInfo boardInfo, BoardBlueprint map)
     {
         if (boardInfo.Count() != map.Figures.Length) throw new ArgumentException("Source and target map size must match");
-        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
-        if (map.Figures.Any(x => x is { PlayerColor: PlayerColor.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
+        if (map.Figures.Count(x => x.IsKing() && x.IsWhite()) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Any(x => x.IsBlack())) throw new ArgumentException("Partial map blueprint cannot have black figure");
 
         var index = 0;
         foreach (var tile in boardInfo)

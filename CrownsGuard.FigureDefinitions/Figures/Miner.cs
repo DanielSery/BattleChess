@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Miner : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Miner;
+    public Figure Figure => Figure.Miner;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
@@ -57,7 +57,7 @@ public class Miner : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsEmpty())
             {
-                board.CreateFigure(position, new Figure(PlayerColor.Neutral, false, FigureId.Trench), onEvent);
+                board.CreateFigure(position, Figure.Trench, onEvent);
             }
         }
     }

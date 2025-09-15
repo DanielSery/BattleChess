@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Mage : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Mage;
+    public Figure Figure => Figure.Mage;
 
     private static readonly Position[] MovementPositions =
     [

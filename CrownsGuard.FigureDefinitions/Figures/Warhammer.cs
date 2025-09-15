@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Warhammer : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Warhammer;
+    public Figure Figure => Figure.Warhammer;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

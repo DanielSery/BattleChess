@@ -7,7 +7,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Fire : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Fire;
+    public Figure Figure => Figure.Fire;
 
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
@@ -26,7 +26,7 @@ public class Fire : ICrownsGuardFigureTypeInfo
             return;
         }
 
-        if (figure.FigureType == FigureId.Dragon)
+        if (figure.GetFigureType() == Figure.Dragon)
         {
             return;
         }

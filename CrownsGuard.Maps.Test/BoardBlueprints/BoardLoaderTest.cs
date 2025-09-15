@@ -21,7 +21,7 @@ public class BoardLoaderTest
             {
                 var figureMock = new Mock<IFigure>();
                 var figureTypeMock = new Mock<IFigureTypeInfo>();
-                figureTypeMock.Setup(x => x.FigureId).Returns(blueprint.FigureId);
+                figureTypeMock.Setup(x => x.Figure).Returns(blueprint.FigureId);
                 var ownerMock = new Mock<IPlayer>();
                 ownerMock.Setup(x => x.PlayerColor).Returns(blueprint.Player);
 
@@ -36,7 +36,7 @@ public class BoardLoaderTest
             {
                 var figureMock = new Mock<IFigure>();
                 var figureTypeMock = new Mock<IFigureTypeInfo>();
-                figureTypeMock.Setup(x => x.FigureId).Returns(0);
+                figureTypeMock.Setup(x => x.Figure).Returns(0);
                 var ownerMock = new Mock<IPlayer>();
                 ownerMock.Setup(x => x.PlayerColor).Returns(PlayerColor.Neutral);
 
@@ -291,7 +291,7 @@ public class BoardLoaderTest
 
         for (var i = 48; i < 63; i++)
         {
-            tileMocks[i].Object.Figure.TypeInfo.FigureId.Should().Be(i - 48);
+            tileMocks[i].Object.Figure.TypeInfo.Figure.Should().Be(i - 48);
             tileMocks[i].Object.Figure.Owner.PlayerColor.Should().Be(PlayerColor.White);
         }
 
@@ -316,13 +316,13 @@ public class BoardLoaderTest
 
         for (var i = 0; i < 8; i++)
         {
-            tileMocks[i].Object.Figure.TypeInfo.FigureId.Should().Be(i + 8);
+            tileMocks[i].Object.Figure.TypeInfo.Figure.Should().Be(i + 8);
             tileMocks[i].Object.Figure.Owner.PlayerColor.Should().Be(PlayerColor.Black);
         }
 
         for (var i = 8; i < 15; i++)
         {
-            tileMocks[i].Object.Figure.TypeInfo.FigureId.Should().Be(i - 8);
+            tileMocks[i].Object.Figure.TypeInfo.Figure.Should().Be(i - 8);
             tileMocks[i].Object.Figure.Owner.PlayerColor.Should().Be(PlayerColor.Black);
         }
 

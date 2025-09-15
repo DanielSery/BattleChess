@@ -6,7 +6,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Trench : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Trench;
+    public Figure Figure => Figure.Trench;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

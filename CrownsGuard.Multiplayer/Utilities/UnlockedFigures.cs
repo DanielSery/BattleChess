@@ -14,17 +14,17 @@ public static class UnlockedFigures
         DefaultUnlockedFigures = new byte[32];
         var bitArray = new BitArray(DefaultUnlockedFigures)
         {
-            [(int)FigureId.Empty] = true,
-            [(int)FigureId.Fire] = true,
-            [(int)FigureId.Trench] = true,
-            [(int)FigureId.Wall] = true,
-            [(int)FigureId.Explosives] = true,
-            [(int)FigureId.LegionarySword] = true,
-            [(int)FigureId.CamelRider] = true,
-            [(int)FigureId.Whiplash] = true,
-            [(int)FigureId.MountedKnight] = true,
-            [(int)FigureId.Queen] = true,
-            [(int)FigureId.King] = true,
+            [(int)Figure.Empty] = true,
+            [(int)Figure.Fire] = true,
+            [(int)Figure.Trench] = true,
+            [(int)Figure.Wall] = true,
+            [(int)Figure.Explosives] = true,
+            [(int)Figure.LegionarySword] = true,
+            [(int)Figure.CamelRider] = true,
+            [(int)Figure.Whiplash] = true,
+            [(int)Figure.MountedKnight] = true,
+            [(int)Figure.Queen] = true,
+            [(int)Figure.King] = true,
         };
         bitArray.CopyTo(DefaultUnlockedFigures, 0);
     }

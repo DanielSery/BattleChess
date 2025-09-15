@@ -60,7 +60,7 @@ public class EditorUnitsViewModel : ViewModelBase
     {
         var random = new Random();
         var chance = isWin ? 0.015 : 0.01;
-        var potentialUnlock = new List<(FigureId, string)>();
+        var potentialUnlock = new List<(Figure, string)>();
         
         foreach (var figure in Figures)
         {
@@ -68,7 +68,7 @@ public class EditorUnitsViewModel : ViewModelBase
                 continue;
 
             if (random.NextDouble() <= chance)
-                potentialUnlock.Add((figure.FigureId, figure.DisplayName));
+                potentialUnlock.Add((figure.Figure, figure.DisplayName));
         }
         
         if (potentialUnlock.Count == 0)

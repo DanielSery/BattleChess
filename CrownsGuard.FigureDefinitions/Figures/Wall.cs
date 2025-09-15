@@ -6,7 +6,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Wall : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Wall;
+    public Figure Figure => Figure.Wall;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

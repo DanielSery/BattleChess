@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Blade : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Blade;
+    public Figure Figure => Figure.Blade;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

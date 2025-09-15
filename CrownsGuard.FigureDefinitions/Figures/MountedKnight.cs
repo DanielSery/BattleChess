@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class MountedKnight : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.MountedKnight;
+    public Figure Figure => Figure.MountedKnight;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

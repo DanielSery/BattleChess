@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class CamelRider : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.CamelRider;
+    public Figure Figure => Figure.CamelRider;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

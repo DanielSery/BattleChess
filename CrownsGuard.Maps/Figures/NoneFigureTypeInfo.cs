@@ -7,7 +7,7 @@ public class NoneFigureTypeInfo : IFigureTypeInfo
     public static NoneFigureTypeInfo Instance { get; } = new();
 
     /// <inheritdoc />
-    public FigureId FigureId => FigureId.Empty;
+    public Figure Figure => Figure.Empty;
     public int FigureValue => 0;
     public string DisplayName => string.Empty;
     public string BaseDescription => string.Empty;

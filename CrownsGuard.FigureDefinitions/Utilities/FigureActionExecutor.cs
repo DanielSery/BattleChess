@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Figures;
 
@@ -27,7 +28,7 @@ public static class FigureActionExecutor
                 Alchemist.ExecuteMove(board, action, onEvent);
                 break;
             case FigureActionType.BuildWall:
-                board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Wall), onEvent);
+                board.CreateFigure(action.TargetPosition, Figure.Wall, onEvent);
                 break;
             case FigureActionType.BattleAxeMove:
                 BattleAxe.ExecuteMove(board, action, onEvent);
@@ -87,21 +88,21 @@ public static class FigureActionExecutor
 
     private static void ChangeToQueen(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var sourceFigureType = board[action.SourcePosition.GetIndex()].FigureType;
+        var sourceFigureType = board[action.SourcePosition.GetIndex()].GetFigureType();
         var targetIndex = action.TargetPosition.GetIndex();
         var targetFigure = board[targetIndex];
 
         if (targetFigure.IsWalkable())
         {
             board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-            if (board[targetIndex].FigureType == sourceFigureType)
-                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Queen, onEvent);
+            if (board[targetIndex].GetFigureType() == sourceFigureType)
+                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, Figure.Queen, onEvent);
         }
         else
         {
             board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-            if (board[targetIndex].FigureType == sourceFigureType)
-                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, FigureId.Queen, onEvent);
+            if (board[targetIndex]. GetFigureType() == sourceFigureType)
+                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, Figure.Queen, onEvent);
         }
     }
 
@@ -121,7 +122,7 @@ public static class FigureActionExecutor
 
             board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
             var figure = board[(sourcePosition + smallMove).GetIndex()];
-            if (figure.FigureType != FigureId.Blade)
+            if (figure.GetFigureType() != Figure.Blade)
                 return;
 
             board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);
@@ -135,7 +136,7 @@ public static class FigureActionExecutor
                 board.MoveFigure(action.SourcePosition, step1Position, onEvent);
             else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
 
-            if (board[step1Position.GetIndex()].FigureType != FigureId.Elephant)
+            if (board[step1Position.GetIndex()].GetFigureType() != Figure.Elephant)
                 return;
 
             var step2Position = action.SourcePosition + smallMove + smallMove;
@@ -143,7 +144,7 @@ public static class FigureActionExecutor
                 board.MoveFigure(step1Position, step2Position, onEvent);
             else board.KillWithMove(step1Position, step2Position, onEvent);
 
-            if (board[step2Position.GetIndex()].FigureType != FigureId.Elephant)
+            if (board[step2Position.GetIndex()].GetFigureType() != Figure.Elephant)
                 return;
 
             if (board[action.TargetPosition.GetIndex()].IsWalkable())

@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Elephant : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Elephant;
+    public Figure Figure => Figure.Elephant;
 
     private static readonly Position[] Directions =
     [

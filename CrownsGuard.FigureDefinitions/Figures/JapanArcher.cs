@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class JapanArcher : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.JapanArcher;
+    public Figure Figure => Figure.JapanArcher;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

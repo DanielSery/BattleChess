@@ -25,10 +25,10 @@ public static class FigureImpactAnalyzer
         using var rentedTileImportance = BoardPool<int>.Rent(out var tileImportance);
         foreach (var figure in board)
         {
-            var whiteFigure = new Figure(PlayerColor.White, false, figure.FigureType);
+            var whiteFigure = figure.GetFigureType() | Figure.IsWhite;
             AnalyzeTileImportance(whiteFigure, tileImportance);
 
-            var blackFigure = new Figure(PlayerColor.Black, false, figure.FigureType);
+            var blackFigure = figure.GetFigureType() | Figure.IsBlack;
             AnalyzeTileImportance(blackFigure, tileImportance);
         }
 
@@ -41,20 +41,20 @@ public static class FigureImpactAnalyzer
         var analysis = new Dictionary<int, int[]>();
         foreach (var figureType in FigureTypes.FigureTypes)
         {
-            var neutralFigure = new Figure(PlayerColor.Neutral, false, figureType.FigureId);
-            analysis[neutralFigure.IntValue] = new int[Constants.FullBoardTilesCount];
+            var neutralFigure = figureType.Figure;
+            analysis[(int)neutralFigure] = new int[Constants.FullBoardTilesCount];
             
-            var whiteFigure = new Figure(PlayerColor.White, false, figureType.FigureId);
-            analysis[whiteFigure.IntValue] = AnalyzeFigureImpact(whiteFigure, tileImportance);
+            var whiteFigure = figureType.Figure | Figure.IsWhite;
+            analysis[(int)whiteFigure] = AnalyzeFigureImpact(whiteFigure, tileImportance);
             
-            var whiteKingFigure = new Figure(PlayerColor.White, true, figureType.FigureId);
-            analysis[whiteKingFigure.IntValue] = AnalyzeFigureImpact(whiteKingFigure, tileImportance);
+            var whiteKingFigure = figureType.Figure | Figure.IsWhite | Figure.IsKing;
+            analysis[(int)whiteKingFigure] = AnalyzeFigureImpact(whiteKingFigure, tileImportance);
             
-            var blackFigure = new Figure(PlayerColor.Black, false, figureType.FigureId);
-            analysis[blackFigure.IntValue] = AnalyzeFigureImpact(blackFigure, tileImportance);
+            var blackFigure = figureType.Figure | Figure.IsBlack;
+            analysis[(int)blackFigure] = AnalyzeFigureImpact(blackFigure, tileImportance);
 
-            var blackKingFigure = new Figure(PlayerColor.Black, true, figureType.FigureId);
-            analysis[blackKingFigure.IntValue] = AnalyzeFigureImpact(blackKingFigure, tileImportance);
+            var blackKingFigure = figureType.Figure | Figure.IsBlack | Figure.IsKing;
+            analysis[(int)blackKingFigure] = AnalyzeFigureImpact(blackKingFigure, tileImportance);
         }
         
         return analysis.ToFrozenDictionary();
@@ -65,7 +65,7 @@ public static class FigureImpactAnalyzer
         using var rentedBoard = BoardPool<Figure>.Rent(out var board);
         for (var j = 0; j < board.Length; j++)
         {
-            board[j] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+            board[j] = Figure.Empty;
         }
 
         using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
@@ -83,7 +83,7 @@ public static class FigureImpactAnalyzer
             for (var j = 0; j < addedElements; j++)
             {
                 var possibleAction = actionsStack.Pop();
-                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction, figure.PlayerColor));
+                var value = Math.Abs(ActionImpactEvaluator.EvaluateAction(board, possibleAction, figure.GetFigureColor()));
                 impact += value;
             }
 
@@ -96,9 +96,9 @@ public static class FigureImpactAnalyzer
         using var rentedBoard = BoardPool<Figure>.Rent(out var board);
         for (var j = 0; j < board.Length; j++)
         {
-            board[j] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+            board[j] = Figure.Empty;
         }
-
+        
         using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
         using var rentedActionsStack = ActionStackPool.Rent(out var actionsStack);
         _ = BoardPool<int>.Rent(out var result);
@@ -115,25 +115,25 @@ public static class FigureImpactAnalyzer
             for (var j = 0; j < addedElements; j++)
             {
                 var possibleAction = actionsStack.Pop();
-                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction, figure.PlayerColor) * tileImportance[i]) / 2000;
+                impact += (ActionImpactEvaluator.EvaluateAction(board, possibleAction, figure.GetFigureColor()) * tileImportance[i]) / 2000;
             }
 
-            if (figure.IsKing)
+            if (figure.IsKing())
             {
-                result[i] = figure.PlayerColor switch
+                result[i] = figure.GetFigureColor() switch
                 {
-                    PlayerColor.Black => Constants.KingValue - tileImportance[i],
-                    PlayerColor.White => -(Constants.KingValue - tileImportance[i]),
+                    Figure.IsBlack => Constants.KingValue - tileImportance[i],
+                    Figure.IsWhite => -(Constants.KingValue - tileImportance[i]),
                     _ => result[i]
                 };
                 continue;
             }
 
-            impact += figure.FigureType.GetFigureValue() * Constants.FigureValueCoeff;
-            result[i] = figure.PlayerColor switch
+            impact += figure.GetFigureValue() * Constants.FigureValueCoeff;
+            result[i] = figure.GetFigureColor() switch
             {
-                PlayerColor.Black => impact,
-                PlayerColor.White => -impact,
+                Figure.IsBlack => impact,
+                Figure.IsWhite => -impact,
                 _ => result[i]
             };
         }

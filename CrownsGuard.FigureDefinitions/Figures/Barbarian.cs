@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Barbarian : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Barbarian;
+    public Figure Figure => Figure.Barbarian;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

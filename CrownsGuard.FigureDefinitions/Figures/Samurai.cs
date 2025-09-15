@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Samurai : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Samurai;
+    public Figure Figure => Figure.Samurai;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

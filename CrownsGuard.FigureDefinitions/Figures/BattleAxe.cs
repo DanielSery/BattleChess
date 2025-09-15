@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class BattleAxe : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.BattleAxe;
+    public Figure Figure => Figure.BattleAxe;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

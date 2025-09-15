@@ -15,5 +15,5 @@ public interface IFigureTypeInfoGroup
     /// <summary>
     /// Bets figure type by unique unit id.
     /// </summary>
-    IFigureTypeInfo GetFigureTypeById(FigureId uniqueUnitId);
+    IFigureTypeInfo GetFigureTypeById(Figure uniqueUnit);
 }

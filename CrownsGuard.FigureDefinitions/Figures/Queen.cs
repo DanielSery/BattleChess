@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Queen : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Queen;
+    public Figure Figure => Figure.Queen;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

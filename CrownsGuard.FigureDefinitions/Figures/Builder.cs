@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Builder : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Builder;
+    public Figure Figure => Figure.Builder;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
@@ -39,7 +39,7 @@ public class Builder : ICrownsGuardFigureTypeInfo
             {
                 actions.Push(new FigureAction(FigureActionType.BuildWall, sourcePosition, targetPosition));
             }
-            else if (targetFigure.FigureType == FigureId.Wall)
+            else if (targetFigure.GetFigureType() == Figure.Wall)
             {
                 actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
             }

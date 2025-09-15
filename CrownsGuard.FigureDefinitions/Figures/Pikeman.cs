@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Pikeman : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Pikeman;
+    public Figure Figure => Figure.Pikeman;
 
     private static readonly Position[] BlackAttackPositions =
     [
@@ -42,7 +42,7 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
             }
         }
 
-        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
+        var attackPositions = sourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
         foreach (var relative in attackPositions)
         {
             var targetPosition = sourcePosition + relative;

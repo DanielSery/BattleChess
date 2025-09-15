@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
+using CrownsGuard.Core.Players;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;
 
@@ -33,13 +35,13 @@ public partial class TeamBoardControl
         else if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName))
         {
             var (teamBoard, sourceTile) = ((TeamBoardViewModel, TileInfoViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName);
-            var sourceFigureIdentifier = new Figure(sourceTile.Figure.Owner.PlayerColor,
-                sourceTile.Figure.IsKing, sourceTile.Figure.TypeInfo.FigureId);
 
+            var sourceFigureIdentifier = FigureHelper.GetFigure(sourceTile.Figure.Owner.PlayerColor, sourceTile.Figure.IsKing, sourceTile.Figure.TypeInfo.Figure);
+            
             var tileButton = (Button)sender;
             var targetTile = (TileInfoViewModel)tileButton.DataContext;
-            var targetFigureIdentifier = new Figure(targetTile.Figure.Owner.PlayerColor,
-                targetTile.Figure.IsKing, targetTile.Figure.TypeInfo.FigureId);
+            
+            var targetFigureIdentifier = FigureHelper.GetFigure(targetTile.Figure.Owner.PlayerColor, targetTile.Figure.IsKing, targetTile.Figure.TypeInfo.Figure);
 
             teamBoard.CreateFigure(sourceTile, targetFigureIdentifier);
             teamBoard.CreateFigure(targetTile, sourceFigureIdentifier);

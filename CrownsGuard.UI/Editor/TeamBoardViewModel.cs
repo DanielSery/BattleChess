@@ -6,6 +6,7 @@ using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Figures;
 using CrownsGuard.Multiplayer.Players;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.GameBoard;
 using CrownsGuard.UI.Services;
@@ -86,7 +87,7 @@ public class TeamBoardViewModel : ViewModelBase
 
     private void EvaluateTeamBoard()
     {
-        TotalPoints = _boardInfo.Sum(x => x.Figure.TypeInfo.FigureId.GetFigureValue());
+        TotalPoints = _boardInfo.Sum(x => x.Figure.TypeInfo.Figure.GetFigureValue());
         HasKing = _boardInfo.Any(x => x.Figure.IsKing);
         RaisePropertyChanged(nameof(PointsLeft));
         RaisePropertyChanged(nameof(PositivePoints));
@@ -102,7 +103,7 @@ public class TeamBoardViewModel : ViewModelBase
     {
         return new BoardBlueprint
         {
-            Figures = Tiles.Select(x => new Figure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.FigureId)).ToArray(),
+            Figures = Tiles.Select(x => FigureHelper.GetFigure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.Figure)).ToArray(),
         };
     }
 
@@ -121,11 +122,7 @@ public class TeamBoardViewModel : ViewModelBase
         var figures = new Figure[16];
         for (var i = 0; i < figures.Length; i++)
         {
-            var value = map[i];
-            var player = (PlayerColor)(value & 0xFF);       // lowest 8 bits
-            var isKing = ((value >> 8) & 1) != 0;    // next bit
-            var figureType = (FigureId)((value >> 9) & 0xFFFF); // next 16 bits
-            figures[i] = new Figure(player, isKing, figureType);
+            figures[i] = (Figure)map[i];
         }
 
         return new BoardBlueprint
@@ -150,8 +147,8 @@ public class TeamBoardViewModel : ViewModelBase
         _soundService.PlaySoundEffect(SoundEffectType.Button);
         if (tile.Figure.IsKing)
         {
-            var demotedFigureId = tile.Figure.TypeInfo.FigureId;
-            tile.Figure = _figureCreator.CreateFigure(new Figure(tile.Figure.Owner.PlayerColor, false, demotedFigureId));
+            var demotedFigureId = tile.Figure.TypeInfo.Figure;
+            tile.Figure = _figureCreator.CreateFigure(FigureHelper.GetFigure(tile.Figure.Owner.PlayerColor, false, demotedFigureId));
             
             HasKing = false;
             RaisePropertyChanged(nameof(CanSave));
@@ -165,12 +162,12 @@ public class TeamBoardViewModel : ViewModelBase
                 !checkedTile.Figure.IsKing) 
                 continue;
             
-            var demotedFigureId = checkedTile.Figure.TypeInfo.FigureId;
-            checkedTile.Figure = _figureCreator.CreateFigure(new Figure(owner.PlayerColor, false, demotedFigureId));
+            var demotedFigureId = checkedTile.Figure.TypeInfo.Figure;
+            checkedTile.Figure = _figureCreator.CreateFigure(FigureHelper.GetFigure(owner.PlayerColor, false, demotedFigureId));
         }
         
-        var upgradedFigureId = tile.Figure.TypeInfo.FigureId;
-        tile.Figure = _figureCreator.CreateFigure(new Figure(owner.PlayerColor, true, upgradedFigureId));
+        var upgradedFigureId = tile.Figure.TypeInfo.Figure;
+        tile.Figure = _figureCreator.CreateFigure(FigureHelper.GetFigure(owner.PlayerColor, true, upgradedFigureId));
         
         HasKing = true;
         RaisePropertyChanged(nameof(CanSave));

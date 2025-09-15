@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class King : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.King;
+    public Figure Figure => Figure.King;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
@@ -41,7 +41,7 @@ public class King : ICrownsGuardFigureTypeInfo
             return;
         }
 
-        if (sourceFigure.PlayerColor == PlayerColor.Black)
+        if (sourceFigure.IsBlack())
         {
             if (sourcePosition.Y != 0)
             {
@@ -76,7 +76,7 @@ public class King : ICrownsGuardFigureTypeInfo
             }
         }
 
-        if (sourceFigure.PlayerColor == PlayerColor.White)
+        if (sourceFigure.IsWhite())
         {
             if (sourcePosition.Y != 7)
             {

@@ -9,11 +9,11 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Peasant : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Peasant;
+    public Figure Figure => Figure.Peasant;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
+        var direction = sourceFigure.IsBlack() ? 1 : -1;
         if (TryGetMoveAction(board, sourcePosition, new Position(0, (sbyte)(1 * direction)), out var attackAction))
         {
             actions.Push(attackAction);

@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Spearman : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Spearman;
+    public Figure Figure => Figure.Spearman;
 
     private static readonly Position[] AttackPositions =
     [
@@ -28,7 +28,7 @@ public class Spearman : ICrownsGuardFigureTypeInfo
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var movePositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackMovePositions : WhiteMovePositions;
+        var movePositions = sourceFigure.IsBlack() ? BlackMovePositions : WhiteMovePositions;
         foreach (var relative in movePositions)
         {
             var targetPosition = sourcePosition + relative;

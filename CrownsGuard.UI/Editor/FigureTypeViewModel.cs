@@ -8,7 +8,7 @@ public sealed class FigureTypeViewModel : IFigureInfo
 {
     public FigureTypeViewModel(IFigureTypeInfo figureTypeInfo, bool isUnlocked)
     {
-        FigureId = figureTypeInfo.FigureId;
+        Figure = figureTypeInfo.Figure;
         DisplayName = figureTypeInfo.DisplayName;
         BaseDescription = figureTypeInfo.BaseDescription;
         MovementDescription = figureTypeInfo.MovementDescription;
@@ -29,7 +29,7 @@ public sealed class FigureTypeViewModel : IFigureInfo
     }
 
     public PlayerColor PlayerColor { get;}
-    public FigureId FigureId { get; }
+    public Figure Figure { get; }
     public string DisplayName { get; }
     public string BaseDescription { get; }
     public string MovementDescription { get; }

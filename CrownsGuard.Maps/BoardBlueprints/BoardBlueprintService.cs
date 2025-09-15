@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Maps.IO;
 using CrownsGuard.Maps.Utilities;
 
@@ -68,7 +69,7 @@ internal class BoardBlueprintService : IBoardBlueprintService
     private static bool IsBoardValid(BoardBlueprint board)
     {
         return board.Figures.Length == 16 &&
-               board.Figures.Count(x => x.IsKing) == 1;
+               board.Figures.Count(x => x.IsKing()) == 1;
     }
 
     private void TryDeleteFile(string filePath)

@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Cannon : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Cannon;
+    public Figure Figure => Figure.Cannon;
 
     private static readonly Position[] BlackAttackPositions =
     [
@@ -37,7 +37,7 @@ public class Cannon : ICrownsGuardFigureTypeInfo
             }
         }
         
-        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
+        var attackPositions = sourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
         foreach (Position attackPosition in attackPositions)
         {
             var targetPosition = sourcePosition + attackPosition;
@@ -60,7 +60,7 @@ public class Cannon : ICrownsGuardFigureTypeInfo
     public static void ExecuteAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigure = board[action.SourcePosition.GetIndex()];
-        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
+        var attackPositions = sourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
 
         foreach (var attackPosition in attackPositions)
         {

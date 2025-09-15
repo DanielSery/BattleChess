@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Catapult : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Catapult;
+    public Figure Figure => Figure.Catapult;
 
     private static readonly Position[] BlackAttackPositions =
     [
@@ -39,7 +39,7 @@ public class Catapult : ICrownsGuardFigureTypeInfo
             }
         }
         
-        var attackPositions = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackPositions : WhiteAttackPositions;
+        var attackPositions = sourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
         
         foreach (var relative in attackPositions)
         {

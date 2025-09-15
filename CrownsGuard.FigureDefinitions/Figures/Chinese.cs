@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Chinese : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Chinese;
+    public Figure Figure => Figure.Chinese;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

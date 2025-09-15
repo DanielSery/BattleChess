@@ -281,7 +281,7 @@ public class MultiplayerViewModel : ViewModelBase
 
         for (var i = 16; i < 48; i++)
         {
-            figures[i] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+            figures[i] = Figure.Empty;
         }
 
         for (var i = 0; i < hisFigures.Length; i++)
@@ -297,10 +297,10 @@ public class MultiplayerViewModel : ViewModelBase
         var figures = new Figure[16];
         for (var i = 0; i < figures.Length; i++)
         {
-            var figure = new Figure(map[i]);
-            if (figure.PlayerColor == PlayerColor.White)
+            var figure = (Figure)map[i];
+            if (figure.IsWhite())
             {
-                figure = new Figure(PlayerColor.Black, figure.IsKing, figure.FigureType);
+                figure = figure.GetIsKing() | figure.GetFigureType() | Figure.IsBlack;
             }
 
             figures[i] = figure;

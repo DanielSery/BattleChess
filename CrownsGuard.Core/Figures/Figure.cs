@@ -1,27 +1,66 @@
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using CrownsGuard.Core.Players;
+﻿namespace CrownsGuard.Core.Figures;
 
-namespace CrownsGuard.Core.Figures;
-
-[DebuggerDisplay("{PlayerColor}-{FigureType}-{IsKing}")]
-[StructLayout(LayoutKind.Explicit, Pack = 1)]
-public readonly struct Figure
+[Flags]
+public enum Figure : ushort
 {
-    [FieldOffset(0)] public readonly int IntValue;
-    [FieldOffset(0)] public readonly PlayerColor PlayerColor;
-    [FieldOffset(1)] public readonly bool IsKing;
-    [FieldOffset(2)] public readonly FigureId FigureType;
-
-    public Figure(PlayerColor playerColor, bool isKing, FigureId figureType)
-    {
-        PlayerColor = playerColor;
-        IsKing = isKing;
-        FigureType = figureType;
-    }
-
-    public Figure(int intValue)
-    {
-        IntValue = intValue;
-    }
+    Empty = 0,
+    Fire = 1,
+    LastWalkableFigure = 7,
+    
+    Wall = 8,
+    LastNonAttackableFigure = 15,
+    
+    Trench = 16,
+    Explosives = 17,
+    LastNeutralFigure = 31,
+    
+    MountedKnight = 32,
+    MountedArcher,
+    CamelArcher,
+    Knight,
+    Ninja,
+    Chinese,
+    LegionarySword,
+    King,
+    Queen,
+    Whiplash,
+    JapanArcher,
+    Archer,
+    Miner,
+    LegionaryPike,
+    Peasant,
+    Spearman,
+    Warhammer,
+    Crossbow,
+    Cannon,
+    Catapult,
+    Pikeman,
+    Dragon,
+    Priest,
+    Elephant,
+    BattleAxe,
+    Samurai,
+    Nordguard,
+    Dogs,
+    Blade,
+    Musketeer,
+    Wizzard,
+    Builder,
+    Scout,
+    Trader,
+    Barbarian,
+    Alchemist,
+    Bard,
+    Spartan,
+    Ranger,
+    Mage,
+    CamelRider,
+    
+    IsKing = 1 << 13,
+    
+    IsBlack = 0b01 << 14,
+    IsWhite = 0b10 << 14,
+    
+    FigureMask = 0b0001111111111111,
+    PlayerMask = 0b1100000000000000,
 }

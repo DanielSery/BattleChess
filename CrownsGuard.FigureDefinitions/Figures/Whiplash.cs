@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Whiplash : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Whiplash;
+    public Figure Figure => Figure.Whiplash;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

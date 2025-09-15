@@ -7,7 +7,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 internal interface ICrownsGuardFigureTypeInfo : IFigureTypeInfo
 {
     string IFigureTypeInfo.DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(DisplayName)}"];
-    string IFigureTypeInfo.BaseDescription => string.Format(CurrentLocalization.Instance[$"{GetType().Name}_{nameof(BaseDescription)}"], FigureId.GetFigureValue());
+    string IFigureTypeInfo.BaseDescription => string.Format(CurrentLocalization.Instance[$"{GetType().Name}_{nameof(BaseDescription)}"], Figure.GetFigureValue());
     string IFigureTypeInfo.MovementDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(MovementDescription)}"];
     string IFigureTypeInfo.AttackDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(AttackDescription)}"];
     string IFigureTypeInfo.SpecialDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(SpecialDescription)}"];

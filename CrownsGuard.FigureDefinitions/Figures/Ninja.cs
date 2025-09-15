@@ -9,11 +9,11 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Ninja : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Ninja;
+    public Figure Figure => Figure.Ninja;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var direction = sourceFigure.PlayerColor == PlayerColor.Black ? 1 : -1;
+        var direction = sourceFigure.IsBlack() ? 1 : -1;
         foreach (var relative in PositionsGroups.RookDirections)
         {
             var targetPosition = sourcePosition + relative;

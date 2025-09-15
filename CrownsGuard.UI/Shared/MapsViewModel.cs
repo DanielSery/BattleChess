@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.GameBoard;
@@ -29,7 +30,7 @@ public sealed class MapsViewModel : ViewModelBase
     {
         var map = new BoardBlueprint
         {
-            Figures = board.Select(x => new Figure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.FigureId)).ToArray(),
+            Figures = board.Select(x => FigureHelper.GetFigure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.Figure)).ToArray(),
             StartingPlayerColor = PlayerColor.White
         };
 

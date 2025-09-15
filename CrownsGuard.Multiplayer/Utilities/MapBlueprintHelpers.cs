@@ -11,7 +11,7 @@ public static class MapBlueprintHelpers
 
         for (var i = 0; i < map.Figures.Length; i++)
         {
-            myMapData[i] = map.Figures[i].IntValue;
+            myMapData[i] = (int)map.Figures[i];
         }
 
         return myMapData;

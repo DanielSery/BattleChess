@@ -22,21 +22,21 @@ public enum FigureActionType : ushort
     Castling = 50 | IsExecutable | IsSpecial,
     
     PossibleMeeleeAttack = 100 | IsMovingAttack,
-    MeeleeAttack = 100  | IsExecutable | IsTargetDependant | IsAttack | IsMovingAttack,
+    MeeleeAttack = 100  | IsTargetDependantMovingAttack,
 
-    SpartanMove = 200 | IsExecutable | IsMove | IsMovingAttack,
+    SpartanMove = 200 | IsBlindMovingAttack,
 
     PossibleMeeleePierceAttack = 203,
-    MeeleePierceAttack = 203 | IsExecutable | IsTargetDependant | IsAttack | IsMovingAttack,
+    MeeleePierceAttack = 203 | IsTargetDependantMovingAttack,
 
-    BattleAxeMove = 300 | IsExecutable | IsMove | IsMovingAttack,
-    WarhammerMove = 301 | IsExecutable | IsMove | IsMovingAttack,
+    BattleAxeMove = 300 | IsBlindMovingAttack,
+    WarhammerMove = 301 | IsBlindMovingAttack,
     
     PossibleRangedAttack = 400,
     RangedAttack = 400 | IsExecutable | IsTargetDependant | IsAttack,
 
-    MageMove = 501 | IsExecutable | IsMove | IsMovingAttack,
-    WizzardMove = 502 | IsExecutable | IsMove | IsMovingAttack,
+    MageMove = 501 | IsBlindMovingAttack,
+    WizzardMove = 502 | IsBlindMovingAttack,
     
     PossibleConvertUnit = 600,
     ConvertUnit = 600 | IsExecutable | IsTargetDependant | IsSpecial,
@@ -51,5 +51,9 @@ public enum FigureActionType : ushort
     IsAttack          = 0b0010000000000000,
     IsExecutable      = 0b0100000000000000,
     IsTargetDependant = 0b1000000000000000,
-    IsTargetDependantMovingAttack = IsTargetDependant | IsMovingAttack,
+    
+    IsTargetDependantMovingAttack = IsExecutable | IsTargetDependant | IsAttack | IsMovingAttack,
+    IsBlindMovingAttack = IsExecutable | IsMove | IsMovingAttack,
+    
+    ActionTypeMask    = 0b1111110000000000,
 }

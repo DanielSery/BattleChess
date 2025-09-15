@@ -9,11 +9,11 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class LegionaryPike : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.LegionaryPike;
+    public Figure Figure => Figure.LegionaryPike;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        if (sourceFigure.PlayerColor == PlayerColor.White)
+        if (sourceFigure.IsWhite())
             GetPossibleWhiteActions(sourcePosition, sourceFigure, board, actions);
         else GetPossibleBlackActions(sourcePosition, sourceFigure, board, actions);
     }

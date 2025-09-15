@@ -53,7 +53,7 @@ public partial class EditorUnitsControl
         if (e.Data.GetDataPresent(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName))
         {
             var (teamBoard, sourceTile) =  ((TeamBoardViewModel, TileInfoViewModel))e.Data.GetData(typeof((TeamBoardViewModel, TileInfoViewModel)).FullName);
-            teamBoard.CreateFigure(sourceTile, new Figure(PlayerColor.Neutral, false, FigureId.Empty));
+            teamBoard.CreateFigure(sourceTile, Figure.Empty);
         }
     }
 
@@ -61,7 +61,12 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var figureType = (FigureTypeViewModel)button.DataContext;
-        e.Data = new Figure(figureType.PlayerColor, false, figureType.FigureId);
+
+        if (figureType.PlayerColor == PlayerColor.White)
+            e.Data = figureType.Figure | Figure.IsWhite;
+        else if (figureType.PlayerColor == PlayerColor.Black)
+            e.Data = figureType.Figure | Figure.IsBlack;
+        else e.Data = figureType.Figure;
     }
 
     private static T? FindAncestor<T>(DependencyObject parent)

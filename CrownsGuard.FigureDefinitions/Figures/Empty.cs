@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 public class Empty : IFigureTypeInfo
 {
     public int FigureValue => 0;
-    public FigureId FigureId => FigureId.Empty;
+    public Figure Figure => Figure.Empty;
     
     public string DisplayName => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureTypeInfo.DisplayName)}"];
     public string BaseDescription => CurrentLocalization.Instance[$"{GetType().Name}_{nameof(IFigureTypeInfo.BaseDescription)}"];

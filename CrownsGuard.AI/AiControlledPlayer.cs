@@ -80,7 +80,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             for (var i = 0; i < _board.Length; i++)
             {
                 var figure = _board[i];
-                if (figure.PlayerColor != PlayerColor.Black)
+                if (figure.IsWhite())
                     continue;
 
                 var countBefore = currentActions.Count;
@@ -164,7 +164,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             for (var i = 0; i < _board.Length; i++)
             {
                 var figure = _board[i];
-                if (figure.PlayerColor != PlayerColor.White)
+                if (figure.IsBlack())
                     continue;
 
                 var countBefore = currentActions.Count;
@@ -251,7 +251,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             for (var i = 0; i < currentBoard.Length; i++)
             {
                 var figure = currentBoard[i];
-                if (figure.PlayerColor != PlayerColor.Black)
+                if (figure.IsWhite())
                     continue;
 
                 var oldCount = actionsStack.Count;
@@ -282,7 +282,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             for (var i = 0; i < currentBoard.Length; i++)
             {
                 var figure = currentBoard[i];
-                if (figure.PlayerColor != PlayerColor.White)
+                if (figure.IsBlack())
                     continue;
 
                 var oldCount = actionsStack.Count;
@@ -322,7 +322,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         for (var i = 0; i < board.Length; i++)
         {
             var figure = board[i];
-            evaluation += analysis[figure.IntValue][i];
+            evaluation += analysis[(int)figure][i];
         }
 
         if (Math.Abs(evaluation) > 800_000_000)
@@ -333,7 +333,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         for (var i = 0; i < board.Length; i++)
         {
             var figure = board[i];
-            if (figure.PlayerColor == PlayerColor.Neutral)
+            if (figure.IsNeutral())
             {
                 continue;
             }
@@ -341,12 +341,12 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
             var oldCount = actionsStack.Count;
             FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), board, actionsStack);
             var added = actionsStack.Count - oldCount;
-            if (figure.PlayerColor == PlayerColor.White)
+            if (figure.IsWhite())
             {
                 for (var j = 0; j < added; j++)
                 {
                     var action = actionsStack.Pop();
-                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, currentPlayerColor);
+                    evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, figure.GetFigureColor());
                 }
             }
             else
@@ -354,7 +354,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 for (var j = 0; j < added; j++)
                 {
                     var action = actionsStack.Pop();
-                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action, currentPlayerColor);
+                    evaluation += ActionImpactEvaluator.EvaluateAction(board, action, figure.GetFigureColor());
                 }
             }
         }

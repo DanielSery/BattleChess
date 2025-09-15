@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
 
 namespace CrownsGuard.Maps.Utilities;
@@ -10,8 +11,8 @@ public static class MapExtender
     public static BoardBlueprint ExtendFor2Players(this BoardBlueprint map)
     {
         if (map.Figures.Length != 16) throw new ArgumentException("Partial map blueprint needs to have 16 tiles");
-        if (map.Figures.Count(x => x is { IsKing: true, PlayerColor: PlayerColor.White }) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
-        if (map.Figures.Any(x => x is { PlayerColor: PlayerColor.Black })) throw new ArgumentException("Partial map blueprint cannot have black figure");
+        if (map.Figures.Count(x => x.IsKing() && x.IsWhite()) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
+        if (map.Figures.Any(x => x.IsBlack())) throw new ArgumentException("Partial map blueprint cannot have black figure");
 
         var resultMap = new BoardBlueprint
         {
@@ -25,21 +26,21 @@ public static class MapExtender
             var whitePosition = Position.FromIndex(i + 64 - 16);
             resultMap.Figures[whitePosition.GetIndex()] = whiteFigure;
 
-            if (whiteFigure.PlayerColor == PlayerColor.White)
+            if (whiteFigure.IsWhite())
             {
                 var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
-                resultMap.Figures[blackPosition.GetIndex()] = new Figure(PlayerColor.Black, whiteFigure.IsKing, whiteFigure.FigureType);
+                resultMap.Figures[blackPosition.GetIndex()] = Figure.IsBlack | whiteFigure.GetIsKing() | whiteFigure.GetFigureType();
             }
             else
             {
                 var blackPosition = new Position(whitePosition.X, (sbyte)(7 - whitePosition.Y));
-                resultMap.Figures[blackPosition.GetIndex()] = new Figure(PlayerColor.Neutral, whiteFigure.IsKing, whiteFigure.FigureType);
+                resultMap.Figures[blackPosition.GetIndex()] = whiteFigure;
             }
         }
 
         for (var i = 16; i < 48; i++)
         {
-            resultMap.Figures[i] = new Figure(PlayerColor.Neutral, false, FigureId.Empty);
+            resultMap.Figures[i] = Figure.Empty;
         }
 
         return resultMap;

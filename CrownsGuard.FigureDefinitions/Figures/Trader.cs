@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Trader : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Trader;
+    public Figure Figure => Figure.Trader;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

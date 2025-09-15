@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Dragon : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Dragon;
+    public Figure Figure => Figure.Dragon;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
@@ -70,7 +70,7 @@ public class Dragon : ICrownsGuardFigureTypeInfo
         if (move.X is <= 1 and >= -1 &&
             move.Y is <= 1 and >= -1)
         {
-            board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire),
+            board.CreateFigure(action.TargetPosition, Figure.Fire,
                 onEvent);
         }
         else if (move.X is <= 2 and >= -2 &&
@@ -78,10 +78,8 @@ public class Dragon : ICrownsGuardFigureTypeInfo
         {
             var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
 
-            board.CreateFigure(action.SourcePosition + smallMove,
-                new Figure(PlayerColor.Neutral, false, FigureId.Fire), onEvent);
-            board.CreateFigure(action.TargetPosition, new Figure(PlayerColor.Neutral, false, FigureId.Fire),
-                onEvent);
+            board.CreateFigure(action.SourcePosition + smallMove, Figure.Fire, onEvent);
+            board.CreateFigure(action.TargetPosition, Figure.Fire, onEvent);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Musketeer : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Musketeer;
+    public Figure Figure => Figure.Musketeer;
 
     private static readonly Position[] BlackAttackDirections =
     [
@@ -37,7 +37,7 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
             }
         }
 
-        var attackDirections = sourceFigure.PlayerColor == PlayerColor.Black ? BlackAttackDirections : WhiteAttackDirections;
+        var attackDirections = sourceFigure.IsBlack() ? BlackAttackDirections : WhiteAttackDirections;
         foreach (var relative in attackDirections)
         {
             var targetPosition = sourcePosition;

@@ -10,7 +10,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Alchemist : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Alchemist;
+    public Figure Figure => Figure.Alchemist;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
@@ -22,7 +22,7 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
                 continue;
             }
             
-            if (targetFigure.IsWalkable() || targetFigure.FigureType == FigureId.Explosives)
+            if (targetFigure.IsWalkable() || targetFigure.GetFigureType() == Figure.Explosives)
             {
                 actions.Push(new FigureAction(FigureActionType.AlchemistMove, sourcePosition, targetPosition));
             }
@@ -46,7 +46,7 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
         if (targetFigure.IsEmpty())
         {
             var sourceFigure = board[sourcePosition.GetIndex()];
-            board.CreateFigure(targetPosition, new Figure(sourceFigure.PlayerColor, false, FigureId.Explosives), onEvent);
+            board.CreateFigure(targetPosition, Figure.Explosives | sourceFigure.GetFigureColor(), onEvent);
         }
     }
 }

@@ -107,13 +107,13 @@ internal class GameService : IGameService, IPlayersOwner
         
         foreach (var figure in Board)
         {
-            if (!figure.IsKing)
+            if (!figure.IsKing())
                 continue;
             
-            if (figure.PlayerColor == PlayerColor.White)
+            if (figure.IsWhite())
                 whiteHasKing = true;
             
-            if (figure.PlayerColor == PlayerColor.Black)
+            if (figure.IsBlack())
                 blackHasKing = true;
         }
         

@@ -2,7 +2,7 @@
 
 public interface IFigureTypeInfo
 {
-    FigureId FigureId { get; }
+    Figure Figure { get; }
 
     /// <summary>
     ///     Name shown in menus and helps

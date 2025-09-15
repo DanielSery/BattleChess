@@ -8,7 +8,7 @@ namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Crossbow : ICrownsGuardFigureTypeInfo
 {
-    public FigureId FigureId => FigureId.Crossbow;
+    public Figure Figure => Figure.Crossbow;
 
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {

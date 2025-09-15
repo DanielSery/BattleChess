@@ -80,14 +80,14 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateCurrentPlayerUnlockedFigure(FigureId unlockedFigureId, CancellationToken cancellationToken)
+    public async Task<Result> UpdateCurrentPlayerUnlockedFigure(Figure unlockedFigure, CancellationToken cancellationToken)
     {
         if (LoggedInPlayer is null)
             return Result.Fail("No logged in player");
 
         var unlockedFiguresArray = new BitArray(LoggedInPlayer.UnlockedFigures)
         {
-            [(int)unlockedFigureId] = true
+            [(int)unlockedFigure] = true
         };
 
         var newUnlockedFigures = new byte[LoggedInPlayer.UnlockedFigures.Length];
