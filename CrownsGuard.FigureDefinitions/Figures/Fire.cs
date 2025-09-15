@@ -15,10 +15,6 @@ public class Fire : ICrownsGuardFigureTypeInfo
             { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{GetType().Name}.png", UriKind.Absolute) },
         };
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
-    {
-    }
-
     public static void OnDied(BoardEvent boardEvent, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
         if (!board.TryGetFigure(boardEvent.SourcePosition, out Figure figure))

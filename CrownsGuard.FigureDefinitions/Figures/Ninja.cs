@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -24,11 +22,11 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
 
@@ -57,11 +55,11 @@ public class Ninja : ICrownsGuardFigureTypeInfo
         if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
             !targetFigure.IsWalkable())
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
+            action = new FigureAction(FigureActionType.Move, Position.None, Position.None, sourceFigure, Figure.Empty);
             return false;
         }
 
-        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
         return true;
     }
 }

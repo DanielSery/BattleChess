@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.Core.Players;
 using CrownsGuard.Game.Timers;
 

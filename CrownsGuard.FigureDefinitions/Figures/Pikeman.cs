@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -38,7 +36,7 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
 
@@ -53,11 +51,11 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
     }

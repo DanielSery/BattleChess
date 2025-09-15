@@ -1,7 +1,6 @@
 ﻿using AwesomeAssertions;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Players;
-using CrownsGuard.Game.Helpers;
 
 namespace CrownsGuard.Game.Test.Helpers;
 

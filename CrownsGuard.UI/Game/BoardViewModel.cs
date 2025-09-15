@@ -9,7 +9,6 @@ using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
-using CrownsGuard.AI;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -229,7 +228,8 @@ public sealed class BoardViewModel : ViewModelBase
             return;
 
         var actionsStack = new Stack<FigureAction>();
-        FigureActionsResolver.GetPossibleActions(clickedTileInfo.Position, _gameService.Board, actionsStack);
+        var figure = _gameService.Board[clickedTileInfo.Position.GetIndex()];
+        FigureActionsResolver.GetPossibleActions(clickedTileInfo.Position.GetIndex(), figure, _gameService.Board, actionsStack);
         foreach (var possibleAction in actionsStack)
         {
             if (!possibleAction.FigureActionType.IsExecutable())
@@ -288,7 +288,8 @@ public sealed class BoardViewModel : ViewModelBase
         var fromTile = Tiles[from.GetIndex()];
         SelectedTileInfo = fromTile;
         var actionsStack = new Stack<FigureAction>();
-        FigureActionsResolver.GetPossibleActions(from, _gameService.Board, actionsStack);
+        var figure = _gameService.Board[from.GetIndex()];
+        FigureActionsResolver.GetPossibleActions(from.GetIndex(), figure, _gameService.Board, actionsStack);
         foreach (var action in actionsStack)
         {
             if (action.SourcePosition == from &&

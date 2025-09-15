@@ -1,7 +1,4 @@
-﻿
-using System.Diagnostics;
-using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -24,7 +21,7 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
             
             if (targetFigure.IsWalkable() || targetFigure.GetFigureType() == Figure.Explosives)
             {
-                actions.Push(new FigureAction(FigureActionType.AlchemistMove, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.AlchemistMove, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
     }

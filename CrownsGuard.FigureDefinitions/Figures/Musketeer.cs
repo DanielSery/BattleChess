@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -51,12 +49,12 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions.Push(new FigureAction(FigureActionType.RangedAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.RangedAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                     break;
                 }
                 else if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                 }
                 else
                 {

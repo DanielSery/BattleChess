@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -23,7 +21,7 @@ public class Builder : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
         
@@ -37,11 +35,11 @@ public class Builder : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsEmpty())
             {
-                actions.Push(new FigureAction(FigureActionType.BuildWall, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.BuildWall, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
             else if (targetFigure.GetFigureType() == Figure.Wall)
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
     }

@@ -1,7 +1,5 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -22,7 +20,7 @@ public class Spartan : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
     }
@@ -32,7 +30,6 @@ public class Spartan : ICrownsGuardFigureTypeInfo
         if (action.FigureActionType == FigureActionType.Move)
         {
             board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-            var sourceFigure = board[action.SourcePosition.GetIndex()];
             var attackedPosition = action.TargetPosition + action.TargetPosition - action.SourcePosition;
 
             if (!board.TryGetFigure(attackedPosition, out var targetFigure))
@@ -40,7 +37,7 @@ public class Spartan : ICrownsGuardFigureTypeInfo
                 return;
             }
 
-            if (sourceFigure.CanAttack(targetFigure))
+            if (action.SourceFigure.CanAttack(targetFigure))
             {
                 board.KillWithoutMove(action.TargetPosition, attackedPosition, onEvent);
             }

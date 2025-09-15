@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -14,7 +12,7 @@ public class Peasant : ICrownsGuardFigureTypeInfo
     public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         var direction = sourceFigure.IsBlack() ? 1 : -1;
-        if (TryGetMoveAction(board, sourcePosition, new Position(0, (sbyte)(1 * direction)), out var attackAction))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var attackAction))
         {
             actions.Push(attackAction);
         }
@@ -41,32 +39,32 @@ public class Peasant : ICrownsGuardFigureTypeInfo
         var attackPosition = sourcePosition + relativePosition;
         if (!board.TryGetFigure(attackPosition, out var targetFigure))
         {
-            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
             return false;
         }
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            action = new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
             return false;
         }
 
-        action = new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
         return true;
     }
 
-    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Position relativePosition,
+    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
         if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
             !targetFigure.IsWalkable())
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
+            action = new FigureAction(FigureActionType.Move, Position.None, Position.None, sourceFigure, Figure.Empty);
             return false;
         }
 
-        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
         return true;
     }
 }

@@ -1,16 +1,10 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
 
 public class Trench : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Trench;
-
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
-    {
-    }
 
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>

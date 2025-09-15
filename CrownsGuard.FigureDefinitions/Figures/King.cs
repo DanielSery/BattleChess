@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -23,16 +21,16 @@ public class King : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
 
@@ -54,11 +52,11 @@ public class King : ICrownsGuardFigureTypeInfo
                     board[2].IsEmpty() &&
                     board[3].IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(2, 0)));
+                    actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(2, 0), sourceFigure, Figure.Empty));
                 }
                 else
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourcePosition, new Position(2, 0)));
+                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourcePosition, new Position(2, 0), sourceFigure, Figure.Empty));
                 }
             }
 
@@ -67,11 +65,11 @@ public class King : ICrownsGuardFigureTypeInfo
                 if (board[5].IsEmpty() &&
                     board[6].IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(6, 0)));
+                    actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(6, 0), sourceFigure, Figure.Empty));
                 }
                 else
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourcePosition, new Position(6, 0)));
+                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourcePosition, new Position(6, 0), sourceFigure, Figure.Empty));
                 }
             }
         }
@@ -88,14 +86,14 @@ public class King : ICrownsGuardFigureTypeInfo
                 board[new Position(2, 7).GetIndex()].IsEmpty() &&
                 board[new Position(3, 7).GetIndex()].IsEmpty())
             {
-                actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(2, 7)));
+                actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(2, 7), sourceFigure, Figure.Empty));
             }
 
             if (sourceFigure.IsAllyTo(board[new Position(7, 7).GetIndex()]) &&
                 board[new Position(5, 7).GetIndex()].IsEmpty() &&
                 board[new Position(6, 7).GetIndex()].IsEmpty())
             {
-                actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(6, 7)));
+                actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(6, 7), sourceFigure, Figure.Empty));
             }
         }
     }

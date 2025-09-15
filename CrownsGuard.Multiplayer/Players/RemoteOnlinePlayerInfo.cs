@@ -1,5 +1,3 @@
-using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
 using CrownsGuard.Multiplayer.Game;

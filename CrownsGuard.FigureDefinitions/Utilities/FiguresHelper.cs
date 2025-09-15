@@ -10,33 +10,32 @@ internal static class FiguresHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsEmpty(this Figure checkedFigure)
     {
-        return checkedFigure.GetFigureType() == Figure.Empty;
+        return checkedFigure == Figure.Empty;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsWalkable(this Figure checkedFigure)
     {
-        return checkedFigure.GetFigureType() <= Figure.LastWalkableFigure;
+        return (checkedFigure & Figure.FigureMask) <= Figure.LastWalkableFigure;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CanAttack(this Figure yoursFigure, Figure checkedFigure)
     {
-        return yoursFigure.GetFigureColor() != checkedFigure.GetFigureColor() &&
-               checkedFigure.GetFigureType() > Figure.LastNonAttackableFigure;
+        return ((yoursFigure ^ checkedFigure) & Figure.PlayerMask) != Figure.Empty &&
+               (checkedFigure & Figure.FigureMask) > Figure.LastNonAttackableFigure;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsAllyTo(this Figure yoursFigure, Figure checkedFigure)
     {
-        return yoursFigure.GetFigureColor() == checkedFigure.GetFigureColor();
+        return ((yoursFigure ^ checkedFigure) & Figure.PlayerMask) == Figure.Empty;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsEnemyTo(this Figure yoursFigure, Figure checkedFigure)
     {
-        return yoursFigure.GetFigureColor() != checkedFigure.GetFigureColor() &&
-               !checkedFigure.IsNeutral();
+        return ((yoursFigure ^ checkedFigure) & Figure.PlayerMask) == Figure.PlayerMask;
     }
 
     public static void CreateFigure(this Span<Figure> board, Position position, Figure createdFigure, Action<BoardEvent, Span<Figure>> onEvent)

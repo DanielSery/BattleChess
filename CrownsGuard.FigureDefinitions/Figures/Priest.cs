@@ -1,7 +1,5 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -18,7 +16,7 @@ public class Priest : ICrownsGuardFigureTypeInfo
             {
                 if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
                 }
                 else
                 {
@@ -33,12 +31,12 @@ public class Priest : ICrownsGuardFigureTypeInfo
             {
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                     break;
                 }
                 else if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                 }
                 else
                 {
@@ -58,7 +56,7 @@ public class Priest : ICrownsGuardFigureTypeInfo
             if (sourceFigure.IsAllyTo(targetFigure) ||
                 sourceFigure.IsEnemyTo(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.MakeUnitKing, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MakeUnitKing, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
     }

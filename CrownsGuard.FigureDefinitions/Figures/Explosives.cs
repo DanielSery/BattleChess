@@ -1,6 +1,5 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -14,10 +13,6 @@ public class Explosives : ICrownsGuardFigureTypeInfo
         {
             { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{GetType().Name}.png", UriKind.Absolute) },
         };
-
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
-    {
-    }
 
     public static void OnAttacked(BoardEvent boardEvent, Figure[] board, Action<BoardEvent, Span<Figure>> onEvent)
     {

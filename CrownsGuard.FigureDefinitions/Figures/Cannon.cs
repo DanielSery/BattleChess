@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -48,20 +46,18 @@ public class Cannon : ICrownsGuardFigureTypeInfo
             
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.CannonAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.CannonAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleCannonAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleCannonAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
     }
 
     public static void ExecuteAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var sourceFigure = board[action.SourcePosition.GetIndex()];
-        var attackPositions = sourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
-
+        var attackPositions = action.SourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
         foreach (var attackPosition in attackPositions)
         {
             var targetPosition = action.SourcePosition + attackPosition;

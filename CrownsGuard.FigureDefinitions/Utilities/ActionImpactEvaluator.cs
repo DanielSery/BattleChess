@@ -3,7 +3,6 @@
 using System.Runtime.CompilerServices;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
 
@@ -18,37 +17,40 @@ public class ActionImpactEvaluator
         }
         
         var actionType = action.FigureActionType & FigureActionType.ActionTypeMask;
-        if (actionType == FigureActionType.IsTargetDependantMovingAttack)
+        switch (actionType)
         {
-            var sourceFigure = board[action.SourcePosition.GetIndex()];
-            var targetFigure = board[action.TargetPosition.GetIndex()];
-            var sourceFigureValue = sourceFigure.GetFigureValue();
-            var targetFigureValue = targetFigure.GetFigureValue();
-
-            if (sourceFigure.GetFigureColor() == targetFigure.GetFigureColor())
+            case FigureActionType.IsTargetDependantMovingAttack:
             {
-                return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * sourceFigureValue * sourceFigureValue / (targetFigureValue + sourceFigureValue);
-            }
+                var sourceFigureValue = (int)action.SourceFigure;
+                var targetFigureValue = (int)action.TargetFigure;
 
-            var attackerAdvantage = currentFigureColor == sourceFigure.GetFigureColor() ? 100 : 0;
-            return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * 10 * targetFigureValue / (targetFigureValue + sourceFigureValue) + attackerAdvantage;
-        }
-        else if (actionType == FigureActionType.IsBlindMovingAttack)
-        {
-            var sourceFigure = board[action.SourcePosition.GetIndex()];
-            var attackerAdvantage = currentFigureColor == sourceFigure.GetFigureColor() ? 100 : 0;
-            return (int)(action.FigureActionType & FigureActionType.ActionValueMask) + attackerAdvantage;
-        }
-        else if (action.FigureActionType.HasFlag(FigureActionType.IsTargetDependant))
-        {
-            var sourceFigure = board[action.SourcePosition.GetIndex()];
-            var attackerAdvantage = currentFigureColor == sourceFigure.GetFigureColor() ? 100 : 0;
-            var targetFigureValue = board[action.TargetPosition.GetIndex()].GetFigureValue();
-            return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * targetFigureValue + attackerAdvantage;
-        }
-        else
-        {
-            return (int)(action.FigureActionType & FigureActionType.ActionValueMask);
+                if (action.SourceFigure.IsSameColor(action.TargetFigure))
+                {
+                    return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * sourceFigureValue * sourceFigureValue / ((targetFigureValue + sourceFigureValue) * 100);
+                }
+
+                var attackerAdvantage = currentFigureColor == action.SourceFigure.GetFigureColor() ? 100 : 0;
+                return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * 10 * targetFigureValue / (targetFigureValue + sourceFigureValue) + attackerAdvantage;
+            }
+            case FigureActionType.IsBlindMovingAttack:
+            {
+                var attackerAdvantage = currentFigureColor == action.SourceFigure.GetFigureColor() ? 100 : 0;
+                return (int)(action.FigureActionType & FigureActionType.ActionValueMask) + attackerAdvantage;
+            }
+            case 
+            default:
+            {
+                if (action.FigureActionType.HasFlag(FigureActionType.IsTargetDependant))
+                {
+                    var attackerAdvantage = currentFigureColor == action.SourceFigure.GetFigureColor() ? 100 : 0;
+                    var targetFigureValue = (int)board[action.TargetPosition.GetIndex()] / 100;
+                    return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * targetFigureValue + attackerAdvantage;
+                }
+                else
+                {
+                    return (int)(action.FigureActionType & FigureActionType.ActionValueMask);
+                }
+            }
         }
     }
 }

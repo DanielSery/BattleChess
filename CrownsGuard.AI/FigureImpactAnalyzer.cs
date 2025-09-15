@@ -3,9 +3,7 @@
 using System.Collections.Frozen;
 using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions;
 using CrownsGuard.FigureDefinitions.Utilities;
 
@@ -77,7 +75,7 @@ public static class FigureImpactAnalyzer
 
             var impact = 0;
             var countBefore = actionsStack.Count;
-            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard, actionsStack);
+            FigureActionsResolver.GetPossibleActions(i, figure, clonedBoard, actionsStack);
             var addedElements = actionsStack.Count - countBefore;
 
             for (var j = 0; j < addedElements; j++)
@@ -109,7 +107,7 @@ public static class FigureImpactAnalyzer
 
             var impact = 0;
             var countBefore = actionsStack.Count;
-            FigureActionsResolver.GetPossibleActions(Position.FromIndex(i), clonedBoard, actionsStack);
+            FigureActionsResolver.GetPossibleActions(i, figure, clonedBoard, actionsStack);
             var addedElements = actionsStack.Count - countBefore;
 
             for (var j = 0; j < addedElements; j++)

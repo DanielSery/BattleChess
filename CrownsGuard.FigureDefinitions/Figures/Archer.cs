@@ -1,8 +1,5 @@
-﻿using System.Diagnostics;
-using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -23,7 +20,7 @@ public class Archer : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
 
@@ -54,12 +51,12 @@ public class Archer : ICrownsGuardFigureTypeInfo
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions.Push(new FigureAction(FigureActionType.RangedAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.RangedAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                     break;
                 }
                 else if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                 }
                 else
                 {

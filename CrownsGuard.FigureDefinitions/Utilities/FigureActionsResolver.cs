@@ -9,12 +9,16 @@ namespace CrownsGuard.FigureDefinitions.Utilities;
 public static class FigureActionsResolver
 {
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    public static void GetPossibleActions(Position sourcePosition, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var sourceFigure = board[sourcePosition.GetIndex()];
+        var sourcePosition = Position.FromIndex(sourceIndex);
         switch (sourceFigure.GetFigureType())
         {
-            case Figure.Empty: Empty.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
+            case Figure.Empty:
+            case Figure.Explosives:
+            case Figure.Fire:
+            case Figure.Trench:
+            case Figure.Wall: break;
             case Figure.Alchemist: Alchemist.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Archer: Archer.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Barbarian: Barbarian.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
@@ -31,8 +35,6 @@ public static class FigureActionsResolver
             case Figure.Dogs: Dogs.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Dragon: Dragon.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Elephant: Elephant.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Explosives: Explosives.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Fire: Fire.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.JapanArcher: JapanArcher.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.King: King.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Knight: Knight.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
@@ -55,8 +57,6 @@ public static class FigureActionsResolver
             case Figure.Spartan: Spartan.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Spearman: Spearman.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Trader: Trader.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Trench: Trench.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Wall: Wall.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Warhammer: Warhammer.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Whiplash: Whiplash.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
             case Figure.Wizzard: Wizzard.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;

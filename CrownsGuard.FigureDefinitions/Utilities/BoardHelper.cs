@@ -25,7 +25,7 @@ internal static class BoardHelper
         if (position.Y is < 0 or >= Constants.BoardLength ||
             position.X is < 0 or >= Constants.BoardLength)
         {
-            tile = new Figure();
+            tile = Figure.Empty;
             return false;
         }
 
@@ -40,7 +40,7 @@ internal static class BoardHelper
         if (position.Y is < 0 or >= Constants.BoardLength || 
             position.X is < 0 or >= Constants.BoardLength)
         {
-            tile = new Figure();
+            tile = Figure.Empty;
             return false;
         }
 

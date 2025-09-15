@@ -4,7 +4,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;
 

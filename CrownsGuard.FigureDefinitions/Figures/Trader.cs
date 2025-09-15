@@ -1,7 +1,5 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -22,15 +20,15 @@ public class Trader : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
             else if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
 
@@ -39,7 +37,7 @@ public class Trader : ICrownsGuardFigureTypeInfo
             var targetFigure = board[i];
             if (sourceFigure.IsAllyTo(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.SwapWithFigure, sourcePosition, Position.FromIndex(i)));
+                actions.Push(new FigureAction(FigureActionType.SwapWithFigure, sourcePosition, Position.FromIndex(i), sourceFigure, targetFigure));
             }
         }
     }

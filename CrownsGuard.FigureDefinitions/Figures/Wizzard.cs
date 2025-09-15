@@ -1,8 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -30,7 +27,7 @@ public class Wizzard : ICrownsGuardFigureTypeInfo
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.WizzardMove, sourcePosition, targetPosition));
+                actions.Push(new FigureAction(FigureActionType.WizzardMove, sourcePosition, targetPosition, sourceFigure, targetFigure));
             }
         }
     }

@@ -1,8 +1,6 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -41,7 +39,7 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             actions.Push(attackAction2);
         }
 
-        if (TryGetMoveAction(board, sourcePosition, new Position(0, 1), out var moveAction1))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 1), out var moveAction1))
         {
             actions.Push(moveAction1);
         }
@@ -51,7 +49,7 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
         }
 
         if (sourcePosition.Y == 1 &&
-            TryGetMoveAction(board, sourcePosition, new Position(0, 2), out var moveAction2))
+            TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), out var moveAction2))
         {
             actions.Push(moveAction2);
         }
@@ -80,7 +78,7 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             actions.Push(attackAction2);
         }
 
-        if (TryGetMoveAction(board, sourcePosition, new Position(0, -1), out var moveAction1))
+        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, -1), out var moveAction1))
         {
             actions.Push(moveAction1);
         }
@@ -90,7 +88,7 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
         }
 
         if (sourcePosition.Y == 6 &&
-            TryGetMoveAction(board, sourcePosition, new Position(0, -2), out var moveAction2))
+            TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, -2), out var moveAction2))
         {
             actions.Push(moveAction2);
         }
@@ -102,17 +100,17 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
         var attackPosition = sourcePosition + relativePosition;
         if (!board.TryGetFigure(attackPosition, out var targetFigure))
         {
-            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
             return false;
         }
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            action = new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
             return true;
         }
 
-        action = new FigureAction(FigureActionType.RangedAttack, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.RangedAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
         return true;
     }
 
@@ -122,44 +120,44 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
         var attackPosition = sourcePosition + relativePosition;
         if (!board.TryGetFigure(attackPosition, out var targetFigure))
         {
-            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
             return false;
         }
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            action = new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
             return true;
         }
 
         if (attackPosition.Y is 7 or 0)
         {
-            action = new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition, sourceFigure, targetFigure);
             return true;
         }
 
-        action = new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
         return true;
     }
 
-    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Position relativePosition,
+    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
         out FigureAction action)
     {
         var attackPosition = sourcePosition + relativePosition;
         if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
             !targetFigure.IsWalkable())
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None);
+            action = new FigureAction(FigureActionType.Move, Position.None, Position.None, sourceFigure, Figure.Empty);
             return false;
         }
 
         if (attackPosition.Y is 7 or 0)
         {
-            action = new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition);
+            action = new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
             return true;
         }
 
-        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition);
+        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
         return true;
     }
 }

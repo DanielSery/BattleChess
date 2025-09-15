@@ -2,7 +2,6 @@
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.FigureDefinitions.Figures;
 
 namespace CrownsGuard.FigureDefinitions.Utilities;
@@ -88,11 +87,10 @@ public static class FigureActionExecutor
 
     private static void ChangeToQueen(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var sourceFigureType = board[action.SourcePosition.GetIndex()].GetFigureType();
+        var sourceFigureType = action.SourceFigure.GetFigureType();
         var targetIndex = action.TargetPosition.GetIndex();
-        var targetFigure = board[targetIndex];
 
-        if (targetFigure.IsWalkable())
+        if (action.TargetFigure.IsWalkable())
         {
             board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
             if (board[targetIndex].GetFigureType() == sourceFigureType)
@@ -101,13 +99,14 @@ public static class FigureActionExecutor
         else
         {
             board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
-            if (board[targetIndex]. GetFigureType() == sourceFigureType)
+            if (board[targetIndex].GetFigureType() == sourceFigureType)
                 board.ChangeFigureType(action.TargetPosition, action.TargetPosition, Figure.Queen, onEvent);
         }
     }
 
     private static void MeeleePierceAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
+        var sourceFigureType = action.SourceFigure.GetFigureType();
         var move = action.TargetPosition - action.SourcePosition;
         if (move.X is <= 1 and >= -1 &&
             move.Y is <= 1 and >= -1)
@@ -122,7 +121,7 @@ public static class FigureActionExecutor
 
             board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
             var figure = board[(sourcePosition + smallMove).GetIndex()];
-            if (figure.GetFigureType() != Figure.Blade)
+            if (figure.GetFigureType() != sourceFigureType)
                 return;
 
             board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);
@@ -136,7 +135,7 @@ public static class FigureActionExecutor
                 board.MoveFigure(action.SourcePosition, step1Position, onEvent);
             else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
 
-            if (board[step1Position.GetIndex()].GetFigureType() != Figure.Elephant)
+            if (board[step1Position.GetIndex()].GetFigureType() != sourceFigureType)
                 return;
 
             var step2Position = action.SourcePosition + smallMove + smallMove;
@@ -144,7 +143,7 @@ public static class FigureActionExecutor
                 board.MoveFigure(step1Position, step2Position, onEvent);
             else board.KillWithMove(step1Position, step2Position, onEvent);
 
-            if (board[step2Position.GetIndex()].GetFigureType() != Figure.Elephant)
+            if (board[step2Position.GetIndex()].GetFigureType() != sourceFigureType)
                 return;
 
             if (board[action.TargetPosition.GetIndex()].IsWalkable())

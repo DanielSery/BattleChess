@@ -3,7 +3,6 @@ using CrownsGuard.UI.Game;
 using CrownsGuard.UI.Multiplayer;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Settings;
-using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
 

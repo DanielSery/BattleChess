@@ -1,7 +1,5 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -31,13 +29,13 @@ public class Elephant : ICrownsGuardFigureTypeInfo
 
                 if (!isAttack && targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition));
-                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                 }
                 else
                 {
                     isAttack = true;
-                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourcePosition, targetPosition));
+                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
                 }
             }
         }

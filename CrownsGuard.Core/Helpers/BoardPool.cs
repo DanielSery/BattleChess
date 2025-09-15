@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using CrownsGuard.Core.Figures;
 
 namespace CrownsGuard.Core.Helpers;
 
