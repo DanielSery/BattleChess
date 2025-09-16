@@ -10,9 +10,6 @@ public static class FigureActionsResolver
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        if (sourceFigure <= Figure.LastNeutralFigure)
-            return;
-        
         switch (sourceFigure.GetFigureType())
         {
             case Figure.Empty:

@@ -49,6 +49,12 @@ public static class FigureHelper
     {
         return figure.HasFlag(Figure.IsBlack);
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsNeutralFigure(this Figure figure)
+    {
+        return figure <= Figure.LastNeutralFigure;
+    }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNeutral(this Figure figure)

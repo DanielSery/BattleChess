@@ -12,11 +12,6 @@ public class ActionImpactEvaluator
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public static int EvaluateAction(ReadOnlySpan<Figure> board, FigureAction action, Figure currentFigureColor)
     {
-        if (action.FigureActionType == FigureActionType.Move)
-        {
-            return Constants.MoveValue;
-        }
-        
         var actionType = action.FigureActionType & FigureActionType.EvaluationMask;
         switch (actionType)
         {
