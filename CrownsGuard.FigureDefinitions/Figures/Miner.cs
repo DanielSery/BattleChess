@@ -43,7 +43,7 @@ public class Miner : ICrownsGuardFigureTypeInfo
     {
         board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
         var difference = Position.FromIndex(action.TargetIndex - action.SourceIndex);
-        var relative = new Position((sbyte) Math.Sign(difference.X), (sbyte) Math.Sign(difference.Y));
+        var relative = (short)(Math.Sign(difference.X) + Math.Sign(difference.Y) * PositionsGroups.YOffset);
         
         for (var targetIndex = action.SourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
         {

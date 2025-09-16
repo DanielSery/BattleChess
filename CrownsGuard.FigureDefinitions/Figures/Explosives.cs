@@ -16,17 +16,17 @@ public class Explosives : ICrownsGuardFigureTypeInfo
 
     public static void OnAttacked(BoardEvent boardEvent, Figure[] board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(-1, -1), onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(-1, 0), onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(-1, 1), onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(0, -1), onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(0, 1), onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(1, -1), onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(1, 0), onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(1, 1), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +-1+-1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +-1+0*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +-1+1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +0+-1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +0+1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +1+-1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +1+0*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +1+1*PositionsGroups.YOffset, onEvent);
     }
     
-    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, Position relative,
+    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, short relative,
         Action<BoardEvent, Span<Figure>> onEvent)
     {
         var targetIndex = sourceIndex.GetWithOffset(relative);

@@ -55,8 +55,8 @@ public class GameSetupViewModel : ViewModelBase
     {
         var mapBlueprint = _mapsViewModel.TeamMap.ExtendFor2Players();
 
-        // var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
-        var whitePlayer = new AiControlledPlayer(PlayerColor.White, mapBlueprint.Figures, _boardViewModel.RequestPlayMove, Difficulty);
+        var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
+        // var whitePlayer = new AiControlledPlayer(PlayerColor.White, mapBlueprint.Figures, _boardViewModel.RequestPlayMove, Difficulty);
         var blackPlayer = new AiControlledPlayer(PlayerColor.Black, mapBlueprint.Figures, _boardViewModel.RequestPlayMove, Difficulty);
 
         _boardViewModel.StartLocalGame(mapBlueprint, whitePlayer, blackPlayer);

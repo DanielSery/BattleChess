@@ -13,31 +13,31 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
     {
         if (sourceFigure.IsWhite())
         {
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.P1M1, actions);
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.M1M1, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, +1+-1*PositionsGroups.YOffset, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, +-1+-1*PositionsGroups.YOffset, actions);
             
-            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0M1, actions);
+            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, +0+-1*PositionsGroups.YOffset, actions);
         
             if (sourceIndex >> 3 == 6)
             {
-                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0M2, actions);
+                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, +0+-2*PositionsGroups.YOffset, actions);
             }
         }
         else
         {
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.P1P1, actions);
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.M1P1, actions);
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +1+1*PositionsGroups.YOffset, actions);
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +-1+1*PositionsGroups.YOffset, actions);
             
-            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0P1, actions);
+            TryAddBlackMoveAction(board, sourceIndex, sourceFigure, +0+1*PositionsGroups.YOffset, actions);
         
             if (sourceIndex >> 3 == 1)
             {
-                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0P2, actions);
+                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, +0+-2*PositionsGroups.YOffset, actions);
             }
         }
     }
 
-    private static void TryAddBlackAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddBlackAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);
@@ -59,7 +59,7 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddWhiteAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddWhiteAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);
@@ -81,7 +81,7 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddBlackMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddBlackMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);
@@ -102,7 +102,7 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddWhiteMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddWhiteMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);

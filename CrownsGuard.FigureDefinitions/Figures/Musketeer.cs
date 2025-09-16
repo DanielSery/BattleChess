@@ -9,14 +9,14 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Musketeer;
 
-    private static readonly Position[] BlackAttackDirections =
+    private static readonly short[] BlackAttackDirections =
     [
-        new(-1, 1), new(0, 1), new(1, 1)
+        +-1+1*PositionsGroups.YOffset, +0+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset
     ];
 
-    private static readonly Position[] WhiteAttackDirections =
+    private static readonly short[] WhiteAttackDirections =
     [
-        new(-1, -1), new(0, -1), new(1, -1)
+        +-1+-1*PositionsGroups.YOffset, +0+-1*PositionsGroups.YOffset, +1+-1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

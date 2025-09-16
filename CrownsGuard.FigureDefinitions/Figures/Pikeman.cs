@@ -9,19 +9,19 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Pikeman;
 
-    private static readonly Position[] BlackAttackPositions =
+    private static readonly short[] BlackAttackPositions =
     [
-        new(-1, 1), new(1, 1)
+        +-1+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset
     ];
 
-    private static readonly Position[] WhiteAttackPositions =
+    private static readonly short[] WhiteAttackPositions =
     [
-        new(-1, 1), new(1, 1)
+        +-1+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset
     ];
 
-    private static readonly Position[] MovePositions =
+    private static readonly short[] MovePositions =
     [
-        new(-1, 0), new(1, 0), new(0, -1), new(0, 1)
+        +-1+0*PositionsGroups.YOffset, +1+0*PositionsGroups.YOffset, +0+-1*PositionsGroups.YOffset, +0+1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

@@ -30,31 +30,31 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
         var movement = action.TargetIndex - action.SourceIndex;
         if (movement == +1+0*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, new Position(1, -1), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(1, 0), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(1, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, +1+-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +1+0*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +1+1*PositionsGroups.YOffset, onEvent);
         }
         else if (movement == -1+0*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, new Position(-1, -1), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(-1, 0), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(-1, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, +-1+-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +-1+0*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +-1+1*PositionsGroups.YOffset, onEvent);
         }
         else if (movement == +0+1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, new Position(-1, 1), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(0, 1), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(1, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, +-1+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +0+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +1+1*PositionsGroups.YOffset, onEvent);
         }
         else if (movement == +0-1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, new Position(-1, -1), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(0, -1), onEvent);
-            TryDestroyTile(board, action.TargetIndex, new Position(1, -1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, +-1+-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +0+-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, +1+-1*PositionsGroups.YOffset, onEvent);
         }
     }
     
-    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, Position relative,
+    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, short relative,
         Action<BoardEvent, Span<Figure>> onEvent)
     {
         var targetIndex = sourceIndex.GetWithOffset(relative);

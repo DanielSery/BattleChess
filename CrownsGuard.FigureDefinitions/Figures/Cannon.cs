@@ -9,14 +9,18 @@ public class Cannon : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Cannon;
 
-    private static readonly Position[] BlackAttackPositions =
+    private static readonly short[] BlackAttackPositions =
     [
-        new(0, 2), new(0, 3), new(0, 4),
+        +0+2*PositionsGroups.YOffset, 
+        +0+3*PositionsGroups.YOffset, 
+        +0+4*PositionsGroups.YOffset,
     ];
 
-    private static readonly Position[] WhiteAttackPositions =
+    private static readonly short[] WhiteAttackPositions =
     [
-        new(0, -2), new(0, -3), new(0, -4),
+        +0+-2*PositionsGroups.YOffset, 
+        +0+-3*PositionsGroups.YOffset, 
+        +0+-4*PositionsGroups.YOffset,
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
@@ -34,7 +38,7 @@ public class Cannon : ICrownsGuardFigureTypeInfo
         }
         
         var attackPositions = sourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
-        foreach (Position relative in attackPositions)
+        foreach (var relative in attackPositions)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;

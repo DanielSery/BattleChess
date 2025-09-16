@@ -8,11 +8,11 @@ public class Wizzard : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Wizzard;
 
-    private static readonly Position[] MovementPositions =
+    private static readonly short[] MovementPositions =
     [
-        new(-2, -2), new(-2, 0), new(-2, 2),
-        new(0, -2), new(0, 2),
-        new(2, -2), new(2, 0), new(2, 2)
+        +-2+-2*PositionsGroups.YOffset, +-2+0*PositionsGroups.YOffset, +-2+2*PositionsGroups.YOffset,
+        +0+-2*PositionsGroups.YOffset, +0+2*PositionsGroups.YOffset,
+        +2+-2*PositionsGroups.YOffset, +2+0*PositionsGroups.YOffset, +2+2*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
@@ -38,17 +38,17 @@ public class Wizzard : ICrownsGuardFigureTypeInfo
             board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
             if (movement % 8 == movement / 8)
             {
-                TryDestroyTile(board, action.SourceIndex, new Position(1, 0), onEvent);
-                TryDestroyTile(board, action.SourceIndex, new Position(-1, 0), onEvent);
-                TryDestroyTile(board, action.SourceIndex, new Position(0, 1), onEvent);
-                TryDestroyTile(board, action.SourceIndex, new Position(0, -1), onEvent);
+                TryDestroyTile(board, action.SourceIndex, +1+0*PositionsGroups.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, +-1+0*PositionsGroups.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, +0+1*PositionsGroups.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, +0+-1*PositionsGroups.YOffset, onEvent);
             }
             else
             {
-                TryDestroyTile(board, action.SourceIndex, new Position(1, -1), onEvent);
-                TryDestroyTile(board, action.SourceIndex, new Position(-1, 1), onEvent);
-                TryDestroyTile(board, action.SourceIndex, new Position(1, 1), onEvent);
-                TryDestroyTile(board, action.SourceIndex, new Position(-1, -1), onEvent);
+                TryDestroyTile(board, action.SourceIndex, +1+-1*PositionsGroups.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, +-1+1*PositionsGroups.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, +1+1*PositionsGroups.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, +-1+-1*PositionsGroups.YOffset, onEvent);
             }
         }
         else
@@ -57,7 +57,7 @@ public class Wizzard : ICrownsGuardFigureTypeInfo
         }
     }
     
-    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, Position relative,
+    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, short relative,
         Action<BoardEvent, Span<Figure>> onEvent)
     {
         var targetIndex = sourceIndex.GetWithOffset(relative);

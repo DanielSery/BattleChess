@@ -29,19 +29,19 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 
         if (sourceFigure.IsBlack())
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(-1, 1), actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(1, 1), actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, new Position(0, 1), actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +-1+1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +1+1*PositionsGroups.YOffset, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, +0+1*PositionsGroups.YOffset, actions);
         }
         else
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(-1, -1), actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(1, -1), actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, new Position(0, -1), actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +-1+-1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +1+-1*PositionsGroups.YOffset, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, +0+-1*PositionsGroups.YOffset, actions);
         }
     }
 
-    private static void TryAddJumpMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddJumpMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var figureIndex = sourceIndex.GetWithOffset(relativePosition);
@@ -65,7 +65,7 @@ public class Ninja : ICrownsGuardFigureTypeInfo
         actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);

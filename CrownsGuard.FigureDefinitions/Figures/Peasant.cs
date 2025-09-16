@@ -13,21 +13,21 @@ public class Peasant : ICrownsGuardFigureTypeInfo
     {
         if (sourceFigure.IsBlack())
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(0, 1), actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(0, 1), actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(-1, 0), actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(1, 0), actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +0+1*PositionsGroups.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, +0+1*PositionsGroups.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, +-1+0*PositionsGroups.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, +1+0*PositionsGroups.YOffset, actions);
         }
         else
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(0, -1), actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(0, -1), actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(-1, 0), actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(1, 0), actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +0+-1*PositionsGroups.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, +0+-1*PositionsGroups.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, +-1+0*PositionsGroups.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, +1+0*PositionsGroups.YOffset, actions);
         }
     }
 
-    private static void TryAddAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);
@@ -43,7 +43,7 @@ public class Peasant : ICrownsGuardFigureTypeInfo
         actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+    private static void TryAddMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
         Stack<FigureAction> actions)
     {
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);

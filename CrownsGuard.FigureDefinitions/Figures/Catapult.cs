@@ -9,16 +9,24 @@ public class Catapult : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Catapult;
 
-    private static readonly Position[] BlackAttackPositions =
+    private static readonly short[] BlackAttackPositions =
     [
-        new (-1, 2), new (1, 2),
-        new (-2, 3), new (0, 3), new (2, 3),
+        +-1+2*PositionsGroups.YOffset, 
+        +1+2*PositionsGroups.YOffset,
+        
+        +-2+3*PositionsGroups.YOffset, 
+        +0+3*PositionsGroups.YOffset, 
+        +2+3*PositionsGroups.YOffset,
     ];
 
-    private static readonly Position[] WhiteAttackPositions =
+    private static readonly short[] WhiteAttackPositions =
     [
-        new (-1, -2), new (1, -2),
-        new (-2, -3), new (0, -3), new (2, -3),
+        +-1+-2*PositionsGroups.YOffset, 
+        +1+-2*PositionsGroups.YOffset,
+        
+        +-2+-3*PositionsGroups.YOffset, 
+        +0+-3*PositionsGroups.YOffset, 
+        +2+-3*PositionsGroups.YOffset,
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

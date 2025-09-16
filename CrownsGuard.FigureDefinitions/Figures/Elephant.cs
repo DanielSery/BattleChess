@@ -8,9 +8,10 @@ public class Elephant : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Elephant;
 
-    private static readonly Position[] Directions =
+    private static readonly short[] Directions =
     [
-        new(0, 1), new(0, -1)
+        +0+1*PositionsGroups.YOffset, 
+        +0+-1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

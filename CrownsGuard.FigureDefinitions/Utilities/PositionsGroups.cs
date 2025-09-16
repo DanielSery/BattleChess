@@ -1,33 +1,33 @@
-using CrownsGuard.Core.GameBoard;
-
 namespace CrownsGuard.FigureDefinitions.Utilities;
 
 public static class PositionsGroups
 {
-    public static readonly Position[] RookDirections =
+    public const int YOffset = 256;
+    
+    public static readonly short[] RookDirections =
     [
-        new(-1, 0), new(1, 0),
-        new(0, -1), new(0, 1)
+        -1+0*YOffset, +1+0*YOffset,
+        +0-1*YOffset, +0+1*YOffset
     ];
     
-    public static readonly Position[] BishopDirections =
+    public static readonly short[] BishopDirections =
     [
-        new(-1, -1), new(1, 1),
-        new(1, -1), new(-1, 1)
+        -1-1*YOffset, +1+1*YOffset,
+        +1-1*YOffset, -1+1*YOffset
     ];
     
-    public static readonly Position[] QueenDirections =
+    public static readonly short[] QueenDirections =
     [
-        new(-1, -1), new(-1, 0), new(-1, 1),
-        new(0, -1), new(0, 1),
-        new(1, -1), new(1, 0), new(1, 1)
+        -1-1*YOffset, -1+0*YOffset, -1+1*YOffset,
+        +0-1*YOffset, +0+1*YOffset,
+        +1-1*YOffset, +1+0*YOffset, +1+1*YOffset
     ];
     
-    public static readonly Position[] KnightPositions =
+    public static readonly short[] KnightPositions =
     [
-        new(-2, -1), new(-2, 1),
-        new(-1, -2), new(-1, 2),
-        new(1, -2), new(1, 2),
-        new(2, -1), new(2, 1)
+        -2-1*YOffset, -2+1*YOffset,
+        -1-2*YOffset, -1+2*YOffset,
+        +1-2*YOffset, +1+2*YOffset,
+        +2-1*YOffset, +2+1*YOffset
     ];
 }

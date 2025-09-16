@@ -9,19 +9,19 @@ public class Spearman : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Spearman;
 
-    private static readonly Position[] AttackPositions =
+    private static readonly short[] AttackPositions =
     [
-        new(-1, 1), new(1, 1), new(-1, -1), new(1, -1)
+        +-1+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset, +-1+-1*PositionsGroups.YOffset, +1+-1*PositionsGroups.YOffset
     ];
 
-    private static readonly Position[] BlackMovePositions =
+    private static readonly short[] BlackMovePositions =
     [
-        new(-1, 0), new(1, 0), new(0, 1)
+        +-1+0*PositionsGroups.YOffset, +1+0*PositionsGroups.YOffset, +0+1*PositionsGroups.YOffset
     ];
 
-    private static readonly Position[] WhiteMovePositions =
+    private static readonly short[] WhiteMovePositions =
     [
-        new(-1, 0), new(1, 0), new(0, -1)
+        +-1+0*PositionsGroups.YOffset, +1+0*PositionsGroups.YOffset, +0+-1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
