@@ -15,12 +15,12 @@ namespace CrownsGuard.AI;
 public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 {
     private readonly Figure[] _board;
-    private readonly Action<Position, Position, TimeSpan> _requestMove;
+    private readonly Action<byte, byte, TimeSpan> _requestMove;
     private readonly int _difficulty;
     private readonly Random _random;
     private FrozenDictionary<int, int[]> _analysis;
 
-    public AiControlledPlayer(PlayerColor playerColor, Figure[] board, Action<Position, Position, TimeSpan> requestMove, int difficulty)
+    public AiControlledPlayer(PlayerColor playerColor, Figure[] board, Action<byte, byte, TimeSpan> requestMove, int difficulty)
     {
         _random = new Random();
         _board = board;
@@ -136,9 +136,9 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 
             var executedAction = resultArray[_random.Next(0, resultArray.Count)];
             Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
-            if (sw.Elapsed < TimeSpan.FromSeconds(1))
-                Thread.Sleep(TimeSpan.FromSeconds(1) - sw.Elapsed);
-            _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
+            // if (sw.Elapsed < TimeSpan.FromSeconds(1))
+                // Thread.Sleep(TimeSpan.FromSeconds(1) - sw.Elapsed);
+            _requestMove.Invoke(executedAction.action.SourceIndex, executedAction.action.TargetIndex, TimeSpan.Zero);
         }
         finally
         {
@@ -220,9 +220,9 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
 
             var executedAction = resultArray[_random.Next(0, resultArray.Count)];
             Console.WriteLine($"Time for turn: {sw.Elapsed}, evaluation: {executedAction.value}");
-            if (sw.Elapsed < TimeSpan.FromSeconds(1))
-                Thread.Sleep(TimeSpan.FromSeconds(1) - sw.Elapsed);
-            _requestMove.Invoke(executedAction.action.SourcePosition, executedAction.action.TargetPosition, TimeSpan.Zero);
+            // if (sw.Elapsed < TimeSpan.FromSeconds(1))
+                // Thread.Sleep(TimeSpan.FromSeconds(1) - sw.Elapsed);
+            _requestMove.Invoke(executedAction.action.SourceIndex, executedAction.action.TargetIndex, TimeSpan.Zero);
         }
         finally
         {

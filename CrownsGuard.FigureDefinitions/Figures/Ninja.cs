@@ -9,57 +9,74 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Ninja;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var direction = sourceFigure.IsBlack() ? 1 : -1;
         foreach (var relative in PositionsGroups.RookDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             }
         }
 
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(-1, (sbyte)(1 * direction)), out var action))
+        if (sourceFigure.IsBlack())
         {
-            actions.Push(action);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(-1, 1), actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(1, 1), actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, new Position(0, 1), actions);
         }
-
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(1, (sbyte)(1 * direction)), out action))
+        else
         {
-            actions.Push(action);
-        }
-
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(2 * direction)), out action) &&
-            board.TryGetFigure(sourcePosition + new Position(0, (sbyte)(1 * direction)), out var jumpedOver) &&
-            jumpedOver.IsAllyTo(sourceFigure))
-        {
-            actions.Push(action);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(-1, -1), actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(1, -1), actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, new Position(0, -1), actions);
         }
     }
 
-    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
-        out FigureAction action)
+    private static void TryAddJumpMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+        Stack<FigureAction> actions)
     {
-        var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
-            !targetFigure.IsWalkable())
+        var figureIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (figureIndex == -1) return;
+        var figure = board[figureIndex];
+
+        if (!sourceFigure.IsAllyTo(figure))
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None, sourceFigure, Figure.Empty);
-            return false;
+            return;
+        }
+        
+        var targetIndex = figureIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
+        
+        if (!targetFigure.IsWalkable())
+        {
+            return;
         }
 
-        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
-        return true;
+        actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
+    }
+
+    private static void TryAddMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+        Stack<FigureAction> actions)
+    {
+        var targetIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
+        
+        if (!targetFigure.IsWalkable())
+        {
+            return;
+        }
+
+        actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
     }
 }

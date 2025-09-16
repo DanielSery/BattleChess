@@ -8,40 +8,36 @@ public class Blade : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Blade;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
             }
         }
         
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var targetPosition = sourcePosition;
+            var targetIndex = sourceIndex;
             for (var i = 1; i <= 3; i++)
             {
-                targetPosition += relative;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    break;
-                }
+                targetIndex = targetIndex.GetWithOffset(relative);
+                if (targetIndex == -1) break;
+                var targetFigure = board[targetIndex];
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
                 else if (targetFigure.IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
                 else
                 {

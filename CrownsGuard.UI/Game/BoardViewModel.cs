@@ -235,7 +235,7 @@ public sealed class BoardViewModel : ViewModelBase
             if (!possibleAction.FigureActionType.IsExecutable())
                 continue;
             
-            Tiles[possibleAction.TargetPosition.GetIndex()].PossibleAction = possibleAction;
+            Tiles[possibleAction.TargetIndex].PossibleAction = possibleAction;
         }
     }
 
@@ -264,12 +264,12 @@ public sealed class BoardViewModel : ViewModelBase
         ClearPossibleActions();
     }
 
-    public void RequestPlayMove(Position from, Position to, TimeSpan turnTimeSpent)
+    public void RequestPlayMove(byte from, byte to, TimeSpan turnTimeSpent)
     {
         SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
 
-        switch (from.GetIndex())
+        switch (from)
         {
             case IMultiplayerGameService.NotRespondingMessage:
                 _gameService.PlayerWin(_gameService.WhitePlayer, WinType.NotResponding, true);
@@ -285,15 +285,15 @@ public sealed class BoardViewModel : ViewModelBase
                 return;
         }
 
-        var fromTile = Tiles[from.GetIndex()];
+        var fromTile = Tiles[from];
         SelectedTileInfo = fromTile;
         var actionsStack = new Stack<FigureAction>();
-        var figure = _gameService.Board[from.GetIndex()];
-        FigureActionsResolver.GetPossibleActions(from.GetIndex(), figure, _gameService.Board, actionsStack);
+        var figure = _gameService.Board[from];
+        FigureActionsResolver.GetPossibleActions(from, figure, _gameService.Board, actionsStack);
         foreach (var action in actionsStack)
         {
-            if (action.SourcePosition == from &&
-                action.TargetPosition == to &&
+            if (action.SourceIndex == from &&
+                action.TargetIndex == to &&
                 action.FigureActionType.IsExecutable())
             {
                 _gameService.EndTurn(turnTimeSpent);
@@ -313,13 +313,13 @@ public sealed class BoardViewModel : ViewModelBase
 
     private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to, TimeSpan turnTimeSpent) e)
     {
-        RequestPlayMove(e.from, e.to, e.turnTimeSpent);
+        RequestPlayMove((byte)e.from.GetIndex(), (byte)e.to.GetIndex(), e.turnTimeSpent);
     }
 
     private void OnEvent(BoardEvent boardEvent, Span<Figure> board)
     {
-        var sourceIndex = boardEvent.SourcePosition.GetIndex();
-        var targetIndex = boardEvent.TargetPosition.GetIndex();
+        var sourceIndex = boardEvent.SourceIndex;
+        var targetIndex = boardEvent.TargetIndex;
         
         switch (boardEvent.EventType)
         {

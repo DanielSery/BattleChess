@@ -23,7 +23,7 @@ public static class FigureHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsSameColor(this Figure figure, Figure otherFigure)
     {
-        return ((figure ^ otherFigure) & Figure.PlayerMask) == Figure.Empty;
+        return (figure & Figure.PlayerMask) == (otherFigure & Figure.PlayerMask);
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

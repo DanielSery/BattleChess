@@ -1,6 +1,7 @@
 // Copyright (c) Veeam Software Group GmbH
 
 using System.Runtime.CompilerServices;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 
@@ -13,18 +14,19 @@ public class ActionImpactEvaluator
     {
         if (action.FigureActionType == FigureActionType.Move)
         {
-            return (int)(action.FigureActionType & FigureActionType.ActionValueMask);
+            return Constants.MoveValue;
         }
         
-        var actionType = action.FigureActionType & FigureActionType.ActionTypeMask;
+        var actionType = action.FigureActionType & FigureActionType.EvaluationMask;
         switch (actionType)
         {
-            case FigureActionType.IsTargetDependantMovingAttack:
+            case FigureActionType.IsTargeted | FigureActionType.IsMovingAttack:
             {
                 var sourceFigureValue = (int)action.SourceFigure;
-                var targetFigureValue = (int)action.TargetFigure;
+                var targetFigure = board[action.TargetIndex];
+                var targetFigureValue = (int)targetFigure;
 
-                if (action.SourceFigure.IsSameColor(action.TargetFigure))
+                if (action.SourceFigure.IsSameColor(targetFigure))
                 {
                     return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * sourceFigureValue * sourceFigureValue / ((targetFigureValue + sourceFigureValue) * 100);
                 }
@@ -32,24 +34,15 @@ public class ActionImpactEvaluator
                 var attackerAdvantage = currentFigureColor == action.SourceFigure.GetFigureColor() ? 100 : 0;
                 return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * 10 * targetFigureValue / (targetFigureValue + sourceFigureValue) + attackerAdvantage;
             }
-            case FigureActionType.IsBlindMovingAttack:
+            case FigureActionType.IsTargeted:
             {
                 var attackerAdvantage = currentFigureColor == action.SourceFigure.GetFigureColor() ? 100 : 0;
-                return (int)(action.FigureActionType & FigureActionType.ActionValueMask) + attackerAdvantage;
+                var targetFigureValue = (int)board[action.TargetIndex] / 100;
+                return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * targetFigureValue + attackerAdvantage;
             }
-            case 
             default:
             {
-                if (action.FigureActionType.HasFlag(FigureActionType.IsTargetDependant))
-                {
-                    var attackerAdvantage = currentFigureColor == action.SourceFigure.GetFigureColor() ? 100 : 0;
-                    var targetFigureValue = (int)board[action.TargetPosition.GetIndex()] / 100;
-                    return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * targetFigureValue + attackerAdvantage;
-                }
-                else
-                {
-                    return (int)(action.FigureActionType & FigureActionType.ActionValueMask);
-                }
+                return (int)(action.FigureActionType & FigureActionType.ActionValueMask);
             }
         }
     }

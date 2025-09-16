@@ -17,16 +17,13 @@ public class Fire : ICrownsGuardFigureTypeInfo
 
     public static void OnDied(BoardEvent boardEvent, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (!board.TryGetFigure(boardEvent.SourcePosition, out Figure figure))
-        {
-            return;
-        }
+        var figure = board[boardEvent.SourceIndex];
 
         if (figure.GetFigureType() == Figure.Dragon)
         {
             return;
         }
         
-        board.Die(boardEvent.SourcePosition, onEvent);
+        board.Die(boardEvent.SourceIndex, onEvent);
     }
 } 

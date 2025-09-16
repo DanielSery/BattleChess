@@ -15,19 +15,19 @@ public static class FigureActionExecutor
         {
             case FigureActionType.PushFigure:
             case FigureActionType.Move:
-                board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+                board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
                 break;
             case FigureActionType.MeeleeAttack:
-                board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+                board.KillWithMove(action.SourceIndex, action.TargetIndex, onEvent);
                 break;
             case FigureActionType.RangedAttack:
-                board.KillWithoutMove(action.SourcePosition, action.TargetPosition, onEvent);
+                board.KillWithoutMove(action.SourceIndex, action.TargetIndex, onEvent);
                 break;
             case FigureActionType.AlchemistMove:
                 Alchemist.ExecuteMove(board, action, onEvent);
                 break;
             case FigureActionType.BuildWall:
-                board.CreateFigure(action.TargetPosition, Figure.Wall, onEvent);
+                board.CreateFigure(action.TargetIndex, Figure.Wall, onEvent);
                 break;
             case FigureActionType.BattleAxeMove:
                 BattleAxe.ExecuteMove(board, action, onEvent);
@@ -45,7 +45,7 @@ public static class FigureActionExecutor
                 ChangeToQueen(board, action, onEvent);
                 break;
             case FigureActionType.ConvertUnit:
-                board.ConvertUnit(action.SourcePosition, action.TargetPosition, onEvent);
+                board.ConvertUnit(action.SourceIndex, action.TargetIndex, onEvent);
                 break;
             case FigureActionType.MageMove:
                 Mage.ExecuteMove(board, action, onEvent);
@@ -63,7 +63,7 @@ public static class FigureActionExecutor
                 Spartan.ExecuteMove(board, action, onEvent);
                 break;
             case FigureActionType.SwapWithFigure:
-                board.SwapTiles(action.SourcePosition, action.TargetPosition, onEvent);
+                board.SwapTiles(action.SourceIndex, action.TargetIndex, onEvent);
                 break;
             case FigureActionType.WarhammerMove:
                 Warhammer.ExecuteMove(board, action, onEvent);
@@ -78,7 +78,7 @@ public static class FigureActionExecutor
             case FigureActionType.PossiblePushFigure:
             case FigureActionType.PossibleRangedAttack:
             case FigureActionType.IsExecutable:
-            case FigureActionType.IsTargetDependant:
+            case FigureActionType.IsTargeted:
                 throw new InvalidOperationException();
             default:
                 throw new ArgumentOutOfRangeException();
@@ -88,67 +88,69 @@ public static class FigureActionExecutor
     private static void ChangeToQueen(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigureType = action.SourceFigure.GetFigureType();
-        var targetIndex = action.TargetPosition.GetIndex();
+        var targetIndex = action.TargetIndex;
+        var targetFigure = board[targetIndex];
 
-        if (action.TargetFigure.IsWalkable())
+        if (targetFigure.IsWalkable())
         {
-            board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
+            board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
             if (board[targetIndex].GetFigureType() == sourceFigureType)
-                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, Figure.Queen, onEvent);
+                board.ChangeFigureType(action.TargetIndex, action.TargetIndex, Figure.Queen, onEvent);
         }
         else
         {
-            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+            board.KillWithMove(action.SourceIndex, action.TargetIndex, onEvent);
             if (board[targetIndex].GetFigureType() == sourceFigureType)
-                board.ChangeFigureType(action.TargetPosition, action.TargetPosition, Figure.Queen, onEvent);
+                board.ChangeFigureType(action.TargetIndex, action.TargetIndex, Figure.Queen, onEvent);
         }
     }
 
     private static void MeeleePierceAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigureType = action.SourceFigure.GetFigureType();
-        var move = action.TargetPosition - action.SourcePosition;
+        
+        var move = Position.FromIndex(action.TargetIndex - action.SourceIndex);
         if (move.X is <= 1 and >= -1 &&
             move.Y is <= 1 and >= -1)
         {
-            board.KillWithMove(action.SourcePosition, action.TargetPosition, onEvent);
+            board.KillWithMove(action.SourceIndex, action.TargetIndex, onEvent);
         }
         else if (move.X is <= 2 and >= -2 &&
                  move.Y is <= 2 and >= -2)
         {
             var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
-            var sourcePosition = action.SourcePosition;
+            var midIndex = (byte)action.SourceIndex.GetWithOffset(smallMove);
 
-            board.KillWithMove(sourcePosition, sourcePosition + smallMove, onEvent);
-            var figure = board[(sourcePosition + smallMove).GetIndex()];
+            board.KillWithMove(action.SourceIndex, midIndex, onEvent);
+            var figure = board[midIndex];
             if (figure.GetFigureType() != sourceFigureType)
                 return;
 
-            board.KillWithMove(sourcePosition + smallMove, action.TargetPosition, onEvent);
+            board.KillWithMove(midIndex, action.TargetIndex, onEvent);
         }
         else
         {
             var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
+            var step1Index = (byte)action.SourceIndex.GetWithOffset(smallMove);
+            
+            if (board[step1Index].IsWalkable())
+                board.MoveFigure(action.SourceIndex, step1Index, onEvent);
+            else board.KillWithMove(action.SourceIndex, step1Index, onEvent);
 
-            var step1Position = action.SourcePosition + smallMove;
-            if (board[step1Position.GetIndex()].IsWalkable())
-                board.MoveFigure(action.SourcePosition, step1Position, onEvent);
-            else board.KillWithMove(action.SourcePosition, step1Position, onEvent);
-
-            if (board[step1Position.GetIndex()].GetFigureType() != sourceFigureType)
+            if (board[step1Index].GetFigureType() != sourceFigureType)
                 return;
 
-            var step2Position = action.SourcePosition + smallMove + smallMove;
-            if (board[step2Position.GetIndex()].IsWalkable())
-                board.MoveFigure(step1Position, step2Position, onEvent);
-            else board.KillWithMove(step1Position, step2Position, onEvent);
+            var step2Index = (byte)step1Index.GetWithOffset(smallMove);
+            if (board[step2Index].IsWalkable())
+                board.MoveFigure(step1Index, step2Index, onEvent);
+            else board.KillWithMove(step1Index, step2Index, onEvent);
 
-            if (board[step2Position.GetIndex()].GetFigureType() != sourceFigureType)
+            if (board[step2Index].GetFigureType() != sourceFigureType)
                 return;
 
-            if (board[action.TargetPosition.GetIndex()].IsWalkable())
-                board.MoveFigure(step2Position, action.TargetPosition, onEvent);
-            else board.KillWithMove(step2Position, action.TargetPosition, onEvent);
+            if (board[action.TargetIndex].IsWalkable())
+                board.MoveFigure(step2Index, action.TargetIndex, onEvent);
+            else board.KillWithMove(step2Index, action.TargetIndex, onEvent);
         }
     }
 }

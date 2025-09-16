@@ -8,29 +8,25 @@ public class Dragon : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Dragon;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.RookDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
             }
         }
 
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
@@ -40,18 +36,16 @@ public class Dragon : ICrownsGuardFigureTypeInfo
         
         foreach (var relative in PositionsGroups.BishopDirections)
         {
-            var targetPosition = sourcePosition;
+            var targetIndex = sourceIndex;
             for (var i = 1; i <= 2; i++)
             {
-                targetPosition += relative;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    break;
-                }
+                targetIndex = targetIndex.GetWithOffset(relative);
+                if (targetIndex == -1) break;
+                var targetFigure = board[targetIndex];
 
                 if (targetFigure.IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.BreatheFire, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.BreatheFire, sourceIndex, targetIndex, sourceFigure));
                 }
                 else
                 {
@@ -63,20 +57,20 @@ public class Dragon : ICrownsGuardFigureTypeInfo
 
     public static void ExecuteBreatheFire(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var move = action.TargetPosition - action.SourcePosition;
-        if (move.X is <= 1 and >= -1 &&
-            move.Y is <= 1 and >= -1)
+        var move = Position.FromIndex(action.TargetIndex - action.SourceIndex);
+        if (move.X is <= 1 and >= -1 && move.Y is <= 1 and >= -1)
         {
-            board.CreateFigure(action.TargetPosition, Figure.Fire,
+            board.CreateFigure(action.TargetIndex, Figure.Fire,
                 onEvent);
         }
         else if (move.X is <= 2 and >= -2 &&
                  move.Y is <= 2 and >= -2)
         {
             var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
+            var targetIndex = action.SourceIndex.GetWithOffset(smallMove);
 
-            board.CreateFigure(action.SourcePosition + smallMove, Figure.Fire, onEvent);
-            board.CreateFigure(action.TargetPosition, Figure.Fire, onEvent);
+            board.CreateFigure((byte)targetIndex, Figure.Fire, onEvent);
+            board.CreateFigure(action.TargetIndex, Figure.Fire, onEvent);
         }
     }
 }

@@ -9,37 +9,33 @@ public class Builder : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Builder;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.BishopDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out Figure targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
             }
         }
         
         foreach (var relative in PositionsGroups.RookDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out Figure targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (targetFigure.IsEmpty())
             {
-                actions.Push(new FigureAction(FigureActionType.BuildWall, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.BuildWall, sourceIndex, targetIndex, sourceFigure));
             }
             else if (targetFigure.GetFigureType() == Figure.Wall)
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             }
         }
     }

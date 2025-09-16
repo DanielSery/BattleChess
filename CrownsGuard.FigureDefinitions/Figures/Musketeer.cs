@@ -19,15 +19,13 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
         new(-1, -1), new(0, -1), new(1, -1)
     ];
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
@@ -38,23 +36,21 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
         var attackDirections = sourceFigure.IsBlack() ? BlackAttackDirections : WhiteAttackDirections;
         foreach (var relative in attackDirections)
         {
-            var targetPosition = sourcePosition;
+            var targetIndex = sourceIndex;
             for (var i = 1; i <= 3; i++)
             {
-                targetPosition += relative;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    break;
-                }
+                targetIndex = targetIndex.GetWithOffset(relative);
+                if (targetIndex == -1) break;
+                var targetFigure = board[targetIndex];
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions.Push(new FigureAction(FigureActionType.RangedAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.RangedAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
                 else if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourceIndex, targetIndex, sourceFigure));
                 }
                 else
                 {

@@ -9,41 +9,39 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Alchemist;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out Figure targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
             
             if (targetFigure.IsWalkable() || targetFigure.GetFigureType() == Figure.Explosives)
             {
-                actions.Push(new FigureAction(FigureActionType.AlchemistMove, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.AlchemistMove, sourceIndex, targetIndex, sourceFigure));
             }
         }
     }
 
     public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        CreateExplosive(action.SourcePosition, action.TargetPosition - action.SourcePosition, board, onEvent);
+        board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
+        CreateExplosive(action, board, onEvent);
     }
 
-    private static void CreateExplosive(Position sourcePosition, Position move, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
+    private static void CreateExplosive(FigureAction action, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var targetPosition = sourcePosition + move + move;
-        if (!board.TryGetFigure(targetPosition, out var targetFigure))
-        {
-            return;
-        }
+        var positionDiff = Position.FromIndex(action.TargetIndex - action.SourceIndex);
+        
+        var targetIndex = action.SourceIndex.GetWithOffset(positionDiff);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
 
         if (targetFigure.IsEmpty())
         {
-            var sourceFigure = board[sourcePosition.GetIndex()];
-            board.CreateFigure(targetPosition, Figure.Explosives | sourceFigure.GetFigureColor(), onEvent);
+            var sourceFigure = board[action.SourceIndex];
+            board.CreateFigure((byte)targetIndex, Figure.Explosives | sourceFigure.GetFigureColor(), onEvent);
         }
     }
 }

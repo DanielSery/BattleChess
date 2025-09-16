@@ -8,29 +8,28 @@ public class Miner : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Miner;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.RookDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
             }
         }
 
         foreach (var relative in PositionsGroups.RookDirections)
         {
-            for (var targetPosition = sourcePosition + relative; board.TryGetFigure(targetPosition, out var targetFigure); targetPosition += relative)
+            for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
+                var targetFigure = board[targetIndex];
                 if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.MinerMove, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.MinerMove, sourceIndex, targetIndex, sourceFigure));
                 }
                 else
                 {
@@ -42,19 +41,20 @@ public class Miner : ICrownsGuardFigureTypeInfo
 
     public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        var difference = action.TargetPosition - action.SourcePosition;
-        var direction = new Position((sbyte) Math.Sign(difference.X), (sbyte) Math.Sign(difference.Y));
-        for (var position = action.SourcePosition; position != action.TargetPosition; position += direction)
+        board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
+        var difference = Position.FromIndex(action.TargetIndex - action.SourceIndex);
+        var relative = new Position((sbyte) Math.Sign(difference.X), (sbyte) Math.Sign(difference.Y));
+        
+        for (var targetIndex = action.SourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
         {
-            if (!board.TryGetFigure(position, out var targetFigure))
-            {
-                continue;
-            }
-
+            var targetFigure = board[targetIndex];
             if (targetFigure.IsEmpty())
             {
-                board.CreateFigure(position, Figure.Trench, onEvent);
+                board.CreateFigure((byte)targetIndex, Figure.Trench, onEvent);
+            }
+            else
+            {
+                break;
             }
         }
     }

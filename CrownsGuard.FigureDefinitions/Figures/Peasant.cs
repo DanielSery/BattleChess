@@ -9,62 +9,52 @@ public class Peasant : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Peasant;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var direction = sourceFigure.IsBlack() ? 1 : -1;
-        if (TryGetMoveAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var attackAction))
+        if (sourceFigure.IsBlack())
         {
-            actions.Push(attackAction);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(0, 1), actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(0, 1), actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(-1, 0), actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(1, 0), actions);
         }
-
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(0, (sbyte)(1 * direction)), out var move1Action))
+        else
         {
-            actions.Push(move1Action);
-        }
-
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 0), out var move2Action))
-        {
-            actions.Push(move2Action);
-        }
-
-        if (TryGetAttackAction(board, sourcePosition, sourceFigure, new Position(1, 0), out var move3Action))
-        {
-            actions.Push(move3Action);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, new Position(0, -1), actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(0, -1), actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(-1, 0), actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, new Position(1, 0), actions);
         }
     }
-    
-    private static bool TryGetAttackAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
-        out FigureAction action)
+
+    private static void TryAddAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+        Stack<FigureAction> actions)
     {
-        var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure))
-        {
-            action = new FigureAction(FigureActionType.None, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
-            return false;
-        }
+        var targetIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            action = new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
-            return false;
+            actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));
+            return;
         }
 
-        action = new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure);
-        return true;
+        actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static bool TryGetMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
-        out FigureAction action)
+    private static void TryAddMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
+        Stack<FigureAction> actions)
     {
-        var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
-            !targetFigure.IsWalkable())
+        var targetIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
+        
+        if (!targetFigure.IsWalkable())
         {
-            action = new FigureAction(FigureActionType.Move, Position.None, Position.None, sourceFigure, Figure.Empty);
-            return false;
+            return;
         }
 
-        action = new FigureAction(FigureActionType.Move, sourcePosition, attackPosition, sourceFigure, Figure.Empty);
-        return true;
+        actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
     }
 }

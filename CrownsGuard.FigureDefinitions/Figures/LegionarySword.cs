@@ -9,115 +9,117 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.LegionarySword;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         if (sourceFigure.IsWhite())
         {
-            TryAddWhiteAttackAction(board, sourcePosition, sourceFigure, new Position(1, -1), actions);
-            TryAddWhiteAttackAction(board, sourcePosition, sourceFigure, new Position(-1, -1), actions);
-            TryAddWhiteMoveAction(board, sourcePosition, sourceFigure, new Position(0, -1), actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.P1M1, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.M1M1, actions);
+            
+            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0M1, actions);
         
-            if (sourcePosition.Y == 6)
+            if (sourceIndex >> 3 == 6)
             {
-                TryAddWhiteMoveAction(board, sourcePosition, sourceFigure, new Position(0, -2), actions);
+                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0M2, actions);
             }
         }
         else
         {
-            TryAddBlackAttackAction(board, sourcePosition, sourceFigure, new Position(1, 1), actions);
-            TryAddBlackAttackAction(board, sourcePosition, sourceFigure, new Position(-1, 1), actions);
-            TryAddBlackMoveAction(board, sourcePosition, sourceFigure, new Position(0, 1), actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.P1P1, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, Position.M1P1, actions);
+            
+            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0P1, actions);
         
-            if (sourcePosition.Y == 1)
+            if (sourceIndex >> 3 == 1)
             {
-                TryAddBlackMoveAction(board, sourcePosition, sourceFigure, new Position(0, 2), actions);
+                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, Position.P0P2, actions);
             }
         }
     }
 
-    private static void TryAddBlackAttackAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static void TryAddBlackAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
         Stack<FigureAction> actions)
     {
-        var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure))
-        {
-            return;
-        }
+        var targetIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure));
+            actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
-        if (attackPosition.Y == 7)
+        if (targetIndex >> 3 == 7)
         {
-            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition, sourceFigure, targetFigure));
+            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
-        actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure));
+        actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddWhiteAttackAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static void TryAddWhiteAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
         Stack<FigureAction> actions)
     {
-        var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure))
-        {
-            return;
-        }
+        var targetIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure));
+            actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
-        if (attackPosition.Y == 0)
+        if (targetIndex >> 3 == 0)
         {
-            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition, sourceFigure, targetFigure));
+            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
-        actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, attackPosition, sourceFigure, targetFigure));
+        actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddBlackMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static void TryAddBlackMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
         Stack<FigureAction> actions)
     {
-        var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
-            !targetFigure.IsWalkable())
+        var targetIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
+        
+        if (!targetFigure.IsWalkable())
         {
             return;
         }
 
-        if (attackPosition.Y == 7)
+        if (targetIndex >> 3 == 7)
         {
-            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition, sourceFigure, Figure.Empty));
+            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
-        actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, attackPosition, sourceFigure, Figure.Empty));
+        actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
     }
 
-    private static void TryAddWhiteMoveAction(ReadOnlySpan<Figure> board, Position sourcePosition, Figure sourceFigure, Position relativePosition,
+    private static void TryAddWhiteMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, Position relativePosition,
         Stack<FigureAction> actions)
     {
-        var attackPosition = sourcePosition + relativePosition;
-        if (!board.TryGetFigure(attackPosition, out var targetFigure) ||
-            !targetFigure.IsWalkable())
+        var targetIndex = sourceIndex.GetWithOffset(relativePosition);
+        if (targetIndex == -1) return;
+        var targetFigure = board[targetIndex];
+        
+        if (!targetFigure.IsWalkable())
         {
             return;
         }
 
-        if (attackPosition.Y == 0)
+        if (targetIndex >> 3 == 0)
         {
-            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourcePosition, attackPosition, sourceFigure, Figure.Empty));
+            actions.Push(new FigureAction(FigureActionType.ChangeToQueen, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
-        actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, attackPosition, sourceFigure, Figure.Empty));
+        actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
     }
 }

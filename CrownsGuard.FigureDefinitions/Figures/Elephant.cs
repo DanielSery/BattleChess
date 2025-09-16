@@ -13,29 +13,27 @@ public class Elephant : ICrownsGuardFigureTypeInfo
         new(0, 1), new(0, -1)
     ];
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in Directions)
         {
             var isAttack = false;
-            var targetPosition = sourcePosition;
+            var targetIndex = sourceIndex;
             for (var i = 1; i <= 3; i++)
             {
-                targetPosition += relative;
-                if (!board.TryGetFigure(targetPosition, out var targetFigure))
-                {
-                    continue;
-                }
+                targetIndex = targetIndex.GetWithOffset(relative);
+                if (targetIndex == -1) break;
+                var targetFigure = board[targetIndex];
 
                 if (!isAttack && targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
-                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
                 else
                 {
                     isAttack = true;
-                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
             }
         }

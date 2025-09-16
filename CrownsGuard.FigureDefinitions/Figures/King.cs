@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
@@ -9,31 +10,30 @@ public class King : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.King;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
             }
 
             if (sourceFigure.CanAttack(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             }
         }
 
+        var sourcePosition = Position.FromIndex(sourceIndex);
         if (sourcePosition.X != 4)
         {
             return;
@@ -52,11 +52,11 @@ public class King : ICrownsGuardFigureTypeInfo
                     board[2].IsEmpty() &&
                     board[3].IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(2, 0), sourceFigure, Figure.Empty));
+                    actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +2+0*Constants.BoardLength, sourceFigure));
                 }
                 else
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourcePosition, new Position(2, 0), sourceFigure, Figure.Empty));
+                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourceIndex, +2+0*Constants.BoardLength, sourceFigure));
                 }
             }
 
@@ -65,50 +65,59 @@ public class King : ICrownsGuardFigureTypeInfo
                 if (board[5].IsEmpty() &&
                     board[6].IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(6, 0), sourceFigure, Figure.Empty));
+                    actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +6+0*Constants.BoardLength, sourceFigure));
                 }
                 else
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourcePosition, new Position(6, 0), sourceFigure, Figure.Empty));
+                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourceIndex, +6+0*Constants.BoardLength, sourceFigure));
                 }
             }
         }
-
-        if (sourceFigure.IsWhite())
+        else
         {
             if (sourcePosition.Y != 7)
             {
                 return;
             }
 
-            if (sourceFigure.IsAllyTo(board[new Position(0, 7).GetIndex()]) &&
-                board[new Position(1, 7).GetIndex()].IsEmpty() &&
-                board[new Position(2, 7).GetIndex()].IsEmpty() &&
-                board[new Position(3, 7).GetIndex()].IsEmpty())
+            if (sourceFigure.IsAllyTo(board[+0+7*Constants.BoardLength]) &&
+                board[+1+7*Constants.BoardLength].IsEmpty() &&
+                board[+2+7*Constants.BoardLength].IsEmpty() &&
+                board[+3+7*Constants.BoardLength].IsEmpty())
             {
-                actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(2, 7), sourceFigure, Figure.Empty));
+                actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +2+7*Constants.BoardLength, sourceFigure));
             }
 
-            if (sourceFigure.IsAllyTo(board[new Position(7, 7).GetIndex()]) &&
-                board[new Position(5, 7).GetIndex()].IsEmpty() &&
-                board[new Position(6, 7).GetIndex()].IsEmpty())
+            if (sourceFigure.IsAllyTo(board[+7+7*Constants.BoardLength]) &&
+                board[+5+7*Constants.BoardLength].IsEmpty() &&
+                board[+6+7*Constants.BoardLength].IsEmpty())
             {
-                actions.Push(new FigureAction(FigureActionType.Castling, sourcePosition, new Position(6, 7), sourceFigure, Figure.Empty));
+                actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +2+7*Constants.BoardLength, sourceFigure));
             }
         }
     }
 
     public static void ExecuteCastle(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (action is { TargetPosition.X: 2 })
+        if (action.TargetIndex == +2+0*Constants.BoardLength)
         {
-            board.MoveFigure(new Position(4, action.TargetPosition.Y), new Position(2, action.TargetPosition.Y), onEvent);
-            board.MoveFigure(new Position(0, action.TargetPosition.Y), new Position(3, action.TargetPosition.Y), onEvent);
+            board.MoveFigure(+4+0*Constants.BoardLength, +2+0*Constants.BoardLength, onEvent);
+            board.MoveFigure(+0+0*Constants.BoardLength, +3+0*Constants.BoardLength, onEvent);
         }
-        else if (action is { TargetPosition.X: 6 })
+        else if (action.TargetIndex == +2+7*Constants.BoardLength)
         {
-            board.MoveFigure(new Position(4, action.TargetPosition.Y), new Position(6, action.TargetPosition.Y), onEvent);
-            board.MoveFigure(new Position(7, action.TargetPosition.Y), new Position(5, action.TargetPosition.Y), onEvent);
+            board.MoveFigure(+4+7*Constants.BoardLength, +2+7*Constants.BoardLength, onEvent);
+            board.MoveFigure(+0+7*Constants.BoardLength, +3+7*Constants.BoardLength, onEvent);
+        }
+        else if (action.TargetIndex == +6+0*Constants.BoardLength)
+        {
+            board.MoveFigure(+4+0*Constants.BoardLength, +6+0*Constants.BoardLength, onEvent);
+            board.MoveFigure(+7+0*Constants.BoardLength, +5+0*Constants.BoardLength, onEvent);
+        }
+        else if (action.TargetIndex == +6+7*Constants.BoardLength)
+        {
+            board.MoveFigure(+4+7*Constants.BoardLength, +6+7*Constants.BoardLength, onEvent);
+            board.MoveFigure(+7+7*Constants.BoardLength, +5+7*Constants.BoardLength, onEvent);
         }
     }
 }

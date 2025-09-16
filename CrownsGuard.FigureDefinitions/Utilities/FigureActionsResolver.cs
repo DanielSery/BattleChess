@@ -11,7 +11,6 @@ public static class FigureActionsResolver
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        var sourcePosition = Position.FromIndex(sourceIndex);
         switch (sourceFigure.GetFigureType())
         {
             case Figure.Empty:
@@ -19,47 +18,47 @@ public static class FigureActionsResolver
             case Figure.Fire:
             case Figure.Trench:
             case Figure.Wall: break;
-            case Figure.Alchemist: Alchemist.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Archer: Archer.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Barbarian: Barbarian.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Bard: Bard.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.BattleAxe: BattleAxe.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Blade: Blade.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Builder: Builder.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.CamelArcher: CamelArcher.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.CamelRider: CamelRider.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Cannon: Cannon.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Catapult: Catapult.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Chinese: Chinese.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Crossbow: Crossbow.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Dogs: Dogs.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Dragon: Dragon.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Elephant: Elephant.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.JapanArcher: JapanArcher.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.King: King.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Knight: Knight.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.LegionaryPike: LegionaryPike.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.LegionarySword: LegionarySword.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Mage: Mage.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Miner: Miner.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.MountedArcher: MountedArcher.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.MountedKnight: MountedKnight.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Musketeer: Musketeer.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Ninja: Ninja.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Nordguard: Nordguard.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Peasant: Peasant.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Pikeman: Pikeman.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Priest: Priest.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Queen: Queen.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Ranger: Ranger.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Samurai: Samurai.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Scout: Scout.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Spartan: Spartan.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Spearman: Spearman.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Trader: Trader.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Warhammer: Warhammer.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Whiplash: Whiplash.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
-            case Figure.Wizzard: Wizzard.GetPossibleActions(sourcePosition, sourceFigure, board, actions); break;
+            case Figure.Alchemist: Alchemist.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Archer: Archer.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Barbarian: Barbarian.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Bard: Bard.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.BattleAxe: BattleAxe.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Blade: Blade.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Builder: Builder.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.CamelArcher: CamelArcher.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.CamelRider: CamelRider.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Cannon: Cannon.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Catapult: Catapult.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Chinese: Chinese.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Crossbow: Crossbow.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Dogs: Dogs.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Dragon: Dragon.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Elephant: Elephant.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.JapanArcher: JapanArcher.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.King: King.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Knight: Knight.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.LegionaryPike: LegionaryPike.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.LegionarySword: LegionarySword.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Mage: Mage.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Miner: Miner.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.MountedArcher: MountedArcher.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.MountedKnight: MountedKnight.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Musketeer: Musketeer.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Ninja: Ninja.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Nordguard: Nordguard.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Peasant: Peasant.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Pikeman: Pikeman.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Priest: Priest.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Queen: Queen.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Ranger: Ranger.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Samurai: Samurai.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Scout: Scout.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Spartan: Spartan.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Spearman: Spearman.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Trader: Trader.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Warhammer: Warhammer.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Whiplash: Whiplash.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
+            case Figure.Wizzard: Wizzard.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
             default: throw new ArgumentOutOfRangeException();
         }
     }

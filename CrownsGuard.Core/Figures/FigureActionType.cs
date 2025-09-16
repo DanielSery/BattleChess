@@ -5,7 +5,7 @@ public enum FigureActionType : ushort
 {
     None = 0,
     
-    Move = 20 | IsExecutable | IsMove,
+    Move = Constants.MoveValue | IsExecutable | IsMove,
 
     PossiblePushFigure = 21,
     PushFigure = 22 | IsExecutable | IsSpecial,
@@ -22,38 +22,38 @@ public enum FigureActionType : ushort
     Castling = 50 | IsExecutable | IsSpecial,
     
     PossibleMeeleeAttack = 100 | IsMovingAttack,
-    MeeleeAttack = 100  | IsTargetDependantMovingAttack,
+    MeeleeAttack = 100  | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
 
-    SpartanMove = 200 | IsBlindMovingAttack,
+    SpartanMove = 200 | IsExecutable | IsMove | IsMovingAttack,
 
     PossibleMeeleePierceAttack = 203,
-    MeeleePierceAttack = 203 | IsTargetDependantMovingAttack,
+    MeeleePierceAttack = 203 | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
 
-    BattleAxeMove = 300 | IsBlindMovingAttack,
-    WarhammerMove = 301 | IsBlindMovingAttack,
+    BattleAxeMove = 300 | IsExecutable | IsMove | IsMovingAttack,
+    WarhammerMove = 301 | IsExecutable | IsMove | IsMovingAttack,
     
     PossibleRangedAttack = 400,
-    RangedAttack = 400 | IsExecutable | IsTargetDependant | IsAttack,
+    RangedAttack = 400 | IsExecutable | IsTargeted | IsAttack,
 
-    MageMove = 501 | IsBlindMovingAttack,
-    WizzardMove = 502 | IsBlindMovingAttack,
+    MageMove = 501 | IsExecutable | IsMove | IsMovingAttack,
+    WizzardMove = 502 | IsExecutable | IsMove | IsMovingAttack,
     
     PossibleConvertUnit = 600,
-    ConvertUnit = 600 | IsExecutable | IsTargetDependant | IsSpecial,
+    ConvertUnit = 600 | IsExecutable | IsTargeted | IsSpecial,
     
     PossibleCannonAttack = 601,
-    CannonAttack = 601 | IsExecutable | IsTargetDependant | IsAttack,
+    CannonAttack = 601 | IsExecutable | IsTargeted | IsAttack,
 
     ActionValueMask   = 0b0000001111111111,
-    IsMovingAttack    = 0b0000010000000000,
-    IsMove            = 0b0000100000000000,
-    IsSpecial         = 0b0001000000000000,
-    IsAttack          = 0b0010000000000000,
-    IsExecutable      = 0b0100000000000000,
-    IsTargetDependant = 0b1000000000000000,
     
-    IsTargetDependantMovingAttack = IsExecutable | IsTargetDependant | IsAttack | IsMovingAttack,
-    IsBlindMovingAttack = IsExecutable | IsMove | IsMovingAttack,
+    IsMove            = 0b0000010000000000,
+    IsSpecial         = 0b0000100000000000,
+    IsAttack          = 0b0001000000000000,
+    ActionTypeMask    = 0b0001110000000000,
     
-    ActionTypeMask    = 0b1111110000000000,
+    IsMovingAttack    = 0b0010000000000000,
+    IsTargeted        = 0b0100000000000000,
+    EvaluationMask    = 0b0110000000000000,
+    
+    IsExecutable      = 0b1000000000000000,
 }

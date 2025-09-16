@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.FigureDefinitions.Utilities;
 
@@ -8,61 +9,57 @@ public class Warhammer : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Warhammer;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.BishopDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
             
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.WarhammerMove, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.WarhammerMove, sourceIndex, targetIndex, sourceFigure));
             }
         }
     }
 
     public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        board.MoveFigure(action.SourcePosition, action.TargetPosition, onEvent);
-        var movement = action.TargetPosition - action.SourcePosition;
-        if (movement is { Y: 0, X: 1 })
+        board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
+        var movement = action.TargetIndex - action.SourceIndex;
+        if (movement == +1+0*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(1, 0), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(1, -1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(1, 0), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(1, 1), onEvent);
         }
-        else if (movement is { Y: 0, X: -1 })
+        else if (movement == -1+0*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(-1, 0), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(-1, -1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(-1, 0), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(-1, 1), onEvent);
         }
-        else if (movement is { Y: 1, X: 0 })
+        else if (movement == +0+1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetPosition, new Position(-1, 1), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(0, 1), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(1, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(-1, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(0, 1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(1, 1), onEvent);
         }
-        else if (movement is { Y: -1, X: 0 })
+        else if (movement == +0-1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetPosition, new Position(-1, -1), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(0, -1), onEvent);
-            TryDestroyTile(board, action.TargetPosition, new Position(1, -1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(-1, -1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(0, -1), onEvent);
+            TryDestroyTile(board, action.TargetIndex, new Position(1, -1), onEvent);
         }
     }
-
-    private static void TryDestroyTile(Span<Figure> board, Position sourcePosition, Position relative,
+    
+    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, Position relative,
         Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (!board.TryGetFigure(sourcePosition + relative, out _))
-        {
-            return;
-        }
+        var targetIndex = sourceIndex.GetWithOffset(relative);
+        if (targetIndex == -1) return;
 
-        board.KillWithoutMove(sourcePosition, sourcePosition + relative, onEvent);
+        board.KillWithoutMove((byte)sourceIndex, (byte)targetIndex, onEvent);
     }
 }

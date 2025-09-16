@@ -7,17 +7,15 @@ public readonly struct FigureAction
     public static readonly FigureAction None = new FigureAction();
 
     public readonly FigureActionType FigureActionType;
-    public readonly Position SourcePosition;
-    public readonly Position TargetPosition;
+    public readonly byte SourceIndex;
+    public readonly byte TargetIndex;
     public readonly Figure SourceFigure;
-    public readonly Figure TargetFigure;
 
-    public FigureAction(FigureActionType figureActionType, Position sourcePosition, Position targetPosition, Figure sourceFigure, Figure targetFigure)
+    public FigureAction(FigureActionType figureActionType, int sourceIndex, int targetIndex, Figure sourceFigure)
     {
         FigureActionType = figureActionType;
-        SourcePosition = sourcePosition;
-        TargetPosition = targetPosition;
+        SourceIndex = (byte)sourceIndex;
+        TargetIndex = (byte)targetIndex;
         SourceFigure = sourceFigure;
-        TargetFigure = targetFigure;
     }
 }

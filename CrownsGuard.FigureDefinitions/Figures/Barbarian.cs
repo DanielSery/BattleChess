@@ -8,40 +8,41 @@ public class Barbarian : ICrownsGuardFigureTypeInfo
 {
     public Figure Figure => Figure.Barbarian;
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.KnightPositions)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
             }
         }
         
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var movedPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(movedPosition, out var movedFigure) ||
-                movedFigure.IsEmpty())
+            var movedIndex = sourceIndex.GetWithOffset(relative);
+            if (movedIndex == -1) continue;
+            var movedFigure = board[movedIndex];
+
+            if (movedFigure.IsEmpty())
             {
                 continue;
             }
 
-            for (var targetPosition = sourcePosition + relative + relative; board.TryGetFigure(targetPosition, out var targetFigure); targetPosition += relative)
+            for (var targetIndex = movedIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
+                var targetFigure = board[targetIndex];
                 if (targetFigure.IsEmpty())
                 {
-                    actions.Push(new FigureAction(FigureActionType.PushFigure, movedPosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.PushFigure, movedIndex, targetIndex, sourceFigure));
                 }
                 else
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossiblePushFigure, movedPosition, targetPosition, sourceFigure, targetFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossiblePushFigure, movedIndex, targetIndex, sourceFigure));
                 }
             }
         }

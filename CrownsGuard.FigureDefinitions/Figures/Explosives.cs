@@ -16,21 +16,22 @@ public class Explosives : ICrownsGuardFigureTypeInfo
 
     public static void OnAttacked(BoardEvent boardEvent, Figure[] board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        TryDie(board, boardEvent.SourcePosition + new Position(-1, -1), onEvent);
-        TryDie(board,boardEvent.SourcePosition + new Position(-1, 0), onEvent);
-        TryDie(board,boardEvent.SourcePosition + new Position(-1, 1), onEvent);
-        TryDie(board,boardEvent.SourcePosition + new Position(0, -1), onEvent);
-        TryDie(board,boardEvent.SourcePosition + new Position(0, 1), onEvent);
-        TryDie(board,boardEvent.SourcePosition + new Position(1, -1), onEvent);
-        TryDie(board,boardEvent.SourcePosition + new Position(1, 0), onEvent);
-        TryDie(board,boardEvent.SourcePosition + new Position(1, 1), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(-1, -1), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(-1, 0), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(-1, 1), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(0, -1), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(0, 1), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(1, -1), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(1, 0), onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  new Position(1, 1), onEvent);
     }
-
-    private static void TryDie(Span<Figure> board, Position position, Action<BoardEvent, Span<Figure>> onEvent)
+    
+    private static void TryDestroyTile(Span<Figure> board, int sourceIndex, Position relative,
+        Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (!board.TryGetFigure(position, out Figure _))
-            return;
-        
-        board.Die(position, onEvent);
+        var targetIndex = sourceIndex.GetWithOffset(relative);
+        if (targetIndex == -1) return;
+
+        board.KillWithoutMove((byte)sourceIndex, (byte)targetIndex, onEvent);
     }
 }

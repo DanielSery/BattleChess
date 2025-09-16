@@ -19,15 +19,13 @@ public class Cannon : ICrownsGuardFigureTypeInfo
         new(0, -2), new(0, -3), new(0, -4),
     ];
 
-    public static void GetPossibleActions(Position sourcePosition, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
+    public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
         foreach (var relative in PositionsGroups.QueenDirections)
         {
-            var targetPosition = sourcePosition + relative;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
@@ -36,21 +34,19 @@ public class Cannon : ICrownsGuardFigureTypeInfo
         }
         
         var attackPositions = sourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
-        foreach (Position attackPosition in attackPositions)
+        foreach (Position relative in attackPositions)
         {
-            var targetPosition = sourcePosition + attackPosition;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = sourceIndex.GetWithOffset(relative);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
             
             if (sourceFigure.IsEnemyTo(targetFigure))
             {
-                actions.Push(new FigureAction(FigureActionType.CannonAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.CannonAttack, sourceIndex, targetIndex, sourceFigure));
             }
             else
             {
-                actions.Push(new FigureAction(FigureActionType.PossibleCannonAttack, sourcePosition, targetPosition, sourceFigure, targetFigure));
+                actions.Push(new FigureAction(FigureActionType.PossibleCannonAttack, sourceIndex, targetIndex, sourceFigure));
             }
         }
     }
@@ -60,15 +56,13 @@ public class Cannon : ICrownsGuardFigureTypeInfo
         var attackPositions = action.SourceFigure.IsBlack() ? BlackAttackPositions : WhiteAttackPositions;
         foreach (var attackPosition in attackPositions)
         {
-            var targetPosition = action.SourcePosition + attackPosition;
-            if (!board.TryGetFigure(targetPosition, out var targetFigure))
-            {
-                continue;
-            }
+            var targetIndex = action.SourceIndex.GetWithOffset(attackPosition);
+            if (targetIndex == -1) continue;
+            var targetFigure = board[targetIndex];
 
             if (!targetFigure.IsEmpty())
             {
-                board.KillWithoutMove(action.SourcePosition, targetPosition, onEvent);
+                board.KillWithoutMove(action.SourceIndex, (byte)targetIndex, onEvent);
             }
         }
     }
