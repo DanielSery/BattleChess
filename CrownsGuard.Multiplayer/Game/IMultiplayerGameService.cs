@@ -1,5 +1,4 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Game;
+﻿using CrownsGuard.Game;
 using CrownsGuard.Multiplayer.Players;
 using FluentResults;
 
@@ -15,10 +14,10 @@ public interface IMultiplayerGameService
 
     public static readonly TimeSpan TurnTimeout = TimeSpan.FromMinutes(2);
 
-    public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
+    public event EventHandler<(byte, byte, TimeSpan)>? RequestPlayMove;
 
     public void StartGame(MultiplayerGameType gameType, string? rankedGameId);
     public Task<Result> HandleRemotePlayerTurnAsync();
     public Task<Result<string?>> HandleWinAsync(bool notifyOther, WinType winType, IOnlinePlayerInfo won, IOnlinePlayerInfo lost, CancellationToken cancellationToken);
-    public Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent, CancellationToken cancellationToken);
+    public Task<Result> PlayedMoveAsync(byte from, byte to, TimeSpan timeSpent, CancellationToken cancellationToken);
 }

@@ -1,5 +1,4 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
+﻿using CrownsGuard.Core.Players;
 using Moq;
 
 namespace CrownsGuard.Game.Test.GameBoard;
@@ -14,8 +13,8 @@ public class RelativeTileTest
         _figure = new FigureWithInfo(NeutralPlayer.Instance, NoneFigureTypeInfo.Instance, false);
 
         var tileMock = new Mock<ITile>();
-        tileMock.Setup(x => x.RelativePosition).Returns(new Position(1, 1));
-        tileMock.Setup(x => x.Position).Returns(new Position(1, 1));
+        tileMock.Setup(x => x.RelativePosition).Returns(new Position.Position(1, 1));
+        tileMock.Setup(x => x.Position).Returns(new Position.Position(1, 1));
         tileMock.Setup(x => x.Figure).Returns(_figure);
         _tile = tileMock.Object;
     }

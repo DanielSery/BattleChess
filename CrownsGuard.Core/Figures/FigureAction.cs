@@ -1,5 +1,3 @@
-using CrownsGuard.Core.GameBoard;
-
 namespace CrownsGuard.Core.Figures;
 
 public readonly struct FigureAction

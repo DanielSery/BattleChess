@@ -1,6 +1,4 @@
-﻿using CrownsGuard.Core.GameBoard;
-
-namespace CrownsGuard.Maps.GameBoard;
+﻿namespace CrownsGuard.Maps.GameBoard;
 
 public interface IBoardInfo : IEnumerable<ITileInfo>
 {

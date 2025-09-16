@@ -14,6 +14,7 @@ using CrownsGuard.Multiplayer.Utilities;
 using CommunityToolkit.Mvvm.Input;
 using CrownsGuard.Core;
 using CrownsGuard.Database.Lobby;
+using CrownsGuard.Maps.GameBoard;
 using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Game;
 using CrownsGuard.UI.Services;

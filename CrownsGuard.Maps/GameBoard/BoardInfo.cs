@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using CrownsGuard.Core;
-using CrownsGuard.Core.GameBoard;
 
 namespace CrownsGuard.Maps.GameBoard;
 

@@ -1,5 +1,4 @@
 ﻿using CrownsGuard.Core;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Game;
 using CrownsGuard.Database.Players;
@@ -29,7 +28,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         _databaseTimeProvider = databaseTimeProvider;
     }
 
-    public event EventHandler<(Position, Position, TimeSpan)>? RequestPlayMove;
+    public event EventHandler<(byte, byte, TimeSpan)>? RequestPlayMove;
 
     private MultiplayerGameType GameType { get; set; }
     private string? GameId { get; set; }
@@ -155,7 +154,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         playerB.Elo += (short)(k * ((1 - resultA) - expectedB));
     }
 
-    public async Task<Result> PlayedMoveAsync(Position from, Position to, TimeSpan timeSpent, CancellationToken cancellationToken)
+    public async Task<Result> PlayedMoveAsync(byte from, byte to, TimeSpan timeSpent, CancellationToken cancellationToken)
     {
         if (GameId is null)
             return Result.Fail("Not in game");
@@ -163,8 +162,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         var gameTurn = new GameTurn()
         {
             GameId = GameId,
-            FromIndex = (byte)from.GetIndex(),
-            ToIndex = (byte)to.GetIndex(),
+            FromIndex = from,
+            ToIndex = to,
             CreatedAt = DateTime.UtcNow,
             TimeSpentInSeconds = timeSpent.TotalSeconds
         };
@@ -185,34 +184,33 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
         if (!hisTurnResult.TryGetValue(out var hisTurn))
         {
-            RequestPlayMove?.Invoke(this,
-                (Position.FromIndex(IMultiplayerGameService.NotRespondingMessage),
-                    Position.None,
-                    TimeSpan.FromMinutes(2)));
+            RequestPlayMove?.Invoke(this, (IMultiplayerGameService.NotRespondingMessage, 255, TimeSpan.FromMinutes(2)));
             return Result.Ok();
         }
 
         Console.WriteLine($"Found his turn with id: {hisTurn.Id}");
         if (hisTurn.FromIndex >= 64)
         {
-            RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
-                Position.FromIndex(hisTurn.FromIndex),
-                Position.FromIndex(hisTurn.ToIndex),
+            RequestPlayMove?.Invoke(this, new ValueTuple<byte, byte, TimeSpan>(
+                hisTurn.FromIndex,
+                hisTurn.ToIndex,
                 TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
             return Result.Ok();
         }
 
-        RequestPlayMove?.Invoke(this, new ValueTuple<Position, Position, TimeSpan>(
+        RequestPlayMove?.Invoke(this, new ValueTuple<byte, byte, TimeSpan>(
             GetPositionOfOppositePlayer(hisTurn.FromIndex),
             GetPositionOfOppositePlayer(hisTurn.ToIndex),
             TimeSpan.FromSeconds(hisTurn.TimeSpentInSeconds)));
         return Result.Ok();
     }
 
-    private static Position GetPositionOfOppositePlayer(int index)
+    private static byte GetPositionOfOppositePlayer(int index)
     {
-        var position = Position.FromIndex(index);
-        return new Position(position.X, (sbyte)(Constants.BoardLength - position.Y - 1));
+        var y = index / 8;
+        var x = index % 8;
+        y = Constants.BoardLength - y - 1;
+        return (byte)(x + y * Constants.BoardLength);
     }
 
     private async Task<Result> DeleteGameTurnsAsync(CancellationToken cancellationToken)

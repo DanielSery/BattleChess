@@ -179,8 +179,8 @@ public sealed class BoardViewModel : ViewModelBase
             _gameService.EndTurn();
             
             await _multiplayerGameService.PlayedMoveAsync(
-                SelectedTileInfo.Position,
-                clickedTile.Position,
+                (byte)SelectedTileInfo.Position.GetIndex(),
+                (byte)clickedTile.Position.GetIndex(),
                 _gameService.CurrentPlayerInfo.Timer.LastTurnElapsedTime,
                 CancellationToken.None);
 
@@ -311,9 +311,9 @@ public sealed class BoardViewModel : ViewModelBase
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
     }
 
-    private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (Position from, Position to, TimeSpan turnTimeSpent) e)
+    private void MultiplayerGameServiceOnRequestPlayMove(object? sender, (byte from, byte to, TimeSpan turnTimeSpent) e)
     {
-        RequestPlayMove((byte)e.from.GetIndex(), (byte)e.to.GetIndex(), e.turnTimeSpent);
+        RequestPlayMove(e.from, e.to, e.turnTimeSpent);
     }
 
     private void OnEvent(BoardEvent boardEvent, Span<Figure> board)

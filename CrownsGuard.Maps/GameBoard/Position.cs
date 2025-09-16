@@ -1,24 +1,16 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using CrownsGuard.Core;
 
-namespace CrownsGuard.Core.GameBoard;
+namespace CrownsGuard.Maps.GameBoard;
 
 [DebuggerDisplay("({X},{Y})")]
 public readonly record struct Position
 {
-    private static readonly Position[] IndexCache = new Position[Constants.FullBoardTilesCount];
     public static readonly Position None = new(-1, -1);
 
     public readonly sbyte X;
     public readonly sbyte Y;
-
-    static Position()
-    {
-        for (var i = 0; i < Constants.FullBoardTilesCount; ++i)
-        {
-            IndexCache[i] = new Position((sbyte)(i % Constants.BoardLength), (sbyte)(i / Constants.BoardLength));
-        }
-    }
 
     public Position(sbyte x, sbyte y)
     {
@@ -31,6 +23,6 @@ public readonly record struct Position
 
     public static Position FromIndex(int index)
     {
-        return IndexCache[index];
+        return new Position((sbyte)(index % Constants.BoardLength), (sbyte)(index / Constants.BoardLength));
     }
 }

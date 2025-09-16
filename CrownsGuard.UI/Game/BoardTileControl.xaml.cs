@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Maps.GameBoard;
 using CrownsGuard.UI.Shared;
 
 namespace CrownsGuard.UI.Game;
