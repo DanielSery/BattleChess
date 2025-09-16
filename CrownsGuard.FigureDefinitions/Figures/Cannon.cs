@@ -11,16 +11,16 @@ public class Cannon : ICrownsGuardFigureTypeInfo
 
     private static readonly short[] BlackAttackPositions =
     [
-        +0+2*PositionsGroups.YOffset, 
-        +0+3*PositionsGroups.YOffset, 
-        +0+4*PositionsGroups.YOffset,
+        unchecked((byte)+0)+2*PositionsGroups.YOffset, 
+        unchecked((byte)+0)+3*PositionsGroups.YOffset, 
+        unchecked((byte)+0)+4*PositionsGroups.YOffset,
     ];
 
     private static readonly short[] WhiteAttackPositions =
     [
-        +0+-2*PositionsGroups.YOffset, 
-        +0+-3*PositionsGroups.YOffset, 
-        +0+-4*PositionsGroups.YOffset,
+        unchecked((byte)+0)-2*PositionsGroups.YOffset, 
+        unchecked((byte)+0)-3*PositionsGroups.YOffset, 
+        unchecked((byte)+0)-4*PositionsGroups.YOffset,
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

@@ -32,8 +32,7 @@ public class Alchemist : ICrownsGuardFigureTypeInfo
 
     private static void CreateExplosive(FigureAction action, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var positionDiff = Position.FromIndex(action.TargetIndex - action.SourceIndex);
-        
+        var positionDiff = PositionsHelper.GetRelative(action.SourceIndex, action.TargetIndex);
         var targetIndex = action.SourceIndex.GetWithOffset(positionDiff);
         if (targetIndex == -1) return;
         var targetFigure = board[targetIndex];

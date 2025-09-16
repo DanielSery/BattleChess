@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -42,8 +43,10 @@ public class Miner : ICrownsGuardFigureTypeInfo
     public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
-        var difference = Position.FromIndex(action.TargetIndex - action.SourceIndex);
-        var relative = (short)(Math.Sign(difference.X) + Math.Sign(difference.Y) * PositionsGroups.YOffset);
+        var difference = PositionsHelper.GetRelative(action.SourceIndex, action.TargetIndex);
+        var differenceX = PositionsHelper.GetRelativeX(difference);
+        var differenceY = PositionsHelper.GetRelativeY(difference);
+        var relative = (short)(Math.Sign(differenceX) + Math.Sign(differenceY) * PositionsGroups.YOffset);
         
         for (var targetIndex = action.SourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
         {

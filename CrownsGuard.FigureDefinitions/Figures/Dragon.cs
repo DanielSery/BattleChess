@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -57,16 +58,18 @@ public class Dragon : ICrownsGuardFigureTypeInfo
 
     public static void ExecuteBreatheFire(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var move = Position.FromIndex(action.TargetIndex - action.SourceIndex);
-        if (move.X is <= 1 and >= -1 && move.Y is <= 1 and >= -1)
+        var move = PositionsHelper.GetRelative(action.SourceIndex, action.TargetIndex);
+        var moveX = PositionsHelper.GetRelativeX(move);
+        var moveY = PositionsHelper.GetRelativeY(move);
+        
+        if (moveX is <= 1 and >= -1 && moveY is <= 1 and >= -1)
         {
-            board.CreateFigure(action.TargetIndex, Figure.Fire,
-                onEvent);
+            board.CreateFigure(action.TargetIndex, Figure.Fire, onEvent);
         }
-        else if (move.X is <= 2 and >= -2 &&
-                 move.Y is <= 2 and >= -2)
+        else if (moveX is <= 2 and >= -2 &&
+                 moveY is <= 2 and >= -2)
         {
-            var smallMove = new Position((sbyte)Math.Sign(move.X), (sbyte)Math.Sign(move.Y));
+            var smallMove = PositionsHelper.GetRelativePosition(Math.Sign(moveX), Math.Sign(moveY));
             var targetIndex = action.SourceIndex.GetWithOffset(smallMove);
 
             board.CreateFigure((byte)targetIndex, Figure.Fire, onEvent);

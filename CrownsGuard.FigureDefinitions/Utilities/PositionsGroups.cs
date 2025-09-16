@@ -6,28 +6,28 @@ public static class PositionsGroups
     
     public static readonly short[] RookDirections =
     [
-        -1+0*YOffset, +1+0*YOffset,
-        +0-1*YOffset, +0+1*YOffset
+        unchecked((byte)-1)+0*YOffset, unchecked((byte)+1)+0*YOffset,
+        unchecked((byte)+0)-1*YOffset, unchecked((byte)+0)+1*YOffset
     ];
     
     public static readonly short[] BishopDirections =
     [
-        -1-1*YOffset, +1+1*YOffset,
-        +1-1*YOffset, -1+1*YOffset
+        unchecked((byte)-1)-1*YOffset, unchecked((byte)+1)+1*YOffset,
+        unchecked((byte)+1)-1*YOffset, unchecked((byte)-1)+1*YOffset
     ];
     
     public static readonly short[] QueenDirections =
     [
-        -1-1*YOffset, -1+0*YOffset, -1+1*YOffset,
-        +0-1*YOffset, +0+1*YOffset,
-        +1-1*YOffset, +1+0*YOffset, +1+1*YOffset
+        unchecked((byte)-1)-1*YOffset, unchecked((byte)-1)+0*YOffset, unchecked((byte)-1)+1*YOffset,
+        unchecked((byte)+0)-1*YOffset, unchecked((byte)+0)+1*YOffset,
+        unchecked((byte)+1)-1*YOffset, unchecked((byte)+1)+0*YOffset, unchecked((byte)+1)+1*YOffset
     ];
     
     public static readonly short[] KnightPositions =
     [
-        -2-1*YOffset, -2+1*YOffset,
-        -1-2*YOffset, -1+2*YOffset,
-        +1-2*YOffset, +1+2*YOffset,
-        +2-1*YOffset, +2+1*YOffset
+        unchecked((byte)-2)-1*YOffset, unchecked((byte)-2)+1*YOffset,
+        unchecked((byte)-1)-2*YOffset, unchecked((byte)-1)+2*YOffset,
+        unchecked((byte)+1)-2*YOffset, unchecked((byte)+1)+2*YOffset,
+        unchecked((byte)+2)-1*YOffset, unchecked((byte)+2)+1*YOffset
     ];
 }

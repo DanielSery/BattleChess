@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -26,7 +27,7 @@ public class Spartan : ICrownsGuardFigureTypeInfo
     public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
-        var diff = Position.FromIndex(action.TargetIndex - action.SourceIndex);
+        var diff = PositionsHelper.GetRelative(action.SourceIndex, action.TargetIndex);
         
         var targetIndex = action.TargetIndex.GetWithOffset(diff);
         if (targetIndex == -1) return;

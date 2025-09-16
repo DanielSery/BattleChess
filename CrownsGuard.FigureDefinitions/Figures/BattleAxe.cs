@@ -1,6 +1,7 @@
 ﻿using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -30,27 +31,27 @@ public class BattleAxe : ICrownsGuardFigureTypeInfo
         var movement = action.TargetIndex - action.SourceIndex;
         if (movement == +1+1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, +1+1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +0+1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +1+0*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+0*PositionsGroups.YOffset, onEvent);
         }
         else if (movement == +1-1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, +1+-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +0+-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +1+0*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+0*PositionsGroups.YOffset, onEvent);
         }
         else if (movement == -1+1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, +-1+1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +0+1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +-1+0*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+0*PositionsGroups.YOffset, onEvent);
         }
         else if (movement == -1-1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, +-1+-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +0+-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, +-1+0*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+0*PositionsGroups.YOffset, onEvent);
         }
     }
     

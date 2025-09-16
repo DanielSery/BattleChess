@@ -29,15 +29,15 @@ public class Ninja : ICrownsGuardFigureTypeInfo
 
         if (sourceFigure.IsBlack())
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, +-1+1*PositionsGroups.YOffset, actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, +1+1*PositionsGroups.YOffset, actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, +0+1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionsGroups.YOffset, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
         }
         else
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, +-1+-1*PositionsGroups.YOffset, actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, +1+-1*PositionsGroups.YOffset, actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, +0+-1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionsGroups.YOffset, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
         }
     }
 

@@ -11,12 +11,12 @@ public class Musketeer : ICrownsGuardFigureTypeInfo
 
     private static readonly short[] BlackAttackDirections =
     [
-        +-1+1*PositionsGroups.YOffset, +0+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+1*PositionsGroups.YOffset, unchecked((byte)+0)+1*PositionsGroups.YOffset, unchecked((byte)+1)+1*PositionsGroups.YOffset
     ];
 
     private static readonly short[] WhiteAttackDirections =
     [
-        +-1+-1*PositionsGroups.YOffset, +0+-1*PositionsGroups.YOffset, +1+-1*PositionsGroups.YOffset
+        unchecked((byte)-1)-1*PositionsGroups.YOffset, unchecked((byte)+0)-1*PositionsGroups.YOffset, unchecked((byte)+1)-1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

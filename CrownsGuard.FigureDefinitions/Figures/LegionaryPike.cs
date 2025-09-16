@@ -13,32 +13,32 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
     {
         if (sourceFigure.IsWhite())
         {
-            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, +1+-2*PositionsGroups.YOffset, actions);
-            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, +-1+-2*PositionsGroups.YOffset, actions);
+            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-2*PositionsGroups.YOffset, actions);
+            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-2*PositionsGroups.YOffset, actions);
             
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, +1+-1*PositionsGroups.YOffset, actions);
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, +-1+-1*PositionsGroups.YOffset, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionsGroups.YOffset, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionsGroups.YOffset, actions);
             
-            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, +0+-1*PositionsGroups.YOffset, actions);
+            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
         
             if (sourceIndex >> 3 == 6)
             {
-                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, +0+-2*PositionsGroups.YOffset, actions);
+                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-2*PositionsGroups.YOffset, actions);
             }
         }
         else
         {
-            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, +1+2*PositionsGroups.YOffset, actions);
-            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, +-1+2*PositionsGroups.YOffset, actions);
+            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+2*PositionsGroups.YOffset, actions);
+            TryAddPikeAttackAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+2*PositionsGroups.YOffset, actions);
             
-            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +1+1*PositionsGroups.YOffset, actions);
-            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +-1+1*PositionsGroups.YOffset, actions);
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionsGroups.YOffset, actions);
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionsGroups.YOffset, actions);
             
-            TryAddBlackMoveAction(board, sourceIndex, sourceFigure, +0+1*PositionsGroups.YOffset, actions);
+            TryAddBlackMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
         
             if (sourceIndex >> 3 == 1)
             {
-                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, +0+-2*PositionsGroups.YOffset, actions);
+                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+2*PositionsGroups.YOffset, actions);
             }
         }
     }

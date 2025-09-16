@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -10,8 +11,8 @@ public class Elephant : ICrownsGuardFigureTypeInfo
 
     private static readonly short[] Directions =
     [
-        +0+1*PositionsGroups.YOffset, 
-        +0+-1*PositionsGroups.YOffset
+        unchecked((byte)+0)+1*PositionsGroups.YOffset, 
+        unchecked((byte)+0)-1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

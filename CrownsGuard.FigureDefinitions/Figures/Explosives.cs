@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.FigureDefinitions.Utilities;
 
 namespace CrownsGuard.FigureDefinitions.Figures;
@@ -16,14 +17,14 @@ public class Explosives : ICrownsGuardFigureTypeInfo
 
     public static void OnAttacked(BoardEvent boardEvent, Figure[] board, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        TryDestroyTile(board, boardEvent.SourceIndex,  +-1+-1*PositionsGroups.YOffset, onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  +-1+0*PositionsGroups.YOffset, onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  +-1+1*PositionsGroups.YOffset, onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  +0+-1*PositionsGroups.YOffset, onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  +0+1*PositionsGroups.YOffset, onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  +1+-1*PositionsGroups.YOffset, onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  +1+0*PositionsGroups.YOffset, onEvent);
-        TryDestroyTile(board, boardEvent.SourceIndex,  +1+1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  unchecked((byte)-1)-1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +unchecked((byte)-1)+0*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  +unchecked((byte)-1)+1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  unchecked((byte)+0)-1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  unchecked((byte)+0)+1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  unchecked((byte)+1)-1*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  unchecked((byte)+1)+0*PositionsGroups.YOffset, onEvent);
+        TryDestroyTile(board, boardEvent.SourceIndex,  unchecked((byte)+1)+1*PositionsGroups.YOffset, onEvent);
     }
     
     private static void TryDestroyTile(Span<Figure> board, int sourceIndex, short relative,

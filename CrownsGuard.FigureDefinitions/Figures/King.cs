@@ -33,15 +33,16 @@ public class King : ICrownsGuardFigureTypeInfo
             }
         }
 
-        var sourcePosition = Position.FromIndex(sourceIndex);
-        if (sourcePosition.X != 4)
+        var absoluteX = PositionsHelper.GetAbsoluteX(sourceIndex);
+        var absoluteY = PositionsHelper.GetAbsoluteY(absoluteX);
+        if (absoluteX != 4)
         {
             return;
         }
 
         if (sourceFigure.IsBlack())
         {
-            if (sourcePosition.Y != 0)
+            if (absoluteY != 0)
             {
                 return;
             }
@@ -75,7 +76,7 @@ public class King : ICrownsGuardFigureTypeInfo
         }
         else
         {
-            if (sourcePosition.Y != 7)
+            if (absoluteY != 7)
             {
                 return;
             }

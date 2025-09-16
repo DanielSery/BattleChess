@@ -11,17 +11,17 @@ public class Spearman : ICrownsGuardFigureTypeInfo
 
     private static readonly short[] AttackPositions =
     [
-        +-1+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset, +-1+-1*PositionsGroups.YOffset, +1+-1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+1*PositionsGroups.YOffset, unchecked((byte)+1)+1*PositionsGroups.YOffset, unchecked((byte)-1)-1*PositionsGroups.YOffset, unchecked((byte)+1)-1*PositionsGroups.YOffset
     ];
 
     private static readonly short[] BlackMovePositions =
     [
-        +-1+0*PositionsGroups.YOffset, +1+0*PositionsGroups.YOffset, +0+1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+0*PositionsGroups.YOffset, unchecked((byte)+1)+0*PositionsGroups.YOffset, unchecked((byte)+0)+1*PositionsGroups.YOffset
     ];
 
     private static readonly short[] WhiteMovePositions =
     [
-        +-1+0*PositionsGroups.YOffset, +1+0*PositionsGroups.YOffset, +0+-1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+0*PositionsGroups.YOffset, unchecked((byte)+1)+0*PositionsGroups.YOffset, unchecked((byte)+0)-1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

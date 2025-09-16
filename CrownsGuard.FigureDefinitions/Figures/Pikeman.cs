@@ -11,17 +11,17 @@ public class Pikeman : ICrownsGuardFigureTypeInfo
 
     private static readonly short[] BlackAttackPositions =
     [
-        +-1+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+1*PositionsGroups.YOffset, unchecked((byte)+1)+1*PositionsGroups.YOffset
     ];
 
     private static readonly short[] WhiteAttackPositions =
     [
-        +-1+1*PositionsGroups.YOffset, +1+1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+1*PositionsGroups.YOffset, unchecked((byte)+1)+1*PositionsGroups.YOffset
     ];
 
     private static readonly short[] MovePositions =
     [
-        +-1+0*PositionsGroups.YOffset, +1+0*PositionsGroups.YOffset, +0+-1*PositionsGroups.YOffset, +0+1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+0*PositionsGroups.YOffset, unchecked((byte)+1)+0*PositionsGroups.YOffset, unchecked((byte)+0)-1*PositionsGroups.YOffset, unchecked((byte)+0)+1*PositionsGroups.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
