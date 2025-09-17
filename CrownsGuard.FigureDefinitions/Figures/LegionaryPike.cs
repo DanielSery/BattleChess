@@ -18,11 +18,13 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
             TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionsGroups.YOffset, actions);
             TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionsGroups.YOffset, actions);
             
-            TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
-        
             if (sourceIndex >> 3 == 6)
             {
-                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-2*PositionsGroups.YOffset, actions);
+                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
+            }
+            else
+            {
+                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
             }
         }
         else
@@ -37,7 +39,11 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
         
             if (sourceIndex >> 3 == 1)
             {
-                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+2*PositionsGroups.YOffset, actions);
+                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
+            }
+            else
+            {
+                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
             }
         }
     }
@@ -100,6 +106,22 @@ public class LegionaryPike : ICrownsGuardFigureTypeInfo
         }
 
         actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
+    }
+
+    private static void TryAddStartMoveActions(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
+        Stack<FigureAction> actions)
+    {
+        var move1Index = sourceIndex.GetWithOffset(relativePosition);
+        if (move1Index == -1) return;
+        var move1Figure = board[move1Index];
+        if (!move1Figure.IsWalkable()) return;
+        actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, move1Index, sourceFigure));
+        
+        var move2Index = move1Index.GetWithOffset(relativePosition);
+        if (move2Index == -1) return;
+        var move2Figure = board[move2Index];
+        if (!move2Figure.IsWalkable()) return;
+        actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, move2Index, sourceFigure));
     }
 
     private static void TryAddBlackMoveAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
