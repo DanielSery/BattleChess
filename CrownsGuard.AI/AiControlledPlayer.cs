@@ -20,8 +20,8 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     private readonly int _difficulty;
     private readonly Random _random;
     private FrozenDictionary<int, int[]> _analysis = FrozenDictionary<int, int[]>.Empty;
-    private ConcurrentDictionary<long, int> _blackCache = new ConcurrentDictionary<long, int>();
-    private ConcurrentDictionary<long, int> _whiteCache = new ConcurrentDictionary<long, int>();
+    private readonly ConcurrentDictionary<long, int> _blackCache = new ConcurrentDictionary<long, int>();
+    private readonly ConcurrentDictionary<long, int> _whiteCache = new ConcurrentDictionary<long, int>();
 
     public AiControlledPlayer(PlayerColor playerColor, Figure[] board, Action<byte, byte, TimeSpan> requestMove, int difficulty)
     {
