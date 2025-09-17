@@ -41,6 +41,7 @@ public class Chinese : ICrownsGuardFigureTypeInfo
                 }
                 else
                 {
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
             }

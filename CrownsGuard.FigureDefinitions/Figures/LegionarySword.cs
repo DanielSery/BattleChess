@@ -46,6 +46,12 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);
         if (targetIndex == -1) return;
         var targetFigure = board[targetIndex];
+
+        if (sourceFigure.IsAllyTo(targetFigure))
+        {
+            actions.Push(new FigureAction(FigureActionType.MeeleeDefend, sourceIndex, targetIndex, sourceFigure));
+            return;
+        }
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
@@ -68,6 +74,12 @@ public class LegionarySword : ICrownsGuardFigureTypeInfo
         var targetIndex = sourceIndex.GetWithOffset(relativePosition);
         if (targetIndex == -1) return;
         var targetFigure = board[targetIndex];
+
+        if (sourceFigure.IsAllyTo(targetFigure))
+        {
+            actions.Push(new FigureAction(FigureActionType.MeeleeDefend, sourceIndex, targetIndex, sourceFigure));
+            return;
+        }
         
         if (!sourceFigure.CanAttack(targetFigure))
         {

@@ -114,7 +114,8 @@ public sealed class BoardViewModel : ViewModelBase
         _boardLoader.LoadBoard(_boardInfo, map);
 
         var random = new Random();
-        var startingPlayer = random.Next(0, 2) == 1 ? PlayerColor.White : PlayerColor.Black;
+        // var startingPlayer = random.Next(0, 2) == 1 ? PlayerColor.White : PlayerColor.Black;
+        var startingPlayer = PlayerColor.White;
 
         _gameService.StartGame(
             whitePlayer,

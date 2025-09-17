@@ -42,6 +42,7 @@ public class CamelRider : ICrownsGuardFigureTypeInfo
                 }
                 else
                 {
+                    actions.Push(new FigureAction(FigureActionType.MeeleeDefend, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
             }

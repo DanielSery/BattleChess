@@ -22,7 +22,8 @@ public enum FigureActionType : ushort
     Castling = 50 | IsExecutable | IsSpecial,
     
     PossibleMeeleeAttack = 100 | IsMovingAttack,
-    MeeleeAttack = 100  | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
+    MeeleeAttack = 100 | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
+    MeeleeDefend = 100 | IsTargeted | IsMovingAttack,
 
     SpartanMove = 200 | IsExecutable | IsMove | IsMovingAttack,
 

@@ -24,6 +24,10 @@ public class Whiplash : ICrownsGuardFigureTypeInfo
             {
                 actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
             }
+            else if (sourceFigure.IsAllyTo(targetFigure))
+            {
+                actions.Push(new FigureAction(FigureActionType.MeeleeDefend, sourceIndex, targetIndex, sourceFigure));
+            }
             else
             {
                 actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));

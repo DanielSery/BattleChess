@@ -42,6 +42,7 @@ public class MountedArcher : ICrownsGuardFigureTypeInfo
                 }
                 else
                 {
+                    actions.Push(new FigureAction(FigureActionType.MeeleeDefend, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
             }

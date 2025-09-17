@@ -54,6 +54,7 @@ public class JapanArcher : ICrownsGuardFigureTypeInfo
                 }
                 else
                 {
+                    actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
             }

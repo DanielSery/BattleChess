@@ -41,6 +41,7 @@ public class Blade : ICrownsGuardFigureTypeInfo
                 }
                 else
                 {
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
             }
