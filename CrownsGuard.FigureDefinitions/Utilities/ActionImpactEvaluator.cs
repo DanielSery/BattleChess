@@ -17,9 +17,9 @@ public class ActionImpactEvaluator
         {
             case FigureActionType.IsTargeted | FigureActionType.IsMovingAttack:
             {
-                var sourceFigureValue = (int)action.SourceFigure;
+                var sourceFigureValue = action.SourceFigure.GetFigureValue();
                 var targetFigure = board[action.TargetIndex];
-                var targetFigureValue = (int)targetFigure;
+                var targetFigureValue = targetFigure.GetFigureValue();
 
                 if (action.SourceFigure.IsSameColor(targetFigure))
                 {
@@ -32,8 +32,14 @@ public class ActionImpactEvaluator
             case FigureActionType.IsTargeted:
             {
                 var attackerAdvantage = currentFigureColor == action.SourceFigure.GetFigureColor() ? 100 : 0;
-                var targetFigureValue = (int)board[action.TargetIndex] / 100;
+                var targetFigure = board[action.TargetIndex];
+                var targetFigureValue = targetFigure.GetFigureValue();
                 return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * targetFigureValue + attackerAdvantage;
+            }
+            case FigureActionType.IsMovingAttack:
+            {
+                var sourceFigureValue = action.SourceFigure.GetFigureValue();
+                return (int)(action.FigureActionType & FigureActionType.ActionValueMask) * 25 / sourceFigureValue;
             }
             default:
             {

@@ -247,7 +247,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         return depth switch
         {
             <= 1 => BlackFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
-            <= 2 => BlackAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
+            <= 3 => BlackAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
             _ => BlackCachingAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool)
         };
     }
@@ -262,7 +262,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         return depth switch
         {
             <= 1 => WhiteFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
-            <= 2 => WhiteAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
+            <= 3 => WhiteAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
             _ => WhiteCachingAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool)
         };
     }

@@ -34,7 +34,7 @@ public class King : ICrownsGuardFigureTypeInfo
         }
 
         var absoluteX = PositionsHelper.GetAbsoluteX(sourceIndex);
-        var absoluteY = PositionsHelper.GetAbsoluteY(absoluteX);
+        var absoluteY = PositionsHelper.GetAbsoluteY(sourceIndex);
         if (absoluteX != 4)
         {
             return;
@@ -80,20 +80,32 @@ public class King : ICrownsGuardFigureTypeInfo
             {
                 return;
             }
-
-            if (sourceFigure.IsAllyTo(board[+0+7*Constants.BoardLength]) &&
-                board[+1+7*Constants.BoardLength].IsEmpty() &&
-                board[+2+7*Constants.BoardLength].IsEmpty() &&
-                board[+3+7*Constants.BoardLength].IsEmpty())
+            
+            if (sourceFigure.IsAllyTo(board[+0+7*Constants.BoardLength]))
             {
-                actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +2+7*Constants.BoardLength, sourceFigure));
+                if (board[+1 + 7 * Constants.BoardLength].IsEmpty() &&
+                    board[+2 + 7 * Constants.BoardLength].IsEmpty() &&
+                    board[+3 + 7 * Constants.BoardLength].IsEmpty())
+                {
+                    actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +2+7*Constants.BoardLength, sourceFigure));
+                }
+                else
+                {
+                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourceIndex, +2+7*Constants.BoardLength, sourceFigure));
+                }
             }
 
-            if (sourceFigure.IsAllyTo(board[+7+7*Constants.BoardLength]) &&
-                board[+5+7*Constants.BoardLength].IsEmpty() &&
-                board[+6+7*Constants.BoardLength].IsEmpty())
+            if (sourceFigure.IsAllyTo(board[+7+7*Constants.BoardLength]))
             {
-                actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +2+7*Constants.BoardLength, sourceFigure));
+                if (board[+5+7*Constants.BoardLength].IsEmpty() &&
+                    board[+6+7*Constants.BoardLength].IsEmpty())
+                {
+                    actions.Push(new FigureAction(FigureActionType.Castling, sourceIndex, +6+7*Constants.BoardLength, sourceFigure));
+                }
+                else
+                {
+                    actions.Push(new FigureAction(FigureActionType.PossibleCastling, sourceIndex, +6+7*Constants.BoardLength, sourceFigure));
+                }
             }
         }
     }
