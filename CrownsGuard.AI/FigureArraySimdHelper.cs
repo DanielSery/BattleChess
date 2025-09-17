@@ -1,10 +1,38 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using CrownsGuard.Core.Figures;
 
-public static class FigureArrayHasher
+namespace CrownsGuard.AI;
+
+public static class FigureArraySimdHelper
 {
+    public static int SimdSum(ReadOnlySpan<Figure> figures)
+    {
+        // Reinterpret Figure as ushort
+        var span = MemoryMarshal.Cast<Figure, ushort>(figures);
+
+        var vectorSize = Vector<ushort>.Count;
+        var i = 0;
+        var vsum = Vector<ushort>.Zero;
+
+        // SIMD loop
+        for (; i <= span.Length - vectorSize; i += vectorSize)
+        {
+            vsum += new Vector<ushort>(span.Slice(i, vectorSize));
+        }
+
+        // Horizontal add of vector lanes
+        var sum = 0;
+        for (var j = 0; j < vectorSize; ++j)
+            sum += vsum[j];
+
+        // Remainder
+        for (; i < span.Length; ++i)
+            sum += span[i];
+
+        return sum;
+    }
+    
     public static long FastSimdHash64(ReadOnlySpan<Figure> figures)
     {
         // Safely reinterpret Figure as ushort

@@ -116,7 +116,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                     Array.Copy(_board, 0, clonedBoard, 0 , _board.Length);
 
                     FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-                    var eval = CachingAlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, false, actionsStack, boardPool, blackCache, whiteCache);
+                    var eval = WhiteSmartAlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, actionsStack, boardPool, blackCache, whiteCache);
                     resultActions.Add((eval, action));
                     // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
                 }
@@ -202,7 +202,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                     Array.Copy(_board, 0, clonedBoard, 0 , _board.Length);
 
                     FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-                    var eval = CachingAlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, true, actionsStack, boardPool, blackCache, whiteCache);
+                    var eval = BlackSmartAlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, actionsStack, boardPool, blackCache, whiteCache);
                     resultActions.Add((eval, action));
                     // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
                 }
@@ -238,204 +238,266 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         }
     }
 
-    private int CachingAlphaBeta(
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int BlackSmartAlphaBeta(
         Figure[] currentBoard,
-        int depth, int alpha, int beta, bool maximizingPlayer,
+        int depth, int alpha, int beta,
         Stack<FigureAction> actionsStack,
         Figure[][] boardPool,
         Dictionary<long, int> blackCache,
         Dictionary<long, int> whiteCache)
     {
-        var check = EvaluateWin(currentBoard);
-        if (depth == 0 || Math.Abs(check) > 10_000_000)
+        return depth switch
         {
-            return check;
-        }
-
-        if (maximizingPlayer)
-        {
-            var maxEval = int.MinValue;
-            for (var i = 0; i < currentBoard.Length; i++)
-            {
-                var figure = currentBoard[i];
-                if (!figure.IsBlack())
-                    continue;
-
-                var oldCount = actionsStack.Count;
-                FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
-                var added = actionsStack.Count - oldCount;
-                for (var j = 0; j < added; j++)
-                {
-                    var action = actionsStack.Pop();
-                    if (beta <= alpha)
-                        continue; // Beta cut-off
-
-                    if (!action.FigureActionType.IsExecutable())
-                        continue;
-
-                    var clonedBoard = boardPool[depth];
-                    Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-                    var boardHash = FigureArrayHasher.FastSimdHash64(clonedBoard);
-                    if (blackCache.TryGetValue(boardHash, out var eval))
-                    {
-                        // Console.WriteLine($"Cached {depth}");
-                        maxEval = Math.Max(maxEval, eval);
-                        alpha = Math.Max(alpha, eval);
-                    }
-                    else
-                    {
-                        eval = depth >= 2
-                            ? CachingAlphaBeta(clonedBoard, depth - 1, alpha, beta, false, actionsStack, boardPool, blackCache, whiteCache)
-                            : AlphaBeta(clonedBoard, depth - 1, alpha, beta, false, actionsStack, boardPool);
-                        maxEval = Math.Max(maxEval, eval);
-                        alpha = Math.Max(alpha, eval);
-                        blackCache[boardHash] = eval;
-                    }
-                }
-            }
-            return maxEval;
-        }
-        else
-        {
-            var minEval = int.MaxValue;
-            for (var i = 0; i < currentBoard.Length; i++)
-            {
-                var figure = currentBoard[i];
-                if (!figure.IsWhite())
-                    continue;
-
-                var oldCount = actionsStack.Count;
-                FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
-                var added = actionsStack.Count - oldCount;
-                for (var j = 0; j < added; j++)
-                {
-                    var action = actionsStack.Pop();
-                    if (beta <= alpha)
-                        continue; // Alpha cut-off
-
-                    if (!action.FigureActionType.IsExecutable())
-                        continue;
-
-                    var clonedBoard = boardPool[depth];
-                    Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-                    var boardHash = FigureArrayHasher.FastSimdHash64(clonedBoard);
-                    if (whiteCache.TryGetValue(boardHash, out var eval))
-                    {
-                        // Console.WriteLine($"Cached {depth}");
-                        minEval = Math.Min(minEval, eval);
-                        beta = Math.Min(beta, eval);
-                    }
-                    else
-                    {
-                        eval = depth >= 2
-                            ? CachingAlphaBeta(clonedBoard, depth - 1, alpha, beta, true, actionsStack, boardPool, blackCache, whiteCache)
-                            : AlphaBeta(clonedBoard, depth - 1, alpha, beta, true, actionsStack, boardPool);
-                        minEval = Math.Min(minEval, eval);
-                        beta = Math.Min(beta, eval);
-                        whiteCache[boardHash] = eval;
-                    }
-                }
-            }
-
-            return minEval;
-        }
+            <= 1 => BlackFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
+            <= 2 => BlackAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool, blackCache, whiteCache),
+            _ => BlackCachingAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool, blackCache, whiteCache)
+        };
     }
 
-    private int AlphaBeta(
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int WhiteSmartAlphaBeta(
         Figure[] currentBoard,
-        int depth, int alpha, int beta, bool maximizingPlayer,
+        int depth, int alpha, int beta,
         Stack<FigureAction> actionsStack,
-        Figure[][] boardPool)
+        Figure[][] boardPool,
+        Dictionary<long, int> blackCache,
+        Dictionary<long, int> whiteCache)
     {
-        var check = EvaluateBoard(currentBoard, actionsStack, maximizingPlayer ? Figure.IsBlack : Figure.IsWhite);
-        if (depth == 0 || Math.Abs(check) > 10_000_000)
+        return depth switch
         {
-            return check;
-        }
+            <= 1 => WhiteFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
+            <= 2 => WhiteAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool, blackCache, whiteCache),
+            _ => WhiteCachingAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool, blackCache, whiteCache)
+        };
+    }
 
-        if (maximizingPlayer)
+    private int WhiteCachingAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, Stack<FigureAction> actionsStack,
+        Figure[][] boardPool, Dictionary<long, int> blackCache, Dictionary<long, int> whiteCache)
+    {
+        var minEval = int.MaxValue;
+        for (var i = 0; i < currentBoard.Length; i++)
         {
-            var maxEval = int.MinValue;
-            for (var i = 0; i < currentBoard.Length; i++)
+            var figure = currentBoard[i];
+            if (!figure.IsWhite())
+                continue;
+
+            var oldCount = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
+            var added = actionsStack.Count - oldCount;
+            for (var j = 0; j < added; j++)
             {
-                var figure = currentBoard[i];
-                if (!figure.IsBlack())
+                var action = actionsStack.Pop();
+                if (beta <= alpha)
+                    continue; // Alpha cut-off
+
+                if (!action.FigureActionType.IsExecutable())
                     continue;
 
-                var oldCount = actionsStack.Count;
-                FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
-                var added = actionsStack.Count - oldCount;
-                for (var j = 0; j < added; j++)
+                var clonedBoard = boardPool[depth];
+                Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                var boardHash = FigureArraySimdHelper.FastSimdHash64(clonedBoard);
+                if (whiteCache.TryGetValue(boardHash, out var eval))
                 {
-                    var action = actionsStack.Pop();
-                    if (beta <= alpha)
-                        continue; // Beta cut-off
-
-                    if (!action.FigureActionType.IsExecutable())
-                        continue;
-
-                    var clonedBoard = boardPool[depth];
-                    Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-                    var eval = AlphaBeta(clonedBoard, depth - 1, alpha, beta, false, actionsStack, boardPool);
-                    maxEval = Math.Max(maxEval, eval);
-                    alpha = Math.Max(alpha, eval);
-                }
-            }
-            return maxEval;
-        }
-        else
-        {
-            var minEval = int.MaxValue;
-            for (var i = 0; i < currentBoard.Length; i++)
-            {
-                var figure = currentBoard[i];
-                if (!figure.IsWhite())
-                    continue;
-
-                var oldCount = actionsStack.Count;
-                FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
-                var added = actionsStack.Count - oldCount;
-                for (var j = 0; j < added; j++)
-                {
-                    var action = actionsStack.Pop();
-                    if (beta <= alpha)
-                        continue; // Alpha cut-off
-
-                    if (!action.FigureActionType.IsExecutable())
-                        continue;
-
-                    var clonedBoard = boardPool[depth];
-                    Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
-                    var eval = AlphaBeta(clonedBoard, depth - 1, alpha, beta, true, actionsStack, boardPool);
+                    // Console.WriteLine($"Cached {depth}");
                     minEval = Math.Min(minEval, eval);
                     beta = Math.Min(beta, eval);
                 }
+                else
+                {
+                    eval = BlackSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool, blackCache, whiteCache);
+                    minEval = Math.Min(minEval, eval);
+                    beta = Math.Min(beta, eval);
+                    whiteCache[boardHash] = eval;
+                }
             }
-            
-            return minEval;
         }
+
+        return minEval;
+    }
+
+    private int WhiteAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, Stack<FigureAction> actionsStack,
+        Figure[][] boardPool, Dictionary<long, int> blackCache, Dictionary<long, int> whiteCache)
+    {
+        var minEval = int.MaxValue;
+        for (var i = 0; i < currentBoard.Length; i++)
+        {
+            var figure = currentBoard[i];
+            if (!figure.IsWhite())
+                continue;
+
+            var oldCount = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
+            var added = actionsStack.Count - oldCount;
+            for (var j = 0; j < added; j++)
+            {
+                var action = actionsStack.Pop();
+                if (beta <= alpha)
+                    continue; // Alpha cut-off
+
+                if (!action.FigureActionType.IsExecutable())
+                    continue;
+
+                var clonedBoard = boardPool[depth];
+                Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                var eval = BlackSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool, blackCache, whiteCache);
+                minEval = Math.Min(minEval, eval);
+                beta = Math.Min(beta, eval);
+            }
+        }
+            
+        return minEval;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+    private int WhiteFinalAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, Stack<FigureAction> actionsStack,
+        Figure[][] boardPool)
+    {
+        var minEval = int.MaxValue;
+        for (var i = 0; i < currentBoard.Length; i++)
+        {
+            var figure = currentBoard[i];
+            if (!figure.IsWhite())
+                continue;
+
+            var oldCount = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
+            var added = actionsStack.Count - oldCount;
+            for (var j = 0; j < added; j++)
+            {
+                var action = actionsStack.Pop();
+                if (beta <= alpha)
+                    continue; // Alpha cut-off
+
+                if (!action.FigureActionType.IsExecutable())
+                    continue;
+
+                var clonedBoard = boardPool[depth];
+                Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                var eval = EvaluateBoard(currentBoard, actionsStack, Figure.IsWhite);
+                minEval = Math.Min(minEval, eval);
+                beta = Math.Min(beta, eval);
+            }
+        }
+            
+        return minEval;
+    }
+
+    private int BlackCachingAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, Stack<FigureAction> actionsStack,
+        Figure[][] boardPool, Dictionary<long, int> blackCache, Dictionary<long, int> whiteCache)
+    {
+        var maxEval = int.MinValue;
+        for (var i = 0; i < currentBoard.Length; i++)
+        {
+            var figure = currentBoard[i];
+            if (!figure.IsBlack())
+                continue;
+
+            var oldCount = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
+            var added = actionsStack.Count - oldCount;
+            for (var j = 0; j < added; j++)
+            {
+                var action = actionsStack.Pop();
+                if (beta <= alpha)
+                    continue; // Beta cut-off
+
+                if (!action.FigureActionType.IsExecutable())
+                    continue;
+
+                var clonedBoard = boardPool[depth];
+                Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                var boardHash = FigureArraySimdHelper.FastSimdHash64(clonedBoard);
+                if (blackCache.TryGetValue(boardHash, out var eval))
+                {
+                    // Console.WriteLine($"Cached {depth}");
+                    maxEval = Math.Max(maxEval, eval);
+                    alpha = Math.Max(alpha, eval);
+                }
+                else
+                {
+                    eval = WhiteSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool, blackCache, whiteCache);
+                    maxEval = Math.Max(maxEval, eval);
+                    alpha = Math.Max(alpha, eval);
+                    blackCache[boardHash] = eval;
+                }
+            }
+        }
+        return maxEval;
+    }
+
+    private int BlackAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, 
+        Stack<FigureAction> actionsStack, Figure[][] boardPool, Dictionary<long, int> blackCache, Dictionary<long, int> whiteCache)
+    {
+        var maxEval = int.MinValue;
+        for (var i = 0; i < currentBoard.Length; i++)
+        {
+            var figure = currentBoard[i];
+            if (!figure.IsBlack())
+                continue;
+
+            var oldCount = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
+            var added = actionsStack.Count - oldCount;
+            for (var j = 0; j < added; j++)
+            {
+                var action = actionsStack.Pop();
+                if (beta <= alpha)
+                    continue; // Beta cut-off
+
+                if (!action.FigureActionType.IsExecutable())
+                    continue;
+
+                var clonedBoard = boardPool[depth];
+                Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                var eval = WhiteSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool, blackCache, whiteCache);
+                maxEval = Math.Max(maxEval, eval);
+                alpha = Math.Max(alpha, eval);
+            }
+        }
+        return maxEval;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+    private int BlackFinalAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, Stack<FigureAction> actionsStack, Figure[][] boardPool)
+    {
+        var maxEval = int.MinValue;
+        for (var i = 0; i < currentBoard.Length; i++)
+        {
+            var figure = currentBoard[i];
+            if (!figure.IsBlack())
+                continue;
+
+            var oldCount = actionsStack.Count;
+            FigureActionsResolver.GetPossibleActions(i, figure, currentBoard, actionsStack);
+            var added = actionsStack.Count - oldCount;
+            for (var j = 0; j < added; j++)
+            {
+                var action = actionsStack.Pop();
+                if (beta <= alpha)
+                    continue; // Beta cut-off
+
+                if (!action.FigureActionType.IsExecutable())
+                    continue;
+
+                var clonedBoard = boardPool[depth];
+                Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                var eval = EvaluateBoard(currentBoard, actionsStack, Figure.IsBlack);
+                maxEval = Math.Max(maxEval, eval);
+                alpha = Math.Max(alpha, eval);
+            }
+        }
+        return maxEval;
     }
 
     private void OnEvent(BoardEvent boardEvent, Span<Figure> board)
     {
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    private int EvaluateWin(ReadOnlySpan<Figure> board)
-    {
-        var analysis = _analysis;
-        var evaluation = 0;
-        for (var i = 0; i < board.Length; i++)
-        {
-            var figure = board[i];
-            evaluation += analysis[(int)figure][i];
-        }
-
-        return evaluation;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
