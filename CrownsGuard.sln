@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.Database", "Cro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.AI", "CrownsGuard.AI\CrownsGuard.AI.csproj", "{7DA609A7-695D-4946-9D7D-A84503B27678}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.AI.Test", "CrownsGuard.AI.Test\CrownsGuard.AI.Test.csproj", "{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{7DA609A7-695D-4946-9D7D-A84503B27678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DA609A7-695D-4946-9D7D-A84503B27678}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DA609A7-695D-4946-9D7D-A84503B27678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,5 +110,6 @@ Global
 		{7B6228A4-858A-40C3-BCA3-D50ABB7C0D0A} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 		{D0B5A3FE-6E94-4A69-BB02-F1E5D33F0BBE} = {F8495298-BC3B-4E03-891C-BB762E223776}
 		{7DA609A7-695D-4946-9D7D-A84503B27678} = {F8495298-BC3B-4E03-891C-BB762E223776}
+		{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 	EndGlobalSection
 EndGlobal

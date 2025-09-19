@@ -20,8 +20,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     private readonly int _difficulty;
     private readonly Random _random;
     private FrozenDictionary<int, int[]> _analysis = FrozenDictionary<int, int[]>.Empty;
-    private readonly ConcurrentDictionary<long, int> _blackCache = new ConcurrentDictionary<long, int>();
-    private readonly ConcurrentDictionary<long, int> _whiteCache = new ConcurrentDictionary<long, int>();
+    private readonly ConcurrentDictionary<long, int>[] _positionCache = new ConcurrentDictionary<long, int>[10];
 
     public AiControlledPlayer(PlayerColor playerColor, Figure[] board, Action<byte, byte, TimeSpan> requestMove, int difficulty)
     {
@@ -29,6 +28,10 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         _board = board;
         _requestMove = requestMove;
         _difficulty = difficulty;
+        for (var i = 0; i < _positionCache.Length; i++)
+        {
+            _positionCache[i] = new ConcurrentDictionary<long, int>();
+        }
         PlayerColor = playerColor;
     }
 
@@ -59,8 +62,11 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     /// <inheritdoc />
     public Task HandleAutomaticTurnAsync()
     {
-        _blackCache.Clear();
-        _whiteCache.Clear();
+        foreach (var positionCache in _positionCache)
+        {
+            positionCache.Clear();
+        }
+        
         return Task.Run(() =>
         {
             if (PlayerColor == PlayerColor.White)
@@ -247,7 +253,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         return depth switch
         {
             <= 1 => BlackFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
-            <= 3 => BlackAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
+            <= 2 => BlackAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
             _ => BlackCachingAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool)
         };
     }
@@ -262,7 +268,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         return depth switch
         {
             <= 1 => WhiteFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
-            <= 3 => WhiteAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
+            <= 2 => WhiteAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
             _ => WhiteCachingAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool)
         };
     }
@@ -270,6 +276,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     private int WhiteCachingAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, Stack<FigureAction> actionsStack,
         Figure[][] boardPool)
     {
+        var cache = _positionCache[depth];
         var minEval = int.MaxValue;
         for (var i = 0; i < currentBoard.Length; i++)
         {
@@ -293,7 +300,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
                 FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
                 var boardHash = FigureArraySimdHelper.FastSimdHash64(clonedBoard);
-                if (_whiteCache.TryGetValue(boardHash, out var eval))
+                if (cache.TryGetValue(boardHash, out var eval))
                 {
                     // Console.WriteLine($"Cached {depth}");
                     minEval = Math.Min(minEval, eval);
@@ -304,7 +311,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                     eval = BlackSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool);
                     minEval = Math.Min(minEval, eval);
                     beta = Math.Min(beta, eval);
-                    _whiteCache[boardHash] = eval;
+                    cache[boardHash] = eval;
                 }
             }
         }
@@ -384,6 +391,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
     private int BlackCachingAlphaBeta(Figure[] currentBoard, int depth, int alpha, int beta, Stack<FigureAction> actionsStack,
         Figure[][] boardPool)
     {
+        var cache = _positionCache[depth];
         var maxEval = int.MinValue;
         for (var i = 0; i < currentBoard.Length; i++)
         {
@@ -407,7 +415,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
                 FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
                 var boardHash = FigureArraySimdHelper.FastSimdHash64(clonedBoard);
-                if (_blackCache.TryGetValue(boardHash, out var eval))
+                if (cache.TryGetValue(boardHash, out var eval))
                 {
                     // Console.WriteLine($"Cached {depth}");
                     maxEval = Math.Max(maxEval, eval);
@@ -418,7 +426,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
                     eval = WhiteSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool);
                     maxEval = Math.Max(maxEval, eval);
                     alpha = Math.Max(alpha, eval);
-                    _blackCache[boardHash] = eval;
+                    cache[boardHash] = eval;
                 }
             }
         }
