@@ -1,5 +1,3 @@
-// Copyright (c) Veeam Software Group GmbH
-
 using System.Collections;
 using CrownsGuard.Core.Figures;
 

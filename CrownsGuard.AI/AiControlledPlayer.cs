@@ -1,15 +1,16 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Frozen;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using CrownsGuard.AI.Helpers;
+﻿using CrownsGuard.AI.Helpers;
 using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Engine.Helpers;
+using CrownsGuard.FigureDefinitions.Figures;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
+using System.Collections.Concurrent;
+using System.Collections.Frozen;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace CrownsGuard.AI;
 
@@ -250,6 +251,10 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
         Stack<FigureAction> actionsStack,
         Figure[][] boardPool)
     {
+        var kingEvaluation = FigureArraySimdHelper.SimdSum(currentBoard);
+        if (Math.Abs(kingEvaluation) > 800_000_000)
+            return kingEvaluation;
+
         return depth switch
         {
             <= 1 => BlackFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
@@ -265,6 +270,10 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
         Stack<FigureAction> actionsStack,
         Figure[][] boardPool)
     {
+        var kingEvaluation = FigureArraySimdHelper.SimdSum(currentBoard);
+        if (Math.Abs(kingEvaluation) > 800_000_000)
+            return kingEvaluation;
+
         return depth switch
         {
             <= 1 => WhiteFinalAlphaBeta(currentBoard, depth, alpha, beta, actionsStack, boardPool),
@@ -506,6 +515,10 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     private int EvaluateBoard(ReadOnlySpan<Figure> board, Stack<FigureAction> actionsStack, Figure currentFigureColor)
     {
+        var kingEvaluation = FigureArraySimdHelper.SimdSum(board);
+        if (Math.Abs(kingEvaluation) > 800_000_000)
+            return kingEvaluation;
+
         var analysis = _analysis;
         var evaluation = 0;
         for (var i = 0; i < board.Length; i++)
@@ -514,13 +527,6 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
             evaluation += analysis[(int)figure][i];
         }
 
-        if (Math.Abs(evaluation) > 800_000_000)
-        {
-            return evaluation;
-        }
-        else
-        {
-            return BoardEvaluationHelper.EvaluateBoard(board, actionsStack, currentFigureColor);
-        }
+        return evaluation + BoardEvaluationHelper.EvaluateBoard(board, actionsStack, currentFigureColor);
     }
 }

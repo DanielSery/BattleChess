@@ -1,5 +1,3 @@
-// Copyright (c) Veeam Software Group GmbH
-
 using CrownsGuard.Core;
 using System.Runtime.CompilerServices;
 
