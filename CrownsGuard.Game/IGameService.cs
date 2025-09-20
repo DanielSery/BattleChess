@@ -1,5 +1,4 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Players;
 using CrownsGuard.Game.Players;
 
 namespace CrownsGuard.Game;
@@ -19,18 +18,18 @@ public interface IGameService
     /// <summary>
     ///     Gets current player.
     /// </summary>
-    IPlayerInfo CurrentPlayerInfo { get; }
+    IPlayer CurrentPlayerInfo { get; }
 
-    IPlayerInfo WhitePlayer { get; }
+    IPlayer WhitePlayer { get; }
 
-    IPlayerInfo BlackPlayer { get; }
+    IPlayer BlackPlayer { get; }
     
     Figure[] Board { get; }
     
     /// <summary>
     ///     Set current players.
     /// </summary>
-    void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, Figure[] board);
+    void StartGame(IPlayer player1, IPlayer player2, PlayerColor startingPlayerColor, Figure[] board);
 
     /// <summary>
     ///     Sets next player as <see cref="CurrentPlayerInfo" />.
@@ -43,7 +42,7 @@ public interface IGameService
 
     void StopGame();
     
-    void PlayerLost(IPlayerInfo player, WinType winType, bool publishResult);
+    void PlayerLost(IPlayer player, WinType winType, bool publishResult);
     
-    void PlayerWin(IPlayerInfo player, WinType winType, bool publishResult);
+    void PlayerWin(IPlayer player, WinType winType, bool publishResult);
 }

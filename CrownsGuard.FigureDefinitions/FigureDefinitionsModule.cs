@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using CrownsGuard.Core.Figures;
 
 namespace CrownsGuard.FigureDefinitions;
 

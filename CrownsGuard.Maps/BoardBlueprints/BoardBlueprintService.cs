@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Maps.IO;
 using CrownsGuard.Maps.Utilities;

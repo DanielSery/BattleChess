@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using CrownsGuard.Core;
 
 namespace CrownsGuard.Game;
 

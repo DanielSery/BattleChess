@@ -1,7 +1,8 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
+using CrownsGuard.FigureDefinitions;
+using CrownsGuard.Game;
+using CrownsGuard.Game.Players;
 
 namespace CrownsGuard.Maps.Figures;
 

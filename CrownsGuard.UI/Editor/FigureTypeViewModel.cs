@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Players;
+using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.Game.Players;
 using CrownsGuard.Maps.Figures;
 
 namespace CrownsGuard.UI.Editor;

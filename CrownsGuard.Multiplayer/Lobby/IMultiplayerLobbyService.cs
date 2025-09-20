@@ -1,4 +1,4 @@
-﻿using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Database.Lobby;
 using FluentResults;
 
@@ -17,7 +17,7 @@ public interface IMultiplayerLobbyService
     public Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         string password,
-        BoardBlueprint myMap,
+        Figure[] myMap,
         CancellationToken cancellationToken);
     
     public Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(
@@ -26,7 +26,7 @@ public interface IMultiplayerLobbyService
     
     public Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
-        string password, 
-        BoardBlueprint myMap,
+        string password,
+        Figure[] myMap,
         CancellationToken cancellationToken);
 }

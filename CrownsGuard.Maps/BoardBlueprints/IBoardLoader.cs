@@ -1,5 +1,4 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Maps.GameBoard;
+﻿using CrownsGuard.Maps.GameBoard;
 
 namespace CrownsGuard.Maps.BoardBlueprints;
 

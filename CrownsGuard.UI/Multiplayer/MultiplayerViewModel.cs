@@ -3,9 +3,6 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Windows;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
 using CrownsGuard.Multiplayer.Game;
 using CrownsGuard.Multiplayer.Lobby;
 using CrownsGuard.Multiplayer.Players;
@@ -19,6 +16,9 @@ using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Game;
 using CrownsGuard.UI.Services;
 using Nicenis.Windows.ViewModels;
+using CrownsGuard.Game.Players;
+using CrownsGuard.Core.Helpers;
+using CrownsGuard.Maps.BoardBlueprints;
 
 namespace CrownsGuard.UI.Multiplayer;
 
@@ -110,7 +110,7 @@ public class MultiplayerViewModel : ViewModelBase
         using var loadingOperation = _loadingService.StartLoadingOperation("Finding ranked game");
         var myMap = _teamBoardViewModel.GetMapBlueprint();
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
-        if (!myMap.IsValid(unlockedFigures))
+        if (!myMap.Figures.IsValid(unlockedFigures))
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Setup has units which weren't unlocked yet");
             _soundService.PlaySoundEffect(SoundEffectType.Error);
@@ -118,7 +118,7 @@ public class MultiplayerViewModel : ViewModelBase
         }
         
         _soundService.PlaySoundEffect(SoundEffectType.Button);
-        var request = await _multiplayerRankedService.FindRankedGameAsync(myMap, loadingOperation.CancellationToken);
+        var request = await _multiplayerRankedService.FindRankedGameAsync(myMap.Figures, loadingOperation.CancellationToken);
         if (request.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, request.Reasons.First().Message);
@@ -162,7 +162,7 @@ public class MultiplayerViewModel : ViewModelBase
     private async Task CreateLobby()
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Creating lobby");
-        var myMap = _teamBoardViewModel.GetMapBlueprint();
+        var myMap = _teamBoardViewModel.GetMapBlueprint().Figures;
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
         {
@@ -203,7 +203,7 @@ public class MultiplayerViewModel : ViewModelBase
             : new RemoteOnlinePlayerInfo(PlayerColor.Black, "Blue player", null, null);
 
         var hisMap = GetFigures(gameJoin.Map);
-        var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, lobby.IsHostStarting);
+        var playedMap = GetJoinedMapBlueprint(myMap, hisMap, lobby.IsHostStarting);
         _boardViewModel.StartMultiplayerGame(
             MultiplayerGameType.Lobby | MultiplayerGameType.Host, lobby.Id, 
             player1, player2,
@@ -213,7 +213,7 @@ public class MultiplayerViewModel : ViewModelBase
     private async Task JoinLobby()
     {
         using var loadingOperation = _loadingService.StartLoadingOperation("Joining lobby");
-        var myMap = _teamBoardViewModel.GetMapBlueprint();
+        var myMap = _teamBoardViewModel.GetMapBlueprint().Figures;
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
         {
@@ -243,7 +243,7 @@ public class MultiplayerViewModel : ViewModelBase
             : new RemoteOnlinePlayerInfo(PlayerColor.Black, "Blue player", null, null);
         
         var hisMap = GetFigures(lobby.Map);
-        var playedMap = GetJoinedMapBlueprint(myMap.Figures, hisMap, !lobby.IsHostStarting);
+        var playedMap = GetJoinedMapBlueprint(myMap, hisMap, !lobby.IsHostStarting);
         _boardViewModel.StartMultiplayerGame(
             MultiplayerGameType.Lobby, lobby.Id, 
             player1, player2,

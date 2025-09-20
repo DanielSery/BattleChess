@@ -1,7 +1,7 @@
 ﻿using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
+using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.GameBoard;
 
 namespace CrownsGuard.Maps.Utilities;

@@ -1,4 +1,4 @@
-﻿using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Database.Players;
 using CrownsGuard.Database.Ranked;
 using CrownsGuard.Database.Utilities;
@@ -24,7 +24,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         _gameJoins = gameJoins;
     }
 
-    public async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(BoardBlueprint myMap, CancellationToken cancellationToken)
+    public async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(Figure[] myMap, CancellationToken cancellationToken)
     {
             var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
             if (currentPlayer is null)

@@ -1,72 +1,90 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.FigureDefinitions.Figures;
 using CrownsGuard.FigureDefinitions.Localization;
+using System.Collections.Frozen;
 
 namespace CrownsGuard.FigureDefinitions;
 
 public sealed class CrownsGuardFigureTypeInfoGroup : IFigureTypeInfoGroup
 {
-    private readonly Dictionary<Figure, IFigureTypeInfo> _figuresDictionary;
+    private readonly FrozenDictionary<Figure, IFigureTypeInfo> _figuresDictionary;
     public string DisplayName => CurrentLocalization.Instance[$"{nameof(CrownsGuardFigureTypeInfoGroup)}_Name"];
+
+    public static readonly IFigureTypeInfo Empty = new NeutralFigureTypeInfo(nameof(Empty), Figure.Empty);
+    public static readonly IFigureTypeInfo Wall = new NeutralFigureTypeInfo(nameof(Wall), Figure.Wall);
+    public static readonly IFigureTypeInfo Explosives = new NeutralFigureTypeInfo(nameof(Explosives), Figure.Explosives);
+    public static readonly IFigureTypeInfo Trench = new NeutralFigureTypeInfo(nameof(Trench), Figure.Trench);
+    public static readonly IFigureTypeInfo Fire = new NeutralFigureTypeInfo(nameof(Fire), Figure.Fire);
+
+    public static readonly IFigureTypeInfo Peasant = new PlayerFigureTypeInfo(nameof(Peasant), Figure.Peasant);
+    public static readonly IFigureTypeInfo Spearman = new PlayerFigureTypeInfo(nameof(Spearman), Figure.Spearman);
+    public static readonly IFigureTypeInfo Pikeman = new PlayerFigureTypeInfo(nameof(Pikeman), Figure.Pikeman);
+    public static readonly IFigureTypeInfo LegionarySword = new PlayerFigureTypeInfo(nameof(LegionarySword), Figure.LegionarySword);
+    public static readonly IFigureTypeInfo LegionaryPike = new PlayerFigureTypeInfo(nameof(LegionaryPike), Figure.LegionaryPike);
+
+    public static readonly IFigureTypeInfo MountedKnight = new PlayerFigureTypeInfo(nameof(MountedKnight), Figure.MountedKnight);
+    public static readonly IFigureTypeInfo CamelRider = new PlayerFigureTypeInfo(nameof(CamelRider), Figure.CamelRider);
+    public static readonly IFigureTypeInfo MountedArcher = new PlayerFigureTypeInfo(nameof(MountedArcher), Figure.MountedArcher);
+    public static readonly IFigureTypeInfo CamelArcher = new PlayerFigureTypeInfo(nameof(CamelArcher), Figure.CamelArcher);
+    public static readonly IFigureTypeInfo Scout = new PlayerFigureTypeInfo(nameof(Scout), Figure.Scout);
+    public static readonly IFigureTypeInfo Dogs = new PlayerFigureTypeInfo(nameof(Dogs), Figure.Dogs);
+    public static readonly IFigureTypeInfo Queen = new PlayerFigureTypeInfo(nameof(Queen), Figure.Queen);
+
+    public static readonly IFigureTypeInfo Knight = new PlayerFigureTypeInfo(nameof(Knight), Figure.Knight);
+    public static readonly IFigureTypeInfo Samurai = new PlayerFigureTypeInfo(nameof(Samurai), Figure.Samurai);
+    public static readonly IFigureTypeInfo Chinese = new PlayerFigureTypeInfo(nameof(Chinese), Figure.Chinese);
+    public static readonly IFigureTypeInfo Nordguard = new PlayerFigureTypeInfo(nameof(Nordguard), Figure.Nordguard);
+    public static readonly IFigureTypeInfo Blade = new PlayerFigureTypeInfo(nameof(Blade), Figure.Blade);
+    public static readonly IFigureTypeInfo Elephant = new PlayerFigureTypeInfo(nameof(Elephant), Figure.Elephant);
+
+    public static readonly IFigureTypeInfo Archer = new PlayerFigureTypeInfo(nameof(Archer), Figure.Archer);
+    public static readonly IFigureTypeInfo JapanArcher = new PlayerFigureTypeInfo(nameof(JapanArcher), Figure.JapanArcher);
+    public static readonly IFigureTypeInfo Ranger = new PlayerFigureTypeInfo(nameof(Ranger), Figure.Ranger);
+    public static readonly IFigureTypeInfo Crossbow = new PlayerFigureTypeInfo(nameof(Crossbow), Figure.Crossbow);
+    public static readonly IFigureTypeInfo Musketeer = new PlayerFigureTypeInfo(nameof(Musketeer), Figure.Musketeer);
+    public static readonly IFigureTypeInfo Cannon = new PlayerFigureTypeInfo(nameof(Cannon), Figure.Cannon);
+    public static readonly IFigureTypeInfo Catapult = new PlayerFigureTypeInfo(nameof(Catapult), Figure.Catapult);
+
+    public static readonly IFigureTypeInfo Spartan = new PlayerFigureTypeInfo(nameof(Spartan), Figure.Spartan);
+    public static readonly IFigureTypeInfo Warhammer = new PlayerFigureTypeInfo(nameof(Warhammer), Figure.Warhammer);
+    public static readonly IFigureTypeInfo BattleAxe = new PlayerFigureTypeInfo(nameof(BattleAxe), Figure.BattleAxe);
+    public static readonly IFigureTypeInfo Mage = new PlayerFigureTypeInfo(nameof(Mage), Figure.Mage);
+    public static readonly IFigureTypeInfo Wizzard = new PlayerFigureTypeInfo(nameof(Wizzard), Figure.Wizzard);
+
+    public static readonly IFigureTypeInfo King = new PlayerFigureTypeInfo(nameof(King), Figure.King);
+    public static readonly IFigureTypeInfo Trader = new PlayerFigureTypeInfo(nameof(Trader), Figure.Trader);
+    public static readonly IFigureTypeInfo Bard = new PlayerFigureTypeInfo(nameof(Bard), Figure.Bard);
+    public static readonly IFigureTypeInfo Barbarian = new PlayerFigureTypeInfo(nameof(Barbarian), Figure.Barbarian);
+    public static readonly IFigureTypeInfo Whiplash = new PlayerFigureTypeInfo(nameof(Whiplash), Figure.Whiplash);
+    public static readonly IFigureTypeInfo Priest = new PlayerFigureTypeInfo(nameof(Priest), Figure.Priest);
+
+    public static readonly IFigureTypeInfo Builder = new PlayerFigureTypeInfo(nameof(Builder), Figure.Builder);
+    public static readonly IFigureTypeInfo Alchemist = new PlayerFigureTypeInfo(nameof(Alchemist), Figure.Alchemist);
+    public static readonly IFigureTypeInfo Miner = new PlayerFigureTypeInfo(nameof(Miner), Figure.Miner);
+    public static readonly IFigureTypeInfo Dragon = new PlayerFigureTypeInfo(nameof(Dragon), Figure.Dragon);
 
     public CrownsGuardFigureTypeInfoGroup()
     {
-        _figuresDictionary = new Dictionary<Figure, IFigureTypeInfo>()
-        {
-            { Figure.Empty, new Empty() },
-            { Figure.Wall, new Wall() },
-            { Figure.Explosives, new Explosives() },
-            { Figure.Trench, new Trench() },
-            { Figure.Fire, new Fire() },
+        FigureTypes = [
+            Empty, Wall, Explosives, Trench, Fire,
 
-            { Figure.Peasant, new Peasant() },
-            { Figure.Spearman, new Spearman() },
-            { Figure.Pikeman, new Pikeman() },
-            { Figure.LegionarySword, new LegionarySword() },
-            { Figure.LegionaryPike, new LegionaryPike() },
+            Peasant, Spearman, Pikeman, LegionarySword, LegionaryPike,
 
-            { Figure.MountedKnight, new MountedKnight() },
-            { Figure.CamelRider, new CamelRider() },
-            { Figure.MountedArcher, new MountedArcher() },
-            { Figure.CamelArcher, new CamelArcher() },
-            { Figure.Scout, new Scout() },
-            { Figure.Dogs, new Dogs() },
-            { Figure.Queen, new Queen() },
+            MountedKnight, CamelRider, MountedArcher, CamelArcher, Scout, Dogs, Queen,
 
-            { Figure.Knight, new Knight() },
-            { Figure.Samurai, new Samurai() },
-            { Figure.Chinese, new Chinese() },
-            { Figure.Nordguard, new Nordguard() },
-            { Figure.Blade, new Blade() },
-            { Figure.Elephant, new Elephant() },
+            Knight, Samurai, Chinese, Nordguard, Blade, Elephant,
 
-            { Figure.Archer, new Archer() },
-            { Figure.JapanArcher, new JapanArcher() },
-            { Figure.Ranger, new Ranger() },
-            { Figure.Crossbow, new Crossbow() },
-            { Figure.Musketeer, new Musketeer() },
-            { Figure.Cannon, new Cannon() },
-            { Figure.Catapult, new Catapult() },
+            Archer, JapanArcher, Ranger, Crossbow, Musketeer, Cannon, Catapult,
 
-            { Figure.Spartan, new Spartan() },
-            { Figure.Warhammer, new Warhammer() },
-            { Figure.BattleAxe, new BattleAxe() },
-            { Figure.Mage, new Mage() },
-            { Figure.Wizzard, new Wizzard() },
+            Spartan, Warhammer, BattleAxe, Mage, Wizzard,
 
-            { Figure.King, new King() },
-            { Figure.Trader, new Trader() },
-            { Figure.Bard, new Bard() },
-            { Figure.Barbarian, new Barbarian() },
-            { Figure.Whiplash, new Whiplash() },
-            { Figure.Priest, new Priest() },
+            King, Trader, Bard, Barbarian, Whiplash, Priest,
 
-            { Figure.Builder, new Builder() },
-            { Figure.Alchemist, new Alchemist() },
-            { Figure.Miner, new Miner() },
-            { Figure.Dragon, new Dragon() },
-        };
-        FigureTypes = _figuresDictionary.Values.ToArray();
+            Builder, Alchemist, Miner, Dragon
+
+        ];
+
+        _figuresDictionary = FigureTypes.ToFrozenDictionary(x => x.Figure, x => x);
     }
 
     public IFigureTypeInfo[] FigureTypes { get; }

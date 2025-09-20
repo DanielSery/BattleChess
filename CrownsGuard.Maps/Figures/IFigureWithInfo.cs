@@ -1,7 +1,7 @@
 // Copyright (c) Veeam Software Group GmbH
 
-using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Players;
+using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.Game.Players;
 
 namespace CrownsGuard.Maps.Figures;
 

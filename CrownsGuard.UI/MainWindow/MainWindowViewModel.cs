@@ -1,5 +1,5 @@
-﻿using CrownsGuard.Core.Players;
-using CrownsGuard.Game;
+﻿using CrownsGuard.Game;
+using CrownsGuard.Game.Players;
 using CrownsGuard.Multiplayer.Game;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Editor;

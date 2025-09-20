@@ -1,6 +1,5 @@
 ﻿using CrownsGuard.Core;
 using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
 using CrownsGuard.Game;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
@@ -10,12 +9,11 @@ using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using CommunityToolkit.Mvvm.Input;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Helpers;
-using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Figures;
 using CrownsGuard.Maps.GameBoard;
 using Nicenis.Windows.ViewModels;
+using CrownsGuard.Engine.Helpers;
 
 namespace CrownsGuard.UI.Game;
 
@@ -108,8 +106,8 @@ public sealed class BoardViewModel : ViewModelBase
 
     public void StartLocalGame(
         BoardBlueprint map,
-        IPlayerInfo whitePlayer,
-        IPlayerInfo blackPlayer)
+        IPlayer whitePlayer,
+        IPlayer blackPlayer)
     {
         _boardLoader.LoadBoard(_boardInfo, map);
 
@@ -122,7 +120,7 @@ public sealed class BoardViewModel : ViewModelBase
             blackPlayer,
             startingPlayer, map.Figures);
         
-        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
+        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayer automaticallyControlledPlayer })
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
         
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
@@ -152,7 +150,7 @@ public sealed class BoardViewModel : ViewModelBase
             whitePlayer, blackPlayer,
             map.StartingPlayerColor, map.Figures);
 
-        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
+        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayer automaticallyControlledPlayer })
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
 
         RequestSwitchToGame?.Invoke(this, EventArgs.Empty);
@@ -192,7 +190,7 @@ public sealed class BoardViewModel : ViewModelBase
             SelectedTileInfo = TileInfoViewModel.None;
             _gameService.StartTurn();
 
-            if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
+            if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayer automaticallyControlledPlayer })
                 _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
         }
         else if (clickedTile.Figure.Owner.PlayerColor == _gameService.CurrentPlayerInfo.PlayerColor)
@@ -222,7 +220,7 @@ public sealed class BoardViewModel : ViewModelBase
         if (!_gameService.GameRunning)
             return;
 
-        if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayerInfo && !automatic)
+        if (_gameService.CurrentPlayerInfo is IAutomaticallyControlledPlayer && !automatic)
             return;
 
         if (_gameService.CurrentPlayerInfo.PlayerColor != clickedTileInfo.Figure.Owner.PlayerColor)
@@ -308,7 +306,7 @@ public sealed class BoardViewModel : ViewModelBase
         SelectedTileInfo = TileInfoViewModel.None;
         ClearPossibleActions();
 
-        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayerInfo automaticallyControlledPlayer })
+        if (_gameService is { GameRunning: true, CurrentPlayerInfo: IAutomaticallyControlledPlayer automaticallyControlledPlayer })
             _ = automaticallyControlledPlayer.HandleAutomaticTurnAsync();
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using AwesomeAssertions;
-using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
+using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Helpers;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.IO;
 using CrownsGuard.Maps.Utilities;
@@ -131,7 +131,7 @@ public class BoardBlueprintServiceTest
     {
         var board = new BoardBlueprint
         {
-            Figures = Enumerable.Range(0, 16).Select(x => new FigureBlueprint(PlayerColor.White, x, false)).ToArray()
+            Figures = Enumerable.Range(0, 16).Select(x => (Figure)x | Figure.IsWhite).ToArray()
         };
 
         var serialized = JsonSerializer.Serialize(board);
@@ -151,9 +151,9 @@ public class BoardBlueprintServiceTest
     {
         var board = new BoardBlueprint
         {
-            Figures = Enumerable.Range(1, 16).Select(x => new FigureBlueprint(PlayerColor.White, x, false)).ToArray()
+            Figures = Enumerable.Range(1, 16).Select(x => (Figure)x | Figure.IsWhite).ToArray()
         };
-        board.Figures[0] = new FigureBlueprint(PlayerColor.White, 1, true);
+        board.Figures[0] = (Figure)1 | Figure.IsWhite | Figure.IsKing;
 
         var serialized = JsonSerializer.Serialize(board);
         var text = CompressionHelper.Compress(serialized);
@@ -165,7 +165,7 @@ public class BoardBlueprintServiceTest
         var underTest = new BoardBlueprintService(_fileHandlerMock.Object, _directoryHandlerMock.Object);
 
         underTest.CurrentMap.Figures.Should().HaveCount(16);
-        underTest.CurrentMap.Figures.Should().ContainSingle(x => x.IsKing);
-        underTest.CurrentMap.Figures.Select(x => x.FigureType).Should().BeInAscendingOrder();
+        underTest.CurrentMap.Figures.Should().ContainSingle(x => x.IsKing());
+        underTest.CurrentMap.Figures.Select(x => x.GetFigureType()).Should().BeInAscendingOrder();
     }
 }

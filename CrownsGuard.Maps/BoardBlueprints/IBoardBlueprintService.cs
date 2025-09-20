@@ -1,7 +1,4 @@
-﻿
-using CrownsGuard.Core.GameBoard;
-
-namespace CrownsGuard.Maps.BoardBlueprints;
+﻿namespace CrownsGuard.Maps.BoardBlueprints;
 
 /// <summary>
 ///     Service for handling maps loading.

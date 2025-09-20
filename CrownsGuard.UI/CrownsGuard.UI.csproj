@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="CrownsGuard.deps.json"/>
+        <None Remove="CrownsGuard.deps.json" />
         <None Update="Resources\Sounds\*">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>

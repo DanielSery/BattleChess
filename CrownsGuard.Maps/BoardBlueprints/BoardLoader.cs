@@ -1,5 +1,4 @@
 ﻿using CrownsGuard.Core;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Maps.Figures;
 using CrownsGuard.Maps.GameBoard;

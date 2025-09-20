@@ -1,5 +1,5 @@
 ﻿using AwesomeAssertions;
-using CrownsGuard.Core.Players;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Game.Players;
 using Moq;
 
@@ -11,10 +11,10 @@ public class GameServiceTest
     public void StartGame_SetsCorrect_ForSingleWhite()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White, GetBoard(true, true));
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
         gameService.CurrentPlayerInfo.PlayerColor.Should().Be(PlayerColor.White);
@@ -26,10 +26,10 @@ public class GameServiceTest
     public void StartGame_SetsCorrect_ForSingleBlack()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
 
         Assert.True(gameService.GameRunning, "gameService.GameRunning");
         gameService.CurrentPlayerInfo.PlayerColor.Should().Be(PlayerColor.Black);
@@ -41,10 +41,10 @@ public class GameServiceTest
     public void StartTurn_SetsCorrect_ForSingleWhite()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White, GetBoard(true, true));
         gameService.EndTurn();
         gameService.StartTurn();
 
@@ -58,10 +58,10 @@ public class GameServiceTest
     public void StartTurn_SetsCorrect_ForSingleBlack()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.EndTurn();
         gameService.StartTurn();
 
@@ -75,12 +75,12 @@ public class GameServiceTest
     public void WhenSurrender_2HumanPlayers_CurrentPlayerLoses()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
         PlayerColor losingPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.Surrender();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -98,12 +98,12 @@ public class GameServiceTest
     public void WhenSurrender_1HumanPlayer_WhitePlayerLoses()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IPlayer>(PlayerColor.Black);
 
         PlayerColor losingPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.Surrender();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -121,12 +121,12 @@ public class GameServiceTest
     public void WhenWhiteWins_WhiteWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.PlayerWin(player1Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -144,12 +144,12 @@ public class GameServiceTest
     public void WhenBlackWins_BlackWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.PlayerWin(player2Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -167,12 +167,12 @@ public class GameServiceTest
     public void WhenWhiteLoses_BlackWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.PlayerLost(player1Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -190,12 +190,12 @@ public class GameServiceTest
     public void WhenBlackLoses_WhiteWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.PlayerLost(player2Mock.Object, WinType.OutOfTime, true);
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -213,10 +213,10 @@ public class GameServiceTest
     public void WhenGameIsOver_IgnoreNextTurn()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         var currentPlayer = gameService.CurrentPlayerInfo;
 
         gameService.PlayerLost(player2Mock.Object, WinType.OutOfTime, true);
@@ -230,15 +230,15 @@ public class GameServiceTest
     public void WhenWhiteLosesKing_OnBlackNewTurnBlackWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White, GetBoard(true, true));
         gameService.EndTurn();
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        player1Mock.Setup(x => x.Figures).Returns([]);
+        ChangeBoard(gameService.Board, false, true);
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -256,15 +256,15 @@ public class GameServiceTest
     public void WhenWhiteLosesKing_OnWhiteNewTurnBlackWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.EndTurn();
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        player1Mock.Setup(x => x.Figures).Returns([]);
+        ChangeBoard(gameService.Board, false, true);
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -282,15 +282,15 @@ public class GameServiceTest
     public void WhenBlackLosesKing_OnBlackNewTurnWhiteWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White, GetBoard(true, true));
         gameService.EndTurn();
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        player2Mock.Setup(x => x.Figures).Returns([]);
+        ChangeBoard(gameService.Board, true, false);
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -308,15 +308,15 @@ public class GameServiceTest
     public void WhenBlackLosesKing_OnWhiteNewTurnWhiteWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.EndTurn();
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        player2Mock.Setup(x => x.Figures).Returns([]);
+        ChangeBoard(gameService.Board, true, false);
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -334,16 +334,15 @@ public class GameServiceTest
     public void WhenBothLoseKing_OnBlackNewTurnWhiteWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.White, GetBoard(true, true));
         gameService.EndTurn();
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        player1Mock.Setup(x => x.Figures).Returns([]);
-        player2Mock.Setup(x => x.Figures).Returns([]);
+        ChangeBoard(gameService.Board, false, false);
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -361,16 +360,15 @@ public class GameServiceTest
     public void WhenBothLoseKing_OnWhiteNewTurnBlackWins()
     {
         var gameService = new GameService();
-        var player1Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.White, true);
-        var player2Mock = CreatePlayer<IControlledPlayerInfo>(PlayerColor.Black, true);
+        var player1Mock = CreatePlayer<IControlledPlayer>(PlayerColor.White);
+        var player2Mock = CreatePlayer<IControlledPlayer>(PlayerColor.Black);
 
-        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black);
+        gameService.StartGame(player1Mock.Object, player2Mock.Object, PlayerColor.Black, GetBoard(true, true));
         gameService.EndTurn();
 
         PlayerColor winningPlayerColor = PlayerColor.Neutral;
         gameService.PlayerWon += GameServiceOnPlayerWon;
-        player1Mock.Setup(x => x.Figures).Returns([]);
-        player2Mock.Setup(x => x.Figures).Returns([]);
+        ChangeBoard(gameService.Board, false, false);
         gameService.StartTurn();
         gameService.PlayerWon -= GameServiceOnPlayerWon;
 
@@ -384,20 +382,49 @@ public class GameServiceTest
         }
     }
 
-    private static Mock<T> CreatePlayer<T>(PlayerColor playerColor, bool hasKing)
-        where T : class, IPlayerInfo
+    private static void ChangeBoard(Figure[] board, bool whiteKing, bool blackKing)
     {
-        var playerInfo = new Mock<T>();
-        playerInfo.SetupGet(x => x.PlayerColor).Returns(playerColor);
-        if (hasKing)
+        if (whiteKing)
         {
-            playerInfo.Setup(x => x.Figures).Returns([new FigureWithInfo(playerInfo.Object, NoneFigureTypeInfo.Instance, true)]);
+            board[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
         }
         else
         {
-            playerInfo.Setup(x => x.Figures).Returns([]);
+            board[0] = Figure.King | Figure.IsWhite;
         }
 
+        if (blackKing)
+        {
+            board[63] = Figure.King | Figure.IsBlack | Figure.IsKing;
+        }
+        else
+        {
+            board[63] = Figure.King | Figure.IsBlack;
+        }
+    }
+
+    private static Figure[] GetBoard(bool whiteKing, bool blackKing)
+    {
+        var figures = Enumerable.Repeat(Figure.Empty, 64).ToArray();
+
+        if (whiteKing)
+        {
+            figures[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
+        }
+
+        if (blackKing)
+        {
+            figures[63] = Figure.King | Figure.IsBlack | Figure.IsKing;
+        }
+
+        return figures;
+    }
+
+    private static Mock<T> CreatePlayer<T>(PlayerColor playerColor)
+        where T : class, IPlayer
+    {
+        var playerInfo = new Mock<T>();
+        playerInfo.SetupGet(x => x.PlayerColor).Returns(playerColor);
         return playerInfo;
     }
 }

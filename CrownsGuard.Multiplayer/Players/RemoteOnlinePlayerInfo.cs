@@ -4,11 +4,11 @@ using CrownsGuard.Multiplayer.Game;
 
 namespace CrownsGuard.Multiplayer.Players;
 
-public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlledPlayerInfo
+public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlledPlayer
 {
     private IMultiplayerGameService? _gameService;
 
-    public RemoteOnlinePlayerInfo(Core.Players.PlayerColor playerColor, string playerName, string? playerId, int? elo)
+    public RemoteOnlinePlayerInfo(PlayerColor playerColor, string playerName, string? playerId, int? elo)
     {
         PlayerColor = playerColor;
         Name = playerName;
@@ -17,7 +17,7 @@ public class RemoteOnlinePlayerInfo : IOnlinePlayerInfo, IAutomaticallyControlle
         Timer = InfinitePlayerTimer.Instance;
     }
 
-    public Core.Players.PlayerColor PlayerColor { get; }
+    public PlayerColor PlayerColor { get; }
     public IPlayerTimer Timer { get; private set; }
     public string Name { get; }
     public string? PlayerId { get; }

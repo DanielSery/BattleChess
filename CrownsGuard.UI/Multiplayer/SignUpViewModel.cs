@@ -8,6 +8,7 @@ using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Services;
 using CommunityToolkit.Mvvm.Input;
 using Nicenis.Windows.ViewModels;
+using CrownsGuard.Maps.BoardBlueprints;
 
 namespace CrownsGuard.UI.Multiplayer;
 
@@ -120,9 +121,12 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
         
-        var myMap = _teamBoardViewModel.GetMapBlueprint();
+        var myMap = _teamBoardViewModel.GetMapBlueprint().Figures;
         var emailHash = HashingHelper.GetEmailHash(Email);
-        var result = await _multiplayerPlayerService.TrySignUpAsync(Name, password1Hash, passwordSalt, emailHash, myMap, loading.CancellationToken);
+        var result = await _multiplayerPlayerService.TrySignUpAsync(
+            Name, password1Hash, passwordSalt, emailHash,
+            myMap, BoardBlueprint.ChessTeam.Figures,
+            loading.CancellationToken);
         if (result.IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Error, result.Errors[0].Message);

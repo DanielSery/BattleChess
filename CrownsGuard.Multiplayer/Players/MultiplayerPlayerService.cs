@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
 using CrownsGuard.Database.Players;
+using CrownsGuard.Game.Players;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 
@@ -63,7 +62,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateCurrentPlayerMapAsync(BoardBlueprint map, CancellationToken cancellationToken)
+    public async Task<Result> UpdateCurrentPlayerMapAsync(Figure[] map, CancellationToken cancellationToken)
     {
         if (LoggedInPlayer is null)
             return Result.Fail("No logged in player");
@@ -108,7 +107,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         return Result.Ok();
     }
 
-    public async Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, BoardBlueprint myMap, CancellationToken cancellationToken)
+    public async Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, Figure[] myMap, Figure[] fallbackMap, CancellationToken cancellationToken)
     {
         var foundPlayerResult = await _players.FindByEmailHashAsync(emailHash, cancellationToken);
         if (!foundPlayerResult.IsFailed) Result.Fail("User with given email already exists");
@@ -118,7 +117,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
         var mapData = myMap.IsValid(UnlockedFigures.DefaultUnlockedFigures)
             ? myMap.GetIntData()
-            : BoardBlueprint.ChessTeam.GetIntData();
+            : fallbackMap.GetIntData();
 
         Console.WriteLine($"Creating new player with name: {name}");
         var player = new RegisteredPlayer

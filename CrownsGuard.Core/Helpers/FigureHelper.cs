@@ -2,7 +2,6 @@
 
 using System.Runtime.CompilerServices;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Players;
 
 namespace CrownsGuard.Core.Helpers;
 
@@ -60,14 +59,5 @@ public static class FigureHelper
     public static bool IsNeutral(this Figure figure)
     {
         return (figure & Figure.PlayerMask) == Figure.Empty;
-    }
-    
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Figure GetFigure(PlayerColor playerColor, bool isKing, Figure figureType)
-    {
-        if (isKing) figureType |= Figure.IsKing;
-        if (playerColor == PlayerColor.White) figureType |= Figure.IsWhite;
-        else if (playerColor == PlayerColor.Black) figureType |= Figure.IsBlack;
-        return figureType;
     }
 }

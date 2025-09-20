@@ -1,4 +1,5 @@
 ﻿using AwesomeAssertions;
+using CrownsGuard.AI.Helpers;
 using CrownsGuard.Core.Figures;
 
 namespace CrownsGuard.AI.Test;

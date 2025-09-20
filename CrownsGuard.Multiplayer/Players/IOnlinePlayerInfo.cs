@@ -3,7 +3,7 @@ using CrownsGuard.Multiplayer.Game;
 
 namespace CrownsGuard.Multiplayer.Players;
 
-public interface IOnlinePlayerInfo : IPlayerInfo
+public interface IOnlinePlayerInfo : IPlayer
 {
     public string? PlayerId { get; }
     public int? Elo { get; }

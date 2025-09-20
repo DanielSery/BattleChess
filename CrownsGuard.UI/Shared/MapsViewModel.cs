@@ -1,8 +1,8 @@
-﻿using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
+﻿using CrownsGuard.Core.Helpers;
+using CrownsGuard.Game.Players;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.GameBoard;
+using CrownsGuard.Maps.Utilities;
 using Nicenis.Windows.ViewModels;
 
 namespace CrownsGuard.UI.Shared;
@@ -29,7 +29,7 @@ public sealed class MapsViewModel : ViewModelBase
     {
         var map = new BoardBlueprint
         {
-            Figures = board.Select(x => FigureHelper.GetFigure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.Figure)).ToArray(),
+            Figures = board.Select(x => FigureGetHelper.GetFigure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.Figure)).ToArray(),
             StartingPlayerColor = PlayerColor.White
         };
 

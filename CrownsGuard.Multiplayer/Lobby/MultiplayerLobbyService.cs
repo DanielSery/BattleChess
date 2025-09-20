@@ -1,4 +1,4 @@
-﻿using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Database.Lobby;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Utilities;
@@ -104,7 +104,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public async Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         string password,
-        BoardBlueprint myMap,
+        Figure[] myMap,
         CancellationToken cancellationToken)
     {
         var random = new Random();
@@ -164,7 +164,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public async Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
         string password,
-        BoardBlueprint myMap,
+        Figure[] myMap,
         CancellationToken cancellationToken)
     {
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;

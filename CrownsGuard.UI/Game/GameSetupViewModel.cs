@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CrownsGuard.AI;
-using CrownsGuard.Core.Players;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Maps.Utilities;
 using CrownsGuard.UI.Shared;
@@ -66,8 +65,8 @@ public class GameSetupViewModel : ViewModelBase
     {
         var mapBlueprint = _mapsViewModel.TeamMap.ExtendFor2Players();
 
-        var whitePlayer = new ControlledPlayerInfo(PlayerColor.White, "Red player");
-        var blackPlayer = new ControlledPlayerInfo(PlayerColor.Black, "Blue player");
+        var whitePlayer = new ControlledPlayer(PlayerColor.White, "Red player");
+        var blackPlayer = new ControlledPlayer(PlayerColor.Black, "Blue player");
 
         _boardViewModel.StartLocalGame(mapBlueprint, whitePlayer, blackPlayer);
     }

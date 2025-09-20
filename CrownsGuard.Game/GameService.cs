@@ -1,12 +1,11 @@
-﻿using CrownsGuard.Core;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
+using CrownsGuard.Game.Helpers;
 using CrownsGuard.Game.Players;
 
 namespace CrownsGuard.Game;
 
-public record WinResult(bool PublishResult, WinType WinType, IPlayerInfo? Won, IPlayerInfo? Lost);
+public record WinResult(bool PublishResult, WinType WinType, IPlayer? Won, IPlayer? Lost);
 
 internal class GameService : IGameService, IPlayersOwner
 {
@@ -15,19 +14,19 @@ internal class GameService : IGameService, IPlayersOwner
     public GameService()
     {
         _figureOwners[0] = NeutralPlayer.Instance;
-        _figureOwners[1] = WhitePlayer = new ControlledPlayerInfo(PlayerColor.White, string.Empty);
-        _figureOwners[2] = BlackPlayer = new ControlledPlayerInfo(PlayerColor.Black, string.Empty);
+        _figureOwners[1] = WhitePlayer = new ControlledPlayer(PlayerColor.White, string.Empty);
+        _figureOwners[2] = BlackPlayer = new ControlledPlayer(PlayerColor.Black, string.Empty);
 
         CurrentPlayerInfo = WhitePlayer;
         WaitingPlayerInfo = BlackPlayer;
     }
 
     public bool GameRunning { get; private set; }
-    public IPlayerInfo CurrentPlayerInfo { get; private set; }
-    public IPlayerInfo WaitingPlayerInfo { get; private set; }
+    public IPlayer CurrentPlayerInfo { get; private set; }
+    public IPlayer WaitingPlayerInfo { get; private set; }
 
-    public IPlayerInfo WhitePlayer { get; private set; }
-    public IPlayerInfo BlackPlayer { get; private set; }
+    public IPlayer WhitePlayer { get; private set; }
+    public IPlayer BlackPlayer { get; private set; }
 
     public Figure[] Board { get; private set; } = [];
 
@@ -38,7 +37,7 @@ internal class GameService : IGameService, IPlayersOwner
 
     public IPlayer GetPlayer(PlayerColor playerColor) => _figureOwners[playerColor.ToInt()];
 
-    public void StartGame(IPlayerInfo player1, IPlayerInfo player2, PlayerColor startingPlayerColor, Figure[] board)
+    public void StartGame(IPlayer player1, IPlayer player2, PlayerColor startingPlayerColor, Figure[] board)
     {
         _figureOwners[0] = NeutralPlayer.Instance;
         _figureOwners[1] = WhitePlayer = player1;
@@ -74,7 +73,7 @@ internal class GameService : IGameService, IPlayersOwner
     public void Surrender()
     {
         GameRunning = false;
-        PlayerWon?.Invoke(this, WhitePlayer is IControlledPlayerInfo && BlackPlayer is IControlledPlayerInfo
+        PlayerWon?.Invoke(this, WhitePlayer is IControlledPlayer && BlackPlayer is IControlledPlayer
             ? new WinResult(false, WinType.Surrender, WaitingPlayerInfo, CurrentPlayerInfo)
             : new WinResult(true, WinType.Surrender, BlackPlayer, WhitePlayer));
     }
@@ -84,7 +83,7 @@ internal class GameService : IGameService, IPlayersOwner
         GameRunning = false;
     }
 
-    public void PlayerLost(IPlayerInfo player, WinType winType, bool notifyOther)
+    public void PlayerLost(IPlayer player, WinType winType, bool notifyOther)
     {
         GameRunning = false;
         PlayerWon?.Invoke(this, player.PlayerColor == PlayerColor.White
@@ -92,7 +91,7 @@ internal class GameService : IGameService, IPlayersOwner
             : new WinResult(notifyOther, winType, WhitePlayer, BlackPlayer));
     }
 
-    public void PlayerWin(IPlayerInfo player, WinType winType, bool publishResult)
+    public void PlayerWin(IPlayer player, WinType winType, bool publishResult)
     {
         GameRunning = false;
         PlayerWon?.Invoke(this, player.PlayerColor == PlayerColor.White
@@ -128,7 +127,7 @@ internal class GameService : IGameService, IPlayersOwner
         var (whiteHasKing, blackHasKing) = CheckKings();
         if (!whiteHasKing && !blackHasKing)
         {
-            PlayerWin(CurrentPlayerInfo, WinType.CapturedKing, WaitingPlayerInfo.PlayerColor == PlayerColor.White);
+            PlayerWin(WaitingPlayerInfo, WinType.CapturedKing, WaitingPlayerInfo.PlayerColor == PlayerColor.White);
         }
         else if (!whiteHasKing)
         {

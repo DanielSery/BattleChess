@@ -64,7 +64,7 @@ public class GameViewModel : ViewModelBase
                 return true;
             }
 
-            return _gameService.CurrentPlayerInfo is not IAutomaticallyControlledPlayerInfo ||
+            return _gameService.CurrentPlayerInfo is not IAutomaticallyControlledPlayer ||
                    !_gameService.GameRunning;
         }
     }

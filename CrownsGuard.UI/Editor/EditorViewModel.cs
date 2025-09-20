@@ -42,7 +42,7 @@ public sealed class EditorViewModel : ViewModelBase
         if (_playerService.LoggedInPlayer is not null)
         {
             using var updatingPlayerMap = _loadingService.StartLoadingOperation("Updating player map");
-            var result = await _playerService.UpdateCurrentPlayerMapAsync(TeamBoard.GetMapBlueprint(), updatingPlayerMap.CancellationToken);
+            var result = await _playerService.UpdateCurrentPlayerMapAsync(TeamBoard.GetMapBlueprint().Figures, updatingPlayerMap.CancellationToken);
             if (result.IsFailed)
             {
                 _notificationService.ShowMessage(ShownMessage.MessageType.Warning, result.Errors[0].Message);

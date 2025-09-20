@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Players;
+using CrownsGuard.Game.Players;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;
 

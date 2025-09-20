@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Resources\Maps\**"/>
+        <None Remove="Resources\Maps\**" />
         <Content Include="Resources\Maps\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -28,7 +28,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CrownsGuard.Core\CrownsGuard.Core.csproj" />
+      <ProjectReference Include="..\CrownsGuard.FigureDefinitions\CrownsGuard.FigureDefinitions.csproj" />
+      <ProjectReference Include="..\CrownsGuard.Game\CrownsGuard.Game.csproj" />
     </ItemGroup>
 
 </Project>

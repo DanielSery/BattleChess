@@ -2,18 +2,18 @@
 using System.Collections.Frozen;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using CrownsGuard.AI.Helpers;
 using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Core.Players;
-using CrownsGuard.FigureDefinitions.Utilities;
+using CrownsGuard.Engine.Helpers;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
 
 namespace CrownsGuard.AI;
 
-public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
+public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
 {
     private readonly Figure[] _board;
     private readonly Action<byte, byte, TimeSpan> _requestMove;
@@ -518,39 +518,9 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayerInfo
         {
             return evaluation;
         }
-
-        for (var i = 0; i < board.Length; i++)
+        else
         {
-            var figure = board[i];
-            if (figure.IsNeutralFigure())
-            {
-                continue;
-            }
-
-            var oldCount = actionsStack.Count;
-            FigureActionsResolver.GetPossibleActions(i, figure, board, actionsStack);
-            var added = actionsStack.Count - oldCount;
-            if (figure.IsWhite())
-            {
-                for (var j = 0; j < added; j++)
-                {
-                    var action = actionsStack.Pop();
-                    if (action.FigureActionType == FigureActionType.Move)
-                        evaluation -= Constants.MoveValue;
-                    else evaluation -= ActionImpactEvaluator.EvaluateAction(board, action, currentFigureColor);
-                }
-            }
-            else
-            {
-                for (var j = 0; j < added; j++)
-                {
-                    var action = actionsStack.Pop();
-                    if (action.FigureActionType == FigureActionType.Move)
-                        evaluation += Constants.MoveValue;
-                    else evaluation += ActionImpactEvaluator.EvaluateAction(board, action, currentFigureColor);
-                }
-            }
+            return BoardEvaluationHelper.EvaluateBoard(board, actionsStack, currentFigureColor);
         }
-        return evaluation;
     }
 }

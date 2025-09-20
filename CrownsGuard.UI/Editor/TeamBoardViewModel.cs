@@ -1,14 +1,14 @@
-﻿using CrownsGuard.Core;
+﻿using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
-using CrownsGuard.Core.Players;
+using CrownsGuard.Core.Helpers;
+using CrownsGuard.Engine.Helpers;
+using CrownsGuard.Game.Players;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Figures;
-using CrownsGuard.Multiplayer.Players;
-using CommunityToolkit.Mvvm.Input;
-using CrownsGuard.Core.Helpers;
-using CrownsGuard.FigureDefinitions.Utilities;
 using CrownsGuard.Maps.GameBoard;
+using CrownsGuard.Maps.Utilities;
+using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.UI.Services;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows.ViewModels;
@@ -103,7 +103,7 @@ public class TeamBoardViewModel : ViewModelBase
     {
         return new BoardBlueprint
         {
-            Figures = Tiles.Select(x => FigureHelper.GetFigure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.Figure)).ToArray(),
+            Figures = Tiles.Select(x => FigureGetHelper.GetFigure(x.Figure.Owner.PlayerColor, x.Figure.IsKing, x.Figure.TypeInfo.Figure)).ToArray(),
         };
     }
 
@@ -148,7 +148,7 @@ public class TeamBoardViewModel : ViewModelBase
         if (tile.Figure.IsKing)
         {
             var demotedFigureId = tile.Figure.TypeInfo.Figure;
-            tile.Figure = _figureCreator.CreateFigure(FigureHelper.GetFigure(tile.Figure.Owner.PlayerColor, false, demotedFigureId));
+            tile.Figure = _figureCreator.CreateFigure(FigureGetHelper.GetFigure(tile.Figure.Owner.PlayerColor, false, demotedFigureId));
             
             HasKing = false;
             RaisePropertyChanged(nameof(CanSave));
@@ -163,11 +163,11 @@ public class TeamBoardViewModel : ViewModelBase
                 continue;
             
             var demotedFigureId = checkedTile.Figure.TypeInfo.Figure;
-            checkedTile.Figure = _figureCreator.CreateFigure(FigureHelper.GetFigure(owner.PlayerColor, false, demotedFigureId));
+            checkedTile.Figure = _figureCreator.CreateFigure(FigureGetHelper.GetFigure(owner.PlayerColor, false, demotedFigureId));
         }
         
         var upgradedFigureId = tile.Figure.TypeInfo.Figure;
-        tile.Figure = _figureCreator.CreateFigure(FigureHelper.GetFigure(owner.PlayerColor, true, upgradedFigureId));
+        tile.Figure = _figureCreator.CreateFigure(FigureGetHelper.GetFigure(owner.PlayerColor, true, upgradedFigureId));
         
         HasKing = true;
         RaisePropertyChanged(nameof(CanSave));

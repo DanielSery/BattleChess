@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Windows.Threading;
-using CrownsGuard.Core.Players;
 using CrownsGuard.Game;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
@@ -12,7 +11,7 @@ namespace CrownsGuard.UI.Multiplayer;
 
 public class PlayerViewModel : ViewModelBase
 {
-    private readonly IPlayerInfo _playerInfo;
+    private readonly IPlayer _playerInfo;
     private readonly IGameService _gameService;
     private readonly DispatcherTimer _timer;
     private readonly Stopwatch  _stopwatch;
@@ -49,7 +48,7 @@ public class PlayerViewModel : ViewModelBase
         }
     }
 
-    public PlayerViewModel(IPlayerInfo player, IGameService gameService)
+    public PlayerViewModel(IPlayer player, IGameService gameService)
     {
         _stopwatch = new Stopwatch();
         if (player is IOnlinePlayerInfo { Elo: not null } onlinePlayerInfo)
