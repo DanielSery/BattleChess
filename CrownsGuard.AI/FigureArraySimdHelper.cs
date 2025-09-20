@@ -1,6 +1,7 @@
-﻿using System.Numerics;
+﻿using CrownsGuard.Core.Figures;
+using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.InteropServices;
-using CrownsGuard.Core.Figures;
 
 namespace CrownsGuard.AI;
 
@@ -8,6 +9,8 @@ public static class FigureArraySimdHelper
 {
     public static int SimdSum(ReadOnlySpan<Figure> figures)
     {
+        Debug.Assert(figures.Length == 64, "figures must have a fixed length of 64.");
+
         // Reinterpret Figure as ushort
         var span = MemoryMarshal.Cast<Figure, ushort>(figures);
 
@@ -15,8 +18,8 @@ public static class FigureArraySimdHelper
         var i = 0;
         var vsum = Vector<ushort>.Zero;
 
-        // SIMD loop
-        for (; i <= span.Length - vectorSize; i += vectorSize)
+        // SIMD loop (no remainder needed, length is always 64)
+        for (; i < span.Length; i += vectorSize)
         {
             vsum += new Vector<ushort>(span.Slice(i, vectorSize));
         }
@@ -26,15 +29,13 @@ public static class FigureArraySimdHelper
         for (var j = 0; j < vectorSize; ++j)
             sum += vsum[j];
 
-        // Remainder
-        for (; i < span.Length; ++i)
-            sum += span[i];
-
         return sum;
     }
-    
+
     public static long FastSimdHash64(ReadOnlySpan<Figure> figures)
     {
+        Debug.Assert(figures.Length == 64, "figures must have a fixed length of 64.");
+
         // Safely reinterpret Figure as ushort
         var span = MemoryMarshal.Cast<Figure, ushort>(figures);
 

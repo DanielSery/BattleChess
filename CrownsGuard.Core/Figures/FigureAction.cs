@@ -2,7 +2,7 @@ namespace CrownsGuard.Core.Figures;
 
 public readonly struct FigureAction
 {
-    public static readonly FigureAction None = new FigureAction();
+    public static readonly FigureAction None = new(FigureActionType.None, -1, -1, Figure.Empty);
 
     public readonly FigureActionType FigureActionType;
     public readonly byte SourceIndex;
