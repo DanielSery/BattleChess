@@ -18,7 +18,7 @@
         <ProjectReference Include="..\CrownsGuard.Game\CrownsGuard.Game.csproj" />
         <ProjectReference Include="..\CrownsGuard.Maps\CrownsGuard.Maps.csproj" />
         <ProjectReference Include="..\CrownsGuard.Multiplayer\CrownsGuard.Multiplayer.csproj" />
-        <ProjectReference Include="..\CrownsGuard.FigureDefinitions\CrownsGuard.FigureDefinitions.csproj" />
+        <ProjectReference Include="..\CrownsGuard.FiguresDesign\CrownsGuard.FiguresDesign.csproj" />
     </ItemGroup>
 
     <ItemGroup>

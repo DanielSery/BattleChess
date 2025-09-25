@@ -1,7 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.FigureDefinitions.Localization;
+using CrownsGuard.FiguresDesign.Localization;
 
-namespace CrownsGuard.FigureDefinitions.Figures;
+namespace CrownsGuard.FiguresDesign.Figures;
 
 public class NeutralFigureTypeInfo : IFigureTypeInfo
 {
@@ -22,6 +22,6 @@ public class NeutralFigureTypeInfo : IFigureTypeInfo
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
-            { 0, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{Name}0.png", UriKind.Absolute) },
+            { 0, new Uri($"pack://application:,,,/CrownsGuard.FiguresDesign;component/Images/{Name}0.png", UriKind.Absolute) },
         };
 }

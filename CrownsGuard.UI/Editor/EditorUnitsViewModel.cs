@@ -6,8 +6,8 @@ using CrownsGuard.Maps.Figures;
 using CrownsGuard.Multiplayer.Utilities;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows.ViewModels;
-using CrownsGuard.FigureDefinitions;
-using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.FiguresDesign;
+using CrownsGuard.FiguresDesign.Figures;
 
 namespace CrownsGuard.UI.Editor;
 

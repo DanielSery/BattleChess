@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace CrownsGuard.FigureDefinitions;
+namespace CrownsGuard.FiguresDesign;
 
 public static class FigureDefinitionsModule
 {

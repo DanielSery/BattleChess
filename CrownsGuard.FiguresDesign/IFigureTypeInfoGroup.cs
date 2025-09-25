@@ -1,7 +1,7 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.FiguresDesign.Figures;
 
-namespace CrownsGuard.FigureDefinitions;
+namespace CrownsGuard.FiguresDesign;
 
 public interface IFigureTypeInfoGroup
 {

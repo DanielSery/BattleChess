@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.FiguresDesign.Figures;
 using CrownsGuard.Game.Helpers;
 using CrownsGuard.Game.Players;
 

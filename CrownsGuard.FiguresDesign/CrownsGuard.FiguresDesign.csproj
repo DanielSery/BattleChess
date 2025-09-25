@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
         <Version>4.0.2</Version>
-        <RootNamespace>CrownsGuard.FigureDefinitions</RootNamespace>
+        <RootNamespace>CrownsGuard.FiguresDesign</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

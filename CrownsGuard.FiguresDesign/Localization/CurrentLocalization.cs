@@ -1,7 +1,7 @@
 ﻿using System.Resources;
 using CrownsGuard.Core.Localization;
 
-namespace CrownsGuard.FigureDefinitions.Localization;
+namespace CrownsGuard.FiguresDesign.Localization;
 
 internal class CurrentLocalization : LocalizationSourceBase
 {

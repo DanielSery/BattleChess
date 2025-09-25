@@ -1,6 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 
-namespace CrownsGuard.FigureDefinitions.Figures;
+namespace CrownsGuard.FiguresDesign.Figures;
 
 public class NoneFigureTypeInfo : IFigureTypeInfo
 {

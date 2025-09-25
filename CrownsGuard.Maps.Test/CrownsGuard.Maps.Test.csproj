@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CrownsGuard.FigureDefinitions\CrownsGuard.FigureDefinitions.csproj" />
+      <ProjectReference Include="..\CrownsGuard.FiguresDesign\CrownsGuard.FiguresDesign.csproj" />
       <ProjectReference Include="..\CrownsGuard.Maps\CrownsGuard.Maps.csproj" />
     </ItemGroup>
 

@@ -1,8 +1,8 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.FigureDefinitions.Localization;
+using CrownsGuard.FiguresDesign.Localization;
 
-namespace CrownsGuard.FigureDefinitions.Figures;
+namespace CrownsGuard.FiguresDesign.Figures;
 
 public class PlayerFigureTypeInfo : IFigureTypeInfo
 {
@@ -23,7 +23,7 @@ public class PlayerFigureTypeInfo : IFigureTypeInfo
     public IDictionary<int, Uri> ImageUris =>
         new Dictionary<int, Uri>
         {
-            { 1, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{Name}1.png", UriKind.Absolute) },
-            { 2, new Uri($"pack://application:,,,/CrownsGuard.FigureDefinitions;component/Images/{Name}2.png", UriKind.Absolute) }
+            { 1, new Uri($"pack://application:,,,/CrownsGuard.FiguresDesign;component/Images/{Name}1.png", UriKind.Absolute) },
+            { 2, new Uri($"pack://application:,,,/CrownsGuard.FiguresDesign;component/Images/{Name}2.png", UriKind.Absolute) }
         };
 }

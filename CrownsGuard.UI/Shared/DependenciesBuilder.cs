@@ -1,7 +1,7 @@
 ﻿using System.Buffers;
 using Autofac;
 using Autofac.Extras.CommonServiceLocator;
-using CrownsGuard.FigureDefinitions;
+using CrownsGuard.FiguresDesign;
 using CrownsGuard.Game;
 using CrownsGuard.Maps;
 using CrownsGuard.Multiplayer;

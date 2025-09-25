@@ -1,9 +1,9 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.FigureDefinitions.Figures;
-using CrownsGuard.FigureDefinitions.Localization;
+using CrownsGuard.FiguresDesign.Figures;
+using CrownsGuard.FiguresDesign.Localization;
 using System.Collections.Frozen;
 
-namespace CrownsGuard.FigureDefinitions;
+namespace CrownsGuard.FiguresDesign;
 
 public sealed class CrownsGuardFigureTypeInfoGroup : IFigureTypeInfoGroup
 {

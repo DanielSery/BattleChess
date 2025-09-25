@@ -1,6 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.FigureDefinitions;
+using CrownsGuard.FiguresDesign;
 using CrownsGuard.Game;
 using CrownsGuard.Game.Players;
 
