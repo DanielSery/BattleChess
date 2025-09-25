@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:CrownsGuard.UI.Converters"
-             xmlns:figures="clr-namespace:CrownsGuard.Core.Figures;assembly=CrownsGuard.Core"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance figures:IFigureTypeInfo}"
+             xmlns:figures1="clr-namespace:CrownsGuard.FigureDefinitions.Figures;assembly=CrownsGuard.FigureDefinitions"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance figures1:IFigureTypeInfo}"
              d:DesignHeight="300" d:DesignWidth="300" MinWidth="265">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"

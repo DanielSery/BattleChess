@@ -1,6 +1,6 @@
 ﻿using CrownsGuard.Maps.BoardBlueprints;
 
-namespace CrownsGuard.Core.Test.GameBoard;
+namespace CrownsGuard.Maps.Test.BoardBlueprints;
 
 public class BoardBlueprintTest
 {

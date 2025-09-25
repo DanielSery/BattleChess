@@ -10,5 +10,6 @@ public static class Constants
 
     public const int BoardLengthShift = 3;
     public const int BoardLength = 8;
+    public const int TeamBoardTilesCount = 16;
     public const int FullBoardTilesCount = 64;
 }

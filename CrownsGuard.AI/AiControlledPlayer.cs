@@ -1,10 +1,8 @@
 ﻿using CrownsGuard.AI.Helpers;
-using CrownsGuard.Core;
+using CrownsGuard.Core.Board;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Engine.Helpers;
-using CrownsGuard.FigureDefinitions.Figures;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
 using System.Collections.Concurrent;

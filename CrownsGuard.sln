@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11012.119 d18.0
+VisualStudioVersion = 18.0.11012.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrownsGuard.Game", "CrownsGuard.Game\CrownsGuard.Game.csproj", "{4663DA29-AA05-4134-800D-1974BE8DB559}"
 EndProject
@@ -31,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.AI.Test", "CrownsGuard.AI.Test\CrownsGuard.AI.Test.csproj", "{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.Engine", "CrownsGuard.Engine\CrownsGuard.Engine.csproj", "{00F202C9-9C52-4E01-9177-73E4B249128E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.Core.Test", "CrownsGuard.Core.Test\CrownsGuard.Core.Test.csproj", "{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +92,10 @@ Global
 		{00F202C9-9C52-4E01-9177-73E4B249128E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00F202C9-9C52-4E01-9177-73E4B249128E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00F202C9-9C52-4E01-9177-73E4B249128E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{7DA609A7-695D-4946-9D7D-A84503B27678} = {F8495298-BC3B-4E03-891C-BB762E223776}
 		{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 		{00F202C9-9C52-4E01-9177-73E4B249128E} = {F8495298-BC3B-4E03-891C-BB762E223776}
+		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0A17059C-17CB-4FA9-BE6E-9BA95510BEFE}

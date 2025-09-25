@@ -1,7 +1,7 @@
 ﻿using AwesomeAssertions;
 using CrownsGuard.Maps.GameBoard;
 
-namespace CrownsGuard.Core.Test.GameBoard;
+namespace CrownsGuard.Maps.Test.GameBoard;
 
 public class PositionTest
 {

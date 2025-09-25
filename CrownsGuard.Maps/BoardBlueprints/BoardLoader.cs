@@ -30,7 +30,8 @@ internal class BoardLoader : IBoardLoader
 
     public void LoadTeamBoard(IBoardInfo boardInfo, BoardBlueprint map)
     {
-        if (boardInfo.Count() != map.Figures.Length) throw new ArgumentException("Source and target map size must match");
+        if (boardInfo.Count() != Constants.TeamBoardTilesCount) throw new ArgumentException("Team board needs to have 16 tiles");
+        if (map.Figures.Length != Constants.TeamBoardTilesCount) throw new ArgumentException("Team map blueprint needs to have 16 tiles");
         if (map.Figures.Count(x => x.IsKing() && x.IsWhite()) != 1) throw new ArgumentException("Map blueprint needs to have a white king");
         if (map.Figures.Any(x => x.IsBlack())) throw new ArgumentException("Partial map blueprint cannot have black figure");
 

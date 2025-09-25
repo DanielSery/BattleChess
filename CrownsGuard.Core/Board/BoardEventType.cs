@@ -1,4 +1,4 @@
-namespace CrownsGuard.Core.GameBoard;
+namespace CrownsGuard.Core.Board;
 
 public enum BoardEventType : byte
 {

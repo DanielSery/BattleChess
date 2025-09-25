@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
+using CrownsGuard.Core.Board;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.Engine.Figures;
 
 namespace CrownsGuard.Engine.Helpers;
 

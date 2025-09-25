@@ -1,5 +1,4 @@
 ﻿using CrownsGuard.Core;
-using CrownsGuard.Core.GameBoard;
 using CrownsGuard.Game;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Game.Timers;
@@ -14,6 +13,7 @@ using CrownsGuard.Maps.Figures;
 using CrownsGuard.Maps.GameBoard;
 using Nicenis.Windows.ViewModels;
 using CrownsGuard.Engine.Helpers;
+using CrownsGuard.Core.Board;
 
 namespace CrownsGuard.UI.Game;
 

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.FigureDefinitions.Figures;
+using CrownsGuard.Engine.Figures;
 
 namespace CrownsGuard.Engine.Helpers;
 

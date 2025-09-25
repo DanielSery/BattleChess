@@ -1,8 +1,8 @@
-﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.GameBoard;
+﻿using CrownsGuard.Core.Board;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Engine.Helpers;
 
-namespace CrownsGuard.FigureDefinitions.Figures;
+namespace CrownsGuard.Engine.Figures;
 
 public static class Mage
 {

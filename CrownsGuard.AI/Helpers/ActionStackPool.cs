@@ -1,5 +1,5 @@
-﻿using System.Collections.Concurrent;
-using CrownsGuard.Core.Figures;
+﻿using CrownsGuard.Core.Figures;
+using System.Collections.Concurrent;
 
 namespace CrownsGuard.AI.Helpers;
 
@@ -15,7 +15,7 @@ public static class ActionStackPool
             result.Clear();
             return new Rented(actionStack);
         }
-
+        
         result = new Stack<FigureAction>(64);
         return new Rented(result);
     }

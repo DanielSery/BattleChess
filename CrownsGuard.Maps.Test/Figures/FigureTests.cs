@@ -4,7 +4,7 @@ using CrownsGuard.Game.Players;
 using CrownsGuard.Maps.Figures;
 using Moq;
 
-namespace CrownsGuard.Core.Test.Figures;
+namespace CrownsGuard.Maps.Test.Figures;
 
 public class FigureTests
 {

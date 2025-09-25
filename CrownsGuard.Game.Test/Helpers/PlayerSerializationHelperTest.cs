@@ -2,7 +2,7 @@
 using CrownsGuard.Game.Helpers;
 using CrownsGuard.Game.Players;
 
-namespace CrownsGuard.Core.Test.Helpers;
+namespace CrownsGuard.Game.Test.Helpers;
 
 public class PlayerSerializationHelperTest
 {
