@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.Engine", "Crown
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.Core.Test", "CrownsGuard.Core.Test\CrownsGuard.Core.Test.csproj", "{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownsGuard.Engine.Test", "CrownsGuard.Engine.Test\CrownsGuard.Engine.Test.csproj", "{45E2AB88-4042-4E67-AAF4-F8B99E71F876}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,10 @@ Global
 		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45E2AB88-4042-4E67-AAF4-F8B99E71F876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45E2AB88-4042-4E67-AAF4-F8B99E71F876}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45E2AB88-4042-4E67-AAF4-F8B99E71F876}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45E2AB88-4042-4E67-AAF4-F8B99E71F876}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +121,7 @@ Global
 		{EF950A84-C5E9-43D7-8C5E-C0A7717EE9F6} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 		{00F202C9-9C52-4E01-9177-73E4B249128E} = {F8495298-BC3B-4E03-891C-BB762E223776}
 		{4EE6302E-DDC7-423C-BF0E-B7705B459CFD} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
+		{45E2AB88-4042-4E67-AAF4-F8B99E71F876} = {0ADAE7A2-44B0-4C38-B9D9-B8A6111AEFDD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0A17059C-17CB-4FA9-BE6E-9BA95510BEFE}

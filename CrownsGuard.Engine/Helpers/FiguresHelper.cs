@@ -7,37 +7,6 @@ namespace CrownsGuard.Engine.Helpers;
 
 internal static class FiguresHelper
 {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsEmpty(this Figure checkedFigure)
-    {
-        return checkedFigure == Figure.Empty;
-    }
-    
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsWalkable(this Figure checkedFigure)
-    {
-        return (checkedFigure & Figure.FigureMask) <= Figure.LastWalkableFigure;
-    }
-    
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool CanAttack(this Figure yoursFigure, Figure checkedFigure)
-    {
-        return ((yoursFigure ^ checkedFigure) & Figure.PlayerMask) != Figure.Empty &&
-               (checkedFigure & Figure.FigureMask) > Figure.LastNonAttackableFigure;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsAllyTo(this Figure yoursFigure, Figure checkedFigure)
-    {
-        return ((yoursFigure ^ checkedFigure) & Figure.PlayerMask) == Figure.Empty;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsEnemyTo(this Figure yoursFigure, Figure checkedFigure)
-    {
-        return ((yoursFigure ^ checkedFigure) & Figure.PlayerMask) == Figure.PlayerMask;
-    }
-
     public static void CreateFigure(this Span<Figure> board, byte targetIndex, Figure createdFigure, Action<BoardEvent, Span<Figure>> onEvent)
     {
         board[targetIndex] = createdFigure;
