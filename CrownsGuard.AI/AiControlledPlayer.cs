@@ -506,7 +506,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
         return maxEval;
     }
 
-    private void OnEvent(BoardEvent boardEvent, Span<Figure> board)
+    private static void OnEvent(BoardEvent boardEvent, Span<Figure> board)
     {
     }
 

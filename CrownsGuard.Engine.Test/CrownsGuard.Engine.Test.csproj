@@ -31,4 +31,9 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\CrownsGuard.Core\CrownsGuard.Core.csproj" />
+      <ProjectReference Include="..\CrownsGuard.Engine\CrownsGuard.Engine.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -57,8 +57,9 @@ internal static class FiguresHelper
 
     public static void ConvertUnit(this Span<Figure> board, byte fromIndex, byte toIndex, Action<BoardEvent, Span<Figure>> onEvent)
     {
+        var sourceFigure = board[fromIndex];
         var targetFigure = board[toIndex];
-        board[toIndex] = targetFigure.GetFigureColor() | targetFigure.GetFigureType();
+        board[toIndex] = sourceFigure.GetFigureColor() | targetFigure.GetFigureType();
         
         onEvent.Invoke(new BoardEvent(BoardEventType.ChangedOwner, fromIndex, toIndex), board);
     }
@@ -73,8 +74,8 @@ internal static class FiguresHelper
 
     public static void MakeUnitKing(this Span<Figure> board, byte fromIndex, byte toIndex, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        var sourceFigure = board[fromIndex];
-        board[toIndex] = sourceFigure.GetFigureColor() | Figure.IsKing | sourceFigure.GetFigureType();
+        var targetFigure = board[toIndex];
+        board[toIndex] = targetFigure.GetFigureColor() | Figure.IsKing | targetFigure.GetFigureType();
         
         onEvent.Invoke(new BoardEvent(BoardEventType.ChangedFigure, fromIndex, toIndex), board);
     }

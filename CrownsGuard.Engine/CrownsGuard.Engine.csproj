@@ -10,4 +10,8 @@
     <ProjectReference Include="..\CrownsGuard.Core\CrownsGuard.Core.csproj" />
   </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="CrownsGuard.Engine.Test" />
+    </ItemGroup>
+
 </Project>

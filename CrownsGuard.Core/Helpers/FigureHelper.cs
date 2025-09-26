@@ -63,19 +63,19 @@ public static class FigureHelper
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsWhite(this Figure figure)
     {
-        return figure.HasFlag(Figure.IsWhite);
+        return (figure & Figure.IsWhite) == Figure.IsWhite;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsKing(this Figure figure)
     {
-        return figure.HasFlag(Figure.IsKing);
+        return (figure & Figure.IsKing) == Figure.IsKing;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsBlack(this Figure figure)
     {
-        return figure.HasFlag(Figure.IsBlack);
+        return (figure & Figure.IsBlack) == Figure.IsBlack;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
