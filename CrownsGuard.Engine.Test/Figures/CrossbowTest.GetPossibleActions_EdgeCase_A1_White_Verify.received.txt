@@ -1,0 +1,11 @@
+﻿{
+  scenario: EdgeCase_A1_White,
+  figure: (0,0):Crossbow, IsWhite,
+  actions: [
+    (0,1):Move,
+    (1,0):Move,
+    (1,1):PossibleRangedAttack,
+    (2,2):PossibleRangedAttack,
+    (3,3):PossibleRangedAttack
+  ]
+}

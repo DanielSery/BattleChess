@@ -1,0 +1,10 @@
+﻿{
+  scenario: EdgeCase_A1_White,
+  figure: (0,0):Dragon, IsWhite,
+  actions: [
+    (0,1):Move,
+    (1,0):Move,
+    (1,1):BreatheFire,
+    (2,2):BreatheFire
+  ]
+}

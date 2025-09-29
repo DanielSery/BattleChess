@@ -1,0 +1,7 @@
+﻿{
+  scenario: ExecuteBreatheFire_TwoSteps_White,
+  action: (3,3->6,1):BreatheFire,
+  board: [
+    (3,3):Dragon, IsWhite
+  ]
+}

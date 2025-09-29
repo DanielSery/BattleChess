@@ -1,0 +1,22 @@
+﻿{
+  scenario: AllEmpty_Center_White,
+  figure: (3,3):Chinese, IsWhite,
+  actions: [
+    (0,0):PossibleMeleePierceAttack,
+    (0,6):PossibleMeleePierceAttack,
+    (1,1):PossibleMeleePierceAttack,
+    (1,5):PossibleMeleePierceAttack,
+    (2,2):PossibleMeleePierceAttack,
+    (2,3):Move,
+    (2,4):PossibleMeleePierceAttack,
+    (3,2):Move,
+    (3,4):Move,
+    (4,2):PossibleMeleePierceAttack,
+    (4,3):Move,
+    (4,4):PossibleMeleePierceAttack,
+    (5,1):PossibleMeleePierceAttack,
+    (5,5):PossibleMeleePierceAttack,
+    (6,0):PossibleMeleePierceAttack,
+    (6,6):PossibleMeleePierceAttack
+  ]
+}

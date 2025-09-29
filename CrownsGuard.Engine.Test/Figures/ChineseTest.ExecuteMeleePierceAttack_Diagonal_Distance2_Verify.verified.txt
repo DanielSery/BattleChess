@@ -1,0 +1,7 @@
+﻿{
+  scenario: ExecuteMeleePierceAttack_Diagonal_Distance2,
+  action: (3,3->5,5):MeleePierceAttack,
+  board: [
+    (5,5):Chinese, IsWhite
+  ]
+}

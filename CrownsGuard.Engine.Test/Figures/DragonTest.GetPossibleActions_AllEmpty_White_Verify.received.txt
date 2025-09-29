@@ -1,0 +1,18 @@
+﻿{
+  scenario: AllEmpty_White,
+  figure: (3,3):Dragon, IsWhite,
+  actions: [
+    (1,1):BreatheFire,
+    (1,5):BreatheFire,
+    (2,2):BreatheFire,
+    (2,3):Move,
+    (2,4):BreatheFire,
+    (3,2):Move,
+    (3,4):Move,
+    (4,2):BreatheFire,
+    (4,3):Move,
+    (4,4):BreatheFire,
+    (5,1):BreatheFire,
+    (5,5):BreatheFire
+  ]
+}

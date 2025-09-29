@@ -1,0 +1,30 @@
+﻿{
+  scenario: EdgeCase_H8_Black,
+  figure: (7,7):Dogs, IsBlack,
+  actions: [
+    (0,0):PossibleMeleeAttack,
+    (0,7):PossibleMeleeAttack,
+    (1,1):PossibleMeleeAttack,
+    (1,7):PossibleMeleeAttack,
+    (2,2):PossibleMeleeAttack,
+    (2,7):PossibleMeleeAttack,
+    (3,3):PossibleMeleeAttack,
+    (3,7):PossibleMeleeAttack,
+    (4,4):PossibleMeleeAttack,
+    (4,7):PossibleMeleeAttack,
+    (5,5):PossibleMeleeAttack,
+    (5,7):PossibleMeleeAttack,
+    (6,6):PossibleMeleeAttack,
+    (6,6):Move,
+    (6,7):PossibleMeleeAttack,
+    (6,7):Move,
+    (7,0):PossibleMeleeAttack,
+    (7,1):PossibleMeleeAttack,
+    (7,2):PossibleMeleeAttack,
+    (7,3):PossibleMeleeAttack,
+    (7,4):PossibleMeleeAttack,
+    (7,5):PossibleMeleeAttack,
+    (7,6):PossibleMeleeAttack,
+    (7,6):Move
+  ]
+}

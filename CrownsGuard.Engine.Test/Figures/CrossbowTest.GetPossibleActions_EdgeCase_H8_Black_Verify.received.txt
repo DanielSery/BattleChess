@@ -1,0 +1,11 @@
+﻿{
+  scenario: EdgeCase_H8_Black,
+  figure: (7,7):Crossbow, IsBlack,
+  actions: [
+    (4,4):PossibleRangedAttack,
+    (5,5):PossibleRangedAttack,
+    (6,6):PossibleRangedAttack,
+    (6,7):Move,
+    (7,6):Move
+  ]
+}

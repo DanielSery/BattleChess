@@ -1,0 +1,13 @@
+﻿{
+  scenario: Mixed_White,
+  figure: (3,3):Dragon, IsWhite,
+  actions: [
+    (1,1):BreatheFire,
+    (2,2):BreatheFire,
+    (2,3):Move,
+    (2,4):BreatheFire,
+    (3,2):Move,
+    (4,2):BreatheFire,
+    (4,3):Move
+  ]
+}
