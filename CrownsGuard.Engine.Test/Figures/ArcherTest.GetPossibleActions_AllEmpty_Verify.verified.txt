@@ -1,0 +1,22 @@
+﻿{
+  scenario: AllEmpty,
+  figure: (3,3):Archer, IsWhite,
+  actions: [
+    (0,3):PossibleRangedAttack,
+    (1,3):PossibleRangedAttack,
+    (2,3):PossibleRangedAttack,
+    (2,3):Move,
+    (3,0):PossibleRangedAttack,
+    (3,1):PossibleRangedAttack,
+    (3,2):PossibleRangedAttack,
+    (3,2):Move,
+    (3,4):PossibleRangedAttack,
+    (3,4):Move,
+    (3,5):PossibleRangedAttack,
+    (3,6):PossibleRangedAttack,
+    (4,3):PossibleRangedAttack,
+    (4,3):Move,
+    (5,3):PossibleRangedAttack,
+    (6,3):PossibleRangedAttack
+  ]
+}

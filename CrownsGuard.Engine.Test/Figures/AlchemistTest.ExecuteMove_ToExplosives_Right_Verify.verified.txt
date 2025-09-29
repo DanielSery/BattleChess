@@ -1,0 +1,7 @@
+﻿{
+  scenario: ToExplosives_Right,
+  action: (3,3->3,4):AlchemistMove,
+  board: [
+    (3,4):Alchemist, IsWhite
+  ]
+}

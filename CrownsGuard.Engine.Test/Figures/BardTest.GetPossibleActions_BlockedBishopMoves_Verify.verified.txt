@@ -1,0 +1,14 @@
+﻿{
+  scenario: BlockedBishopMoves,
+  figure: (3,3):Bard, IsWhite,
+  actions: [
+    (1,2):PossibleConvertUnit,
+    (1,4):ConvertUnit,
+    (2,1):PossibleConvertUnit,
+    (2,5):PossibleConvertUnit,
+    (4,1):PossibleConvertUnit,
+    (4,5):PossibleConvertUnit,
+    (5,2):PossibleConvertUnit,
+    (5,4):PossibleConvertUnit
+  ]
+}

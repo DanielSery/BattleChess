@@ -1,0 +1,61 @@
+﻿[
+  {
+    scenario: AllEmpty,
+    figure: (3,3):Bard, IsWhite,
+    actions: [
+      (1,2):PossibleConvertUnit,
+      (1,4):PossibleConvertUnit,
+      (2,1):PossibleConvertUnit,
+      (2,2):Move,
+      (2,4):Move,
+      (2,5):PossibleConvertUnit,
+      (4,1):PossibleConvertUnit,
+      (4,2):Move,
+      (4,4):Move,
+      (4,5):PossibleConvertUnit,
+      (5,2):PossibleConvertUnit,
+      (5,4):PossibleConvertUnit
+    ]
+  },
+  {
+    scenario: KnightEnemiesAndFriendlies,
+    figure: (3,3):Bard, IsWhite,
+    actions: [
+      (1,2):PossibleConvertUnit,
+      (1,4):PossibleConvertUnit,
+      (2,1):ConvertUnit,
+      (2,2):Move,
+      (2,4):Move,
+      (2,5):PossibleConvertUnit,
+      (4,1):PossibleConvertUnit,
+      (4,2):Move,
+      (4,4):Move,
+      (4,5):PossibleConvertUnit,
+      (5,2):ConvertUnit,
+      (5,4):PossibleConvertUnit
+    ]
+  },
+  {
+    scenario: BlockedBishopMoves,
+    figure: (3,3):Bard, IsWhite,
+    actions: [
+      (1,2):PossibleConvertUnit,
+      (1,4):ConvertUnit,
+      (2,1):PossibleConvertUnit,
+      (2,5):PossibleConvertUnit,
+      (4,1):PossibleConvertUnit,
+      (4,5):PossibleConvertUnit,
+      (5,2):PossibleConvertUnit,
+      (5,4):PossibleConvertUnit
+    ]
+  },
+  {
+    scenario: EdgeCase_A1,
+    figure: (0,0):Bard, IsWhite,
+    actions: [
+      (1,1):Move,
+      (1,2):PossibleConvertUnit,
+      (2,1):PossibleConvertUnit
+    ]
+  }
+]

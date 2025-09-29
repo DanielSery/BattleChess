@@ -1,0 +1,9 @@
+﻿{
+  scenario: ExecuteAttack_White_KillsAt2to4Forward,
+  action: (3,3->1,3):CannonAttack,
+  board: [
+    (3,3):Cannon, IsWhite,
+    (5,3):Knight, IsBlack,
+    (6,3):Archer, IsBlack
+  ]
+}

@@ -1,0 +1,7 @@
+﻿{
+  scenario: BlockedDiagonals,
+  figure: (3,3):BattleAxe, IsWhite,
+  actions: [
+    (4,4):BattleAxeMove
+  ]
+}

@@ -1,0 +1,7 @@
+﻿{
+  scenario: ToFire_Up,
+  action: (3,3->4,3):AlchemistMove,
+  board: [
+    (4,3):Alchemist, IsWhite
+  ]
+}

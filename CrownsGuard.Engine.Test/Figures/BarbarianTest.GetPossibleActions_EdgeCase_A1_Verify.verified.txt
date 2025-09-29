@@ -1,0 +1,8 @@
+﻿{
+  scenario: EdgeCase_A1,
+  figure: (0,0):Barbarian, IsWhite,
+  actions: [
+    (1,2):Move,
+    (2,1):Move
+  ]
+}

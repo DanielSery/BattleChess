@@ -1,0 +1,4 @@
+﻿{
+  scenario: EdgeCase_H8_Black,
+  figure: (7,7):Catapult, IsBlack
+}

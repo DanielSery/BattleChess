@@ -1,0 +1,17 @@
+﻿{
+  scenario: PushLine_Up_ImmediatelyBlocked,
+  figure: (3,3):Barbarian, IsWhite,
+  actions: [
+    (1,2):Move,
+    (1,4):Move,
+    (2,1):Move,
+    (2,5):Move,
+    (4,1):Move,
+    (4,5):Move,
+    (5,2):Move,
+    (5,3):PossiblePushFigure,
+    (5,4):Move,
+    (6,3):PushFigure,
+    (7,3):PushFigure
+  ]
+}

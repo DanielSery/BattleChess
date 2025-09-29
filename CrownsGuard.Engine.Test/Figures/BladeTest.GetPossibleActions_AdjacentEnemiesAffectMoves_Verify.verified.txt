@@ -1,0 +1,32 @@
+﻿{
+  scenario: AdjacentEnemiesAffectMoves,
+  figure: (3,3):Blade, IsWhite,
+  actions: [
+    (0,0):PossibleMeleePierceAttack,
+    (0,3):PossibleMeleePierceAttack,
+    (0,6):PossibleMeleePierceAttack,
+    (1,1):PossibleMeleePierceAttack,
+    (1,3):PossibleMeleePierceAttack,
+    (1,5):PossibleMeleePierceAttack,
+    (2,2):MeleePierceAttack,
+    (2,3):MeleePierceAttack,
+    (2,4):MeleePierceAttack,
+    (3,0):PossibleMeleePierceAttack,
+    (3,1):PossibleMeleePierceAttack,
+    (3,2):MeleePierceAttack,
+    (3,4):PossibleMeleePierceAttack,
+    (3,4):Move,
+    (3,5):PossibleMeleePierceAttack,
+    (3,6):PossibleMeleePierceAttack,
+    (4,2):MeleePierceAttack,
+    (4,3):PossibleMeleePierceAttack,
+    (4,3):Move,
+    (4,4):MeleePierceAttack,
+    (5,1):PossibleMeleePierceAttack,
+    (5,3):PossibleMeleePierceAttack,
+    (5,5):PossibleMeleePierceAttack,
+    (6,0):PossibleMeleePierceAttack,
+    (6,3):PossibleMeleePierceAttack,
+    (6,6):PossibleMeleePierceAttack
+  ]
+}

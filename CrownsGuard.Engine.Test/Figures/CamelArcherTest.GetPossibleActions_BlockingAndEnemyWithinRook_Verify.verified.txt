@@ -1,0 +1,22 @@
+﻿{
+  scenario: BlockingAndEnemyWithinRook,
+  figure: (3,3):CamelArcher, IsWhite,
+  actions: [
+    (0,0):Move,
+    (0,3):PossibleMeleeAttack,
+    (0,6):Move,
+    (1,1):Move,
+    (1,3):PossibleMeleeAttack,
+    (1,5):Move,
+    (2,2):Move,
+    (2,3):PossibleMeleeAttack,
+    (2,4):Move,
+    (3,0):MeleeAttack,
+    (3,1):PossibleMeleeAttack,
+    (3,2):PossibleMeleeAttack,
+    (3,4):PossibleMeleeAttack,
+    (4,3):PossibleMeleeAttack,
+    (4,4):Move,
+    (5,3):PossibleMeleeAttack
+  ]
+}

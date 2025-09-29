@@ -1,0 +1,10 @@
+﻿{
+  scenario: AllEmpty,
+  figure: (3,3):BattleAxe, IsWhite,
+  actions: [
+    (2,2):BattleAxeMove,
+    (2,4):BattleAxeMove,
+    (4,2):BattleAxeMove,
+    (4,4):BattleAxeMove
+  ]
+}

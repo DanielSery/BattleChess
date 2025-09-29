@@ -1,0 +1,4 @@
+﻿{
+  scenario: EdgeCase_A1_White,
+  figure: (0,0):Catapult, IsWhite
+}

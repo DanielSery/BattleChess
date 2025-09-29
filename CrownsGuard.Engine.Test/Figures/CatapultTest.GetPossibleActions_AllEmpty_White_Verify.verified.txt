@@ -1,0 +1,11 @@
+﻿{
+  scenario: AllEmpty_White,
+  figure: (3,3):Catapult, IsWhite,
+  actions: [
+    (0,1):PossibleRangedAttack,
+    (0,3):PossibleRangedAttack,
+    (0,5):PossibleRangedAttack,
+    (1,2):PossibleRangedAttack,
+    (1,4):PossibleRangedAttack
+  ]
+}

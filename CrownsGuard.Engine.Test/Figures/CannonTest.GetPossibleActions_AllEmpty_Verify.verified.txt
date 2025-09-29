@@ -1,0 +1,8 @@
+﻿{
+  scenario: AllEmpty,
+  figure: (3,3):Cannon, IsWhite,
+  actions: [
+    (0,3):PossibleCannonAttack,
+    (1,3):PossibleCannonAttack
+  ]
+}

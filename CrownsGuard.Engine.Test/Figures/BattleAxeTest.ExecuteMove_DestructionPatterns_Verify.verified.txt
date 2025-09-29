@@ -1,0 +1,34 @@
+﻿[
+  {
+    scenario: Execute_UR_Destroys_Quadrant,
+    action: (3,3->4,4):BattleAxeMove,
+    board: [
+      (4,3):Knight, IsBlack,
+      (4,4):BattleAxe, IsWhite
+    ]
+  },
+  {
+    scenario: Execute_UL_Destroys_Quadrant,
+    action: (3,3->4,2):BattleAxeMove,
+    board: [
+      (4,2):BattleAxe, IsWhite,
+      (4,3):Knight, IsBlack
+    ]
+  },
+  {
+    scenario: /Execute_DR_Destroys_Quadrant,
+    action: (3,3->2,4):BattleAxeMove,
+    board: [
+      (2,4):BattleAxe, IsWhite,
+      (3,4):Knight, IsBlack
+    ]
+  },
+  {
+    scenario: Execute_DL_Destroys_Quadrant,
+    action: (3,3->2,2):BattleAxeMove,
+    board: [
+      (2,2):BattleAxe, IsWhite,
+      (2,3):Knight, IsBlack
+    ]
+  }
+]

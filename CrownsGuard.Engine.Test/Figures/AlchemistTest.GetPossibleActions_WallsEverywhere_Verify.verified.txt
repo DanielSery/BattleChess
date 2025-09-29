@@ -1,0 +1,4 @@
+﻿{
+  scenario: WallsEverywhere,
+  figure: (3,3):Alchemist, IsWhite
+}

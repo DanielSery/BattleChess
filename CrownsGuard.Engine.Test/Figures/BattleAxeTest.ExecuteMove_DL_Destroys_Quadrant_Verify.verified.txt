@@ -1,0 +1,8 @@
+﻿{
+  scenario: Execute_DL_Destroys_Quadrant,
+  action: (3,3->2,2):BattleAxeMove,
+  board: [
+    (2,2):BattleAxe, IsWhite,
+    (2,3):Knight, IsBlack
+  ]
+}

@@ -1,0 +1,16 @@
+﻿{
+  scenario: EnemyOnDiagonal,
+  figure: (3,3):CamelRider, IsWhite,
+  actions: [
+    (2,2):MeleeDefend,
+    (2,4):MeleeAttack,
+    (4,2):PossibleMeleeAttack,
+    (4,2):Move,
+    (4,4):PossibleMeleeAttack,
+    (4,4):Move,
+    (5,1):MeleeAttack,
+    (5,5):PossibleMeleeAttack,
+    (5,5):Move,
+    (6,6):MeleeDefend
+  ]
+}

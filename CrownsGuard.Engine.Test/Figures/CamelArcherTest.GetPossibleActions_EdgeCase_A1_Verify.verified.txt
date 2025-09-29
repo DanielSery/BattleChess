@@ -1,0 +1,27 @@
+﻿{
+  scenario: EdgeCase_A1,
+  figure: (0,0):CamelArcher, IsWhite,
+  actions: [
+    (0,1):PossibleMeleeAttack,
+    (0,2):PossibleMeleeAttack,
+    (0,3):PossibleMeleeAttack,
+    (0,4):PossibleMeleeAttack,
+    (0,5):PossibleMeleeAttack,
+    (0,6):PossibleMeleeAttack,
+    (0,7):PossibleMeleeAttack,
+    (1,0):PossibleMeleeAttack,
+    (1,1):Move,
+    (2,0):PossibleMeleeAttack,
+    (2,2):Move,
+    (3,0):PossibleMeleeAttack,
+    (3,3):Move,
+    (4,0):PossibleMeleeAttack,
+    (4,4):Move,
+    (5,0):PossibleMeleeAttack,
+    (5,5):Move,
+    (6,0):PossibleMeleeAttack,
+    (6,6):Move,
+    (7,0):PossibleMeleeAttack,
+    (7,7):Move
+  ]
+}

@@ -1,0 +1,4 @@
+﻿{
+  scenario: EnemyAdjacentSuppress,
+  figure: (3,3):Catapult, IsWhite
+}

@@ -1,0 +1,9 @@
+﻿{
+  scenario: ExecuteAttack_Black_KillsAt2to4Forward,
+  action: (4,4->6,4):CannonAttack,
+  board: [
+    (0,4):LastNonAttackableFigure,
+    (2,4):Trader, IsWhite,
+    (4,4):Cannon, IsBlack
+  ]
+}

@@ -1,0 +1,78 @@
+﻿[
+  {
+    scenario: AllEmpty,
+    figure: (3,3):Barbarian, IsWhite,
+    actions: [
+      (1,2):Move,
+      (1,4):Move,
+      (2,1):Move,
+      (2,5):Move,
+      (4,1):Move,
+      (4,5):Move,
+      (5,2):Move,
+      (5,4):Move
+    ]
+  },
+  {
+    scenario: PushLine_Left_WithBlocker,
+    figure: (3,3):Barbarian, IsWhite,
+    actions: [
+      (1,2):Move,
+      (1,4):Move,
+      (2,1):Move,
+      (2,5):Move,
+      (3,0):PushFigure,
+      (3,1):PushFigure,
+      (4,1):Move,
+      (4,5):Move,
+      (5,2):Move,
+      (5,4):Move
+    ]
+  },
+  {
+    scenario: PushLine_Up_ImmediatelyBlocked,
+    figure: (3,3):Barbarian, IsWhite,
+    actions: [
+      (1,2):Move,
+      (1,4):Move,
+      (2,1):Move,
+      (2,5):Move,
+      (4,1):Move,
+      (4,5):Move,
+      (5,2):Move,
+      (5,3):PossiblePushFigure,
+      (5,4):Move,
+      (6,3):PushFigure,
+      (7,3):PushFigure
+    ]
+  },
+  {
+    scenario: MixedDirections,
+    figure: (3,3):Barbarian, IsWhite,
+    actions: [
+      (0,0):PossiblePushFigure,
+      (0,3):PushFigure,
+      (1,1):PushFigure,
+      (1,2):Move,
+      (1,3):PossiblePushFigure,
+      (1,4):Move,
+      (2,1):Move,
+      (2,5):Move,
+      (3,5):PushFigure,
+      (3,6):PushFigure,
+      (3,7):PushFigure,
+      (4,1):Move,
+      (4,5):Move,
+      (5,2):Move,
+      (5,4):Move
+    ]
+  },
+  {
+    scenario: EdgeCase_A1,
+    figure: (0,0):Barbarian, IsWhite,
+    actions: [
+      (1,2):Move,
+      (2,1):Move
+    ]
+  }
+]

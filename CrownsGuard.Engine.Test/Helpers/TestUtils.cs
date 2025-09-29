@@ -34,13 +34,12 @@ internal static class TestUtils
         var actions = new Stack<FigureAction>();
         getPossibleActions.Invoke(src, figure, board, actions);
         var result = actions
-            .Where(a => a.FigureActionType == FigureActionType.AlchemistMove)
             .OrderBy(a => a.TargetIndex)
             .Select(a => $"({a.TargetIndex/8},{a.TargetIndex%8}):{a.FigureActionType}")
             .ToArray();
         var figureName = $"({src / 8},{src % 8}):{figure}";
 
-        return new {scenario = name, figure = figureName, actions = result};
+        return new { scenario = name, figure = figureName, actions = result };
     }
 
     public static object RunExecuteActionScenario(

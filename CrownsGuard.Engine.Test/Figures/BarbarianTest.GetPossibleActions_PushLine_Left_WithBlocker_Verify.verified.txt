@@ -1,0 +1,16 @@
+﻿{
+  scenario: PushLine_Left_WithBlocker,
+  figure: (3,3):Barbarian, IsWhite,
+  actions: [
+    (1,2):Move,
+    (1,4):Move,
+    (2,1):Move,
+    (2,5):Move,
+    (3,0):PushFigure,
+    (3,1):PushFigure,
+    (4,1):Move,
+    (4,5):Move,
+    (5,2):Move,
+    (5,4):Move
+  ]
+}

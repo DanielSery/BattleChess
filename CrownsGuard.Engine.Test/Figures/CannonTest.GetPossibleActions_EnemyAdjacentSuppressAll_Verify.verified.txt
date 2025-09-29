@@ -1,0 +1,4 @@
+﻿{
+  scenario: EnemyAdjacentSuppressAll,
+  figure: (3,3):Cannon, IsWhite
+}
