@@ -9,7 +9,7 @@ public static class Dragon
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -21,7 +21,7 @@ public static class Dragon
             }
         }
 
-        foreach (var relative in PositionsGroups.QueenDirections)
+        foreach (var relative in PositionConstants.QueenDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -33,7 +33,7 @@ public static class Dragon
             }
         }
         
-        foreach (var relative in PositionsGroups.BishopDirections)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             var targetIndex = sourceIndex;
             for (var i = 1; i <= 2; i++)

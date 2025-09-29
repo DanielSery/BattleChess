@@ -8,17 +8,17 @@ public static class Musketeer
 {
     private static readonly short[] BlackAttackDirections =
     [
-        +unchecked((byte)-1)+1*PositionsGroups.YOffset, unchecked((byte)+0)+1*PositionsGroups.YOffset, unchecked((byte)+1)+1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+1*PositionConstants.YOffset, unchecked((byte)+0)+1*PositionConstants.YOffset, unchecked((byte)+1)+1*PositionConstants.YOffset
     ];
 
     private static readonly short[] WhiteAttackDirections =
     [
-        unchecked((byte)-1)-1*PositionsGroups.YOffset, unchecked((byte)+0)-1*PositionsGroups.YOffset, unchecked((byte)+1)-1*PositionsGroups.YOffset
+        unchecked((byte)-1)-1*PositionConstants.YOffset, unchecked((byte)+0)-1*PositionConstants.YOffset, unchecked((byte)+1)-1*PositionConstants.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.QueenDirections)
+        foreach (var relative in PositionConstants.QueenDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;

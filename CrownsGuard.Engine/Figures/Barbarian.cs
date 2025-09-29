@@ -8,7 +8,7 @@ public static class Barbarian
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.KnightPositions)
+        foreach (var relative in PositionConstants.KnightPositions)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -20,7 +20,7 @@ public static class Barbarian
             }
         }
         
-        foreach (var relative in PositionsGroups.QueenDirections)
+        foreach (var relative in PositionConstants.QueenDirections)
         {
             var movedIndex = sourceIndex.GetWithOffset(relative);
             if (movedIndex == -1) continue;

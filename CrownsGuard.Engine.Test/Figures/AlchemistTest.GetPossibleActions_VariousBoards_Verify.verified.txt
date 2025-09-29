@@ -1,0 +1,32 @@
+﻿[
+  {
+    scenario: AllEmpty,
+    figure: (3,3):Alchemist, IsWhite,
+    actions: [
+      (2,2):AlchemistMove,
+      (2,3):AlchemistMove,
+      (2,4):AlchemistMove,
+      (3,2):AlchemistMove,
+      (3,4):AlchemistMove,
+      (4,2):AlchemistMove,
+      (4,3):AlchemistMove,
+      (4,4):AlchemistMove
+    ]
+  },
+  {
+    scenario: WallsEverywhere,
+    figure: (3,3):Alchemist, IsWhite
+  },
+  {
+    scenario: Mixed,
+    figure: (3,3):Alchemist, IsWhite,
+    actions: [
+      (2,4):AlchemistMove,
+      (3,2):AlchemistMove,
+      (3,4):AlchemistMove,
+      (4,2):AlchemistMove,
+      (4,3):AlchemistMove,
+      (4,4):AlchemistMove
+    ]
+  }
+]

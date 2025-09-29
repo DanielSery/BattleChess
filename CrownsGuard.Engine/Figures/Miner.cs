@@ -9,7 +9,7 @@ public static class Miner
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -21,7 +21,7 @@ public static class Miner
             }
         }
 
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
@@ -44,7 +44,7 @@ public static class Miner
         var difference = PositionsHelper.GetRelative(action.SourceIndex, action.TargetIndex);
         var differenceX = PositionsHelper.GetRelativeX(difference);
         var differenceY = PositionsHelper.GetRelativeY(difference);
-        var relative = (short)(Math.Sign(differenceX) + Math.Sign(differenceY) * PositionsGroups.YOffset);
+        var relative = (short)(Math.Sign(differenceX) + Math.Sign(differenceY) * PositionConstants.YOffset);
         
         for (var targetIndex = action.SourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
         {

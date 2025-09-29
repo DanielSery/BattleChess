@@ -8,7 +8,7 @@ public static class CamelArcher
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.BishopDirections)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
@@ -24,7 +24,7 @@ public static class CamelArcher
             }
         }
         
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {

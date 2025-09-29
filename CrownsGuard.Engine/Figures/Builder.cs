@@ -8,7 +8,7 @@ public static class Builder
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.BishopDirections)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -20,7 +20,7 @@ public static class Builder
             }
         }
         
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;

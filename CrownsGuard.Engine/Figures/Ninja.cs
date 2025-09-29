@@ -8,7 +8,7 @@ public static class Ninja
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -26,15 +26,15 @@ public static class Ninja
 
         if (sourceFigure.IsBlack())
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionsGroups.YOffset, actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionsGroups.YOffset, actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionConstants.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionConstants.YOffset, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
         }
         else
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionsGroups.YOffset, actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionsGroups.YOffset, actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionConstants.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionConstants.YOffset, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
         }
     }
 

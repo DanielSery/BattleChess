@@ -10,30 +10,30 @@ public static class LegionarySword
     {
         if (sourceFigure.IsWhite())
         {
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionsGroups.YOffset, actions);
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionsGroups.YOffset, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionConstants.YOffset, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionConstants.YOffset, actions);
         
             if (sourceIndex >> 3 == 6)
             {
-                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
+                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
             }
             else
             {
-                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
+                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
             }
         }
         else
         {
-            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionsGroups.YOffset, actions);
-            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionsGroups.YOffset, actions);
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionConstants.YOffset, actions);
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionConstants.YOffset, actions);
         
             if (sourceIndex >> 3 == 1)
             {
-                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
+                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
             }
             else
             {
-                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
+                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
             }
         }
     }

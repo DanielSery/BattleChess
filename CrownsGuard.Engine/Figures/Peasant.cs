@@ -10,17 +10,17 @@ public static class Peasant
     {
         if (sourceFigure.IsBlack())
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionsGroups.YOffset, actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)+0*PositionsGroups.YOffset, actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+0*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)+0*PositionConstants.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+0*PositionConstants.YOffset, actions);
         }
         else
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionsGroups.YOffset, actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)+0*PositionsGroups.YOffset, actions);
-            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+0*PositionsGroups.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)+0*PositionConstants.YOffset, actions);
+            TryAddAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+0*PositionConstants.YOffset, actions);
         }
     }
 

@@ -8,27 +8,27 @@ public static class Catapult
 {
     private static readonly short[] BlackAttackPositions =
     [
-        +unchecked((byte)-1)+2*PositionsGroups.YOffset, 
-        unchecked((byte)+1)+2*PositionsGroups.YOffset,
+        +unchecked((byte)-1)+2*PositionConstants.YOffset, 
+        unchecked((byte)+1)+2*PositionConstants.YOffset,
         
-        +unchecked((byte)-2)+3*PositionsGroups.YOffset, 
-        unchecked((byte)+0)+3*PositionsGroups.YOffset, 
-        unchecked((byte)+2)+3*PositionsGroups.YOffset,
+        +unchecked((byte)-2)+3*PositionConstants.YOffset, 
+        unchecked((byte)+0)+3*PositionConstants.YOffset, 
+        unchecked((byte)+2)+3*PositionConstants.YOffset,
     ];
 
     private static readonly short[] WhiteAttackPositions =
     [
-        unchecked((byte)-1)-2*PositionsGroups.YOffset, 
-        unchecked((byte)+1)-2*PositionsGroups.YOffset,
+        unchecked((byte)-1)-2*PositionConstants.YOffset, 
+        unchecked((byte)+1)-2*PositionConstants.YOffset,
         
-        unchecked((byte)-2)-3*PositionsGroups.YOffset, 
-        unchecked((byte)+0)-3*PositionsGroups.YOffset, 
-        unchecked((byte)+2)-3*PositionsGroups.YOffset,
+        unchecked((byte)-2)-3*PositionConstants.YOffset, 
+        unchecked((byte)+0)-3*PositionConstants.YOffset, 
+        unchecked((byte)+2)-3*PositionConstants.YOffset,
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.QueenDirections)
+        foreach (var relative in PositionConstants.QueenDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;

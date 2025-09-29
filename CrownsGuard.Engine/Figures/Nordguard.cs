@@ -8,7 +8,7 @@ public static class Nordguard
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.BishopDirections)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -20,7 +20,7 @@ public static class Nordguard
             }
         }
         
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             var targetIndex = sourceIndex;
             for (var i = 1; i <= 3; i++)

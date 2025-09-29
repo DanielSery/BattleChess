@@ -8,7 +8,7 @@ public static class Scout
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.QueenDirections)
+        foreach (var relative in PositionConstants.QueenDirections)
         {
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
@@ -24,7 +24,7 @@ public static class Scout
             }
         }
 
-        foreach (var relative in PositionsGroups.QueenDirections)
+        foreach (var relative in PositionConstants.QueenDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;

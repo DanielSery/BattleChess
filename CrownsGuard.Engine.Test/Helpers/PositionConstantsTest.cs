@@ -2,29 +2,29 @@
 
 namespace CrownsGuard.Engine.Test.Helpers;
 
-public class PositionsGroupsTest
+public class PositionConstantsTest
 {
     [Fact]
     public Task VerifyChessBoard()
     {
-        return Verify(PositionsGroups.RookDirections);
+        return Verify(PositionConstants.RookDirections);
     }
     
     [Fact]
     public Task BishopDirections_Verify()
     {
-        return Verify(PositionsGroups.BishopDirections);
+        return Verify(PositionConstants.BishopDirections);
     }
     
     [Fact]
     public Task QueenDirections_Verify()
     {
-        return Verify(PositionsGroups.QueenDirections);
+        return Verify(PositionConstants.QueenDirections);
     }
     
     [Fact]
     public Task KnightPositions_Verify()
     {
-        return Verify(PositionsGroups.KnightPositions);
+        return Verify(PositionConstants.KnightPositions);
     }
 }

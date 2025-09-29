@@ -8,17 +8,17 @@ public static class Spearman
 {
     private static readonly short[] AttackPositions =
     [
-        +unchecked((byte)-1)+1*PositionsGroups.YOffset, unchecked((byte)+1)+1*PositionsGroups.YOffset, unchecked((byte)-1)-1*PositionsGroups.YOffset, unchecked((byte)+1)-1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+1*PositionConstants.YOffset, unchecked((byte)+1)+1*PositionConstants.YOffset, unchecked((byte)-1)-1*PositionConstants.YOffset, unchecked((byte)+1)-1*PositionConstants.YOffset
     ];
 
     private static readonly short[] BlackMovePositions =
     [
-        +unchecked((byte)-1)+0*PositionsGroups.YOffset, unchecked((byte)+1)+0*PositionsGroups.YOffset, unchecked((byte)+0)+1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+0*PositionConstants.YOffset, unchecked((byte)+1)+0*PositionConstants.YOffset, unchecked((byte)+0)+1*PositionConstants.YOffset
     ];
 
     private static readonly short[] WhiteMovePositions =
     [
-        +unchecked((byte)-1)+0*PositionsGroups.YOffset, unchecked((byte)+1)+0*PositionsGroups.YOffset, unchecked((byte)+0)-1*PositionsGroups.YOffset
+        +unchecked((byte)-1)+0*PositionConstants.YOffset, unchecked((byte)+1)+0*PositionConstants.YOffset, unchecked((byte)+0)-1*PositionConstants.YOffset
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

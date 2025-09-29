@@ -9,7 +9,7 @@ public static class Priest
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.BishopDirections)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
@@ -25,7 +25,7 @@ public static class Priest
             }
         }
 
-        foreach (var relative in PositionsGroups.BishopDirections)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
@@ -47,7 +47,7 @@ public static class Priest
             }
         }
 
-        foreach (var relative in PositionsGroups.RookDirections)
+        foreach (var relative in PositionConstants.RookDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;

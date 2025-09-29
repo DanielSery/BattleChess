@@ -10,7 +10,7 @@ public static class Warhammer
 {
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
     {
-        foreach (var relative in PositionsGroups.BishopDirections)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;
@@ -29,27 +29,27 @@ public static class Warhammer
         var movement = action.TargetIndex - action.SourceIndex;
         if (movement == +1+0*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+0*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)-1*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+0*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+1*PositionConstants.YOffset, onEvent);
         }
         else if (movement == -1+0*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+0*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)-1*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+0*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+1*PositionConstants.YOffset, onEvent);
         }
         else if (movement == +0+1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)+1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+1*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)+1*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+1*PositionConstants.YOffset, onEvent);
         }
         else if (movement == +0-1*Constants.BoardLength)
         {
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)+-1*PositionsGroups.YOffset, onEvent);
-            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+-1*PositionsGroups.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)-1)+-1*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+0)+-1*PositionConstants.YOffset, onEvent);
+            TryDestroyTile(board, action.TargetIndex, unchecked((byte)+1)+-1*PositionConstants.YOffset, onEvent);
         }
     }
     
