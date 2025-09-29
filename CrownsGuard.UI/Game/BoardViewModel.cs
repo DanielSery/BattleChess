@@ -14,6 +14,7 @@ using CrownsGuard.Maps.GameBoard;
 using Nicenis.Windows.ViewModels;
 using CrownsGuard.Engine.Helpers;
 using CrownsGuard.Core.Board;
+using CrownsGuard.Core.Helpers;
 
 namespace CrownsGuard.UI.Game;
 

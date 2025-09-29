@@ -11,14 +11,8 @@ namespace CrownsGuard.Maps.Test.BoardBlueprints;
 
 public class BoardBlueprintServiceTest
 {
-    private readonly Mock<IFileHandler> _fileHandlerMock;
-    private readonly Mock<IDirectoryHandler> _directoryHandlerMock;
-
-    public BoardBlueprintServiceTest()
-    {
-        _fileHandlerMock = new Mock<IFileHandler>();
-        _directoryHandlerMock = new Mock<IDirectoryHandler>();
-    }
+    private readonly Mock<IFileHandler> _fileHandlerMock = new();
+    private readonly Mock<IDirectoryHandler> _directoryHandlerMock = new();
 
     [Fact]
     public void ctor_WhenNotHavingResources_CreatesDirectory()

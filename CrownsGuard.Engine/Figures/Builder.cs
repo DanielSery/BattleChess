@@ -32,7 +32,7 @@ public static class Builder
             }
             else if (targetFigure.GetFigureType() == Figure.Wall)
             {
-                actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
+                actions.Push(new FigureAction(FigureActionType.MeleeAttack, sourceIndex, targetIndex, sourceFigure));
             }
         }
     }

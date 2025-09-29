@@ -1,5 +1,6 @@
 using CrownsGuard.Core;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace CrownsGuard.Engine.Helpers;
 
@@ -31,14 +32,17 @@ public static class PositionsHelper
     
     public static short GetRelative(byte start, byte end)
     {
-        var diff = end - start;
-        return (short)(diff & 7 + (diff & ~7) << 5);
+        var relativeStart = PositionHelpStruct.FromAbsolute(start);
+        var relativeEnd = PositionHelpStruct.FromAbsolute(end);
+        var relative = new PositionHelpStruct((sbyte)(relativeEnd.X - relativeStart.X), (sbyte)(relativeEnd.Y - relativeStart.Y));
+        return relative.Position;
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static short GetRelativePosition(int x, int y)
     {
-        return (short)(x + y << 8);
+        var relative = new PositionHelpStruct((sbyte)x, (sbyte)y);
+        return relative.Position;
     }
     
     public static int GetWithOffset(this byte absoluteIndex, short relative)
@@ -73,5 +77,36 @@ public static class PositionsHelper
         }
 
         return result;
+    }
+    
+    [StructLayout(LayoutKind.Explicit)]
+    internal struct PositionHelpStruct
+    {
+        [FieldOffset(0)]
+        public sbyte X;
+
+        [FieldOffset(1)]
+        public sbyte Y;
+
+        [FieldOffset(0)]
+        public short Position;
+
+        public PositionHelpStruct(sbyte x, sbyte y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public PositionHelpStruct(short position)
+        {
+            Position = position;
+        }
+
+        public static PositionHelpStruct FromAbsolute(short absolute)
+        {
+            return new PositionHelpStruct(
+                (sbyte)(absolute & 7),
+                (sbyte)(absolute >> 3));
+        }
     }
 }

@@ -21,14 +21,14 @@ public enum FigureActionType : ushort
     PossibleCastling = 50,
     Castling = 50 | IsExecutable | IsSpecial,
     
-    PossibleMeeleeAttack = 100 | IsMovingAttack,
-    MeeleeAttack = 100 | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
-    MeeleeDefend = 100 | IsTargeted | IsMovingAttack,
+    PossibleMeleeAttack = 100 | IsMovingAttack,
+    MeleeAttack = 100 | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
+    MeleeDefend = 100 | IsTargeted | IsMovingAttack,
 
     SpartanMove = 200 | IsExecutable | IsMove | IsMovingAttack,
 
-    PossibleMeeleePierceAttack = 203,
-    MeeleePierceAttack = 203 | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
+    PossibleMeleePierceAttack = 203,
+    MeleePierceAttack = 203 | IsExecutable | IsTargeted | IsAttack | IsMovingAttack,
 
     BattleAxeMove = 300 | IsExecutable | IsMove | IsMovingAttack,
     WarhammerMove = 301 | IsExecutable | IsMove | IsMovingAttack,

@@ -5,7 +5,7 @@ using CrownsGuard.Engine.Helpers;
 
 namespace CrownsGuard.AI.Helpers
 {
-    public class BoardEvaluationHelper
+    public static class BoardEvaluationHelper
     {
         public static int EvaluateBoard(ReadOnlySpan<Figure> board, Stack<FigureAction> actionsStack, Figure currentFigureColor)
         {

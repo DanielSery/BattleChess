@@ -27,12 +27,12 @@ public static class Elephant
                 if (!isAttack && targetFigure.IsWalkable())
                 {
                     actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
-                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
                 else
                 {
                     isAttack = true;
-                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
+                    actions.Push(new FigureAction(FigureActionType.MeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
             }
         }

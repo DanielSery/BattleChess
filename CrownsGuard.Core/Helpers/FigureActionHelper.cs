@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using CrownsGuard.Core.Figures;
 
-namespace CrownsGuard.Engine.Helpers;
+namespace CrownsGuard.Core.Helpers;
 
 public static class FigureActionHelper
 {

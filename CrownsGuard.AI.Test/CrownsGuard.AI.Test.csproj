@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" Version="9.1.0" />
         <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
         <PackageReference Include="xunit" Version="2.9.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
@@ -21,6 +22,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CrownsGuard.AI\CrownsGuard.AI.csproj" />
+      <ProjectReference Include="..\CrownsGuard.Core\CrownsGuard.Core.csproj" />
+      <ProjectReference Include="..\CrownsGuard.Engine\CrownsGuard.Engine.csproj" />
     </ItemGroup>
 
 </Project>

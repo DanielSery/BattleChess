@@ -17,7 +17,7 @@ public static class FigureActionExecutor
             case FigureActionType.Move:
                 board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
                 break;
-            case FigureActionType.MeeleeAttack:
+            case FigureActionType.MeleeAttack:
                 board.KillWithMove(action.SourceIndex, action.TargetIndex, onEvent);
                 break;
             case FigureActionType.RangedAttack:
@@ -56,8 +56,8 @@ public static class FigureActionExecutor
             case FigureActionType.MakeUnitKing:
                 Priest.ExecuteMakeKing(board, action, onEvent);
                 break;
-            case FigureActionType.MeeleePierceAttack:
-                MeeleePierceAttack(board, action, onEvent);
+            case FigureActionType.MeleePierceAttack:
+                MeleePierceAttack(board, action, onEvent);
                 break;
             case FigureActionType.SpartanMove:
                 Spartan.ExecuteMove(board, action, onEvent);
@@ -73,8 +73,8 @@ public static class FigureActionExecutor
                 break;
             case FigureActionType.PossibleCannonAttack:
             case FigureActionType.PossibleConvertUnit:
-            case FigureActionType.PossibleMeeleeAttack:
-            case FigureActionType.PossibleMeeleePierceAttack:
+            case FigureActionType.PossibleMeleeAttack:
+            case FigureActionType.PossibleMeleePierceAttack:
             case FigureActionType.PossiblePushFigure:
             case FigureActionType.PossibleRangedAttack:
             case FigureActionType.IsExecutable:
@@ -85,7 +85,7 @@ public static class FigureActionExecutor
         }
     }
 
-    private static void ChangeToQueen(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    internal static void ChangeToQueen(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigureType = action.SourceFigure.GetFigureType();
         var targetIndex = action.TargetIndex;
@@ -105,7 +105,7 @@ public static class FigureActionExecutor
         }
     }
 
-    private static void MeeleePierceAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
+    internal static void MeleePierceAttack(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var sourceFigureType = action.SourceFigure.GetFigureType();
         

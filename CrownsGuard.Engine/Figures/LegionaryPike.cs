@@ -71,7 +71,7 @@ public static class LegionaryPike
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));
+            actions.Push(new FigureAction(FigureActionType.PossibleMeleeAttack, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
@@ -81,7 +81,7 @@ public static class LegionaryPike
             return;
         }
 
-        actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
+        actions.Push(new FigureAction(FigureActionType.MeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
     private static void TryAddWhiteAttackAction(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,
@@ -93,7 +93,7 @@ public static class LegionaryPike
         
         if (!sourceFigure.CanAttack(targetFigure))
         {
-            actions.Push(new FigureAction(FigureActionType.PossibleMeeleeAttack, sourceIndex, targetIndex, sourceFigure));
+            actions.Push(new FigureAction(FigureActionType.PossibleMeleeAttack, sourceIndex, targetIndex, sourceFigure));
             return;
         }
 
@@ -103,7 +103,7 @@ public static class LegionaryPike
             return;
         }
 
-        actions.Push(new FigureAction(FigureActionType.MeeleeAttack, sourceIndex, targetIndex, sourceFigure));
+        actions.Push(new FigureAction(FigureActionType.MeleeAttack, sourceIndex, targetIndex, sourceFigure));
     }
 
     private static void TryAddStartMoveActions(ReadOnlySpan<Figure> board, int sourceIndex, Figure sourceFigure, short relativePosition,

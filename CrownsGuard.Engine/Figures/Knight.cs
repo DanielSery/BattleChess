@@ -31,16 +31,16 @@ public static class Knight
 
                 if (sourceFigure.CanAttack(targetFigure))
                 {
-                    actions.Push(new FigureAction(FigureActionType.MeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
+                    actions.Push(new FigureAction(FigureActionType.MeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
                 else if (targetFigure.IsWalkable())
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
                 else
                 {
-                    actions.Push(new FigureAction(FigureActionType.PossibleMeeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
+                    actions.Push(new FigureAction(FigureActionType.PossibleMeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
             }

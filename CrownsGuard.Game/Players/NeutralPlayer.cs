@@ -4,7 +4,7 @@ namespace CrownsGuard.Game.Players;
 
 public class NeutralPlayer : IPlayer
 {
-    public static readonly NeutralPlayer Instance = new NeutralPlayer();
+    public static readonly NeutralPlayer Instance = new();
 
     private NeutralPlayer() { }
 

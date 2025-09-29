@@ -40,33 +40,35 @@ public class FigureHelperTest
     }
 
     [Theory]
-    // Same color, same figure
-    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Queen | Figure.IsWhite, true)]
-    // Same color, different figures
-    [InlineData(Figure.MountedArcher | Figure.IsBlack, Figure.CamelArcher | Figure.IsBlack, true)]
-    // Different color, same base figure
-    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Knight | Figure.IsBlack, false)]
-    // Different color, different figures
-    [InlineData(Figure.Knight | Figure.IsWhite, Figure.CamelArcher | Figure.IsBlack, false)]
-    // Both neutral
-    [InlineData(Figure.Wall, Figure.Trench, true)]
-    // Neutral vs colored
-    [InlineData(Figure.Wall, Figure.Knight | Figure.IsWhite, false)]
-    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Trench, false)]
-    // Both empty
-    [InlineData(Figure.Empty, Figure.Empty, true)]
-    // Empty vs colored
-    [InlineData(Figure.Empty, Figure.Knight | Figure.IsWhite, false)]
-    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Empty, false)]
-    public void IsSameColor_ReturnsExpectedResult(Figure a, Figure b, bool expected)
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Queen | Figure.IsWhite)]
+    [InlineData(Figure.MountedArcher | Figure.IsBlack, Figure.CamelArcher | Figure.IsBlack)] 
+    [InlineData(Figure.Wall, Figure.Trench)]
+    [InlineData(Figure.Empty, Figure.Empty)]
+    public void IsSameColor_ReturnsTrue(Figure a, Figure b)
     {
         // Act
         var result = a.IsSameColor(b);
-
+    
         // Assert
-        result.Should().Be(expected);
+        result.Should().BeTrue();
     }
-
+    
+    [Theory]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Knight | Figure.IsBlack)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.CamelArcher | Figure.IsBlack)]
+    [InlineData(Figure.Wall, Figure.Knight | Figure.IsWhite)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Trench)]
+    [InlineData(Figure.Empty, Figure.Knight | Figure.IsWhite)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Empty)]
+    public void IsSameColor_ReturnsFalse(Figure a, Figure b) 
+    {
+        // Act
+        var result = a.IsSameColor(b);
+    
+        // Assert
+        result.Should().BeFalse();
+    }
+    
     [Theory]
     // Neutral figure (no color)
     [InlineData(Figure.Wall, Figure.Empty)]
@@ -95,255 +97,208 @@ public class FigureHelperTest
     }
 
     [Theory]
-    // Neutral figures (should be true)
-    [InlineData(Figure.Empty, true)]
-    [InlineData(Figure.Fire, true)]
-    [InlineData(Figure.Wall, true)]
-    [InlineData(Figure.Trench, true)]
-    [InlineData(Figure.Explosives, true)]
-    // Neutral figures with flags (should be false)
-    [InlineData(Figure.Wall | Figure.IsKing, false)]
-    [InlineData(Figure.Trench | Figure.IsWhite, false)]
-    [InlineData(Figure.Explosives | Figure.IsBlack, false)]
-    // Non-neutral figures (should be false)
-    [InlineData(Figure.MountedKnight, false)]
-    [InlineData(Figure.Knight, false)]
-    [InlineData(Figure.Queen, false)]
-    // Non-neutral figures with flags (should be false)
-    [InlineData(Figure.Knight | Figure.IsWhite, false)]
-    [InlineData(Figure.MountedKnight | Figure.IsBlack, false)]
-    [InlineData(Figure.Knight | Figure.IsWhite | Figure.IsKing, false)]
-    public void IsNeutralFigure_ReturnsExpectedResult(Figure input, bool expected)
+    [InlineData(Figure.Empty)]
+    [InlineData(Figure.Fire)]
+    [InlineData(Figure.Wall)]
+    [InlineData(Figure.Trench)]
+    [InlineData(Figure.Explosives)]
+    public void IsNeutralFigure_ReturnsTrue(Figure input)
     {
         // Act
         var result = input.IsNeutralFigure();
 
         // Assert
-        result.Should().Be(expected);
+        result.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(Figure.Wall | Figure.IsKing)]
+    [InlineData(Figure.Trench | Figure.IsWhite)]
+    [InlineData(Figure.Explosives | Figure.IsBlack)]
+    [InlineData(Figure.MountedKnight)]
+    [InlineData(Figure.Knight)]
+    [InlineData(Figure.Queen)] 
+    [InlineData(Figure.Knight | Figure.IsWhite)]
+    [InlineData(Figure.MountedKnight | Figure.IsBlack)]
+    [InlineData(Figure.Knight | Figure.IsWhite | Figure.IsKing)]
+    public void IsNeutralFigure_ReturnsFalse(Figure input)
+    {
+        // Act
+        var result = input.IsNeutralFigure();
+
+        // Assert 
+        result.Should().BeFalse();
     }
 
     [Theory]
     // Neutral figures (no color)
-    [InlineData(Figure.Empty, true)]
-    [InlineData(Figure.Wall, true)]
-    [InlineData(Figure.Trench, true)]
-    [InlineData(Figure.Explosives, true)]
-    // Neutral figures with color flags (should be false)
-    [InlineData(Figure.Wall | Figure.IsWhite, false)]
-    [InlineData(Figure.Trench | Figure.IsBlack, false)]
-    [InlineData(Figure.Explosives | Figure.IsWhite, false)]
-    // Colored figures (should be false)
-    [InlineData(Figure.Knight | Figure.IsWhite, false)]
-    [InlineData(Figure.Knight | Figure.IsBlack, false)]
-    [InlineData(Figure.MountedKnight | Figure.IsWhite, false)]
-    // Only color flags (should be false)
-    [InlineData(Figure.IsWhite, false)]
-    [InlineData(Figure.IsBlack, false)]
-    // Non-neutral, non-coloredlu figures (should be true)
-    [InlineData(Figure.Knight, true)]
-    [InlineData(Figure.MountedKnight, true)]
-    public void IsNeutral_ReturnsExpectedResult(Figure input, bool expected)
+    [InlineData(Figure.Empty)]
+    [InlineData(Figure.Wall)]
+    [InlineData(Figure.Trench)]
+    [InlineData(Figure.Explosives)]
+    // Non-neutral, non-colored figures
+    [InlineData(Figure.Knight)]
+    [InlineData(Figure.MountedKnight)]
+    public void IsNeutral_ReturnsTrue(Figure input)
     {
         // Act
         var result = input.IsNeutral();
 
         // Assert
-        result.Should().Be(expected);
+        result.Should().BeTrue();
+    }
+
+    [Theory]
+    // Neutral figures with color flags
+    [InlineData(Figure.Wall | Figure.IsWhite)]
+    [InlineData(Figure.Trench | Figure.IsBlack)]
+    [InlineData(Figure.Explosives | Figure.IsWhite)]
+    // Colored figures
+    [InlineData(Figure.Knight | Figure.IsWhite)]
+    [InlineData(Figure.Knight | Figure.IsBlack)]
+    [InlineData(Figure.MountedKnight | Figure.IsWhite)]
+    // Only color flags
+    [InlineData(Figure.IsWhite)]
+    [InlineData(Figure.IsBlack)]
+    public void IsNeutral_ReturnsFalse(Figure input)
+    {
+        // Act
+        var result = input.IsNeutral();
+
+        // Assert
+        result.Should().BeFalse();
     }
     
     [Theory]
-    [InlineData(Figure.Empty, true)]
-    [InlineData(Figure.Fire, true)]
-    [InlineData(Figure.Wall, false)]
-    [InlineData(Figure.Trench, false)]
-    [InlineData(Figure.Explosives, false)]
-    [InlineData(Figure.MountedKnight, false)]
-    [InlineData(Figure.King, false)]
-    [InlineData(Figure.Bard, false)]
-    public void IsWalkable_BaseFigures(Figure figure, bool expected)
+    [InlineData(Figure.Empty)]
+    [InlineData(Figure.Fire)]
+    [InlineData(Figure.Empty | Figure.IsWhite)]
+    [InlineData(Figure.Fire | Figure.IsWhite)]
+    [InlineData(Figure.Empty | Figure.IsBlack)]
+    [InlineData(Figure.Fire | Figure.IsBlack)]
+    [InlineData(Figure.Empty | Figure.IsKing)]
+    [InlineData(Figure.Fire | Figure.IsKing)]
+    [InlineData(Figure.Empty | Figure.PlayerMask)]
+    [InlineData(Figure.Fire | Figure.PlayerMask)]
+    public void IsWalkable_ReturnsTrue(Figure figure)
     {
         var actual = figure.IsWalkable();
-        Assert.Equal(expected, actual);
-    }
-
-    [Theory]
-    [InlineData(Figure.Empty | Figure.IsWhite, true)]
-    [InlineData(Figure.Fire | Figure.IsWhite, true)]
-    [InlineData(Figure.Empty | Figure.IsBlack, true)]
-    [InlineData(Figure.Fire | Figure.IsBlack, true)]
-    [InlineData(Figure.Wall | Figure.IsWhite, false)]
-    [InlineData(Figure.Wall | Figure.IsBlack, false)]
-    [InlineData(Figure.Trench | Figure.IsWhite, false)]
-    [InlineData(Figure.Trench | Figure.IsBlack, false)]
-    public void IsWalkable_WithColorFlags(Figure figure, bool expected)
-    {
-        var actual = figure.IsWalkable();
-        Assert.Equal(expected, actual);
-    }
-
-    [Theory]
-    [InlineData(Figure.Empty | Figure.IsKing, true)]
-    [InlineData(Figure.Fire | Figure.IsKing, true)]
-    [InlineData(Figure.Wall | Figure.IsKing, false)]
-    [InlineData(Figure.MountedKnight | Figure.IsKing, false)]
-    public void IsWalkable_WithKingFlag(Figure figure, bool expected)
-    {
-        var actual = figure.IsWalkable();
-        Assert.Equal(expected, actual);
-    }
-
-    [Theory]
-    [InlineData(Figure.Empty | Figure.PlayerMask, true)]
-    [InlineData(Figure.Fire | Figure.PlayerMask, true)]
-    [InlineData(Figure.Wall | Figure.PlayerMask, false)]
-    public void IsWalkable_WithPlayerMask(Figure figure, bool expected)
-    {
-        var actual = figure.IsWalkable();
-        Assert.Equal(expected, actual);
+        Assert.True(actual);
     }
     
     [Theory]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Knight | Figure.IsBlack, true)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Knight | Figure.IsWhite, true)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Knight | Figure.IsWhite, false)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Knight | Figure.IsBlack, false)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Empty, false)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Empty, false)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Wall, false)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Wall, false)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Fire, false)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Fire, false)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Trench, true)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Trench, true)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Explosives, true)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Explosives, true)]
-        public void CanAttack_ReturnsExpected_ForVariousTargets(Figure attacker, Figure target, bool expected)
-        {
-            Assert.Equal(expected, attacker.CanAttack(target));
-        }
+    [InlineData(Figure.Wall)]
+    [InlineData(Figure.Trench)]
+    [InlineData(Figure.Explosives)]
+    [InlineData(Figure.MountedKnight)]
+    [InlineData(Figure.King)]
+    [InlineData(Figure.Bard)]
+    [InlineData(Figure.Wall | Figure.IsWhite)]
+    [InlineData(Figure.Wall | Figure.IsBlack)]
+    [InlineData(Figure.Trench | Figure.IsWhite)]
+    [InlineData(Figure.Trench | Figure.IsBlack)]
+    [InlineData(Figure.Wall | Figure.IsKing)]
+    [InlineData(Figure.MountedKnight | Figure.IsKing)]
+    [InlineData(Figure.Wall | Figure.PlayerMask)]
+    public void IsWalkable_ReturnsFalse(Figure figure)
+    {
+        var actual = figure.IsWalkable();
+        Assert.False(actual);
+    }
+    
+    [Theory]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Knight | Figure.IsBlack)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Knight | Figure.IsWhite)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Trench)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Trench)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Explosives)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Explosives)]
+    [InlineData(Figure.Ninja | Figure.IsWhite, Figure.Priest | Figure.IsBlack)]
+    [InlineData(Figure.Ninja | Figure.IsBlack, Figure.Priest | Figure.IsWhite)]
+    public void CanAttack_ReturnsTrue(Figure attacker, Figure target)
+    {
+        attacker.CanAttack(target).Should().BeTrue();
+    }
 
-        [Theory]
-        [InlineData(Figure.Ninja | Figure.IsWhite, Figure.Priest | Figure.IsBlack, true)]
-        [InlineData(Figure.Ninja | Figure.IsBlack, Figure.Priest | Figure.IsWhite, true)]
-        [InlineData(Figure.Ninja | Figure.IsWhite, Figure.Priest | Figure.IsWhite, false)]
-        [InlineData(Figure.Ninja | Figure.IsBlack, Figure.Priest | Figure.IsBlack, false)]
-        public void CanAttack_OpponentPieces_AreAttackable(Figure attacker, Figure target, bool expected)
-        {
-            Assert.Equal(expected, attacker.CanAttack(target));
-        }
-
-        [Theory]
-        [InlineData(Figure.Queen | Figure.IsWhite, Figure.LastNonAttackableFigure, false)]
-        [InlineData(Figure.Queen | Figure.IsBlack, Figure.LastNonAttackableFigure, false)]
-        public void CanAttack_LastNonAttackableFigure_IsNotAttackable(Figure attacker, Figure target, bool expected)
-        {
-            Assert.Equal(expected, attacker.CanAttack(target));
-        }
-
-        [Theory]
-        [InlineData(Figure.Mage | Figure.IsWhite, (Figure)0, false)]
-        [InlineData(Figure.Mage | Figure.IsBlack, (Figure)0, false)]
-        public void CanAttack_Empty_IsNotAttackable(Figure attacker, Figure target, bool expected)
-        {
-            Assert.Equal(expected, attacker.CanAttack(target));
-        }
+    [Theory]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Knight | Figure.IsWhite)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Knight | Figure.IsBlack)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Empty)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Empty)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Wall)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Wall)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Fire)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Fire)]
+    [InlineData(Figure.Ninja | Figure.IsWhite, Figure.Priest | Figure.IsWhite)]
+    [InlineData(Figure.Ninja | Figure.IsBlack, Figure.Priest | Figure.IsBlack)]
+    [InlineData(Figure.Queen | Figure.IsWhite, Figure.LastNonAttackableFigure)]
+    [InlineData(Figure.Queen | Figure.IsBlack, Figure.LastNonAttackableFigure)]
+    [InlineData(Figure.Mage | Figure.IsWhite, (Figure)0)]
+    [InlineData(Figure.Mage | Figure.IsBlack, (Figure)0)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Queen | Figure.IsBlack)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Queen | Figure.IsWhite)]
+    public void CanAttack_ReturnsFalse(Figure attacker, Figure target)
+    {
+        attacker.CanAttack(target).Should().BeFalse();
+    }
+    [Theory]
+    [InlineData(Figure.Trader | Figure.IsBlack, Figure.Miner | Figure.IsBlack)]
+    [InlineData(Figure.Trader | Figure.IsWhite, Figure.Miner | Figure.IsWhite)]
+    [InlineData(Figure.Empty, Figure.Empty)]
+    public void IsAllyTo_ReturnsTrue(Figure a, Figure b)
+    {
+        a.IsAllyTo(b).Should().BeTrue();
+    }
         
-        [Theory]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Queen | Figure.IsBlack, true)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Queen | Figure.IsWhite, true)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Queen | Figure.IsWhite, false)]
-        [InlineData(Figure.Knight | Figure.IsWhite, Figure.Queen | Figure.IsBlack, false)]
-        [InlineData(Figure.Knight | Figure.IsBlack, Figure.Empty, false)]
-        [InlineData(Figure.Empty, Figure.Queen | Figure.IsWhite, false)]
-        [InlineData(Figure.Empty, Figure.Empty, true)]
-        public void IsAllyTo_ReturnsExpected(Figure a, Figure b, bool expected)
-        {
-            Assert.Equal(expected, a.IsAllyTo(b));
-        }
-
-        [Theory]
-        [InlineData(Figure.Trader | Figure.IsBlack, Figure.Miner | Figure.IsBlack, true)]
-        [InlineData(Figure.Trader | Figure.IsWhite, Figure.Miner | Figure.IsWhite, true)]
-        [InlineData(Figure.Trader | Figure.IsBlack, Figure.Miner | Figure.IsWhite, false)]
-        public void IsAllyTo_WithDifferentFiguresSamePlayers_ReturnsTrue_And_CrossPlayers_ReturnsFalse(Figure a, Figure b, bool expected)
-        {
-            Assert.Equal(expected, a.IsAllyTo(b));
-        }
+    [Theory]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Queen | Figure.IsWhite)]
+    [InlineData(Figure.Knight | Figure.IsWhite, Figure.Queen | Figure.IsBlack)]
+    [InlineData(Figure.Knight | Figure.IsBlack, Figure.Empty)]
+    [InlineData(Figure.Empty, Figure.Queen | Figure.IsWhite)]
+    [InlineData(Figure.Trader | Figure.IsBlack, Figure.Miner | Figure.IsWhite)]
+    public void IsAllyTo_ReturnsFalse(Figure a, Figure b)
+    {
+        a.IsAllyTo(b).Should().BeFalse();
+    }
         
-        // White piece vs Black piece => enemy
+    // White piece vs Black piece => enemy
     [Theory]
     [InlineData(Figure.Knight | Figure.IsWhite, Figure.Archer | Figure.IsBlack)]
     [InlineData(Figure.Bard | Figure.IsWhite, Figure.Ranger | Figure.IsBlack)]
     [InlineData(Figure.Musketeer | Figure.IsWhite, Figure.Crossbow | Figure.IsBlack)]
     [InlineData(Figure.King | Figure.IsWhite | Figure.IsKing, Figure.Queen | Figure.IsBlack)]
-    public void ReturnsTrue_ForWhiteVsBlack(Figure a, Figure b)
-    {
-        Assert.True(a.IsEnemyTo(b));
-    }
-
-    // Black piece vs White piece => enemy
-    [Theory]
     [InlineData(Figure.Ninja | Figure.IsBlack, Figure.Priest | Figure.IsWhite)]
     [InlineData(Figure.Samurai | Figure.IsBlack, Figure.Dragon | Figure.IsWhite)]
     [InlineData(Figure.Elephant | Figure.IsBlack, Figure.BattleAxe | Figure.IsWhite)]
     [InlineData(Figure.Mage | Figure.IsBlack, Figure.Blade | Figure.IsWhite)]
-    public void ReturnsTrue_ForBlackVsWhite(Figure a, Figure b)
+    public void IsEnemyTo_ReturnsTrue(Figure a, Figure b)
     {
         Assert.True(a.IsEnemyTo(b));
     }
 
-    // Same color (white) => not enemy
     [Theory]
     [InlineData(Figure.Scout | Figure.IsWhite, Figure.Trader | Figure.IsWhite)]
     [InlineData(Figure.Spearman | Figure.IsWhite, Figure.Pikeman | Figure.IsWhite)]
     [InlineData(Figure.Archer | Figure.IsWhite, Figure.Crossbow | Figure.IsWhite)]
     [InlineData(Figure.Queen | Figure.IsWhite, Figure.King | Figure.IsWhite | Figure.IsKing)]
-    public void ReturnsFalse_ForSameColorWhite(Figure a, Figure b)
-    {
-        Assert.False(a.IsEnemyTo(b));
-    }
-
-    // Same color (black) => not enemy
-    [Theory]
     [InlineData(Figure.Knight | Figure.IsBlack, Figure.CamelArcher | Figure.IsBlack)]
     [InlineData(Figure.LegionarySword | Figure.IsBlack, Figure.LegionaryPike | Figure.IsBlack)]
     [InlineData(Figure.MountedArcher | Figure.IsBlack, Figure.MountedKnight | Figure.IsBlack)]
     [InlineData(Figure.Cannon | Figure.IsBlack, Figure.Catapult | Figure.IsBlack)]
-    public void ReturnsFalse_ForSameColorBlack(Figure a, Figure b)
-    {
-        Assert.False(a.IsEnemyTo(b));
-    }
-
-    // Neutral/empty vs colored => not enemy (no opposing players)
-    [Theory]
     [InlineData(Figure.Empty, Figure.Knight | Figure.IsWhite)]
     [InlineData(Figure.Fire, Figure.Archer | Figure.IsBlack)]
     [InlineData(Figure.Wall, Figure.Samurai | Figure.IsWhite)]
     [InlineData(Figure.Trench, Figure.Ninja | Figure.IsBlack)]
     [InlineData(Figure.Explosives, Figure.Miner | Figure.IsWhite)]
-    public void ReturnsFalse_ForNeutralOrEmptyAgainstColored(Figure a, Figure b)
-    {
-        Assert.False(a.IsEnemyTo(b));
-    }
-
-    // Colored vs neutral/empty => not enemy
-    [Theory]
     [InlineData(Figure.Knight | Figure.IsWhite, Figure.Empty)]
     [InlineData(Figure.Archer | Figure.IsBlack, Figure.Fire)]
     [InlineData(Figure.Samurai | Figure.IsWhite, Figure.Wall)]
     [InlineData(Figure.Ninja | Figure.IsBlack, Figure.Trench)]
     [InlineData(Figure.Miner | Figure.IsWhite, Figure.Explosives)]
-    public void ReturnsFalse_ForColoredAgainstNeutralOrEmpty(Figure a, Figure b)
-    {
-        Assert.False(a.IsEnemyTo(b));
-    }
-
-    // Neutral/empty vs neutral/empty => not enemy
-    [Theory]
     [InlineData(Figure.Empty, Figure.Empty)]
     [InlineData(Figure.Fire, Figure.Wall)]
     [InlineData(Figure.Trench, Figure.Explosives)]
-    public void ReturnsFalse_ForNeutralOrEmptyPairs(Figure a, Figure b)
+    public void IsEnemyTo_ReturnsFalse(Figure a, Figure b)
     {
         Assert.False(a.IsEnemyTo(b));
     }

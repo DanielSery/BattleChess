@@ -37,14 +37,4 @@ public class PositionTest
     {
         position1.Should().NotBe(position2);
     }
-
-    public static TheoryData<Position, Position, Position> PositionAdditionData()
-    {
-        return new TheoryData<Position, Position,  Position>
-        {
-            { new Position(2, 2), new Position(2, 1), new Position(4, 3) },
-            { new Position(2, 2), new Position(1, 2), new Position(3, 4) },
-            { new Position(2, 1), new Position(1, 2), new Position(3, 3) }
-        };
-    }
 }
