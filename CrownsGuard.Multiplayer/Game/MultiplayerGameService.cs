@@ -179,8 +179,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
 
         Console.WriteLine($"Waiting for his turn with id greater than: {TurnId}");
         var hisTurnResult = TurnId is null
-            ? await _gameTurns.WaitForFirstTurnAsync(GameId, IMultiplayerGameService.TurnTimeout)
-            : await _gameTurns.WaitForNextTurnAsync(TurnId, GameId, IMultiplayerGameService.TurnTimeout);
+            ? await _gameTurns.WaitForFirstTurnAsync(GameId, CancellationToken.None, IMultiplayerGameService.TurnTimeoutSeconds)
+            : await _gameTurns.WaitForNextTurnAsync(TurnId, GameId, CancellationToken.None, IMultiplayerGameService.TurnTimeoutSeconds);
 
         if (!hisTurnResult.TryGetValue(out var hisTurn))
         {

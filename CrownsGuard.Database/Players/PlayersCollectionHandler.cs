@@ -1,4 +1,6 @@
 using CrownsGuard.Database.Database;
+using CrownsGuard.Database;
+using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Utilities;
 using FluentResults;
 using MongoDB.Bson;

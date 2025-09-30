@@ -13,6 +13,7 @@ public interface IMultiplayerGameService
     public const int NotRespondingLostMessage = 70;
 
     public static readonly TimeSpan TurnTimeout = TimeSpan.FromMinutes(2);
+    public static readonly int TurnTimeoutSeconds = TurnTimeout.Seconds;
 
     public event EventHandler<(byte, byte, TimeSpan)>? RequestPlayMove;
 

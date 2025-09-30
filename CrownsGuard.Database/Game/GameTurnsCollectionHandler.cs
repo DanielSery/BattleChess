@@ -1,178 +1,151 @@
-﻿using CrownsGuard.Database.Database;
+﻿using System.Diagnostics.CodeAnalysis;
+using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Utilities;
 using FluentResults;
-using MongoDB.Bson;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Game;
 
+[SuppressMessage("ReSharper", "PossiblyMistakenUseOfCancellationToken")]
 internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
 {
     private readonly IDatabaseClient _client;
+    private readonly ILogger<GameTurnsCollectionHandler> _logger;
 
-    public GameTurnsCollectionHandler(IDatabaseClient databaseClient)
+    public GameTurnsCollectionHandler(IDatabaseClient databaseClient, ILogger<GameTurnsCollectionHandler> logger)
     {
         _client = databaseClient;
+        _logger = logger;
     }
 
     /// <inheritdoc />
-    public async Task<Result> InsertAsync(GameTurn gameTurn, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(GameTurn gameTurn, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Inserting game turn {gameTurn.Id}");
-            await _client.GameTurns.InsertOneAsync(gameTurn, cancellationToken: cancellationToken);
-            Console.WriteLine($"Game turn {gameTurn.Id} inserted");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to insert game turn: {e}");
-            return Result.Fail(e.Message);
-        }
+            _logger.LogInformation("Inserting game turn {GameTurnId} for game {GameId}", gameTurn.Id, gameTurn.GameId);
+
+            await _client.GameTurns.InsertOneAsync(gameTurn, cancellationToken: linkedSource.Token);
+
+            _logger.LogInformation("Successfully inserted game turn {GameTurnId}", gameTurn.Id);
+        }, nameof(InsertAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Result> RemoveOlderThanAsync(DateTime time, CancellationToken cancellationToken)
+    public async Task<Result> RemoveOlderThanAsync(DateTime time, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Deleting GameTurns");
-            var filter = Builders<GameTurn>.Filter.Lte(gj => gj.CreatedAt, time);
-            var result = await _client.GameTurns.DeleteManyAsync(filter, cancellationToken: cancellationToken);
-            Console.WriteLine($"Deleted GameTurns: {result.DeletedCount}");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to remove game turns: {e}");
-            return Result.Fail(e.Message);
-        }
+            _logger.LogInformation("Deleting game turns older than {Time}", time);
+
+            var filter = Builders<GameTurn>.Filter.Lte(gt => gt.CreatedAt, time);
+            var result = await _client.GameTurns.DeleteManyAsync(filter, cancellationToken: linkedSource.Token);
+
+            _logger.LogInformation("Successfully deleted {DeletedCount} game turns older than {Time}", result.DeletedCount, time);
+        }, nameof(RemoveOlderThanAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<GameTurn>> WaitForFirstTurnAsync(string gameId, TimeSpan timeout)
+    /// <inheritdoc />
+    public async Task<Result<GameTurn>> WaitForFirstTurnAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
-        var timeoutTokenSource = new CancellationTokenSource(timeout);
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-                .Match(changeFilter);
+            _logger.LogInformation("Waiting for first turn for game {GameId} with timeout {Timeout}", gameId, timeoutSeconds);
+            var turn = await WaitForFirstTurnInnerAsync(gameId, linkedSource.Token);
+            _logger.LogInformation("Received first turn {TurnId} for game {GameId} via change stream", turn.Id, gameId);
 
-            using var cursor = await _client.GameTurns.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                timeoutTokenSource.Token
-            );
-            
-            var filter = Builders<GameTurn>.Filter.Eq(g => g.GameId, gameId);
-            var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: timeoutTokenSource.Token);
-            var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: timeoutTokenSource.Token);
-            if (foundTurn is not null)
-            {
-                return foundTurn;
-            }
-
-            while (await cursor.MoveNextAsync(timeoutTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    var turn = change.FullDocument;
-                    if (turn.GameId == gameId)
-                    {
-                        return turn;
-                    }
-                }
-            }
-
-            return Result.Fail<GameTurn>($"Game turn {gameId} not found");
-        }
-        catch (OperationCanceledException)
-        {
-            if (timeoutTokenSource.IsCancellationRequested)
-            {
-                return Result.Fail("Operation timeout")
-                    .WithError(TimeoutError.Instance);
-            }
-            
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to wait for first turn: {e}");
-            return Result.Fail<GameTurn>(e.Message);
-        }
+            return turn;
+        }, nameof(WaitForFirstTurnAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<GameTurn>> WaitForNextTurnAsync(string turnId, string gameId, TimeSpan timeout)
+    /// <summary>
+    /// Waits for a turn via MongoDB change stream
+    /// </summary>
+    private async Task<GameTurn> WaitForFirstTurnInnerAsync(string gameId, CancellationToken cancellationToken)
     {
-        var timeoutTokenSource = new CancellationTokenSource(timeout);
-        try
+        var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
+        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
+            .Match(changeFilter);
+
+        using var cursor = await _client.GameTurns.WatchAsync(
+            pipeline,
+            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+            cancellationToken
+        );
+        
+        var filter = Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId);
+        var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: cancellationToken);
+        var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        if (foundTurn is not null) return foundTurn;
+
+        while (await cursor.MoveNextAsync(cancellationToken))
         {
-            var afterObjectId = ObjectId.Parse(turnId);
-            var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
-                Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
-                Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, turnId)
-            );
-
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-                .Match(changeFilter);
-
-            using var cursor = await _client.GameTurns.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                timeoutTokenSource.Token
-            );
-            
-            var filter = Builders<GameTurn>.Filter.And(
-                Builders<GameTurn>.Filter.Eq(g => g.GameId, gameId),
-                Builders<GameTurn>.Filter.Gt(cs => cs.Id, turnId));
-            var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: timeoutTokenSource.Token);
-            var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: timeoutTokenSource.Token);
-            if (foundTurn is not null)
+            foreach (var change in cursor.Current)
             {
-                return foundTurn;
+                return change.FullDocument;
             }
-
-            while (await cursor.MoveNextAsync(timeoutTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    var turn = change.FullDocument;
-                    if (turn.GameId == gameId && ObjectId.Parse(turn.Id) > afterObjectId)
-                    {
-                        return turn;
-                    }
-                }
-            }
-
-            return Result.Fail<GameTurn>($"Game turn {turnId} not found");
         }
-        catch (OperationCanceledException)
+
+        throw new InvalidOperationException("Failed to get first turn");
+    }
+
+    /// <inheritdoc />
+    public async Task<Result<GameTurn>> WaitForNextTurnAsync(string turnId, string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120)
+    {
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            if (timeoutTokenSource.IsCancellationRequested)
-            {
-                return Result.Fail("Operation timeout")
-                    .WithError(TimeoutError.Instance);
-            }
+            _logger.LogInformation("Waiting for next turn after {TurnId} for game {GameId} with timeout {Timeout}", turnId, gameId, timeoutSeconds);
+            var turn = await WaitForNextTurnInnerAsync(gameId, turnId, linkedSource.Token);
+            _logger.LogInformation("Received next turn {TurnId} for game {GameId} via change stream", turn.Id, gameId);
 
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
+            return turn;
+        }, nameof(WaitForNextTurnAsync), _logger, cancellationToken);
+    }
+
+    /// <summary>
+    /// Waits for the next turn via MongoDB change stream after the specified ObjectId
+    /// </summary>
+    private async Task<GameTurn> WaitForNextTurnInnerAsync(string gameId, string afterTurnId, CancellationToken cancellationToken)
+    {
+        var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
+            Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
+            Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, afterTurnId)
+        );
+
+        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
+            .Match(changeFilter);
+
+        using var cursor = await _client.GameTurns.WatchAsync(
+            pipeline,
+            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+            cancellationToken
+        );
+        
+        var filter = Builders<GameTurn>.Filter.And(
+            Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId),
+            Builders<GameTurn>.Filter.Gt(gt => gt.Id, afterTurnId));
+
+        var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: cancellationToken);
+        var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+        if (foundTurn is not null) return foundTurn;
+
+        while (await cursor.MoveNextAsync(cancellationToken))
         {
-            Console.WriteLine($"Failed to wait for next turn: {e}");
-            return Result.Fail<GameTurn>(e.Message);
+            foreach (var change in cursor.Current)
+            {
+                return change.FullDocument;
+            }
         }
+        
+        throw new InvalidOperationException("Failed to get next turn");
     }
 }

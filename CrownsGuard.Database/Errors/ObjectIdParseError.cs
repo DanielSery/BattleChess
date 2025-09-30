@@ -1,13 +1,13 @@
 ﻿using FluentResults;
 
-namespace CrownsGuard.Database;
+namespace CrownsGuard.Database.Errors;
 
-public class CancelledError : IError
+public class ObjectIdParseError : IError
 {
-    public static readonly CancelledError Instance = new();
+    public static readonly ObjectIdParseError Instance = new();
 
     /// <inheritdoc />
-    public string Message => "Operation cancelled";
+    public string Message => "Failed to parse ObjectId";
 
     /// <inheritdoc />
     public Dictionary<string, object> Metadata { get; } = new();

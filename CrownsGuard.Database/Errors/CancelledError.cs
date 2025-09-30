@@ -1,13 +1,13 @@
 ﻿using FluentResults;
 
-namespace CrownsGuard.Database;
+namespace CrownsGuard.Database.Errors;
 
-public class TimeoutError : IError
+public class CancelledError : IError
 {
-    public static readonly TimeoutError Instance = new();
+    public static readonly CancelledError Instance = new();
 
     /// <inheritdoc />
-    public string Message => "Operation timeout";
+    public string Message => "Operation cancelled";
 
     /// <inheritdoc />
     public Dictionary<string, object> Metadata { get; } = new();

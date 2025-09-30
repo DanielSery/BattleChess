@@ -1,4 +1,5 @@
 ﻿using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Errors;
 using FluentResults;
 using MongoDB.Driver;
 
@@ -53,11 +54,7 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
             {
                 foreach (var change in cursor.Current)
                 {
-                    if (change.FullDocument.GameId == gameId)
-                    {
-                        Console.WriteLine($"Found join request for game: {gameId}");
-                        return change.FullDocument;
-                    }
+                    return change.FullDocument;
                 }
             }
 

@@ -6,6 +6,7 @@ using CrownsGuard.Game;
 using CrownsGuard.Maps;
 using CrownsGuard.Multiplayer;
 using CommonServiceLocator;
+using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Database;
 using CrownsGuard.UI.Editor;
@@ -37,6 +38,7 @@ public static class DependenciesBuilder
 
     private static void SetUpComponents(ContainerBuilder builder)
     {
+        builder.RegisterCoreModule();
         builder.RegisterGamesModule();
         builder.RegisterFigureDefinitionsModule();
         builder.RegisterMapsComponent();

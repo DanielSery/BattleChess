@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Game;
+using Microsoft.Extensions.Logging;
 using Mongo2Go;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -28,8 +29,11 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         mockDatabaseClient.Setup(db => db.GameTurns).Returns(_gameTurnsCollection);
         mockDatabaseClient.Setup(db => db.GetServerTimeAsync()).ReturnsAsync(DateTime.UtcNow);
 
-        // Create handler with mocked dependency
-        _handler = new GameTurnsCollectionHandler(mockDatabaseClient.Object);
+        // Create a mock logger for testing
+        var mockLogger = new Mock<ILogger<GameTurnsCollectionHandler>>();
+
+        // Create handler with mocked dependencies
+        _handler = new GameTurnsCollectionHandler(mockDatabaseClient.Object, mockLogger.Object);
     }
 
     public void Dispose()
@@ -122,6 +126,20 @@ public class GameTurnsCollectionHandlerTest : IDisposable
     }
 
     [Fact]
+    public async Task InsertAsync_OperationTimeout_ReturnsFailure()
+    {
+        // Arrange
+        var gameTurn = CreateTestGameTurn("turn0", "game0");
+
+        // Act
+        var result = await _handler.InsertAsync(gameTurn, CancellationToken.None, 0);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.Contains("timeout", result.Errors.First().Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public async Task InsertAsync_OperationCancelled_ReturnsFailure()
     {
         // Arrange
@@ -147,7 +165,8 @@ public class GameTurnsCollectionHandlerTest : IDisposable
             .Throws(new MongoException("Database connection failed"));
         mockDatabaseClient.Setup(db => db.GetServerTimeAsync()).ReturnsAsync(DateTime.UtcNow);
 
-        var handler = new GameTurnsCollectionHandler(mockDatabaseClient.Object);
+        var mockLogger = new Mock<ILogger<GameTurnsCollectionHandler>>();
+        var handler = new GameTurnsCollectionHandler(mockDatabaseClient.Object, mockLogger.Object);
 
         // Act
         var result = await handler.InsertAsync(gameTurn, CancellationToken.None);
@@ -228,6 +247,19 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         Assert.Contains("cancelled", result.Errors.First().Message, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public async Task RemoveOlderThanAsync_OperationTimeout_ReturnsFailure()
+    {
+        // Arrange
+
+        // Act
+        var result = await _handler.RemoveOlderThanAsync(DateTime.UtcNow, CancellationToken.None, 0);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.Contains("timeout", result.Errors.First().Message, StringComparison.OrdinalIgnoreCase);
+    }
+
     #endregion
 
     #region WaitForFirstTurnAsync Tests
@@ -245,12 +277,28 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         await InsertTestGameTurnAsync(gameTurn);
 
         // Act
-        var result = await _handler.WaitForFirstTurnAsync(gameId, TimeSpan.FromSeconds(5));
+        var result = await _handler.WaitForFirstTurnAsync(gameId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
         Assert.Equal(gameTurn.Id, result.Value.Id);
         Assert.Equal(gameTurn.GameId, result.Value.GameId);
+    }
+
+    [Fact]
+    public async Task WaitForFirstTurnAsync_TurnDoesNotExistWithinCancel_ReturnsFailure()
+    {
+        // Arrange
+        var cts = new CancellationTokenSource();
+        cts.Cancel();
+        var gameId = ObjectId.GenerateNewId().ToString();
+
+        // Act
+        var result = await _handler.WaitForFirstTurnAsync(gameId, cts.Token, 30);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.Contains("cancel", result.Errors.First().Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -260,7 +308,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         var gameId = ObjectId.GenerateNewId().ToString();
 
         // Act
-        var result = await _handler.WaitForFirstTurnAsync(gameId, TimeSpan.FromSeconds(0));
+        var result = await _handler.WaitForFirstTurnAsync(gameId, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -286,12 +334,32 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         await InsertTestGameTurnAsync(secondTurn);
 
         // Act
-        var result = await _handler.WaitForNextTurnAsync(firstTurnId, gameId, TimeSpan.FromSeconds(5));
+        var result = await _handler.WaitForNextTurnAsync(firstTurnId, gameId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
         Assert.Equal(secondTurn.Id, result.Value.Id);
         Assert.Equal(secondTurn.GameId, result.Value.GameId);
+    }
+
+    [Fact]
+    public async Task WaitForNextTurnAsync_NoNextTurnWithinCancel_ReturnsFailure()
+    {
+        // Arrange
+        var cts = new CancellationTokenSource();
+        cts.Cancel();
+        var gameId = ObjectId.GenerateNewId().ToString();
+        var turnId = ObjectId.GenerateNewId().ToString();
+
+        var existingTurn = CreateTestGameTurn(id: turnId, gameId: gameId);
+        await InsertTestGameTurnAsync(existingTurn);
+
+        // Act
+        var result = await _handler.WaitForNextTurnAsync(turnId, gameId, cts.Token, 30);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.Contains("cancel", result.Errors.First().Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -305,7 +373,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         await InsertTestGameTurnAsync(existingTurn);
 
         // Act
-        var result = await _handler.WaitForNextTurnAsync(turnId, gameId, TimeSpan.FromSeconds(0));
+        var result = await _handler.WaitForNextTurnAsync(turnId, gameId, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -320,7 +388,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         var invalidTurnId = "invalid-object-id";
 
         // Act
-        var result = await _handler.WaitForNextTurnAsync(invalidTurnId, gameId, TimeSpan.FromSeconds(2));
+        var result = await _handler.WaitForNextTurnAsync(invalidTurnId, gameId, CancellationToken.None, 30);
         
         // Assert
         Assert.True(result.IsFailed);
