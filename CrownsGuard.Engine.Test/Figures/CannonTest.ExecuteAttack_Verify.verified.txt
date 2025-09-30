@@ -1,20 +1,10 @@
 ﻿[
   {
     scenario: White kills at 2-4 forward,
-    action: (3,3->1,3):CannonAttack,
-    board: [
-      (3,3):Cannon, IsWhite,
-      (5,3):Knight, IsBlack,
-      (6,3):Archer, IsBlack
-    ]
+    action: (3,3->1,3):CannonAttack
   },
   {
     scenario: Black kills at 2-4 forward,
-    action: (4,4->6,4):CannonAttack,
-    board: [
-      (0,4):LastNonAttackableFigure,
-      (2,4):Trader, IsWhite,
-      (4,4):Cannon, IsBlack
-    ]
+    action: (4,4->6,4):CannonAttack
   }
 ]

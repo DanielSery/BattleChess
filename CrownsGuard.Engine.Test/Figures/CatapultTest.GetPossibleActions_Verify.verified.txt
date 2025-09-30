@@ -37,7 +37,7 @@
     scenario: Execute ranged attack,
     action: (3,3->0,3):RangedAttack,
     board: [
-      (3,3):Catapult, IsWhite
+      (0,3):(Knight, IsBlack)->(Empty)
     ]
   }
 ]

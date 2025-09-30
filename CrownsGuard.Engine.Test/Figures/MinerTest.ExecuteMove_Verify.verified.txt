@@ -3,101 +3,111 @@
     scenario: Short move no trench,
     action: (3,3->4,3):MinerMove,
     board: [
-      (4,3):Miner, IsWhite
+      (3,3):(Miner, IsWhite)->(Empty),
+      (4,3):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: Long move multiple trenches,
     action: (3,3->6,3):MinerMove,
     board: [
-      (4,3):Trench,
-      (5,3):Trench,
-      (6,3):Miner, IsWhite
+      (3,3):(Miner, IsWhite)->(Empty),
+      (4,3):(Empty)->(Trench),
+      (5,3):(Empty)->(Trench),
+      (6,3):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: With obstacle stops trench,
     action: (3,3->5,3):MinerMove,
     board: [
-      (4,3):Trench,
-      (5,3):Miner, IsWhite,
-      (6,3):LastNonAttackableFigure
+      (3,3):(Miner, IsWhite)->(Empty),
+      (4,3):(Empty)->(Trench),
+      (5,3):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: Boundary no trench off board,
     action: (0,4->0,5):MinerMove,
     board: [
-      (0,5):Miner, IsWhite
+      (0,4):(Miner, IsWhite)->(Empty),
+      (0,5):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: Direction right,
     action: (3,3->3,4):MinerMove,
     board: [
-      (3,4):Miner, IsWhite
+      (3,3):(Miner, IsWhite)->(Empty),
+      (3,4):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: Direction left,
     action: (3,3->3,2):MinerMove,
     board: [
-      (0,0):Trench,
-      (1,1):Trench,
-      (2,2):Trench,
-      (3,2):Miner, IsWhite
+      (0,0):(Empty)->(Trench),
+      (1,1):(Empty)->(Trench),
+      (2,2):(Empty)->(Trench),
+      (3,2):(Empty)->(Miner, IsWhite),
+      (3,3):(Miner, IsWhite)->(Empty)
     ]
   },
   {
     scenario: Direction up,
     action: (3,3->4,3):MinerMove,
     board: [
-      (4,3):Miner, IsWhite
+      (3,3):(Miner, IsWhite)->(Empty),
+      (4,3):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: Direction down,
     action: (3,3->2,3):MinerMove,
     board: [
-      (2,3):Miner, IsWhite
+      (2,3):(Empty)->(Miner, IsWhite),
+      (3,3):(Miner, IsWhite)->(Empty)
     ]
   },
   {
     scenario: Edge case corner to corner,
     action: (0,0->7,7):MinerMove,
     board: [
-      (1,1):Trench,
-      (2,2):Trench,
-      (3,3):Trench,
-      (4,4):Trench,
-      (5,5):Trench,
-      (6,6):Trench,
-      (7,7):Miner, IsWhite
+      (0,0):(Miner, IsWhite)->(Empty),
+      (1,1):(Empty)->(Trench),
+      (2,2):(Empty)->(Trench),
+      (3,3):(Empty)->(Trench),
+      (4,4):(Empty)->(Trench),
+      (5,5):(Empty)->(Trench),
+      (6,6):(Empty)->(Trench),
+      (7,7):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: Edge case along edge,
     action: (0,0->0,7):MinerMove,
     board: [
-      (0,1):Trench,
-      (0,2):Trench,
-      (0,3):Trench,
-      (0,4):Trench,
-      (0,5):Trench,
-      (0,6):Trench,
-      (0,7):Miner, IsWhite
+      (0,0):(Miner, IsWhite)->(Empty),
+      (0,1):(Empty)->(Trench),
+      (0,2):(Empty)->(Trench),
+      (0,3):(Empty)->(Trench),
+      (0,4):(Empty)->(Trench),
+      (0,5):(Empty)->(Trench),
+      (0,6):(Empty)->(Trench),
+      (0,7):(Empty)->(Miner, IsWhite)
     ]
   },
   {
     scenario: Edge case boundary trench creation,
     action: (0,1->6,1):MinerMove,
     board: [
-      (1,1):Trench,
-      (2,1):Trench,
-      (3,1):Trench,
-      (4,1):Trench,
-      (5,1):Trench,
-      (6,1):Miner, IsWhite
+      (0,1):(Miner, IsWhite)->(Empty),
+      (1,1):(Empty)->(Trench),
+      (2,1):(Empty)->(Trench),
+      (3,1):(Empty)->(Trench),
+      (4,1):(Empty)->(Trench),
+      (5,1):(Empty)->(Trench),
+      (6,1):(Empty)->(Miner, IsWhite)
     ]
   }
 ]

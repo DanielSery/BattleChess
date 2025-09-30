@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CrownsGuard.Core.Board;
+﻿using CrownsGuard.Core.Board;
 using CrownsGuard.Core.Figures;
-using CrownsGuard.Engine.Figures;
 using CrownsGuard.Engine.Helpers;
 
 namespace CrownsGuard.Engine.Test.Helpers;
@@ -50,19 +46,20 @@ internal static class TestUtils
         short relative,
         FigureActionType actionType)
     {
-        var board = EmptyBoard();
-        board[src] = figure;
-        setup(board);
+        var sourceBoard = EmptyBoard();
+        sourceBoard[src] = figure;
+        setup(sourceBoard);
 
         var dst = src.GetWithOffset(relative);
         if (dst == -1) throw new ArgumentOutOfRangeException(nameof(relative), "Destination is out of board");
+        var resultBoard = sourceBoard.ToArray();
 
         var action = new FigureAction(actionType, src, dst, figure);
-        FigureActionExecutor.ExecuteFigureAction(board, action, IgnoreEvents());
+        FigureActionExecutor.ExecuteFigureAction(resultBoard, action, IgnoreEvents());
 
         var nonEmpty = Enumerable.Range(0, 64)
-            .Where(i => board[i] != Figure.Empty)
-            .Select(i => $"({i/8},{i%8}):{board[i]}")
+            .Where(i => resultBoard[i] != sourceBoard[i])
+            .Select(i => $"({i/8},{i%8}):({sourceBoard[i]})->({resultBoard[i]})")
             .ToArray();
         
         var actionString = $"({src / 8},{src % 8}->{dst/8},{dst%8}):{actionType}";

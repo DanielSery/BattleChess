@@ -5,14 +5,14 @@ public enum Figure : ushort
 {
     Empty = 0,
     Fire = 1,
-    LastWalkableFigure = Fire,
+    LastWalkableFigure = 7,
     
     Wall = 8,
-    LastNonAttackableFigure = Wall,
+    LastNonAttackableFigure = 15,
     
     Trench = 16,
     Explosives = 17,
-    LastNeutralFigure = Explosives,
+    LastNeutralFigure = 31,
     
     MountedKnight = 32,
     MountedArcher,

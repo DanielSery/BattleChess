@@ -16,7 +16,11 @@ public static class FigureActionsResolver
             case Figure.Explosives:
             case Figure.Fire:
             case Figure.Trench:
-            case Figure.Wall: break;
+            case Figure.Wall: 
+            case Figure.LastNeutralFigure:
+            case Figure.LastNonAttackableFigure:
+            case Figure.LastWalkableFigure:
+                break;
             case Figure.Alchemist: Alchemist.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
             case Figure.Archer: Archer.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;
             case Figure.Barbarian: Barbarian.GetPossibleActions(sourceIndex, sourceFigure, board, actions); break;

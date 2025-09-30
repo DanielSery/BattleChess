@@ -2,6 +2,7 @@
   scenario: Diagonal distance 2,
   action: (3,3->5,5):MeleePierceAttack,
   board: [
-    (5,5):Chinese, IsWhite
+    (3,3):(Chinese, IsWhite)->(Empty),
+    (5,5):(Dogs, IsBlack)->(Chinese, IsWhite)
   ]
 }

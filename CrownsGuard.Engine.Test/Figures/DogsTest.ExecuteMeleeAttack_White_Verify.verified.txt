@@ -3,7 +3,8 @@
     scenario: Execute up melee,
     action: (3,3->4,3):MeleeAttack,
     board: [
-      (4,3):Dogs, IsWhite
+      (3,3):(Dogs, IsWhite)->(Empty),
+      (4,3):(Knight, IsBlack)->(Dogs, IsWhite)
     ]
   }
 ]

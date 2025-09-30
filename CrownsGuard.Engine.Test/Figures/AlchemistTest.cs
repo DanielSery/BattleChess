@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CrownsGuard.Core.Board;
-using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Helpers;
+﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Engine.Figures;
 using CrownsGuard.Engine.Helpers;
 using CrownsGuard.Engine.Test.Helpers;

@@ -3,32 +3,44 @@
     scenario: Move UR destroys quadrant,
     action: (3,3->4,4):BattleAxeMove,
     board: [
-      (4,3):Knight, IsBlack,
-      (4,4):BattleAxe, IsWhite
+      (3,3):(BattleAxe, IsWhite)->(Empty),
+      (4,4):(Empty)->(BattleAxe, IsWhite),
+      (4,5):(Wall)->(Empty),
+      (5,4):(Archer, IsWhite)->(Empty),
+      (5,5):(Trader, IsBlack)->(Empty)
     ]
   },
   {
     scenario: Move UL destroys quadrant,
     action: (3,3->4,2):BattleAxeMove,
     board: [
-      (4,2):BattleAxe, IsWhite,
-      (4,3):Knight, IsBlack
+      (3,3):(BattleAxe, IsWhite)->(Empty),
+      (4,1):(Wall)->(Empty),
+      (4,2):(Empty)->(BattleAxe, IsWhite),
+      (5,1):(Trader, IsBlack)->(Empty),
+      (5,2):(Archer, IsWhite)->(Empty)
     ]
   },
   {
     scenario: Move DR destroys quadrant,
     action: (3,3->2,4):BattleAxeMove,
     board: [
-      (2,4):BattleAxe, IsWhite,
-      (3,4):Knight, IsBlack
+      (1,4):(Archer, IsWhite)->(Empty),
+      (1,5):(Trader, IsBlack)->(Empty),
+      (2,4):(Empty)->(BattleAxe, IsWhite),
+      (2,5):(Wall)->(Empty),
+      (3,3):(BattleAxe, IsWhite)->(Empty)
     ]
   },
   {
     scenario: Move DL destroys quadrant,
     action: (3,3->2,2):BattleAxeMove,
     board: [
-      (2,2):BattleAxe, IsWhite,
-      (2,3):Knight, IsBlack
+      (1,1):(Trader, IsBlack)->(Empty),
+      (1,2):(Archer, IsWhite)->(Empty),
+      (2,1):(Wall)->(Empty),
+      (2,2):(Empty)->(BattleAxe, IsWhite),
+      (3,3):(BattleAxe, IsWhite)->(Empty)
     ]
   }
 ]
