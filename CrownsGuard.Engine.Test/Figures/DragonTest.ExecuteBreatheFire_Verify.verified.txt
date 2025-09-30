@@ -1,0 +1,17 @@
+﻿[
+  {
+    scenario: Adjacent target,
+    action: (3,3->4,2):BreatheFire,
+    board: [
+      (3,3):Dragon, IsWhite,
+      (4,2):LastWalkableFigure
+    ]
+  },
+  {
+    scenario: Two-step target,
+    action: (3,3->6,1):BreatheFire,
+    board: [
+      (3,3):Dragon, IsWhite
+    ]
+  }
+]

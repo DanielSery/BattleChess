@@ -1,7 +1,9 @@
-﻿{
-  scenario: ExecuteMeleeAttack_White,
-  action: (3,3->4,3):MeleeAttack,
-  board: [
-    (4,3):Dogs, IsWhite
-  ]
-}
+﻿[
+  {
+    scenario: Execute up melee,
+    action: (3,3->4,3):MeleeAttack,
+    board: [
+      (4,3):Dogs, IsWhite
+    ]
+  }
+]

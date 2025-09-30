@@ -1,0 +1,53 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (0,3):PossibleMeleePierceAttack,
+      (1,3):PossibleMeleePierceAttack,
+      (2,3):PossibleMeleePierceAttack,
+      (2,3):Move,
+      (3,0):PossibleMeleePierceAttack,
+      (3,1):PossibleMeleePierceAttack,
+      (3,2):PossibleMeleePierceAttack,
+      (3,2):Move,
+      (3,4):PossibleMeleePierceAttack,
+      (3,4):Move,
+      (3,5):PossibleMeleePierceAttack,
+      (3,6):PossibleMeleePierceAttack,
+      (4,3):PossibleMeleePierceAttack,
+      (4,3):Move,
+      (5,3):PossibleMeleePierceAttack,
+      (6,3):PossibleMeleePierceAttack
+    ]
+  },
+  {
+    scenario: Mixed blocking and attacks,
+    figure: (3,3),
+    actions: [
+      (2,3):PossibleMeleePierceAttack,
+      (3,1):PossibleMeleePierceAttack,
+      (3,2):PossibleMeleePierceAttack,
+      (3,2):Move,
+      (3,4):PossibleMeleePierceAttack,
+      (4,3):PossibleMeleePierceAttack,
+      (4,3):Move,
+      (5,3):PossibleMeleePierceAttack,
+      (6,3):MeleePierceAttack
+    ]
+  },
+  {
+    scenario: Edge case A1,
+    figure: (0,0),
+    actions: [
+      (0,1):PossibleMeleePierceAttack,
+      (0,1):Move,
+      (0,2):PossibleMeleePierceAttack,
+      (0,3):PossibleMeleePierceAttack,
+      (1,0):PossibleMeleePierceAttack,
+      (1,0):Move,
+      (2,0):PossibleMeleePierceAttack,
+      (3,0):PossibleMeleePierceAttack
+    ]
+  }
+]

@@ -21,6 +21,7 @@ internal static class TestUtils
     }
 
     public static object RunGetActionsScenario(
+        string name,
         Action<Span<Figure>> setup, 
         int src,
         Figure figure, 
@@ -38,10 +39,11 @@ internal static class TestUtils
             .ToArray();
         var figureName = $"({src / 8},{src % 8})";
 
-        return new { figure = figureName, actions = result };
+        return new { scenario = name, figure = figureName, actions = result };
     }
 
     public static object RunExecuteActionScenario(
+        string name,
         Action<Span<Figure>> setup,
         int src,
         Figure figure,
@@ -64,7 +66,7 @@ internal static class TestUtils
             .ToArray();
         
         var actionString = $"({src / 8},{src % 8}->{dst/8},{dst%8}):{actionType}";
-        return new { action = actionString, board = nonEmpty};
+        return new { scenario = name, action = actionString, board = nonEmpty};
     }
 
     public static Action<BoardEvent, Span<Figure>> IgnoreEvents() => (_, _) => { };

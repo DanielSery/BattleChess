@@ -1,0 +1,26 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):BattleAxeMove,
+      (2,4):BattleAxeMove,
+      (4,2):BattleAxeMove,
+      (4,4):BattleAxeMove
+    ]
+  },
+  {
+    scenario: Blocked diagonals,
+    figure: (3,3),
+    actions: [
+      (4,4):BattleAxeMove
+    ]
+  },
+  {
+    scenario: Edge case A1,
+    figure: (0,0),
+    actions: [
+      (1,1):BattleAxeMove
+    ]
+  }
+]

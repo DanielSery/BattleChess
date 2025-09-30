@@ -1,0 +1,49 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):Move,
+      (2,3):BuildWall,
+      (2,4):Move,
+      (3,2):BuildWall,
+      (3,4):BuildWall,
+      (4,2):Move,
+      (4,3):BuildWall,
+      (4,4):Move
+    ]
+  },
+  {
+    scenario: Walls adjacent,
+    figure: (3,3),
+    actions: [
+      (2,2):Move,
+      (2,3):BuildWall,
+      (2,4):Move,
+      (3,2):BuildWall,
+      (3,4):MeleeAttack,
+      (4,2):Move,
+      (4,3):MeleeAttack,
+      (4,4):Move
+    ]
+  },
+  {
+    scenario: Mixed neighbors,
+    figure: (3,3),
+    actions: [
+      (2,2):Move,
+      (3,2):MeleeAttack,
+      (4,2):Move,
+      (4,3):BuildWall
+    ]
+  },
+  {
+    scenario: Edge case A1,
+    figure: (0,0),
+    actions: [
+      (0,1):BuildWall,
+      (1,0):BuildWall,
+      (1,1):Move
+    ]
+  }
+]

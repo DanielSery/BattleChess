@@ -1,0 +1,58 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,3):Move,
+      (2,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Start row double step white,
+    figure: (6,3),
+    actions: [
+      (4,3):Move,
+      (5,2):PossibleMeleeAttack,
+      (5,3):Move,
+      (5,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Enemy left ally right white,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,3):Move,
+      (2,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Forward blocked no move white,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    White: {
+      scenario: Promotion white forward square empty diagonals empty,
+      figure: (1,3),
+      actions: [
+        (0,2):PossibleMeleeAttack,
+        (0,3):ChangeToQueen,
+        (0,4):PossibleMeleeAttack
+      ]
+    },
+    Black: {
+      scenario: Promotion black forward square empty diagonals empty,
+      figure: (6,4),
+      actions: [
+        (7,3):PossibleMeleeAttack,
+        (7,4):ChangeToQueen,
+        (7,5):PossibleMeleeAttack
+      ]
+    }
+  }
+]

@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Engine.Figures;
@@ -10,95 +13,83 @@ namespace CrownsGuard.Engine.Test.Figures;
 public class CamelArcherTest
 {
     [Fact]
-    public Task GetPossibleActions_AllEmpty_Verify()
+    public Task GetPossibleActions_Verify()
     {
         const int src = 27; // d4
         const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
-            src,
-            camelArcher,
-            CamelArcher.GetPossibleActions
-        ));
-    }
+        return Verify(new List<object>
+        {
+            TestUtils.RunGetActionsScenario(
+                "All empty",
+                _ => { /* empty around */ },
+                src,
+                camelArcher,
+                CamelArcher.GetPossibleActions),
 
-    [Fact]
-    public Task GetPossibleActions_BlockingAndEnemyWithinRook_Verify()
-    {
-        const int src = 27; // d4
-        const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
+            TestUtils.RunGetActionsScenario(
+                "Blocking and enemy within rook",
+                b =>
+                {
+                    // Rook lines setup for melee path
+                    // Left: empty, empty, then enemy at distance 3
+                    var l1 = src.GetWithOffset(PositionConstants.L);
+                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L);
+                    var l3 = l2 == -1 ? -1 : l2.GetWithOffset(PositionConstants.L);
+                    if (l1 != -1) b[l1] = Figure.Empty; // walkable -> PossibleMeleeAttack
+                    if (l2 != -1) b[l2] = Figure.Empty; // walkable -> PossibleMeleeAttack
+                    if (l3 != -1) b[l3] = Figure.Peasant | Figure.IsBlack; // enemy -> MeleeAttack
 
-        return Verify(TestUtils.RunGetActionsScenario(b =>
-            {
-                // Rook lines setup for melee path
-                // Left: empty, empty, then enemy at distance 3
-                var l1 = src.GetWithOffset(PositionConstants.L);
-                var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L);
-                var l3 = l2 == -1 ? -1 : l2.GetWithOffset(PositionConstants.L);
-                if (l1 != -1) b[l1] = Figure.Empty; // walkable -> PossibleMeleeAttack
-                if (l2 != -1) b[l2] = Figure.Empty; // walkable -> PossibleMeleeAttack
-                if (l3 != -1) b[l3] = Figure.Peasant | Figure.IsBlack; // enemy -> MeleeAttack
+                    // Up: empty, then friendly at distance 2 (blocks further)
+                    var u1 = src.GetWithOffset(PositionConstants.U);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
+                    if (u1 != -1) b[u1] = Figure.Empty; // walkable -> PossibleMeleeAttack
+                    if (u2 != -1) b[u2] = Figure.LegionarySword | Figure.IsWhite; // friendly -> PossibleMeleeAttack then stop
 
-                // Up: empty, then friendly at distance 2 (blocks further)
-                var u1 = src.GetWithOffset(PositionConstants.U);
-                var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                if (u1 != -1) b[u1] = Figure.Empty; // walkable -> PossibleMeleeAttack
-                if (u2 != -1) b[u2] = Figure.LegionarySword | Figure.IsWhite; // friendly -> PossibleMeleeAttack then stop
+                    // Right: wall immediately (non-walkable blocker)
+                    var r1 = src.GetWithOffset(PositionConstants.R);
+                    if (r1 != -1) b[r1] = Figure.Wall; // -> PossibleMeleeAttack then stop
 
-                // Right: wall immediately (non-walkable blocker)
-                var r1 = src.GetWithOffset(PositionConstants.R);
-                if (r1 != -1) b[r1] = Figure.Wall; // -> PossibleMeleeAttack then stop
+                    // Down: leave empty to edge -> all squares become PossibleMeleeAttack
 
-                // Down: leave empty to edge -> all squares become PossibleMeleeAttack
+                    // Diagonal movement blockers for bishop-like moves
+                    // Up-Left: wall immediately blocks any move
+                    var ul1 = src.GetWithOffset(PositionConstants.UL);
+                    if (ul1 != -1) b[ul1] = Figure.Wall;
 
-                // Diagonal movement blockers for bishop-like moves
-                // Up-Left: wall immediately blocks any move
-                var ul1 = src.GetWithOffset(PositionConstants.UL);
-                if (ul1 != -1) b[ul1] = Figure.Wall;
+                    // Up-Right: empty then friendly at distance 2 blocks further
+                    var ur1 = src.GetWithOffset(PositionConstants.UR);
+                    var ur2 = ur1 == -1 ? -1 : ur1.GetWithOffset(PositionConstants.UR);
+                    if (ur1 != -1) b[ur1] = Figure.Empty; // walkable move
+                    if (ur2 != -1) b[ur2] = Figure.Peasant | Figure.IsWhite; // blocks further
 
-                // Up-Right: empty then friendly at distance 2 blocks further
-                var ur1 = src.GetWithOffset(PositionConstants.UR);
-                var ur2 = ur1 == -1 ? -1 : ur1.GetWithOffset(PositionConstants.UR);
-                if (ur1 != -1) b[ur1] = Figure.Empty; // walkable move
-                if (ur2 != -1) b[ur2] = Figure.Peasant | Figure.IsWhite; // blocks further
+                    // Down-Left and Down-Right left empty to edge
+                },
+                src,
+                camelArcher,
+                CamelArcher.GetPossibleActions),
 
-                // Down-Left and Down-Right left empty to edge
-            },
-            src,
-            camelArcher,
-            CamelArcher.GetPossibleActions
-        ));
-    }
+            TestUtils.RunGetActionsScenario(
+                "Enemy adjacent rook",
+                b =>
+                {
+                    // Enemy immediately above -> should be MeleeAttack and stop in that direction
+                    var u1 = src.GetWithOffset(PositionConstants.U);
+                    if (u1 != -1) b[u1] = Figure.Peasant | Figure.IsBlack;
+                    // Place some diagonal blockers to ensure movement respects walkability
+                    var dl1 = src.GetWithOffset(PositionConstants.DL);
+                    if (dl1 != -1) b[dl1] = Figure.LegionarySword | Figure.IsWhite; // blocks diagonal move
+                },
+                src,
+                camelArcher,
+                CamelArcher.GetPossibleActions),
 
-    [Fact]
-    public Task GetPossibleActions_EnemyAdjacentRook_Verify()
-    {
-        const int src = 27; // d4
-        const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
-
-        return Verify(TestUtils.RunGetActionsScenario(b =>
-            {
-                // Enemy immediately above -> should be MeleeAttack and stop in that direction
-                var u1 = src.GetWithOffset(PositionConstants.U);
-                if (u1 != -1) b[u1] = Figure.Peasant | Figure.IsBlack;
-                // Place some diagonal blockers to ensure movement respects walkability
-                var dl1 = src.GetWithOffset(PositionConstants.DL);
-                if (dl1 != -1) b[dl1] = Figure.LegionarySword | Figure.IsWhite; // blocks diagonal move
-            },
-            src,
-            camelArcher,
-            CamelArcher.GetPossibleActions
-        ));
-    }
-
-    [Fact]
-    public Task GetPossibleActions_EdgeCase_A1_Verify()
-    {
-        const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(b => { /* archer at edge via src override */ },
-            0, // a1
-            camelArcher,
-            CamelArcher.GetPossibleActions
-        ));
+            TestUtils.RunGetActionsScenario(
+                "Edge case A1",
+                b => { /* archer at edge via src override */ },
+                0, // a1
+                camelArcher,
+                CamelArcher.GetPossibleActions)
+        });
     }
 }

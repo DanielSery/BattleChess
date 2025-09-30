@@ -10,111 +10,81 @@ namespace CrownsGuard.Engine.Test.Figures;
 public class CatapultTest
 {
     [Fact]
-    public Task GetPossibleActions_AllEmpty_White_Verify()
+    public Task GetPossibleActions_Verify()
     {
-        const int src = 27; // d4
-        const Figure catapult = Figure.Catapult | Figure.IsWhite;
+        return Verify(new List<object>
+        {
+            TestUtils.RunGetActionsScenario(
+                "All empty",
+                _ => { /* no adjacent enemies, empty board */ },
+                27, // d4
+                Figure.Catapult | Figure.IsWhite,
+                Catapult.GetPossibleActions),
 
-        return Verify(TestUtils.RunGetActionsScenario(_ => { /* no adjacent enemies, empty board */ },
-            src,
-            catapult,
-            Catapult.GetPossibleActions
-        ));
-    }
-
-    [Fact]
-    public Task GetPossibleActions_EnemyAdjacentSuppress_Verify()
-    {
-        const int src = 27; // d4
-        const Figure catapult = Figure.Catapult | Figure.IsWhite;
-
-        return Verify(TestUtils.RunGetActionsScenario(b =>
-            {
-                // Any adjacent enemy in queen directions suppresses all actions
-                var r = src.GetWithOffset(PositionConstants.R);
-                if (r != -1) b[r] = Figure.Peasant | Figure.IsBlack;
-            },
-            src,
-            catapult,
-            Catapult.GetPossibleActions
-        ));
-    }
-
-    [Fact]
-    public Task GetPossibleActions_MixPossibleAndActual_White_Verify()
-    {
-        const int src = 27; // d4
-        const Figure catapult = Figure.Catapult | Figure.IsWhite;
-
-        return Verify(TestUtils.RunGetActionsScenario(b =>
-            {
-                // White attacks 2 and 3 tiles forward (up, -YOffset) with lateral offsets
-                var rels = new short[]
+            TestUtils.RunGetActionsScenario(
+                "Enemy adjacent suppress",
+                b =>
                 {
-                    (short)(unchecked((byte)-1) - 2*PositionConstants.YOffset),
-                    (short)(unchecked((byte)+1) - 2*PositionConstants.YOffset),
-                    (short)(unchecked((byte)-2) - 3*PositionConstants.YOffset),
-                    (short)(unchecked((byte)+0) - 3*PositionConstants.YOffset),
-                    (short)(unchecked((byte)+2) - 3*PositionConstants.YOffset),
-                };
+                    // Any adjacent enemy in queen directions suppresses all actions
+                    var r = 27 /* d4 */.GetWithOffset(PositionConstants.R);
+                    if (r != -1) b[r] = Figure.Peasant | Figure.IsBlack;
+                },
+                27, // d4
+                Figure.Catapult | Figure.IsWhite,
+                Catapult.GetPossibleActions),
 
-                // Place different kinds of targets on some of them
-                var t0 = src.GetWithOffset(rels[0]); // enemy -> RangedAttack
-                var t1 = src.GetWithOffset(rels[1]); // friendly -> PossibleRangedAttack
-                var t2 = src.GetWithOffset(rels[2]); // wall -> PossibleRangedAttack
-                if (t0 != -1) b[t0] = Figure.Archer | Figure.IsBlack;
-                if (t1 != -1) b[t1] = Figure.LegionarySword | Figure.IsWhite;
-                if (t2 != -1) b[t2] = Figure.Wall;
-                // leave others empty -> PossibleRangedAttack
-            },
-            src,
-            catapult,
-            Catapult.GetPossibleActions
-        ));
-    }
+            TestUtils.RunGetActionsScenario(
+                "Mix possible and actual",
+                b =>
+                {
+                    // White attacks 2 and 3 tiles forward (up, -YOffset) with lateral offsets
+                    var rels = new short[]
+                    {
+                        (short)(unchecked((byte)-1) - 2*PositionConstants.YOffset),
+                        (short)(unchecked((byte)+1) - 2*PositionConstants.YOffset),
+                        (short)(unchecked((byte)-2) - 3*PositionConstants.YOffset),
+                        (short)(unchecked((byte)+0) - 3*PositionConstants.YOffset),
+                        (short)(unchecked((byte)+2) - 3*PositionConstants.YOffset),
+                    };
 
-    [Fact]
-    public Task GetPossibleActions_EdgeCase_A1_White_Verify()
-    {
-        const int src = 0; // a1
-        const Figure catapult = Figure.Catapult | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(_ => { },
-            src,
-            catapult,
-            Catapult.GetPossibleActions
-        ));
-    }
+                    // Place different kinds of targets on some of them
+                    var t0 = 27 /* d4 */.GetWithOffset(rels[0]); // enemy -> RangedAttack
+                    var t1 = 27 /* d4 */.GetWithOffset(rels[1]); // friendly -> PossibleRangedAttack
+                    var t2 = 27 /* d4 */.GetWithOffset(rels[2]); // wall -> PossibleRangedAttack
+                    if (t0 != -1) b[t0] = Figure.Archer | Figure.IsBlack;
+                    if (t1 != -1) b[t1] = Figure.LegionarySword | Figure.IsWhite;
+                    if (t2 != -1) b[t2] = Figure.Wall;
+                    // leave others empty -> PossibleRangedAttack
+                },
+                27, // d4
+                Figure.Catapult | Figure.IsWhite,
+                Catapult.GetPossibleActions),
 
-    [Fact]
-    public Task GetPossibleActions_EdgeCase_H8_Black_Verify()
-    {
-        const int src = 63; // h8
-        const Figure catapult = Figure.Catapult | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(_ => { },
-            src,
-            catapult,
-            Catapult.GetPossibleActions
-        ));
-    }
+            TestUtils.RunGetActionsScenario(
+                "Edge case A1",
+                _ => { },
+                0, // a1
+                Figure.Catapult | Figure.IsWhite,
+                Catapult.GetPossibleActions),
 
-    [Fact]
-    public Task ExecuteRangedAttack_White_Verify()
-    {
-        const int src = 27; // d4
-        const Figure catapult = Figure.Catapult | Figure.IsWhite;
+            TestUtils.RunGetActionsScenario(
+                "Edge case H8",
+                _ => { },
+                63, // h8
+                Figure.Catapult | Figure.IsBlack,
+                Catapult.GetPossibleActions),
 
-        // pick the central far target: 0 - 3*YOffset
-        short relative = (short)(unchecked((byte)+0) - 3*PositionConstants.YOffset);
-
-        return Verify(TestUtils.RunExecuteActionScenario(b =>
-            {
-                var dst = src.GetWithOffset(relative);
-                if (dst != -1) b[dst] = Figure.Knight | Figure.IsBlack;
-            },
-            src,
-            catapult,
-            relative,
-            FigureActionType.RangedAttack
-        ));
+            TestUtils.RunExecuteActionScenario(
+                "Execute ranged attack",
+                b =>
+                {
+                    var dst = 27 /* d4 */.GetWithOffset((short)(unchecked((byte)+0) - 3*PositionConstants.YOffset));
+                    if (dst != -1) b[dst] = Figure.Knight | Figure.IsBlack;
+                },
+                27, // d4
+                Figure.Catapult | Figure.IsWhite,
+                (short)(unchecked((byte)+0) - 3*PositionConstants.YOffset),
+                FigureActionType.RangedAttack)
+        });
     }
 }

@@ -1,0 +1,34 @@
+﻿[
+  {
+    scenario: Move UR destroys quadrant,
+    action: (3,3->4,4):BattleAxeMove,
+    board: [
+      (4,3):Knight, IsBlack,
+      (4,4):BattleAxe, IsWhite
+    ]
+  },
+  {
+    scenario: Move UL destroys quadrant,
+    action: (3,3->4,2):BattleAxeMove,
+    board: [
+      (4,2):BattleAxe, IsWhite,
+      (4,3):Knight, IsBlack
+    ]
+  },
+  {
+    scenario: Move DR destroys quadrant,
+    action: (3,3->2,4):BattleAxeMove,
+    board: [
+      (2,4):BattleAxe, IsWhite,
+      (3,4):Knight, IsBlack
+    ]
+  },
+  {
+    scenario: Move DL destroys quadrant,
+    action: (3,3->2,2):BattleAxeMove,
+    board: [
+      (2,2):BattleAxe, IsWhite,
+      (2,3):Knight, IsBlack
+    ]
+  }
+]

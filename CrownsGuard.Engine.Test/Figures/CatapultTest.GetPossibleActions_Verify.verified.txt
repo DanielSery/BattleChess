@@ -1,0 +1,43 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (0,1):PossibleRangedAttack,
+      (0,3):PossibleRangedAttack,
+      (0,5):PossibleRangedAttack,
+      (1,2):PossibleRangedAttack,
+      (1,4):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Enemy adjacent suppress,
+    figure: (3,3)
+  },
+  {
+    scenario: Mix possible and actual,
+    figure: (3,3),
+    actions: [
+      (0,1):PossibleRangedAttack,
+      (0,3):PossibleRangedAttack,
+      (0,5):PossibleRangedAttack,
+      (1,2):RangedAttack,
+      (1,4):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case A1,
+    figure: (0,0)
+  },
+  {
+    scenario: Edge case H8,
+    figure: (7,7)
+  },
+  {
+    scenario: Execute ranged attack,
+    action: (3,3->0,3):RangedAttack,
+    board: [
+      (3,3):Catapult, IsWhite
+    ]
+  }
+]

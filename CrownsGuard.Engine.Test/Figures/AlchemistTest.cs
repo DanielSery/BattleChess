@@ -13,85 +13,71 @@ namespace CrownsGuard.Engine.Test.Figures;
 public class AlchemistTest
 {
     [Fact]
-    public Task GetPossibleActions_AllEmpty_Verify()
+    public Task GetPossibleActions_Verify()
     {
         const int src = 27; // somewhere in the middle (d4)
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(_ => { /* default empty neighbors */ }, src, alchemist, Alchemist.GetPossibleActions));
+        return Verify(new List<object>
+        {
+            TestUtils.RunGetActionsScenario(
+                "All empty",
+                _ => { /* default empty neighbors */ }, src, alchemist, Alchemist.GetPossibleActions),
+            
+            TestUtils.RunGetActionsScenario(
+                "Walls everywhere", b =>
+                {
+                    foreach (var rel in PositionConstants.QueenDirections)
+                    {
+                        var idx = src.GetWithOffset(rel);
+                        if (idx != -1) b[idx] = Figure.Wall;
+                    }
+                }, src, alchemist, Alchemist.GetPossibleActions),
+            
+            TestUtils.RunGetActionsScenario(
+                "Mixed", b =>
+                {
+                    var left = src.GetWithOffset(PositionConstants.L);
+                    var up = src.GetWithOffset(PositionConstants.U);
+                    var right = src.GetWithOffset(PositionConstants.R);
+                    var downLeft = src.GetWithOffset(PositionConstants.DL);
+                    var down = src.GetWithOffset(PositionConstants.D);
+
+                    if (left != -1) b[left] = Figure.Empty;        // walkable
+                    if (up != -1) b[up] = Figure.Fire;             // walkable
+                    if (right != -1) b[right] = Figure.Explosives; // allowed
+                    if (downLeft != -1) b[downLeft] = Figure.Wall;     // not allowed
+                    if (down != -1) b[down] = Figure.Trench;       // not allowed
+                }, src, alchemist, Alchemist.GetPossibleActions)
+        });
     }
 
     [Fact]
-    public Task GetPossibleActions_WallsEverywhere_Verify()
+    public Task ExecuteMove_Verify()
     {
-        const int src = 27; // somewhere in the middle (d4)
+        const int src = 27; // d4
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(b =>
+        return Verify(new List<object>
         {
-            foreach (var rel in PositionConstants.QueenDirections)
+            TestUtils.RunExecuteActionScenario(
+                "To empty", _ => { }, 
+                src, alchemist,
+                PositionConstants.L, FigureActionType.AlchemistMove),
+            
+            TestUtils.RunExecuteActionScenario(
+                "To fire", b =>
             {
-                var idx = src.GetWithOffset(rel);
-                if (idx != -1) b[idx] = Figure.Wall;
-            }
-        }, src, alchemist, Alchemist.GetPossibleActions));
-    }
-
-    [Fact]
-    public Task GetPossibleActions_Mixed_Verify()
-    {
-        const int src = 27; // somewhere in the middle (d4)
-        const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
-
-        return Verify(TestUtils.RunGetActionsScenario(b =>
-        {
-            var left = src.GetWithOffset(PositionConstants.L);
-            var up = src.GetWithOffset(PositionConstants.U);
-            var right = src.GetWithOffset(PositionConstants.R);
-            var downLeft = src.GetWithOffset(PositionConstants.DL);
-            var down = src.GetWithOffset(PositionConstants.D);
-
-            if (left != -1) b[left] = Figure.Empty;        // walkable
-            if (up != -1) b[up] = Figure.Fire;             // walkable
-            if (right != -1) b[right] = Figure.Explosives; // allowed
-            if (downLeft != -1) b[downLeft] = Figure.Wall;     // not allowed
-            if (down != -1) b[down] = Figure.Trench;       // not allowed
-        }, src, alchemist, Alchemist.GetPossibleActions));
-    }
-
-    [Fact]
-    public Task ExecuteMove_ToEmpty_Left_Verify()
-    {
-        const int src = 27; // d4
-        const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
-
-        return Verify(TestUtils.RunExecuteActionScenario(_ => { }, src, alchemist,
-            PositionConstants.QueenDirections[1], FigureActionType.AlchemistMove));
-    }
-
-    [Fact]
-    public Task ExecuteMove_ToFire_Up_Verify()
-    {
-        const int src = 27; // d4
-        const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
-
-        return Verify(TestUtils.RunExecuteActionScenario(b =>
-        {
-            var up = src.GetWithOffset(PositionConstants.U);
-            if (up != -1) b[up] = Figure.Fire;
-        }, src, alchemist, PositionConstants.U, FigureActionType.AlchemistMove));
-    }
-
-    [Fact]
-    public Task ExecuteMove_ToExplosives_Right_Verify()
-    {
-        const int src = 27; // d4
-        const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
-
-        return Verify(TestUtils.RunExecuteActionScenario(b =>
-        {
-            var right = src.GetWithOffset(PositionConstants.R);
-            if (right != -1) b[right] = Figure.Explosives;
-        }, src, alchemist, PositionConstants.R, FigureActionType.AlchemistMove));
+                var up = src.GetWithOffset(PositionConstants.U);
+                if (up != -1) b[up] = Figure.Fire;
+            }, src, alchemist, PositionConstants.U, FigureActionType.AlchemistMove),
+            
+            TestUtils.RunExecuteActionScenario(
+                "To explosives", b =>
+                {
+                    var right = src.GetWithOffset(PositionConstants.R);
+                    if (right != -1) b[right] = Figure.Explosives;
+                }, src, alchemist, PositionConstants.R, FigureActionType.AlchemistMove)
+        });
     }
 }

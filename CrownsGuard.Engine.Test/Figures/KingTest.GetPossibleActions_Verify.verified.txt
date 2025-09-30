@@ -1,0 +1,74 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):MeleeDefend,
+      (2,2):Move,
+      (2,3):MeleeDefend,
+      (2,3):Move,
+      (2,4):MeleeDefend,
+      (2,4):Move,
+      (3,2):MeleeDefend,
+      (3,2):Move,
+      (3,4):MeleeDefend,
+      (3,4):Move,
+      (4,2):MeleeDefend,
+      (4,2):Move,
+      (4,3):MeleeDefend,
+      (4,3):Move,
+      (4,4):MeleeDefend,
+      (4,4):Move
+    ]
+  },
+  {
+    scenario: Mixed blocking and attacks,
+    figure: (3,3),
+    actions: [
+      (2,2):MeleeDefend,
+      (2,2):Move,
+      (2,3):MeleeDefend,
+      (2,4):MeleeDefend,
+      (3,2):MeleeDefend,
+      (3,4):MeleeAttack,
+      (4,2):MeleeAttack,
+      (4,3):MeleeDefend,
+      (4,3):Move,
+      (4,4):MeleeDefend
+    ]
+  },
+  {
+    scenario: Castling black mixed,
+    figure: (0,4),
+    actions: [
+      (0,2):PossibleCastling,
+      (0,3):MeleeDefend,
+      (0,5):MeleeDefend,
+      (0,5):Move,
+      (0,6):Castling,
+      (1,3):MeleeDefend,
+      (1,3):Move,
+      (1,4):MeleeDefend,
+      (1,4):Move,
+      (1,5):MeleeDefend,
+      (1,5):Move
+    ]
+  },
+  {
+    scenario: Castling white mixed,
+    figure: (7,4),
+    actions: [
+      (6,3):MeleeDefend,
+      (6,3):Move,
+      (6,4):MeleeDefend,
+      (6,4):Move,
+      (6,5):MeleeDefend,
+      (6,5):Move,
+      (7,2):Castling,
+      (7,3):MeleeDefend,
+      (7,3):Move,
+      (7,5):MeleeDefend,
+      (7,6):PossibleCastling
+    ]
+  }
+]

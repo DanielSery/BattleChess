@@ -10,127 +10,105 @@ namespace CrownsGuard.Engine.Test.Figures;
 public class CannonTest
 {
     [Fact]
-    public Task GetPossibleActions_AllEmpty_Verify()
+    public Task GetPossibleActions_Verify()
     {
-        const int src = 27; // d4
-        const Figure cannon = Figure.Cannon | Figure.IsWhite;
+        return Verify(new List<object>
+        {
+            TestUtils.RunGetActionsScenario(
+                "All empty",
+                _ => { /* no blockers, no adjacent enemies */ },
+                27, // d4
+                Figure.Cannon | Figure.IsWhite,
+                Cannon.GetPossibleActions
+            ),
 
-        return Verify(TestUtils.RunGetActionsScenario(_ => { /* no blockers, no adjacent enemies */ },
-            src,
-            cannon,
-            Cannon.GetPossibleActions
-        ));
+            TestUtils.RunGetActionsScenario(
+                "Enemy adjacent suppresses all", b =>
+                {
+                    var up = 27.GetWithOffset(PositionConstants.U);
+                    if (up != -1) b[up] = Figure.Peasant | Figure.IsBlack; // any adjacent enemy suppresses all actions
+                },
+                27, // d4
+                Figure.Cannon | Figure.IsWhite,
+                Cannon.GetPossibleActions
+            ),
+
+            TestUtils.RunGetActionsScenario(
+                "Mix possible and actual", b =>
+                {
+                    var src = 27; // d4
+                    // Place pieces exactly at 2-4 squares forward (white moves up)
+                    var u1 = src.GetWithOffset(PositionConstants.U);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
+                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
+                    var u4 = u3 == -1 ? -1 : u3.GetWithOffset(PositionConstants.U);
+                    if (u2 != -1) b[u2] = Figure.Peasant | Figure.IsBlack; // enemy -> CannonAttack
+                    if (u3 != -1) b[u3] = Figure.Peasant | Figure.IsWhite; // friendly -> PossibleCannonAttack
+                    if (u4 != -1) b[u4] = Figure.Wall; // wall -> PossibleCannonAttack
+                },
+                27, // d4
+                Figure.Cannon | Figure.IsWhite,
+                Cannon.GetPossibleActions
+            ),
+
+            TestUtils.RunGetActionsScenario(
+                "Edge case A1 white", _ => { },
+                0, // a1
+                Figure.Cannon | Figure.IsWhite,
+                Cannon.GetPossibleActions
+            ),
+
+            TestUtils.RunGetActionsScenario(
+                "Edge case H8 black", _ => { },
+                63, // h8
+                Figure.Cannon | Figure.IsBlack,
+                Cannon.GetPossibleActions
+            )
+        });
     }
 
     [Fact]
-    public Task GetPossibleActions_EnemyAdjacentSuppressAll_Verify()
+    public Task ExecuteAttack_Verify()
     {
-        const int src = 27; // d4
-        const Figure cannon = Figure.Cannon | Figure.IsWhite;
+        return Verify(new List<object>
+        {
+            TestUtils.RunExecuteActionScenario(
+                "White kills at 2-4 forward", b =>
+                {
+                    var src = 27; // d4
+                    // Enemies at 2 and 3 up; empty at 4 up
+                    var u1 = src.GetWithOffset(PositionConstants.U);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
+                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
+                    var u4 = u3 == -1 ? -1 : u3.GetWithOffset(PositionConstants.U);
+                    if (u2 != -1) b[u2] = Figure.Knight | Figure.IsBlack;
+                    if (u3 != -1) b[u3] = Figure.Archer | Figure.IsBlack;
+                    // leave u4 empty
+                },
+                27, // d4
+                Figure.Cannon | Figure.IsWhite,
+                // Use relative of two steps up to target a valid CannonAttack square
+                (short)(unchecked((byte)+0) - 2*PositionConstants.YOffset),
+                FigureActionType.CannonAttack
+            ),
 
-        return Verify(TestUtils.RunGetActionsScenario(b =>
-            {
-                var up = src.GetWithOffset(PositionConstants.U);
-                if (up != -1) b[up] = Figure.Peasant | Figure.IsBlack; // any adjacent enemy suppresses all actions
-            },
-            src,
-            cannon,
-            Cannon.GetPossibleActions
-        ));
-    }
-
-    [Fact]
-    public Task GetPossibleActions_MixPossibleAndActual_Verify()
-    {
-        const int src = 27; // d4
-        const Figure cannon = Figure.Cannon | Figure.IsWhite;
-
-        return Verify(TestUtils.RunGetActionsScenario(b =>
-            {
-                // Place pieces exactly at 2-4 squares forward (white moves up)
-                var u1 = src.GetWithOffset(PositionConstants.U);
-                var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
-                var u4 = u3 == -1 ? -1 : u3.GetWithOffset(PositionConstants.U);
-                if (u2 != -1) b[u2] = Figure.Peasant | Figure.IsBlack; // enemy -> CannonAttack
-                if (u3 != -1) b[u3] = Figure.Peasant | Figure.IsWhite; // friendly -> PossibleCannonAttack
-                if (u4 != -1) b[u4] = Figure.Wall; // wall -> PossibleCannonAttack
-            },
-            src,
-            cannon,
-            Cannon.GetPossibleActions
-        ));
-    }
-
-    [Fact]
-    public Task GetPossibleActions_EdgeCase_A1_White_Verify()
-    {
-        const int src = 0; // a1
-        const Figure cannon = Figure.Cannon | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(_ => { },
-            src,
-            cannon,
-            Cannon.GetPossibleActions
-        ));
-    }
-
-    [Fact]
-    public Task GetPossibleActions_EdgeCase_H8_Black_Verify()
-    {
-        const int src = 63; // h8
-        const Figure cannon = Figure.Cannon | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(_ => { },
-            src,
-            cannon,
-            Cannon.GetPossibleActions
-        ));
-    }
-
-    [Fact]
-    public Task ExecuteAttack_White_KillsAt2to4Forward_Verify()
-    {
-        const int src = 27; // d4
-        const Figure cannon = Figure.Cannon | Figure.IsWhite;
-
-        return Verify(TestUtils.RunExecuteActionScenario(b =>
-            {
-                // Enemies at 2 and 3 up; empty at 4 up
-                var u1 = src.GetWithOffset(PositionConstants.U);
-                var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
-                var u4 = u3 == -1 ? -1 : u3.GetWithOffset(PositionConstants.U);
-                if (u2 != -1) b[u2] = Figure.Knight | Figure.IsBlack;
-                if (u3 != -1) b[u3] = Figure.Archer | Figure.IsBlack;
-                // leave u4 empty
-            },
-            src,
-            cannon,
-            // Use relative of two steps up to target a valid CannonAttack square
-            (short)(unchecked((byte)+0) - 2*PositionConstants.YOffset),
-            FigureActionType.CannonAttack
-        ));
-    }
-
-    [Fact]
-    public Task ExecuteAttack_Black_KillsAt2to4Forward_Verify()
-    {
-        const int src = 36; // e5 (somewhere central)
-        const Figure cannon = Figure.Cannon | Figure.IsBlack;
-
-        return Verify(TestUtils.RunExecuteActionScenario(b =>
-            {
-                // For black, forward is down (+YOffset)
-                var d1 = src.GetWithOffset(PositionConstants.D);
-                var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D);
-                var d3 = d2 == -1 ? -1 : d2.GetWithOffset(PositionConstants.D);
-                var d4 = d3 == -1 ? -1 : d3.GetWithOffset(PositionConstants.D);
-                if (d2 != -1) b[d2] = Figure.Trader | Figure.IsWhite;
-                if (d4 != -1) b[d4] = Figure.Wall; // non-empty also gets destroyed
-            },
-            src,
-            cannon,
-            (short)(unchecked((byte)+0) + 2*PositionConstants.YOffset),
-            FigureActionType.CannonAttack
-        ));
+            TestUtils.RunExecuteActionScenario(
+                "Black kills at 2-4 forward", b =>
+                {
+                    var src = 36; // e5 (somewhere central)
+                    // For black, forward is down (+YOffset)
+                    var d1 = src.GetWithOffset(PositionConstants.D);
+                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D);
+                    var d3 = d2 == -1 ? -1 : d2.GetWithOffset(PositionConstants.D);
+                    var d4 = d3 == -1 ? -1 : d3.GetWithOffset(PositionConstants.D);
+                    if (d2 != -1) b[d2] = Figure.Trader | Figure.IsWhite;
+                    if (d4 != -1) b[d4] = Figure.Wall; // non-empty also gets destroyed
+                },
+                36, // e5
+                Figure.Cannon | Figure.IsBlack,
+                (short)(unchecked((byte)+0) + 2*PositionConstants.YOffset),
+                FigureActionType.CannonAttack
+            )
+        });
     }
 }

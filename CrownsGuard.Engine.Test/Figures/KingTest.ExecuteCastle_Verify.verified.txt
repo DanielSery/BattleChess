@@ -1,0 +1,30 @@
+﻿[
+  {
+    scenario: Black king-side,
+    nonEmpty: [
+      (0,5):MountedKnight, IsBlack,
+      (0,6):King, IsBlack
+    ]
+  },
+  {
+    scenario: Black queen-side,
+    nonEmpty: [
+      (0,2):King, IsBlack,
+      (0,3):MountedKnight, IsBlack
+    ]
+  },
+  {
+    scenario: White queen-side,
+    nonEmpty: [
+      (7,2):King, IsWhite,
+      (7,3):MountedKnight, IsWhite
+    ]
+  },
+  {
+    scenario: White king-side,
+    nonEmpty: [
+      (7,5):MountedKnight, IsWhite,
+      (7,6):King, IsWhite
+    ]
+  }
+]

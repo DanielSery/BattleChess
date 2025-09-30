@@ -1,0 +1,70 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (0,0):PossibleMeleeAttack,
+      (0,0):Move,
+      (0,6):PossibleMeleeAttack,
+      (0,6):Move,
+      (1,1):PossibleMeleeAttack,
+      (1,1):Move,
+      (1,5):PossibleMeleeAttack,
+      (1,5):Move,
+      (2,2):PossibleMeleeAttack,
+      (2,2):Move,
+      (2,4):PossibleMeleeAttack,
+      (2,4):Move,
+      (4,2):PossibleMeleeAttack,
+      (4,2):Move,
+      (4,4):PossibleMeleeAttack,
+      (4,4):Move,
+      (5,1):PossibleMeleeAttack,
+      (5,1):Move,
+      (5,5):PossibleMeleeAttack,
+      (5,5):Move,
+      (6,0):PossibleMeleeAttack,
+      (6,0):Move,
+      (6,6):PossibleMeleeAttack,
+      (6,6):Move,
+      (7,7):PossibleMeleeAttack,
+      (7,7):Move
+    ]
+  },
+  {
+    scenario: Enemy on diagonal,
+    figure: (3,3),
+    actions: [
+      (2,2):MeleeDefend,
+      (2,4):MeleeAttack,
+      (4,2):PossibleMeleeAttack,
+      (4,2):Move,
+      (4,4):PossibleMeleeAttack,
+      (4,4):Move,
+      (5,1):MeleeAttack,
+      (5,5):PossibleMeleeAttack,
+      (5,5):Move,
+      (6,6):MeleeDefend
+    ]
+  },
+  {
+    scenario: Edge case A1,
+    figure: (0,0),
+    actions: [
+      (1,1):PossibleMeleeAttack,
+      (1,1):Move,
+      (2,2):PossibleMeleeAttack,
+      (2,2):Move,
+      (3,3):PossibleMeleeAttack,
+      (3,3):Move,
+      (4,4):PossibleMeleeAttack,
+      (4,4):Move,
+      (5,5):PossibleMeleeAttack,
+      (5,5):Move,
+      (6,6):PossibleMeleeAttack,
+      (6,6):Move,
+      (7,7):PossibleMeleeAttack,
+      (7,7):Move
+    ]
+  }
+]

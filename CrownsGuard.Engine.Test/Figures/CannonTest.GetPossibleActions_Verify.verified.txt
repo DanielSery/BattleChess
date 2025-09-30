@@ -1,0 +1,30 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (0,3):PossibleCannonAttack,
+      (1,3):PossibleCannonAttack
+    ]
+  },
+  {
+    scenario: Enemy adjacent suppresses all,
+    figure: (3,3)
+  },
+  {
+    scenario: Mix possible and actual,
+    figure: (3,3),
+    actions: [
+      (0,3):PossibleCannonAttack,
+      (1,3):PossibleCannonAttack
+    ]
+  },
+  {
+    scenario: Edge case A1 white,
+    figure: (0,0)
+  },
+  {
+    scenario: Edge case H8 black,
+    figure: (7,7)
+  }
+]

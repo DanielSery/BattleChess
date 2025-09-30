@@ -1,0 +1,63 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (1,1):BreatheFire,
+      (1,5):BreatheFire,
+      (2,2):BreatheFire,
+      (2,3):Move,
+      (2,4):BreatheFire,
+      (3,2):Move,
+      (3,4):Move,
+      (4,2):BreatheFire,
+      (4,3):Move,
+      (4,4):BreatheFire,
+      (5,1):BreatheFire,
+      (5,5):BreatheFire
+    ]
+  },
+  {
+    scenario: Enemy adjacent suppresses breath,
+    figure: (3,3),
+    actions: [
+      (2,3):Move,
+      (3,2):Move,
+      (3,4):Move,
+      (4,3):Move
+    ]
+  },
+  {
+    scenario: Mixed scenario,
+    figure: (3,3),
+    actions: [
+      (1,1):BreatheFire,
+      (2,2):BreatheFire,
+      (2,3):Move,
+      (2,4):BreatheFire,
+      (3,2):Move,
+      (4,2):BreatheFire,
+      (4,3):Move
+    ]
+  },
+  {
+    scenario: Edge case A1,
+    figure: (0,0),
+    actions: [
+      (0,1):Move,
+      (1,0):Move,
+      (1,1):BreatheFire,
+      (2,2):BreatheFire
+    ]
+  },
+  {
+    scenario: Edge case H8 Black,
+    figure: (7,7),
+    actions: [
+      (5,5):BreatheFire,
+      (6,6):BreatheFire,
+      (6,7):Move,
+      (7,6):Move
+    ]
+  }
+]

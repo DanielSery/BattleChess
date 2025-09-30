@@ -1,0 +1,71 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (1,2):PossibleRangedAttack,
+      (1,4):PossibleRangedAttack,
+      (2,2):PossibleMeleeAttack,
+      (2,3):Move,
+      (2,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Mixed blocking and attacks,
+    figure: (3,3),
+    actions: [
+      (1,2):RangedAttack,
+      (1,4):PossibleRangedAttack,
+      (2,2):PossibleMeleeAttack,
+      (2,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Start double step white,
+    figure: (6,3),
+    actions: [
+      (4,2):PossibleRangedAttack,
+      (4,3):Move,
+      (4,4):PossibleRangedAttack,
+      (5,2):PossibleMeleeAttack,
+      (5,3):Move,
+      (5,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Start double step black,
+    figure: (1,4),
+    actions: [
+      (2,3):PossibleMeleeAttack,
+      (2,4):Move,
+      (2,4):Move,
+      (2,5):PossibleMeleeAttack,
+      (3,3):PossibleRangedAttack,
+      (3,4):Move,
+      (3,5):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case A1,
+    figure: (0,0)
+  },
+  {
+    scenario: Promotion to queen white,
+    figure: (1,3),
+    actions: [
+      (0,2):PossibleMeleeAttack,
+      (0,3):ChangeToQueen,
+      (0,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Promotion to queen black,
+    figure: (6,4),
+    actions: [
+      (7,3):PossibleMeleeAttack,
+      (7,4):ChangeToQueen,
+      (7,4):ChangeToQueen,
+      (7,5):PossibleMeleeAttack
+    ]
+  }
+]
