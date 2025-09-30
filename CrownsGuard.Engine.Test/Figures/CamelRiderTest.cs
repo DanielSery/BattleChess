@@ -15,9 +15,7 @@ public class CamelRiderTest
         const int src = 27; // d4
         const Figure camelRider = Figure.CamelRider | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             camelRider,
             CamelRider.GetPossibleActions
@@ -30,9 +28,7 @@ public class CamelRiderTest
         const int src = 27; // d4
         const Figure camelRider = Figure.CamelRider | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EnemyOnDiagonal",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Place enemy two steps up-left (diagonal) with empty in between
                 var ul1 = src.GetWithOffset(PositionConstants.UL);
@@ -66,9 +62,7 @@ public class CamelRiderTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure camelRider = Figure.CamelRider | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            b => { /* source fixed to edge via src index */ },
+        return Verify(TestUtils.RunGetActionsScenario(b => { /* source fixed to edge via src index */ },
             0, // a1
             camelRider,
             CamelRider.GetPossibleActions

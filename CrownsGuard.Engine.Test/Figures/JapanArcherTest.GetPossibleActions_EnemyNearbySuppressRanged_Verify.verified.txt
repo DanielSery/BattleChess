@@ -1,0 +1,9 @@
+﻿{
+  scenario: EnemyNearbySuppressRanged,
+  figure: (3,3):JapanArcher, IsWhite,
+  actions: [
+    (2,2):Move,
+    (2,4):Move,
+    (4,4):Move
+  ]
+}

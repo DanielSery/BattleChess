@@ -1,0 +1,16 @@
+﻿[
+  {
+    scenario: ExecuteCastle_Black_KingSide,
+    nonEmpty: [
+      (0,5):MountedKnight, IsBlack,
+      (0,6):King, IsBlack
+    ]
+  },
+  {
+    scenario: ExecuteCastle_Black_QueenSide,
+    nonEmpty: [
+      (0,2):King, IsBlack,
+      (0,3):MountedKnight, IsBlack
+    ]
+  }
+]

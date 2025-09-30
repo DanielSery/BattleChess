@@ -1,6 +1,5 @@
 ﻿{
-  scenario: AllEmpty,
-  figure: (3,3):Barbarian, IsWhite,
+  figure: (3,3),
   actions: [
     (1,2):Move,
     (1,4):Move,

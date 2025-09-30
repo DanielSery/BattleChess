@@ -1,8 +1,0 @@
-﻿{
-  scenario: ExecuteBreatheFire_Adjacent_White,
-  action: (3,3->4,2):BreatheFire,
-  board: [
-    (3,3):Dragon, IsWhite,
-    (4,2):LastWalkableFigure
-  ]
-}

@@ -1,0 +1,12 @@
+﻿{
+  scenario: EdgeCase_A1,
+  figure: (0,0):Elephant, IsWhite,
+  actions: [
+    (1,0):PossibleMeleePierceAttack,
+    (1,0):Move,
+    (2,0):PossibleMeleePierceAttack,
+    (2,0):Move,
+    (3,0):PossibleMeleePierceAttack,
+    (3,0):Move
+  ]
+}

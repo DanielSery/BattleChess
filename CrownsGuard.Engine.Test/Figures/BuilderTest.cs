@@ -16,9 +16,7 @@ public class BuilderTest
         const int src = 27; // d4
         const Figure builder = Figure.Builder | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* empty board */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty board */ },
             src,
             builder,
             Builder.GetPossibleActions
@@ -31,9 +29,7 @@ public class BuilderTest
         const int src = 27; // d4
         const Figure builder = Figure.Builder | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "WallsAdjacent",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Place walls on Up and Right to trigger MeleeAttack, empties on Down/Left to allow BuildWall
                 var u = src.GetWithOffset(PositionConstants.U);
@@ -64,9 +60,7 @@ public class BuilderTest
         const int src = 27; // d4
         const Figure builder = Figure.Builder | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "MixedNeighbors",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Up empty -> BuildWall
                 var u = src.GetWithOffset(PositionConstants.U);
@@ -101,9 +95,7 @@ public class BuilderTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure builder = Figure.Builder | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             0, // a1
             builder,
             Builder.GetPossibleActions

@@ -16,9 +16,7 @@ public class ArcherTest
         const int src = 27; // d4
         const Figure archer = Figure.Archer | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             archer,
             Archer.GetPossibleActions
@@ -31,9 +29,7 @@ public class ArcherTest
         const int src = 27; // d4
         const Figure archer = Figure.Archer | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EnemyNearbySuppressRanged",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 var upLeft = src.GetWithOffset(PositionConstants.UL);
                 if (upLeft != -1) b[upLeft] = Figure.Peasant | Figure.IsBlack; // enemy next to archer
@@ -50,9 +46,7 @@ public class ArcherTest
         const int src = 27; // d4
         const Figure archer = Figure.Archer | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "BlockingAndEnemyWithin3",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Left: empty then friendly blocker at distance 2
                 var l1 = src.GetWithOffset(PositionConstants.L);
@@ -86,9 +80,7 @@ public class ArcherTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure archer = Figure.Archer | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            b => { /* setup below places archer at edge via src override */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* setup below places archer at edge via src override */ },
             0, // a1
             archer,
             Archer.GetPossibleActions

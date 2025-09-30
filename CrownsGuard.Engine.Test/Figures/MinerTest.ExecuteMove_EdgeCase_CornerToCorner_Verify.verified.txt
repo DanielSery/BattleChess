@@ -1,0 +1,12 @@
+﻿{
+  action: (0,0->7,7):MinerMove,
+  board: [
+    (1,1):Trench,
+    (2,2):Trench,
+    (3,3):Trench,
+    (4,4):Trench,
+    (5,5):Trench,
+    (6,6):Trench,
+    (7,7):Miner, IsWhite
+  ]
+}

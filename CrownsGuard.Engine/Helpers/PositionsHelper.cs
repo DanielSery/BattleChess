@@ -45,15 +45,17 @@ public static class PositionsHelper
         return relative.Position;
     }
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int GetWithOffset(this byte absoluteIndex, short relative)
     {
-        var result = absoluteIndex + (sbyte)(relative & 255);
-        if ((absoluteIndex >> Constants.BoardLengthShift) != (result >> Constants.BoardLengthShift))
+        int result = absoluteIndex + (sbyte)relative;
+        // Check for row wrap by comparing high bits with a single shift of the XOR
+        if (((absoluteIndex ^ result) >> Constants.BoardLengthShift) != 0)
         {
             return -1;
         }
 
-        result += (relative >> 5) & ~7;
+        result += (relative >> 8) << 3;
         if ((uint)result >= Constants.FullBoardTilesCount)
         {
             return -1;
@@ -62,15 +64,17 @@ public static class PositionsHelper
         return result;
     }
     
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int GetWithOffset(this int absoluteIndex, short relative)
     {
-        var result = absoluteIndex + (sbyte)(relative & 255);
-        if ((absoluteIndex >> Constants.BoardLengthShift) != (result >> Constants.BoardLengthShift))
+        int result = absoluteIndex + (sbyte)relative;
+        // Check for row wrap by comparing high bits with a single shift of the XOR
+        if (((absoluteIndex ^ result) >> Constants.BoardLengthShift) != 0)
         {
             return -1;
         }
 
-        result += (relative >> 5) & ~7;
+        result += (relative >> 8) << 3;
         if ((uint)result >= Constants.FullBoardTilesCount)
         {
             return -1;

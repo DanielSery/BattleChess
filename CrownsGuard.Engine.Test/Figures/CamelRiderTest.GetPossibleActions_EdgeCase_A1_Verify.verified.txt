@@ -1,6 +1,5 @@
 ﻿{
-  scenario: EdgeCase_A1,
-  figure: (0,0):CamelRider, IsWhite,
+  figure: (0,0),
   actions: [
     (1,1):PossibleMeleeAttack,
     (1,1):Move,

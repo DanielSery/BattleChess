@@ -16,9 +16,7 @@ public class BarbarianTest
         const int src = 27; // d4
         const Figure barbarian = Figure.Barbarian | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             barbarian,
             Barbarian.GetPossibleActions
@@ -31,9 +29,7 @@ public class BarbarianTest
         const int src = 27; // d4
         const Figure barbarian = Figure.Barbarian | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "PushLine_Left_WithBlocker",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 var l1 = src.GetWithOffset(PositionConstants.L);
                 var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L);
@@ -56,9 +52,7 @@ public class BarbarianTest
         const int src = 27; // d4
         const Figure barbarian = Figure.Barbarian | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "PushLine_Up_ImmediatelyBlocked",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 var u1 = src.GetWithOffset(PositionConstants.U);
                 var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
@@ -79,9 +73,7 @@ public class BarbarianTest
         const int src = 27; // d4
         const Figure barbarian = Figure.Barbarian | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "MixedDirections",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Right: adjacent enemy then empties
                 var r1 = src.GetWithOffset(PositionConstants.R);
@@ -115,9 +107,7 @@ public class BarbarianTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure barbarian = Figure.Barbarian | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            _ => { /* no additional setup */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* no additional setup */ },
             0, // a1
             barbarian,
             Barbarian.GetPossibleActions

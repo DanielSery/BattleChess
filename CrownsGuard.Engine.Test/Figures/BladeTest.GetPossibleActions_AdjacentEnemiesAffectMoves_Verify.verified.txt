@@ -1,6 +1,5 @@
 ﻿{
-  scenario: AdjacentEnemiesAffectMoves,
-  figure: (3,3):Blade, IsWhite,
+  figure: (3,3),
   actions: [
     (0,0):PossibleMeleePierceAttack,
     (0,3):PossibleMeleePierceAttack,

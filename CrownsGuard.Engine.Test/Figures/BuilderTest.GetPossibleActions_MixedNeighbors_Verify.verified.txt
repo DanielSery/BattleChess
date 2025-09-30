@@ -1,6 +1,5 @@
 ﻿{
-  scenario: MixedNeighbors,
-  figure: (3,3):Builder, IsWhite,
+  figure: (3,3),
   actions: [
     (2,2):Move,
     (3,2):MeleeAttack,

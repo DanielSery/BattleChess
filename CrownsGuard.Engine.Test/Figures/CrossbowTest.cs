@@ -15,9 +15,7 @@ public class CrossbowTest
         const int src = 27; // d4
         const Figure crossbow = Figure.Crossbow | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty_White",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             crossbow,
             Crossbow.GetPossibleActions
@@ -30,9 +28,7 @@ public class CrossbowTest
         const int src = 27; // d4
         const Figure crossbow = Figure.Crossbow | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EnemyAdjacentSuppress",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Any adjacent enemy in queen directions suppresses all actions
                 var ur = src.GetWithOffset(PositionConstants.UR);
@@ -50,9 +46,7 @@ public class CrossbowTest
         const int src = 27; // d4
         const Figure crossbow = Figure.Crossbow | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "MixPossibleAndActual_White",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Diagonals up to 3 tiles
                 // UL: enemy at distance 2
@@ -90,9 +84,7 @@ public class CrossbowTest
     {
         const int src = 0; // a1
         const Figure crossbow = Figure.Crossbow | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1_White",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             crossbow,
             Crossbow.GetPossibleActions
@@ -104,9 +96,7 @@ public class CrossbowTest
     {
         const int src = 63; // h8
         const Figure crossbow = Figure.Crossbow | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_H8_Black",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             crossbow,
             Crossbow.GetPossibleActions
@@ -122,9 +112,7 @@ public class CrossbowTest
         // pick a diagonal distance-2 target: UR + UR
         short relative = (short)(PositionConstants.UR + PositionConstants.UR);
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteRangedAttack_White",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(relative);
                 if (dst != -1) b[dst] = Figure.Knight | Figure.IsBlack;

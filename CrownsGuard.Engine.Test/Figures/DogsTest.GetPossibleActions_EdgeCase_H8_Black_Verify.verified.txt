@@ -1,6 +1,5 @@
 ﻿{
-  scenario: EdgeCase_H8_Black,
-  figure: (7,7):Dogs, IsBlack,
+  figure: (7,7),
   actions: [
     (0,0):PossibleMeleeAttack,
     (0,7):PossibleMeleeAttack,

@@ -15,9 +15,7 @@ public class DogsTest
         const int src = 27; // d4
         const Figure dogs = Figure.Dogs | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty_White",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             dogs,
             Dogs.GetPossibleActions
@@ -30,9 +28,7 @@ public class DogsTest
         const int src = 27; // d4
         const Figure dogs = Figure.Dogs | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "Mixed_White",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // UL: enemy at distance 2 (should add Possible at 1 and MeleeAttack at 2)
                 var ul1 = src.GetWithOffset(PositionConstants.UL);
@@ -63,9 +59,7 @@ public class DogsTest
     {
         const int src = 0; // a1
         const Figure dogs = Figure.Dogs | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1_White",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             dogs,
             Dogs.GetPossibleActions
@@ -77,9 +71,7 @@ public class DogsTest
     {
         const int src = 63; // h8
         const Figure dogs = Figure.Dogs | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_H8_Black",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             dogs,
             Dogs.GetPossibleActions
@@ -95,9 +87,7 @@ public class DogsTest
         // choose an adjacent target: Up relative
         short relative = PositionConstants.U;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteMeleeAttack_White",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(relative);
                 if (dst != -1) b[dst] = Figure.Knight | Figure.IsBlack;

@@ -16,9 +16,7 @@ public class BladeTest
         const int src = 27; // d4
         const Figure blade = Figure.Blade | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             blade,
             Blade.GetPossibleActions
@@ -31,9 +29,7 @@ public class BladeTest
         const int src = 27; // d4
         const Figure blade = Figure.Blade | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "BlockingAndEnemyWithin3",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Up-Left: enemy at distance 2, then wall at distance 3 (should still add possible at 3 because non-empty)
                 var ul1 = src.GetWithOffset(PositionConstants.UL);
@@ -77,9 +73,7 @@ public class BladeTest
         const int src = 27; // d4
         const Figure blade = Figure.Blade | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AdjacentEnemiesAffectMoves",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Place enemies in several adjacent tiles; moves should only include walkable (empty) neighbors
                 var dirs = PositionConstants.QueenDirections;
@@ -104,9 +98,7 @@ public class BladeTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure blade = Figure.Blade | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            b => { /* archer placed at corner via src */ },
+        return Verify(TestUtils.RunGetActionsScenario(b => { /* archer placed at corner via src */ },
             0, // a1
             blade,
             Blade.GetPossibleActions

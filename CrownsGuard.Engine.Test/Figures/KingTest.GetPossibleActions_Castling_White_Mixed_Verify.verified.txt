@@ -1,0 +1,17 @@
+﻿{
+  scenario: Castling_White_Mixed,
+  figure: (7,4):King, IsWhite,
+  actions: [
+    (6,3):MeleeDefend,
+    (6,3):Move,
+    (6,4):MeleeDefend,
+    (6,4):Move,
+    (6,5):MeleeDefend,
+    (6,5):Move,
+    (7,2):Castling,
+    (7,3):MeleeDefend,
+    (7,3):Move,
+    (7,5):MeleeDefend,
+    (7,6):PossibleCastling
+  ]
+}

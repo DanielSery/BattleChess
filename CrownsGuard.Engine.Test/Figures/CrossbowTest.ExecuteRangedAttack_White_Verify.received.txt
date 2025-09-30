@@ -1,7 +1,0 @@
-﻿{
-  scenario: ExecuteRangedAttack_White,
-  action: (3,3->5,5):RangedAttack,
-  board: [
-    (3,3):Crossbow, IsWhite
-  ]
-}

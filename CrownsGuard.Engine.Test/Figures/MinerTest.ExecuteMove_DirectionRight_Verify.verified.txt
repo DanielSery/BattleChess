@@ -1,0 +1,6 @@
+﻿{
+  action: (3,3->3,4):MinerMove,
+  board: [
+    (3,4):Miner, IsWhite
+  ]
+}

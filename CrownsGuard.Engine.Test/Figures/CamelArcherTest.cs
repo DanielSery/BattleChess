@@ -15,9 +15,7 @@ public class CamelArcherTest
         const int src = 27; // d4
         const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             camelArcher,
             CamelArcher.GetPossibleActions
@@ -30,9 +28,7 @@ public class CamelArcherTest
         const int src = 27; // d4
         const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "BlockingAndEnemyWithinRook",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Rook lines setup for melee path
                 // Left: empty, empty, then enemy at distance 3
@@ -80,9 +76,7 @@ public class CamelArcherTest
         const int src = 27; // d4
         const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EnemyAdjacentRook",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Enemy immediately above -> should be MeleeAttack and stop in that direction
                 var u1 = src.GetWithOffset(PositionConstants.U);
@@ -101,9 +95,7 @@ public class CamelArcherTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure camelArcher = Figure.CamelArcher | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            b => { /* archer at edge via src override */ },
+        return Verify(TestUtils.RunGetActionsScenario(b => { /* archer at edge via src override */ },
             0, // a1
             camelArcher,
             CamelArcher.GetPossibleActions

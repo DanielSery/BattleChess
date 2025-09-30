@@ -1,0 +1,9 @@
+﻿{
+  figure: (3,3),
+  actions: [
+    (1,2):RangedAttack,
+    (1,4):PossibleRangedAttack,
+    (2,2):PossibleMeleeAttack,
+    (2,4):PossibleMeleeAttack
+  ]
+}

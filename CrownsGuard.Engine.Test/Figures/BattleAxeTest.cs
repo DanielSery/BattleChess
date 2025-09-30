@@ -16,9 +16,7 @@ public class BattleAxeTest
         const int src = 27; // d4
         const Figure axe = Figure.BattleAxe | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* nothing */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* nothing */ },
             src,
             axe,
             BattleAxe.GetPossibleActions
@@ -31,9 +29,7 @@ public class BattleAxeTest
         const int src = 27; // d4
         const Figure axe = Figure.BattleAxe | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "BlockedDiagonals",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 var ur = src.GetWithOffset(PositionConstants.UR);
                 var ul = src.GetWithOffset(PositionConstants.UL);
@@ -55,9 +51,7 @@ public class BattleAxeTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure axe = Figure.BattleAxe | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             0, // a1
             axe,
             BattleAxe.GetPossibleActions
@@ -70,9 +64,7 @@ public class BattleAxeTest
         const int src = 27; // d4
         const Figure axe = Figure.BattleAxe | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "Execute_UR_Destroys_Quadrant",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(PositionConstants.UR);
                 if (dst == -1) return;
@@ -98,9 +90,7 @@ public class BattleAxeTest
         const int src = 27; // d4
         const Figure axe = Figure.BattleAxe | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "Execute_UL_Destroys_Quadrant",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(PositionConstants.UL);
                 if (dst == -1) return;
@@ -126,9 +116,7 @@ public class BattleAxeTest
         const int src = 27; // d4
         const Figure axe = Figure.BattleAxe | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "/Execute_DR_Destroys_Quadrant",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(PositionConstants.DR);
                 if (dst == -1) return;
@@ -154,9 +142,7 @@ public class BattleAxeTest
         const int src = 27; // d4
         const Figure axe = Figure.BattleAxe | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "Execute_DL_Destroys_Quadrant",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(PositionConstants.DL);
                 if (dst == -1) return;

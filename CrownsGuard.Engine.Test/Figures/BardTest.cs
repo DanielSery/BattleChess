@@ -16,9 +16,7 @@ public class BardTest
         const int src = 27; // d4
         const Figure bard = Figure.Bard | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             bard,
             Bard.GetPossibleActions
@@ -31,9 +29,7 @@ public class BardTest
         const int src = 27; // d4
         const Figure bard = Figure.Bard | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "KnightEnemiesAndFriendlies",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 foreach (var rel in PositionConstants.KnightPositions)
                 {
@@ -64,9 +60,7 @@ public class BardTest
         const int src = 27; // d4
         const Figure bard = Figure.Bard | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "BlockedBishopMoves",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 var ul = src.GetWithOffset(PositionConstants.UL);
                 var ur = src.GetWithOffset(PositionConstants.UR);
@@ -94,9 +88,7 @@ public class BardTest
     public Task GetPossibleActions_EdgeCase_A1_Verify()
     {
         const Figure bard = Figure.Bard | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1",
-            _ => { /* setup below places bard at edge via src override */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* setup below places bard at edge via src override */ },
             0, // a1
             bard,
             Bard.GetPossibleActions

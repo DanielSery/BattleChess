@@ -1,0 +1,15 @@
+﻿{
+  scenario: BlockingAndEnemyWithin3,
+  figure: (3,3):JapanArcher, IsWhite,
+  actions: [
+    (2,2):PossibleRangedAttack,
+    (2,4):PossibleRangedAttack,
+    (4,2):PossibleRangedAttack,
+    (4,2):Move,
+    (4,4):PossibleRangedAttack,
+    (4,4):Move,
+    (5,1):PossibleRangedAttack,
+    (5,5):PossibleRangedAttack,
+    (6,6):RangedAttack
+  ]
+}

@@ -1,0 +1,10 @@
+﻿{
+  scenario: EdgeCase_A1,
+  figure: (0,0):JapanArcher, IsWhite,
+  actions: [
+    (1,1):PossibleRangedAttack,
+    (1,1):Move,
+    (2,2):PossibleRangedAttack,
+    (3,3):PossibleRangedAttack
+  ]
+}

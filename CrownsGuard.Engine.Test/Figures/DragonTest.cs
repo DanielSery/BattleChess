@@ -15,9 +15,7 @@ public class DragonTest
         const int src = 27; // d4
         const Figure dragon = Figure.Dragon | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty_White",
-            _ => { /* empty around */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty around */ },
             src,
             dragon,
             Dragon.GetPossibleActions
@@ -30,9 +28,7 @@ public class DragonTest
         const int src = 27; // d4
         const Figure dragon = Figure.Dragon | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EnemyAdjacentSuppressBreath",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Any adjacent enemy in queen directions suppresses breathe fire generation
                 var ur = src.GetWithOffset(PositionConstants.UR);
@@ -50,9 +46,7 @@ public class DragonTest
         const int src = 27; // d4
         const Figure dragon = Figure.Dragon | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "Mixed_White",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // UL: empty at 1, wall at 2 -> should add BreatheFire at 1 only
                 var ul1 = src.GetWithOffset(PositionConstants.UL);
@@ -88,9 +82,7 @@ public class DragonTest
     {
         const int src = 0; // a1
         const Figure dragon = Figure.Dragon | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1_White",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             dragon,
             Dragon.GetPossibleActions
@@ -102,9 +94,7 @@ public class DragonTest
     {
         const int src = 63; // h8
         const Figure dragon = Figure.Dragon | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_H8_Black",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             dragon,
             Dragon.GetPossibleActions
@@ -120,9 +110,7 @@ public class DragonTest
         // choose an adjacent diagonal target: UL relative (one step)
         short relative = PositionConstants.UL;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteBreatheFire_Adjacent_White",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 // destination must be empty for BreatheFire action creation; executor will create Fire there
                 var dst = src.GetWithOffset(relative);
@@ -144,9 +132,7 @@ public class DragonTest
         // two-step diagonal: UL + UL
         short relative = (short)(PositionConstants.UL + PositionConstants.UL);
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteBreatheFire_TwoSteps_White",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var mid = src.GetWithOffset(PositionConstants.UL);
                 var dst = mid == -1 ? -1 : mid.GetWithOffset(PositionConstants.UL);

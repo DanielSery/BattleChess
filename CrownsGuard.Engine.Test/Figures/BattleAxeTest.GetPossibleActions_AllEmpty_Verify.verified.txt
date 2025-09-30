@@ -1,6 +1,5 @@
 ﻿{
-  scenario: AllEmpty,
-  figure: (3,3):BattleAxe, IsWhite,
+  figure: (3,3),
   actions: [
     (2,2):BattleAxeMove,
     (2,4):BattleAxeMove,

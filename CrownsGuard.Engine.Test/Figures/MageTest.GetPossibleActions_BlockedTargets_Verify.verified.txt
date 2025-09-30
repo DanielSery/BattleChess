@@ -1,0 +1,9 @@
+﻿{
+  figure: (3,3),
+  actions: [
+    (1,3):MageMove,
+    (3,5):MageMove,
+    (5,1):MageMove,
+    (5,3):MageMove
+  ]
+}

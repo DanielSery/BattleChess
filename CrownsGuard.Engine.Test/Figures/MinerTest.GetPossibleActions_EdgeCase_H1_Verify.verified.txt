@@ -1,0 +1,21 @@
+﻿{
+  figure: (0,7),
+  actions: [
+    (0,0):MinerMove,
+    (0,1):MinerMove,
+    (0,2):MinerMove,
+    (0,3):MinerMove,
+    (0,4):MinerMove,
+    (0,5):MinerMove,
+    (0,6):MinerMove,
+    (0,6):Move,
+    (1,7):MinerMove,
+    (1,7):Move,
+    (2,7):MinerMove,
+    (3,7):MinerMove,
+    (4,7):MinerMove,
+    (5,7):MinerMove,
+    (6,7):MinerMove,
+    (7,7):MinerMove
+  ]
+}

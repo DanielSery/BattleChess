@@ -1,6 +1,5 @@
 ﻿{
-  scenario: EdgeCase_A1_White,
-  figure: (0,0):Dogs, IsWhite,
+  figure: (0,0),
   actions: [
     (0,1):PossibleMeleeAttack,
     (0,1):Move,

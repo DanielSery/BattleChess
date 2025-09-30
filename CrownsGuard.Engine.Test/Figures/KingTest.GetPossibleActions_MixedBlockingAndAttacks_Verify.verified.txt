@@ -1,0 +1,16 @@
+﻿{
+  scenario: MixedBlockingAndAttacks,
+  figure: (3,3):King, IsWhite,
+  actions: [
+    (2,2):MeleeDefend,
+    (2,2):Move,
+    (2,3):MeleeDefend,
+    (2,4):MeleeDefend,
+    (3,2):MeleeDefend,
+    (3,4):MeleeAttack,
+    (4,2):MeleeAttack,
+    (4,3):MeleeDefend,
+    (4,3):Move,
+    (4,4):MeleeDefend
+  ]
+}

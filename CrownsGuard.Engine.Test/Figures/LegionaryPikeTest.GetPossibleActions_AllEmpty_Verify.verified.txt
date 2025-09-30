@@ -1,0 +1,11 @@
+﻿{
+  scenario: AllEmpty,
+  figure: (3,3):LegionaryPike, IsWhite,
+  actions: [
+    (1,2):PossibleRangedAttack,
+    (1,4):PossibleRangedAttack,
+    (2,2):PossibleMeleeAttack,
+    (2,3):Move,
+    (2,4):PossibleMeleeAttack
+  ]
+}

@@ -1,0 +1,8 @@
+﻿{
+  action: (3,3->5,3):MinerMove,
+  board: [
+    (4,3):Trench,
+    (5,3):Miner, IsWhite,
+    (6,3):LastNonAttackableFigure
+  ]
+}

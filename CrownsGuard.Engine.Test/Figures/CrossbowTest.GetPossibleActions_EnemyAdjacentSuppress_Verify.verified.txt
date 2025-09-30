@@ -1,6 +1,5 @@
 ﻿{
-  scenario: EnemyAdjacentSuppress,
-  figure: (3,3):Crossbow, IsWhite,
+  figure: (3,3),
   actions: [
     (2,3):Move,
     (3,2):Move,

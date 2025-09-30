@@ -1,0 +1,12 @@
+﻿{
+  figure: (3,3),
+  actions: [
+    (3,2):MinerMove,
+    (3,2):Move,
+    (4,3):MinerMove,
+    (4,3):Move,
+    (5,3):MinerMove,
+    (6,3):MinerMove,
+    (7,3):MinerMove
+  ]
+}

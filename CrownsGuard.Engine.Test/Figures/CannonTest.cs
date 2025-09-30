@@ -15,9 +15,7 @@ public class CannonTest
         const int src = 27; // d4
         const Figure cannon = Figure.Cannon | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty",
-            _ => { /* no blockers, no adjacent enemies */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* no blockers, no adjacent enemies */ },
             src,
             cannon,
             Cannon.GetPossibleActions
@@ -30,9 +28,7 @@ public class CannonTest
         const int src = 27; // d4
         const Figure cannon = Figure.Cannon | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EnemyAdjacentSuppressAll",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 var up = src.GetWithOffset(PositionConstants.U);
                 if (up != -1) b[up] = Figure.Peasant | Figure.IsBlack; // any adjacent enemy suppresses all actions
@@ -49,9 +45,7 @@ public class CannonTest
         const int src = 27; // d4
         const Figure cannon = Figure.Cannon | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "MixPossibleAndActual",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Place pieces exactly at 2-4 squares forward (white moves up)
                 var u1 = src.GetWithOffset(PositionConstants.U);
@@ -73,9 +67,7 @@ public class CannonTest
     {
         const int src = 0; // a1
         const Figure cannon = Figure.Cannon | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1_White",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             cannon,
             Cannon.GetPossibleActions
@@ -87,9 +79,7 @@ public class CannonTest
     {
         const int src = 63; // h8
         const Figure cannon = Figure.Cannon | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_H8_Black",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             cannon,
             Cannon.GetPossibleActions
@@ -102,9 +92,7 @@ public class CannonTest
         const int src = 27; // d4
         const Figure cannon = Figure.Cannon | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteAttack_White_KillsAt2to4Forward",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 // Enemies at 2 and 3 up; empty at 4 up
                 var u1 = src.GetWithOffset(PositionConstants.U);
@@ -129,9 +117,7 @@ public class CannonTest
         const int src = 36; // e5 (somewhere central)
         const Figure cannon = Figure.Cannon | Figure.IsBlack;
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteAttack_Black_KillsAt2to4Forward",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 // For black, forward is down (+YOffset)
                 var d1 = src.GetWithOffset(PositionConstants.D);

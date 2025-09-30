@@ -1,6 +1,5 @@
 ﻿{
-  scenario: EdgeCase_A1,
-  figure: (0,0):Bard, IsWhite,
+  figure: (0,0),
   actions: [
     (1,1):Move,
     (1,2):PossibleConvertUnit,

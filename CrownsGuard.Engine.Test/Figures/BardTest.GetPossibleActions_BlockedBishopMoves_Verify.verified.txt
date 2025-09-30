@@ -1,6 +1,5 @@
 ﻿{
-  scenario: BlockedBishopMoves,
-  figure: (3,3):Bard, IsWhite,
+  figure: (3,3),
   actions: [
     (1,2):PossibleConvertUnit,
     (1,4):ConvertUnit,

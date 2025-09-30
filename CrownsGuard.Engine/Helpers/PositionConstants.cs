@@ -23,6 +23,13 @@ public static class PositionConstants
     public const int DDL = unchecked((byte)-1) - 2 * YOffset;
     public const int DLL = unchecked((byte)-2) - 1 * YOffset;
     
+    public const int UU = unchecked((byte)+0) + 2 * YOffset;
+    public const int UUU = unchecked((byte)+0) + 3 * YOffset;
+    public const int UUUU = unchecked((byte)+0) + 4 * YOffset;
+    
+    public const int DD = unchecked((byte)+0) - 2 * YOffset;
+    public const int DDD = unchecked((byte)+0) - 3 * YOffset;
+    public const int DDDD = unchecked((byte)+0) - 4 * YOffset;
     
     public static readonly short[] RookDirections =
     [

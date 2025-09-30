@@ -1,0 +1,14 @@
+﻿{
+  scenario: AllEmpty,
+  figure: (3,3):Mage, IsWhite,
+  actions: [
+    (1,1):MageMove,
+    (1,3):MageMove,
+    (1,5):MageMove,
+    (3,1):MageMove,
+    (3,5):MageMove,
+    (5,1):MageMove,
+    (5,3):MageMove,
+    (5,5):MageMove
+  ]
+}

@@ -1,0 +1,27 @@
+﻿{
+  White: {
+    scenario: StartDoubleStep_White,
+    figure: (6,3):LegionaryPike, IsWhite,
+    actions: [
+      (4,2):PossibleRangedAttack,
+      (4,3):Move,
+      (4,4):PossibleRangedAttack,
+      (5,2):PossibleMeleeAttack,
+      (5,3):Move,
+      (5,4):PossibleMeleeAttack
+    ]
+  },
+  Black: {
+    scenario: StartDoubleStep_Black,
+    figure: (1,4):LegionaryPike, IsBlack,
+    actions: [
+      (2,3):PossibleMeleeAttack,
+      (2,4):Move,
+      (2,4):Move,
+      (2,5):PossibleMeleeAttack,
+      (3,3):PossibleRangedAttack,
+      (3,4):Move,
+      (3,5):PossibleRangedAttack
+    ]
+  }
+}

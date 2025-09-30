@@ -1,6 +1,5 @@
 ﻿{
-  scenario: MixPossibleAndActual_White,
-  figure: (3,3):Catapult, IsWhite,
+  figure: (3,3),
   actions: [
     (0,1):PossibleRangedAttack,
     (0,3):PossibleRangedAttack,

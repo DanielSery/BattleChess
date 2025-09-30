@@ -1,0 +1,8 @@
+﻿{
+  scenario: ForwardBlocked_NoMove_White,
+  figure: (3,3):LegionarySword, IsWhite,
+  actions: [
+    (2,2):PossibleMeleeAttack,
+    (2,4):PossibleMeleeAttack
+  ]
+}

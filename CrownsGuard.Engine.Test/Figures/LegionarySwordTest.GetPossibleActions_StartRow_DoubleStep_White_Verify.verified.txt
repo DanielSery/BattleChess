@@ -1,0 +1,10 @@
+﻿{
+  scenario: StartRow_DoubleStep_White,
+  figure: (6,3):LegionarySword, IsWhite,
+  actions: [
+    (4,3):Move,
+    (5,2):PossibleMeleeAttack,
+    (5,3):Move,
+    (5,4):PossibleMeleeAttack
+  ]
+}

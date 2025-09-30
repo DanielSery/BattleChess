@@ -14,9 +14,7 @@ public class ChineseTest
         const int src = 27; // d4
         const Figure chinese = Figure.Chinese | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty_Center_White",
-            _ => { /* empty board */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* empty board */ },
             src,
             chinese,
             Chinese.GetPossibleActions
@@ -29,9 +27,7 @@ public class ChineseTest
         const int src = 27; // d4
         const Figure chinese = Figure.Chinese | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "MixedBlockingAndAttacks",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // UL: enemy at distance 2
                 var ul1 = src.GetWithOffset(PositionConstants.UL);
@@ -65,9 +61,7 @@ public class ChineseTest
     {
         const int src = 0; // a1
         const Figure chinese = Figure.Chinese | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1_White",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             chinese,
             Chinese.GetPossibleActions
@@ -79,9 +73,7 @@ public class ChineseTest
     {
         const int src = 63; // h8
         const Figure chinese = Figure.Chinese | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_H8_Black",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             chinese,
             Chinese.GetPossibleActions
@@ -96,9 +88,7 @@ public class ChineseTest
         // Use distance-2 diagonal (UR twice)
         short relative = (short)(PositionConstants.UR + PositionConstants.UR);
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteMeleePierceAttack_Diagonal_Distance2",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(relative);
                 if (dst != -1) b[dst] = Figure.Dogs | Figure.IsBlack;

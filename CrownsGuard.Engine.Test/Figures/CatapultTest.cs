@@ -15,9 +15,7 @@ public class CatapultTest
         const int src = 27; // d4
         const Figure catapult = Figure.Catapult | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "AllEmpty_White",
-            _ => { /* no adjacent enemies, empty board */ },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* no adjacent enemies, empty board */ },
             src,
             catapult,
             Catapult.GetPossibleActions
@@ -30,9 +28,7 @@ public class CatapultTest
         const int src = 27; // d4
         const Figure catapult = Figure.Catapult | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EnemyAdjacentSuppress",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // Any adjacent enemy in queen directions suppresses all actions
                 var r = src.GetWithOffset(PositionConstants.R);
@@ -50,9 +46,7 @@ public class CatapultTest
         const int src = 27; // d4
         const Figure catapult = Figure.Catapult | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario(
-            "MixPossibleAndActual_White",
-            b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
             {
                 // White attacks 2 and 3 tiles forward (up, -YOffset) with lateral offsets
                 var rels = new short[]
@@ -84,9 +78,7 @@ public class CatapultTest
     {
         const int src = 0; // a1
         const Figure catapult = Figure.Catapult | Figure.IsWhite;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_A1_White",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             catapult,
             Catapult.GetPossibleActions
@@ -98,9 +90,7 @@ public class CatapultTest
     {
         const int src = 63; // h8
         const Figure catapult = Figure.Catapult | Figure.IsBlack;
-        return Verify(TestUtils.RunGetActionsScenario(
-            "EdgeCase_H8_Black",
-            _ => { },
+        return Verify(TestUtils.RunGetActionsScenario(_ => { },
             src,
             catapult,
             Catapult.GetPossibleActions
@@ -116,9 +106,7 @@ public class CatapultTest
         // pick the central far target: 0 - 3*YOffset
         short relative = (short)(unchecked((byte)+0) - 3*PositionConstants.YOffset);
 
-        return Verify(TestUtils.RunExecuteActionScenario(
-            "ExecuteRangedAttack_White",
-            b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
             {
                 var dst = src.GetWithOffset(relative);
                 if (dst != -1) b[dst] = Figure.Knight | Figure.IsBlack;

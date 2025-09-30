@@ -18,7 +18,7 @@ public class AlchemistTest
         const int src = 27; // somewhere in the middle (d4)
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario("AllEmpty", _ => { /* default empty neighbors */ }, src, alchemist, Alchemist.GetPossibleActions));
+        return Verify(TestUtils.RunGetActionsScenario(_ => { /* default empty neighbors */ }, src, alchemist, Alchemist.GetPossibleActions));
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class AlchemistTest
         const int src = 27; // somewhere in the middle (d4)
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario("WallsEverywhere", b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
         {
             foreach (var rel in PositionConstants.QueenDirections)
             {
@@ -43,7 +43,7 @@ public class AlchemistTest
         const int src = 27; // somewhere in the middle (d4)
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunGetActionsScenario("Mixed", b =>
+        return Verify(TestUtils.RunGetActionsScenario(b =>
         {
             var left = src.GetWithOffset(PositionConstants.L);
             var up = src.GetWithOffset(PositionConstants.U);
@@ -65,7 +65,7 @@ public class AlchemistTest
         const int src = 27; // d4
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario("ToEmpty_Left", _ => { }, src, alchemist,
+        return Verify(TestUtils.RunExecuteActionScenario(_ => { }, src, alchemist,
             PositionConstants.QueenDirections[1], FigureActionType.AlchemistMove));
     }
 
@@ -75,7 +75,7 @@ public class AlchemistTest
         const int src = 27; // d4
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario("ToFire_Up", b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
         {
             var up = src.GetWithOffset(PositionConstants.U);
             if (up != -1) b[up] = Figure.Fire;
@@ -88,7 +88,7 @@ public class AlchemistTest
         const int src = 27; // d4
         const Figure alchemist = Figure.Alchemist | Figure.IsWhite;
 
-        return Verify(TestUtils.RunExecuteActionScenario("ToExplosives_Right", b =>
+        return Verify(TestUtils.RunExecuteActionScenario(b =>
         {
             var right = src.GetWithOffset(PositionConstants.R);
             if (right != -1) b[right] = Figure.Explosives;

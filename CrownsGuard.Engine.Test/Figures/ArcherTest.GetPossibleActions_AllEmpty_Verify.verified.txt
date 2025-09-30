@@ -1,6 +1,5 @@
 ﻿{
-  scenario: AllEmpty,
-  figure: (3,3):Archer, IsWhite,
+  figure: (3,3),
   actions: [
     (0,3):PossibleRangedAttack,
     (1,3):PossibleRangedAttack,

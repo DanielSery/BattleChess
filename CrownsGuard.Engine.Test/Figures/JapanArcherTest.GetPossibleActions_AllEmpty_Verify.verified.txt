@@ -1,0 +1,22 @@
+﻿{
+  scenario: AllEmpty,
+  figure: (3,3):JapanArcher, IsWhite,
+  actions: [
+    (0,0):PossibleRangedAttack,
+    (0,6):PossibleRangedAttack,
+    (1,1):PossibleRangedAttack,
+    (1,5):PossibleRangedAttack,
+    (2,2):PossibleRangedAttack,
+    (2,2):Move,
+    (2,4):PossibleRangedAttack,
+    (2,4):Move,
+    (4,2):PossibleRangedAttack,
+    (4,2):Move,
+    (4,4):PossibleRangedAttack,
+    (4,4):Move,
+    (5,1):PossibleRangedAttack,
+    (5,5):PossibleRangedAttack,
+    (6,0):PossibleRangedAttack,
+    (6,6):PossibleRangedAttack
+  ]
+}

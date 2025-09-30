@@ -1,6 +1,5 @@
 ﻿{
-  scenario: AllEmpty_Center_White,
-  figure: (3,3):Chinese, IsWhite,
+  figure: (3,3),
   actions: [
     (0,0):PossibleMeleePierceAttack,
     (0,6):PossibleMeleePierceAttack,

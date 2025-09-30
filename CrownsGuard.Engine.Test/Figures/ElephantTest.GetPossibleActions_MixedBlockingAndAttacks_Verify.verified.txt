@@ -1,0 +1,12 @@
+﻿{
+  figure: (3,3),
+  actions: [
+    (0,3):MeleePierceAttack,
+    (1,3):MeleePierceAttack,
+    (2,3):MeleePierceAttack,
+    (4,3):PossibleMeleePierceAttack,
+    (4,3):Move,
+    (5,3):MeleePierceAttack,
+    (6,3):MeleePierceAttack
+  ]
+}
