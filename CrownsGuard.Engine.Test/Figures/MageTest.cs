@@ -59,7 +59,7 @@ public class MageTest
 
         return Verify(new List<object>
         {
-            TestUtils.RunExecuteActionScenario("White mage teleports up-right diagonally to (1,5)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports up-right diagonally to (1,5)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -68,7 +68,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports up-left diagonally to (1,1)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports up-left diagonally to (1,1)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -77,7 +77,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports down-right diagonally to (5,5)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports down-right diagonally to (5,5)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -86,7 +86,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports down-left diagonally to (5,1)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports down-left diagonally to (5,1)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -95,7 +95,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight up to (1,3)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports straight up to (1,3)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -104,7 +104,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight down to (5,3)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports straight down to (5,3)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -113,7 +113,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight left to (3,1)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports straight left to (3,1)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -122,7 +122,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight right to (3,5)", b =>
+            TestUtils.RunExecuteActionScenario("White mage teleports straight right to (3,5)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -131,7 +131,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports up-right diagonally to (1,5)", b =>
+            TestUtils.RunExecuteActionScenario("Black mage teleports up-right diagonally to (1,5)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -140,7 +140,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports down-left diagonally to (5,1)", b =>
+            TestUtils.RunExecuteActionScenario("Black mage teleports down-left diagonally to (5,1)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -149,7 +149,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports straight up to (1,3)", b =>
+            TestUtils.RunExecuteActionScenario("Black mage teleports straight up to (1,3)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -158,7 +158,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports straight down to (5,3)", b =>
+            TestUtils.RunExecuteActionScenario("Black mage teleports straight down to (5,3)", _ =>
                 {
                     // Place empty target for teleportation
                 },
@@ -200,7 +200,7 @@ public class MageTest
                 FigureActionType.MageMove
             ),
 
-            TestUtils.RunExecuteActionScenario("Edge case - White mage teleport from corner A1", b =>
+            TestUtils.RunExecuteActionScenario("Edge case - White mage teleport from corner A1", _ =>
                 {
                     // Test teleport from corner position
                 },

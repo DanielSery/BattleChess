@@ -13,7 +13,7 @@ internal static class TestUtils
 
     public static Action<BoardEvent, Span<Figure>> CaptureEvents(List<BoardEvent> sink)
     {
-        return (e, b) => sink.Add(e);
+        return (e, _) => sink.Add(e);
     }
 
     public static object RunGetActionsScenario(

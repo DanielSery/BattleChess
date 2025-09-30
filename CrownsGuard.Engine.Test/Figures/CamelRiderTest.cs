@@ -52,7 +52,7 @@ public class CamelRiderTest
                 CamelRider.GetPossibleActions),
 
             TestUtils.RunGetActionsScenario(
-                "Edge case A1", b => { /* source fixed to edge via src index */ },
+                "Edge case A1", _ => { /* source fixed to edge via src index */ },
                 0, // a1
                 camelRider,
                 CamelRider.GetPossibleActions)

@@ -81,7 +81,7 @@ public class CamelArcherTest
 
             TestUtils.RunGetActionsScenario(
                 "Edge case A1",
-                b => { /* archer at edge via src override */ },
+                _ => { /* archer at edge via src override */ },
                 0, // a1
                 camelArcher,
                 CamelArcher.GetPossibleActions)

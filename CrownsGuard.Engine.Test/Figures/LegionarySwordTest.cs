@@ -21,7 +21,7 @@ public class LegionarySwordTest
 
             TestUtils.RunGetActionsScenario(
                 "Start row double step white",
-                b => { /* ensure path ahead is empty by default */ },
+                _ => { /* ensure path ahead is empty by default */ },
                 (6 * 8) + 3, // d7
                 Figure.LegionarySword | Figure.IsWhite,
                 LegionarySword.GetPossibleActions),
@@ -56,13 +56,13 @@ public class LegionarySwordTest
             {
                 White = TestUtils.RunGetActionsScenario(
                     "Promotion white forward square empty diagonals empty",
-                    b => { /* forward square empty, diagonals empty */ },
+                    _ => { /* forward square empty, diagonals empty */ },
                     1 * 8 + 3, // d2 -> d1 (row 0)
                     Figure.LegionarySword | Figure.IsWhite,
                     LegionarySword.GetPossibleActions),
                 Black = TestUtils.RunGetActionsScenario(
                     "Promotion black forward square empty diagonals empty",
-                    b => { /* forward square empty, diagonals empty */ },
+                    _ => { /* forward square empty, diagonals empty */ },
                     6 * 8 + 4, // e7 -> e8 (row 7)
                     Figure.LegionarySword | Figure.IsBlack,
                     LegionarySword.GetPossibleActions)
@@ -78,37 +78,37 @@ public class LegionarySwordTest
             // Regular Move execution - White
             TestUtils.RunExecuteActionScenario(
                 "White regular move to empty adjacent square",
-                b => { /* target square is empty by default */ },
+                _ => { /* target square is empty by default */ },
                 27, // d4
                 Figure.LegionarySword | Figure.IsWhite,
-                unchecked((byte)+0)-1*PositionConstants.YOffset, // U1 - white moves up
+                PositionConstants.D1,
                 FigureActionType.Move),
 
             // Regular Move execution - Black
             TestUtils.RunExecuteActionScenario(
                 "Black regular move to empty adjacent square",
-                b => { /* target square is empty by default */ },
+                _ => { /* target square is empty by default */ },
                 27, // d4
                 Figure.LegionarySword | Figure.IsBlack,
-                unchecked((byte)+0)+1*PositionConstants.YOffset, // D1 - black moves down
+                PositionConstants.U1,
                 FigureActionType.Move),
 
             // Double step Move execution from starting row - White
             TestUtils.RunExecuteActionScenario(
                 "White double step move from starting row",
-                b => { /* both target squares are empty by default */ },
+                _ => { /* both target squares are empty by default */ },
                 (6 * 8) + 3, // d7 - white starting row
                 Figure.LegionarySword | Figure.IsWhite,
-                unchecked((byte)+0)-2*PositionConstants.YOffset, // U2 - white double move up
+                PositionConstants.D2,
                 FigureActionType.Move),
 
             // Double step Move execution from starting row - Black
             TestUtils.RunExecuteActionScenario(
                 "Black double step move from starting row",
-                b => { /* both target squares are empty by default */ },
+                _ => { /* both target squares are empty by default */ },
                 (1 * 8) + 3, // d2 - black starting row
                 Figure.LegionarySword | Figure.IsBlack,
-                unchecked((byte)+0)+2*PositionConstants.YOffset, // D2 - black double move down
+                PositionConstants.U2,
                 FigureActionType.Move),
 
             // MeleeAttack execution - White attacking enemy on diagonal
@@ -117,12 +117,12 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var target = src.GetWithOffset(unchecked((byte)+1)-1*PositionConstants.YOffset); // white attack right
+                    var target = src.GetWithOffset(PositionConstants.D1R1); // white attack right
                     if (target != -1) b[target] = Figure.Peasant | Figure.IsBlack; // enemy to attack
                 },
                 27, // d4
                 Figure.LegionarySword | Figure.IsWhite,
-                unchecked((byte)+1)-1*PositionConstants.YOffset, // white attack right
+                PositionConstants.D1R1,
                 FigureActionType.MeleeAttack),
 
             TestUtils.RunExecuteActionScenario(
@@ -130,12 +130,12 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var target = src.GetWithOffset(unchecked((byte)-1)-1*PositionConstants.YOffset); // white attack left
+                    var target = src.GetWithOffset(PositionConstants.D1L1); // white attack left
                     if (target != -1) b[target] = Figure.Archer | Figure.IsBlack; // enemy to attack
                 },
                 27, // d4
                 Figure.LegionarySword | Figure.IsWhite,
-                unchecked((byte)-1)-1*PositionConstants.YOffset, // white attack left
+                PositionConstants.D1L1, // white attack left
                 FigureActionType.MeleeAttack),
 
             // MeleeAttack execution - Black attacking enemy on diagonal
@@ -144,12 +144,12 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var target = src.GetWithOffset(unchecked((byte)+1)+1*PositionConstants.YOffset); // black attack right
+                    var target = src.GetWithOffset(PositionConstants.U1R1); // black attack right
                     if (target != -1) b[target] = Figure.Peasant | Figure.IsWhite; // enemy to attack
                 },
                 27, // d4
                 Figure.LegionarySword | Figure.IsBlack,
-                unchecked((byte)+1)+1*PositionConstants.YOffset, // black attack right
+                PositionConstants.U1R1,
                 FigureActionType.MeleeAttack),
 
             TestUtils.RunExecuteActionScenario(
@@ -157,12 +157,12 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var target = src.GetWithOffset(unchecked((byte)-1)+1*PositionConstants.YOffset); // black attack left
+                    var target = src.GetWithOffset(PositionConstants.U1L1); // black attack left
                     if (target != -1) b[target] = Figure.Archer | Figure.IsWhite; // enemy to attack
                 },
                 27, // d4
                 Figure.LegionarySword | Figure.IsBlack,
-                unchecked((byte)-1)+1*PositionConstants.YOffset, // black attack left
+                PositionConstants.U1L1,
                 FigureActionType.MeleeAttack),
 
             // Edge case - Move blocked by wall
@@ -171,12 +171,12 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var target = src.GetWithOffset(unchecked((byte)+0)-1*PositionConstants.YOffset); // U1
+                    var target = src.GetWithOffset(PositionConstants.D1); // U1
                     if (target != -1) b[target] = Figure.Wall; // block the move
                 },
                 27, // d4
                 Figure.LegionarySword | Figure.IsWhite,
-                unchecked((byte)+0)-1*PositionConstants.YOffset, // U1 - should be blocked
+                PositionConstants.D1,
                 FigureActionType.Move),
 
             // Edge case - MeleeAttack blocked by friendly piece
@@ -185,12 +185,12 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var target = src.GetWithOffset(unchecked((byte)+1)-1*PositionConstants.YOffset); // white attack right
+                    var target = src.GetWithOffset(PositionConstants.D1R1); // white attack right
                     if (target != -1) b[target] = Figure.Peasant | Figure.IsWhite; // friendly piece blocks attack
                 },
                 27, // d4
                 Figure.LegionarySword | Figure.IsWhite,
-                unchecked((byte)+1)-1*PositionConstants.YOffset, // white attack right - should be blocked
+                PositionConstants.D1R1,
                 FigureActionType.MeleeAttack)
         });
     }

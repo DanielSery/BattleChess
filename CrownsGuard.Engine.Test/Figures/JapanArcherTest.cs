@@ -69,7 +69,7 @@ public class JapanArcherTest
 
             TestUtils.RunGetActionsScenario(
                 "Edge case A1",
-                b => { /* setup places archer at edge via src override */ },
+                _ => { /* setup places archer at edge via src override */ },
                 0, // a1
                 japanArcher,
                 JapanArcher.GetPossibleActions

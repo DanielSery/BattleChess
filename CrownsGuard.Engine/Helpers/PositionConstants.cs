@@ -77,6 +77,18 @@ public static class PositionConstants
     public const int D2L1 = unchecked((byte)-1) - 2 * YOffset;
     public const int D1L2 = unchecked((byte)-2) - 1 * YOffset;
 
+    // 3-Step Diagonal Constants
+    public const int U3L2 = unchecked((byte)-2) + 3 * YOffset;
+    public const int U3R2 = +2 + 3 * YOffset;
+    public const int D3L2 = unchecked((byte)-2) - 3 * YOffset;
+    public const int D3R2 = +2 - 3 * YOffset;
+
+    // Movement Value Constants
+    public const int U1R1Value = U1R1;
+    public const int D1R1Value = D1R1;
+    public const int U1L1Value = U1L1;
+    public const int D1L1Value = D1L1;
+
     public static readonly short[] RookDirections =
     [
         L1, R1, D1, U1

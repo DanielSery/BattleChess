@@ -8,22 +8,22 @@ public static class Catapult
 {
     private static readonly short[] BlackAttackPositions =
     [
-        +unchecked((byte)-1)+2*PositionConstants.YOffset, 
-        unchecked((byte)+1)+2*PositionConstants.YOffset,
-        
-        +unchecked((byte)-2)+3*PositionConstants.YOffset, 
-        unchecked((byte)+0)+3*PositionConstants.YOffset, 
-        unchecked((byte)+2)+3*PositionConstants.YOffset,
+        PositionConstants.U2L1,
+        PositionConstants.U2R1,
+
+        PositionConstants.U3L2,
+        PositionConstants.U3,
+        PositionConstants.U3R2,
     ];
 
     private static readonly short[] WhiteAttackPositions =
     [
-        unchecked((byte)-1)-2*PositionConstants.YOffset, 
-        unchecked((byte)+1)-2*PositionConstants.YOffset,
-        
-        unchecked((byte)-2)-3*PositionConstants.YOffset, 
-        unchecked((byte)+0)-3*PositionConstants.YOffset, 
-        unchecked((byte)+2)-3*PositionConstants.YOffset,
+        PositionConstants.D2L1,
+        PositionConstants.D2R1,
+
+        PositionConstants.D3L2,
+        PositionConstants.D3,
+        PositionConstants.D3R2,
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

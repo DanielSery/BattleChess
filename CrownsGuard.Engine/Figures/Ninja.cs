@@ -26,15 +26,15 @@ public static class Ninja
 
         if (sourceFigure.IsBlack())
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionConstants.YOffset, actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionConstants.YOffset, actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, PositionConstants.U1L1, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, PositionConstants.U1R1, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, PositionConstants.U1, actions);
         }
         else
         {
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionConstants.YOffset, actions);
-            TryAddMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionConstants.YOffset, actions);
-            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, PositionConstants.D1L1, actions);
+            TryAddMoveAction(board, sourceIndex, sourceFigure, PositionConstants.D1R1, actions);
+            TryAddJumpMoveAction(board, sourceIndex, sourceFigure, PositionConstants.D1, actions);
         }
     }
 

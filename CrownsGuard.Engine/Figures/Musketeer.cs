@@ -8,12 +8,12 @@ public static class Musketeer
 {
     private static readonly short[] BlackAttackDirections =
     [
-        +unchecked((byte)-1)+1*PositionConstants.YOffset, unchecked((byte)+0)+1*PositionConstants.YOffset, unchecked((byte)+1)+1*PositionConstants.YOffset
+        PositionConstants.U1L1, PositionConstants.U1, PositionConstants.U1R1
     ];
 
     private static readonly short[] WhiteAttackDirections =
     [
-        unchecked((byte)-1)-1*PositionConstants.YOffset, unchecked((byte)+0)-1*PositionConstants.YOffset, unchecked((byte)+1)-1*PositionConstants.YOffset
+        PositionConstants.D1L1, PositionConstants.D1, PositionConstants.D1R1
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

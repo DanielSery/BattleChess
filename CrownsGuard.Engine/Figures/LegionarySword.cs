@@ -10,30 +10,30 @@ public static class LegionarySword
     {
         if (sourceFigure.IsWhite())
         {
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)-1*PositionConstants.YOffset, actions);
-            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)-1)-1*PositionConstants.YOffset, actions);
-        
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, PositionConstants.D1R1, actions);
+            TryAddWhiteAttackAction(board, sourceIndex, sourceFigure, PositionConstants.D1L1, actions);
+            
             if (sourceIndex >> 3 == 6)
             {
-                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
+                TryAddStartMoveActions(board, sourceIndex, sourceFigure, PositionConstants.D1, actions);
             }
             else
             {
-                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)-1*PositionConstants.YOffset, actions);
+                TryAddWhiteMoveAction(board, sourceIndex, sourceFigure, PositionConstants.D1, actions);
             }
         }
         else
         {
-            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, unchecked((byte)+1)+1*PositionConstants.YOffset, actions);
-            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, +unchecked((byte)-1)+1*PositionConstants.YOffset, actions);
-        
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, PositionConstants.U1R1, actions);
+            TryAddBlackAttackAction(board, sourceIndex, sourceFigure, PositionConstants.U1L1, actions);
+            
             if (sourceIndex >> 3 == 1)
             {
-                TryAddStartMoveActions(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
+                TryAddStartMoveActions(board, sourceIndex, sourceFigure, PositionConstants.U1, actions);
             }
             else
             {
-                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, unchecked((byte)+0)+1*PositionConstants.YOffset, actions);
+                TryAddBlackMoveAction(board, sourceIndex, sourceFigure, PositionConstants.U1, actions);
             }
         }
     }

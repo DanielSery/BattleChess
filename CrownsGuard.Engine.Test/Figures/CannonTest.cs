@@ -86,7 +86,7 @@ public class CannonTest
                 27, // d4
                 Figure.Cannon | Figure.IsWhite,
                 // Use relative of two steps up to target a valid CannonAttack square
-                (short)(unchecked((byte)+0) - 2*PositionConstants.YOffset),
+                PositionConstants.D2,
                 FigureActionType.CannonAttack
             ),
 
@@ -104,7 +104,7 @@ public class CannonTest
                 },
                 36, // e5
                 Figure.Cannon | Figure.IsBlack,
-                (short)(unchecked((byte)+0) + 2*PositionConstants.YOffset),
+                PositionConstants.U2,
                 FigureActionType.CannonAttack
             )
         });

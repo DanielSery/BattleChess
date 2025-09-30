@@ -38,11 +38,11 @@ public class CatapultTest
                     // White attacks 2 and 3 tiles forward (up, -YOffset) with lateral offsets
                     var rels = new short[]
                     {
-                        (short)(unchecked((byte)-1) - 2*PositionConstants.YOffset),
-                        (short)(unchecked((byte)+1) - 2*PositionConstants.YOffset),
-                        (short)(unchecked((byte)-2) - 3*PositionConstants.YOffset),
-                        (short)(unchecked((byte)+0) - 3*PositionConstants.YOffset),
-                        (short)(unchecked((byte)+2) - 3*PositionConstants.YOffset),
+                        PositionConstants.D2L1,
+                        PositionConstants.D2R1,
+                        PositionConstants.D3L2,
+                        PositionConstants.D3,
+                        PositionConstants.D3R2
                     };
 
                     // Place different kinds of targets on some of them
@@ -76,12 +76,12 @@ public class CatapultTest
                 "Execute ranged attack",
                 b =>
                 {
-                    var dst = 27 /* d4 */.GetWithOffset((short)(unchecked((byte)+0) - 3*PositionConstants.YOffset));
+                    var dst = 27 /* d4 */.GetWithOffset(PositionConstants.D3);
                     if (dst != -1) b[dst] = Figure.Knight | Figure.IsBlack;
                 },
                 27, // d4
                 Figure.Catapult | Figure.IsWhite,
-                (short)(unchecked((byte)+0) - 3*PositionConstants.YOffset),
+                PositionConstants.D3,
                 FigureActionType.RangedAttack)
         });
     }

@@ -30,8 +30,8 @@ public class LegionaryPikeTest
                     if (ur != -1) b[ur] = Figure.LegionarySword | Figure.IsWhite; // friendly - only PossibleMeleeAttack
 
                     // Pike ranged (two forward diagonals): one enemy and one non-attackable (friendly) to produce PossibleRangedAttack
-                    var uul = src.GetWithOffset(unchecked((byte)-1) - 2 * PositionConstants.YOffset);
-                    var uur = src.GetWithOffset(unchecked((byte)+1) - 2 * PositionConstants.YOffset);
+                    var uul = src.GetWithOffset(PositionConstants.D2L1);
+                    var uur = src.GetWithOffset(PositionConstants.D2R1);
                     if (uul != -1) b[uul] = Figure.Peasant | Figure.IsBlack; // enemy - ranged attack
                     if (uur != -1) b[uur] = Figure.LegionarySword | Figure.IsWhite; // friendly - only PossibleRangedAttack
 
@@ -46,35 +46,35 @@ public class LegionaryPikeTest
 
             TestUtils.RunGetActionsScenario(
                 "Start double step white",
-                b => { /* ensure path is empty */ },
+                _ => { /* ensure path is empty */ },
                 6 * 8 + 3, // d7
                 Figure.LegionaryPike | Figure.IsWhite,
                 LegionaryPike.GetPossibleActions),
 
             TestUtils.RunGetActionsScenario(
                 "Start double step black",
-                b => { /* ensure path is empty */ },
+                _ => { /* ensure path is empty */ },
                 1 * 8 + 4, // e2
                 Figure.LegionaryPike | Figure.IsBlack,
                 LegionaryPike.GetPossibleActions),
 
             TestUtils.RunGetActionsScenario(
                 "Edge case A1",
-                b => { /* setup places pike at edge via src override */ },
+                _ => { /* setup places pike at edge via src override */ },
                 0, // a1
                 Figure.LegionaryPike | Figure.IsWhite,
                 LegionaryPike.GetPossibleActions),
 
             TestUtils.RunGetActionsScenario(
                 "Promotion to queen white",
-                b => { /* forward empty */ },
+                _ => { /* forward empty */ },
                 1 * 8 + 3, // d2 -> d1
                 Figure.LegionaryPike | Figure.IsWhite,
                 LegionaryPike.GetPossibleActions),
 
             TestUtils.RunGetActionsScenario(
                 "Promotion to queen black",
-                b => { /* forward empty */ },
+                _ => { /* forward empty */ },
                 6 * 8 + 4, // e7 -> e8
                 Figure.LegionaryPike | Figure.IsBlack,
                 LegionaryPike.GetPossibleActions)

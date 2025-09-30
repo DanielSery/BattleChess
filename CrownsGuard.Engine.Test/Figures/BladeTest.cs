@@ -84,7 +84,7 @@ public class BladeTest
 
             TestUtils.RunGetActionsScenario(
                 "Edge case A1",
-                b => { /* blade placed at corner via src */ },
+                _ => { /* blade placed at corner via src */ },
                 0, // a1
                 blade,
                 Blade.GetPossibleActions

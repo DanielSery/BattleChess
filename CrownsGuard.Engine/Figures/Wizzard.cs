@@ -9,9 +9,9 @@ public static class Wizzard
 {
     private static readonly short[] MovementPositions =
     [
-        unchecked((byte)-2)-2*PositionConstants.YOffset, +unchecked((byte)-2)+0*PositionConstants.YOffset, +unchecked((byte)-2)+2*PositionConstants.YOffset,
-        unchecked((byte)+0)-2*PositionConstants.YOffset, unchecked((byte)+0)+2*PositionConstants.YOffset,
-        unchecked((byte)+2)-2*PositionConstants.YOffset, unchecked((byte)+2)+0*PositionConstants.YOffset, unchecked((byte)+2)+2*PositionConstants.YOffset
+        PositionConstants.D2L2, PositionConstants.L2, PositionConstants.U2L2,
+        PositionConstants.D2, PositionConstants.U2,
+        PositionConstants.D2R2, PositionConstants.R2, PositionConstants.U2R2
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
@@ -37,17 +37,17 @@ public static class Wizzard
             board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);
             if (movement % 8 == movement / 8)
             {
-                TryDestroyTile(board, action.SourceIndex, unchecked((byte)+1)+0*PositionConstants.YOffset, onEvent);
-                TryDestroyTile(board, action.SourceIndex, +unchecked((byte)-1)+0*PositionConstants.YOffset, onEvent);
-                TryDestroyTile(board, action.SourceIndex, unchecked((byte)+0)+1*PositionConstants.YOffset, onEvent);
-                TryDestroyTile(board, action.SourceIndex, unchecked((byte)+0)-1*PositionConstants.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.R1, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.L1, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.U1, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.D1, onEvent);
             }
             else
             {
-                TryDestroyTile(board, action.SourceIndex, unchecked((byte)+1)-1*PositionConstants.YOffset, onEvent);
-                TryDestroyTile(board, action.SourceIndex, +unchecked((byte)-1)+1*PositionConstants.YOffset, onEvent);
-                TryDestroyTile(board, action.SourceIndex, unchecked((byte)+1)+1*PositionConstants.YOffset, onEvent);
-                TryDestroyTile(board, action.SourceIndex, unchecked((byte)-1)-1*PositionConstants.YOffset, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.D1R1, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.U1L1, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.U1R1, onEvent);
+                TryDestroyTile(board, action.SourceIndex, PositionConstants.D1L1, onEvent);
             }
         }
         else

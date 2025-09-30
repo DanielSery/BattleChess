@@ -6,19 +6,14 @@ namespace CrownsGuard.Engine.Figures;
 
 public static class Spearman
 {
-    private static readonly short[] AttackPositions =
-    [
-        +unchecked((byte)-1)+1*PositionConstants.YOffset, unchecked((byte)+1)+1*PositionConstants.YOffset, unchecked((byte)-1)-1*PositionConstants.YOffset, unchecked((byte)+1)-1*PositionConstants.YOffset
-    ];
-
     private static readonly short[] BlackMovePositions =
     [
-        +unchecked((byte)-1)+0*PositionConstants.YOffset, unchecked((byte)+1)+0*PositionConstants.YOffset, unchecked((byte)+0)+1*PositionConstants.YOffset
+        PositionConstants.L1, PositionConstants.R1, PositionConstants.U1
     ];
 
     private static readonly short[] WhiteMovePositions =
     [
-        +unchecked((byte)-1)+0*PositionConstants.YOffset, unchecked((byte)+1)+0*PositionConstants.YOffset, unchecked((byte)+0)-1*PositionConstants.YOffset
+        PositionConstants.L1, PositionConstants.R1, PositionConstants.D1
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)
@@ -36,7 +31,7 @@ public static class Spearman
             }
         }
 
-        foreach (var relative in AttackPositions)
+        foreach (var relative in PositionConstants.BishopDirections)
         {
             var targetIndex = sourceIndex.GetWithOffset(relative);
             if (targetIndex == -1) continue;

@@ -8,8 +8,8 @@ public static class Elephant
 {
     private static readonly short[] Directions =
     [
-        unchecked((byte)+0)+1*PositionConstants.YOffset, 
-        unchecked((byte)+0)-1*PositionConstants.YOffset
+        PositionConstants.U1,
+        PositionConstants.D1
     ];
 
     public static void GetPossibleActions(int sourceIndex, Figure sourceFigure, ReadOnlySpan<Figure> board, Stack<FigureAction> actions)

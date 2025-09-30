@@ -38,7 +38,6 @@
     actions: [
       (2,3):PossibleMeleeAttack,
       (2,4):Move,
-      (2,4):Move,
       (2,5):PossibleMeleeAttack,
       (3,3):PossibleRangedAttack,
       (3,4):Move,
@@ -63,7 +62,6 @@
     figure: (6,4),
     actions: [
       (7,3):PossibleMeleeAttack,
-      (7,4):ChangeToQueen,
       (7,4):ChangeToQueen,
       (7,5):PossibleMeleeAttack
     ]
