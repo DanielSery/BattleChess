@@ -27,7 +27,7 @@
     ]
   },
   {
-    scenario: Edge case,
+    scenario: Edge case A1,
     figure: (0,0),
     actions: [
       (1,1):WarhammerMove

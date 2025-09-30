@@ -60,7 +60,7 @@ public class MountedArcherTest
                 MountedArcher.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("Edge case", _ => { /* setup below places mounted archer at edge via src override */ },
+            TestUtils.RunGetActionsScenario("Edge case A1", _ => { /* setup below places mounted archer at edge via src override */ },
                 0, // a1
                 mountedArcher,
                 MountedArcher.GetPossibleActions

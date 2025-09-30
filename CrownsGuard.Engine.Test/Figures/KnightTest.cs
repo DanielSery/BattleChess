@@ -53,4 +53,103 @@ public class KnightTest
                 Knight.GetPossibleActions)
         });
     }
+
+    [Fact]
+    public Task ExecuteMeleePierceAttack_Verify()
+    {
+        const int src = 27; // d4
+        const Figure whiteKnight = Figure.Knight | Figure.IsWhite;
+        const Figure blackKnight = Figure.Knight | Figure.IsBlack;
+
+        return Verify(new List<object>
+        {
+            TestUtils.RunExecuteActionScenario("White knight attacks enemy at (2,1) distance - up right", b =>
+                {
+                    // Place enemy at 2 right, 1 up from knight (U2R1)
+                    var target = src.GetWithOffset(PositionConstants.U2R1);
+                    if (target != -1) b[target] = Figure.Peasant | Figure.IsBlack; // enemy to attack
+                },
+                src, whiteKnight,
+                PositionConstants.U2R1,
+                FigureActionType.MeleePierceAttack
+            ),
+
+            TestUtils.RunExecuteActionScenario("White knight attacks enemy at (2,1) distance - up left", b =>
+                {
+                    // Place enemy at 2 left, 1 up from knight (U2L1)
+                    var target = src.GetWithOffset(PositionConstants.U2L1);
+                    if (target != -1) b[target] = Figure.Archer | Figure.IsBlack; // enemy to attack
+                },
+                src, whiteKnight,
+                PositionConstants.U2L1,
+                FigureActionType.MeleePierceAttack
+            ),
+
+            TestUtils.RunExecuteActionScenario("White knight attacks enemy at (1,2) distance - up right", b =>
+                {
+                    // Place enemy at 1 right, 2 up from knight (U1R2)
+                    var target = src.GetWithOffset(PositionConstants.U1R2);
+                    if (target != -1) b[target] = Figure.Mage | Figure.IsBlack; // enemy to attack
+                },
+                src, whiteKnight,
+                PositionConstants.U1R2,
+                FigureActionType.MeleePierceAttack
+            ),
+
+            TestUtils.RunExecuteActionScenario("White knight attacks enemy at (1,2) distance - up left", b =>
+                {
+                    // Place enemy at 1 left, 2 up from knight (U1L2)
+                    var target = src.GetWithOffset(PositionConstants.U1L2);
+                    if (target != -1) b[target] = Figure.Trader | Figure.IsBlack; // enemy to attack
+                },
+                src, whiteKnight,
+                PositionConstants.U1L2,
+                FigureActionType.MeleePierceAttack
+            ),
+
+            TestUtils.RunExecuteActionScenario("Black knight attacks enemy at (2,1) distance - down right", b =>
+                {
+                    // For black knight, forward is down. Place enemy at 2 right, 1 down (D2R1)
+                    var target = src.GetWithOffset(PositionConstants.D2R1);
+                    if (target != -1) b[target] = Figure.Peasant | Figure.IsWhite; // enemy to attack
+                },
+                src, blackKnight,
+                PositionConstants.D2R1,
+                FigureActionType.MeleePierceAttack
+            ),
+
+            TestUtils.RunExecuteActionScenario("Black knight attacks enemy at (2,1) distance - down left", b =>
+                {
+                    // For black knight, forward is down. Place enemy at 2 left, 1 down (D2L1)
+                    var target = src.GetWithOffset(PositionConstants.D2L1);
+                    if (target != -1) b[target] = Figure.Archer | Figure.IsWhite; // enemy to attack
+                },
+                src, blackKnight,
+                PositionConstants.D2L1,
+                FigureActionType.MeleePierceAttack
+            ),
+
+            TestUtils.RunExecuteActionScenario("Black knight attacks enemy at (1,2) distance - down right", b =>
+                {
+                    // For black knight, forward is down. Place enemy at 1 right, 2 down (D1R2)
+                    var target = src.GetWithOffset(PositionConstants.D1R2);
+                    if (target != -1) b[target] = Figure.Mage | Figure.IsWhite; // enemy to attack
+                },
+                src, blackKnight,
+                PositionConstants.D1R2,
+                FigureActionType.MeleePierceAttack
+            ),
+
+            TestUtils.RunExecuteActionScenario("Black knight attacks enemy at (1,2) distance - down left", b =>
+                {
+                    // For black knight, forward is down. Place enemy at 1 left, 2 down (D1L2)
+                    var target = src.GetWithOffset(PositionConstants.D1L2);
+                    if (target != -1) b[target] = Figure.Trader | Figure.IsWhite; // enemy to attack
+                },
+                src, blackKnight,
+                PositionConstants.D1L2,
+                FigureActionType.MeleePierceAttack
+            )
+        });
+    }
 }

@@ -68,7 +68,7 @@
     ]
   },
   {
-    scenario: White - Edge case,
+    scenario: White - Edge case H8,
     figure: (7,7),
     actions: [
       (4,4):PossibleRangedAttack,
@@ -80,7 +80,7 @@
     ]
   },
   {
-    scenario: Black - Edge case,
+    scenario: Black - Edge case A1,
     figure: (0,0),
     actions: [
       (1,0):PossibleRangedAttack,

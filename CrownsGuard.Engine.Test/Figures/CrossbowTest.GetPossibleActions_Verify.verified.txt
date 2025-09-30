@@ -1,6 +1,6 @@
 ﻿[
   {
-    scenario: All empty - White,
+    scenario: All empty,
     figure: (3,3),
     actions: [
       (0,0):PossibleRangedAttack,

@@ -1,0 +1,130 @@
+﻿[
+  {
+    scenario: White mage teleports up-right diagonally to (1,5),
+    action: (3,3->5,5):MageMove,
+    board: [
+      (3,3):(Mage, IsWhite)->(Empty),
+      (5,5):(Empty)->(Mage, IsWhite)
+    ]
+  },
+  {
+    scenario: White mage teleports up-left diagonally to (1,1),
+    action: (3,3->5,1):MageMove,
+    board: [
+      (3,3):(Mage, IsWhite)->(Empty),
+      (5,1):(Empty)->(Mage, IsWhite)
+    ]
+  },
+  {
+    scenario: White mage teleports down-right diagonally to (5,5),
+    action: (3,3->1,5):MageMove,
+    board: [
+      (1,5):(Empty)->(Mage, IsWhite),
+      (3,3):(Mage, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White mage teleports down-left diagonally to (5,1),
+    action: (3,3->1,1):MageMove,
+    board: [
+      (1,1):(Empty)->(Mage, IsWhite),
+      (3,3):(Mage, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White mage teleports straight up to (1,3),
+    action: (3,3->5,3):MageMove,
+    board: [
+      (3,3):(Mage, IsWhite)->(Empty),
+      (5,3):(Empty)->(Mage, IsWhite)
+    ]
+  },
+  {
+    scenario: White mage teleports straight down to (5,3),
+    action: (3,3->1,3):MageMove,
+    board: [
+      (1,3):(Empty)->(Mage, IsWhite),
+      (3,3):(Mage, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White mage teleports straight left to (3,1),
+    action: (3,3->3,1):MageMove,
+    board: [
+      (3,1):(Empty)->(Mage, IsWhite),
+      (3,3):(Mage, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White mage teleports straight right to (3,5),
+    action: (3,3->3,5):MageMove,
+    board: [
+      (3,3):(Mage, IsWhite)->(Empty),
+      (3,5):(Empty)->(Mage, IsWhite)
+    ]
+  },
+  {
+    scenario: Black mage teleports up-right diagonally to (1,5),
+    action: (3,3->5,5):MageMove,
+    board: [
+      (3,3):(Mage, IsBlack)->(Empty),
+      (5,5):(Empty)->(Mage, IsBlack)
+    ]
+  },
+  {
+    scenario: Black mage teleports down-left diagonally to (5,1),
+    action: (3,3->1,1):MageMove,
+    board: [
+      (1,1):(Empty)->(Mage, IsBlack),
+      (3,3):(Mage, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black mage teleports straight up to (1,3),
+    action: (3,3->5,3):MageMove,
+    board: [
+      (3,3):(Mage, IsBlack)->(Empty),
+      (5,3):(Empty)->(Mage, IsBlack)
+    ]
+  },
+  {
+    scenario: Black mage teleports straight down to (5,3),
+    action: (3,3->1,3):MageMove,
+    board: [
+      (1,3):(Empty)->(Mage, IsBlack),
+      (3,3):(Mage, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: White mage teleport blocked by friendly unit,
+    action: (3,3->5,5):MageMove,
+    board: [
+      (3,3):(Mage, IsWhite)->(Empty),
+      (5,5):(Peasant, IsWhite)->(Mage, IsWhite)
+    ]
+  },
+  {
+    scenario: White mage teleport blocked by enemy unit,
+    action: (3,3->5,1):MageMove,
+    board: [
+      (3,3):(Mage, IsWhite)->(Empty),
+      (5,1):(Peasant, IsBlack)->(Mage, IsWhite)
+    ]
+  },
+  {
+    scenario: White mage teleport blocked by wall,
+    action: (3,3->1,5):MageMove,
+    board: [
+      (1,5):(Wall)->(Mage, IsWhite),
+      (3,3):(Mage, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Edge case - White mage teleport from corner A1,
+    action: (0,0->2,2):MageMove,
+    board: [
+      (0,0):(Mage, IsWhite)->(Empty),
+      (2,2):(Empty)->(Mage, IsWhite)
+    ]
+  }
+]

@@ -102,13 +102,13 @@ public class MusketeerTest
                 Musketeer.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("White - Edge case", _ => { /* setup below places musketeer at edge via src override */ },
+            TestUtils.RunGetActionsScenario("White - Edge case H8", _ => { /* setup below places musketeer at edge via src override */ },
                 63, // h8
                 whiteMusketeer,
                 Musketeer.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("Black - Edge case", _ => { /* setup below places musketeer at edge via src override */ },
+            TestUtils.RunGetActionsScenario("Black - Edge case A1", _ => { /* setup below places musketeer at edge via src override */ },
                 0, // a1
                 blackMusketeer,
                 Musketeer.GetPossibleActions

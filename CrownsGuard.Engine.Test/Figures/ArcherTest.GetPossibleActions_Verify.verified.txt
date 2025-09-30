@@ -22,7 +22,7 @@
     ]
   },
   {
-    scenario: Enemy near,
+    scenario: Enemy nearby,
     figure: (3,3),
     actions: [
       (2,3):Move,
@@ -32,7 +32,7 @@
     ]
   },
   {
-    scenario: Blocking within 3,
+    scenario: Blocking and enemy within 3,
     figure: (3,3),
     actions: [
       (2,3):PossibleRangedAttack,
@@ -47,7 +47,7 @@
     ]
   },
   {
-    scenario: Edge case,
+    scenario: Edge case A1 corner,
     figure: (0,0),
     actions: [
       (0,1):PossibleRangedAttack,
@@ -58,6 +58,116 @@
       (1,0):Move,
       (2,0):PossibleRangedAttack,
       (3,0):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case H1 corner,
+    figure: (0,7),
+    actions: [
+      (0,4):PossibleRangedAttack,
+      (0,5):PossibleRangedAttack,
+      (0,6):PossibleRangedAttack,
+      (0,6):Move,
+      (1,7):PossibleRangedAttack,
+      (1,7):Move,
+      (2,7):PossibleRangedAttack,
+      (3,7):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case A8 corner,
+    figure: (7,0),
+    actions: [
+      (4,0):PossibleRangedAttack,
+      (5,0):PossibleRangedAttack,
+      (6,0):PossibleRangedAttack,
+      (6,0):Move,
+      (7,1):PossibleRangedAttack,
+      (7,1):Move,
+      (7,2):PossibleRangedAttack,
+      (7,3):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case H8 corner,
+    figure: (7,7),
+    actions: [
+      (4,7):PossibleRangedAttack,
+      (5,7):PossibleRangedAttack,
+      (6,7):PossibleRangedAttack,
+      (6,7):Move,
+      (7,4):PossibleRangedAttack,
+      (7,5):PossibleRangedAttack,
+      (7,6):PossibleRangedAttack,
+      (7,6):Move
+    ]
+  },
+  {
+    scenario: Edge case B1 side edge,
+    figure: (0,1),
+    actions: [
+      (0,0):PossibleRangedAttack,
+      (0,0):Move,
+      (0,2):PossibleRangedAttack,
+      (0,2):Move,
+      (0,3):PossibleRangedAttack,
+      (0,4):PossibleRangedAttack,
+      (1,1):PossibleRangedAttack,
+      (1,1):Move,
+      (2,1):PossibleRangedAttack,
+      (3,1):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case G1 side edge,
+    figure: (0,6),
+    actions: [
+      (0,3):PossibleRangedAttack,
+      (0,4):PossibleRangedAttack,
+      (0,5):PossibleRangedAttack,
+      (0,5):Move,
+      (0,7):PossibleRangedAttack,
+      (0,7):Move,
+      (1,6):PossibleRangedAttack,
+      (1,6):Move,
+      (2,6):PossibleRangedAttack,
+      (3,6):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case A4 side edge,
+    figure: (3,0),
+    actions: [
+      (0,0):PossibleRangedAttack,
+      (1,0):PossibleRangedAttack,
+      (2,0):PossibleRangedAttack,
+      (2,0):Move,
+      (3,1):PossibleRangedAttack,
+      (3,1):Move,
+      (3,2):PossibleRangedAttack,
+      (3,3):PossibleRangedAttack,
+      (4,0):PossibleRangedAttack,
+      (4,0):Move,
+      (5,0):PossibleRangedAttack,
+      (6,0):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Edge case H4 side edge,
+    figure: (3,7),
+    actions: [
+      (0,7):PossibleRangedAttack,
+      (1,7):PossibleRangedAttack,
+      (2,7):PossibleRangedAttack,
+      (2,7):Move,
+      (3,4):PossibleRangedAttack,
+      (3,5):PossibleRangedAttack,
+      (3,6):PossibleRangedAttack,
+      (3,6):Move,
+      (4,7):PossibleRangedAttack,
+      (4,7):Move,
+      (5,7):PossibleRangedAttack,
+      (6,7):PossibleRangedAttack
     ]
   }
 ]

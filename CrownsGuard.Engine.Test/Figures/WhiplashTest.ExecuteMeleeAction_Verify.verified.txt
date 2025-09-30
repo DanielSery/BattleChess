@@ -1,0 +1,82 @@
+﻿[
+  {
+    scenario: White whiplash attacks enemy at (2,1) distance - up right,
+    action: (3,3->5,4):MeleeAttack,
+    board: [
+      (3,3):(Whiplash, IsWhite)->(Empty),
+      (5,4):(Peasant, IsBlack)->(Whiplash, IsWhite)
+    ]
+  },
+  {
+    scenario: White whiplash attacks enemy at (2,1) distance - up left,
+    action: (3,3->5,2):MeleeAttack,
+    board: [
+      (3,3):(Whiplash, IsWhite)->(Empty),
+      (5,2):(Archer, IsBlack)->(Whiplash, IsWhite)
+    ]
+  },
+  {
+    scenario: White whiplash attacks enemy at (1,2) distance - up right,
+    action: (3,3->4,5):MeleeAttack,
+    board: [
+      (3,3):(Whiplash, IsWhite)->(Empty),
+      (4,5):(Mage, IsBlack)->(Whiplash, IsWhite)
+    ]
+  },
+  {
+    scenario: White whiplash attacks enemy at (1,2) distance - up left,
+    action: (3,3->4,1):MeleeAttack,
+    board: [
+      (3,3):(Whiplash, IsWhite)->(Empty),
+      (4,1):(Trader, IsBlack)->(Whiplash, IsWhite)
+    ]
+  },
+  {
+    scenario: Black whiplash attacks enemy at (2,1) distance - down right,
+    action: (3,3->1,4):MeleeAttack,
+    board: [
+      (1,4):(Peasant, IsWhite)->(Whiplash, IsBlack),
+      (3,3):(Whiplash, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black whiplash attacks enemy at (2,1) distance - down left,
+    action: (3,3->1,2):MeleeAttack,
+    board: [
+      (1,2):(Archer, IsWhite)->(Whiplash, IsBlack),
+      (3,3):(Whiplash, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black whiplash attacks enemy at (1,2) distance - down right,
+    action: (3,3->2,5):MeleeAttack,
+    board: [
+      (2,5):(Mage, IsWhite)->(Whiplash, IsBlack),
+      (3,3):(Whiplash, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black whiplash attacks enemy at (1,2) distance - down left,
+    action: (3,3->2,1):MeleeAttack,
+    board: [
+      (2,1):(Trader, IsWhite)->(Whiplash, IsBlack),
+      (3,3):(Whiplash, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: White whiplash moves to empty square at (2,1) distance,
+    action: (3,3->5,4):Move,
+    board: [
+      (3,3):(Whiplash, IsWhite)->(Empty),
+      (5,4):(Empty)->(Whiplash, IsWhite)
+    ]
+  },
+  {
+    scenario: White whiplash moves to empty square at (1,2) distance,
+    action: (3,3->4,5):Move,
+    board: [
+      (3,3):(Whiplash, IsWhite)->(Empty),
+      (4,5):(Empty)->(Whiplash, IsWhite)
+    ]
+  }
+]

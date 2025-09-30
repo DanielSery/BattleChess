@@ -1,0 +1,82 @@
+﻿[
+  {
+    scenario: White regular move to empty adjacent square,
+    action: (3,3->2,3):Move,
+    board: [
+      (2,3):(Empty)->(LegionarySword, IsWhite),
+      (3,3):(LegionarySword, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Black regular move to empty adjacent square,
+    action: (3,3->4,3):Move,
+    board: [
+      (3,3):(LegionarySword, IsBlack)->(Empty),
+      (4,3):(Empty)->(LegionarySword, IsBlack)
+    ]
+  },
+  {
+    scenario: White double step move from starting row,
+    action: (6,3->4,3):Move,
+    board: [
+      (4,3):(Empty)->(LegionarySword, IsWhite),
+      (6,3):(LegionarySword, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Black double step move from starting row,
+    action: (1,3->3,3):Move,
+    board: [
+      (1,3):(LegionarySword, IsBlack)->(Empty),
+      (3,3):(Empty)->(LegionarySword, IsBlack)
+    ]
+  },
+  {
+    scenario: White melee attack on adjacent enemy diagonal - up right,
+    action: (3,3->2,4):MeleeAttack,
+    board: [
+      (2,4):(Peasant, IsBlack)->(LegionarySword, IsWhite),
+      (3,3):(LegionarySword, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White melee attack on adjacent enemy diagonal - up left,
+    action: (3,3->2,2):MeleeAttack,
+    board: [
+      (2,2):(Archer, IsBlack)->(LegionarySword, IsWhite),
+      (3,3):(LegionarySword, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Black melee attack on adjacent enemy diagonal - down right,
+    action: (3,3->4,4):MeleeAttack,
+    board: [
+      (3,3):(LegionarySword, IsBlack)->(Empty),
+      (4,4):(Peasant, IsWhite)->(LegionarySword, IsBlack)
+    ]
+  },
+  {
+    scenario: Black melee attack on adjacent enemy diagonal - down left,
+    action: (3,3->4,2):MeleeAttack,
+    board: [
+      (3,3):(LegionarySword, IsBlack)->(Empty),
+      (4,2):(Archer, IsWhite)->(LegionarySword, IsBlack)
+    ]
+  },
+  {
+    scenario: White move blocked by wall,
+    action: (3,3->2,3):Move,
+    board: [
+      (2,3):(Wall)->(LegionarySword, IsWhite),
+      (3,3):(LegionarySword, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White melee attack blocked by friendly piece,
+    action: (3,3->2,4):MeleeAttack,
+    board: [
+      (2,4):(Peasant, IsWhite)->(LegionarySword, IsWhite),
+      (3,3):(LegionarySword, IsWhite)->(Empty)
+    ]
+  }
+]

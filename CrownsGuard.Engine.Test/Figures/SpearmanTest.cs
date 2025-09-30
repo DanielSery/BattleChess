@@ -119,13 +119,13 @@ public class SpearmanTest
                 Spearman.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("White - Edge case", _ => { /* setup below places spearman at edge via src override */ },
+            TestUtils.RunGetActionsScenario("White - Edge case H1", _ => { /* setup below places spearman at edge via src override */ },
                 7, // h1
                 whiteSpearman,
                 Spearman.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("Black - Edge case", _ => { /* setup below places spearman at edge via src override */ },
+            TestUtils.RunGetActionsScenario("Black - Edge case A8", _ => { /* setup below places spearman at edge via src override */ },
                 56, // a8
                 blackSpearman,
                 Spearman.GetPossibleActions

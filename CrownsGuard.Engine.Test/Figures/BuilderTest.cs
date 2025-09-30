@@ -86,4 +86,248 @@ public class BuilderTest
                 Builder.GetPossibleActions)
         });
     }
+
+    [Fact]
+    public Task ExecuteAction_Verify()
+    {
+        const int src = 27; // d4
+        const Figure whiteBuilder = Figure.Builder | Figure.IsWhite;
+        const Figure blackBuilder = Figure.Builder | Figure.IsBlack;
+
+        return Verify(new List<object>
+        {
+            // White Builder - BuildWall on empty adjacent squares
+            TestUtils.RunExecuteActionScenario("White BuildWall up", b =>
+                {
+                    var up = src.GetWithOffset(PositionConstants.U1);
+                    if (up != -1) b[up] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.U1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("White BuildWall right", b =>
+                {
+                    var right = src.GetWithOffset(PositionConstants.R1);
+                    if (right != -1) b[right] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.R1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("White BuildWall down", b =>
+                {
+                    var down = src.GetWithOffset(PositionConstants.D1);
+                    if (down != -1) b[down] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.D1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("White BuildWall left", b =>
+                {
+                    var left = src.GetWithOffset(PositionConstants.L1);
+                    if (left != -1) b[left] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.L1,
+                FigureActionType.BuildWall),
+
+            // Black Builder - BuildWall on empty adjacent squares
+            TestUtils.RunExecuteActionScenario("Black BuildWall up", b =>
+                {
+                    var up = src.GetWithOffset(PositionConstants.U1);
+                    if (up != -1) b[up] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                blackBuilder,
+                PositionConstants.U1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("Black BuildWall right", b =>
+                {
+                    var right = src.GetWithOffset(PositionConstants.R1);
+                    if (right != -1) b[right] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                blackBuilder,
+                PositionConstants.R1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("Black BuildWall down", b =>
+                {
+                    var down = src.GetWithOffset(PositionConstants.D1);
+                    if (down != -1) b[down] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                blackBuilder,
+                PositionConstants.D1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("Black BuildWall left", b =>
+                {
+                    var left = src.GetWithOffset(PositionConstants.L1);
+                    if (left != -1) b[left] = Figure.Empty; // Empty square to build wall on
+                },
+                src,
+                blackBuilder,
+                PositionConstants.L1,
+                FigureActionType.BuildWall),
+
+            // White Builder - MeleeAttack on adjacent walls
+            TestUtils.RunExecuteActionScenario("White MeleeAttack wall up", b =>
+                {
+                    var up = src.GetWithOffset(PositionConstants.U1);
+                    if (up != -1) b[up] = Figure.Wall; // Wall to attack
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.U1,
+                FigureActionType.MeleeAttack),
+
+            TestUtils.RunExecuteActionScenario("White MeleeAttack wall right", b =>
+                {
+                    var right = src.GetWithOffset(PositionConstants.R1);
+                    if (right != -1) b[right] = Figure.Wall; // Wall to attack
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.R1,
+                FigureActionType.MeleeAttack),
+
+            TestUtils.RunExecuteActionScenario("White MeleeAttack wall down", b =>
+                {
+                    var down = src.GetWithOffset(PositionConstants.D1);
+                    if (down != -1) b[down] = Figure.Wall; // Wall to attack
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.D1,
+                FigureActionType.MeleeAttack),
+
+            TestUtils.RunExecuteActionScenario("White MeleeAttack wall left", b =>
+                {
+                    var left = src.GetWithOffset(PositionConstants.L1);
+                    if (left != -1) b[left] = Figure.Wall; // Wall to attack
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.L1,
+                FigureActionType.MeleeAttack),
+
+            // Black Builder - MeleeAttack on adjacent walls
+            TestUtils.RunExecuteActionScenario("Black MeleeAttack wall up", b =>
+                {
+                    var up = src.GetWithOffset(PositionConstants.U1);
+                    if (up != -1) b[up] = Figure.Wall; // Wall to attack
+                },
+                src,
+                blackBuilder,
+                PositionConstants.U1,
+                FigureActionType.MeleeAttack),
+
+            TestUtils.RunExecuteActionScenario("Black MeleeAttack wall right", b =>
+                {
+                    var right = src.GetWithOffset(PositionConstants.R1);
+                    if (right != -1) b[right] = Figure.Wall; // Wall to attack
+                },
+                src,
+                blackBuilder,
+                PositionConstants.R1,
+                FigureActionType.MeleeAttack),
+
+            TestUtils.RunExecuteActionScenario("Black MeleeAttack wall down", b =>
+                {
+                    var down = src.GetWithOffset(PositionConstants.D1);
+                    if (down != -1) b[down] = Figure.Wall; // Wall to attack
+                },
+                src,
+                blackBuilder,
+                PositionConstants.D1,
+                FigureActionType.MeleeAttack),
+
+            TestUtils.RunExecuteActionScenario("Black MeleeAttack wall left", b =>
+                {
+                    var left = src.GetWithOffset(PositionConstants.L1);
+                    if (left != -1) b[left] = Figure.Wall; // Wall to attack
+                },
+                src,
+                blackBuilder,
+                PositionConstants.L1,
+                FigureActionType.MeleeAttack),
+
+            // Edge cases - BuildWall blocked scenarios
+            TestUtils.RunExecuteActionScenario("White BuildWall blocked by friendly unit", b =>
+                {
+                    var up = src.GetWithOffset(PositionConstants.U1);
+                    if (up != -1) b[up] = Figure.Peasant | Figure.IsWhite; // Friendly unit blocks building
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.U1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("White BuildWall blocked by enemy unit", b =>
+                {
+                    var right = src.GetWithOffset(PositionConstants.R1);
+                    if (right != -1) b[right] = Figure.Archer | Figure.IsBlack; // Enemy unit blocks building
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.R1,
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("White BuildWall blocked by existing wall", b =>
+                {
+                    var down = src.GetWithOffset(PositionConstants.D1);
+                    if (down != -1) b[down] = Figure.Wall; // Existing wall blocks building
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.D1,
+                FigureActionType.BuildWall),
+
+            // Edge cases - MeleeAttack blocked scenarios
+            TestUtils.RunExecuteActionScenario("White MeleeAttack blocked by friendly unit", b =>
+                {
+                    var up = src.GetWithOffset(PositionConstants.U1);
+                    if (up != -1) b[up] = Figure.Peasant | Figure.IsWhite; // Friendly unit instead of wall
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.U1,
+                FigureActionType.MeleeAttack),
+
+            TestUtils.RunExecuteActionScenario("White MeleeAttack on empty square", b =>
+                {
+                    var right = src.GetWithOffset(PositionConstants.R1);
+                    if (right != -1) b[right] = Figure.Empty; // Empty square instead of wall
+                },
+                src,
+                whiteBuilder,
+                PositionConstants.R1,
+                FigureActionType.MeleeAttack),
+
+            // Edge case - Corner position A1
+            TestUtils.RunExecuteActionScenario("White BuildWall from corner A1", _ => { },
+                0, // a1
+                whiteBuilder,
+                PositionConstants.R1, // Right from A1
+                FigureActionType.BuildWall),
+
+            TestUtils.RunExecuteActionScenario("White MeleeAttack from corner A1", b =>
+                {
+                    var right = 1; // b1 (right from a1)
+                    b[right] = Figure.Wall; // Wall to attack
+                },
+                0, // a1
+                whiteBuilder,
+                PositionConstants.R1, // Right from A1
+                FigureActionType.MeleeAttack)
+        });
+    }
 }

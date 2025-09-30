@@ -1,17 +1,17 @@
-﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Engine.Figures;
 using CrownsGuard.Engine.Helpers;
 using CrownsGuard.Engine.Test.Helpers;
 
 namespace CrownsGuard.Engine.Test.Figures;
 
-public class MageTest
+public class WizzardTest
 {
     [Fact]
     public Task GetPossibleActions_Verify()
     {
         const int src = 27; // d4 (3,3)
-        const Figure mage = Figure.Mage | Figure.IsWhite;
+        const Figure wizzard = Figure.Wizzard | Figure.IsWhite;
 
         return Verify(new List<object>
         {
@@ -19,8 +19,8 @@ public class MageTest
                 "All empty",
                 _ => { /* empty board around */ },
                 src,
-                mage,
-                Mage.GetPossibleActions),
+                wizzard,
+                Wizzard.GetPossibleActions),
 
             TestUtils.RunGetActionsScenario(
                 "Blocked targets", b =>
@@ -38,176 +38,176 @@ public class MageTest
                     b[t55] = Figure.Knight | Figure.IsBlack; // enemy blocks
                 },
                 src,
-                mage,
-                Mage.GetPossibleActions),
+                wizzard,
+                Wizzard.GetPossibleActions),
 
             TestUtils.RunGetActionsScenario(
                 "Edge case A1",
                 _ => { /* at corner, only in-bounds moves */ },
                 0, // a1 (0,0)
-                mage,
-                Mage.GetPossibleActions)
+                wizzard,
+                Wizzard.GetPossibleActions)
         });
     }
 
     [Fact]
-    public Task ExecuteMageMove_Verify()
+    public Task ExecuteWizzardMove_Verify()
     {
         const int src = 27; // d4 (3,3)
-        const Figure whiteMage = Figure.Mage | Figure.IsWhite;
-        const Figure blackMage = Figure.Mage | Figure.IsBlack;
+        const Figure whiteWizzard = Figure.Wizzard | Figure.IsWhite;
+        const Figure blackWizzard = Figure.Wizzard | Figure.IsBlack;
 
         return Verify(new List<object>
         {
-            TestUtils.RunExecuteActionScenario("White mage teleports up-right diagonally to (1,5)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports up-right diagonally to (1,5)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.U2R2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports up-left diagonally to (1,1)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports up-left diagonally to (1,1)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.U2L2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports down-right diagonally to (5,5)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports down-right diagonally to (5,5)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.D2R2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports down-left diagonally to (5,1)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports down-left diagonally to (5,1)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.D2L2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight up to (1,3)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports straight up to (1,3)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.U2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight down to (5,3)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports straight down to (5,3)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.D2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight left to (3,1)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports straight left to (3,1)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.L2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleports straight right to (3,5)", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleports straight right to (3,5)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.R2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports up-right diagonally to (1,5)", b =>
+            TestUtils.RunExecuteActionScenario("Black wizzard teleports up-right diagonally to (1,5)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, blackMage,
+                src, blackWizzard,
                 PositionConstants.U2R2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports down-left diagonally to (5,1)", b =>
+            TestUtils.RunExecuteActionScenario("Black wizzard teleports down-left diagonally to (5,1)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, blackMage,
+                src, blackWizzard,
                 PositionConstants.D2L2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports straight up to (1,3)", b =>
+            TestUtils.RunExecuteActionScenario("Black wizzard teleports straight up to (1,3)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, blackMage,
+                src, blackWizzard,
                 PositionConstants.U2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("Black mage teleports straight down to (5,3)", b =>
+            TestUtils.RunExecuteActionScenario("Black wizzard teleports straight down to (5,3)", b =>
                 {
                     // Place empty target for teleportation
                 },
-                src, blackMage,
+                src, blackWizzard,
                 PositionConstants.D2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleport blocked by friendly unit", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleport blocked by friendly unit", b =>
                 {
                     // Block the target position with friendly unit
                     var target = src.GetWithOffset(PositionConstants.U2R2);
                     if (target != -1) b[target] = Figure.Peasant | Figure.IsWhite; // friendly blocks teleport
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.U2R2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleport blocked by enemy unit", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleport blocked by enemy unit", b =>
                 {
                     // Block the target position with enemy unit
                     var target = src.GetWithOffset(PositionConstants.U2L2);
                     if (target != -1) b[target] = Figure.Peasant | Figure.IsBlack; // enemy blocks teleport
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.U2L2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("White mage teleport blocked by wall", b =>
+            TestUtils.RunExecuteActionScenario("White wizzard teleport blocked by wall", b =>
                 {
                     // Block the target position with wall
                     var target = src.GetWithOffset(PositionConstants.D2R2);
                     if (target != -1) b[target] = Figure.Wall; // wall blocks teleport
                 },
-                src, whiteMage,
+                src, whiteWizzard,
                 PositionConstants.D2R2,
-                FigureActionType.MageMove
+                FigureActionType.Move
             ),
 
-            TestUtils.RunExecuteActionScenario("Edge case - White mage teleport from corner A1", b =>
+            TestUtils.RunExecuteActionScenario("Edge case - White wizzard teleport from corner A1", b =>
                 {
                     // Test teleport from corner position
                 },
                 0, // a1 (0,0)
-                whiteMage,
+                whiteWizzard,
                 PositionConstants.U2R2, // Should be valid from corner
-                FigureActionType.MageMove
+                FigureActionType.Move
             )
         });
     }

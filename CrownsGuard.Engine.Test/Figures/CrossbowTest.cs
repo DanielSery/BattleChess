@@ -13,7 +13,7 @@ public class CrossbowTest
         return Verify(new List<object>
         {
             TestUtils.RunGetActionsScenario(
-                "All empty - White",
+                "All empty",
                 _ => { /* empty around */ },
                 27, // d4
                 Figure.Crossbow | Figure.IsWhite,

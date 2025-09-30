@@ -1,0 +1,170 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (1,2):Move,
+      (1,4):Move,
+      (2,1):Move,
+      (2,5):Move,
+      (4,1):Move,
+      (4,5):Move,
+      (5,2):Move,
+      (5,4):Move
+    ]
+  },
+  {
+    scenario: Enemy in knight positions,
+    figure: (3,3),
+    actions: [
+      (1,2):MeleeAttack,
+      (1,4):MeleeAttack,
+      (2,1):MeleeAttack,
+      (2,5):MeleeAttack,
+      (4,1):MeleeAttack,
+      (4,5):MeleeAttack,
+      (5,2):MeleeAttack,
+      (5,4):MeleeAttack
+    ]
+  },
+  {
+    scenario: Allies in knight positions,
+    figure: (3,3),
+    actions: [
+      (1,2):MeleeDefend,
+      (1,4):MeleeDefend,
+      (2,1):MeleeDefend,
+      (2,5):MeleeDefend,
+      (4,1):MeleeDefend,
+      (4,5):MeleeDefend,
+      (5,2):MeleeDefend,
+      (5,4):MeleeDefend
+    ]
+  },
+  {
+    scenario: Mixed blocking scenario,
+    figure: (3,3),
+    actions: [
+      (1,2):MeleeAttack,
+      (1,4):MeleeDefend,
+      (2,1):MeleeDefend,
+      (2,5):MeleeAttack,
+      (4,1):PossibleMeleeAttack,
+      (4,5):Move,
+      (5,2):MeleeAttack,
+      (5,4):Move
+    ]
+  },
+  {
+    scenario: Corner edge case A1,
+    figure: (0,0),
+    actions: [
+      (1,2):Move,
+      (2,1):Move
+    ]
+  },
+  {
+    scenario: Corner edge case H1,
+    figure: (0,7),
+    actions: [
+      (1,5):Move,
+      (2,6):Move
+    ]
+  },
+  {
+    scenario: Corner edge case A8,
+    figure: (7,0),
+    actions: [
+      (5,1):Move,
+      (6,2):Move
+    ]
+  },
+  {
+    scenario: Corner edge case H8,
+    figure: (7,7),
+    actions: [
+      (5,6):Move,
+      (6,5):Move
+    ]
+  },
+  {
+    scenario: Side edge case A4,
+    figure: (3,0),
+    actions: [
+      (1,1):Move,
+      (2,2):Move,
+      (4,2):Move,
+      (5,1):Move
+    ]
+  },
+  {
+    scenario: Side edge case H4,
+    figure: (3,7),
+    actions: [
+      (1,6):Move,
+      (2,5):Move,
+      (4,5):Move,
+      (5,6):Move
+    ]
+  },
+  {
+    scenario: Side edge case D1,
+    figure: (0,3),
+    actions: [
+      (1,1):Move,
+      (1,5):Move,
+      (2,2):Move,
+      (2,4):Move
+    ]
+  },
+  {
+    scenario: Side edge case D8,
+    figure: (7,3),
+    actions: [
+      (5,2):Move,
+      (5,4):Move,
+      (6,1):Move,
+      (6,5):Move
+    ]
+  },
+  {
+    scenario: Near-corner edge case B2,
+    figure: (1,1),
+    actions: [
+      (0,3):Move,
+      (2,3):Move,
+      (3,0):Move,
+      (3,2):Move
+    ]
+  },
+  {
+    scenario: Near-corner edge case G2,
+    figure: (1,6),
+    actions: [
+      (0,4):Move,
+      (2,4):Move,
+      (3,5):Move,
+      (3,7):Move
+    ]
+  },
+  {
+    scenario: Near-corner edge case B7,
+    figure: (6,1),
+    actions: [
+      (4,0):Move,
+      (4,2):Move,
+      (5,3):Move,
+      (7,3):Move
+    ]
+  },
+  {
+    scenario: Near-corner edge case G7,
+    figure: (6,6),
+    actions: [
+      (4,5):Move,
+      (4,7):Move,
+      (5,4):Move,
+      (7,4):Move
+    ]
+  }
+]

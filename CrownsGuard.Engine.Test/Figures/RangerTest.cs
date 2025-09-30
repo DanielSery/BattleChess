@@ -102,7 +102,7 @@ public class RangerTest
                 Ranger.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("Edge case", _ => { /* setup below places ranger at edge via src override */ },
+            TestUtils.RunGetActionsScenario("Edge case A1", _ => { /* setup below places ranger at edge via src override */ },
                 0, // a1
                 ranger,
                 Ranger.GetPossibleActions

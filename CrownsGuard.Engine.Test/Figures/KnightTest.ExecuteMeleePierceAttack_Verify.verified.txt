@@ -1,0 +1,66 @@
+﻿[
+  {
+    scenario: White knight attacks enemy at (2,1) distance - up right,
+    action: (3,3->5,4):MeleePierceAttack,
+    board: [
+      (3,3):(Knight, IsWhite)->(Empty),
+      (5,4):(Peasant, IsBlack)->(Knight, IsWhite)
+    ]
+  },
+  {
+    scenario: White knight attacks enemy at (2,1) distance - up left,
+    action: (3,3->5,2):MeleePierceAttack,
+    board: [
+      (3,3):(Knight, IsWhite)->(Empty),
+      (5,2):(Archer, IsBlack)->(Knight, IsWhite)
+    ]
+  },
+  {
+    scenario: White knight attacks enemy at (1,2) distance - up right,
+    action: (3,3->4,5):MeleePierceAttack,
+    board: [
+      (3,3):(Knight, IsWhite)->(Empty),
+      (4,5):(Mage, IsBlack)->(Knight, IsWhite)
+    ]
+  },
+  {
+    scenario: White knight attacks enemy at (1,2) distance - up left,
+    action: (3,3->4,1):MeleePierceAttack,
+    board: [
+      (3,3):(Knight, IsWhite)->(Empty),
+      (4,1):(Trader, IsBlack)->(Knight, IsWhite)
+    ]
+  },
+  {
+    scenario: Black knight attacks enemy at (2,1) distance - down right,
+    action: (3,3->1,4):MeleePierceAttack,
+    board: [
+      (1,4):(Peasant, IsWhite)->(Knight, IsBlack),
+      (3,3):(Knight, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black knight attacks enemy at (2,1) distance - down left,
+    action: (3,3->1,2):MeleePierceAttack,
+    board: [
+      (1,2):(Archer, IsWhite)->(Knight, IsBlack),
+      (3,3):(Knight, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black knight attacks enemy at (1,2) distance - down right,
+    action: (3,3->2,5):MeleePierceAttack,
+    board: [
+      (2,5):(Mage, IsWhite)->(Knight, IsBlack),
+      (3,3):(Knight, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black knight attacks enemy at (1,2) distance - down left,
+    action: (3,3->2,1):MeleePierceAttack,
+    board: [
+      (2,1):(Trader, IsWhite)->(Knight, IsBlack),
+      (3,3):(Knight, IsBlack)->(Empty)
+    ]
+  }
+]

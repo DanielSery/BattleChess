@@ -1,0 +1,23 @@
+﻿[
+  {
+    scenario: White attacks enemy at distance 2,
+    action: (3,3->5,3):RangedAttack,
+    board: [
+      (5,3):(Knight, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: White attacks enemy at distance 3,
+    action: (3,3->3,6):RangedAttack,
+    board: [
+      (3,6):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black attacks enemy at distance 2,
+    action: (4,4->2,4):RangedAttack,
+    board: [
+      (2,4):(Trader, IsWhite)->(Empty)
+    ]
+  }
+]

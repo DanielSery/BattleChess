@@ -93,7 +93,7 @@ public class NordguardTest
                 Nordguard.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("Edge case", _ => { /* setup below places nordguard at edge via src override */ },
+            TestUtils.RunGetActionsScenario("Edge case A1", _ => { /* setup below places nordguard at edge via src override */ },
                 0, // a1
                 nordguard,
                 Nordguard.GetPossibleActions

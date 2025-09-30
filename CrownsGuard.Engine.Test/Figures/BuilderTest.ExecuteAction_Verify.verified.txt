@@ -1,0 +1,171 @@
+﻿[
+  {
+    scenario: White BuildWall up,
+    action: (3,3->4,3):BuildWall,
+    board: [
+      (4,3):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: White BuildWall right,
+    action: (3,3->3,4):BuildWall,
+    board: [
+      (3,4):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: White BuildWall down,
+    action: (3,3->2,3):BuildWall,
+    board: [
+      (2,3):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: White BuildWall left,
+    action: (3,3->3,2):BuildWall,
+    board: [
+      (3,2):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: Black BuildWall up,
+    action: (3,3->4,3):BuildWall,
+    board: [
+      (4,3):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: Black BuildWall right,
+    action: (3,3->3,4):BuildWall,
+    board: [
+      (3,4):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: Black BuildWall down,
+    action: (3,3->2,3):BuildWall,
+    board: [
+      (2,3):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: Black BuildWall left,
+    action: (3,3->3,2):BuildWall,
+    board: [
+      (3,2):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: White MeleeAttack wall up,
+    action: (3,3->4,3):MeleeAttack,
+    board: [
+      (3,3):(Builder, IsWhite)->(Empty),
+      (4,3):(Wall)->(Builder, IsWhite)
+    ]
+  },
+  {
+    scenario: White MeleeAttack wall right,
+    action: (3,3->3,4):MeleeAttack,
+    board: [
+      (3,3):(Builder, IsWhite)->(Empty),
+      (3,4):(Wall)->(Builder, IsWhite)
+    ]
+  },
+  {
+    scenario: White MeleeAttack wall down,
+    action: (3,3->2,3):MeleeAttack,
+    board: [
+      (2,3):(Wall)->(Builder, IsWhite),
+      (3,3):(Builder, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White MeleeAttack wall left,
+    action: (3,3->3,2):MeleeAttack,
+    board: [
+      (3,2):(Wall)->(Builder, IsWhite),
+      (3,3):(Builder, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Black MeleeAttack wall up,
+    action: (3,3->4,3):MeleeAttack,
+    board: [
+      (3,3):(Builder, IsBlack)->(Empty),
+      (4,3):(Wall)->(Builder, IsBlack)
+    ]
+  },
+  {
+    scenario: Black MeleeAttack wall right,
+    action: (3,3->3,4):MeleeAttack,
+    board: [
+      (3,3):(Builder, IsBlack)->(Empty),
+      (3,4):(Wall)->(Builder, IsBlack)
+    ]
+  },
+  {
+    scenario: Black MeleeAttack wall down,
+    action: (3,3->2,3):MeleeAttack,
+    board: [
+      (2,3):(Wall)->(Builder, IsBlack),
+      (3,3):(Builder, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black MeleeAttack wall left,
+    action: (3,3->3,2):MeleeAttack,
+    board: [
+      (3,2):(Wall)->(Builder, IsBlack),
+      (3,3):(Builder, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: White BuildWall blocked by friendly unit,
+    action: (3,3->4,3):BuildWall,
+    board: [
+      (4,3):(Peasant, IsWhite)->(Wall)
+    ]
+  },
+  {
+    scenario: White BuildWall blocked by enemy unit,
+    action: (3,3->3,4):BuildWall,
+    board: [
+      (3,4):(Archer, IsBlack)->(Wall)
+    ]
+  },
+  {
+    scenario: White BuildWall blocked by existing wall,
+    action: (3,3->2,3):BuildWall
+  },
+  {
+    scenario: White MeleeAttack blocked by friendly unit,
+    action: (3,3->4,3):MeleeAttack,
+    board: [
+      (3,3):(Builder, IsWhite)->(Empty),
+      (4,3):(Peasant, IsWhite)->(Builder, IsWhite)
+    ]
+  },
+  {
+    scenario: White MeleeAttack on empty square,
+    action: (3,3->3,4):MeleeAttack,
+    board: [
+      (3,3):(Builder, IsWhite)->(Empty),
+      (3,4):(Empty)->(Builder, IsWhite)
+    ]
+  },
+  {
+    scenario: White BuildWall from corner A1,
+    action: (0,0->0,1):BuildWall,
+    board: [
+      (0,1):(Empty)->(Wall)
+    ]
+  },
+  {
+    scenario: White MeleeAttack from corner A1,
+    action: (0,0->0,1):MeleeAttack,
+    board: [
+      (0,0):(Builder, IsWhite)->(Empty),
+      (0,1):(Wall)->(Builder, IsWhite)
+    ]
+  }
+]

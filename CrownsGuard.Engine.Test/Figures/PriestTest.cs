@@ -104,7 +104,7 @@ public class PriestTest
                 Priest.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("Edge case", _ => { /* setup below places priest at edge via src override */ },
+            TestUtils.RunGetActionsScenario("Edge case A1", _ => { /* setup below places priest at edge via src override */ },
                 0, // a1
                 priest,
                 Priest.GetPossibleActions

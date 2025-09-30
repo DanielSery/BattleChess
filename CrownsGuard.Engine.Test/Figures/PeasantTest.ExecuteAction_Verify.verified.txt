@@ -1,0 +1,178 @@
+﻿[
+  {
+    scenario: White peasant moves up to empty square,
+    action: (3,3->4,3):Move,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (4,3):(Empty)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: White peasant moves left to empty square,
+    action: (3,3->3,2):Move,
+    board: [
+      (3,2):(Empty)->(Peasant, IsWhite),
+      (3,3):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White peasant moves right to empty square,
+    action: (3,3->3,4):Move,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (3,4):(Empty)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: Black peasant moves down to empty square,
+    action: (3,3->2,3):Move,
+    board: [
+      (2,3):(Empty)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black peasant moves left to empty square,
+    action: (3,3->3,2):Move,
+    board: [
+      (3,2):(Empty)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black peasant moves right to empty square,
+    action: (3,3->3,4):Move,
+    board: [
+      (3,3):(Peasant, IsBlack)->(Empty),
+      (3,4):(Empty)->(Peasant, IsBlack)
+    ]
+  },
+  {
+    scenario: White peasant attacks enemy up,
+    action: (3,3->4,3):MeleeAttack,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (4,3):(Peasant, IsBlack)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: White peasant attacks enemy up-left,
+    action: (3,3->4,2):MeleeAttack,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (4,2):(Archer, IsBlack)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: White peasant attacks enemy up-right,
+    action: (3,3->4,4):MeleeAttack,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (4,4):(Knight, IsBlack)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: White peasant attacks enemy left,
+    action: (3,3->3,2):MeleeAttack,
+    board: [
+      (3,2):(Mage, IsBlack)->(Peasant, IsWhite),
+      (3,3):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: White peasant attacks enemy right,
+    action: (3,3->3,4):MeleeAttack,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (3,4):(Trader, IsBlack)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: Black peasant attacks enemy down,
+    action: (3,3->2,3):MeleeAttack,
+    board: [
+      (2,3):(Peasant, IsWhite)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black peasant attacks enemy down-left,
+    action: (3,3->2,2):MeleeAttack,
+    board: [
+      (2,2):(Archer, IsWhite)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black peasant attacks enemy down-right,
+    action: (3,3->2,4):MeleeAttack,
+    board: [
+      (2,4):(Knight, IsWhite)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black peasant attacks enemy left,
+    action: (3,3->3,2):MeleeAttack,
+    board: [
+      (3,2):(Mage, IsWhite)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black peasant attacks enemy right,
+    action: (3,3->3,4):MeleeAttack,
+    board: [
+      (3,3):(Peasant, IsBlack)->(Empty),
+      (3,4):(Trader, IsWhite)->(Peasant, IsBlack)
+    ]
+  },
+  {
+    scenario: White peasant blocked by wall,
+    action: (3,3->4,3):Move,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (4,3):(Wall)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: White peasant blocked by friendly unit,
+    action: (3,3->4,3):MeleeAttack,
+    board: [
+      (3,3):(Peasant, IsWhite)->(Empty),
+      (4,3):(Builder, IsWhite)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: Black peasant blocked by wall,
+    action: (3,3->2,3):Move,
+    board: [
+      (2,3):(Wall)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Black peasant blocked by friendly unit,
+    action: (3,3->2,3):MeleeAttack,
+    board: [
+      (2,3):(Builder, IsBlack)->(Peasant, IsBlack),
+      (3,3):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: White peasant at edge - cannot move up,
+    action: (0,7->1,7):Move,
+    board: [
+      (0,7):(Peasant, IsWhite)->(Empty),
+      (1,7):(Empty)->(Peasant, IsWhite)
+    ]
+  },
+  {
+    scenario: Black peasant at edge - cannot move down,
+    action: (7,0->6,0):Move,
+    board: [
+      (6,0):(Empty)->(Peasant, IsBlack),
+      (7,0):(Peasant, IsBlack)->(Empty)
+    ]
+  }
+]

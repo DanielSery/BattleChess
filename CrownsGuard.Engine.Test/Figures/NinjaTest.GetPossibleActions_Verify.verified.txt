@@ -74,7 +74,7 @@
     ]
   },
   {
-    scenario: White - Edge case,
+    scenario: White - Edge case H1,
     figure: (0,7),
     actions: [
       (0,6):PossibleMeleeAttack,
@@ -82,7 +82,7 @@
     ]
   },
   {
-    scenario: Black - Edge case,
+    scenario: Black - Edge case A8,
     figure: (7,0),
     actions: [
       (6,0):PossibleMeleeAttack,

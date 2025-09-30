@@ -116,13 +116,13 @@ public class NinjaTest
                 Ninja.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("White - Edge case", _ => { /* setup below places ninja at edge via src override */ },
+            TestUtils.RunGetActionsScenario("White - Edge case H1", _ => { /* setup below places ninja at edge via src override */ },
                 7, // h1
                 whiteNinja,
                 Ninja.GetPossibleActions
             ),
 
-            TestUtils.RunGetActionsScenario("Black - Edge case", _ => { /* setup below places ninja at edge via src override */ },
+            TestUtils.RunGetActionsScenario("Black - Edge case A8", _ => { /* setup below places ninja at edge via src override */ },
                 56, // a8
                 blackNinja,
                 Ninja.GetPossibleActions

@@ -83,7 +83,7 @@ public class BarbarianTest
                 Barbarian.GetPossibleActions
             ),
             
-            TestUtils.RunGetActionsScenario("Edge case", _ => { /* no additional setup */ },
+            TestUtils.RunGetActionsScenario("Edge case A1", _ => { /* no additional setup */ },
                 0, // a1
                 barbarian,
                 Barbarian.GetPossibleActions
