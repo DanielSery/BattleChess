@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
+﻿namespace CrownsGuard.UI.Settings;
 
-namespace CrownsGuard.UI.Settings;
-
-public partial class SettingsSideControl : UserControl
+public partial class SettingsSideControl
 {
     public SettingsSideControl()
     {

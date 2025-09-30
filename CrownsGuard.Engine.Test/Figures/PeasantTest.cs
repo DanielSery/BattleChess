@@ -37,10 +37,10 @@ public class PeasantTest
                     var up = src.GetWithOffset(PositionConstants.U1);
                     if (up != -1) b[up] = Figure.Empty; // Can move here
 
-                    var upLeft = src.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.D1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Peasant | Figure.IsBlack; // Can attack enemy
 
-                    var upRight = src.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
+                    var upRight = src.GetWithOffset(PositionConstants.D1R1);
                     if (upRight != -1) b[upRight] = Figure.Archer | Figure.IsBlack; // Can attack enemy
 
                     var left = src.GetWithOffset(PositionConstants.L1);
@@ -64,10 +64,10 @@ public class PeasantTest
                     var down = src.GetWithOffset(PositionConstants.D1);
                     if (down != -1) b[down] = Figure.Empty; // Can move here
 
-                    var downLeft = src.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
+                    var downLeft = src.GetWithOffset(PositionConstants.U1L1);
                     if (downLeft != -1) b[downLeft] = Figure.Peasant | Figure.IsWhite; // Can attack enemy
 
-                    var downRight = src.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var downRight = src.GetWithOffset(PositionConstants.U1R1);
                     if (downRight != -1) b[downRight] = Figure.Archer | Figure.IsWhite; // Can attack enemy
 
                     var left = src.GetWithOffset(PositionConstants.L1);
@@ -91,10 +91,10 @@ public class PeasantTest
                     var up = src.GetWithOffset(PositionConstants.U1);
                     if (up != -1) b[up] = Figure.Wall; // Cannot move through wall
 
-                    var upLeft = src.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.D1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Archer | Figure.IsWhite; // Friendly - cannot attack
 
-                    var upRight = src.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
+                    var upRight = src.GetWithOffset(PositionConstants.D1R1);
                     if (upRight != -1) b[upRight] = Figure.Peasant | Figure.IsBlack; // Can attack enemy
 
                     var left = src.GetWithOffset(PositionConstants.L1);

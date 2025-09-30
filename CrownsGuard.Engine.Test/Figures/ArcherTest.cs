@@ -115,7 +115,6 @@ public class ArcherTest
     [Fact]
     public Task ExecuteRangedAttack_Verify()
     {
-        const int src = 27; // d4
         const Figure archer = Figure.Archer | Figure.IsWhite;
 
         return Verify(new List<object>
@@ -131,7 +130,7 @@ public class ArcherTest
                 },
                 27, // d4
                 archer,
-                (short)(PositionConstants.U1 + PositionConstants.U1), // distance 2 up
+                PositionConstants.U2, // distance 2 up
                 FigureActionType.RangedAttack
             ),
 
@@ -148,7 +147,7 @@ public class ArcherTest
                 },
                 27, // d4
                 archer,
-                (short)(PositionConstants.R1 + PositionConstants.R1 + PositionConstants.R1), // distance 3 right
+                PositionConstants.R3, // distance 3 right
                 FigureActionType.RangedAttack
             ),
 
@@ -163,7 +162,7 @@ public class ArcherTest
                 },
                 36, // e5
                 Figure.Archer | Figure.IsBlack,
-                (short)(PositionConstants.D1 + PositionConstants.D1), // distance 2 down
+                PositionConstants.D2, // distance 2 down
                 FigureActionType.RangedAttack
             )
         });

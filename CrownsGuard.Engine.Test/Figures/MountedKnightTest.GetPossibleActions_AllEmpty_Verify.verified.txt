@@ -107,7 +107,10 @@
       (3,4):Move,
       (3,5):PossibleMeleeAttack,
       (3,5):Move,
-      (3,6):MeleeAttack,
+      (3,6):PossibleMeleeAttack,
+      (3,6):Move,
+      (3,7):PossibleMeleeAttack,
+      (3,7):Move,
       (4,3):PossibleMeleeAttack,
       (4,3):Move,
       (5,3):MeleeAttack

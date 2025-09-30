@@ -78,7 +78,6 @@ public class CannonTest
                     var u1 = src.GetWithOffset(PositionConstants.U1);
                     var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U1);
                     var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U1);
-                    var u4 = u3 == -1 ? -1 : u3.GetWithOffset(PositionConstants.U1);
                     if (u2 != -1) b[u2] = Figure.Knight | Figure.IsBlack;
                     if (u3 != -1) b[u3] = Figure.Archer | Figure.IsBlack;
                     // leave u4 empty

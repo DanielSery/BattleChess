@@ -28,23 +28,23 @@ public class WhiplashTest
                 b =>
                 {
                     // Place enemies in all 8 knight positions from d4
-                    var u1r2 = src.GetWithOffset(PositionConstants.U1R2);
-                    var u2r1 = src.GetWithOffset(PositionConstants.U2R1);
-                    var d1r2 = src.GetWithOffset(PositionConstants.D1R2);
-                    var d2r1 = src.GetWithOffset(PositionConstants.D2R1);
-                    var u1l2 = src.GetWithOffset(PositionConstants.U1L2);
-                    var u2l1 = src.GetWithOffset(PositionConstants.U2L1);
-                    var d1l2 = src.GetWithOffset(PositionConstants.D1L2);
-                    var d2l1 = src.GetWithOffset(PositionConstants.D2L1);
+                    var u1R2 = src.GetWithOffset(PositionConstants.U1R2);
+                    var u2R1 = src.GetWithOffset(PositionConstants.U2R1);
+                    var d1R2 = src.GetWithOffset(PositionConstants.D1R2);
+                    var d2R1 = src.GetWithOffset(PositionConstants.D2R1);
+                    var u1L2 = src.GetWithOffset(PositionConstants.U1L2);
+                    var u2L1 = src.GetWithOffset(PositionConstants.U2L1);
+                    var d1L2 = src.GetWithOffset(PositionConstants.D1L2);
+                    var d2L1 = src.GetWithOffset(PositionConstants.D2L1);
 
-                    if (u1r2 != -1) b[u1r2] = Figure.Peasant | Figure.IsBlack;
-                    if (u2r1 != -1) b[u2r1] = Figure.Archer | Figure.IsBlack;
-                    if (d1r2 != -1) b[d1r2] = Figure.Knight | Figure.IsBlack;
-                    if (d2r1 != -1) b[d2r1] = Figure.Mage | Figure.IsBlack;
-                    if (u1l2 != -1) b[u1l2] = Figure.Trader | Figure.IsBlack;
-                    if (u2l1 != -1) b[u2l1] = Figure.LegionarySword | Figure.IsBlack;
-                    if (d1l2 != -1) b[d1l2] = Figure.Peasant | Figure.IsBlack;
-                    if (d2l1 != -1) b[d2l1] = Figure.Archer | Figure.IsBlack;
+                    if (u1R2 != -1) b[u1R2] = Figure.Peasant | Figure.IsBlack;
+                    if (u2R1 != -1) b[u2R1] = Figure.Archer | Figure.IsBlack;
+                    if (d1R2 != -1) b[d1R2] = Figure.Knight | Figure.IsBlack;
+                    if (d2R1 != -1) b[d2R1] = Figure.Mage | Figure.IsBlack;
+                    if (u1L2 != -1) b[u1L2] = Figure.Trader | Figure.IsBlack;
+                    if (u2L1 != -1) b[u2L1] = Figure.LegionarySword | Figure.IsBlack;
+                    if (d1L2 != -1) b[d1L2] = Figure.Peasant | Figure.IsBlack;
+                    if (d2L1 != -1) b[d2L1] = Figure.Archer | Figure.IsBlack;
                 },
                 src,
                 whiplash,
@@ -56,23 +56,23 @@ public class WhiplashTest
                 b =>
                 {
                     // Place allies in all 8 knight positions from d4
-                    var u1r2 = src.GetWithOffset(PositionConstants.U1R2);
-                    var u2r1 = src.GetWithOffset(PositionConstants.U2R1);
-                    var d1r2 = src.GetWithOffset(PositionConstants.D1R2);
-                    var d2r1 = src.GetWithOffset(PositionConstants.D2R1);
-                    var u1l2 = src.GetWithOffset(PositionConstants.U1L2);
-                    var u2l1 = src.GetWithOffset(PositionConstants.U2L1);
-                    var d1l2 = src.GetWithOffset(PositionConstants.D1L2);
-                    var d2l1 = src.GetWithOffset(PositionConstants.D2L1);
+                    var u1R2 = src.GetWithOffset(PositionConstants.U1R2);
+                    var u2R1 = src.GetWithOffset(PositionConstants.U2R1);
+                    var d1R2 = src.GetWithOffset(PositionConstants.D1R2);
+                    var d2R1 = src.GetWithOffset(PositionConstants.D2R1);
+                    var u1L2 = src.GetWithOffset(PositionConstants.U1L2);
+                    var u2L1 = src.GetWithOffset(PositionConstants.U2L1);
+                    var d1L2 = src.GetWithOffset(PositionConstants.D1L2);
+                    var d2L1 = src.GetWithOffset(PositionConstants.D2L1);
 
-                    if (u1r2 != -1) b[u1r2] = Figure.Peasant | Figure.IsWhite;
-                    if (u2r1 != -1) b[u2r1] = Figure.Archer | Figure.IsWhite;
-                    if (d1r2 != -1) b[d1r2] = Figure.Knight | Figure.IsWhite;
-                    if (d2r1 != -1) b[d2r1] = Figure.Mage | Figure.IsWhite;
-                    if (u1l2 != -1) b[u1l2] = Figure.Trader | Figure.IsWhite;
-                    if (u2l1 != -1) b[u2l1] = Figure.LegionarySword | Figure.IsWhite;
-                    if (d1l2 != -1) b[d1l2] = Figure.Peasant | Figure.IsWhite;
-                    if (d2l1 != -1) b[d2l1] = Figure.Archer | Figure.IsWhite;
+                    if (u1R2 != -1) b[u1R2] = Figure.Peasant | Figure.IsWhite;
+                    if (u2R1 != -1) b[u2R1] = Figure.Archer | Figure.IsWhite;
+                    if (d1R2 != -1) b[d1R2] = Figure.Knight | Figure.IsWhite;
+                    if (d2R1 != -1) b[d2R1] = Figure.Mage | Figure.IsWhite;
+                    if (u1L2 != -1) b[u1L2] = Figure.Trader | Figure.IsWhite;
+                    if (u2L1 != -1) b[u2L1] = Figure.LegionarySword | Figure.IsWhite;
+                    if (d1L2 != -1) b[d1L2] = Figure.Peasant | Figure.IsWhite;
+                    if (d2L1 != -1) b[d2L1] = Figure.Archer | Figure.IsWhite;
                 },
                 src,
                 whiplash,
@@ -84,36 +84,36 @@ public class WhiplashTest
                 b =>
                 {
                     // Place various figures to test different action types
-                    var u1r2 = src.GetWithOffset(PositionConstants.U1R2);
-                    var u2r1 = src.GetWithOffset(PositionConstants.U2R1);
-                    var d1r2 = src.GetWithOffset(PositionConstants.D1R2);
-                    var d2r1 = src.GetWithOffset(PositionConstants.D2R1);
-                    var u1l2 = src.GetWithOffset(PositionConstants.U1L2);
-                    var u2l1 = src.GetWithOffset(PositionConstants.U2L1);
-                    var d1l2 = src.GetWithOffset(PositionConstants.D1L2);
-                    var d2l1 = src.GetWithOffset(PositionConstants.D2L1);
+                    var u1R2 = src.GetWithOffset(PositionConstants.U1R2);
+                    var u2R1 = src.GetWithOffset(PositionConstants.U2R1);
+                    var d1R2 = src.GetWithOffset(PositionConstants.D1R2);
+                    var d2R1 = src.GetWithOffset(PositionConstants.D2R1);
+                    var u1L2 = src.GetWithOffset(PositionConstants.U1L2);
+                    var u2L1 = src.GetWithOffset(PositionConstants.U2L1);
+                    var d1L2 = src.GetWithOffset(PositionConstants.D1L2);
+                    var d2L1 = src.GetWithOffset(PositionConstants.D2L1);
 
                     // Empty squares for moves
-                    if (u1r2 != -1) b[u1r2] = Figure.Empty;
-                    if (u2r1 != -1) b[u2r1] = Figure.Empty;
+                    if (u1R2 != -1) b[u1R2] = Figure.Empty;
+                    if (u2R1 != -1) b[u2R1] = Figure.Empty;
 
                     // Enemy for attack
-                    if (d1r2 != -1) b[d1r2] = Figure.Peasant | Figure.IsBlack;
+                    if (d1R2 != -1) b[d1R2] = Figure.Peasant | Figure.IsBlack;
 
                     // Ally for defend
-                    if (d2r1 != -1) b[d2r1] = Figure.Archer | Figure.IsWhite;
+                    if (d2R1 != -1) b[d2R1] = Figure.Archer | Figure.IsWhite;
 
                     // Wall for blocking
-                    if (u1l2 != -1) b[u1l2] = Figure.Wall;
+                    if (u1L2 != -1) b[u1L2] = Figure.Wall;
 
                     // Another enemy for attack
-                    if (u2l1 != -1) b[u2l1] = Figure.Knight | Figure.IsBlack;
+                    if (u2L1 != -1) b[u2L1] = Figure.Knight | Figure.IsBlack;
 
                     // Another ally for defend
-                    if (d1l2 != -1) b[d1l2] = Figure.Mage | Figure.IsWhite;
+                    if (d1L2 != -1) b[d1L2] = Figure.Mage | Figure.IsWhite;
 
                     // Neutral figure for possible attack
-                    if (d2l1 != -1) b[d2l1] = Figure.Trader; // No color flag = neutral
+                    if (d2L1 != -1) b[d2L1] = Figure.Trader; // No color flag = neutral
                 },
                 src,
                 whiplash,

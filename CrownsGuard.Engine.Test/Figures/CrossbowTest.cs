@@ -87,7 +87,7 @@ public class CrossbowTest
         const Figure crossbow = Figure.Crossbow | Figure.IsWhite;
 
         // pick a diagonal distance-2 target: UR + UR
-        short relative = (short)(PositionConstants.U1R1 + PositionConstants.U1R1);
+        short relative = PositionConstants.U2R2;
 
         return Verify(TestUtils.RunExecuteActionScenario("Simple", b =>
             {

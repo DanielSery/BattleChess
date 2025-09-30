@@ -271,7 +271,6 @@ public class MinerTest
             TestUtils.RunExecuteActionScenario(
                 "Edge case along edge", b =>
                 {
-                    const int src = 0; // a1 (bottom-left corner)
                     // Ensure path is clear along the bottom edge: positions 0->1->2->3->4->5->6->7
                     for (var i = 1; i < 8; i++) b[i] = Figure.Empty;
                 },

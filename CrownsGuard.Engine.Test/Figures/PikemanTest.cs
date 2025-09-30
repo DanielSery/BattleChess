@@ -47,16 +47,16 @@ public class PikemanTest
                 "Diagonal attacks", b =>
                 {
                     // Setup diagonal attack positions (same for both colors)
-                    var upLeft = src.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.U1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Peasant | Figure.IsBlack; // Can attack enemy
 
-                    var upRight = src.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var upRight = src.GetWithOffset(PositionConstants.U1R1);
                     if (upRight != -1) b[upRight] = Figure.Archer | Figure.IsBlack; // Can attack enemy
 
-                    var downLeft = src.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
+                    var downLeft = src.GetWithOffset(PositionConstants.D1L1);
                     if (downLeft != -1) b[downLeft] = Figure.Knight | Figure.IsBlack; // Can attack enemy
 
-                    var downRight = src.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
+                    var downRight = src.GetWithOffset(PositionConstants.D1R1);
                     if (downRight != -1) b[downRight] = Figure.Mage | Figure.IsBlack; // Can attack enemy
                 },
                 src,
@@ -81,10 +81,10 @@ public class PikemanTest
                     if (right != -1) b[right] = Figure.Peasant | Figure.IsBlack; // Enemy blocks movement but can attack
 
                     // Block some attacks
-                    var upLeft = src.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.U1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Builder | Figure.IsWhite; // Friendly - cannot attack
 
-                    var upRight = src.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var upRight = src.GetWithOffset(PositionConstants.U1R1);
                     if (upRight != -1) b[upRight] = Figure.Knight | Figure.IsBlack; // Can attack enemy
                 },
                 src,

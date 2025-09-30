@@ -1,6 +1,4 @@
 ﻿using CrownsGuard.Core.Figures;
-using CrownsGuard.Core.Helpers;
-using CrownsGuard.Engine.Helpers;
 using CrownsGuard.Maps.Utilities;
 using CrownsGuard.UI.Shared;
 using Nicenis.Windows;

@@ -1,4 +1,3 @@
-using CrownsGuard.Core.Board;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Engine.Figures;
 using CrownsGuard.Engine.Helpers;
@@ -86,9 +85,9 @@ public class WarhammerTest
                 {
                     // Setup: move right, place figures in the destruction column
                     var target = src.GetWithOffset(PositionConstants.R1);
-                    var destroy1 = target.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
-                    var destroy2 = target.GetWithOffset((short)(1 + 0 * PositionConstants.YOffset));
-                    var destroy3 = target.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var destroy1 = target.GetWithOffset(PositionConstants.D1R1);
+                    var destroy2 = target.GetWithOffset(PositionConstants.R1);
+                    var destroy3 = target.GetWithOffset(PositionConstants.U1R1);
 
                     if (destroy1 != -1) b[destroy1] = Figure.Peasant | Figure.IsBlack;
                     if (destroy2 != -1) b[destroy2] = Figure.Archer | Figure.IsBlack;
@@ -105,9 +104,9 @@ public class WarhammerTest
                 {
                     // Setup: move left, place figures in the destruction column
                     var target = src.GetWithOffset(PositionConstants.L1);
-                    var destroy1 = target.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
-                    var destroy2 = target.GetWithOffset((short)(-1 + 0 * PositionConstants.YOffset));
-                    var destroy3 = target.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
+                    var destroy1 = target.GetWithOffset(PositionConstants.D1L1);
+                    var destroy2 = target.GetWithOffset(PositionConstants.L1);
+                    var destroy3 = target.GetWithOffset(PositionConstants.U1L1);
 
                     if (destroy1 != -1) b[destroy1] = Figure.Peasant | Figure.IsBlack;
                     if (destroy2 != -1) b[destroy2] = Figure.Archer | Figure.IsBlack;
@@ -124,9 +123,9 @@ public class WarhammerTest
                 {
                     // Setup: move up, place figures in the destruction row
                     var target = src.GetWithOffset(PositionConstants.U1);
-                    var destroy1 = target.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
-                    var destroy2 = target.GetWithOffset((short)(0 + 1 * PositionConstants.YOffset));
-                    var destroy3 = target.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var destroy1 = target.GetWithOffset(PositionConstants.U1L1);
+                    var destroy2 = target.GetWithOffset(PositionConstants.U1);
+                    var destroy3 = target.GetWithOffset(PositionConstants.U1R1);
 
                     if (destroy1 != -1) b[destroy1] = Figure.Peasant | Figure.IsBlack;
                     if (destroy2 != -1) b[destroy2] = Figure.Archer | Figure.IsBlack;
@@ -143,9 +142,9 @@ public class WarhammerTest
                 {
                     // Setup: move down, place figures in the destruction row
                     var target = src.GetWithOffset(PositionConstants.D1);
-                    var destroy1 = target.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
-                    var destroy2 = target.GetWithOffset((short)(0 + -1 * PositionConstants.YOffset));
-                    var destroy3 = target.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
+                    var destroy1 = target.GetWithOffset(PositionConstants.D1L1);
+                    var destroy2 = target.GetWithOffset(PositionConstants.D1);
+                    var destroy3 = target.GetWithOffset(PositionConstants.D1R1);
 
                     if (destroy1 != -1) b[destroy1] = Figure.Peasant | Figure.IsBlack;
                     if (destroy2 != -1) b[destroy2] = Figure.Archer | Figure.IsBlack;
@@ -162,7 +161,7 @@ public class WarhammerTest
                 {
                     // Setup: diagonal move should not trigger destruction
                     var target = src.GetWithOffset(PositionConstants.U1R1);
-                    var destroy1 = target.GetWithOffset((short)(1 + 0 * PositionConstants.YOffset));
+                    var destroy1 = target.GetWithOffset(PositionConstants.R1);
                     if (destroy1 != -1) b[destroy1] = Figure.Peasant | Figure.IsBlack; // Should not be destroyed
                 },
                 src,

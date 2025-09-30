@@ -63,8 +63,6 @@ public class KingTest
             TestUtils.RunGetActionsScenario(
                 "Castling black mixed", b =>
                 {
-                    const int src = 4; // e1
-
                     // Place allied corner pieces (any ally qualifies for castling in this variant)
                     b[0] = Figure.MountedKnight | Figure.IsBlack; // a1
                     b[7] = Figure.MountedKnight | Figure.IsBlack; // h1
@@ -86,8 +84,6 @@ public class KingTest
             TestUtils.RunGetActionsScenario(
                 "Castling white mixed", b =>
                 {
-                    const int src = 60; // e8
-
                     // Place allied corner pieces (any ally qualifies)
                     b[56] = Figure.MountedKnight | Figure.IsWhite; // a8
                     b[63] = Figure.MountedKnight | Figure.IsWhite; // h8

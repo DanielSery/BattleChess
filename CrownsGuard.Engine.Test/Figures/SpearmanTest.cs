@@ -44,16 +44,16 @@ public class SpearmanTest
                     if (right != -1) b[right] = Figure.Archer | Figure.IsBlack; // Can attack enemy
 
                     // Diagonal attacks
-                    var upLeft = src.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.D1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Knight | Figure.IsBlack; // Can attack enemy
 
-                    var upRight = src.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
+                    var upRight = src.GetWithOffset(PositionConstants.D1R1);
                     if (upRight != -1) b[upRight] = Figure.Mage | Figure.IsBlack; // Can attack enemy
 
-                    var downLeft = src.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
+                    var downLeft = src.GetWithOffset(PositionConstants.U1L1);
                     if (downLeft != -1) b[downLeft] = Figure.Builder | Figure.IsBlack; // Can attack enemy
 
-                    var downRight = src.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var downRight = src.GetWithOffset(PositionConstants.U1R1);
                     if (downRight != -1) b[downRight] = Figure.Dragon | Figure.IsBlack; // Can attack enemy
 
                     var down = src.GetWithOffset(PositionConstants.D1);
@@ -78,16 +78,16 @@ public class SpearmanTest
                     if (right != -1) b[right] = Figure.Archer | Figure.IsWhite; // Can attack enemy
 
                     // Diagonal attacks
-                    var upLeft = src.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.D1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Knight | Figure.IsWhite; // Can attack enemy
 
-                    var upRight = src.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
+                    var upRight = src.GetWithOffset(PositionConstants.D1R1);
                     if (upRight != -1) b[upRight] = Figure.Mage | Figure.IsWhite; // Can attack enemy
 
-                    var downLeft = src.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
+                    var downLeft = src.GetWithOffset(PositionConstants.U1L1);
                     if (downLeft != -1) b[downLeft] = Figure.Builder | Figure.IsWhite; // Can attack enemy
 
-                    var downRight = src.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var downRight = src.GetWithOffset(PositionConstants.U1R1);
                     if (downRight != -1) b[downRight] = Figure.Dragon | Figure.IsWhite; // Can attack enemy
 
                     var up = src.GetWithOffset(PositionConstants.U1);
@@ -111,7 +111,7 @@ public class SpearmanTest
                     var right = src.GetWithOffset(PositionConstants.R1);
                     if (right != -1) b[right] = Figure.Peasant | Figure.IsBlack; // Can attack enemy
 
-                    var upLeft = src.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.D1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Knight | Figure.IsBlack; // Can attack enemy
                 },
                 src,

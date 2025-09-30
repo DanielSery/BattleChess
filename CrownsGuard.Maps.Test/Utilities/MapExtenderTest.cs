@@ -1,12 +1,9 @@
-using System;
-using System.Linq;
 using AwesomeAssertions;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Utilities;
 using CrownsGuard.Core;
-using Xunit;
 using CrownsGuard.Game.Players;
 
 namespace CrownsGuard.Maps.Test.Utilities;

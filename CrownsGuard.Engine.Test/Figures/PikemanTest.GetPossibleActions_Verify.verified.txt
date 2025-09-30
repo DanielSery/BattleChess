@@ -28,8 +28,9 @@
     figure: (3,3),
     actions: [
       (2,3):Move,
+      (3,2):Move,
       (3,4):Move,
-      (4,2):PossibleMeleeAttack,
+      (4,2):MeleeAttack,
       (4,3):Move,
       (4,4):MeleeAttack
     ]
@@ -38,6 +39,7 @@
     scenario: Blocked movement and attacks,
     figure: (3,3),
     actions: [
+      (3,2):Move,
       (4,2):PossibleMeleeAttack,
       (4,4):MeleeAttack
     ]

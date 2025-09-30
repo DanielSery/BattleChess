@@ -107,7 +107,7 @@ public class DragonTest
                 },
                 27, // d4
                 Figure.Dragon | Figure.IsWhite,
-                (short)(PositionConstants.U1L1 + PositionConstants.U1L1),
+                PositionConstants.U2L2,
                 FigureActionType.BreatheFire)
         });
     }

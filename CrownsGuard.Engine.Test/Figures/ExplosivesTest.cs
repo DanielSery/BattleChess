@@ -67,7 +67,6 @@ public class ExplosivesTest
         var ul = src.GetWithOffset(PositionConstants.U1L1); if (ul != -1) board[ul] = Figure.Peasant | Figure.IsBlack;
         var u = src.GetWithOffset(PositionConstants.U1); if (u != -1) board[u] = Figure.Archer | Figure.IsWhite;
         var ur = src.GetWithOffset(PositionConstants.U1R1); if (ur != -1) board[ur] = Figure.Knight | Figure.IsBlack;
-        var l = src.GetWithOffset(PositionConstants.L1); // This should be invalid (off board)
         var r = src.GetWithOffset(PositionConstants.R1); if (r != -1) board[r] = Figure.Mage | Figure.IsWhite;
         var dl = src.GetWithOffset(PositionConstants.D1L1); if (dl != -1) board[dl] = Figure.Builder | Figure.IsBlack;
         var d = src.GetWithOffset(PositionConstants.D1); if (d != -1) board[d] = Figure.Barbarian | Figure.IsWhite;

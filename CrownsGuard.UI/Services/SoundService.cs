@@ -89,7 +89,7 @@ public class SoundService : ISoundService
         });
     }
 
-    private Task DispatchBackgroundMusicAction(Func<Task> action)
+    private void DispatchBackgroundMusicAction(Func<Task> action)
     {
         var tcs = new TaskCompletionSource();
         Application.Current.Dispatcher.Invoke(async () =>
@@ -109,8 +109,6 @@ public class SoundService : ISoundService
                 tcs.TrySetResult();
             }
         });
-        
-        return tcs.Task;
     }
 
     private void StartNextBackgroundSong()

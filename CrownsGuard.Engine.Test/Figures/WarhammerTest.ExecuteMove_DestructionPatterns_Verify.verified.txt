@@ -14,10 +14,11 @@
     scenario: Left movement destroys left column,
     action: (3,3->3,2):WarhammerMove,
     board: [
-      (2,1):(Archer, IsBlack)->(Empty),
-      (3,1):(Knight, IsBlack)->(Empty),
+      (2,1):(Peasant, IsBlack)->(Empty),
+      (3,1):(Archer, IsBlack)->(Empty),
       (3,2):(Empty)->(Warhammer, IsWhite),
-      (3,3):(Warhammer, IsWhite)->(Empty)
+      (3,3):(Warhammer, IsWhite)->(Empty),
+      (4,1):(Knight, IsBlack)->(Empty)
     ]
   },
   {
@@ -26,6 +27,7 @@
     board: [
       (3,3):(Warhammer, IsWhite)->(Empty),
       (4,3):(Empty)->(Warhammer, IsWhite),
+      (5,2):(Peasant, IsBlack)->(Empty),
       (5,3):(Archer, IsBlack)->(Empty),
       (5,4):(Knight, IsBlack)->(Empty)
     ]
@@ -34,6 +36,7 @@
     scenario: Down movement destroys lower row,
     action: (3,3->2,3):WarhammerMove,
     board: [
+      (1,2):(Peasant, IsBlack)->(Empty),
       (1,3):(Archer, IsBlack)->(Empty),
       (1,4):(Knight, IsBlack)->(Empty),
       (2,3):(Empty)->(Warhammer, IsWhite),

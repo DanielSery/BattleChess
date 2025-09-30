@@ -57,25 +57,25 @@ public class QueenTest
                     var up1 = src.GetWithOffset(PositionConstants.U1);
                     if (up1 != -1) b[up1] = Figure.Peasant | Figure.IsBlack; // Enemy at distance 1
 
-                    var down2 = src.GetWithOffset((short)(0 - 2 * PositionConstants.YOffset));
+                    var down2 = src.GetWithOffset(PositionConstants.D2);
                     if (down2 != -1) b[down2] = Figure.Archer | Figure.IsBlack; // Enemy at distance 2
 
-                    var left3 = src.GetWithOffset((short)(-3 + 0 * PositionConstants.YOffset));
+                    var left3 = src.GetWithOffset(PositionConstants.L3);
                     if (left3 != -1) b[left3] = Figure.Knight | Figure.IsBlack; // Enemy at distance 3
 
                     var right1 = src.GetWithOffset(PositionConstants.R1);
                     if (right1 != -1) b[right1] = Figure.Mage | Figure.IsBlack; // Enemy at distance 1
 
-                    var ul2 = src.GetWithOffset((short)(-2 + -2 * PositionConstants.YOffset));
+                    var ul2 = src.GetWithOffset(PositionConstants.D2L2);
                     if (ul2 != -1) b[ul2] = Figure.Builder | Figure.IsBlack; // Enemy at distance 2
 
                     var ur1 = src.GetWithOffset(PositionConstants.U1R1);
                     if (ur1 != -1) b[ur1] = Figure.Dragon | Figure.IsBlack; // Enemy at distance 1
 
-                    var dl3 = src.GetWithOffset((short)(-3 + 3 * PositionConstants.YOffset));
+                    var dl3 = src.GetWithOffset(PositionConstants.U3L3);
                     if (dl3 != -1) b[dl3] = Figure.Barbarian | Figure.IsBlack; // Enemy at distance 3
 
-                    var dr2 = src.GetWithOffset((short)(2 + 2 * PositionConstants.YOffset));
+                    var dr2 = src.GetWithOffset(PositionConstants.U2R2);
                     if (dr2 != -1) b[dr2] = Figure.Wizzard | Figure.IsBlack; // Enemy at distance 2
                 },
                 src,
@@ -96,19 +96,19 @@ public class QueenTest
                     var left1 = src.GetWithOffset(PositionConstants.L1);
                     if (left1 != -1) b[left1] = Figure.Empty; // Clear for movement
 
-                    var right2 = src.GetWithOffset((short)(2 + 0 * PositionConstants.YOffset));
+                    var right2 = src.GetWithOffset(PositionConstants.R2);
                     if (right2 != -1) b[right2] = Figure.Knight | Figure.IsBlack; // Enemy at distance 2
 
                     var ul1 = src.GetWithOffset(PositionConstants.U1L1);
                     if (ul1 != -1) b[ul1] = Figure.Peasant | Figure.IsWhite; // Friendly blocks diagonal
 
-                    var ur2 = src.GetWithOffset((short)(2 + -2 * PositionConstants.YOffset));
+                    var ur2 = src.GetWithOffset(PositionConstants.D2R2);
                     if (ur2 != -1) b[ur2] = Figure.Empty; // Clear diagonal movement
 
                     var dl1 = src.GetWithOffset(PositionConstants.D1L1);
                     if (dl1 != -1) b[dl1] = Figure.Mage | Figure.IsBlack; // Enemy blocks diagonal
 
-                    var dr3 = src.GetWithOffset((short)(3 + 3 * PositionConstants.YOffset));
+                    var dr3 = src.GetWithOffset(PositionConstants.U3R3);
                     if (dr3 != -1) b[dr3] = Figure.Builder | Figure.IsBlack; // Enemy at distance 3
                 },
                 src,

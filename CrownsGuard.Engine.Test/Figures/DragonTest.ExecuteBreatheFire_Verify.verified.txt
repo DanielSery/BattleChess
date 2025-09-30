@@ -8,6 +8,10 @@
   },
   {
     scenario: Two-step target,
-    action: (3,3->6,1):BreatheFire
+    action: (3,3->5,1):BreatheFire,
+    board: [
+      (4,2):(Empty)->(Fire),
+      (5,1):(Empty)->(Fire)
+    ]
   }
 ]

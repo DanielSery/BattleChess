@@ -71,11 +71,11 @@ public class MountedKnightTest
                 "Enemy in range", b =>
                 {
                     // Place enemy at distance 2 up
-                    var up2 = src.GetWithOffset((short)(0 + 2 * PositionConstants.YOffset));
+                    var up2 = src.GetWithOffset(PositionConstants.U2);
                     if (up2 != -1) b[up2] = Figure.Knight | Figure.IsBlack;
 
                     // Place enemy at distance 3 right
-                    var right3 = src.GetWithOffset((short)(3 + 0 * PositionConstants.YOffset));
+                    var right3 = src.GetWithOffset(PositionConstants.U3);
                     if (right3 != -1) b[right3] = Figure.Mage | Figure.IsBlack;
                 },
                 src,

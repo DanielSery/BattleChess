@@ -7,4 +7,5 @@ public interface IFigureInfo
     public string MovementDescription { get; }
     public string AttackDescription { get; }
     public string SpecialDescription { get; }
+    public Uri ImageUri { get; }
 }

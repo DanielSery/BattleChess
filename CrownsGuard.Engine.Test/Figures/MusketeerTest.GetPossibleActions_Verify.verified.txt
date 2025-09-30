@@ -41,7 +41,7 @@
     scenario: White - Clear attack lines,
     figure: (3,3),
     actions: [
-      (0,0):PossibleRangedAttack,
+      (0,0):RangedAttack,
       (0,3):PossibleRangedAttack,
       (0,6):RangedAttack,
       (1,1):PossibleRangedAttack,
@@ -62,7 +62,7 @@
       (5,1):PossibleRangedAttack,
       (5,3):PossibleRangedAttack,
       (5,5):PossibleRangedAttack,
-      (6,0):PossibleRangedAttack,
+      (6,0):RangedAttack,
       (6,3):PossibleRangedAttack,
       (6,6):RangedAttack
     ]

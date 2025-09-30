@@ -29,9 +29,9 @@
     scenario: White - Movement and attacks,
     figure: (3,3),
     actions: [
-      (2,2):PossibleMeleeAttack,
+      (2,2):MeleeAttack,
       (2,4):MeleeAttack,
-      (4,2):PossibleMeleeAttack,
+      (4,2):MeleeAttack,
       (4,4):MeleeAttack
     ]
   },
@@ -39,9 +39,9 @@
     scenario: Black - Movement and attacks,
     figure: (3,3),
     actions: [
-      (2,2):PossibleMeleeAttack,
+      (2,2):MeleeAttack,
       (2,4):MeleeAttack,
-      (4,2):PossibleMeleeAttack,
+      (4,2):MeleeAttack,
       (4,4):MeleeAttack
     ]
   },
@@ -49,7 +49,7 @@
     scenario: White - Blocked movement,
     figure: (3,3),
     actions: [
-      (2,2):PossibleMeleeAttack,
+      (2,2):MeleeAttack,
       (2,3):Move,
       (2,4):PossibleMeleeAttack,
       (4,2):PossibleMeleeAttack,

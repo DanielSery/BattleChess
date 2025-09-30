@@ -1,8 +1,3 @@
-using CrownsGuard.Core.Board;
-using CrownsGuard.Core.Figures;
-using CrownsGuard.Engine.Figures;
-using CrownsGuard.Engine.Test.Helpers;
-
 namespace CrownsGuard.Engine.Test.Figures;
 
 /// <summary>

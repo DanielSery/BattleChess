@@ -2,7 +2,6 @@
 using CrownsGuard.Core;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using CrownsGuard.Engine.Helpers;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Maps.BoardBlueprints;
 using CrownsGuard.Maps.Figures;

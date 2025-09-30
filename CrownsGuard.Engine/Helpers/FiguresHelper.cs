@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using CrownsGuard.Core.Board;
+﻿using CrownsGuard.Core.Board;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 

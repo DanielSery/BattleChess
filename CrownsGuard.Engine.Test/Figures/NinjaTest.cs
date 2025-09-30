@@ -76,17 +76,17 @@ public class NinjaTest
                 "White - Movement and jump", b =>
                 {
                     // Setup for white ninja movement (backward/up)
-                    var upLeft = src.GetWithOffset((short)(-1 + -1 * PositionConstants.YOffset));
+                    var upLeft = src.GetWithOffset(PositionConstants.D1L1);
                     if (upLeft != -1) b[upLeft] = Figure.Empty; // Regular move
 
-                    var upRight = src.GetWithOffset((short)(1 + -1 * PositionConstants.YOffset));
+                    var upRight = src.GetWithOffset(PositionConstants.D1R1);
                     if (upRight != -1) b[upRight] = Figure.Empty; // Regular move
 
                     // Setup jump move: ally then empty space
-                    var up1 = src.GetWithOffset((short)(0 + -1 * PositionConstants.YOffset));
+                    var up1 = src.GetWithOffset(PositionConstants.D1);
                     if (up1 != -1) b[up1] = Figure.Peasant | Figure.IsWhite; // Ally to jump over
 
-                    var up2 = up1 == -1 ? -1 : up1.GetWithOffset((short)(0 + -1 * PositionConstants.YOffset));
+                    var up2 = up1 == -1 ? -1 : up1.GetWithOffset(PositionConstants.D1);
                     if (up2 != -1) b[up2] = Figure.Empty; // Empty space to land on
                 },
                 src,
@@ -98,17 +98,17 @@ public class NinjaTest
                 "Black - Movement and jump", b =>
                 {
                     // Setup for black ninja movement (forward/down)
-                    var downLeft = src.GetWithOffset((short)(-1 + 1 * PositionConstants.YOffset));
+                    var downLeft = src.GetWithOffset(PositionConstants.U1L1);
                     if (downLeft != -1) b[downLeft] = Figure.Empty; // Regular move
 
-                    var downRight = src.GetWithOffset((short)(1 + 1 * PositionConstants.YOffset));
+                    var downRight = src.GetWithOffset(PositionConstants.U1R1);
                     if (downRight != -1) b[downRight] = Figure.Empty; // Regular move
 
                     // Setup jump move: ally then empty space
-                    var down1 = src.GetWithOffset((short)(0 + 1 * PositionConstants.YOffset));
+                    var down1 = src.GetWithOffset(PositionConstants.U1);
                     if (down1 != -1) b[down1] = Figure.Archer | Figure.IsBlack; // Ally to jump over
 
-                    var down2 = down1 == -1 ? -1 : down1.GetWithOffset((short)(0 + 1 * PositionConstants.YOffset));
+                    var down2 = down1 == -1 ? -1 : down1.GetWithOffset(PositionConstants.U1);
                     if (down2 != -1) b[down2] = Figure.Empty; // Empty space to land on
                 },
                 src,

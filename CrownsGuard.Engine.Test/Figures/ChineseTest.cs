@@ -77,7 +77,7 @@ public class ChineseTest
         const int src = 27; // d4
         const Figure chinese = Figure.Chinese | Figure.IsWhite;
         // Use distance-2 diagonal (UR twice)
-        short relative = (short)(PositionConstants.U1R1 + PositionConstants.U1R1);
+        short relative = PositionConstants.U2R2;
 
         return Verify(TestUtils.RunExecuteActionScenario("Diagonal distance 2", b =>
             {

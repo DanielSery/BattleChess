@@ -6,7 +6,7 @@ using CrownsGuard.Game.Players;
 
 namespace CrownsGuard.Maps.Figures;
 
-[DebuggerDisplay("{TypeInfo.DisplayName}:{Owner.PlayerColor}")]
+[DebuggerDisplay($"{{TypeInfo.DisplayName}}:{{Owner.PlayerColor}}")]
 public sealed class FigureWithInfo : IFigureWithInfo, INotifyPropertyChanged
 {
     public static readonly FigureWithInfo None = new(NeutralPlayer.Instance, NoneFigureTypeInfo.Instance, false);

@@ -1,4 +1,3 @@
-using CrownsGuard.Core.Board;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Engine.Figures;
 using CrownsGuard.Engine.Helpers;

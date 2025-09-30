@@ -87,7 +87,6 @@ public class TileInfoViewModel : ViewModelBase, ITileInfo
         set => SetProperty(ref _figure, value);
     }
 
-    /// <inheritdoc />
     public void OnDied()
     {
         Died?.Invoke(this, EventArgs.Empty);
@@ -98,13 +97,11 @@ public class TileInfoViewModel : ViewModelBase, ITileInfo
         MovedFrom?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <inheritdoc />
     public void OnMovedTo()
     {
         MovedTo?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <inheritdoc />
     public void OnCreated()
     {
         Created?.Invoke(this, EventArgs.Empty);

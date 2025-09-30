@@ -20,7 +20,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var stackPanel = FindAncestor<Grid>(button);
-        var editorViewModel = (EditorUnitsViewModel)stackPanel.DataContext;
+        var editorViewModel = (EditorUnitsViewModel)stackPanel!.DataContext;
         editorViewModel.FigureGotFocusCommand.Execute(button.CommandParameter);
     }
 
@@ -28,7 +28,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var stackPanel = FindAncestor<Grid>(button);
-        var editorViewModel = (EditorUnitsViewModel)stackPanel.DataContext;
+        var editorViewModel = (EditorUnitsViewModel)stackPanel!.DataContext;
         editorViewModel.FigureLostFocusCommand.Execute(button.CommandParameter);
     }
 
@@ -36,7 +36,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var stackPanel = FindAncestor<Grid>(button);
-        var editorViewModel = (EditorUnitsViewModel)stackPanel.DataContext;
+        var editorViewModel = (EditorUnitsViewModel)stackPanel!.DataContext;
         editorViewModel.FigureMouseEnterCommand.Execute(button.CommandParameter);
     }
 
@@ -44,7 +44,7 @@ public partial class EditorUnitsControl
     {
         var button = (Button)sender;
         var stackPanel = FindAncestor<Grid>(button);
-        var editorViewModel = (EditorUnitsViewModel)stackPanel.DataContext;
+        var editorViewModel = (EditorUnitsViewModel)stackPanel!.DataContext;
         editorViewModel.FigureMouseExitCommand.Execute(button.CommandParameter);
     }
 
