@@ -1,0 +1,58 @@
+﻿[
+  {
+    scenario: Empty board - peasant moves to fire,
+    action: (4,3->3,3):Move,
+    board: [
+      (3,3):(Fire)->(Empty),
+      (4,3):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Mixed figures - archer moves to fire,
+    action: (4,3->3,3):Move,
+    board: [
+      (3,3):(Fire)->(Empty),
+      (4,3):(Archer, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Empty board - knight moves to fire,
+    action: (5,3->3,3):Move,
+    board: [
+      (3,3):(Fire)->(Empty),
+      (5,3):(Knight, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Knight moves to fire with figures in path,
+    action: (5,3->3,3):Move,
+    board: [
+      (3,3):(Fire)->(Empty),
+      (5,3):(Knight, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Empty board - white dragon moves to fire (immune),
+    action: (4,3->3,3):Move,
+    board: [
+      (3,3):(Fire)->(Dragon, IsWhite),
+      (4,3):(Dragon, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Empty board - black dragon moves to fire (immune),
+    action: (4,3->3,3):Move,
+    board: [
+      (3,3):(Fire)->(Dragon, IsBlack),
+      (4,3):(Dragon, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Dragon moves to fire with other figures around,
+    action: (4,3->3,3):Move,
+    board: [
+      (3,3):(Fire)->(Dragon, IsWhite),
+      (4,3):(Dragon, IsWhite)->(Empty)
+    ]
+  }
+]

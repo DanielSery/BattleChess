@@ -1,0 +1,30 @@
+﻿[
+  {
+    scenario: A1 corner explosion,
+    position: (0,0),
+    destroyed: [
+      (0,0):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: H1 corner explosion,
+    position: (0,7),
+    destroyed: [
+      (0,7):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: A8 corner explosion,
+    position: (7,0),
+    destroyed: [
+      (7,0):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: H8 corner explosion,
+    position: (7,7),
+    destroyed: [
+      (7,7):(Explosives)->(Empty)
+    ]
+  }
+]

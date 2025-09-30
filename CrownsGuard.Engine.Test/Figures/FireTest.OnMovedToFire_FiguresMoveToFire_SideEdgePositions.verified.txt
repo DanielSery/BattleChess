@@ -1,0 +1,50 @@
+﻿[
+  {
+    scenario: B1 side edge - peasant moves to fire from right,
+    action: (0,2->0,1):Move,
+    board: [
+      (0,1):(Fire)->(Empty),
+      (0,2):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: G1 side edge - archer moves to fire from right,
+    action: (0,5->0,6):Move,
+    board: [
+      (0,5):(Archer, IsBlack)->(Empty),
+      (0,6):(Fire)->(Empty)
+    ]
+  },
+  {
+    scenario: A4 side edge - knight moves to fire from below,
+    action: (4,0->5,0):Move,
+    board: [
+      (4,0):(Knight, IsWhite)->(Empty),
+      (5,0):(Empty)->(Knight, IsWhite)
+    ]
+  },
+  {
+    scenario: H4 side edge - builder moves to fire from below,
+    action: (4,7->5,7):Move,
+    board: [
+      (4,7):(Builder, IsBlack)->(Empty),
+      (5,7):(Empty)->(Builder, IsBlack)
+    ]
+  },
+  {
+    scenario: B1 side edge - white dragon moves to fire from right (immune),
+    action: (0,2->0,1):Move,
+    board: [
+      (0,1):(Fire)->(Dragon, IsWhite),
+      (0,2):(Dragon, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: A4 side edge - black dragon moves to fire from below (immune),
+    action: (4,0->5,0):Move,
+    board: [
+      (4,0):(Dragon, IsBlack)->(Empty),
+      (5,0):(Empty)->(Dragon, IsBlack)
+    ]
+  }
+]

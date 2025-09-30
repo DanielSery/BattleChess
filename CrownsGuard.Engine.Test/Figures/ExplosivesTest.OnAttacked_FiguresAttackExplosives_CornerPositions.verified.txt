@@ -1,0 +1,72 @@
+﻿[
+  {
+    scenario: A1 corner - peasant melee attacks explosives from right,
+    action: (0,1->0,0):MeleeAttack,
+    board: [
+      (0,0):(Explosives)->(Empty),
+      (0,1):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: H1 corner - archer melee attacks explosives from left,
+    action: (0,6->0,7):MeleeAttack,
+    board: [
+      (0,6):(Archer, IsBlack)->(Empty),
+      (0,7):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: A8 corner - knight melee attacks explosives from right,
+    action: (7,1->7,0):MeleeAttack,
+    board: [
+      (7,0):(Explosives)->(Empty),
+      (7,1):(Knight, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: H8 corner - builder melee attacks explosives from left,
+    action: (7,6->7,7):MeleeAttack,
+    board: [
+      (7,6):(Builder, IsBlack)->(Empty),
+      (7,7):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: A1 corner - chinese melee pierce attacks explosives,
+    action: (0,2->0,0):MeleePierceAttack,
+    board: [
+      (0,0):(Explosives)->(Empty),
+      (0,2):(Chinese, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: H1 corner - samurai melee pierce attacks explosives,
+    action: (0,5->0,7):MeleePierceAttack,
+    board: [
+      (0,5):(Samurai, IsBlack)->(Empty),
+      (0,7):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: A1 corner - ranger ranged attacks explosives,
+    action: (0,3->0,0):RangedAttack,
+    board: [
+      (0,0):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: H8 corner - musketeer ranged attacks explosives,
+    action: (7,4->7,7):RangedAttack,
+    board: [
+      (7,7):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: A1 corner - cannon attacks explosives,
+    action: (0,4->0,0):CannonAttack
+  },
+  {
+    scenario: H8 corner - cannon attacks explosives,
+    action: (7,3->7,7):CannonAttack
+  }
+]

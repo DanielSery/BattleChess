@@ -1,6 +1,6 @@
 ﻿[
   {
-    scenario: White wizzard teleports up-right diagonally to (1,5),
+    scenario: White wizzard diagonal move up-right to (1,5) - destroys cardinal directions,
     action: (3,3->5,5):Move,
     board: [
       (3,3):(Wizzard, IsWhite)->(Empty),
@@ -8,7 +8,16 @@
     ]
   },
   {
-    scenario: White wizzard teleports up-left diagonally to (1,1),
+    scenario: Simple destruction test - place figure adjacent to source,
+    action: (3,3->5,5):WizzardMove,
+    board: [
+      (3,3):(Wizzard, IsWhite)->(Empty),
+      (3,4):(Peasant, IsBlack)->(Empty),
+      (5,5):(Empty)->(Wizzard, IsWhite)
+    ]
+  },
+  {
+    scenario: White wizzard diagonal move up-left to (1,1) - destroys cardinal directions,
     action: (3,3->5,1):Move,
     board: [
       (3,3):(Wizzard, IsWhite)->(Empty),
@@ -16,7 +25,7 @@
     ]
   },
   {
-    scenario: White wizzard teleports down-right diagonally to (5,5),
+    scenario: White wizzard diagonal move down-right to (5,5) - destroys cardinal directions,
     action: (3,3->1,5):Move,
     board: [
       (1,5):(Empty)->(Wizzard, IsWhite),
@@ -24,7 +33,7 @@
     ]
   },
   {
-    scenario: White wizzard teleports down-left diagonally to (5,1),
+    scenario: White wizzard diagonal move down-left to (5,1) - destroys cardinal directions,
     action: (3,3->1,1):Move,
     board: [
       (1,1):(Empty)->(Wizzard, IsWhite),
@@ -32,7 +41,7 @@
     ]
   },
   {
-    scenario: White wizzard teleports straight up to (1,3),
+    scenario: White wizzard straight up to (1,3) - destroys diagonal directions,
     action: (3,3->5,3):Move,
     board: [
       (3,3):(Wizzard, IsWhite)->(Empty),
@@ -40,7 +49,7 @@
     ]
   },
   {
-    scenario: White wizzard teleports straight down to (5,3),
+    scenario: White wizzard straight down to (5,3) - destroys diagonal directions,
     action: (3,3->1,3):Move,
     board: [
       (1,3):(Empty)->(Wizzard, IsWhite),
@@ -48,7 +57,7 @@
     ]
   },
   {
-    scenario: White wizzard teleports straight left to (3,1),
+    scenario: White wizzard straight left to (3,1) - destroys diagonal directions,
     action: (3,3->3,1):Move,
     board: [
       (3,1):(Empty)->(Wizzard, IsWhite),
@@ -56,7 +65,7 @@
     ]
   },
   {
-    scenario: White wizzard teleports straight right to (3,5),
+    scenario: White wizzard straight right to (3,5) - destroys diagonal directions,
     action: (3,3->3,5):Move,
     board: [
       (3,3):(Wizzard, IsWhite)->(Empty),
@@ -64,7 +73,7 @@
     ]
   },
   {
-    scenario: Black wizzard teleports up-right diagonally to (1,5),
+    scenario: Black wizzard diagonal move up-right to (1,5) - destroys cardinal directions,
     action: (3,3->5,5):Move,
     board: [
       (3,3):(Wizzard, IsBlack)->(Empty),
@@ -72,7 +81,7 @@
     ]
   },
   {
-    scenario: Black wizzard teleports down-left diagonally to (5,1),
+    scenario: Black wizzard diagonal move down-left to (5,1) - destroys cardinal directions,
     action: (3,3->1,1):Move,
     board: [
       (1,1):(Empty)->(Wizzard, IsBlack),
@@ -80,7 +89,7 @@
     ]
   },
   {
-    scenario: Black wizzard teleports straight up to (1,3),
+    scenario: Black wizzard straight up to (1,3) - destroys diagonal directions,
     action: (3,3->5,3):Move,
     board: [
       (3,3):(Wizzard, IsBlack)->(Empty),
@@ -88,7 +97,7 @@
     ]
   },
   {
-    scenario: Black wizzard teleports straight down to (5,3),
+    scenario: Black wizzard straight down to (5,3) - destroys diagonal directions,
     action: (3,3->1,3):Move,
     board: [
       (1,3):(Empty)->(Wizzard, IsBlack),
@@ -96,7 +105,7 @@
     ]
   },
   {
-    scenario: White wizzard teleport blocked by friendly unit,
+    scenario: White wizzard move blocked by friendly unit,
     action: (3,3->5,5):Move,
     board: [
       (3,3):(Wizzard, IsWhite)->(Empty),
@@ -104,7 +113,7 @@
     ]
   },
   {
-    scenario: White wizzard teleport blocked by enemy unit,
+    scenario: White wizzard move blocked by enemy unit,
     action: (3,3->5,1):Move,
     board: [
       (3,3):(Wizzard, IsWhite)->(Empty),
@@ -112,7 +121,7 @@
     ]
   },
   {
-    scenario: White wizzard teleport blocked by wall,
+    scenario: White wizzard move blocked by wall,
     action: (3,3->1,5):Move,
     board: [
       (1,5):(Wall)->(Wizzard, IsWhite),
@@ -120,11 +129,19 @@
     ]
   },
   {
-    scenario: Edge case - White wizzard teleport from corner A1,
+    scenario: Edge case - White wizzard move from corner A1,
     action: (0,0->2,2):Move,
     board: [
       (0,0):(Wizzard, IsWhite)->(Empty),
       (2,2):(Empty)->(Wizzard, IsWhite)
+    ]
+  },
+  {
+    scenario: Edge case - White wizzard diagonal move from near edge,
+    action: (1,1->3,3):Move,
+    board: [
+      (1,1):(Wizzard, IsWhite)->(Empty),
+      (3,3):(Empty)->(Wizzard, IsWhite)
     ]
   }
 ]

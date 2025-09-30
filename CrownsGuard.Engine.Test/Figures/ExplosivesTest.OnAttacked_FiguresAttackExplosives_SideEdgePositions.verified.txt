@@ -1,0 +1,61 @@
+﻿[
+  {
+    scenario: B1 side edge - peasant melee attacks explosives from right,
+    action: (0,2->0,1):MeleeAttack,
+    board: [
+      (0,1):(Explosives)->(Empty),
+      (0,2):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: G1 side edge - archer melee attacks explosives from right,
+    action: (0,5->0,6):MeleeAttack,
+    board: [
+      (0,5):(Archer, IsBlack)->(Empty),
+      (0,6):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: A4 side edge - knight melee attacks explosives from below,
+    action: (4,0->5,0):MeleeAttack,
+    board: [
+      (4,0):(Knight, IsWhite)->(Empty),
+      (5,0):(Empty)->(Knight, IsWhite)
+    ]
+  },
+  {
+    scenario: H4 side edge - builder melee attacks explosives from below,
+    action: (4,7->5,7):MeleeAttack,
+    board: [
+      (4,7):(Builder, IsBlack)->(Empty),
+      (5,7):(Empty)->(Builder, IsBlack)
+    ]
+  },
+  {
+    scenario: B1 side edge - nordguard melee pierce attacks explosives,
+    action: (0,3->0,1):MeleePierceAttack,
+    board: [
+      (0,1):(Explosives)->(Empty),
+      (0,3):(Nordguard, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: A4 side edge - blade melee pierce attacks explosives,
+    action: (4,0->5,0):MeleePierceAttack,
+    board: [
+      (4,0):(Blade, IsWhite)->(Empty),
+      (5,0):(Empty)->(Blade, IsWhite)
+    ]
+  },
+  {
+    scenario: B1 side edge - japan archer ranged attacks explosives,
+    action: (0,4->0,1):RangedAttack,
+    board: [
+      (0,1):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: H4 side edge - catapult ranged attacks explosives,
+    action: (4,7->5,7):RangedAttack
+  }
+]

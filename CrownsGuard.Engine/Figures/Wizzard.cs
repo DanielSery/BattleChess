@@ -31,7 +31,7 @@ public static class Wizzard
 
     public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
-        if (action.FigureActionType == FigureActionType.Move)
+        if (action.FigureActionType == FigureActionType.Move || action.FigureActionType == FigureActionType.WizzardMove)
         {
             var movement = action.TargetIndex - action.SourceIndex;
             board.MoveFigure(action.SourceIndex, action.TargetIndex, onEvent);

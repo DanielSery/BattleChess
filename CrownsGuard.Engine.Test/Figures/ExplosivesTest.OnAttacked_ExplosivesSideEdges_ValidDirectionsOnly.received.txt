@@ -1,0 +1,30 @@
+﻿[
+  {
+    scenario: B1 side edge explosion,
+    position: (0,1),
+    destroyed: [
+      (0,1):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: G1 side edge explosion,
+    position: (0,6),
+    destroyed: [
+      (0,6):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: A4 side edge explosion,
+    position: (3,0),
+    destroyed: [
+      (3,0):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: H4 side edge explosion,
+    position: (3,7),
+    destroyed: [
+      (3,7):(Explosives)->(Empty)
+    ]
+  }
+]

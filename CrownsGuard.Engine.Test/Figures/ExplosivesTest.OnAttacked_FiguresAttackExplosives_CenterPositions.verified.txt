@@ -1,0 +1,67 @@
+﻿[
+  {
+    scenario: Empty board - peasant melee attacks explosives,
+    action: (4,3->3,3):MeleeAttack,
+    board: [
+      (3,3):(Explosives)->(Empty),
+      (4,3):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Mixed figures melee attacking explosives,
+    action: (4,3->3,3):MeleeAttack,
+    board: [
+      (2,3):(Archer, IsWhite)->(Empty),
+      (3,2):(Builder, IsBlack)->(Empty),
+      (3,3):(Explosives)->(Empty),
+      (3,4):(Knight, IsBlack)->(Empty),
+      (4,3):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Empty board - knight melee pierce attacks explosives,
+    action: (5,3->3,3):MeleePierceAttack,
+    board: [
+      (3,3):(Explosives)->(Empty),
+      (5,3):(Knight, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Knight melee pierce attacking explosives with figures in path,
+    action: (5,3->3,3):MeleePierceAttack,
+    board: [
+      (3,3):(Explosives)->(Empty),
+      (4,3):(Peasant, IsBlack)->(Empty),
+      (5,3):(Knight, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: Empty board - archer ranged attacks explosives,
+    action: (6,3->3,3):RangedAttack,
+    board: [
+      (3,3):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: Crossbow ranged attacking explosives,
+    action: (6,3->3,3):RangedAttack,
+    board: [
+      (3,3):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: Empty board - cannon attacks explosives,
+    action: (7,3->3,3):CannonAttack,
+    board: [
+      (3,3):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: Cannon attacking explosives with figures in path,
+    action: (7,3->3,3):CannonAttack,
+    board: [
+      (3,3):(Explosives)->(Empty),
+      (5,3):(Peasant, IsBlack)->(Empty)
+    ]
+  }
+]

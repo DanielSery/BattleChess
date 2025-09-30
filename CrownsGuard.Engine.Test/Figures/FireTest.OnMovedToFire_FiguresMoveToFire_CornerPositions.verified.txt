@@ -1,0 +1,50 @@
+﻿[
+  {
+    scenario: A1 corner - peasant moves to fire from right,
+    action: (0,1->0,0):Move,
+    board: [
+      (0,0):(Fire)->(Empty),
+      (0,1):(Peasant, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: H1 corner - archer moves to fire from left,
+    action: (0,6->0,7):Move,
+    board: [
+      (0,6):(Archer, IsBlack)->(Empty),
+      (0,7):(Fire)->(Empty)
+    ]
+  },
+  {
+    scenario: A8 corner - knight moves to fire from right,
+    action: (7,1->7,0):Move,
+    board: [
+      (7,0):(Fire)->(Empty),
+      (7,1):(Knight, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: H8 corner - builder moves to fire from left,
+    action: (7,6->7,7):Move,
+    board: [
+      (7,6):(Builder, IsBlack)->(Empty),
+      (7,7):(Fire)->(Empty)
+    ]
+  },
+  {
+    scenario: A1 corner - white dragon moves to fire from right (immune),
+    action: (0,1->0,0):Move,
+    board: [
+      (0,0):(Fire)->(Dragon, IsWhite),
+      (0,1):(Dragon, IsWhite)->(Empty)
+    ]
+  },
+  {
+    scenario: H8 corner - black dragon moves to fire from left (immune),
+    action: (7,6->7,7):Move,
+    board: [
+      (7,6):(Dragon, IsBlack)->(Empty),
+      (7,7):(Fire)->(Dragon, IsBlack)
+    ]
+  }
+]

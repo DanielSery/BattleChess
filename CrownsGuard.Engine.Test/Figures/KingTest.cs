@@ -117,7 +117,7 @@ public class KingTest
             board[5] = Figure.Empty;
             board[6] = Figure.Empty;
             var action = new FigureAction(FigureActionType.Castling, 4, 6, board[4]);
-            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents());
+            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents);
             results.Add(new
             {
                 scenario = "Black king-side",
@@ -134,7 +134,7 @@ public class KingTest
             board[2] = Figure.Empty;
             board[3] = Figure.Empty;
             var action = new FigureAction(FigureActionType.Castling, 4, 2, board[4]);
-            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents());
+            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents);
             results.Add(new
             {
                 scenario = "Black queen-side",
@@ -151,7 +151,7 @@ public class KingTest
             board[58] = Figure.Empty;
             board[59] = Figure.Empty;
             var action = new FigureAction(FigureActionType.Castling, 60, 58, board[60]);
-            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents());
+            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents);
             results.Add(new
             {
                 scenario = "White queen-side",
@@ -167,7 +167,7 @@ public class KingTest
             board[61] = Figure.Empty;
             board[62] = Figure.Empty;
             var action = new FigureAction(FigureActionType.Castling, 60, 62, board[60]);
-            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents());
+            FigureActionExecutor.ExecuteFigureAction(board, action, TestUtils.IgnoreEvents);
             results.Add(new
             {
                 scenario = "White king-side",

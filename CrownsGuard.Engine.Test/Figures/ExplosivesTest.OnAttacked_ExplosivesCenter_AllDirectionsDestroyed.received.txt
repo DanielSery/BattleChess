@@ -1,0 +1,24 @@
+﻿[
+  {
+    scenario: Empty board explosion,
+    position: (3,3),
+    destroyed: [
+      (3,3):(Explosives)->(Empty)
+    ]
+  },
+  {
+    scenario: Mixed figures explosion,
+    position: (3,3),
+    destroyed: [
+      (2,2):(LegionarySword, IsWhite)->(Empty),
+      (2,3):(Wall)->(Empty),
+      (2,4):(Trader, IsBlack)->(Empty),
+      (3,2):(Archer, IsWhite)->(Empty),
+      (3,3):(Explosives)->(Empty),
+      (3,4):(Knight, IsBlack)->(Empty),
+      (4,2):(Builder, IsWhite)->(Empty),
+      (4,3):(Peasant, IsWhite)->(Empty),
+      (4,4):(Mage, IsBlack)->(Empty)
+    ]
+  }
+]
