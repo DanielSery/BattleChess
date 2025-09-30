@@ -14,9 +14,14 @@ public static class Priest
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
                 var targetFigure = board[targetIndex];
-                if (targetFigure.IsWalkable())
+                if (targetFigure.IsEmpty())
                 {
                     actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
+                }
+                else if (targetFigure.IsWalkable())
+                {
+                    actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
+                    break;
                 }
                 else
                 {
@@ -35,7 +40,7 @@ public static class Priest
                     actions.Push(new FigureAction(FigureActionType.MeleeAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
-                else if (targetFigure.IsWalkable())
+                else if (targetFigure.IsEmpty())
                 {
                     actions.Push(new FigureAction(FigureActionType.PossibleMeleeAttack, sourceIndex, targetIndex, sourceFigure));
                 }

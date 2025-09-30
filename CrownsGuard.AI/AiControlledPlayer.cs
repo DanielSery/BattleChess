@@ -1,5 +1,4 @@
 ﻿using CrownsGuard.AI.Helpers;
-using CrownsGuard.Core.Board;
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Engine.Helpers;
@@ -121,7 +120,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
                     using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
                     Array.Copy(_board, 0, clonedBoard, 0 , _board.Length);
 
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                     var eval = WhiteSmartAlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, actionsStack, boardPool);
                     resultActions.Add((eval, action));
                     // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
@@ -205,7 +204,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
                     using var rentedClonedBoard = BoardPool<Figure>.Rent(out var clonedBoard);
                     Array.Copy(_board, 0, clonedBoard, 0 , _board.Length);
 
-                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                    FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                     var eval = BlackSmartAlphaBeta(clonedBoard, _difficulty - 1, int.MinValue, int.MaxValue, actionsStack, boardPool);
                     resultActions.Add((eval, action));
                     // Console.WriteLine($"Evaluated action {sw.Elapsed} action: {action}, eval: {eval}");
@@ -305,7 +304,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
 
                 var clonedBoard = boardPool[depth];
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                 var boardHash = FigureArraySimdHelper.FastSimdHash64(clonedBoard);
                 if (cache.TryGetValue(boardHash, out var eval))
                 {
@@ -350,7 +349,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
 
                 var clonedBoard = boardPool[depth];
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                 var eval = BlackSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool);
                 minEval = Math.Min(minEval, eval);
                 beta = Math.Min(beta, eval);
@@ -385,7 +384,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
 
                 var clonedBoard = boardPool[depth];
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                 var eval = EvaluateBoard(currentBoard, actionsStack, Figure.IsWhite);
                 minEval = Math.Min(minEval, eval);
                 beta = Math.Min(beta, eval);
@@ -420,7 +419,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
 
                 var clonedBoard = boardPool[depth];
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                 var boardHash = FigureArraySimdHelper.FastSimdHash64(clonedBoard);
                 if (cache.TryGetValue(boardHash, out var eval))
                 {
@@ -464,7 +463,7 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
 
                 var clonedBoard = boardPool[depth];
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                 var eval = WhiteSmartAlphaBeta(clonedBoard, depth - 1, alpha, beta, actionsStack, boardPool);
                 maxEval = Math.Max(maxEval, eval);
                 alpha = Math.Max(alpha, eval);
@@ -497,17 +496,13 @@ public sealed class AiControlledPlayer : IAutomaticallyControlledPlayer
 
                 var clonedBoard = boardPool[depth];
                 Array.Copy(currentBoard, 0, clonedBoard, 0, currentBoard.Length);
-                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, OnEvent);
+                FigureActionExecutor.ExecuteFigureAction(clonedBoard, action, BoardEventHandler.HandleFigureActionEvent);
                 var eval = EvaluateBoard(currentBoard, actionsStack, Figure.IsBlack);
                 maxEval = Math.Max(maxEval, eval);
                 alpha = Math.Max(alpha, eval);
             }
         }
         return maxEval;
-    }
-
-    private static void OnEvent(BoardEvent boardEvent, Span<Figure> board)
-    {
     }
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]

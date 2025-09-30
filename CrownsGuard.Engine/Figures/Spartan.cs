@@ -17,7 +17,7 @@ public static class Spartan
 
             if (targetFigure.IsWalkable())
             {
-                actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, targetIndex, sourceFigure));
+                actions.Push(new FigureAction(FigureActionType.SpartanMove, sourceIndex, targetIndex, sourceFigure));
             }
         }
     }

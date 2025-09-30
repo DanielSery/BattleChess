@@ -34,7 +34,7 @@ public static class Knight
                     actions.Push(new FigureAction(FigureActionType.MeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
-                else if (targetFigure.IsWalkable())
+                else if (targetFigure.IsEmpty())
                 {
                     actions.Push(new FigureAction(FigureActionType.PossibleMeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }

@@ -4,6 +4,8 @@ public static class PositionConstants
 {
     public const int YOffset = 256;
 
+    public const int Center = 0;
+
     public const int R1 = +1 + 0 * YOffset;
     public const int R2 = +2 + 0 * YOffset;      // 2 steps right
     public const int R3 = +3 + 0 * YOffset;      // 3 steps right

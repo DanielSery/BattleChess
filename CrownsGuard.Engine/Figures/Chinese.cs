@@ -33,7 +33,7 @@ public static class Chinese
                 {
                     actions.Push(new FigureAction(FigureActionType.MeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }
-                else if (targetFigure.IsWalkable())
+                else if (targetFigure.IsEmpty())
                 {
                     actions.Push(new FigureAction(FigureActionType.PossibleMeleePierceAttack, sourceIndex, targetIndex, sourceFigure));
                 }

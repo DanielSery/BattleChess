@@ -46,7 +46,7 @@ public static class JapanArcher
                     actions.Push(new FigureAction(FigureActionType.RangedAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
-                else if (targetFigure.IsWalkable())
+                else if (targetFigure.IsEmpty())
                 {
                     actions.Push(new FigureAction(FigureActionType.PossibleRangedAttack, sourceIndex, targetIndex, sourceFigure));
                 }

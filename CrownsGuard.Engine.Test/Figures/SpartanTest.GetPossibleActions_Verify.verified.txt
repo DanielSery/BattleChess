@@ -3,37 +3,37 @@
     scenario: All empty,
     figure: (3,3),
     actions: [
-      (2,2):Move,
-      (2,3):Move,
-      (2,4):Move,
-      (3,2):Move,
-      (3,4):Move,
-      (4,2):Move,
-      (4,3):Move,
-      (4,4):Move
+      (2,2):SpartanMove,
+      (2,3):SpartanMove,
+      (2,4):SpartanMove,
+      (3,2):SpartanMove,
+      (3,4):SpartanMove,
+      (4,2):SpartanMove,
+      (4,3):SpartanMove,
+      (4,4):SpartanMove
     ]
   },
   {
     scenario: Movement in all directions,
     figure: (3,3),
     actions: [
-      (2,2):Move,
-      (2,3):Move,
-      (2,4):Move,
-      (3,2):Move,
-      (3,4):Move,
-      (4,2):Move,
-      (4,3):Move,
-      (4,4):Move
+      (2,2):SpartanMove,
+      (2,3):SpartanMove,
+      (2,4):SpartanMove,
+      (3,2):SpartanMove,
+      (3,4):SpartanMove,
+      (4,2):SpartanMove,
+      (4,3):SpartanMove,
+      (4,4):SpartanMove
     ]
   },
   {
     scenario: Edge case A1,
     figure: (0,0),
     actions: [
-      (0,1):Move,
-      (1,0):Move,
-      (1,1):Move
+      (0,1):SpartanMove,
+      (1,0):SpartanMove,
+      (1,1):SpartanMove
     ]
   }
 ]

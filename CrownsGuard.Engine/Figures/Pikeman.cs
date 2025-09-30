@@ -8,12 +8,12 @@ public static class Pikeman
 {
     private static readonly short[] BlackAttackPositions =
     [
-        PositionConstants.D1L1, PositionConstants.D1R1
+        PositionConstants.U1L1, PositionConstants.U1R1
     ];
 
     private static readonly short[] WhiteAttackPositions =
     [
-        PositionConstants.U1L1, PositionConstants.U1R1
+        PositionConstants.D1L1, PositionConstants.D1R1
     ];
 
     private static readonly short[] MovePositions =

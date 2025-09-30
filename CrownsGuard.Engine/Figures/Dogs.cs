@@ -30,7 +30,7 @@ public static class Dogs
                     actions.Push(new FigureAction(FigureActionType.MeleeAttack, sourceIndex, targetIndex, sourceFigure));
                     break;
                 }
-                else if (targetFigure.IsWalkable())
+                else if (targetFigure.IsEmpty())
                 {
                     actions.Push(new FigureAction(FigureActionType.PossibleMeleeAttack, sourceIndex, targetIndex, sourceFigure));
                 }

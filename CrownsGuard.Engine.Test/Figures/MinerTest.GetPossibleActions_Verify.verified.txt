@@ -86,24 +86,14 @@
     scenario: Fire walkable,
     figure: (3,3),
     actions: [
-      (0,3):MinerMove,
-      (1,3):MinerMove,
       (2,3):MinerMove,
       (2,3):Move,
-      (3,0):MinerMove,
-      (3,1):MinerMove,
       (3,2):MinerMove,
       (3,2):Move,
       (3,4):MinerMove,
       (3,4):Move,
-      (3,5):MinerMove,
-      (3,6):MinerMove,
-      (3,7):MinerMove,
       (4,3):MinerMove,
-      (4,3):Move,
-      (5,3):MinerMove,
-      (6,3):MinerMove,
-      (7,3):MinerMove
+      (4,3):Move
     ]
   },
   {

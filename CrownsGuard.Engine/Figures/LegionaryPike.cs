@@ -113,6 +113,7 @@ public static class LegionaryPike
         if (!move1Figure.IsWalkable()) return;
         actions.Push(new FigureAction(FigureActionType.Move, sourceIndex, move1Index, sourceFigure));
         
+        if (!move1Figure.IsEmpty()) return;
         var move2Index = move1Index.GetWithOffset(relativePosition);
         if (move2Index == -1) return;
         var move2Figure = board[move2Index];

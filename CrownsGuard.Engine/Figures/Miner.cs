@@ -26,9 +26,14 @@ public static class Miner
             for (var targetIndex = sourceIndex.GetWithOffset(relative); targetIndex != -1; targetIndex = targetIndex.GetWithOffset(relative))
             {
                 var targetFigure = board[targetIndex];
-                if (targetFigure.IsWalkable())
+                if (targetFigure.IsEmpty())
                 {
                     actions.Push(new FigureAction(FigureActionType.MinerMove, sourceIndex, targetIndex, sourceFigure));
+                }
+                else if (targetFigure.IsWalkable())
+                {
+                    actions.Push(new FigureAction(FigureActionType.MinerMove, sourceIndex, targetIndex, sourceFigure));
+                    break;
                 }
                 else
                 {

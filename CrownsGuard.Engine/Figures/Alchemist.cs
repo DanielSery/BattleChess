@@ -31,7 +31,7 @@ public static class Alchemist
     private static void CreateExplosive(FigureAction action, Span<Figure> board, Action<BoardEvent, Span<Figure>> onEvent)
     {
         var positionDiff = PositionsHelper.GetRelative(action.SourceIndex, action.TargetIndex);
-        var targetIndex = action.SourceIndex.GetWithOffset(positionDiff);
+        var targetIndex = action.TargetIndex.GetWithOffset(positionDiff);
         if (targetIndex == -1) return;
         var targetFigure = board[targetIndex];
 

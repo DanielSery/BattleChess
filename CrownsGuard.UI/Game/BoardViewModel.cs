@@ -344,6 +344,8 @@ public sealed class BoardViewModel : ViewModelBase
             default:
                 throw new ArgumentOutOfRangeException();
         }
+        
+        BoardEventHandler.HandleFigureActionEvent(boardEvent, board, OnEvent);
     }
 }
   

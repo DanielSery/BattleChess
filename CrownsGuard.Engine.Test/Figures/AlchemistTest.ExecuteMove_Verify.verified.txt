@@ -3,6 +3,7 @@
     scenario: To empty,
     action: (3,3->3,2):AlchemistMove,
     board: [
+      (3,1):(Empty)->(Explosives),
       (3,2):(Empty)->(Alchemist, IsWhite),
       (3,3):(Alchemist, IsWhite)->(Empty)
     ]
@@ -12,7 +13,8 @@
     action: (3,3->4,3):AlchemistMove,
     board: [
       (3,3):(Alchemist, IsWhite)->(Empty),
-      (4,3):(Fire)->(Alchemist, IsWhite)
+      (4,3):(Fire)->(Alchemist, IsWhite),
+      (5,3):(Empty)->(Explosives)
     ]
   },
   {
@@ -20,7 +22,8 @@
     action: (3,3->3,4):AlchemistMove,
     board: [
       (3,3):(Alchemist, IsWhite)->(Empty),
-      (3,4):(Explosives)->(Alchemist, IsWhite)
+      (3,4):(Explosives)->(Alchemist, IsWhite),
+      (3,5):(Empty)->(Explosives)
     ]
   }
 ]
