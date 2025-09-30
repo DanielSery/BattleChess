@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Database;
 
-internal interface IDatabaseClient
+public interface IDatabaseClient
 {
     IMongoCollection<GameTurn> GameTurns { get; }
 

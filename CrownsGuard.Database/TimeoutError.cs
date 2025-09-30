@@ -2,12 +2,12 @@
 
 namespace CrownsGuard.Database;
 
-public class CancelledError : IError
+public class TimeoutError : IError
 {
-    public static readonly CancelledError Instance = new();
+    public static readonly TimeoutError Instance = new();
 
     /// <inheritdoc />
-    public string Message => "Operation cancelled";
+    public string Message => "Operation timeout";
 
     /// <inheritdoc />
     public Dictionary<string, object> Metadata { get; } = new();

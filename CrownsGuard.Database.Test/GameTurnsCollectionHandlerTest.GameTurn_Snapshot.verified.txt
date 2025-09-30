@@ -1,0 +1,7 @@
+﻿{
+  Id: 507f1f77bcf86cd799439011,
+  GameId: 507f1f77bcf86cd799439012,
+  CreatedAt: DateTime_1,
+  TimeSpentInSeconds: 1.5,
+  ToIndex: 1
+}

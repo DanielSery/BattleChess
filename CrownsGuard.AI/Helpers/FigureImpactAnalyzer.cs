@@ -27,7 +27,7 @@ public static class FigureImpactAnalyzer
         }
 
         var analysis = new Dictionary<int, int[]>();
-        var figureTypes = Enum.GetValues<Figure>().ToArray();
+        var figureTypes = Enum.GetValues<Figure>();
         foreach (var figureType in figureTypes)
         {
             if (figureType.GetFigureType() >= Figure.FigureMask)

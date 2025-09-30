@@ -1,0 +1,14 @@
+﻿{
+  IsFailed: true,
+  IsSuccess: false,
+  Reasons: [
+    {
+      Message: An error occurred while serializing the Id property of class CrownsGuard.Database.Game.GameTurn: 'turn0' is not a valid 24 digit hex string.
+    }
+  ],
+  Errors: [
+    {
+      Message: An error occurred while serializing the Id property of class CrownsGuard.Database.Game.GameTurn: 'turn0' is not a valid 24 digit hex string.
+    }
+  ]
+}

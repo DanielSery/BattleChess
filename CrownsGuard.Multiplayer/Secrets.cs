@@ -5,7 +5,6 @@
 /// </summary>
 internal static partial class Secrets
 {
-    public static string ConnectionString { get; }
     public static string EmailSalt { get; }
     public static string GmailString { get; }
 }

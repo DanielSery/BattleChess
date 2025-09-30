@@ -7,11 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <InternalsVisibleTo Include="CrownsGuard.Database.Test" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="FluentResults" Version="4.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.8" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.8" />
-        <PackageReference Include="MongoDB.Driver" Version="3.4.3" />
+        <PackageReference Include="MongoDB.Driver" Version="3.5.0" />
         <PackageReference Include="Autofac" Version="8.0.0" />
     </ItemGroup>
 

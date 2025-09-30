@@ -61,21 +61,28 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
 
     public async Task<Result<GameTurn>> WaitForFirstTurnAsync(string gameId, TimeSpan timeout)
     {
+        var timeoutTokenSource = new CancellationTokenSource(timeout);
         try
         {
-            var cancellationTokenSource = new CancellationTokenSource(timeout);
-            var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-
+            var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-                .Match(filter);
+                .Match(changeFilter);
 
             using var cursor = await _client.GameTurns.WatchAsync(
                 pipeline,
                 new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
+                timeoutTokenSource.Token
             );
+            
+            var filter = Builders<GameTurn>.Filter.Eq(g => g.GameId, gameId);
+            var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: timeoutTokenSource.Token);
+            var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: timeoutTokenSource.Token);
+            if (foundTurn is not null)
+            {
+                return foundTurn;
+            }
 
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+            while (await cursor.MoveNextAsync(timeoutTokenSource.Token))
             {
                 foreach (var change in cursor.Current)
                 {
@@ -91,6 +98,12 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
         }
         catch (OperationCanceledException)
         {
+            if (timeoutTokenSource.IsCancellationRequested)
+            {
+                return Result.Fail("Operation timeout")
+                    .WithError(TimeoutError.Instance);
+            }
+            
             return Result.Fail("Operation cancelled")
                 .WithError(CancelledError.Instance);
         }
@@ -103,26 +116,35 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
 
     public async Task<Result<GameTurn>> WaitForNextTurnAsync(string turnId, string gameId, TimeSpan timeout)
     {
+        var timeoutTokenSource = new CancellationTokenSource(timeout);
         try
         {
             var afterObjectId = ObjectId.Parse(turnId);
-            var cancellationTokenSource = new CancellationTokenSource(timeout);
-
-            var filter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
+            var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
                 Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
                 Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, turnId)
             );
 
             var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-                .Match(filter);
+                .Match(changeFilter);
 
             using var cursor = await _client.GameTurns.WatchAsync(
                 pipeline,
                 new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
+                timeoutTokenSource.Token
             );
+            
+            var filter = Builders<GameTurn>.Filter.And(
+                Builders<GameTurn>.Filter.Eq(g => g.GameId, gameId),
+                Builders<GameTurn>.Filter.Gt(cs => cs.Id, turnId));
+            var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: timeoutTokenSource.Token);
+            var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: timeoutTokenSource.Token);
+            if (foundTurn is not null)
+            {
+                return foundTurn;
+            }
 
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
+            while (await cursor.MoveNextAsync(timeoutTokenSource.Token))
             {
                 foreach (var change in cursor.Current)
                 {
@@ -138,6 +160,12 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
         }
         catch (OperationCanceledException)
         {
+            if (timeoutTokenSource.IsCancellationRequested)
+            {
+                return Result.Fail("Operation timeout")
+                    .WithError(TimeoutError.Instance);
+            }
+
             return Result.Fail("Operation cancelled")
                 .WithError(CancelledError.Instance);
         }
