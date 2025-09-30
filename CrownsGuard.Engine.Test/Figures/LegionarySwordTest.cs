@@ -31,8 +31,8 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var ul = src.GetWithOffset(PositionConstants.UL);
-                    var ur = src.GetWithOffset(PositionConstants.UR);
+                    var ul = src.GetWithOffset(PositionConstants.U1L1);
+                    var ur = src.GetWithOffset(PositionConstants.U1R1);
                     if (ul != -1) b[ul] = Figure.Peasant | Figure.IsBlack; // enemy -> MeleeAttack
                     if (ur != -1) b[ur] = Figure.Peasant | Figure.IsWhite; // ally -> MeleeDefend
                 },
@@ -45,7 +45,7 @@ public class LegionarySwordTest
                 b =>
                 {
                     var src = 27; // d4
-                    var forward = src.GetWithOffset(PositionConstants.D); // white forward is D (-Y)
+                    var forward = src.GetWithOffset(PositionConstants.D1); // white forward is D (-Y)
                     if (forward != -1) b[forward] = Figure.Wall; // non-walkable blocks move
                 },
                 27, // d4

@@ -24,7 +24,7 @@ public class CatapultTest
                 b =>
                 {
                     // Any adjacent enemy in queen directions suppresses all actions
-                    var r = 27 /* d4 */.GetWithOffset(PositionConstants.R);
+                    var r = 27 /* d4 */.GetWithOffset(PositionConstants.R1);
                     if (r != -1) b[r] = Figure.Peasant | Figure.IsBlack;
                 },
                 27, // d4

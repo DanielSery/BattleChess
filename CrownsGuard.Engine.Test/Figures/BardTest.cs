@@ -49,10 +49,10 @@ public class BardTest
             TestUtils.RunGetActionsScenario(
                 "Blocked bishop moves", b =>
                 {
-                    var ul = src.GetWithOffset(PositionConstants.UL);
-                    var ur = src.GetWithOffset(PositionConstants.UR);
-                    var dl = src.GetWithOffset(PositionConstants.DL);
-                    var dr = src.GetWithOffset(PositionConstants.DR);
+                    var ul = src.GetWithOffset(PositionConstants.U1L1);
+                    var ur = src.GetWithOffset(PositionConstants.U1R1);
+                    var dl = src.GetWithOffset(PositionConstants.D1L1);
+                    var dr = src.GetWithOffset(PositionConstants.D1R1);
 
                     if (ul != -1) b[ul] = Figure.Wall; // block move
                     if (ur != -1) b[ur] = Figure.LegionarySword | Figure.IsWhite; // friendly blocks move

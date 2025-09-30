@@ -25,10 +25,10 @@ public class BattleAxeTest
             TestUtils.RunGetActionsScenario(
                 "Blocked diagonals", b =>
                 {
-                    var ur = src.GetWithOffset(PositionConstants.UR);
-                    var ul = src.GetWithOffset(PositionConstants.UL);
-                    var dr = src.GetWithOffset(PositionConstants.DR);
-                    var dl = src.GetWithOffset(PositionConstants.DL);
+                    var ur = src.GetWithOffset(PositionConstants.U1R1);
+                    var ul = src.GetWithOffset(PositionConstants.U1L1);
+                    var dr = src.GetWithOffset(PositionConstants.D1R1);
+                    var dl = src.GetWithOffset(PositionConstants.D1L1);
                     if (ul != -1) b[ul] = Figure.Wall; // not walkable
                     if (dr != -1) b[dr] = Figure.Peasant | Figure.IsWhite; // friendly – not walkable
                     if (dl != -1) b[dl] = Figure.Peasant | Figure.IsBlack; // enemy – not walkable
@@ -58,12 +58,12 @@ public class BattleAxeTest
             TestUtils.RunExecuteActionScenario(
                 "Move UR destroys quadrant", b =>
                 {
-                    var dst = src.GetWithOffset(PositionConstants.UR);
+                    var dst = src.GetWithOffset(PositionConstants.U1R1);
                     if (dst == -1) return;
-                    var ur = dst.GetWithOffset(PositionConstants.UR);
-                    var u  = dst.GetWithOffset(PositionConstants.U);
-                    var r  = dst.GetWithOffset(PositionConstants.R);
-                    var l  = dst.GetWithOffset(PositionConstants.L); // should survive
+                    var ur = dst.GetWithOffset(PositionConstants.U1R1);
+                    var u  = dst.GetWithOffset(PositionConstants.U1);
+                    var r  = dst.GetWithOffset(PositionConstants.R1);
+                    var l  = dst.GetWithOffset(PositionConstants.L1); // should survive
                     if (ur != -1) b[ur] = Figure.Trader | Figure.IsBlack;
                     if (u  != -1) b[u]  = Figure.Archer | Figure.IsWhite;
                     if (r  != -1) b[r]  = Figure.Wall;
@@ -71,18 +71,18 @@ public class BattleAxeTest
                 },
                 src,
                 axe,
-                PositionConstants.UR,
+                PositionConstants.U1R1,
                 FigureActionType.BattleAxeMove),
 
             TestUtils.RunExecuteActionScenario(
                 "Move UL destroys quadrant", b =>
                 {
-                    var dst = src.GetWithOffset(PositionConstants.UL);
+                    var dst = src.GetWithOffset(PositionConstants.U1L1);
                     if (dst == -1) return;
-                    var ul = dst.GetWithOffset(PositionConstants.UL);
-                    var u  = dst.GetWithOffset(PositionConstants.U);
-                    var l  = dst.GetWithOffset(PositionConstants.L);
-                    var r  = dst.GetWithOffset(PositionConstants.R); // should survive
+                    var ul = dst.GetWithOffset(PositionConstants.U1L1);
+                    var u  = dst.GetWithOffset(PositionConstants.U1);
+                    var l  = dst.GetWithOffset(PositionConstants.L1);
+                    var r  = dst.GetWithOffset(PositionConstants.R1); // should survive
                     if (ul != -1) b[ul] = Figure.Trader | Figure.IsBlack;
                     if (u  != -1) b[u]  = Figure.Archer | Figure.IsWhite;
                     if (l  != -1) b[l]  = Figure.Wall;
@@ -90,18 +90,18 @@ public class BattleAxeTest
                 },
                 src,
                 axe,
-                PositionConstants.UL,
+                PositionConstants.U1L1,
                 FigureActionType.BattleAxeMove),
 
             TestUtils.RunExecuteActionScenario(
                 "Move DR destroys quadrant", b =>
                 {
-                    var dst = src.GetWithOffset(PositionConstants.DR);
+                    var dst = src.GetWithOffset(PositionConstants.D1R1);
                     if (dst == -1) return;
-                    var dr = dst.GetWithOffset(PositionConstants.DR);
-                    var d  = dst.GetWithOffset(PositionConstants.D);
-                    var r  = dst.GetWithOffset(PositionConstants.R);
-                    var u  = dst.GetWithOffset(PositionConstants.U); // should survive
+                    var dr = dst.GetWithOffset(PositionConstants.D1R1);
+                    var d  = dst.GetWithOffset(PositionConstants.D1);
+                    var r  = dst.GetWithOffset(PositionConstants.R1);
+                    var u  = dst.GetWithOffset(PositionConstants.U1); // should survive
                     if (dr != -1) b[dr] = Figure.Trader | Figure.IsBlack;
                     if (d  != -1) b[d]  = Figure.Archer | Figure.IsWhite;
                     if (r  != -1) b[r]  = Figure.Wall;
@@ -109,18 +109,18 @@ public class BattleAxeTest
                 },
                 src,
                 axe,
-                PositionConstants.DR,
+                PositionConstants.D1R1,
                 FigureActionType.BattleAxeMove),
 
             TestUtils.RunExecuteActionScenario(
                 "Move DL destroys quadrant", b =>
                 {
-                    var dst = src.GetWithOffset(PositionConstants.DL);
+                    var dst = src.GetWithOffset(PositionConstants.D1L1);
                     if (dst == -1) return;
-                    var dl = dst.GetWithOffset(PositionConstants.DL);
-                    var d  = dst.GetWithOffset(PositionConstants.D);
-                    var l  = dst.GetWithOffset(PositionConstants.L);
-                    var r  = dst.GetWithOffset(PositionConstants.R); // should survive
+                    var dl = dst.GetWithOffset(PositionConstants.D1L1);
+                    var d  = dst.GetWithOffset(PositionConstants.D1);
+                    var l  = dst.GetWithOffset(PositionConstants.L1);
+                    var r  = dst.GetWithOffset(PositionConstants.R1); // should survive
                     if (dl != -1) b[dl] = Figure.Trader | Figure.IsBlack;
                     if (d  != -1) b[d]  = Figure.Archer | Figure.IsWhite;
                     if (l  != -1) b[l]  = Figure.Wall;
@@ -128,7 +128,7 @@ public class BattleAxeTest
                 },
                 src,
                 axe,
-                PositionConstants.DL,
+                PositionConstants.D1L1,
                 FigureActionType.BattleAxeMove)
         });
     }

@@ -1,0 +1,37 @@
+﻿[
+  {
+    scenario: Horizontal charge right,
+    action: (3,3->3,4):SpartanMove,
+    board: [
+      (3,3):(Spartan, IsWhite)->(Empty),
+      (3,4):(Empty)->(Spartan, IsWhite),
+      (3,5):(Peasant, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Vertical charge up,
+    action: (3,3->4,3):SpartanMove,
+    board: [
+      (3,3):(Spartan, IsWhite)->(Empty),
+      (4,3):(Empty)->(Spartan, IsWhite),
+      (5,3):(Archer, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: Diagonal charge,
+    action: (3,3->4,4):SpartanMove,
+    board: [
+      (3,3):(Spartan, IsWhite)->(Empty),
+      (4,4):(Empty)->(Spartan, IsWhite),
+      (5,5):(Knight, IsBlack)->(Empty)
+    ]
+  },
+  {
+    scenario: No charge - no enemy behind,
+    action: (3,3->3,4):SpartanMove,
+    board: [
+      (3,3):(Spartan, IsWhite)->(Empty),
+      (3,4):(Empty)->(Spartan, IsWhite)
+    ]
+  }
+]

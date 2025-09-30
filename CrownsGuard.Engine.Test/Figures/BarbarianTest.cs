@@ -24,10 +24,10 @@ public class BarbarianTest
             TestUtils.RunGetActionsScenario(
                 "Push line left", b =>
                 {
-                    var l1 = src.GetWithOffset(PositionConstants.L);
-                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L);
-                    var l3 = l2 == -1 ? -1 : l2.GetWithOffset(PositionConstants.L);
-                    var l4 = l3 == -1 ? -1 : l3.GetWithOffset(PositionConstants.L);
+                    var l1 = src.GetWithOffset(PositionConstants.L1);
+                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L1);
+                    var l3 = l2 == -1 ? -1 : l2.GetWithOffset(PositionConstants.L1);
+                    var l4 = l3 == -1 ? -1 : l3.GetWithOffset(PositionConstants.L1);
                     if (l1 != -1) b[l1] = Figure.LegionarySword | Figure.IsBlack; // adjacent non-empty (enemy)
                     if (l2 != -1) b[l2] = Figure.Empty; // empty target -> PushFigure
                     if (l3 != -1) b[l3] = Figure.Empty; // empty target -> PushFigure
@@ -41,9 +41,9 @@ public class BarbarianTest
             TestUtils.RunGetActionsScenario(
                 "Push line up", b =>
                 {
-                    var u1 = src.GetWithOffset(PositionConstants.U);
-                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
+                    var u1 = src.GetWithOffset(PositionConstants.U1);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U1);
+                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U1);
                     if (u1 != -1) b[u1] = Figure.Peasant | Figure.IsWhite; // adjacent non-empty (friendly)
                     if (u2 != -1) b[u2] = Figure.LegionarySword | Figure.IsWhite; // non-walkable blocker right after -> PossiblePushFigure from u2
                     if (u3 != -1) b[u3] = Figure.Empty; // will still appear as PossiblePushFigure in current behavior
@@ -57,23 +57,23 @@ public class BarbarianTest
                 "Mixed directions", b =>
                 {
                     // Right: adjacent enemy then empties
-                    var r1 = src.GetWithOffset(PositionConstants.R);
-                    var r2 = r1 == -1 ? -1 : r1.GetWithOffset(PositionConstants.R);
-                    var r3 = r2 == -1 ? -1 : r2.GetWithOffset(PositionConstants.R);
+                    var r1 = src.GetWithOffset(PositionConstants.R1);
+                    var r2 = r1 == -1 ? -1 : r1.GetWithOffset(PositionConstants.R1);
+                    var r3 = r2 == -1 ? -1 : r2.GetWithOffset(PositionConstants.R1);
                     if (r1 != -1) b[r1] = Figure.Trader | Figure.IsBlack;
                     if (r2 != -1) b[r2] = Figure.Empty;
                     if (r3 != -1) b[r3] = Figure.Empty;
 
                     // Down: adjacent friendly then blocker immediately
-                    var d1 = src.GetWithOffset(PositionConstants.D);
-                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D);
+                    var d1 = src.GetWithOffset(PositionConstants.D1);
+                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D1);
                     if (d1 != -1) b[d1] = Figure.Archer | Figure.IsWhite;
                     if (d2 != -1) b[d2] = Figure.Wall;
 
                     // Down-Left: adjacent enemy then empty then blocker
-                    var dl1 = src.GetWithOffset(PositionConstants.DL);
-                    var dl2 = dl1 == -1 ? -1 : dl1.GetWithOffset(PositionConstants.DL);
-                    var dl3 = dl2 == -1 ? -1 : dl2.GetWithOffset(PositionConstants.DL);
+                    var dl1 = src.GetWithOffset(PositionConstants.D1L1);
+                    var dl2 = dl1 == -1 ? -1 : dl1.GetWithOffset(PositionConstants.D1L1);
+                    var dl3 = dl2 == -1 ? -1 : dl2.GetWithOffset(PositionConstants.D1L1);
                     if (dl1 != -1) b[dl1] = Figure.Knight | Figure.IsBlack;
                     if (dl2 != -1) b[dl2] = Figure.Empty;
                     if (dl3 != -1) b[dl3] = Figure.Knight | Figure.IsBlack;

@@ -26,25 +26,25 @@ public class MinerTest
                 {
                     const int src = 27; // d4
                     // Left: empty then friendly blocker at distance 2
-                    var l1 = src.GetWithOffset(PositionConstants.L);
-                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L);
+                    var l1 = src.GetWithOffset(PositionConstants.L1);
+                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L1);
                     if (l1 != -1) b[l1] = Figure.Empty; // walkable
                     if (l2 != -1) b[l2] = Figure.Peasant | Figure.IsWhite; // friendly blocks
 
                     // Up: empty spaces for miner movement
-                    var u1 = src.GetWithOffset(PositionConstants.U);
-                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
+                    var u1 = src.GetWithOffset(PositionConstants.U1);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U1);
+                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U1);
                     if (u1 != -1) b[u1] = Figure.Empty; // walkable
                     if (u2 != -1) b[u2] = Figure.Empty; // walkable
                     if (u3 != -1) b[u3] = Figure.Empty; // walkable
 
                     // Right: wall immediately
-                    var r1 = src.GetWithOffset(PositionConstants.R);
+                    var r1 = src.GetWithOffset(PositionConstants.R1);
                     if (r1 != -1) b[r1] = Figure.Wall; // non-walkable blocker
 
                     // Down: friendly immediately
-                    var d1 = src.GetWithOffset(PositionConstants.D);
+                    var d1 = src.GetWithOffset(PositionConstants.D1);
                     if (d1 != -1) b[d1] = Figure.LegionarySword | Figure.IsWhite; // non-walkable blocker
                 },
                 27, // d4
@@ -66,33 +66,33 @@ public class MinerTest
                     const int src = 27; // d4
                     // Set up a clear path in all directions for multiple squares
                     // Left direction: positions 26, 25, 24 should be empty
-                    var l1 = src.GetWithOffset(PositionConstants.L);
-                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L);
-                    var l3 = l2 == -1 ? -1 : l2.GetWithOffset(PositionConstants.L);
+                    var l1 = src.GetWithOffset(PositionConstants.L1);
+                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L1);
+                    var l3 = l2 == -1 ? -1 : l2.GetWithOffset(PositionConstants.L1);
                     if (l1 != -1) b[l1] = Figure.Empty;
                     if (l2 != -1) b[l2] = Figure.Empty;
                     if (l3 != -1) b[l3] = Figure.Empty;
 
                     // Right direction: positions 28, 29, 30 should be empty
-                    var r1 = src.GetWithOffset(PositionConstants.R);
-                    var r2 = r1 == -1 ? -1 : r1.GetWithOffset(PositionConstants.R);
-                    var r3 = r2 == -1 ? -1 : r2.GetWithOffset(PositionConstants.R);
+                    var r1 = src.GetWithOffset(PositionConstants.R1);
+                    var r2 = r1 == -1 ? -1 : r1.GetWithOffset(PositionConstants.R1);
+                    var r3 = r2 == -1 ? -1 : r2.GetWithOffset(PositionConstants.R1);
                     if (r1 != -1) b[r1] = Figure.Empty;
                     if (r2 != -1) b[r2] = Figure.Empty;
                     if (r3 != -1) b[r3] = Figure.Empty;
 
                     // Up direction: positions 19, 11, 3 should be empty
-                    var u1 = src.GetWithOffset(PositionConstants.U);
-                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
+                    var u1 = src.GetWithOffset(PositionConstants.U1);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U1);
+                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U1);
                     if (u1 != -1) b[u1] = Figure.Empty;
                     if (u2 != -1) b[u2] = Figure.Empty;
                     if (u3 != -1) b[u3] = Figure.Empty;
 
                     // Down direction: positions 35, 43, 51 should be empty
-                    var d1 = src.GetWithOffset(PositionConstants.D);
-                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D);
-                    var d3 = d2 == -1 ? -1 : d2.GetWithOffset(PositionConstants.D);
+                    var d1 = src.GetWithOffset(PositionConstants.D1);
+                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D1);
+                    var d3 = d2 == -1 ? -1 : d2.GetWithOffset(PositionConstants.D1);
                     if (d1 != -1) b[d1] = Figure.Empty;
                     if (d2 != -1) b[d2] = Figure.Empty;
                     if (d3 != -1) b[d3] = Figure.Empty;
@@ -107,10 +107,10 @@ public class MinerTest
                 {
                     const int src = 27; // d4
                     // Place Fire squares in all directions - these should be walkable for miner
-                    var l1 = src.GetWithOffset(PositionConstants.L);
-                    var r1 = src.GetWithOffset(PositionConstants.R);
-                    var u1 = src.GetWithOffset(PositionConstants.U);
-                    var d1 = src.GetWithOffset(PositionConstants.D);
+                    var l1 = src.GetWithOffset(PositionConstants.L1);
+                    var r1 = src.GetWithOffset(PositionConstants.R1);
+                    var u1 = src.GetWithOffset(PositionConstants.U1);
+                    var d1 = src.GetWithOffset(PositionConstants.D1);
 
                     if (l1 != -1) b[l1] = Figure.Fire;
                     if (r1 != -1) b[r1] = Figure.Fire;
@@ -118,10 +118,10 @@ public class MinerTest
                     if (d1 != -1) b[d1] = Figure.Fire;
 
                     // Place Fire squares further along to test MinerMove through Fire
-                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L);
-                    var r2 = r1 == -1 ? -1 : r1.GetWithOffset(PositionConstants.R);
-                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D);
+                    var l2 = l1 == -1 ? -1 : l1.GetWithOffset(PositionConstants.L1);
+                    var r2 = r1 == -1 ? -1 : r1.GetWithOffset(PositionConstants.R1);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U1);
+                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D1);
 
                     if (l2 != -1) b[l2] = Figure.Fire;
                     if (r2 != -1) b[r2] = Figure.Fire;
@@ -169,7 +169,7 @@ public class MinerTest
                 _ => { /* empty board */ },
                 27, // d4
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.U, // Move up one square
+                PositionConstants.U1, // Move up one square
                 FigureActionType.MinerMove),
 
             // Long move multiple trenches scenario
@@ -178,9 +178,9 @@ public class MinerTest
                 {
                     const int src = 27; // d4
                     // Ensure path is clear for 3 squares up: positions 27->19->11->3
-                    var u1 = src.GetWithOffset(PositionConstants.U);
-                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
+                    var u1 = src.GetWithOffset(PositionConstants.U1);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U1);
+                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U1);
 
                     if (u1 != -1) b[u1] = Figure.Empty;
                     if (u2 != -1) b[u2] = Figure.Empty;
@@ -188,7 +188,7 @@ public class MinerTest
                 },
                 27, // d4
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.U * 3, // Move up three squares
+                PositionConstants.U3, // Move up three squares
                 FigureActionType.MinerMove),
 
             // With obstacle stops trench scenario
@@ -197,9 +197,9 @@ public class MinerTest
                 {
                     const int src = 27; // d4
                     // Place obstacle after 2 squares up, path: 27->19->11 (obstacle)->3 (should not create trench)
-                    var u1 = src.GetWithOffset(PositionConstants.U);
-                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U);
-                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U);
+                    var u1 = src.GetWithOffset(PositionConstants.U1);
+                    var u2 = u1 == -1 ? -1 : u1.GetWithOffset(PositionConstants.U1);
+                    var u3 = u2 == -1 ? -1 : u2.GetWithOffset(PositionConstants.U1);
 
                     if (u1 != -1) b[u1] = Figure.Empty;
                     if (u2 != -1) b[u2] = Figure.Empty;
@@ -207,7 +207,7 @@ public class MinerTest
                 },
                 27, // d4
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.U * 2, // Move up two squares
+                PositionConstants.U2, // Move up two squares
                 FigureActionType.MinerMove),
 
             // Boundary no trench off board scenario
@@ -216,7 +216,7 @@ public class MinerTest
                 _ => { /* empty board */ },
                 4, // b8 (top edge, but can move right)
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.R, // Move right one square (to edge)
+                PositionConstants.R1, // Move right one square (to edge)
                 FigureActionType.MinerMove),
 
             // Direction right scenario
@@ -225,7 +225,7 @@ public class MinerTest
                 _ => { /* empty board */ },
                 27, // d4
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.R, // Move right one square
+                PositionConstants.R1, // Move right one square
                 FigureActionType.MinerMove),
 
             // Direction left scenario
@@ -234,7 +234,7 @@ public class MinerTest
                 _ => { /* empty board */ },
                 27, // d4
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.L, // Move left one square
+                PositionConstants.L1, // Move left one square
                 FigureActionType.MinerMove),
 
             // Direction up scenario
@@ -243,7 +243,7 @@ public class MinerTest
                 _ => { /* empty board */ },
                 27, // d4
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.U, // Move up one square
+                PositionConstants.U1, // Move up one square
                 FigureActionType.MinerMove),
 
             // Direction down scenario
@@ -252,7 +252,7 @@ public class MinerTest
                 _ => { /* empty board */ },
                 27, // d4
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.D, // Move down one square
+                PositionConstants.D1, // Move down one square
                 FigureActionType.MinerMove),
 
             // Edge case corner to corner scenario
@@ -264,7 +264,7 @@ public class MinerTest
                 },
                 0, // a1 (bottom-left corner)
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.UR * 7, // Move diagonally to h8 (7 right, 7 up)
+                PositionConstants.U7R7, // Move diagonally to h8 (7 right, 7 up)
                 FigureActionType.MinerMove),
 
             // Edge case along edge scenario
@@ -277,7 +277,7 @@ public class MinerTest
                 },
                 0, // a1 (bottom-left corner)
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.R * 7, // Move right along bottom edge to h1
+                PositionConstants.R7, // Move right along bottom edge to h1
                 FigureActionType.MinerMove),
 
             // Edge case boundary trench creation scenario
@@ -289,13 +289,13 @@ public class MinerTest
                     // Move up 6 squares: positions 1->9->17->25->33->41->49
                     for (var i = 1; i < 7; i++)
                     {
-                        var pos = src.GetWithOffset((short)(PositionConstants.U * i));
+                        var pos = src.GetWithOffset(PositionConstants.U1);
                         if (pos != -1) b[pos] = Figure.Empty;
                     }
                 },
                 1, // b1 (near bottom edge)
                 Figure.Miner | Figure.IsWhite,
-                PositionConstants.U * 6, // Move up 6 squares toward top edge
+                PositionConstants.U6, // Move up 6 squares toward top edge
                 FigureActionType.MinerMove)
         });
     }

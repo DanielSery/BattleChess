@@ -1,0 +1,63 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):Move,
+      (2,3):Move,
+      (2,4):Move,
+      (3,2):Move,
+      (3,3):SwapWithFigure,
+      (3,4):Move,
+      (4,2):Move,
+      (4,3):Move,
+      (4,4):Move
+    ]
+  },
+  {
+    scenario: Movement and attacks,
+    figure: (3,3),
+    actions: [
+      (0,0):SwapWithFigure,
+      (0,7):SwapWithFigure,
+      (2,2):MeleeAttack,
+      (2,3):MeleeAttack,
+      (2,4):MeleeAttack,
+      (3,2):MeleeAttack,
+      (3,3):SwapWithFigure,
+      (3,4):MeleeAttack,
+      (4,2):MeleeAttack,
+      (4,3):MeleeAttack,
+      (4,4):MeleeAttack,
+      (7,0):SwapWithFigure,
+      (7,7):SwapWithFigure
+    ]
+  },
+  {
+    scenario: Swap with allies only,
+    figure: (3,3),
+    actions: [
+      (0,0):SwapWithFigure,
+      (2,2):Move,
+      (2,3):Move,
+      (2,4):Move,
+      (3,2):Move,
+      (3,3):SwapWithFigure,
+      (3,4):Move,
+      (4,2):Move,
+      (4,3):MeleeAttack,
+      (4,4):Move,
+      (7,0):SwapWithFigure
+    ]
+  },
+  {
+    scenario: Edge case,
+    figure: (0,0),
+    actions: [
+      (0,0):SwapWithFigure,
+      (0,1):Move,
+      (1,0):Move,
+      (1,1):Move
+    ]
+  }
+]

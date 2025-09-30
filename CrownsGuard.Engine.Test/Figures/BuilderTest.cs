@@ -27,10 +27,10 @@ public class BuilderTest
                 b =>
                 {
                     // Place walls on Up and Right to trigger MeleeAttack, empties on Down/Left to allow BuildWall
-                    var u = src.GetWithOffset(PositionConstants.U);
-                    var r = src.GetWithOffset(PositionConstants.R);
-                    var d = src.GetWithOffset(PositionConstants.D);
-                    var l = src.GetWithOffset(PositionConstants.L);
+                    var u = src.GetWithOffset(PositionConstants.U1);
+                    var r = src.GetWithOffset(PositionConstants.R1);
+                    var d = src.GetWithOffset(PositionConstants.D1);
+                    var l = src.GetWithOffset(PositionConstants.L1);
                     if (u != -1) b[u] = Figure.Wall;
                     if (r != -1) b[r] = Figure.Wall;
                     if (d != -1) b[d] = Figure.Empty;
@@ -52,23 +52,23 @@ public class BuilderTest
                 b =>
                 {
                     // Up empty -> BuildWall
-                    var u = src.GetWithOffset(PositionConstants.U);
+                    var u = src.GetWithOffset(PositionConstants.U1);
                     if (u != -1) b[u] = Figure.Empty;
                     // Right friendly (non-empty non-wall) -> no action on rook direction
-                    var r = src.GetWithOffset(PositionConstants.R);
+                    var r = src.GetWithOffset(PositionConstants.R1);
                     if (r != -1) b[r] = Figure.LegionarySword | Figure.IsWhite;
                     // Down enemy (non-empty non-wall) -> no action on rook direction
-                    var d = src.GetWithOffset(PositionConstants.D);
+                    var d = src.GetWithOffset(PositionConstants.D1);
                     if (d != -1) b[d] = Figure.Peasant | Figure.IsBlack;
                     // Left wall -> MeleeAttack
-                    var l = src.GetWithOffset(PositionConstants.L);
+                    var l = src.GetWithOffset(PositionConstants.L1);
                     if (l != -1) b[l] = Figure.Wall;
 
                     // Diagonals: make two walkable and two blocked to verify move generation only on walkable
-                    var ul = src.GetWithOffset(PositionConstants.UL);
-                    var ur = src.GetWithOffset(PositionConstants.UR);
-                    var dl = src.GetWithOffset(PositionConstants.DL);
-                    var dr = src.GetWithOffset(PositionConstants.DR);
+                    var ul = src.GetWithOffset(PositionConstants.U1L1);
+                    var ur = src.GetWithOffset(PositionConstants.U1R1);
+                    var dl = src.GetWithOffset(PositionConstants.D1L1);
+                    var dr = src.GetWithOffset(PositionConstants.D1R1);
                     if (ul != -1) b[ul] = Figure.Empty; // move
                     if (ur != -1) b[ur] = Figure.Wall;  // block
                     if (dl != -1) b[dl] = Figure.Empty; // move

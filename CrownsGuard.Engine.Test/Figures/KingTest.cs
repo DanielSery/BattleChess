@@ -25,35 +25,35 @@ public class KingTest
                     const int src = 27; // d4
 
                     // Up-Left: enemy
-                    var ul = src.GetWithOffset(PositionConstants.UL);
+                    var ul = src.GetWithOffset(PositionConstants.U1L1);
                     if (ul != -1) b[ul] = Figure.Peasant | Figure.IsBlack;
 
                     // Up: empty
-                    var u = src.GetWithOffset(PositionConstants.U);
+                    var u = src.GetWithOffset(PositionConstants.U1);
                     if (u != -1) b[u] = Figure.Empty;
 
                     // Up-Right: wall (non-walkable)
-                    var ur = src.GetWithOffset(PositionConstants.UR);
+                    var ur = src.GetWithOffset(PositionConstants.U1R1);
                     if (ur != -1) b[ur] = Figure.Wall;
 
                     // Left: ally
-                    var l = src.GetWithOffset(PositionConstants.L);
+                    var l = src.GetWithOffset(PositionConstants.L1);
                     if (l != -1) b[l] = Figure.Knight | Figure.IsWhite;
 
                     // Right: enemy
-                    var r = src.GetWithOffset(PositionConstants.R);
+                    var r = src.GetWithOffset(PositionConstants.R1);
                     if (r != -1) b[r] = Figure.Archer | Figure.IsBlack;
 
                     // Down-Left: empty
-                    var dl = src.GetWithOffset(PositionConstants.DL);
+                    var dl = src.GetWithOffset(PositionConstants.D1L1);
                     if (dl != -1) b[dl] = Figure.Empty;
 
                     // Down: ally
-                    var d = src.GetWithOffset(PositionConstants.D);
+                    var d = src.GetWithOffset(PositionConstants.D1);
                     if (d != -1) b[d] = Figure.LegionarySword | Figure.IsWhite;
 
                     // Down-Right: wall
-                    var dr = src.GetWithOffset(PositionConstants.DR);
+                    var dr = src.GetWithOffset(PositionConstants.D1R1);
                     if (dr != -1) b[dr] = Figure.Wall;
                 },
                 27, // d4

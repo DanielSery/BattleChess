@@ -1,0 +1,76 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (0,0):PossibleMeleePierceAttack,
+      (0,6):PossibleMeleePierceAttack,
+      (1,1):PossibleMeleePierceAttack,
+      (1,5):PossibleMeleePierceAttack,
+      (2,2):PossibleMeleePierceAttack,
+      (2,2):Move,
+      (2,4):PossibleMeleePierceAttack,
+      (2,4):Move,
+      (4,2):PossibleMeleePierceAttack,
+      (4,2):Move,
+      (4,4):PossibleMeleePierceAttack,
+      (4,4):Move,
+      (5,1):PossibleMeleePierceAttack,
+      (5,5):PossibleMeleePierceAttack,
+      (6,0):PossibleMeleePierceAttack,
+      (6,6):PossibleMeleePierceAttack
+    ]
+  },
+  {
+    scenario: Diagonal movement,
+    figure: (3,3),
+    actions: [
+      (0,0):PossibleMeleePierceAttack,
+      (0,6):PossibleMeleePierceAttack,
+      (1,1):PossibleMeleePierceAttack,
+      (1,5):PossibleMeleePierceAttack,
+      (2,2):PossibleMeleePierceAttack,
+      (2,2):Move,
+      (2,4):PossibleMeleePierceAttack,
+      (2,4):Move,
+      (4,2):PossibleMeleePierceAttack,
+      (4,2):Move,
+      (4,4):PossibleMeleePierceAttack,
+      (4,4):Move,
+      (5,1):PossibleMeleePierceAttack,
+      (5,5):PossibleMeleePierceAttack,
+      (6,0):PossibleMeleePierceAttack,
+      (6,6):PossibleMeleePierceAttack
+    ]
+  },
+  {
+    scenario: Piercing attacks,
+    figure: (3,3),
+    actions: [
+      (0,6):PossibleMeleePierceAttack,
+      (1,1):PossibleMeleePierceAttack,
+      (1,5):PossibleMeleePierceAttack,
+      (2,2):PossibleMeleePierceAttack,
+      (2,2):Move,
+      (2,4):PossibleMeleePierceAttack,
+      (2,4):Move,
+      (4,2):PossibleMeleePierceAttack,
+      (4,2):Move,
+      (4,4):MeleePierceAttack,
+      (5,1):PossibleMeleePierceAttack,
+      (5,5):PossibleMeleePierceAttack,
+      (6,0):MeleePierceAttack,
+      (6,6):PossibleMeleePierceAttack
+    ]
+  },
+  {
+    scenario: Edge case,
+    figure: (0,0),
+    actions: [
+      (1,1):PossibleMeleePierceAttack,
+      (1,1):Move,
+      (2,2):PossibleMeleePierceAttack,
+      (3,3):PossibleMeleePierceAttack
+    ]
+  }
+]

@@ -1,0 +1,75 @@
+﻿[
+  {
+    scenario: White - All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,3):Move,
+      (2,4):PossibleMeleeAttack,
+      (3,2):Move,
+      (3,4):Move,
+      (4,2):PossibleMeleeAttack,
+      (4,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Black - All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,4):PossibleMeleeAttack,
+      (3,2):Move,
+      (3,4):Move,
+      (4,2):PossibleMeleeAttack,
+      (4,3):Move,
+      (4,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: White - Movement and attacks,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,4):MeleeAttack,
+      (4,2):PossibleMeleeAttack,
+      (4,4):MeleeAttack
+    ]
+  },
+  {
+    scenario: Black - Movement and attacks,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,4):MeleeAttack,
+      (4,2):PossibleMeleeAttack,
+      (4,4):MeleeAttack
+    ]
+  },
+  {
+    scenario: White - Blocked movement,
+    figure: (3,3),
+    actions: [
+      (2,2):PossibleMeleeAttack,
+      (2,3):Move,
+      (2,4):PossibleMeleeAttack,
+      (4,2):PossibleMeleeAttack,
+      (4,4):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: White - Edge case,
+    figure: (0,7),
+    actions: [
+      (0,6):Move,
+      (1,6):PossibleMeleeAttack
+    ]
+  },
+  {
+    scenario: Black - Edge case,
+    figure: (7,0),
+    actions: [
+      (6,1):PossibleMeleeAttack,
+      (7,1):Move
+    ]
+  }
+]

@@ -1,0 +1,79 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (0,3):PossibleRangedAttack,
+      (1,3):PossibleRangedAttack,
+      (2,2):Move,
+      (2,3):PossibleRangedAttack,
+      (2,4):Move,
+      (3,0):PossibleRangedAttack,
+      (3,1):PossibleRangedAttack,
+      (3,2):PossibleRangedAttack,
+      (3,4):PossibleRangedAttack,
+      (3,5):PossibleRangedAttack,
+      (3,6):PossibleRangedAttack,
+      (4,2):Move,
+      (4,3):PossibleRangedAttack,
+      (4,4):Move,
+      (5,3):PossibleRangedAttack,
+      (6,3):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Diagonal movement,
+    figure: (3,3),
+    actions: [
+      (0,3):PossibleRangedAttack,
+      (1,3):PossibleRangedAttack,
+      (2,2):Move,
+      (2,3):PossibleRangedAttack,
+      (2,4):Move,
+      (3,0):PossibleRangedAttack,
+      (3,1):PossibleRangedAttack,
+      (3,2):PossibleRangedAttack,
+      (3,4):PossibleRangedAttack,
+      (3,5):PossibleRangedAttack,
+      (3,6):PossibleRangedAttack,
+      (4,2):Move,
+      (4,3):PossibleRangedAttack,
+      (4,4):Move,
+      (5,3):PossibleRangedAttack,
+      (6,3):PossibleRangedAttack
+    ]
+  },
+  {
+    scenario: Ranged attacks,
+    figure: (3,3),
+    actions: [
+      (2,2):Move,
+      (2,4):Move,
+      (4,2):Move,
+      (4,4):Move
+    ]
+  },
+  {
+    scenario: Suppressed by adjacent enemy,
+    figure: (3,3),
+    actions: [
+      (2,2):Move,
+      (2,4):Move,
+      (4,2):Move,
+      (4,4):Move
+    ]
+  },
+  {
+    scenario: Edge case,
+    figure: (0,0),
+    actions: [
+      (0,1):PossibleRangedAttack,
+      (0,2):PossibleRangedAttack,
+      (0,3):PossibleRangedAttack,
+      (1,0):PossibleRangedAttack,
+      (1,1):Move,
+      (2,0):PossibleRangedAttack,
+      (3,0):PossibleRangedAttack
+    ]
+  }
+]

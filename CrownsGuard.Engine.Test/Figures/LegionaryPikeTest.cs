@@ -24,8 +24,8 @@ public class LegionaryPikeTest
                 {
                     const int src = 27; // d4
                     // Melee (white forward-diagonals): one enemy and one friendly adjacent
-                    var ul = src.GetWithOffset(PositionConstants.UL);
-                    var ur = src.GetWithOffset(PositionConstants.UR);
+                    var ul = src.GetWithOffset(PositionConstants.U1L1);
+                    var ur = src.GetWithOffset(PositionConstants.U1R1);
                     if (ul != -1) b[ul] = Figure.Peasant | Figure.IsBlack; // enemy - melee attack possible
                     if (ur != -1) b[ur] = Figure.LegionarySword | Figure.IsWhite; // friendly - only PossibleMeleeAttack
 
@@ -36,7 +36,7 @@ public class LegionaryPikeTest
                     if (uur != -1) b[uur] = Figure.LegionarySword | Figure.IsWhite; // friendly - only PossibleRangedAttack
 
                     // Forward moves: place a blocker immediately ahead to block both single and double moves
-                    var u = src.GetWithOffset(PositionConstants.D); // for white forward is down (negative Y)
+                    var u = src.GetWithOffset(PositionConstants.D1); // for white forward is down (negative Y)
                     // Note: in engine, white forward move uses -1 * YOffset (PositionConstants.D)
                     if (u != -1) b[u] = Figure.Wall; // non-walkable blocker
                 },

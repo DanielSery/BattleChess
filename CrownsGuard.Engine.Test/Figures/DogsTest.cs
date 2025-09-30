@@ -26,18 +26,18 @@ public class DogsTest
                 "Mixed", b =>
                 {
                     // UL: enemy at distance 2 (should add Possible at 1 and MeleeAttack at 2)
-                    var ul1 = src.GetWithOffset(PositionConstants.UL);
-                    var ul2 = ul1 == -1 ? -1 : ul1.GetWithOffset(PositionConstants.UL);
+                    var ul1 = src.GetWithOffset(PositionConstants.U1L1);
+                    var ul2 = ul1 == -1 ? -1 : ul1.GetWithOffset(PositionConstants.U1L1);
                     if (ul2 != -1) b[ul2] = Figure.Peasant | Figure.IsBlack;
 
                     // R: friendly at distance 1 (should add PossibleMeleeAttack at R1 and break)
-                    var r1 = src.GetWithOffset(PositionConstants.R);
+                    var r1 = src.GetWithOffset(PositionConstants.R1);
                     if (r1 != -1) b[r1] = Figure.LegionarySword | Figure.IsWhite;
 
                     // D: wall at distance 3 (should add PossibleMeleeAttack at D1, D2 and D3 then break)
-                    var d1 = src.GetWithOffset(PositionConstants.D);
-                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D);
-                    var d3 = d2 == -1 ? -1 : d2.GetWithOffset(PositionConstants.D);
+                    var d1 = src.GetWithOffset(PositionConstants.D1);
+                    var d2 = d1 == -1 ? -1 : d1.GetWithOffset(PositionConstants.D1);
+                    var d3 = d2 == -1 ? -1 : d2.GetWithOffset(PositionConstants.D1);
                     if (d3 != -1) b[d3] = Figure.Wall;
 
                     // Keep adjacent walkable squares empty for move generation in other directions
@@ -70,12 +70,12 @@ public class DogsTest
             TestUtils.RunExecuteActionScenario(
                 "Execute up melee", b =>
                 {
-                    var dst = 27.GetWithOffset(PositionConstants.U);
+                    var dst = 27.GetWithOffset(PositionConstants.U1);
                     if (dst != -1) b[dst] = Figure.Knight | Figure.IsBlack;
                 },
                 27,
                 Figure.Dogs | Figure.IsWhite,
-                PositionConstants.U,
+                PositionConstants.U1,
                 FigureActionType.MeleeAttack
             )
         });

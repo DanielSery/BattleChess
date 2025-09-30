@@ -1,0 +1,36 @@
+﻿[
+  {
+    scenario: All empty,
+    figure: (3,3),
+    actions: [
+      (2,2):WarhammerMove,
+      (2,4):WarhammerMove,
+      (4,2):WarhammerMove,
+      (4,4):WarhammerMove
+    ]
+  },
+  {
+    scenario: Diagonal movement,
+    figure: (3,3),
+    actions: [
+      (2,2):WarhammerMove,
+      (2,4):WarhammerMove,
+      (4,2):WarhammerMove,
+      (4,4):WarhammerMove
+    ]
+  },
+  {
+    scenario: Blocked diagonals,
+    figure: (3,3),
+    actions: [
+      (2,4):WarhammerMove
+    ]
+  },
+  {
+    scenario: Edge case,
+    figure: (0,0),
+    actions: [
+      (1,1):WarhammerMove
+    ]
+  }
+]
