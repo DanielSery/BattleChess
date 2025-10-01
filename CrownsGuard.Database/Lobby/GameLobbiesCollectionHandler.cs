@@ -1,28 +1,33 @@
-﻿using CrownsGuard.Database.Database;
-using CrownsGuard.Database;
+﻿using System.Diagnostics.CodeAnalysis;
+using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Utilities;
 using FluentResults;
-using MongoDB.Bson;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Lobby;
 
+[SuppressMessage("ReSharper", "PossiblyMistakenUseOfCancellationToken")]
 internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
 {
     private readonly IDatabaseClient _client;
+    private readonly ILogger<GameLobbiesCollectionHandler> _logger;
 
-    public GameLobbiesCollectionHandler(IDatabaseClient databaseClient)
+    public GameLobbiesCollectionHandler(IDatabaseClient databaseClient, ILogger<GameLobbiesCollectionHandler> logger)
     {
         _client = databaseClient;
+        _logger = logger;
     }
 
-    public async Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Getting public-lobbies");
-            var publicLobbies = await _client.GameLobbies.Aggregate()
+            _logger.LogInformation("Getting public-lobbies");
+            return await _client.GameLobbies.Aggregate()
                 .Match(l => l.Version == GameVersion.VersionId && string.IsNullOrEmpty(l.JoinedId))
                 .Project(doc => new PublicLobbyData
                 {
@@ -31,187 +36,116 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                     Elo = doc.Elo,
                     Locked = (doc.PasswordHash.Length > 0) ? "True" : "False",
                 })
-                .ToListAsync(cancellationToken: cancellationToken);
-            Console.WriteLine("Found public-lobbies");
-            return publicLobbies;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to get public-lobbies: {e}");
-            return Result.Fail<List<PublicLobbyData>>(e.Message);
-        }
+                .ToListAsync(cancellationToken: linkedSource.Token);
+            
+        }, nameof(GetPublicLobbiesAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Searching for lobby with id: {lobbyId}");
+            _logger.LogInformation("Searching for lobby with id: {lobbyId}", lobbyId);
             var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
-            var foundGames = await _client.GameLobbies.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
-            Console.WriteLine($"Found lobby with id: {lobbyId}");
-            return foundGameResult;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to get game-lobby with id {lobbyId}: {e}");
-            return Result.Fail<GameLobby>(e.Message);
-        }
+            return await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            
+        }, nameof(FindByIdAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Searching for lobby with name: {lobbyName}");
+            _logger.LogInformation("Searching for lobby with name: {lobbyName}", lobbyName);
             var filter = Builders<GameLobby>.Filter.And(
                 Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
                 Builders<GameLobby>.Filter.Eq(g => g.Version, GameVersion.VersionId)
             );
-            var foundGames = await _client.GameLobbies.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundGameResult = await foundGames.SingleResultAsync(cancellationToken: cancellationToken);
-            Console.WriteLine($"Found lobby with name: {lobbyName}");
-            return foundGameResult;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to get game-lobby with name {lobbyName}: {e}");
-            return Result.Fail<GameLobby>(e.Message);
-        }
+            return await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            
+        }, nameof(FindByNameAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken)
+    public async Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            using var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-            using var compositeTimeoutTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
-                .Match(change =>
-                    (change.OperationType == ChangeStreamOperationType.Update ||
-                     change.OperationType == ChangeStreamOperationType.Delete) &&
-                    change.DocumentKey["_id"] == ObjectId.Parse(lobbyId));
-
-            Console.WriteLine("Waiting for join request confirmation");
-            using var cursor = await _client.GameLobbies.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                compositeTimeoutTokenSource.Token
-            );
-
-            while (await cursor.MoveNextAsync(compositeTimeoutTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    if (change.FullDocument.Id != lobbyId)
-                        continue;
-
-                    if (change.OperationType == ChangeStreamOperationType.Delete)
-                        return Result.Fail("Lobby deleted");
-
-                    Console.WriteLine("Join request confirmed");
-                    return change.FullDocument;
-                }
-            }
-
-            return Result.Fail<GameLobby>("Lobby not found");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to wait for accept e:{e}");
-            return Result.Fail<GameLobby>(e.Message);
-        }
+            _logger.LogInformation("Waiting for join request confirmation");
+            return await WaitForLobbyAcceptInnerAsync(lobbyId, linkedSource.Token);
+            
+        }, nameof(WaitForLobbyAcceptAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken)
+    /// <summary>
+    /// Waits for the next turn via MongoDB change stream after the specified ObjectId
+    /// </summary>
+    private async Task<Result<GameLobby>> WaitForLobbyAcceptInnerAsync(string lobbyId, CancellationToken cancellationToken)
     {
-        try
+        var streamFilter = Builders<ChangeStreamDocument<GameLobby>>.Filter.And(
+            Builders<ChangeStreamDocument<GameLobby>>.Filter.Or(
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete)),
+            Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.FullDocument.Id, lobbyId)
+        );
+        var streamResult = _client.GameLobbies.WaitForUpdateAsync(streamFilter, cancellationToken: cancellationToken);
+        
+        var filter = Builders<GameLobby>.Filter.And(
+            Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId),
+            Builders<GameLobby>.Filter.Ne(g => g.JoinedId, null)
+        );
+        var foundResult = await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: cancellationToken);
+        if (foundResult.IsSuccess) return foundResult.Value;
+
+        return await streamResult;
+    }
+
+    public async Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
+    {
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Deleting Lobbies");
+            _logger.LogInformation("Deleting Lobbies of game {GameId}", gameId);
             var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
-            var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: cancellationToken);
-            Console.WriteLine($"Deleted Lobbies: {result.DeletedCount}");
+            var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: linkedSource.Token);
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete lobbies");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to delete lobbies: {ex}");
-            return Result.Fail(ex.Message);
-        }
+            
+        }, nameof(DeleteGameLobbiesAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken)
+    public async Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Confirming game join");
+            _logger.LogInformation("Confirming game join of lobby {lobbyId}", lobbyId);
             var filter = Builders<GameLobby>.Filter.Eq(l => l.Id, lobbyId);
             var update = Builders<GameLobby>.Update.Set(x => x.JoinedId, joinId);
-            var result = await _client.GameLobbies.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-            if (!result.IsAcknowledged) return Result.Fail("Failed to update game confirmation");
-            Console.WriteLine($"Confirmed game join for request: {joinId}");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to update game join for request: {e}");
-            return Result.Fail(e.Message);
-        }
+            var result = await _client.GameLobbies.UpdateOneAsync(filter, update, cancellationToken: linkedSource.Token);
+            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update game confirmation");
+            
+        }, nameof(UpdateLobbyJoinAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(timeoutSeconds);
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            game.Version = GameVersion.VersionId;
-            Console.WriteLine("Inserting game lobby");
-            await _client.GameLobbies.InsertOneAsync(game, cancellationToken: cancellationToken);
-            Console.WriteLine("Inserted game lobby");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to insert game lobby: {e}");
-            return Result.Fail(e.Message);
-        }
+            _logger.LogInformation("Inserting game lobby");
+            await _client.GameLobbies.InsertOneAsync(game, cancellationToken: linkedSource.Token);
+            
+        }, nameof(InsertAsync), _logger, cancellationToken);
     }
 
     public Task WatchChangesAsync(

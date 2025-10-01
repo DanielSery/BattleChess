@@ -5,19 +5,19 @@ namespace CrownsGuard.Database.Lobby;
 
 public interface IGameLobbiesCollectionHandler
 {
-    Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken);
+    Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken);
+    Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 10);
 
-    Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken);
+    Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken);
+    Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken);
+    Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
     Task WatchChangesAsync(Func<ChangeStreamDocument<GameLobby>, Task> onLobbyChange, CancellationToken cancellationToken);
 }

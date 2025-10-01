@@ -6,6 +6,33 @@ namespace CrownsGuard.Database.Utilities;
 
 public static class AsyncCursorHelper
 {
+    public static async Task<Result<T>> WaitForUpdateAsync<T>(
+        this IMongoCollection<T> collection, 
+        FilterDefinition<ChangeStreamDocument<T>>? filter,
+        CancellationToken cancellationToken)
+    {
+        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<T>>().Match(filter);
+
+        using var cursor = await collection.WatchAsync(
+            pipeline,
+            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
+            cancellationToken
+        );
+        
+        while (await cursor.MoveNextAsync(cancellationToken))
+        {
+            foreach (var change in cursor.Current)
+            {
+                if (change.OperationType == ChangeStreamOperationType.Delete)
+                    return Result.Fail("Deleted instead of update");
+                
+                return change.FullDocument;
+            }
+        }
+
+        throw new OperationFailedException("Failed to wait for add");
+    }
+    
     public static async Task<T> WaitForAddAsync<T>(
         this IMongoCollection<T> collection, 
         FilterDefinition<ChangeStreamDocument<T>>? filter,
