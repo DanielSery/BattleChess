@@ -11,7 +11,7 @@ public interface IGameLobbiesCollectionHandler
 
     Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 10);
+    Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 1_000);
 
     Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 

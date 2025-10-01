@@ -100,7 +100,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         
         var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
         var foundResult = await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: cancellationToken);
-        if (foundResult.IsSuccess) return foundResult;
+        if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
         if (foundResult.HasError<NoResultsFoundError>()) return foundResult;
 
         return await streamResult;

@@ -1,5 +1,6 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Database.Lobby;
+using CrownsGuard.Database.Utilities;
 using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
@@ -130,6 +131,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             PlayerId = currentPlayer?.Id ?? null,
             Elo = currentPlayer?.Elo ?? null,
             IsHostStarting = isHostStarting,
+            Version = GameVersion.VersionId
         };
         var insertResult = await _gameLobbies.InsertAsync(game, cancellationToken);
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game lobby");
@@ -138,27 +140,17 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
 
     public async Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby, CancellationToken cancellationToken)
     {
-        try
-        {
-            var joinResult = await _lobbyJoins.WaitForJoinAsync(lobby.Id, cancellationToken);
-            if (!joinResult.TryGetValue(out var join)) return joinResult;
+        var joinResult = await _lobbyJoins.WaitForJoinAsync(lobby.Id, cancellationToken);
+        if (!joinResult.TryGetValue(out var join)) return joinResult;
 
-            var updateResult = await _gameLobbies.UpdateLobbyJoinAsync(lobby.Id, join.Id, cancellationToken);
-            if (updateResult.IsFailed)
-            {
-                await DeleteGameAsync(lobby.Id);
-                return Result.Fail("Failed to update game confirmation");
-            }
-
-            return Result.Ok(join);
-        }
-        finally
+        var updateResult = await _gameLobbies.UpdateLobbyJoinAsync(lobby.Id, join.Id, cancellationToken);
+        if (updateResult.IsFailed)
         {
-            if (lobby.JoinedId is null)
-            {
-                await DeleteGameAsync(lobby.Id);
-            }
+            await DeleteGameAsync(lobby.Id);
+            return Result.Fail("Failed to update game confirmation");
         }
+
+        return Result.Ok(join);
     }
 
     public async Task<Result<GameLobby>> JoinLobbyAsync(
