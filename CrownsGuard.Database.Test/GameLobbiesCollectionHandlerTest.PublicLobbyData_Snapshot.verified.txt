@@ -1,0 +1,6 @@
+﻿{
+  Id: 507f1f77bcf86cd799439011,
+  LobbyName: Test Lobby,
+  Locked: True,
+  Elo: 1500
+}

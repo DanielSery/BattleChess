@@ -1,0 +1,16 @@
+﻿{
+  Id: 507f1f77bcf86cd799439011,
+  LobbyName: Test Lobby,
+  PasswordHash: ,
+  PasswordSalt: ,
+  Version: 65536,
+  Elo: 1500,
+  IsHostStarting: false,
+  Map: [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
+}

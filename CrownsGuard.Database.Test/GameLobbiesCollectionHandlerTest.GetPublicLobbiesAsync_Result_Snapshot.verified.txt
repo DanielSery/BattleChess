@@ -1,0 +1,32 @@
+﻿{
+  ValueOrDefault: [
+    {
+      Id: 507f1f77bcf86cd799439011,
+      LobbyName: Public Lobby 1,
+      Locked: False,
+      Elo: 1500
+    },
+    {
+      Id: 507f1f77bcf86cd799439012,
+      LobbyName: Public Lobby 2,
+      Locked: False,
+      Elo: 1600
+    }
+  ],
+  Value: [
+    {
+      Id: 507f1f77bcf86cd799439011,
+      LobbyName: Public Lobby 1,
+      Locked: False,
+      Elo: 1500
+    },
+    {
+      Id: 507f1f77bcf86cd799439012,
+      LobbyName: Public Lobby 2,
+      Locked: False,
+      Elo: 1600
+    }
+  ],
+  IsFailed: false,
+  IsSuccess: true
+}

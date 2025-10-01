@@ -23,7 +23,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     public async Task<Result> InsertAsync(GameTurn gameTurn, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
         using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(timeoutSeconds);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
         return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
             _logger.LogInformation("Inserting game turn {GameTurnId} for game {GameId}", gameTurn.Id, gameTurn.GameId);
@@ -36,7 +36,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     public async Task<Result> RemoveOlderThanAsync(DateTime time, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
         using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(timeoutSeconds);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
         return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
             _logger.LogInformation("Deleting game turns older than {Time}", time);
@@ -53,13 +53,14 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     public async Task<Result<GameTurn>> WaitForFirstTurnAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
         using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(timeoutSeconds);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
         return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
             _logger.LogInformation("Waiting for first turn for game {GameId}", gameId);
             
             var streamFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-            var streamResult = _client.GameTurns.WaitForAddAsync(streamFilter, cancellationToken: linkedSource.Token);
+            using var streamCursor = await _client.GameTurns.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: linkedSource.Token);
+            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: linkedSource.Token);
         
             var filter = Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId);
             var foundResult = await _client.GameTurns.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
@@ -73,7 +74,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     public async Task<Result<GameTurn>> WaitForNextTurnAsync(string turnId, string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
         using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(timeoutSeconds);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
         return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
             _logger.LogInformation("Waiting for next turn after {TurnId} for game {GameId}", turnId, gameId);
@@ -82,7 +83,8 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
                 Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
                 Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, turnId)
             );
-            var streamResult = _client.GameTurns.WaitForAddAsync(streamFilter, cancellationToken: linkedSource.Token);
+            using var streamCursor = await _client.GameTurns.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: linkedSource.Token);
+            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: linkedSource.Token);
         
             var filter = Builders<GameTurn>.Filter.And(
                 Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId),

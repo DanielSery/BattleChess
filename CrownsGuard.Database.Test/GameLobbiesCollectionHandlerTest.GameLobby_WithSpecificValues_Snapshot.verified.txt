@@ -1,0 +1,18 @@
+﻿{
+  Id: 507f1f77bcf86cd799439011,
+  PlayerId: 507f1f77bcf86cd799439012,
+  JoinedId: 507f1f77bcf86cd799439013,
+  LobbyName: Test Lobby,
+  PasswordHash: hashedpassword,
+  PasswordSalt: salt,
+  Version: 2,
+  Elo: 1600,
+  IsHostStarting: true,
+  Map: [
+    1,
+    2,
+    3,
+    4,
+    5
+  ]
+}
