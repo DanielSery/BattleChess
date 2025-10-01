@@ -8,22 +8,6 @@ namespace CrownsGuard.Database.Utilities;
 public static class DatabaseHelper
 {
     /// <summary>
-    /// Safely parses an ObjectId with proper error handling
-    /// </summary>
-    public static ObjectId ParseObjectId(string objectIdValue, string fieldName, ILogger logger)
-    {
-        try
-        {
-            return ObjectId.Parse(objectIdValue);
-        }
-        catch (FormatException)
-        {
-            logger.LogWarning("Invalid {FieldName} ObjectId format: {ObjectIdValue}", fieldName, objectIdValue);
-            throw new ObjectIdParseException();
-        }
-    }
-    
-    /// <summary>
     /// Executes an async operation with standardized error handling
     /// </summary>
     public static async Task<Result> ExecuteWithErrorHandling(
@@ -74,7 +58,7 @@ public static class DatabaseHelper
             logger.LogWarning("Operation {OperationName} was timed out", operationName);
             return Result.Fail(TimeoutError.Instance);
         }
-        catch (ObjectIdParseException)
+        catch (FormatException)
         {
             return Result.Fail(ObjectIdParseError.Instance);
         }

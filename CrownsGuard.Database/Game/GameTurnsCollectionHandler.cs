@@ -70,30 +70,14 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     /// </summary>
     private async Task<GameTurn> WaitForFirstTurnInnerAsync(string gameId, CancellationToken cancellationToken)
     {
-        var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-            .Match(changeFilter);
-
-        using var cursor = await _client.GameTurns.WatchAsync(
-            pipeline,
-            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationToken
-        );
+        var streamFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
+        var streamResult = _client.GameTurns.WaitForAddAsync(streamFilter, cancellationToken: cancellationToken);
         
         var filter = Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId);
-        var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: cancellationToken);
-        var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        if (foundTurn is not null) return foundTurn;
+        var foundResult = await _client.GameTurns.FindSingleResultAsync(filter, cancellationToken: cancellationToken);
+        if (foundResult.IsSuccess) return foundResult.Value;
 
-        while (await cursor.MoveNextAsync(cancellationToken))
-        {
-            foreach (var change in cursor.Current)
-            {
-                return change.FullDocument;
-            }
-        }
-
-        throw new InvalidOperationException("Failed to get first turn");
+        return await streamResult;
     }
 
     /// <inheritdoc />
@@ -116,36 +100,18 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     /// </summary>
     private async Task<GameTurn> WaitForNextTurnInnerAsync(string gameId, string afterTurnId, CancellationToken cancellationToken)
     {
-        var changeFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
+        var streamFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
             Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
             Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, afterTurnId)
         );
-
-        var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameTurn>>()
-            .Match(changeFilter);
-
-        using var cursor = await _client.GameTurns.WatchAsync(
-            pipeline,
-            new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-            cancellationToken
-        );
+        var streamResult = _client.GameTurns.WaitForAddAsync(streamFilter, cancellationToken: cancellationToken);
         
         var filter = Builders<GameTurn>.Filter.And(
             Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId),
             Builders<GameTurn>.Filter.Gt(gt => gt.Id, afterTurnId));
+        var foundResult = await _client.GameTurns.FindSingleResultAsync(filter, cancellationToken: cancellationToken);
+        if (foundResult.IsSuccess) return foundResult.Value;
 
-        var foundTurns = await _client.GameTurns.FindAsync(filter, cancellationToken: cancellationToken);
-        var foundTurn = await foundTurns.FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        if (foundTurn is not null) return foundTurn;
-
-        while (await cursor.MoveNextAsync(cancellationToken))
-        {
-            foreach (var change in cursor.Current)
-            {
-                return change.FullDocument;
-            }
-        }
-        
-        throw new InvalidOperationException("Failed to get next turn");
+        return await streamResult;
     }
 }
