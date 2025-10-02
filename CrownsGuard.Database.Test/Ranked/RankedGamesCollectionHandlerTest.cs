@@ -1,8 +1,6 @@
-using AwesomeAssertions;
 using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Ranked;
 using CrownsGuard.Database.Utilities;
-using FluentResults;
 using Microsoft.Extensions.Logging;
 using Mongo2Go;
 using MongoDB.Driver;
@@ -597,14 +595,14 @@ public class RankedGamesCollectionHandlerTest : IDisposable
 
         var nearMaxEloGame = CreateTestRankedGame(
             id: "507f1f77bcf86cd799439012",
-            elo: (short)(short.MaxValue - 50),
+            elo: short.MaxValue - 50,
             joinedId: null);
 
         await InsertTestRankedGameAsync(maxEloGame);
         await InsertTestRankedGameAsync(nearMaxEloGame);
 
         // Act
-        var result = await _handler.FindGameForTargetEloAsync(gameId, (short)targetElo, eloDifference, CancellationToken.None, 30);
+        var result = await _handler.FindGameForTargetEloAsync(gameId, targetElo, eloDifference, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
