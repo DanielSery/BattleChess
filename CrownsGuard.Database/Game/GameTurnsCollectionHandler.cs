@@ -20,7 +20,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result> InsertAsync(GameTurn gameTurn, CancellationToken cancellationToken, int timeoutSeconds = 120)
+    public async Task<Result> InsertTurnAsync(GameTurn gameTurn, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
         using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
@@ -29,11 +29,11 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
             _logger.LogInformation("Inserting game turn {GameTurnId} for game {GameId}", gameTurn.Id, gameTurn.GameId);
             await _client.GameTurns.InsertOneAsync(gameTurn, cancellationToken: linkedSource.Token);
             
-        }, nameof(InsertAsync), _logger, cancellationToken);
+        }, nameof(InsertTurnAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Result> RemoveOlderThanAsync(DateTime time, CancellationToken cancellationToken, int timeoutSeconds = 120)
+    public async Task<Result> RemoveTurnsOlderThanAsync(DateTime time, CancellationToken cancellationToken, int timeoutSeconds = 120)
     {
         using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
@@ -46,7 +46,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
 
             _logger.LogInformation("Successfully deleted {DeletedCount} game turns older than {Time}", result.DeletedCount, time);
             
-        }, nameof(RemoveOlderThanAsync), _logger, cancellationToken);
+        }, nameof(RemoveTurnsOlderThanAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />

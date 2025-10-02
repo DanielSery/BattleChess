@@ -95,7 +95,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             CreatedAt = DateTime.UtcNow,
             TimeSpentInSeconds = 0
         };
-        await _gameTurns.InsertAsync(gameTurn, cancellationToken);
+        await _gameTurns.InsertTurnAsync(gameTurn, cancellationToken);
         Console.WriteLine("Created game result");
     }
 
@@ -167,7 +167,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             CreatedAt = DateTime.UtcNow,
             TimeSpentInSeconds = timeSpent.TotalSeconds
         };
-        await _gameTurns.InsertAsync(gameTurn, cancellationToken);
+        await _gameTurns.InsertTurnAsync(gameTurn, cancellationToken);
         TurnId = gameTurn.Id;
         return Result.Ok();
     }
@@ -219,6 +219,6 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         if (!serverTimeResult.TryGetValue(out var serverTime)) return Result.Fail(serverTimeResult.ToString());
 
         var oldestKeepTime = serverTime - TimeSpan.FromMinutes(20);
-        return await _gameTurns.RemoveOlderThanAsync(oldestKeepTime, cancellationToken);
+        return await _gameTurns.RemoveTurnsOlderThanAsync(oldestKeepTime, cancellationToken);
     }
 }

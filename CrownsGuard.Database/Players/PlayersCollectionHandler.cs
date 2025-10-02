@@ -1,333 +1,219 @@
+using System.Diagnostics.CodeAnalysis;
 using CrownsGuard.Database.Database;
-using CrownsGuard.Database;
-using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Utilities;
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Players;
 
+[SuppressMessage("ReSharper", "PossiblyMistakenUseOfCancellationToken")]
 internal class PlayersCollectionHandler : IPlayersCollectionHandler
 {
     private readonly IDatabaseClient _client;
+    private readonly ILogger<PlayersCollectionHandler> _logger;
 
-    public PlayersCollectionHandler(IDatabaseClient databaseClient)
+    public PlayersCollectionHandler(IDatabaseClient databaseClient, ILogger<PlayersCollectionHandler> logger)
     {
         _client = databaseClient;
+        _logger = logger;
     }
     
-    public async Task<Result<RegisteredPlayer>> FindByIdAsync(string id, CancellationToken cancellationToken)
+    public async Task<Result<RegisteredPlayer>> FindByIdAsync(string id, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Getting player with id: {id}");
+            _logger.LogInformation("Getting player with id: {id}", id);
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, id);
-            var foundPlayers = await _client.Players.FindAsync(playerFilter, cancellationToken: cancellationToken);
-            var foundPlayerResult = await foundPlayers.SingleResultAsync(cancellationToken: cancellationToken);
-            if (foundPlayerResult.IsSuccess)
-            {
-                Console.WriteLine($"Found player {foundPlayerResult.Value.Name} with id: {foundPlayerResult.Value.Id}");
-            }
-            return foundPlayerResult;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to get player with id: {id}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            return await _client.Players.FindSingleResultAsync(playerFilter, cancellationToken: linkedSource.Token);
+            
+        }, nameof(FindByIdAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<RegisteredPlayer>> FindByNameAsync(string name, CancellationToken cancellationToken)
+    public async Task<Result<RegisteredPlayer>> FindByNameAsync(string name, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Getting player with name: {name}");
+            _logger.LogInformation("Getting player with name: {name}", name);
             var filter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Name, name);
-            var foundPlayers = await _client.Players.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundPlayerResult = await foundPlayers.SingleResultAsync(cancellationToken: cancellationToken);
-            if (foundPlayerResult.IsSuccess)
-            {
-                Console.WriteLine($"Found player {foundPlayerResult.Value.Name} with id: {foundPlayerResult.Value.Id}");
-            }
-            return foundPlayerResult;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to find player with name: {name}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            return await _client.Players.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            
+        }, nameof(FindByNameAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<RegisteredPlayer>> FindByEmailHashAsync(string emailHash, CancellationToken cancellationToken)
+    public async Task<Result<RegisteredPlayer>> FindByEmailHashAsync(string emailHash, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Getting player with email hash");
+            _logger.LogInformation("Getting player with email hash");
             var filter = Builders<RegisteredPlayer>.Filter.Eq(g => g.EmailHash, emailHash);
-            var foundPlayers = await _client.Players.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundPlayerResult = await foundPlayers.SingleResultAsync(cancellationToken: cancellationToken);
-            if (foundPlayerResult.IsSuccess)
-            {
-                Console.WriteLine($"Found player {foundPlayerResult.Value.Name} with id: {foundPlayerResult.Value.Id}");
-            }
-            return foundPlayerResult;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to find player with email hash exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            return await _client.Players.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            
+        }, nameof(FindByEmailHashAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result> InsertAsync(RegisteredPlayer player, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(RegisteredPlayer player, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Creating player with id: {player.Id}");
-            await _client.Players.InsertOneAsync(player, cancellationToken: cancellationToken);
-            Console.WriteLine($"Created player with id: {player.Id}");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to create player with id: {player.Id}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            _logger.LogInformation("Creating player with id: {playerId}", player.Id);
+            await _client.Players.InsertOneAsync(player, cancellationToken: linkedSource.Token);
+            
+        }, nameof(InsertAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateEloAsync(string playerId, int newElo, CancellationToken cancellationToken)
+    public async Task<Result> UpdateEloAsync(string playerId, int newElo, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Updating elo of player with id: {playerId}");
+            _logger.LogInformation("Updating elo of player with id: {playerId}", playerId);
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId);
             var update = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, newElo);
-            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: cancellationToken);
-            Console.WriteLine($"Updating elo of player with id: {playerId} was {updateResult.IsAcknowledged}");
+            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: linkedSource.Token);
             return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update player elo");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to update elo of player with id: {playerId}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            
+        }, nameof(UpdateEloAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateSetupAsync(string playerId, int[] newMap, CancellationToken cancellationToken)
+    public async Task<Result> UpdateSetupAsync(string playerId, int[] newMap, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Updating setup of player with id: {playerId}");
+            _logger.LogInformation("Updating setup of player with id: {playerId}", playerId);
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId);
             var update = Builders<RegisteredPlayer>.Update.Set(x => x.Map, newMap);
-            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: cancellationToken);
-            Console.WriteLine($"Updating setup of player with id: {playerId} was {updateResult.IsAcknowledged}");
+            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: linkedSource.Token);
             return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update player setup");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to update setup of player with id: {playerId}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            
+        }, nameof(UpdateSetupAsync), _logger, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateUnlockedFiguresAsync(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken)
+    public async Task<Result> UpdateUnlockedFiguresAsync(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Updating unlocked figures of player with id: {playerId}");
+            _logger.LogInformation("Updating unlocked figures of player with id: {playerId}", playerId);
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId);
             var update = Builders<RegisteredPlayer>.Update.Set(x => x.UnlockedFigures, newUnlockedFigures);
-            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: cancellationToken);
-            Console.WriteLine($"Updating unlocked figures of player with id: {playerId} was {updateResult.IsAcknowledged}");
+            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: linkedSource.Token);
             return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update unlocked figures");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to update unlocked figures of player with id: {playerId}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            
+        }, nameof(UpdateUnlockedFiguresAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<RegisteredPlayer>> WaitForEloUpdateAsync(string playerId, CancellationToken cancellationToken)
+    public async Task<Result<RegisteredPlayer>> WaitForEloUpdateAsync(string playerId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Waiting for update of player with id: {playerId}");
-            using var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(5));
-            using var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
+            _logger.LogInformation("Waiting for update of player with id: {playerId}", playerId);
+            var streamFilter = Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.And(
+                Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
+                Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.Eq(cs => cs.FullDocument.Id, playerId));
+            using var streamCursor = await _client.Players.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: linkedSource.Token);
+            return await streamCursor.WaitForAddAsync(cancellationToken: linkedSource.Token);
+            
+        }, nameof(WaitForEloUpdateAsync), _logger, cancellationToken);
+    }
 
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RegisteredPlayer>>()
-                .Match(change => change.OperationType == ChangeStreamOperationType.Update &&
-                                 change.DocumentKey["_id"] == ObjectId.Parse(playerId));
+    public async Task<Result<List<PublicPlayerData>>> GetTopLeaderboardAsync(CancellationToken cancellationToken, int timeoutSeconds)
+    {
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        {
+            _logger.LogInformation("Getting top leaderboard");
+            var bsonCollection = _client.Players.Database
+                .GetCollection<BsonDocument>(_client.Players.CollectionNamespace.CollectionName);
 
-            using var cursor = await _client.Players.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
-            );
-
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
+            var pipeline = new EmptyPipelineDefinition<BsonDocument>()
+                .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
                 {
-                    if (change.FullDocument.Id == playerId)
-                    {
-                        Console.WriteLine($"Found update of player with id: {change.FullDocument.Id}");
-                        return change.FullDocument;
-                    }
-                }
-            }
-
-            Console.WriteLine($"No update of player with id: {playerId} in time");
-            return Result.Fail("No player update in time.");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed waiting for update of player with id: {playerId}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
-    }
-
-    public async Task<Result<List<PublicPlayerData>>> GetTopLeaderboardAsync(CancellationToken cancellationToken)
-    {
-        Console.WriteLine("Getting top leaderboard");
-        var bsonCollection = _client.Players.Database
-            .GetCollection<BsonDocument>(_client.Players.CollectionNamespace.CollectionName);
-
-        var pipeline = new EmptyPipelineDefinition<BsonDocument>()
-            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
-            {
-                { "sortBy", new BsonDocument("Elo", -1) },
-                { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
-            }))
-            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$limit", 100));
-
-        try
-        {
+                    { "sortBy", new BsonDocument("Elo", -1) },
+                    { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
+                }))
+                .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$limit", 100));
+            
             var topDocs = await bsonCollection
-                .Aggregate(pipeline, cancellationToken: cancellationToken)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .Aggregate(pipeline, cancellationToken: linkedSource.Token)
+                .ToListAsync(cancellationToken: linkedSource.Token);
 
-            var leaderboard = topDocs.Select(doc => new PublicPlayerData
+            return topDocs.Select(doc => new PublicPlayerData
             {
                 Rank = doc["Rank"].AsInt32,
                 Name = doc["Name"].AsString,
                 Elo = (short)doc["Elo"].AsInt32
             }).ToList();
-
-            Console.WriteLine("Retrieved top leaderboard");
-            return leaderboard;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed retrieving top leaderboard, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            
+            
+        }, nameof(GetTopLeaderboardAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<List<PublicPlayerData>>> GetUserLeaderboardAsync(string playerId, CancellationToken cancellationToken)
+    public async Task<Result<List<PublicPlayerData>>> GetUserLeaderboardAsync(string playerId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        var bsonCollection = _client.Players.Database
-            .GetCollection<BsonDocument>(_client.Players.CollectionNamespace.CollectionName);
-
-        var targetId = ObjectId.Parse(playerId);
-
-        var rankPipeline = new EmptyPipelineDefinition<BsonDocument>()
-            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
-            {
-                { "sortBy", new BsonDocument("Elo", -1) },
-                { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
-            }))
-            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument("_id", targetId)))
-            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$project", new BsonDocument("Rank", 1)));
-
-        Result<BsonDocument> rankDocResult;
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Retrieving rank of user: {playerId}");
-            rankDocResult = await bsonCollection
-                .Aggregate(rankPipeline, cancellationToken: cancellationToken)
-                .SingleResultAsync(cancellationToken: cancellationToken);
-            if (rankDocResult.IsFailed) return Result.Fail("Failed to retrieve user's rank");
-            Console.WriteLine("Retrieved rank of user");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed retrieving rank of user: {playerId}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            var bsonCollection = _client.Players.Database
+                .GetCollection<BsonDocument>(_client.Players.CollectionNamespace.CollectionName);
 
-        var targetRank = rankDocResult.Value["Rank"].AsInt32;
-        var minRank = Math.Max(targetRank - 100, 1);
-        var maxRank = targetRank + 100;
+            var targetId = ObjectId.Parse(playerId);
 
-        var leaderboardPipeline = new EmptyPipelineDefinition<BsonDocument>()
-            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
-            {
-                { "sortBy", new BsonDocument("Elo", -1) },
-                { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
-            }))
-            .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument
-            {
-                { "Rank", new BsonDocument("$gte", minRank).Add("$lte", maxRank) }
-            }));
+            var rankPipeline = new EmptyPipelineDefinition<BsonDocument>()
+                .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
+                {
+                    { "sortBy", new BsonDocument("Elo", -1) },
+                    { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
+                }))
+                .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument("_id", targetId)))
+                .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$project", new BsonDocument("Rank", 1)));
+            
+            _logger.LogInformation("Retrieving rank of user: {playerId}", playerId);
+            var rankDocResult = await bsonCollection
+                .Aggregate(rankPipeline, cancellationToken: linkedSource.Token)
+                .SingleResultAsync(cancellationToken: linkedSource.Token);
+            if (rankDocResult.IsFailed) return await GetTopLeaderboardAsync(linkedSource.Token, timeoutSeconds);
+            _logger.LogInformation("Retrieved rank of user");
+            
+            var targetRank = rankDocResult.Value["Rank"].AsInt32;
+            var minRank = Math.Max(targetRank - 100, 1);
+            var maxRank = targetRank + 100;
 
-        try
-        {
-            Console.WriteLine($"Retrieving leaderboard for player: {playerId}");
+            var leaderboardPipeline = new EmptyPipelineDefinition<BsonDocument>()
+                .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$setWindowFields", new BsonDocument
+                {
+                    { "sortBy", new BsonDocument("Elo", -1) },
+                    { "output", new BsonDocument("Rank", new BsonDocument("$documentNumber", new BsonDocument())) }
+                }))
+                .AppendStage<BsonDocument, BsonDocument, BsonDocument>(new BsonDocument("$match", new BsonDocument
+                {
+                    { "Rank", new BsonDocument("$gte", minRank).Add("$lte", maxRank) }
+                }));
+            
+            _logger.LogInformation("Retrieving leaderboard for player: {playerId}", playerId);
             var leaderboardDocs = await bsonCollection
-                .Aggregate(leaderboardPipeline, cancellationToken: cancellationToken)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .Aggregate(leaderboardPipeline, cancellationToken: linkedSource.Token)
+                .ToListAsync(cancellationToken: linkedSource.Token);
 
             var leaderboard = leaderboardDocs.Select(doc => new PublicPlayerData
             {
@@ -336,18 +222,9 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
                 Elo = (short)doc["Elo"].AsInt32
             }).ToList();
 
-            Console.WriteLine($"Retrieved leaderboard for player: {playerId}");
+            _logger.LogInformation("Retrieved leaderboard for player: {playerId}", playerId);
             return leaderboard;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed retrieving leaderboard for player: {playerId}, exception: {e}");
-            return Result.Fail(e.Message);
-        }
+            
+        }, nameof(GetUserLeaderboardAsync), _logger, cancellationToken);
     }
 }

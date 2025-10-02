@@ -86,7 +86,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
             gameId: "507f1f77bcf86cd799439012");
 
         // Act
-        var result = await _handler.InsertAsync(gameTurn, CancellationToken.None);
+        var result = await _handler.InsertTurnAsync(gameTurn, CancellationToken.None);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -116,7 +116,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         // Act
         foreach (var gameTurn in gameTurns)
         {
-            var result = await _handler.InsertAsync(gameTurn, CancellationToken.None);
+            var result = await _handler.InsertTurnAsync(gameTurn, CancellationToken.None);
             Assert.True(result.IsSuccess);
         }
 
@@ -132,7 +132,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         var gameTurn = CreateTestGameTurn("turn0", "game0");
 
         // Act
-        var result = await _handler.InsertAsync(gameTurn, CancellationToken.None, 0);
+        var result = await _handler.InsertTurnAsync(gameTurn, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -148,7 +148,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.InsertAsync(gameTurn, cancellationTokenSource.Token);
+        var result = await _handler.InsertTurnAsync(gameTurn, cancellationTokenSource.Token);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -169,7 +169,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         var handler = new GameTurnsCollectionHandler(mockDatabaseClient.Object, mockLogger.Object);
 
         // Act
-        var result = await handler.InsertAsync(gameTurn, CancellationToken.None);
+        var result = await handler.InsertTurnAsync(gameTurn, CancellationToken.None);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -201,7 +201,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
 
         // Act
         var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-        var result = await _handler.RemoveOlderThanAsync(DateTime.UtcNow.AddMinutes(-5), timeoutTokenSource.Token);
+        var result = await _handler.RemoveTurnsOlderThanAsync(DateTime.UtcNow.AddMinutes(-5), timeoutTokenSource.Token);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -223,7 +223,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         await InsertTestGameTurnAsync(recentTurn);
 
         // Act
-        var result = await _handler.RemoveOlderThanAsync(DateTime.UtcNow.AddMinutes(-10), CancellationToken.None);
+        var result = await _handler.RemoveTurnsOlderThanAsync(DateTime.UtcNow.AddMinutes(-10), CancellationToken.None);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -240,7 +240,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.RemoveOlderThanAsync(DateTime.UtcNow, cancellationTokenSource.Token);
+        var result = await _handler.RemoveTurnsOlderThanAsync(DateTime.UtcNow, cancellationTokenSource.Token);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -253,7 +253,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         // Arrange
 
         // Act
-        var result = await _handler.RemoveOlderThanAsync(DateTime.UtcNow, CancellationToken.None, 0);
+        var result = await _handler.RemoveTurnsOlderThanAsync(DateTime.UtcNow, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -433,7 +433,7 @@ public class GameTurnsCollectionHandlerTest : IDisposable
         var gameTurn = CreateTestGameTurn("turn0", "game0");
 
         // Act
-        var result = await _handler.InsertAsync(gameTurn, CancellationToken.None);
+        var result = await _handler.InsertTurnAsync(gameTurn, CancellationToken.None);
 
         // Assert
         await Verify(result);

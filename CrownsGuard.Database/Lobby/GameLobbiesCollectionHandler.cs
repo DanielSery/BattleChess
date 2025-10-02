@@ -79,31 +79,23 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
             _logger.LogInformation("Waiting for join request confirmation");
-            return await WaitForLobbyAcceptInnerAsync(lobbyId, linkedSource.Token);
+            var streamFilter = Builders<ChangeStreamDocument<GameLobby>>.Filter.And(
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Or(
+                    Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
+                    Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete)),
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.FullDocument.Id, lobbyId)
+            );
+            using var streamCursor = await _client.GameLobbies.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: cancellationToken);
+            var streamResult = streamCursor.WaitForUpdateAsync(cancellationToken: linkedSource.Token);
+        
+            var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
+            var foundResult = await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
+            if (foundResult.HasError<NoResultsFoundError>()) return foundResult;
+
+            return await streamResult;
             
         }, nameof(WaitForLobbyAcceptAsync), _logger, cancellationToken);
-    }
-
-    /// <summary>
-    /// Waits for the next turn via MongoDB change stream after the specified ObjectId
-    /// </summary>
-    private async Task<Result<GameLobby>> WaitForLobbyAcceptInnerAsync(string lobbyId, CancellationToken cancellationToken)
-    {
-        var streamFilter = Builders<ChangeStreamDocument<GameLobby>>.Filter.And(
-            Builders<ChangeStreamDocument<GameLobby>>.Filter.Or(
-                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
-                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete)),
-            Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.FullDocument.Id, lobbyId)
-        );
-        using var streamCursor = await _client.GameLobbies.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: cancellationToken);
-        var streamResult = streamCursor.WaitForUpdateAsync(cancellationToken: cancellationToken);
-        
-        var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
-        var foundResult = await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: cancellationToken);
-        if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
-        if (foundResult.HasError<NoResultsFoundError>()) return foundResult;
-
-        return await streamResult;
     }
 
     public async Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
@@ -155,13 +147,14 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     {
         return Task.Run(async () =>
         {
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>()
-                .Match(change => change.OperationType == ChangeStreamOperationType.Insert ||
-                                 change.OperationType == ChangeStreamOperationType.Replace ||
-                                 change.OperationType == ChangeStreamOperationType.Update ||
-                                 change.OperationType == ChangeStreamOperationType.Delete);
+            var streamFilter = Builders<ChangeStreamDocument<GameLobby>>.Filter.Or(
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Insert),
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Replace),
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
+                Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete));
+            var streamPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobby>>().Match(streamFilter);
 
-            using var cursor = await _client.GameLobbies.WatchAsync(pipeline, cancellationToken: cancellationToken);
+            using var cursor = await _client.GameLobbies.WatchAsync(streamPipeline, cancellationToken: cancellationToken);
             while (!cancellationToken.IsCancellationRequested)
             {
                 var moveResult = await cursor.MoveNextAsync(cancellationToken);

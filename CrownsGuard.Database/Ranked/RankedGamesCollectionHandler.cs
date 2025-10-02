@@ -1,212 +1,132 @@
-﻿using CrownsGuard.Database.Database;
-using CrownsGuard.Database;
+﻿using System.Diagnostics.CodeAnalysis;
+using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Utilities;
 using FluentResults;
-using MongoDB.Bson;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Ranked;
 
+[SuppressMessage("ReSharper", "PossiblyMistakenUseOfCancellationToken")]
 internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
 {
     private readonly IDatabaseClient _client;
+    private readonly ILogger<RankedGamesCollectionHandler> _logger;
 
-    public RankedGamesCollectionHandler(IDatabaseClient databaseClient)
+    public RankedGamesCollectionHandler(IDatabaseClient databaseClient, ILogger<RankedGamesCollectionHandler> logger)
     {
         _client = databaseClient;
+        _logger = logger;
     }
 
-    public async Task<Result> ConfirmGameJoinAsync(string gameId, string joinId, CancellationToken cancellationToken)
+    public async Task<Result> ConfirmGameJoinAsync(string gameId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Confirming game join");
+            _logger.LogInformation("Confirming game join");
             var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, gameId);
             var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, joinId);
-
-            var result = await _client.RankedGames.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-            if (!result.IsAcknowledged)
-            {
-                return Result.Fail("Failed to update game confirmation");
-            }
-
-            Console.WriteLine($"Confirmed game join for request: {joinId}");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to confirm game join for request: {joinId}");
-            return Result.Fail(e.Message);
-        }
+            var result = await _client.RankedGames.UpdateOneAsync(filter, update, cancellationToken: linkedSource.Token);
+            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete confirm game join");
+            
+        }, nameof(ConfirmGameJoinAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result> DeleteGameSearchAsync(string deletedGameId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteGameSearchAsync(string deletedGameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Deleting game search");
+            _logger.LogInformation("Deleting game search");
             var gameSearchFilter = Builders<RankedGame>.Filter.Eq(l => l.Id, deletedGameId);
-            var gameSearchDeletion = await _client.RankedGames.DeleteManyAsync(gameSearchFilter, cancellationToken);
-            Console.WriteLine($"Deleted game search count: {gameSearchDeletion.DeletedCount}");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to delete game search: {deletedGameId}, e:{e}");
-            return Result.Fail(e.Message);
-        }
+            await _client.RankedGames.DeleteManyAsync(gameSearchFilter, linkedSource.Token);
+            
+        }, nameof(DeleteGameSearchAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<RankedGame>> FindForTargetEloAsync(string gameId, short targetElo, int eloDifference, CancellationToken cancellationToken)
+    public async Task<Result<RankedGame>> FindForTargetEloAsync(string gameId, short targetElo, int eloDifference, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            var gameObjectId = ObjectId.Parse(gameId);
-            var searchesPipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
-                .Match(change => change.OperationType == ChangeStreamOperationType.Insert &&
-                                 change.DocumentKey["_id"] > gameObjectId &&
-                                 change.FullDocument.Version == GameVersion.VersionId &&
-                                 string.IsNullOrEmpty(change.FullDocument.JoinedId) &&
-                                 Math.Abs(change.FullDocument.Elo - targetElo) < eloDifference);
+            _logger.LogInformation("Waiting for ranked join request for game: {gameId}", gameId);
 
-            using var cursor = await _client.RankedGames.WatchAsync(searchesPipeline, cancellationToken: cancellationToken);
+            var fromElo = targetElo - eloDifference;
+            var toElo = targetElo + eloDifference;
+            var streamFilter = Builders<ChangeStreamDocument<RankedGame>>.Filter.And(
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Insert),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Gt(cs => cs.FullDocument.Id, gameId),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.FullDocument.Version, GameVersion.VersionId),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Ne(cs => cs.FullDocument.JoinedId, null),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Gt(cs => cs.FullDocument.Elo, fromElo),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Lt(cs => cs.FullDocument.Elo, toElo));
+            using var streamCursor = await _client.RankedGames.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: linkedSource.Token);
+            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: linkedSource.Token);
+        
             var filter = Builders<RankedGame>.Filter.And(
                 Builders<RankedGame>.Filter.Gt(g => g.Id, gameId),
                 Builders<RankedGame>.Filter.Eq(g => g.Version, GameVersion.VersionId),
                 Builders<RankedGame>.Filter.Eq(g => g.JoinedId, null),
-                Builders<RankedGame>.Filter.Where(g => Math.Abs(g.Elo - targetElo) < eloDifference));
+                Builders<RankedGame>.Filter.Gt(g => g.Elo, fromElo),
+                Builders<RankedGame>.Filter.Lt(g => g.Elo, toElo));
+            var foundResult = await _client.RankedGames.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            if (foundResult.IsSuccess) return foundResult;
 
-            var foundGames = await _client.RankedGames.FindAsync(filter, cancellationToken: cancellationToken);
-            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken);
-            if (foundGame is not null)
-            {
-                return foundGame;
-            }
-
-            while (await cursor.MoveNextAsync(cancellationToken))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    return change.FullDocument;
-                }
-            }
-
-            return Result.Fail<RankedGame>("No game found");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to find game: {gameId}, e:{e}");
-            return Result.Fail(e.Message);
-        }
+            return await streamResult;
+            
+        }, nameof(FindForTargetEloAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<RankedGame>> WaitForAcceptAsync(string joinedGameId, int timeoutSeconds, CancellationToken cancellationToken)
+    public async Task<Result<RankedGame>> WaitForAcceptAsync(string joinedGameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            using var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
-            using var cancellationTokenSource =
-                CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
-
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<RankedGame>>()
-                .Match(change =>
-                    (change.OperationType == ChangeStreamOperationType.Update ||
-                     change.OperationType == ChangeStreamOperationType.Delete) &&
-                    change.DocumentKey["_id"] == ObjectId.Parse(joinedGameId));
-
-            using var cursor = await _client.RankedGames.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationTokenSource.Token
-            );
-
-            Console.WriteLine($"Getting game with id: {joinedGameId}");
-            var filter = Builders<RankedGame>.Filter.Eq("Id", joinedGameId);
-            var foundGames = await _client.RankedGames.FindAsync(filter, cancellationToken: cancellationTokenSource.Token);
-            var foundGame = await foundGames.FirstOrDefaultAsync(cancellationToken: cancellationTokenSource.Token);
-            if (foundGame is null)
-            {
-                return Result.Fail<RankedGame>("No game found");
-            }
-
-            if (!string.IsNullOrEmpty(foundGame.JoinedId))
-            {
-                await cancellationTokenSource.CancelAsync();
-                return foundGame;
-            }
-
-            Console.WriteLine($"Found game with id: {foundGame.Id}");
-            while (await cursor.MoveNextAsync(cancellationTokenSource.Token))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    if (change.FullDocument.Id != joinedGameId)
-                        continue;
-
-                    if (change.OperationType == ChangeStreamOperationType.Delete)
-                        return Result.Fail("Game was deleted");
-
-                    return change.FullDocument;
-                }
-            }
-
-            return Result.Fail("No game join found");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to find game join: {joinedGameId}, e:{e}");
-            return Result.Fail(e.Message);
-        }
+            _logger.LogInformation("Getting game with id: {joinedGameId}", joinedGameId);
+            var streamFilter = Builders<ChangeStreamDocument<RankedGame>>.Filter.And(
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Or(
+                    Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
+                    Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete)),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.FullDocument.Id, joinedGameId));
+            using var streamCursor = await _client.RankedGames.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: linkedSource.Token);
+            var streamResult = streamCursor.WaitForUpdateAsync(cancellationToken: linkedSource.Token);
+        
+            var filter = Builders<RankedGame>.Filter.Eq(g => g.JoinedId, joinedGameId);
+            var foundResult = await _client.RankedGames.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
+            if (foundResult.HasError<NoResultsFoundError>()) return foundResult;
+            
+            return await streamResult;
+            
+        }, nameof(WaitForAcceptAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result> InsertAsync(RankedGame game, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(RankedGame game, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Creating game request");
-            await _client.RankedGames.InsertOneAsync(game, cancellationToken: cancellationToken);
-            Console.WriteLine($"Created game request: {game.Id}");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to create game: {game.Id}, e:{e}");
-            return Result.Fail(e.Message);
-        }
+            _logger.LogInformation("Creating game request");
+            await _client.RankedGames.InsertOneAsync(game, cancellationToken: linkedSource.Token);
+            
+        }, nameof(InsertAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<RankedGame>> GetClosestGameSearchAsync(int searchedElo, int maxDifference, CancellationToken cancellationToken)
+    public async Task<Result<RankedGame>> GetClosestGameSearchAsync(int searchedElo, int maxDifference, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Searching for ranked game with elo: {searchedElo - maxDifference}-{searchedElo + maxDifference}");
-            var closestGameSearch = await _client.RankedGames.Aggregate()
+            _logger.LogInformation("Searching for ranked game with elo: {fromElo}-{toElo}", searchedElo - maxDifference, searchedElo + maxDifference);
+            return await _client.RankedGames.Aggregate()
                 .Match(l => l.Version == GameVersion.VersionId && string.IsNullOrEmpty(l.JoinedId))
                 .Project(lobby => new
                 {
@@ -216,19 +136,8 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                 .SortBy(x => x.EloDifference)
                 .Limit(1)
                 .Project(x => x.Lobby)
-                .FirstAsync(cancellationToken: cancellationToken);
-            Console.WriteLine($"Closest game search elo: {closestGameSearch.Elo}");
-            return closestGameSearch;
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to get closest game to elo {searchedElo}, e: {e.Message}");
-            return Result.Fail(e.Message);
-        }
+                .FirstAsync(cancellationToken: linkedSource.Token);
+
+        }, nameof(InsertAsync), _logger, cancellationToken);
     }
 }

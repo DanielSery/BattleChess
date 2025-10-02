@@ -1,96 +1,69 @@
-﻿using CrownsGuard.Database.Database;
-using CrownsGuard.Database.Errors;
+﻿using System.Diagnostics.CodeAnalysis;
+using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Utilities;
 using FluentResults;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Lobby;
 
+[SuppressMessage("ReSharper", "PossiblyMistakenUseOfCancellationToken")]
 internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandler
 {
     private readonly IDatabaseClient _client;
+    private readonly ILogger<GameLobbyJoinsCollectionHandler> _logger;
 
-    public GameLobbyJoinsCollectionHandler(IDatabaseClient databaseClient)
+    public GameLobbyJoinsCollectionHandler(IDatabaseClient databaseClient, ILogger<GameLobbyJoinsCollectionHandler> logger)
     {
         _client = databaseClient;
+        _logger = logger;
     }
 
-    public async Task<Result> InsertAsync(GameLobbyJoin lobbyJoin, CancellationToken cancellationToken)
+    public async Task<Result> InsertAsync(GameLobbyJoin lobbyJoin, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine($"Inserting join request for game: {lobbyJoin.GameId}");
-            await _client.LobbyGameJoins.InsertOneAsync(lobbyJoin, cancellationToken: cancellationToken);
-            Console.WriteLine($"Created join request with id: {lobbyJoin.GameId}");
-            return Result.Ok();
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to add join request for game: {lobbyJoin.GameId}, e: {e}");
-            return Result.Fail(e.Message);
-        }
+            _logger.LogInformation("Inserting join request for game: {GameId}", lobbyJoin.GameId);
+            await _client.LobbyGameJoins.InsertOneAsync(lobbyJoin, cancellationToken: linkedSource.Token);
+            
+        }, nameof(InsertAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result<GameLobbyJoin>> WaitForJoinAsync(string gameId, CancellationToken cancellationToken)
+    public async Task<Result<GameLobbyJoin>> WaitForJoinAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            var pipeline = new EmptyPipelineDefinition<ChangeStreamDocument<GameLobbyJoin>>()
-                .Match(Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter
-                    .Eq(cs => cs.FullDocument.GameId, gameId));
+            _logger.LogInformation("Waiting for join request for game: {gameId}", gameId);
 
-            using var cursor = await _client.LobbyGameJoins.WatchAsync(
-                pipeline,
-                new ChangeStreamOptions { FullDocument = ChangeStreamFullDocumentOption.UpdateLookup },
-                cancellationToken
-            );
+            var streamFilter = Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
+            using var streamCursor = await _client.LobbyGameJoins.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: linkedSource.Token);
+            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: linkedSource.Token);
+        
+            var filter = Builders<GameLobbyJoin>.Filter.Eq(g => g.GameId, gameId);
+            var foundResult = await _client.LobbyGameJoins.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            if (foundResult.IsSuccess) return foundResult;
 
-            Console.WriteLine($"Waiting for join request for game: {gameId}");
-            while (await cursor.MoveNextAsync(cancellationToken))
-            {
-                foreach (var change in cursor.Current)
-                {
-                    return change.FullDocument;
-                }
-            }
-
-            return Result.Fail<GameLobbyJoin>($"Game join with id: {gameId} not found");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Failed to get join request for game: {gameId}, e: {e}");
-            return Result.Fail<GameLobbyJoin>(e.Message);
-        }
+            return await streamResult;
+            
+        }, nameof(WaitForJoinAsync), _logger, cancellationToken);
     }
 
-    public async Task<Result> DeleteGameJoinsAsync(string gameId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteGameJoinsAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        try
+        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
         {
-            Console.WriteLine("Deleting LobbyJoins");
+            _logger.LogInformation("Deleting LobbyJoins");
+
             var filter = Builders<GameLobbyJoin>.Filter.Eq(gj => gj.GameId, gameId);
-            var result = await _client.LobbyGameJoins.DeleteManyAsync(filter, cancellationToken: cancellationToken);
-            Console.WriteLine($"Deleted LobbyJoins: {result.DeletedCount}");
+            var result = await _client.LobbyGameJoins.DeleteManyAsync(filter, cancellationToken: linkedSource.Token);
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete LobbyJoins");
-        }
-        catch (OperationCanceledException)
-        {
-            return Result.Fail("Operation cancelled")
-                .WithError(CancelledError.Instance);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to delete LobbyJoins, e: {ex}");
-            return Result.Fail(ex.Message);
-        }
+            
+        }, nameof(WaitForJoinAsync), _logger, cancellationToken);
     }
 }

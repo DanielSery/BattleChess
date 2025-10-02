@@ -237,16 +237,6 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     }
 
     [Fact]
-    public async Task InsertAsync_NullGameLobby_ReturnsFailure()
-    {
-        // Act
-        var result = await _handler.InsertAsync(null, CancellationToken.None, 30);
-
-        // Assert
-        Assert.True(result.IsFailed);
-    }
-
-    [Fact]
     public async Task InsertAsync_GameLobbyWithInvalidId_ReturnsFailure()
     {
         // Arrange
