@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CrownsGuard.Database.Database;
+﻿using CrownsGuard.Database.Database;
 using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Utilities;
 using FluentResults;
@@ -8,7 +7,6 @@ using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Lobby;
 
-[SuppressMessage("ReSharper", "PossiblyMistakenUseOfCancellationToken")]
 internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
 {
     private readonly IDatabaseClient _client;
@@ -22,9 +20,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
 
     public async Task<Result<List<PublicLobbyData>>> GetPublicLobbiesAsync(CancellationToken cancellationToken, int timeoutSeconds)
     {
-        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
-        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Getting public-lobbies");
             return await _client.GameLobbies.Aggregate()
@@ -36,47 +32,38 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                     Elo = doc.Elo,
                     Locked = (doc.PasswordHash.Length > 0) ? "True" : "False",
                 })
-                .ToListAsync(cancellationToken: linkedSource.Token);
-            
-        }, nameof(GetPublicLobbiesAsync), _logger, cancellationToken);
+                .ToListAsync(cancellationToken: token);
+        });
     }
 
     /// <inheritdoc />
     public async Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
-        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Searching for lobby with id: {lobbyId}", lobbyId);
             var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
-            return await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
-            
-        }, nameof(FindByIdAsync), _logger, cancellationToken);
+            return await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: token);
+        });
     }
 
     /// <inheritdoc />
     public async Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
-        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Searching for lobby with name: {lobbyName}", lobbyName);
             var filter = Builders<GameLobby>.Filter.And(
                 Builders<GameLobby>.Filter.Eq(g => g.LobbyName, lobbyName),
                 Builders<GameLobby>.Filter.Eq(g => g.Version, GameVersion.VersionId)
             );
-            return await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
-            
-        }, nameof(FindByNameAsync), _logger, cancellationToken);
+            return await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: token);
+        });
     }
 
     public async Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
-        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Waiting for join request confirmation");
             var streamFilter = Builders<ChangeStreamDocument<GameLobby>>.Filter.And(
@@ -85,60 +72,50 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                     Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete)),
                 Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.FullDocument.Id, lobbyId)
             );
-            using var streamCursor = await _client.GameLobbies.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: cancellationToken);
-            var streamResult = streamCursor.WaitForUpdateAsync(cancellationToken: linkedSource.Token);
+            using var streamCursor = await _client.GameLobbies.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
+            var streamResult = streamCursor.WaitForUpdateAsync(cancellationToken: token);
         
             var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
-            var foundResult = await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: linkedSource.Token);
+            var foundResult = await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: token);
             if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
             if (foundResult.HasError<NoResultsFoundError>()) return foundResult;
 
             return await streamResult;
-            
-        }, nameof(WaitForLobbyAcceptAsync), _logger, cancellationToken);
+        });
     }
 
     public async Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
-        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Deleting Lobbies of game {GameId}", gameId);
             var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
-            var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: linkedSource.Token);
+            var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: token);
             return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete lobbies");
-            
-        }, nameof(DeleteGameLobbiesAsync), _logger, cancellationToken);
+        });
     }
 
     public async Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
-        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Confirming game join of lobby {lobbyId}", lobbyId);
             var filter = Builders<GameLobby>.Filter.And(
                 Builders<GameLobby>.Filter.Eq(l => l.Id, lobbyId),
                 Builders<GameLobby>.Filter.Eq(l => l.JoinedId, null));
             var update = Builders<GameLobby>.Update.Set(x => x.JoinedId, joinId);
-            var result = await _client.GameLobbies.UpdateOneAsync(filter, update, cancellationToken: linkedSource.Token);
+            var result = await _client.GameLobbies.UpdateOneAsync(filter, update, cancellationToken: token);
             return result.IsAcknowledged && result.ModifiedCount > 0 ? Result.Ok() : Result.Fail("Failed to update game confirmation");
-            
-        }, nameof(UpdateLobbyJoinAsync), _logger, cancellationToken);
+        });
     }
 
     public async Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        using var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        linkedSource.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
-        return await DatabaseHelper.ExecuteWithErrorHandling(async () =>
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Inserting game lobby");
-            await _client.GameLobbies.InsertOneAsync(game, cancellationToken: linkedSource.Token);
-            
-        }, nameof(InsertAsync), _logger, cancellationToken);
+            await _client.GameLobbies.InsertOneAsync(game, cancellationToken: token);
+        });
     }
 
     public Task WatchChangesAsync(

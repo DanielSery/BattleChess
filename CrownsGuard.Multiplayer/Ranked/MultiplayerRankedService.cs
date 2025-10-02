@@ -173,7 +173,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game join");
 
         Console.WriteLine("Waiting for join request confirmation");
-        var updatedJoinedGameResult = await _gameRequests.WaitForAcceptAsync(joinedGame.Id, 20, cancellationToken);
+        var updatedJoinedGameResult = await _gameRequests.WaitForAcceptAsync(joinedGame.Id, cancellationToken, 20);
         if (!updatedJoinedGameResult.TryGetValue(out var updatedJoinedGame))
         {
             await DeleteGameSearch(joinedGame);
