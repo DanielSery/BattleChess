@@ -111,7 +111,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
         }
 
-        updatedPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost, cancellationToken);
+        updatedPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost.PlayerId, lost.Elo ?? 0, cancellationToken);
         if (!updatedPlayerResult.TryGetValue(out updatedPlayer)) return Result.Fail("Could not find losing player");
 
         _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
@@ -126,7 +126,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         var winningPlayerResult = await _players.FindPlayerByIdAsync(won.PlayerId, cancellationToken);
         if (!winningPlayerResult.TryGetValue(out var winningPlayer)) return Result.Fail("Could not find winning player");
 
-        var losingPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost.PlayerId, cancellationToken);
+        var losingPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost.PlayerId, lost.Elo ?? 0, cancellationToken);
         if (!losingPlayerResult.TryGetValue(out var losingPlayer)) return Result.Fail("Could not find losing player");
 
         winningPlayer.Elo = (short)won.Elo!;

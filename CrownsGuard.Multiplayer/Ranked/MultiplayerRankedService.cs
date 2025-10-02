@@ -41,7 +41,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
 
                 var myMapData = myMap.GetIntData();
                 var eloDifference = 50;
-                var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
+                var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, cancellationToken);
                 if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
 
                 while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= eloDifference)
@@ -52,7 +52,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                         return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
                     }
 
-                    closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, eloDifference, cancellationToken);
+                    closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, cancellationToken);
                     if (!closestGameSearchResult.TryGetValue(out closestGameSearch)) closestGameSearch = null;
                 }
 

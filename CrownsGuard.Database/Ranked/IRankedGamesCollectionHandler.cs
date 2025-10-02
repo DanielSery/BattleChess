@@ -14,5 +14,5 @@ public interface IRankedGamesCollectionHandler
 
     Task<Result> InsertAsync(RankedGame game, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result<RankedGame>> GetClosestGameSearchAsync(int searchedElo, int maxDifference, CancellationToken cancellationToken, int timeoutSeconds = 120);
+    Task<Result<RankedGame>> GetClosestGameSearchAsync(int searchedElo, CancellationToken cancellationToken, int timeoutSeconds = 120);
 }

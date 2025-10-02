@@ -53,25 +53,25 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Insert),
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Gt(cs => cs.FullDocument.Id, gameId),
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.FullDocument.Version, GameVersion.VersionId),
-                Builders<ChangeStreamDocument<RankedGame>>.Filter.Ne(cs => cs.FullDocument.JoinedId, null),
-                Builders<ChangeStreamDocument<RankedGame>>.Filter.Gt(cs => cs.FullDocument.Elo, fromElo),
-                Builders<ChangeStreamDocument<RankedGame>>.Filter.Lt(cs => cs.FullDocument.Elo, toElo));
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.FullDocument.JoinedId, null),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Gte(cs => cs.FullDocument.Elo, fromElo),
+                Builders<ChangeStreamDocument<RankedGame>>.Filter.Lte(cs => cs.FullDocument.Elo, toElo));
             using var streamCursor = await _client.RankedGames.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<RankedGame>.Filter.And(
                 Builders<RankedGame>.Filter.Gt(g => g.Id, gameId),
                 Builders<RankedGame>.Filter.Eq(g => g.Version, GameVersion.VersionId),
                 Builders<RankedGame>.Filter.Eq(g => g.JoinedId, null),
-                Builders<RankedGame>.Filter.Gt(g => g.Elo, fromElo),
-                Builders<RankedGame>.Filter.Lt(g => g.Elo, toElo));
-            var foundResult = await _client.RankedGames.FindSingleResultAsync(filter, cancellationToken: token);
+                Builders<RankedGame>.Filter.Gte(g => g.Elo, fromElo),
+                Builders<RankedGame>.Filter.Lte(g => g.Elo, toElo));
+            var foundResult = await _client.RankedGames.FindFirstResultAsync(filter, cancellationToken: token);
             
             if (foundResult.IsSuccess) return foundResult;
             return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
 
-    public async Task<Result<RankedGame>> WaitForGameAcceptAsync(string joinedGameId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RankedGame>>  WaitForGameAcceptAsync(string joinedGameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -83,7 +83,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.FullDocument.Id, joinedGameId));
             using var streamCursor = await _client.RankedGames.WatchAsync(streamFilter, cancellationToken: token);
         
-            var filter = Builders<RankedGame>.Filter.Eq(g => g.JoinedId, joinedGameId);
+            var filter = Builders<RankedGame>.Filter.Eq(g => g.Id, joinedGameId);
             var foundResult = await _client.RankedGames.FindSingleResultAsync(filter, cancellationToken: token);
             
             if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
@@ -101,11 +101,11 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         });
     }
 
-    public async Task<Result<RankedGame>> GetClosestGameSearchAsync(int searchedElo, int maxDifference, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RankedGame>> GetClosestGameSearchAsync(int searchedElo, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
-            _logger.LogInformation("Searching for ranked game with elo: {fromElo}-{toElo}", searchedElo - maxDifference, searchedElo + maxDifference);
+            _logger.LogInformation("Searching for ranked game near elo: {searchedElo}", searchedElo);
             return await _client.RankedGames.Aggregate()
                 .Match(l => l.Version == GameVersion.VersionId && string.IsNullOrEmpty(l.JoinedId))
                 .Project(lobby => new
