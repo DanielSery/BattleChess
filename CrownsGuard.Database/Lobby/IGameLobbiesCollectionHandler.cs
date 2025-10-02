@@ -11,11 +11,11 @@ public interface IGameLobbiesCollectionHandler
 
     Task<Result<GameLobby>> FindLobbyByIdAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 1_000);
+    Task<Result<GameLobby>> WaitForLobbyJoinCofirmationAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds = 1_000);
 
     Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken, int timeoutSeconds = 120);
+    Task<Result> ConfirmLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
     Task<Result> InsertLobbyAsync(GameLobby game, CancellationToken cancellationToken, int timeoutSeconds = 120);
 

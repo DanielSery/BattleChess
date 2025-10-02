@@ -102,17 +102,17 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     /// <inheritdoc />
     public async Task<Result> TryVerifyEmailAsync(string emailHash, CancellationToken cancellationToken)
     {
-        var foundPlayerResult = await _players.FindPlayerByEmailHashAsync(emailHash, cancellationToken);
+        var foundPlayerResult = await _players.HasPlayerWithEmailHashAsync(emailHash, cancellationToken);
         if (!foundPlayerResult.IsFailed) return Result.Fail("User with given email already exists");
         return Result.Ok();
     }
 
     public async Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, Figure[] myMap, Figure[] fallbackMap, CancellationToken cancellationToken)
     {
-        var foundPlayerResult = await _players.FindPlayerByEmailHashAsync(emailHash, cancellationToken);
-        if (!foundPlayerResult.IsFailed) Result.Fail("User with given email already exists");
+        var hasPlayerWithEmail = await _players.HasPlayerWithEmailHashAsync(emailHash, cancellationToken);
+        if (!hasPlayerWithEmail.IsFailed || hasPlayerWithEmail.Value) Result.Fail("User with given email already exists");
 
-        foundPlayerResult = await _players.FindPlayerByNameAsync(name, cancellationToken);
+        var foundPlayerResult = await _players.FindPlayerByNameAsync(name, cancellationToken);
         if (!foundPlayerResult.IsFailed) Result.Fail("User with given name already exists");
 
         var mapData = myMap.IsValid(UnlockedFigures.DefaultUnlockedFigures)

@@ -8,14 +8,18 @@ namespace CrownsGuard.UI.Shared;
 
 public sealed class MapsViewModel : ViewModelBase
 {
-    private readonly IBoardBlueprintService _boardBlueprintService;
+    private readonly ISetupLoadingService _setupLoadingService;
 
     private BoardBlueprint _teamMap;
 
-    public MapsViewModel(IBoardBlueprintService boardBlueprintService)
+    public MapsViewModel(ISetupLoadingService setupLoadingService)
     {
-        _boardBlueprintService = boardBlueprintService;
-        _teamMap = _boardBlueprintService.CurrentMap;
+        _setupLoadingService = setupLoadingService;
+        _teamMap = new BoardBlueprint
+        {
+            Figures = _setupLoadingService.CurrentMap,
+            StartingPlayerColor = PlayerColor.White
+        };
     }
 
     public BoardBlueprint TeamMap
@@ -32,7 +36,7 @@ public sealed class MapsViewModel : ViewModelBase
             StartingPlayerColor = PlayerColor.White
         };
 
-        _boardBlueprintService.Save(map);
+        _setupLoadingService.Save(map.Figures);
         TeamMap = map;
     }
 }

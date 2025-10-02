@@ -7,8 +7,8 @@ using CrownsGuard.Multiplayer.Utilities;
 using CrownsGuard.UI.Editor;
 using CrownsGuard.UI.Services;
 using CommunityToolkit.Mvvm.Input;
+using CrownsGuard.Core.Board;
 using Nicenis.Windows.ViewModels;
-using CrownsGuard.Maps.BoardBlueprints;
 
 namespace CrownsGuard.UI.Multiplayer;
 
@@ -125,7 +125,7 @@ public class SignUpViewModel : ViewModelBase
         var emailHash = HashingHelper.GetEmailHash(Email);
         var result = await _multiplayerPlayerService.TrySignUpAsync(
             Name, password1Hash, passwordSalt, emailHash,
-            myMap, BoardBlueprint.ChessTeam.Figures,
+            myMap, SampleSetup.ChessSetup,
             loading.CancellationToken);
         if (result.IsFailed)
         {

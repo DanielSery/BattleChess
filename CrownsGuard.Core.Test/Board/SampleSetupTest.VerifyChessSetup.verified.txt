@@ -1,0 +1,18 @@
+﻿[
+  LegionarySword, IsWhite,
+  LegionarySword, IsWhite,
+  LegionarySword, IsWhite,
+  LegionarySword, IsWhite,
+  LegionarySword, IsWhite,
+  LegionarySword, IsWhite,
+  LegionarySword, IsWhite,
+  LegionarySword, IsWhite,
+  MountedKnight, IsWhite,
+  Whiplash, IsWhite,
+  CamelRider, IsWhite,
+  Queen, IsWhite,
+  King, IsKing, IsWhite,
+  CamelRider, IsWhite,
+  Whiplash, IsWhite,
+  MountedKnight, IsWhite
+]

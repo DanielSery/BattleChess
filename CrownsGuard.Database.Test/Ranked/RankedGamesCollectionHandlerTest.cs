@@ -90,7 +90,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var joinId = "507f1f77bcf86cd799439013";
 
         // Act
-        var result = await _handler.ConfirmGameAsync(game.Id, joinId, CancellationToken.None, 30);
+        var result = await _handler.ConfirmGameJoinAsync(game.Id, joinId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -108,7 +108,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var joinId = "507f1f77bcf86cd799439012";
 
         // Act
-        var result = await _handler.ConfirmGameAsync(invalidGameId, joinId, CancellationToken.None, 30);
+        var result = await _handler.ConfirmGameJoinAsync(invalidGameId, joinId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -130,7 +130,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var handler = new RankedGamesCollectionHandler(mockDatabaseClient.Object, mockLogger.Object);
 
         // Act
-        var result = await handler.ConfirmGameAsync("507f1f77bcf86cd799439018", "507f1f77bcf86cd799439019", CancellationToken.None, 30);
+        var result = await handler.ConfirmGameJoinAsync("507f1f77bcf86cd799439018", "507f1f77bcf86cd799439019", CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -269,7 +269,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         await InsertTestRankedGameAsync(game);
 
         // Act
-        var result = await _handler.WaitForGameAcceptAsync(game.Id, CancellationToken.None, 30);
+        var result = await _handler.WaitForGameConfirmationAsync(game.Id, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -290,12 +290,12 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         await InsertTestRankedGameAsync(game);
 
         // Act - Start waiting for acceptance
-        var waitTask = _handler.WaitForGameAcceptAsync(game.Id, CancellationToken.None, 30);
+        var waitTask = _handler.WaitForGameConfirmationAsync(game.Id, CancellationToken.None, 30);
 
         // Update the game to accept after a short delay
         await Task.Delay(500);
 
-        await _handler.ConfirmGameAsync(game.Id, joinedGameId, CancellationToken.None, 30);
+        await _handler.ConfirmGameJoinAsync(game.Id, joinedGameId, CancellationToken.None, 30);
 
         var result = await waitTask;
 
@@ -316,7 +316,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         await InsertTestRankedGameAsync(game);
 
         // Act
-        var waitTask = _handler.WaitForGameAcceptAsync(joinedGameId, CancellationToken.None, 30);
+        var waitTask = _handler.WaitForGameConfirmationAsync(joinedGameId, CancellationToken.None, 30);
 
         // Delete the game while waiting
         await _handler.DeleteGameSearchAsync(game.Id, CancellationToken.None, 30);
@@ -341,7 +341,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
             elo: 1500);
 
         // Act
-        var result = await _handler.InsertAsync(game, CancellationToken.None, 30);
+        var result = await _handler.InsertGameAsync(game, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -361,8 +361,8 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var game2 = CreateTestRankedGame(gameId, playerId: "507f1f77bcf86cd799439013", elo: 1600);
 
         // Act
-        await _handler.InsertAsync(game1, CancellationToken.None, 30);
-        var result = await _handler.InsertAsync(game2, CancellationToken.None, 30);
+        await _handler.InsertGameAsync(game1, CancellationToken.None, 30);
+        var result = await _handler.InsertGameAsync(game2, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -375,7 +375,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var game = CreateTestRankedGame("invalid-id", elo: 1500);
 
         // Act
-        var result = await _handler.InsertAsync(game, CancellationToken.None, 30);
+        var result = await _handler.InsertGameAsync(game, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -492,7 +492,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var joinId = "507f1f77bcf86cd799439012";
 
         // Act
-        var result = await _handler.ConfirmGameAsync(invalidGameId, joinId, CancellationToken.None, 30);
+        var result = await _handler.ConfirmGameJoinAsync(invalidGameId, joinId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -507,7 +507,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var invalidJoinId = "invalid-object-id-format";
 
         // Act
-        var result = await _handler.ConfirmGameAsync(gameId, invalidJoinId, CancellationToken.None, 30);
+        var result = await _handler.ConfirmGameJoinAsync(gameId, invalidJoinId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -551,7 +551,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var invalidGameId = "invalid-object-id-format";
 
         // Act
-        var result = await _handler.WaitForGameAcceptAsync(invalidGameId, CancellationToken.None, 30);
+        var result = await _handler.WaitForGameConfirmationAsync(invalidGameId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -616,7 +616,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var game = CreateTestRankedGame("507f1f77bcf86cd799439011", elo: 1500);
 
         // Act
-        var result = await _handler.InsertAsync(game, CancellationToken.None, 0);
+        var result = await _handler.InsertGameAsync(game, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -673,7 +673,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
 
         // Act & Assert - Complete workflow
         // 1. Insert game
-        var insertResult = await _handler.InsertAsync(game, CancellationToken.None, 30);
+        var insertResult = await _handler.InsertGameAsync(game, CancellationToken.None, 30);
         Assert.True(insertResult.IsSuccess);
 
         // 2. Find the game
@@ -682,10 +682,10 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         Assert.Equal(game.Id, findResult.Value.Id);
 
         // 3. Wait for another player to join
-        var waitTask = _handler.WaitForGameAcceptAsync(game.Id, CancellationToken.None, 30);
+        var waitTask = _handler.WaitForGameConfirmationAsync(game.Id, CancellationToken.None, 30);
 
         // 4. Confirm the game (simulating another player joining)
-        var confirmResult = await _handler.ConfirmGameAsync(game.Id, "507f1f77bcf86cd799439013", CancellationToken.None, 30);
+        var confirmResult = await _handler.ConfirmGameJoinAsync(game.Id, "507f1f77bcf86cd799439013", CancellationToken.None, 30);
         Assert.True(confirmResult.IsSuccess);
 
         // 5. Verify the wait operation completes
@@ -838,8 +838,8 @@ public class RankedGamesCollectionHandlerTest : IDisposable
         var joinId2 = "507f1f77bcf86cd799439013";
 
         // Act - Start both operations concurrently
-        var task1 = _handler.ConfirmGameAsync(game.Id, joinId1, CancellationToken.None, 30);
-        var task2 = _handler.ConfirmGameAsync(game.Id, joinId2, CancellationToken.None, 30);
+        var task1 = _handler.ConfirmGameJoinAsync(game.Id, joinId1, CancellationToken.None, 30);
+        var task2 = _handler.ConfirmGameJoinAsync(game.Id, joinId2, CancellationToken.None, 30);
 
         await Task.WhenAll(task1, task2);
 
@@ -864,7 +864,7 @@ public class RankedGamesCollectionHandlerTest : IDisposable
 
         // Act - Mix of read and write operations
         var task1 = _handler.GetClosestGameSearchAsync(1500, CancellationToken.None, 30);
-        var task2 = _handler.ConfirmGameAsync(game.Id, joinId, CancellationToken.None, 30);
+        var task2 = _handler.ConfirmGameJoinAsync(game.Id, joinId, CancellationToken.None, 30);
         var task3 = _handler.GetClosestGameSearchAsync(1500, CancellationToken.None, 30);
 
         await Task.WhenAll(task1, task2, task3);

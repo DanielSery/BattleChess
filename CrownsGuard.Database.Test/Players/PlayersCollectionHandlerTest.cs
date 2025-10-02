@@ -264,7 +264,7 @@ public class PlayersCollectionHandlerTest : IDisposable
     #region FindPlayerByEmailHashAsync Tests
 
     [Fact]
-    public async Task FindPlayerByEmailHashAsync_ValidEmailHash_ReturnsPlayer()
+    public async Task FindPlayerByEmailHashAsync_ExistingEmailHash_ReturnsTrue()
     {
         // Arrange
         var player = CreateTestPlayer(
@@ -275,29 +275,11 @@ public class PlayersCollectionHandlerTest : IDisposable
         await InsertTestPlayerAsync(player);
 
         // Act
-        var result = await _handler.FindPlayerByEmailHashAsync(player.EmailHash, CancellationToken.None, 30);
+        var result = await _handler.HasPlayerWithEmailHashAsync(player.EmailHash, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
-        Assert.Equal(player.Id, result.Value.Id);
-        Assert.Equal(player.Name, result.Value.Name);
-        Assert.Equal(player.Elo, result.Value.Elo);
-        Assert.Equal(player.EmailHash, result.Value.EmailHash);
-    }
-
-    [Fact]
-    public async Task FindPlayerByEmailHashAsync_InvalidEmailHash_ReturnsFailure()
-    {
-        // Arrange
-        var invalidEmailHash = "invalid_email_hash";
-
-        // Act
-        var result = await _handler.FindPlayerByEmailHashAsync(invalidEmailHash, CancellationToken.None, 30);
-
-        // Assert
-        Assert.True(result.IsFailed);
-        Assert.Single(result.Errors);
-        Assert.NotEmpty(result.Errors.First().Message);
+        Assert.True(result.Value);
     }
 
     [Fact]
@@ -307,7 +289,7 @@ public class PlayersCollectionHandlerTest : IDisposable
         var emailHash = "test_timeout@example.com_hash";
 
         // Act
-        var result = await _handler.FindPlayerByEmailHashAsync(emailHash, CancellationToken.None, 0);
+        var result = await _handler.HasPlayerWithEmailHashAsync(emailHash, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -323,7 +305,7 @@ public class PlayersCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.FindPlayerByEmailHashAsync(emailHash, cancellationTokenSource.Token, 30);
+        var result = await _handler.HasPlayerWithEmailHashAsync(emailHash, cancellationTokenSource.Token, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -343,7 +325,7 @@ public class PlayersCollectionHandlerTest : IDisposable
         var handler = new PlayersCollectionHandler(mockDatabaseClient.Object, mockLogger.Object);
 
         // Act
-        var result = await handler.FindPlayerByEmailHashAsync("test_exception@example.com_hash", CancellationToken.None, 30);
+        var result = await handler.HasPlayerWithEmailHashAsync("test_exception@example.com_hash", CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -796,26 +778,6 @@ public class PlayersCollectionHandlerTest : IDisposable
     }
 
     [Fact]
-    public async Task FindPlayerByEmailHashAsync_EmptyEmailHash_ReturnsFailure()
-    {
-        // Act
-        var result = await _handler.FindPlayerByEmailHashAsync(string.Empty, CancellationToken.None, 30);
-
-        // Assert
-        Assert.True(result.IsFailed);
-    }
-
-    [Fact]
-    public async Task FindPlayerByEmailHashAsync_WhitespaceEmailHash_ReturnsFailure()
-    {
-        // Act
-        var result = await _handler.FindPlayerByEmailHashAsync("   ", CancellationToken.None, 30);
-
-        // Assert
-        Assert.True(result.IsFailed);
-    }
-
-    [Fact]
     public async Task UpdatePlayerEloAsync_ZeroElo_UpdatesSuccessfully()
     {
         // Arrange
@@ -1023,10 +985,10 @@ public class PlayersCollectionHandlerTest : IDisposable
         Assert.True(result6.IsSuccess); // FindById after updates
 
         // Verify the player was updated
-        var updatedPlayer = result6.Value;
-        Assert.Equal(newElo, updatedPlayer.Elo);
-        Assert.Equal(newMap, updatedPlayer.Map);
-        Assert.Equal(newUnlockedFigures, updatedPlayer.UnlockedFigures);
+        var updatedPlayer = await _handler.FindPlayerByIdAsync(player.Id, CancellationToken.None, 30);
+        Assert.Equal(newElo, updatedPlayer.Value.Elo);
+        Assert.Equal(newMap, updatedPlayer.Value.Map);
+        Assert.Equal(newUnlockedFigures, updatedPlayer.Value.UnlockedFigures);
     }
 
     [Fact]

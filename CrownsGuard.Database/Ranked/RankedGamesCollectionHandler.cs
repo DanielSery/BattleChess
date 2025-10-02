@@ -18,18 +18,6 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         _logger = logger;
     }
 
-    public async Task<Result> ConfirmGameAsync(string gameId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
-    {
-        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
-        {
-            _logger.LogInformation("Confirming game join");
-            var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, gameId);
-            var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, joinId);
-            var result = await _client.RankedGames.UpdateOneAsync(filter, update, cancellationToken: token);
-            return result.ToResult("Failed to delete confirm game join");
-        });
-    }
-
     public async Task<Result> DeleteGameSearchAsync(string deletedGameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
@@ -71,7 +59,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         });
     }
 
-    public async Task<Result<RankedGame>>  WaitForGameAcceptAsync(string joinedGameId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RankedGame>> WaitForGameConfirmationAsync(string joinedGameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -92,7 +80,19 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         });
     }
 
-    public async Task<Result> InsertAsync(RankedGame game, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> ConfirmGameJoinAsync(string gameId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
+    {
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
+        {
+            _logger.LogInformation("Confirming game join");
+            var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, gameId);
+            var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, joinId);
+            var result = await _client.RankedGames.UpdateOneAsync(filter, update, cancellationToken: token);
+            return result.ToResult("Failed to delete confirm game join");
+        });
+    }
+
+    public async Task<Result> InsertGameAsync(RankedGame game, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {

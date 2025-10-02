@@ -61,7 +61,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         });
     }
 
-    public async Task<Result<GameLobby>> WaitForLobbyAcceptAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<GameLobby>> WaitForLobbyJoinCofirmationAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -83,18 +83,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         });
     }
 
-    public async Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
-    {
-        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
-        {
-            _logger.LogInformation("Deleting Lobbies of game {GameId}", gameId);
-            var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
-            var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: token);
-            return result.ToResult("Failed to delete lobbies");
-        });
-    }
-
-    public async Task<Result> UpdateLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> ConfirmLobbyJoinAsync(string lobbyId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -105,6 +94,17 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             var update = Builders<GameLobby>.Update.Set(x => x.JoinedId, joinId);
             var result = await _client.GameLobbies.UpdateOneAsync(filter, update, cancellationToken: token);
             return result.ToResult("Failed to update game confirmation");
+        });
+    }
+
+    public async Task<Result> DeleteGameLobbiesAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
+    {
+        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
+        {
+            _logger.LogInformation("Deleting Lobbies of game {GameId}", gameId);
+            var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
+            var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: token);
+            return result.ToResult("Failed to delete lobbies");
         });
     }
 

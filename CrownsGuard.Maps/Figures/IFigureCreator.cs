@@ -5,6 +5,4 @@ namespace CrownsGuard.Maps.Figures;
 public interface IFigureCreator
 {
     IFigureWithInfo CreateFigure(Figure figureBlueprint);
-
-    IFigureWithInfo CreateEmptyFigure();
 }

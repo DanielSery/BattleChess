@@ -65,7 +65,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                         var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
                         if (waitResult == WaitResult.GameJoin)
                         {
-                            var confirmationResult = await _gameRequests.ConfirmGameAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
+                            var confirmationResult = await _gameRequests.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
                             if (confirmationResult.IsSuccess)
                             {
                                 return Result.Ok((true, createdGameSearch, foundSearchJoin));
@@ -152,7 +152,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             IsHostStarting = isHostStarting,
         };
 
-        var result = await _gameRequests.InsertAsync(game, cancellationToken);
+        var result = await _gameRequests.InsertGameAsync(game, cancellationToken);
         if (result.IsFailed) return result;
         return game;
     }
@@ -173,7 +173,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game join");
 
         Console.WriteLine("Waiting for join request confirmation");
-        var updatedJoinedGameResult = await _gameRequests.WaitForGameAcceptAsync(joinedGame.Id, cancellationToken, 20);
+        var updatedJoinedGameResult = await _gameRequests.WaitForGameConfirmationAsync(joinedGame.Id, cancellationToken, 20);
         if (!updatedJoinedGameResult.TryGetValue(out var updatedJoinedGame))
         {
             await DeleteGameSearch(joinedGame);

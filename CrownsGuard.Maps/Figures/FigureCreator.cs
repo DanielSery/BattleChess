@@ -30,11 +30,4 @@ internal class FigureCreator : IFigureCreator
         });
         return new FigureWithInfo(player, figureType, figureBlueprint.IsKing());
     }
-
-    public IFigureWithInfo CreateEmptyFigure()
-    {
-        const int emptyFigureId = 0;
-        var figureType = _figureTypeInfoGroup.GetFigureTypeById(emptyFigureId);
-        return new FigureWithInfo(NeutralPlayer.Instance, figureType, false);
-    }
 }

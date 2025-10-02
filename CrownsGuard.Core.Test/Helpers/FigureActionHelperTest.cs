@@ -1,10 +1,8 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
-using JetBrains.Annotations;
 
 namespace CrownsGuard.Core.Test.Helpers;
 
-[TestSubject(typeof(FigureActionHelper))]
 public class FigureActionHelperTest
 {
     [Theory]

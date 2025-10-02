@@ -1,16 +1,18 @@
 ﻿using System.Text.Json;
+using CrownsGuard.Core.Board;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 using CrownsGuard.Maps.IO;
 using CrownsGuard.Maps.Utilities;
 
 namespace CrownsGuard.Maps.BoardBlueprints;
 
-internal class BoardBlueprintService : IBoardBlueprintService
+internal class SetupLoadingService : ISetupLoadingService
 {
     private readonly IFileHandler _fileHandler;
     private readonly IDirectoryHandler _directoryHandler;
 
-    public BoardBlueprintService(
+    public SetupLoadingService(
         IFileHandler fileHandler,
         IDirectoryHandler directoryHandler)
     {
@@ -19,9 +21,9 @@ internal class BoardBlueprintService : IBoardBlueprintService
         CurrentMap = LoadMap();
     }
 
-    public BoardBlueprint CurrentMap { get; private set; }
+    public Figure[] CurrentMap { get; private set; }
 
-    public void Save(BoardBlueprint map)
+    public void Save(Figure[] map)
     {
         CurrentMap = map;
         var text = JsonSerializer.Serialize(map);
@@ -29,7 +31,7 @@ internal class BoardBlueprintService : IBoardBlueprintService
         _fileHandler.WriteAllText("Resources\\TeamBoard.map", text);
     }
 
-    private BoardBlueprint LoadMap()
+    private Figure[] LoadMap()
     {
         const string directory = "Resources";
         const string filePath = "Resources\\TeamBoard.map";
@@ -37,12 +39,12 @@ internal class BoardBlueprintService : IBoardBlueprintService
         if (!_directoryHandler.Exists(directory))
         {
             _directoryHandler.CreateDirectory(directory);
-            return BoardBlueprint.ChessTeam;
+            return SampleSetup.ChessSetup;
         }
 
         if (!_fileHandler.Exists(filePath))
         {
-            return BoardBlueprint.ChessTeam;
+            return SampleSetup.ChessSetup;
         }
 
         try
@@ -50,25 +52,25 @@ internal class BoardBlueprintService : IBoardBlueprintService
             var text = _fileHandler.ReadAllText(filePath);
             text = CompressionHelper.Decompress(text);
 
-            var deserialized = JsonSerializer.Deserialize<BoardBlueprint>(text);
+            var deserialized = JsonSerializer.Deserialize<Figure[]>(text);
             if (deserialized is not null && IsBoardValid(deserialized))
                 return deserialized;
 
             TryDeleteFile(filePath);
-            return BoardBlueprint.ChessTeam;
+            return SampleSetup.ChessSetup;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             TryDeleteFile(filePath);
-            return BoardBlueprint.ChessTeam;
+            return SampleSetup.ChessSetup;
         }
     }
 
-    private static bool IsBoardValid(BoardBlueprint board)
+    private static bool IsBoardValid(Figure[] board)
     {
-        return board.Figures.Length == 16 &&
-               board.Figures.Count(x => x.IsKing()) == 1;
+        return board.Length == 16 &&
+               board.Count(x => x.IsKing()) == 1;
     }
 
     private void TryDeleteFile(string filePath)

@@ -1,4 +1,5 @@
 using CrownsGuard.Database.Database;
+using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Utilities;
 using FluentResults;
 using Microsoft.Extensions.Logging;
@@ -38,13 +39,17 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
         });
     }
 
-    public async Task<Result<RegisteredPlayer>> FindPlayerByEmailHashAsync(string emailHash, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<bool>> HasPlayerWithEmailHashAsync(string emailHash, CancellationToken cancellationToken, int timeoutSeconds)
     {
-        return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
+        return await DatabaseHelper.ExecuteWithErrorHandling<bool>(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Getting player with email hash");
             var filter = Builders<RegisteredPlayer>.Filter.Eq(g => g.EmailHash, emailHash);
-            return await _client.Players.FindSingleResultAsync(filter, cancellationToken: token);
+            var result = await _client.Players.FindSingleResultAsync(filter, cancellationToken: token);
+            
+            if (result.HasError<NoResultsFoundError>()) return false;
+            if (result.IsSuccess || result.HasError<TooManyResultsFoundError>()) return true;
+            return result.ToResult();
         });
     }
 

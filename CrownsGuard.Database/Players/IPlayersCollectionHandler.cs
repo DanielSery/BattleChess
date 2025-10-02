@@ -6,7 +6,7 @@ public interface IPlayersCollectionHandler
 {
     Task<Result<RegisteredPlayer>> FindPlayerByIdAsync(string id, CancellationToken cancellationToken, int timeoutSeconds = 120);
     Task<Result<RegisteredPlayer>> FindPlayerByNameAsync(string name, CancellationToken cancellationToken, int timeoutSeconds = 120);
-    Task<Result<RegisteredPlayer>> FindPlayerByEmailHashAsync(string emailHash, CancellationToken cancellationToken, int timeoutSeconds = 120);
+    Task<Result<bool>> HasPlayerWithEmailHashAsync(string emailHash, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
     Task<Result> InsertPlayerAsync(RegisteredPlayer player, CancellationToken cancellationToken, int timeoutSeconds = 120);
     Task<Result> UpdatePlayerEloAsync(string playerId, int newElo, CancellationToken cancellationToken, int timeoutSeconds = 120);

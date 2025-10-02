@@ -342,7 +342,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var newJoinId = "507f1f77bcf86cd799439013";
 
         // Act
-        var result = await _handler.UpdateLobbyJoinAsync(lobby.Id, newJoinId, CancellationToken.None, 30);
+        var result = await _handler.ConfirmLobbyJoinAsync(lobby.Id, newJoinId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -360,7 +360,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var result = await _handler.WaitForLobbyAcceptAsync(lobby.Id, CancellationToken.None, 30);
+        var result = await _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -379,7 +379,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var waitTask = _handler.WaitForLobbyAcceptAsync(lobby.Id, CancellationToken.None, 30);
+        var waitTask = _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, CancellationToken.None, 30);
 
         // Delete the lobby while waiting
         await _handler.DeleteGameLobbiesAsync(lobby.Id, CancellationToken.None, 30);
@@ -420,8 +420,8 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var joinId2 = "507f1f77bcf86cd799439013";
 
         // Act - Start both operations concurrently
-        var task1 = _handler.UpdateLobbyJoinAsync(lobby.Id, joinId1, CancellationToken.None, 30);
-        var task2 = _handler.UpdateLobbyJoinAsync(lobby.Id, joinId2, CancellationToken.None, 30);
+        var task1 = _handler.ConfirmLobbyJoinAsync(lobby.Id, joinId1, CancellationToken.None, 30);
+        var task2 = _handler.ConfirmLobbyJoinAsync(lobby.Id, joinId2, CancellationToken.None, 30);
 
         await Task.WhenAll(task1, task2);
 
@@ -536,8 +536,8 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var task = _handler.WaitForLobbyAcceptAsync(lobby.Id, CancellationToken.None, 30);
-        var updateResult = await _handler.UpdateLobbyJoinAsync(lobby.Id, "507f1f77bcf86cd799439015", CancellationToken.None, 30);
+        var task = _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, CancellationToken.None, 30);
+        var updateResult = await _handler.ConfirmLobbyJoinAsync(lobby.Id, "507f1f77bcf86cd799439015", CancellationToken.None, 30);
         
         Assert.True(updateResult.IsSuccess);
         var result = await task;
@@ -554,7 +554,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobbyId = "507f1f77bcf86cd799439017";
 
         // Act
-        var result = await _handler.WaitForLobbyAcceptAsync(lobbyId, CancellationToken.None, 0);
+        var result = await _handler.WaitForLobbyJoinCofirmationAsync(lobbyId, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -570,7 +570,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.WaitForLobbyAcceptAsync(lobbyId, cancellationTokenSource.Token, 30);
+        var result = await _handler.WaitForLobbyJoinCofirmationAsync(lobbyId, cancellationTokenSource.Token, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -664,7 +664,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var joinId = "507f1f77bcf86cd799439012";
 
         // Act
-        var result = await _handler.UpdateLobbyJoinAsync(lobby.Id, joinId, CancellationToken.None, 30);
+        var result = await _handler.ConfirmLobbyJoinAsync(lobby.Id, joinId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -682,7 +682,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var joinId = "507f1f77bcf86cd799439012";
 
         // Act
-        var result = await _handler.UpdateLobbyJoinAsync(invalidLobbyId, joinId, CancellationToken.None, 30);
+        var result = await _handler.ConfirmLobbyJoinAsync(invalidLobbyId, joinId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -699,7 +699,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var joinId = "507f1f77bcf86cd799439022";
 
         // Act
-        var result = await _handler.UpdateLobbyJoinAsync(lobbyId, joinId, CancellationToken.None, 0);
+        var result = await _handler.ConfirmLobbyJoinAsync(lobbyId, joinId, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -716,7 +716,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.UpdateLobbyJoinAsync(lobbyId, joinId, cancellationTokenSource.Token, 30);
+        var result = await _handler.ConfirmLobbyJoinAsync(lobbyId, joinId, cancellationTokenSource.Token, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -828,7 +828,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         // Act - Mix of read and write operations
         var task1 = _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
         var task2 = _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30);
-        var task3 = _handler.UpdateLobbyJoinAsync(lobby.Id, joinId, CancellationToken.None, 30);
+        var task3 = _handler.ConfirmLobbyJoinAsync(lobby.Id, joinId, CancellationToken.None, 30);
         var task4 = _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
         var task5 = _handler.GetPublicLobbiesAsync(CancellationToken.None, 30);
 
@@ -866,7 +866,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var task1 = _handler.DeleteGameLobbiesAsync(lobby.Id, CancellationToken.None, 30);
         var task2 = _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
         var task3 = _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30);
-        var task4 = _handler.WaitForLobbyAcceptAsync(lobby.Id, cts.Token, 30);
+        var task4 = _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, cts.Token, 30);
 
         cts.Cancel();
         await Task.WhenAll(task1, task2, task3, task4);
@@ -971,7 +971,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         // Update some lobbies
         for (int i = 0; i < 5; i++)
         {
-            await _handler.UpdateLobbyJoinAsync(lobbies[i].Id, $"507f1f77bcf86cd7994391{i:D2}", CancellationToken.None, 30);
+            await _handler.ConfirmLobbyJoinAsync(lobbies[i].Id, $"507f1f77bcf86cd7994391{i:D2}", CancellationToken.None, 30);
             await Task.Delay(10);
         }
 

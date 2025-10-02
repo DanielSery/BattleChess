@@ -143,7 +143,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         var joinResult = await _lobbyJoins.WaitForLobbyJoinAsync(lobby.Id, cancellationToken);
         if (!joinResult.TryGetValue(out var join)) return joinResult;
 
-        var updateResult = await _gameLobbies.UpdateLobbyJoinAsync(lobby.Id, join.Id, cancellationToken);
+        var updateResult = await _gameLobbies.ConfirmLobbyJoinAsync(lobby.Id, join.Id, cancellationToken);
         if (updateResult.IsFailed)
         {
             await DeleteGameAsync(lobby.Id);
@@ -182,7 +182,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         var gameJoinResult = await _lobbyJoins.InsertLobbyJoinAsync(gameJoin, cancellationToken);
         if (gameJoinResult.IsFailed) return Result.Fail<GameLobby>("Failed to join game");
 
-        var lobbyUpdateResult = await _gameLobbies.WaitForLobbyAcceptAsync(lobby.Id, cancellationToken);
+        var lobbyUpdateResult = await _gameLobbies.WaitForLobbyJoinCofirmationAsync(lobby.Id, cancellationToken);
         if (!lobbyUpdateResult.TryGetValue(out var lobbyUpdate)) return lobbyUpdateResult;
         if (lobbyUpdate.JoinedId is null)
         {

@@ -129,28 +129,5 @@ namespace CrownsGuard.Maps.Test.Figures
             Assert.Equal(mockTypeInfo.Object, result.TypeInfo);
             Assert.True(result.IsKing);
         }
-
-        [Fact]
-        public void CreateEmptyFigure_ReturnsNeutralPlayerAndEmptyTypeInfo()
-        {
-            var mockTypeGroup = new Mock<IFigureTypeInfoGroup>();
-            var mockTypeInfo = new Mock<IFigureTypeInfo>();
-            mockTypeInfo.Setup(x => x.ImageUris).Returns(new Dictionary<int, Uri>
-            {
-                { 0, new Uri("https://example.com/uri0.png") },
-                { 1, new Uri("https://example.com/uri1.png") },
-                { 2, new Uri("https://example.com/uri2.png") }
-            });
-
-            mockTypeGroup.Setup(g => g.GetFigureTypeById(0)).Returns(mockTypeInfo.Object);
-
-            var creator = new FigureCreator(Mock.Of<IPlayersOwner>(), mockTypeGroup.Object);
-
-            var result = creator.CreateEmptyFigure();
-
-            Assert.Equal(NeutralPlayer.Instance, result.Owner);
-            Assert.Equal(mockTypeInfo.Object, result.TypeInfo);
-            Assert.False(result.IsKing);
-        }
     }
 }

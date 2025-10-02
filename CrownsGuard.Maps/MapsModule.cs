@@ -15,8 +15,8 @@ public static class MapsModule
         builder.RegisterType<DirectoryHandler>()
             .As<IDirectoryHandler>()
             .SingleInstance();
-        builder.RegisterType<BoardBlueprintService>()
-            .As<IBoardBlueprintService>()
+        builder.RegisterType<SetupLoadingService>()
+            .As<ISetupLoadingService>()
             .SingleInstance();
         builder.RegisterType<BoardLoader>()
             .As<IBoardLoader>()
