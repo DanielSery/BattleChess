@@ -35,7 +35,7 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
             using var streamCursor = await _client.LobbyGameJoins.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<GameLobbyJoin>.Filter.Eq(g => g.GameId, gameId);
-            var foundResult = await _client.LobbyGameJoins.FindSingleResultAsync(filter, cancellationToken: token);
+            var foundResult = await _client.LobbyGameJoins.FindFirstResultAsync(filter, cancellationToken: token);
             
             if (foundResult.IsSuccess) return foundResult;
             return await streamCursor.WaitForAddAsync(cancellationToken: token);

@@ -52,6 +52,22 @@ public static class AsyncCursorHelper
         throw new OperationFailedException("Failed to wait for add");
     }
     
+    public static async Task<Result<T>> FindFirstResultAsync<T>(
+        this IMongoCollection<T> collection, 
+        FilterDefinition<T> filter,
+        CancellationToken cancellationToken)
+    {
+        var cursor = await collection.FindAsync(filter, cancellationToken: cancellationToken);
+        
+        var hasFirstBatch = await cursor.MoveNextAsync(cancellationToken);
+        if (!hasFirstBatch) return Result.Fail(NoResultsFoundError.Instance);
+
+        using var firstBatch = cursor.Current.GetEnumerator();
+        if (!firstBatch.MoveNext()) return Result.Fail(NoResultsFoundError.Instance);
+
+        return firstBatch.Current;
+    }
+    
     public static async Task<Result<T>> FindSingleResultAsync<T>(
         this IMongoCollection<T> collection, 
         FilterDefinition<T> filter,

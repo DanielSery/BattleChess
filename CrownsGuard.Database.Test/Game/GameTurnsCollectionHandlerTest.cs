@@ -6,7 +6,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
 
-namespace CrownsGuard.Database.Test;
+namespace CrownsGuard.Database.Test.Game;
 
 public class GameTurnsCollectionHandlerTest : IDisposable
 {

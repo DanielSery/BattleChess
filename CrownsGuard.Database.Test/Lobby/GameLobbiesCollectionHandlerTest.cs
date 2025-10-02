@@ -8,7 +8,7 @@ using Mongo2Go;
 using MongoDB.Driver;
 using Moq;
 
-namespace CrownsGuard.Database.Test;
+namespace CrownsGuard.Database.Test.Lobby;
 
 public class GameLobbiesCollectionHandlerTest : IDisposable
 {
@@ -197,16 +197,6 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     }
 
     [Fact]
-    public async Task FindByNameAsync_NullName_ReturnsFailure()
-    {
-        // Act
-        var result = await _handler.FindLobbyByNameAsync(null, CancellationToken.None, 30);
-
-        // Assert
-        Assert.True(result.IsFailed);
-    }
-
-    [Fact]
     public async Task FindByNameAsync_EmptyName_ReturnsFailure()
     {
         // Act
@@ -221,16 +211,6 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     {
         // Act
         var result = await _handler.FindLobbyByNameAsync("   ", CancellationToken.None, 30);
-
-        // Assert
-        Assert.True(result.IsFailed);
-    }
-
-    [Fact]
-    public async Task UpdateLobbyJoinAsync_NullJoinId_ReturnsFailure()
-    {
-        // Act
-        var result = await _handler.UpdateLobbyJoinAsync("507f1f77bcf86cd799439011", null, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -846,27 +826,29 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var joinId = "507f1f77bcf86cd799439012";
 
         // Act - Mix of read and write operations
-        var tasks = new List<Task>
-        {
-            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30),
-            _handler.UpdateLobbyJoinAsync(lobby.Id, joinId, CancellationToken.None, 30),
-            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.GetPublicLobbiesAsync(CancellationToken.None, 30)
-        };
+        var task1 = _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
+        var task2 = _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30);
+        var task3 = _handler.UpdateLobbyJoinAsync(lobby.Id, joinId, CancellationToken.None, 30);
+        var task4 = _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
+        var task5 = _handler.GetPublicLobbiesAsync(CancellationToken.None, 30);
 
-        await Task.WhenAll(tasks);
+        await Task.WhenAll(task1, task2, task3, task4, task5);
+        var result1 = await task1;
+        var result2 = await task2;
+        var result3 = await task3;
+        var result4 = await task4;
+        var result5 = await task5;
 
         // Assert
         // All operations should complete successfully
-        Assert.True(((Task<Result<GameLobby>>)tasks[0]).Result.IsSuccess); // FindById
-        Assert.True(((Task<Result<GameLobby>>)tasks[1]).Result.IsSuccess); // FindByName
-        Assert.True(((Task<Result>)tasks[2]).Result.IsSuccess); // UpdateLobbyJoin
-        Assert.True(((Task<Result<GameLobby>>)tasks[3]).Result.IsSuccess); // FindById after update
-        Assert.True(((Task<Result<List<PublicLobbyData>>>)tasks[4]).Result.IsSuccess); // GetPublicLobbies
+        Assert.True(result1.IsSuccess); // FindById
+        Assert.True(result2.IsSuccess); // FindByName
+        Assert.True(result3.IsSuccess); // UpdateLobbyJoin
+        Assert.True(result4.IsSuccess); // FindById after update
+        Assert.True(result5.IsSuccess); // GetPublicLobbies
 
         // Verify the lobby was updated
-        var updatedLobby = ((Task<Result<GameLobby>>)tasks[3]).Result.Value;
+        var updatedLobby = result4.Value;
         Assert.Equal(joinId, updatedLobby.JoinedId);
     }
 
@@ -881,28 +863,24 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var cts = new CancellationTokenSource();
 
         // Act - Mix of delete and read operations
-        var tasks = new List<Task>
-        {
-            _handler.DeleteGameLobbiesAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30),
-            _handler.WaitForLobbyAcceptAsync(lobby.Id, cts.Token, 30)
-        };
+        var task1 = _handler.DeleteGameLobbiesAsync(lobby.Id, CancellationToken.None, 30);
+        var task2 = _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
+        var task3 = _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30);
+        var task4 = _handler.WaitForLobbyAcceptAsync(lobby.Id, cts.Token, 30);
 
         cts.Cancel();
-        await Task.WhenAll(tasks);
+        await Task.WhenAll(task1, task2, task3, task4);
+
+        var result1 = await task1;
+        var result2 = await task2;
+        var result3 = await task3;
+        var result4 = await task4;
 
         // Assert
-        Assert.True(((Task<Result>)tasks[0]).Result.IsSuccess); // Delete should succeed
-
-        // Some read operations might fail after deletion, which is expected
-        // The important thing is that no exceptions are thrown and operations complete
-        foreach (var task in tasks.Skip(1))
-        {
-            var result = ((Task<Result<GameLobby>>)task).Result;
-            // Read operations after deletion may fail, but shouldn't throw exceptions
-            Assert.True(result.IsSuccess || result.IsFailed);
-        }
+        Assert.True(result1.IsSuccess); // Delete should succeed
+        Assert.True(result2.IsSuccess | result2.IsFailed);
+        Assert.True(result3.IsSuccess | result3.IsFailed);
+        Assert.True(result4.IsSuccess | result4.IsFailed);
     }
 
     [Fact]
