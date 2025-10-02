@@ -134,6 +134,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             Version = GameVersion.VersionId
         };
         var insertResult = await _gameLobbies.InsertLobbyAsync(game, cancellationToken);
+        
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game lobby");
         return game;
     }

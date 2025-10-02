@@ -77,7 +77,6 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         if (winType == WinType.CapturedKing)
             return;
 
-        Console.WriteLine("Sending game result to the other player");
         var messageIndex = winType switch
         {
             WinType.Surrender => IMultiplayerGameService.SurrenderMessage,
@@ -86,7 +85,6 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             _ => throw new ArgumentOutOfRangeException(nameof(winType), winType, null)
         };
 
-        Console.WriteLine("Creating game result");
         var gameTurn = new GameTurn
         {
             GameId = GameId,
@@ -96,7 +94,6 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             TimeSpentInSeconds = 0
         };
         await _gameTurns.InsertTurnAsync(gameTurn, cancellationToken);
-        Console.WriteLine("Created game result");
     }
 
     private async Task<Result<string?>> GetUpdatedElo(IOnlinePlayerInfo lost, CancellationToken cancellationToken)
@@ -168,6 +165,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             TimeSpentInSeconds = timeSpent.TotalSeconds
         };
         await _gameTurns.InsertTurnAsync(gameTurn, cancellationToken);
+        
         TurnId = gameTurn.Id;
         return Result.Ok();
     }
@@ -177,7 +175,6 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         if (GameId is null)
             return Result.Fail("Not in game");
 
-        Console.WriteLine($"Waiting for his turn with id greater than: {TurnId}");
         var hisTurnResult = TurnId is null
             ? await _gameTurns.WaitForFirstTurnAsync(GameId, CancellationToken.None, IMultiplayerGameService.TurnTimeoutSeconds)
             : await _gameTurns.WaitForNextTurnAsync(TurnId, GameId, CancellationToken.None, IMultiplayerGameService.TurnTimeoutSeconds);
@@ -188,7 +185,6 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             return Result.Ok();
         }
 
-        Console.WriteLine($"Found his turn with id: {hisTurn.Id}");
         if (hisTurn.FromIndex >= 64)
         {
             RequestPlayMove?.Invoke(this, new ValueTuple<byte, byte, TimeSpan>(

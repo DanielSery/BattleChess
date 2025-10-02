@@ -55,7 +55,8 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     {
         var foundPlayerResult = await _players.FindPlayerByNameAsync(name, cancellationToken);
         if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Incorrect username or password");
-        if (foundPlayer.PasswordHash != hash)  return Result.Fail("Incorrect username or password");
+        if (foundPlayer.PasswordHash != hash) return Result.Fail("Incorrect username or password");
+        
         LoggedInPlayer = foundPlayer;
         LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
         return Result.Ok();
@@ -73,6 +74,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         var mapData = map.GetIntData();
         var result = await _players.UpdatePlayerSetupAsync(LoggedInPlayer.Id, mapData, cancellationToken);
         if (result.IsFailed) return result;
+        
         LoggedInPlayer.Map = mapData;
         LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
         return result;
@@ -94,6 +96,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
         var result = await _players.UpdatePlayerUnlockedFiguresAsync(LoggedInPlayer.Id, newUnlockedFigures, cancellationToken);
         if (result.IsFailed) return result;
+        
         LoggedInPlayer.UnlockedFigures = newUnlockedFigures;
         LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
         return result;
@@ -119,7 +122,6 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             ? myMap.GetIntData()
             : fallbackMap.GetIntData();
 
-        Console.WriteLine($"Creating new player with name: {name}");
         var player = new RegisteredPlayer
         {
             Name = name,
@@ -130,7 +132,6 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             Map = mapData,
             UnlockedFigures = UnlockedFigures.DefaultUnlockedFigures,
         };
-
         return await _players.InsertPlayerAsync(player, cancellationToken);
     }
 }

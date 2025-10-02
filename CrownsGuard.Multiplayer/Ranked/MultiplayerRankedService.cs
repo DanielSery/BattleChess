@@ -1,4 +1,5 @@
 ﻿using CrownsGuard.Core.Figures;
+using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Players;
 using CrownsGuard.Database.Ranked;
 using CrownsGuard.Database.Utilities;
@@ -26,77 +27,95 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
 
     public async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> FindRankedGameAsync(Figure[] myMap, CancellationToken cancellationToken)
     {
-            var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
-            if (currentPlayer is null)
+        var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
+        if (currentPlayer is null)
+        {
+            return Result.Fail<(bool, RankedGame, RankedGameJoin)>("No player logged in");
+        }
+
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer!.UnlockedFigures;
+        if (!myMap.IsValid(unlockedFigures))
+            return Result.Fail<(bool, RankedGame, RankedGameJoin)>("Setup has units which weren't unlocked yet");
+
+        var random = new Random();
+        var isHostStarting = random.Next(0, 1) == 1;
+
+        var myMapData = myMap.GetIntData();
+        var eloDifference = 50;
+        
+        var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, cancellationToken);
+        if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
+
+        var closeGameResult = await TryJoinCloseGameAsync(cancellationToken, closestGameSearch, currentPlayer, eloDifference, myMapData);
+        if (closeGameResult.IsSuccess) return closeGameResult;
+
+        var createdGameSearchResult = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
+        if (!createdGameSearchResult.TryGetValue(out var createdGameSearch)) return createdGameSearchResult.ToResult();
+        try
+        {
+            return await IterativeGameSearchAsync(cancellationToken, createdGameSearch, currentPlayer, eloDifference, myMapData);
+        }
+        finally
+        {
+            if (string.IsNullOrEmpty(createdGameSearch.JoinedId))
             {
-                return Result.Fail<(bool, RankedGame, RankedGameJoin)>("No player logged in");
+                await DeleteGameSearch(createdGameSearch);
+            }
+        }
+    }
+
+    private async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> IterativeGameSearchAsync(CancellationToken cancellationToken, RankedGame createdGameSearch,
+        RegisteredPlayer currentPlayer, int eloDifference, int[] myMapData)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            var (waitResult, foundSearch, foundSearchJoin) = await WaitForGameSearchOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
+            if (waitResult == WaitResult.GameJoin)
+            {
+                var confirmationResult = await _gameRequests.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
+                if (confirmationResult.IsSuccess)
+                {
+                    return Result.Ok((true, createdGameSearch, foundSearchJoin));
+                }
+            }
+            else if (waitResult == WaitResult.GameSearch)
+            {
+                var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
+                if (joinResult.IsSuccess)
+                {
+                    return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, foundSearch!, joinResult.Value));
+                }
+            }
+            else if (eloDifference < 300)
+            {
+                Console.WriteLine($"No game found with elo difference {eloDifference}, increasing to {eloDifference + 50}");
+                eloDifference += 50;
+            }
+            else
+            {
+                Console.WriteLine($"No game found with elo difference {eloDifference}, continuing search");
+            }
+        }
+
+        return Result.Fail(CancelledError.Instance);
+    }
+
+    private async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> TryJoinCloseGameAsync(CancellationToken cancellationToken, RankedGame? closestGameSearch,
+        RegisteredPlayer currentPlayer, int eloDifference, int[] myMapData)
+    {
+        while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= eloDifference)
+        {
+            var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
+            if (joinResult.IsSuccess)
+            {
+                return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
             }
 
-            var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer!.UnlockedFigures;
-            if (!myMap.IsValid(unlockedFigures))
-                return Result.Fail<(bool, RankedGame, RankedGameJoin)>("Setup has units which weren't unlocked yet");
+            var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, cancellationToken);
+            if (!closestGameSearchResult.TryGetValue(out closestGameSearch)) closestGameSearch = null;
+        }
 
-            var random = new Random();
-            var isHostStarting = random.Next(0, 1) == 1;
-
-                var myMapData = myMap.GetIntData();
-                var eloDifference = 50;
-                var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, cancellationToken);
-                if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
-
-                while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= eloDifference)
-                {
-                    var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
-                    if (joinResult.IsSuccess)
-                    {
-                        return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
-                    }
-
-                    closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, cancellationToken);
-                    if (!closestGameSearchResult.TryGetValue(out closestGameSearch)) closestGameSearch = null;
-                }
-
-                var createdGameSearchResult = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
-                if (!createdGameSearchResult.TryGetValue(out var createdGameSearch)) return createdGameSearchResult.ToResult();
-                try
-                {
-                    while (true)
-                    {
-                        var (waitResult, foundSearch, foundSearchJoin) = await WaitForLobbyOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
-                        if (waitResult == WaitResult.GameJoin)
-                        {
-                            var confirmationResult = await _gameRequests.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
-                            if (confirmationResult.IsSuccess)
-                            {
-                                return Result.Ok((true, createdGameSearch, foundSearchJoin));
-                            }
-                        }
-                        else if (waitResult == WaitResult.GameSearch)
-                        {
-                            var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
-                            if (joinResult.IsSuccess)
-                            {
-                                return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, foundSearch!, joinResult.Value));
-                            }
-                        }
-                        else if (eloDifference < 300)
-                        {
-                            Console.WriteLine($"No game found with elo difference {eloDifference}, increasing to {eloDifference + 50}");
-                            eloDifference += 50;
-                        }
-                        else
-                        {
-                            Console.WriteLine($"No game found with elo difference {eloDifference}, continuing search");
-                        }
-                    }
-                }
-                finally
-                {
-                    if (string.IsNullOrEmpty(createdGameSearch.JoinedId))
-                    {
-                        await DeleteGameSearch(createdGameSearch);
-                    }
-                }
+        return Result.Fail("Did not find close game");
     }
 
     private async Task DeleteGameSearch(RankedGame deletedGame)
@@ -112,7 +131,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         GameJoin
     }
     
-    private async Task<(WaitResult result, RankedGame? search, RankedGameJoin? searchJoin)> WaitForLobbyOrJoinAsync(
+    private async Task<(WaitResult result, RankedGame? search, RankedGameJoin? searchJoin)> WaitForGameSearchOrJoinAsync(
         string gameId,
         short targetElo,
         int eloDifference,
@@ -172,25 +191,20 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         var insertResult = await _gameJoins.InsertGameJoinAsync(gameJoin, cancellationToken);
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game join");
 
-        Console.WriteLine("Waiting for join request confirmation");
         var updatedJoinedGameResult = await _gameRequests.WaitForGameConfirmationAsync(joinedGame.Id, cancellationToken, 20);
         if (!updatedJoinedGameResult.TryGetValue(out var updatedJoinedGame))
         {
             await DeleteGameSearch(joinedGame);
-            Console.WriteLine("Invalid game search");
             return Result.Fail("Joining timed out");
         }
-        else if (updatedJoinedGame.JoinedId == gameJoin.Id)
+
+        if (updatedJoinedGame.JoinedId == gameJoin.Id)
         {
             await DeleteGameSearch(updatedJoinedGame);
-            Console.WriteLine($"Confirmed join request with id: {gameJoin.Id}");
             return Result.Ok(gameJoin);
         }
-        else
-        {
-            Console.WriteLine("The lobby is already full");
-            return Result.Fail("The lobby is already full");
-        }
+
+        return Result.Fail("The lobby is already full");
     }
 
 }
