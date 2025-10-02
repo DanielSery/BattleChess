@@ -111,7 +111,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
         }
 
-        updatedPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost.PlayerId, cancellationToken);
+        updatedPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost, cancellationToken);
         if (!updatedPlayerResult.TryGetValue(out updatedPlayer)) return Result.Fail("Could not find losing player");
 
         _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;

@@ -15,7 +15,7 @@ public static class DatabaseHelper
     
     public static Result ToResult(this UpdateResult updateResult, string messageOnError)
     {
-        return updateResult is { IsAcknowledged: true, ModifiedCount: > 0 } ? Result.Ok() : Result.Fail(messageOnError);
+        return updateResult is { IsAcknowledged: true, MatchedCount: > 0 } ? Result.Ok() : Result.Fail(messageOnError);
     }
     
     /// <summary>

@@ -96,7 +96,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
         });
     }
 
-    public async Task<Result<RegisteredPlayer>> WaitForPlayerEloUpdateAsync(string playerId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RegisteredPlayer>> WaitForPlayerEloUpdateAsync(string playerId, int initialElo, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -105,6 +105,13 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
                 Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
                 Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.Eq(cs => cs.FullDocument.Id, playerId));
             using var streamCursor = await _client.Players.WatchAsync(streamFilter, cancellationToken: token);
+            
+            var filter = Builders<RegisteredPlayer>.Filter.And(
+                Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId),
+                Builders<RegisteredPlayer>.Filter.Ne(g => g.Elo, initialElo));
+            var foundResult = await _client.Players.FindFirstResultAsync(filter, cancellationToken: token);
+
+            if (foundResult.IsSuccess) return foundResult;
             return await streamCursor.WaitForUpdateAsync(cancellationToken: token);
         });
     }

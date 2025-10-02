@@ -13,7 +13,7 @@ public interface IPlayersCollectionHandler
     Task<Result> UpdatePlayerSetupAsync(string playerId, int[] newMap, CancellationToken cancellationToken, int timeoutSeconds = 120);
     Task<Result> UpdatePlayerUnlockedFiguresAsync(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
-    Task<Result<RegisteredPlayer>> WaitForPlayerEloUpdateAsync(string playerId, CancellationToken cancellationToken, int timeoutSeconds = 120);
+    Task<Result<RegisteredPlayer>> WaitForPlayerEloUpdateAsync(string playerId, int initialElo, CancellationToken cancellationToken, int timeoutSeconds = 120);
     Task<Result<List<PublicPlayerData>>> GetTopLeaderboardAsync(CancellationToken cancellationToken, int timeoutSeconds = 120);
     Task<Result<List<PublicPlayerData>>> GetUserLeaderboardAsync(string playerId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 }

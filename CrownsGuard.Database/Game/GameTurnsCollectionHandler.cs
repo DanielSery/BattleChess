@@ -51,7 +51,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
             var filter = Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId);
             var foundResult = await _client.GameTurns.FindSingleResultAsync(filter, cancellationToken: token);
             
-            if (foundResult.IsSuccess) return foundResult.Value;
+            if (foundResult.IsSuccess) return foundResult;
             return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
@@ -73,7 +73,7 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
                 Builders<GameTurn>.Filter.Gt(gt => gt.Id, turnId));
             var foundResult = await _client.GameTurns.FindSingleResultAsync(filter, cancellationToken: token);
             
-            if (foundResult.IsSuccess) return foundResult.Value;
+            if (foundResult.IsSuccess) return foundResult;
             return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
