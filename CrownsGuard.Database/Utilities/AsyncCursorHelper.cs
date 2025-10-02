@@ -6,7 +6,7 @@ namespace CrownsGuard.Database.Utilities;
 
 public static class AsyncCursorHelper
 {
-    public static async Task<IChangeStreamCursor<ChangeStreamDocument<T>>> CreateChangeStreamCursorAsync<T>(
+    public static async Task<IChangeStreamCursor<ChangeStreamDocument<T>>> WatchAsync<T>(
         this IMongoCollection<T> collection, 
         FilterDefinition<ChangeStreamDocument<T>>? filter,
         CancellationToken cancellationToken)

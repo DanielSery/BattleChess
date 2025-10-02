@@ -103,7 +103,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     {
         if (lost.PlayerId is null) throw new ArgumentNullException(nameof(lost));
 
-        var updatedPlayerResult = await _players.FindByIdAsync(lost.PlayerId, cancellationToken);
+        var updatedPlayerResult = await _players.FindPlayerByIdAsync(lost.PlayerId, cancellationToken);
         if (!updatedPlayerResult.TryGetValue(out var updatedPlayer)) return Result.Fail("Could not find losing player");
         if (updatedPlayer.Elo != lost.Elo)
         {
@@ -111,7 +111,7 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
             return Result.Ok<string?>($"Elo {updatedPlayer.Elo - lost.Elo} → {updatedPlayer.Elo}");
         }
 
-        updatedPlayerResult = await _players.WaitForEloUpdateAsync(lost.PlayerId, cancellationToken);
+        updatedPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost.PlayerId, cancellationToken);
         if (!updatedPlayerResult.TryGetValue(out updatedPlayer)) return Result.Fail("Could not find losing player");
 
         _playerService.LoggedInPlayer!.Elo = updatedPlayer.Elo;
@@ -123,18 +123,18 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
         if (won.PlayerId is null) throw new ArgumentNullException(nameof(won));
         if (lost.PlayerId is null) throw new ArgumentNullException(nameof(lost));
 
-        var winningPlayerResult = await _players.FindByIdAsync(won.PlayerId, cancellationToken);
+        var winningPlayerResult = await _players.FindPlayerByIdAsync(won.PlayerId, cancellationToken);
         if (!winningPlayerResult.TryGetValue(out var winningPlayer)) return Result.Fail("Could not find winning player");
 
-        var losingPlayerResult = await _players.WaitForEloUpdateAsync(lost.PlayerId, cancellationToken);
+        var losingPlayerResult = await _players.WaitForPlayerEloUpdateAsync(lost.PlayerId, cancellationToken);
         if (!losingPlayerResult.TryGetValue(out var losingPlayer)) return Result.Fail("Could not find losing player");
 
         winningPlayer.Elo = (short)won.Elo!;
         losingPlayer.Elo = (short)lost.Elo!;
         UpdateElo(winningPlayer, losingPlayer, 1d);
 
-        var updateWinningPlayerResult = await _players.UpdateEloAsync(winningPlayer.Id, winningPlayer.Elo, cancellationToken);
-        var updateLosingPlayerResult = await _players.UpdateEloAsync(losingPlayer.Id, losingPlayer.Elo, cancellationToken);
+        var updateWinningPlayerResult = await _players.UpdatePlayerEloAsync(winningPlayer.Id, winningPlayer.Elo, cancellationToken);
+        var updateLosingPlayerResult = await _players.UpdatePlayerEloAsync(losingPlayer.Id, losingPlayer.Elo, cancellationToken);
 
         if (!updateLosingPlayerResult.IsFailed) return updateLosingPlayerResult;
         if (!updateWinningPlayerResult.IsFailed) return updateWinningPlayerResult;

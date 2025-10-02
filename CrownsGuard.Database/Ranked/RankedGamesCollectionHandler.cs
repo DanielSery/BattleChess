@@ -18,7 +18,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         _logger = logger;
     }
 
-    public async Task<Result> ConfirmGameJoinAsync(string gameId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> ConfirmGameAsync(string gameId, string joinId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -26,7 +26,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
             var filter = Builders<RankedGame>.Filter.Eq(l => l.Id, gameId);
             var update = Builders<RankedGame>.Update.Set(x => x.JoinedId, joinId);
             var result = await _client.RankedGames.UpdateOneAsync(filter, update, cancellationToken: token);
-            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete confirm game join");
+            return result.ToResult("Failed to delete confirm game join");
         });
     }
 
@@ -36,18 +36,19 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         {
             _logger.LogInformation("Deleting game search");
             var gameSearchFilter = Builders<RankedGame>.Filter.Eq(l => l.Id, deletedGameId);
-            await _client.RankedGames.DeleteManyAsync(gameSearchFilter, token);
+            var result = await _client.RankedGames.DeleteManyAsync(gameSearchFilter, token);
+            return result.ToResult("Failed to delete game joins");
         });
     }
 
-    public async Task<Result<RankedGame>> FindForTargetEloAsync(string gameId, short targetElo, int eloDifference, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RankedGame>> FindGameForTargetEloAsync(string gameId, short targetElo, int eloDifference, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
-            _logger.LogInformation("Waiting for ranked join request for game: {gameId}", gameId);
-
             var fromElo = targetElo - eloDifference;
             var toElo = targetElo + eloDifference;
+            
+            _logger.LogInformation("Waiting for ranked join request for game: {gameId}", gameId);
             var streamFilter = Builders<ChangeStreamDocument<RankedGame>>.Filter.And(
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Insert),
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Gt(cs => cs.FullDocument.Id, gameId),
@@ -55,8 +56,7 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Ne(cs => cs.FullDocument.JoinedId, null),
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Gt(cs => cs.FullDocument.Elo, fromElo),
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Lt(cs => cs.FullDocument.Elo, toElo));
-            using var streamCursor = await _client.RankedGames.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: token);
+            using var streamCursor = await _client.RankedGames.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<RankedGame>.Filter.And(
                 Builders<RankedGame>.Filter.Gt(g => g.Id, gameId),
@@ -65,13 +65,13 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                 Builders<RankedGame>.Filter.Gt(g => g.Elo, fromElo),
                 Builders<RankedGame>.Filter.Lt(g => g.Elo, toElo));
             var foundResult = await _client.RankedGames.FindSingleResultAsync(filter, cancellationToken: token);
+            
             if (foundResult.IsSuccess) return foundResult;
-
-            return await streamResult;
+            return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
 
-    public async Task<Result<RankedGame>> WaitForAcceptAsync(string joinedGameId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RankedGame>> WaitForGameAcceptAsync(string joinedGameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -81,15 +81,14 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
                     Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
                     Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete)),
                 Builders<ChangeStreamDocument<RankedGame>>.Filter.Eq(cs => cs.FullDocument.Id, joinedGameId));
-            using var streamCursor = await _client.RankedGames.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            var streamResult = streamCursor.WaitForUpdateAsync(cancellationToken: token);
+            using var streamCursor = await _client.RankedGames.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<RankedGame>.Filter.Eq(g => g.JoinedId, joinedGameId);
             var foundResult = await _client.RankedGames.FindSingleResultAsync(filter, cancellationToken: token);
+            
             if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
             if (foundResult.HasError<NoResultsFoundError>()) return foundResult;
-            
-            return await streamResult;
+            return await streamCursor.WaitForUpdateAsync(cancellationToken: token);
         });
     }
 
@@ -99,7 +98,6 @@ internal class RankedGamesCollectionHandler : IRankedGamesCollectionHandler
         {
             _logger.LogInformation("Creating game request");
             await _client.RankedGames.InsertOneAsync(game, cancellationToken: token);
-            
         });
     }
 

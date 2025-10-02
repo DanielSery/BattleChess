@@ -4,7 +4,7 @@ namespace CrownsGuard.Database.Ranked;
 
 public interface IRankedGameJoinsCollectionHandler
 {
-    Task<Result> InsertAsync(RankedGameJoin gameJoin, CancellationToken cancellationToken, int timeoutSeconds = 120);
+    Task<Result> InsertGameJoinAsync(RankedGameJoin gameJoin, CancellationToken cancellationToken, int timeoutSeconds = 120);
 
     Task<Result> DeleteGameJoinsAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds = 120);
 

@@ -98,7 +98,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var result = await _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -114,7 +114,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var invalidId = "507f1f77bcf86cd799439099";
 
         // Act
-        var result = await _handler.FindByIdAsync(invalidId, CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByIdAsync(invalidId, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -129,7 +129,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobbyId = "507f1f77bcf86cd799439014";
 
         // Act
-        var result = await _handler.FindByIdAsync(lobbyId, CancellationToken.None, 0);
+        var result = await _handler.FindLobbyByIdAsync(lobbyId, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -145,7 +145,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.FindByIdAsync(lobbyId, cancellationTokenSource.Token, 30);
+        var result = await _handler.FindLobbyByIdAsync(lobbyId, cancellationTokenSource.Token, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -165,7 +165,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var handler = new GameLobbiesCollectionHandler(mockDatabaseClient.Object, mockLogger.Object);
 
         // Act
-        var result = await handler.FindByIdAsync("507f1f77bcf86cd799439016", CancellationToken.None, 30);
+        var result = await handler.FindLobbyByIdAsync("507f1f77bcf86cd799439016", CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -180,7 +180,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     public async Task FindByIdAsync_EmptyId_ReturnsFailure()
     {
         // Act
-        var result = await _handler.FindByIdAsync(string.Empty, CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByIdAsync(string.Empty, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -190,7 +190,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     public async Task FindByIdAsync_InvalidObjectIdFormat_ReturnsFailure()
     {
         // Act
-        var result = await _handler.FindByIdAsync("invalid-object-id-format", CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByIdAsync("invalid-object-id-format", CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -200,7 +200,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     public async Task FindByNameAsync_NullName_ReturnsFailure()
     {
         // Act
-        var result = await _handler.FindByNameAsync(null, CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByNameAsync(null, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -210,7 +210,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     public async Task FindByNameAsync_EmptyName_ReturnsFailure()
     {
         // Act
-        var result = await _handler.FindByNameAsync(string.Empty, CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByNameAsync(string.Empty, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -220,7 +220,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
     public async Task FindByNameAsync_WhitespaceName_ReturnsFailure()
     {
         // Act
-        var result = await _handler.FindByNameAsync("   ", CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByNameAsync("   ", CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -244,7 +244,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         lobby.Id = "invalid-id";
 
         // Act
-        var result = await _handler.InsertAsync(lobby, CancellationToken.None, 30);
+        var result = await _handler.InsertLobbyAsync(lobby, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -343,7 +343,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(wrongVersionLobby);
 
         // Act
-        var result = await _handler.FindByNameAsync("Wrong Version Lobby", CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByNameAsync("Wrong Version Lobby", CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -419,8 +419,8 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobby2 = CreateTestGameLobby(lobbyId, "Test Lobby 2"); // Same ID
 
         // Act
-        await _handler.InsertAsync(lobby1, CancellationToken.None, 30);
-        var result = await _handler.InsertAsync(lobby2, CancellationToken.None, 30);
+        await _handler.InsertLobbyAsync(lobby1, CancellationToken.None, 30);
+        var result = await _handler.InsertLobbyAsync(lobby2, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -447,7 +447,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
 
         // Assert
         // Verify the lobby was updated with one of the join IDs
-        var findResult = await _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30);
+        var findResult = await _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
         Assert.True(findResult.IsSuccess);
         var joinedId = findResult.Value.JoinedId;
         Assert.True(joinedId == joinId1 || joinedId == joinId2);
@@ -468,7 +468,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var result = await _handler.FindByNameAsync(lobby.LobbyName, CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -484,7 +484,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobbyName = "Non-existent Lobby";
 
         // Act
-        var result = await _handler.FindByNameAsync(lobbyName, CancellationToken.None, 30);
+        var result = await _handler.FindLobbyByNameAsync(lobbyName, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -499,7 +499,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobbyName = "Test Lobby Timeout";
 
         // Act
-        var result = await _handler.FindByNameAsync(lobbyName, CancellationToken.None, 0);
+        var result = await _handler.FindLobbyByNameAsync(lobbyName, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -515,7 +515,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.FindByNameAsync(lobbyName, cancellationTokenSource.Token, 30);
+        var result = await _handler.FindLobbyByNameAsync(lobbyName, cancellationTokenSource.Token, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -535,7 +535,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var handler = new GameLobbiesCollectionHandler(mockDatabaseClient.Object, mockLogger.Object);
 
         // Act
-        var result = await handler.FindByNameAsync("Test Lobby Exception", CancellationToken.None, 30);
+        var result = await handler.FindLobbyByNameAsync("Test Lobby Exception", CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -757,7 +757,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
             elo: 1500);
 
         // Act
-        var result = await _handler.InsertAsync(lobby, CancellationToken.None, 30);
+        var result = await _handler.InsertLobbyAsync(lobby, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -774,7 +774,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobby = CreateTestGameLobby("lobby_timeout", "Test Lobby Timeout");
 
         // Act
-        var result = await _handler.InsertAsync(lobby, CancellationToken.None, 0);
+        var result = await _handler.InsertLobbyAsync(lobby, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -790,7 +790,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.InsertAsync(lobby, cancellationTokenSource.Token, 30);
+        var result = await _handler.InsertLobbyAsync(lobby, cancellationTokenSource.Token, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -814,11 +814,11 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         // Act - Start multiple concurrent read operations
         var tasks = new List<Task<Result<GameLobby>>>
         {
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30)
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30)
         };
 
         await Task.WhenAll(tasks);
@@ -848,10 +848,10 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         // Act - Mix of read and write operations
         var tasks = new List<Task>
         {
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindByNameAsync(lobby.LobbyName, CancellationToken.None, 30),
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
+            _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30),
             _handler.UpdateLobbyJoinAsync(lobby.Id, joinId, CancellationToken.None, 30),
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30),
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
             _handler.GetPublicLobbiesAsync(CancellationToken.None, 30)
         };
 
@@ -884,8 +884,8 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var tasks = new List<Task>
         {
             _handler.DeleteGameLobbiesAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindByIdAsync(lobby.Id, CancellationToken.None, 30),
-            _handler.FindByNameAsync(lobby.LobbyName, CancellationToken.None, 30),
+            _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30),
+            _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30),
             _handler.WaitForLobbyAcceptAsync(lobby.Id, cts.Token, 30)
         };
 
@@ -926,11 +926,11 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobby2 = CreateTestGameLobby("507f1f77bcf86cd799439012", "Lobby 2");
         var lobby3 = CreateTestGameLobby("507f1f77bcf86cd799439013", "Lobby 3");
 
-        await _handler.InsertAsync(lobby1, CancellationToken.None, 30);
+        await _handler.InsertLobbyAsync(lobby1, CancellationToken.None, 30);
         await Task.Delay(50);
-        await _handler.InsertAsync(lobby2, CancellationToken.None, 30);
+        await _handler.InsertLobbyAsync(lobby2, CancellationToken.None, 30);
         await Task.Delay(50);
-        await _handler.InsertAsync(lobby3, CancellationToken.None, 30);
+        await _handler.InsertLobbyAsync(lobby3, CancellationToken.None, 30);
 
         // Let changes propagate
         await Task.Delay(200);
@@ -986,7 +986,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         {
             var lobby = CreateTestGameLobby($"507f1f77bcf86cd7994390{i:D2}", $"Lobby {i}");
             lobbies.Add(lobby);
-            await _handler.InsertAsync(lobby, CancellationToken.None, 30);
+            await _handler.InsertLobbyAsync(lobby, CancellationToken.None, 30);
             await Task.Delay(10);
         }
 
@@ -1037,7 +1037,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobby = CreateTestGameLobby(lobbyId, "Test Lobby");
 
         // Act - Try to insert and immediately delete
-        var insertTask = _handler.InsertAsync(lobby, CancellationToken.None, 30);
+        var insertTask = _handler.InsertLobbyAsync(lobby, CancellationToken.None, 30);
         var deleteTask = _handler.DeleteGameLobbiesAsync(lobbyId, CancellationToken.None, 30);
 
         var results = await Task.WhenAll(insertTask, deleteTask);

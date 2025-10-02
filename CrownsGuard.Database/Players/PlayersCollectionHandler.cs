@@ -18,7 +18,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
         _logger = logger;
     }
     
-    public async Task<Result<RegisteredPlayer>> FindByIdAsync(string id, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RegisteredPlayer>> FindPlayerByIdAsync(string id, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -28,7 +28,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
         });
     }
 
-    public async Task<Result<RegisteredPlayer>> FindByNameAsync(string name, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RegisteredPlayer>> FindPlayerByNameAsync(string name, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -38,7 +38,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
         });
     }
 
-    public async Task<Result<RegisteredPlayer>> FindByEmailHashAsync(string emailHash, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RegisteredPlayer>> FindPlayerByEmailHashAsync(string emailHash, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -48,7 +48,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
         });
     }
 
-    public async Task<Result> InsertAsync(RegisteredPlayer player, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> InsertPlayerAsync(RegisteredPlayer player, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -58,45 +58,45 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateEloAsync(string playerId, int newElo, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> UpdatePlayerEloAsync(string playerId, int newElo, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Updating elo of player with id: {playerId}", playerId);
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId);
             var update = Builders<RegisteredPlayer>.Update.Set(x => x.Elo, newElo);
-            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: token);
-            return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update player elo");
+            var result = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: token);
+            return result.ToResult("Failed to update player elo");
         });
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateSetupAsync(string playerId, int[] newMap, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> UpdatePlayerSetupAsync(string playerId, int[] newMap, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Updating setup of player with id: {playerId}", playerId);
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId);
             var update = Builders<RegisteredPlayer>.Update.Set(x => x.Map, newMap);
-            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: token);
-            return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update player setup");
+            var result = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: token);
+            return result.ToResult("Failed to update player setup");
         });
     }
 
     /// <inheritdoc />
-    public async Task<Result> UpdateUnlockedFiguresAsync(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> UpdatePlayerUnlockedFiguresAsync(string playerId, byte[] newUnlockedFigures, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Updating unlocked figures of player with id: {playerId}", playerId);
             var playerFilter = Builders<RegisteredPlayer>.Filter.Eq(g => g.Id, playerId);
             var update = Builders<RegisteredPlayer>.Update.Set(x => x.UnlockedFigures, newUnlockedFigures);
-            var updateResult = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: token);
-            return updateResult.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to update unlocked figures");
+            var result = await _client.Players.UpdateOneAsync(playerFilter, update, cancellationToken: token);
+            return result.ToResult("Failed to update unlocked figures");
         });
     }
 
-    public async Task<Result<RegisteredPlayer>> WaitForEloUpdateAsync(string playerId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<RegisteredPlayer>> WaitForPlayerEloUpdateAsync(string playerId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -104,8 +104,8 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             var streamFilter = Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.And(
                 Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Update),
                 Builders<ChangeStreamDocument<RegisteredPlayer>>.Filter.Eq(cs => cs.FullDocument.Id, playerId));
-            using var streamCursor = await _client.Players.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            return await streamCursor.WaitForAddAsync(cancellationToken: token);
+            using var streamCursor = await _client.Players.WatchAsync(streamFilter, cancellationToken: token);
+            return await streamCursor.WaitForUpdateAsync(cancellationToken: token);
         });
     }
 
@@ -160,6 +160,7 @@ internal class PlayersCollectionHandler : IPlayersCollectionHandler
             var rankDocResult = await bsonCollection
                 .Aggregate(rankPipeline, cancellationToken: token)
                 .SingleResultAsync(cancellationToken: token);
+            
             // ReSharper disable once PossiblyMistakenUseOfCancellationToken
             if (rankDocResult.IsFailed) return await GetTopLeaderboardAsync(cancellationToken, timeoutSeconds);
             _logger.LogInformation("Retrieved rank of user");

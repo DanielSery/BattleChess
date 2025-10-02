@@ -72,7 +72,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     else
                     {
                         var id = change.DocumentKey["_id"].AsObjectId.ToString();
-                        var foundLobbyResult = await _gameLobbies.FindByIdAsync(id, cancellationToken);
+                        var foundLobbyResult = await _gameLobbies.FindLobbyByIdAsync(id, cancellationToken);
                         if (foundLobbyResult.TryGetValue(out var foundLobby))
                         {
                             lobby = new PublicLobbyData
@@ -115,7 +115,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         if (!myMap.IsValid(unlockedFigures))
             return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
 
-        var foundLobby = _gameLobbies.FindByNameAsync(lobbyName, cancellationToken);
+        var foundLobby = _gameLobbies.FindLobbyByNameAsync(lobbyName, cancellationToken);
         if (foundLobby.IsCompleted) return Result.Fail("Lobby already exists");
 
         var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
@@ -133,14 +133,14 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             IsHostStarting = isHostStarting,
             Version = GameVersion.VersionId
         };
-        var insertResult = await _gameLobbies.InsertAsync(game, cancellationToken);
+        var insertResult = await _gameLobbies.InsertLobbyAsync(game, cancellationToken);
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game lobby");
         return game;
     }
 
     public async Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby, CancellationToken cancellationToken)
     {
-        var joinResult = await _lobbyJoins.WaitForJoinAsync(lobby.Id, cancellationToken);
+        var joinResult = await _lobbyJoins.WaitForLobbyJoinAsync(lobby.Id, cancellationToken);
         if (!joinResult.TryGetValue(out var join)) return joinResult;
 
         var updateResult = await _gameLobbies.UpdateLobbyJoinAsync(lobby.Id, join.Id, cancellationToken);
@@ -163,7 +163,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         if (!myMap.IsValid(unlockedFigures))
             return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
 
-        var foundLobbyResult = await _gameLobbies.FindByNameAsync(lobbyName, cancellationToken: cancellationToken);
+        var foundLobbyResult = await _gameLobbies.FindLobbyByNameAsync(lobbyName, cancellationToken: cancellationToken);
         if (!foundLobbyResult.TryGetValue(out var lobby)) return Result.Fail<GameLobby>("Lobby not found");
 
         var hash = HashingHelper.GetHash(password, lobby.PasswordSalt);
@@ -179,7 +179,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             PlayerId = currentPlayer?.Id ?? null,
             Map = myMap.GetIntData(),
         };
-        var gameJoinResult = await _lobbyJoins.InsertAsync(gameJoin, cancellationToken);
+        var gameJoinResult = await _lobbyJoins.InsertLobbyJoinAsync(gameJoin, cancellationToken);
         if (gameJoinResult.IsFailed) return Result.Fail<GameLobby>("Failed to join game");
 
         var lobbyUpdateResult = await _gameLobbies.WaitForLobbyAcceptAsync(lobby.Id, cancellationToken);

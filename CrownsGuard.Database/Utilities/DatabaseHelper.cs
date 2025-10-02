@@ -2,11 +2,22 @@
 using CrownsGuard.Database.Errors;
 using FluentResults;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Utilities;
 
 public static class DatabaseHelper
 {
+    public static Result ToResult(this DeleteResult deleteResult, string messageOnError)
+    {
+        return deleteResult.IsAcknowledged ? Result.Ok() : Result.Fail(messageOnError);
+    }
+    
+    public static Result ToResult(this UpdateResult updateResult, string messageOnError)
+    {
+        return updateResult is { IsAcknowledged: true, ModifiedCount: > 0 } ? Result.Ok() : Result.Fail(messageOnError);
+    }
+    
     /// <summary>
     /// Executes an async operation with standardized error handling
     /// </summary>

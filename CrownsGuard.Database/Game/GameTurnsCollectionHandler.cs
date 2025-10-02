@@ -34,7 +34,8 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
         {
             _logger.LogInformation("Deleting game turns older than {Time}", time);
             var filter = Builders<GameTurn>.Filter.Lte(gt => gt.CreatedAt, time);
-            await _client.GameTurns.DeleteManyAsync(filter, cancellationToken: token);
+            var result = await _client.GameTurns.DeleteManyAsync(filter, cancellationToken: token);
+            return result.ToResult("Failed to delete turns");
         });
     }
 
@@ -44,16 +45,14 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Waiting for first turn for game {GameId}", gameId);
-            
             var streamFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-            using var streamCursor = await _client.GameTurns.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: token);
+            using var streamCursor = await _client.GameTurns.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId);
             var foundResult = await _client.GameTurns.FindSingleResultAsync(filter, cancellationToken: token);
+            
             if (foundResult.IsSuccess) return foundResult.Value;
-
-            return await streamResult;
+            return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
 
@@ -63,21 +62,19 @@ internal class GameTurnsCollectionHandler : IGameTurnsCollectionHandler
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Waiting for next turn after {TurnId} for game {GameId}", turnId, gameId);
-            
             var streamFilter = Builders<ChangeStreamDocument<GameTurn>>.Filter.And(
                 Builders<ChangeStreamDocument<GameTurn>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId),
                 Builders<ChangeStreamDocument<GameTurn>>.Filter.Gt(cs => cs.FullDocument.Id, turnId)
             );
-            using var streamCursor = await _client.GameTurns.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: token);
+            using var streamCursor = await _client.GameTurns.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<GameTurn>.Filter.And(
                 Builders<GameTurn>.Filter.Eq(gt => gt.GameId, gameId),
                 Builders<GameTurn>.Filter.Gt(gt => gt.Id, turnId));
             var foundResult = await _client.GameTurns.FindSingleResultAsync(filter, cancellationToken: token);
+            
             if (foundResult.IsSuccess) return foundResult.Value;
-
-            return await streamResult;
+            return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
 }

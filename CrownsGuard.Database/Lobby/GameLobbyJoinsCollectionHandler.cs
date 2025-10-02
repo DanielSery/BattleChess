@@ -17,7 +17,7 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
         _logger = logger;
     }
 
-    public async Task<Result> InsertAsync(GameLobbyJoin lobbyJoin, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> InsertLobbyJoinAsync(GameLobbyJoin lobbyJoin, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -26,21 +26,19 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
         });
     }
 
-    public async Task<Result<GameLobbyJoin>> WaitForJoinAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<GameLobbyJoin>> WaitForLobbyJoinAsync(string gameId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Waiting for join request for game: {gameId}", gameId);
-
             var streamFilter = Builders<ChangeStreamDocument<GameLobbyJoin>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-            using var streamCursor = await _client.LobbyGameJoins.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: token);
+            using var streamCursor = await _client.LobbyGameJoins.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<GameLobbyJoin>.Filter.Eq(g => g.GameId, gameId);
             var foundResult = await _client.LobbyGameJoins.FindSingleResultAsync(filter, cancellationToken: token);
+            
             if (foundResult.IsSuccess) return foundResult;
-
-            return await streamResult;
+            return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
 
@@ -49,10 +47,9 @@ internal class GameLobbyJoinsCollectionHandler : IGameLobbyJoinsCollectionHandle
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Deleting LobbyJoins");
-
             var filter = Builders<GameLobbyJoin>.Filter.Eq(gj => gj.GameId, gameId);
             var result = await _client.LobbyGameJoins.DeleteManyAsync(filter, cancellationToken: token);
-            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete LobbyJoins");
+            return result.ToResult("Failed to delete LobbyJoins");
         });
     }
 }

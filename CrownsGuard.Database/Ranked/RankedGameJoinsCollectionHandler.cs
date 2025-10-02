@@ -17,7 +17,7 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
         _logger = logger;
     }
 
-    public async Task<Result> InsertAsync(RankedGameJoin gameJoin, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> InsertGameJoinAsync(RankedGameJoin gameJoin, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -33,7 +33,7 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
             _logger.LogInformation("Deleting RankedJoins");
             var filter = Builders<RankedGameJoin>.Filter.Eq(gj => gj.GameId, gameId);
             var result = await _client.RankedGameJoins.DeleteManyAsync(filter, cancellationToken: token);
-            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete RankedJoins");
+            return result.ToResult("Failed to delete RankedJoins");
         });
     }
 
@@ -42,16 +42,14 @@ internal class RankedGameJoinsCollectionHandler : IRankedGameJoinsCollectionHand
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
             _logger.LogInformation("Waiting for ranked join request for game: {gameId}", gameId);
-
             var streamFilter = Builders<ChangeStreamDocument<RankedGameJoin>>.Filter.Eq(cs => cs.FullDocument.GameId, gameId);
-            using var streamCursor = await _client.RankedGameJoins.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            var streamResult = streamCursor.WaitForAddAsync(cancellationToken: token);
+            using var streamCursor = await _client.RankedGameJoins.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<RankedGameJoin>.Filter.Eq(g => g.GameId, gameId);
             var foundResult = await _client.RankedGameJoins.FindSingleResultAsync(filter, cancellationToken: token);
+            
             if (foundResult.IsSuccess) return foundResult;
-
-            return await streamResult;
+            return await streamCursor.WaitForAddAsync(cancellationToken: token);
         });
     }
 }

@@ -37,7 +37,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindByIdAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<GameLobby>> FindLobbyByIdAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -48,7 +48,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     }
 
     /// <inheritdoc />
-    public async Task<Result<GameLobby>> FindByNameAsync(string lobbyName, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<GameLobby>> FindLobbyByNameAsync(string lobbyName, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -72,15 +72,14 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                     Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.OperationType, ChangeStreamOperationType.Delete)),
                 Builders<ChangeStreamDocument<GameLobby>>.Filter.Eq(cs => cs.FullDocument.Id, lobbyId)
             );
-            using var streamCursor = await _client.GameLobbies.CreateChangeStreamCursorAsync(streamFilter, cancellationToken: token);
-            var streamResult = streamCursor.WaitForUpdateAsync(cancellationToken: token);
+            using var streamCursor = await _client.GameLobbies.WatchAsync(streamFilter, cancellationToken: token);
         
             var filter = Builders<GameLobby>.Filter.Eq(g => g.Id, lobbyId);
             var foundResult = await _client.GameLobbies.FindSingleResultAsync(filter, cancellationToken: token);
+            
             if (foundResult.IsSuccess && foundResult.Value.JoinedId is not null) return foundResult;
             if (foundResult.HasError<NoResultsFoundError>()) return foundResult;
-
-            return await streamResult;
+            return await streamCursor.WaitForUpdateAsync(cancellationToken: token);
         });
     }
 
@@ -91,7 +90,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
             _logger.LogInformation("Deleting Lobbies of game {GameId}", gameId);
             var filter = Builders<GameLobby>.Filter.Eq(gj => gj.Id, gameId);
             var result = await _client.GameLobbies.DeleteManyAsync(filter, cancellationToken: token);
-            return result.IsAcknowledged ? Result.Ok() : Result.Fail("Failed to delete lobbies");
+            return result.ToResult("Failed to delete lobbies");
         });
     }
 
@@ -105,11 +104,11 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
                 Builders<GameLobby>.Filter.Eq(l => l.JoinedId, null));
             var update = Builders<GameLobby>.Update.Set(x => x.JoinedId, joinId);
             var result = await _client.GameLobbies.UpdateOneAsync(filter, update, cancellationToken: token);
-            return result.IsAcknowledged && result.ModifiedCount > 0 ? Result.Ok() : Result.Fail("Failed to update game confirmation");
+            return result.ToResult("Failed to update game confirmation");
         });
     }
 
-    public async Task<Result> InsertAsync(GameLobby game, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result> InsertLobbyAsync(GameLobby game, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {

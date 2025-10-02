@@ -39,21 +39,21 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
 
     public async Task<Result<IOnlinePlayerInfo>> GetRemotePlayerAsync(string playerId, CancellationToken cancellationToken)
     {
-        var foundPlayerResult = await _players.FindByIdAsync(playerId, cancellationToken);
+        var foundPlayerResult = await _players.FindPlayerByIdAsync(playerId, cancellationToken);
         if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Could not find remote player");
         return Result.Ok<IOnlinePlayerInfo>(new RemoteOnlinePlayerInfo(PlayerColor.Black, foundPlayer.Name, playerId, foundPlayer.Elo));
     }
 
     public async Task<Result<string>> GetUserSaltAsync(string name, CancellationToken cancellationToken)
     {
-        var foundPlayerResult = await _players.FindByNameAsync(name, cancellationToken);
+        var foundPlayerResult = await _players.FindPlayerByNameAsync(name, cancellationToken);
         if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Could not find user");
         return Result.Ok(foundPlayer.PasswordSalt);
     }
 
     public async Task<Result> TryLoginAsync(string name, string hash, CancellationToken cancellationToken)
     {
-        var foundPlayerResult = await _players.FindByNameAsync(name, cancellationToken);
+        var foundPlayerResult = await _players.FindPlayerByNameAsync(name, cancellationToken);
         if (!foundPlayerResult.TryGetValue(out var foundPlayer)) return Result.Fail("Incorrect username or password");
         if (foundPlayer.PasswordHash != hash)  return Result.Fail("Incorrect username or password");
         LoggedInPlayer = foundPlayer;
@@ -71,7 +71,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             return Result.Fail("Trying to save setup with not unlocked figures");
 
         var mapData = map.GetIntData();
-        var result = await _players.UpdateSetupAsync(LoggedInPlayer.Id, mapData, cancellationToken);
+        var result = await _players.UpdatePlayerSetupAsync(LoggedInPlayer.Id, mapData, cancellationToken);
         if (result.IsFailed) return result;
         LoggedInPlayer.Map = mapData;
         LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
@@ -92,7 +92,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         var newUnlockedFigures = new byte[LoggedInPlayer.UnlockedFigures.Length];
         unlockedFiguresArray.CopyTo(newUnlockedFigures, 0);
 
-        var result = await _players.UpdateUnlockedFiguresAsync(LoggedInPlayer.Id, newUnlockedFigures, cancellationToken);
+        var result = await _players.UpdatePlayerUnlockedFiguresAsync(LoggedInPlayer.Id, newUnlockedFigures, cancellationToken);
         if (result.IsFailed) return result;
         LoggedInPlayer.UnlockedFigures = newUnlockedFigures;
         LoggedInPlayerChanged?.Invoke(this, EventArgs.Empty);
@@ -102,17 +102,17 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     /// <inheritdoc />
     public async Task<Result> TryVerifyEmailAsync(string emailHash, CancellationToken cancellationToken)
     {
-        var foundPlayerResult = await _players.FindByEmailHashAsync(emailHash, cancellationToken);
+        var foundPlayerResult = await _players.FindPlayerByEmailHashAsync(emailHash, cancellationToken);
         if (!foundPlayerResult.IsFailed) return Result.Fail("User with given email already exists");
         return Result.Ok();
     }
 
     public async Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, Figure[] myMap, Figure[] fallbackMap, CancellationToken cancellationToken)
     {
-        var foundPlayerResult = await _players.FindByEmailHashAsync(emailHash, cancellationToken);
+        var foundPlayerResult = await _players.FindPlayerByEmailHashAsync(emailHash, cancellationToken);
         if (!foundPlayerResult.IsFailed) Result.Fail("User with given email already exists");
 
-        foundPlayerResult = await _players.FindByNameAsync(name, cancellationToken);
+        foundPlayerResult = await _players.FindPlayerByNameAsync(name, cancellationToken);
         if (!foundPlayerResult.IsFailed) Result.Fail("User with given name already exists");
 
         var mapData = myMap.IsValid(UnlockedFigures.DefaultUnlockedFigures)
@@ -131,6 +131,6 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             UnlockedFigures = UnlockedFigures.DefaultUnlockedFigures,
         };
 
-        return await _players.InsertAsync(player, cancellationToken);
+        return await _players.InsertPlayerAsync(player, cancellationToken);
     }
 }
