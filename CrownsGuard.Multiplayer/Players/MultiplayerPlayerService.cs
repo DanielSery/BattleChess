@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Players;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Multiplayer.Utilities;
@@ -113,10 +114,12 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
     public async Task<Result> TrySignUpAsync(string name, string hash, string salt, string emailHash, Figure[] myMap, Figure[] fallbackMap, CancellationToken cancellationToken)
     {
         var hasPlayerWithEmail = await _players.HasPlayerWithEmailHashAsync(emailHash, cancellationToken);
-        if (!hasPlayerWithEmail.IsFailed || hasPlayerWithEmail.Value) Result.Fail("User with given email already exists");
+        if (hasPlayerWithEmail.IsFailed) return hasPlayerWithEmail.ToResult();
+        if (hasPlayerWithEmail.Value) return Result.Fail("User with given email already exists");
 
         var foundPlayerResult = await _players.FindPlayerByNameAsync(name, cancellationToken);
-        if (!foundPlayerResult.IsFailed) Result.Fail("User with given name already exists");
+        if (foundPlayerResult.IsSuccess) return Result.Fail("User with given name already exists");
+        if (foundPlayerResult.HasError<NoResultsFoundError>()) return foundPlayerResult.ToResult();
 
         var mapData = myMap.IsValid(UnlockedFigures.DefaultUnlockedFigures)
             ? myMap.GetIntData()
