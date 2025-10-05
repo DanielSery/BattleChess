@@ -205,8 +205,8 @@ internal sealed class MultiplayerGameService : IMultiplayerGameService
     {
         var y = index / 8;
         var x = index % 8;
-        y = Constants.BoardLength - y - 1;
-        return (byte)(x + y * Constants.BoardLength);
+        y = Core.Constants.BoardLength - y - 1;
+        return (byte)(x + y * Core.Constants.BoardLength);
     }
 
     private async Task<Result> DeleteGameTurnsAsync(CancellationToken cancellationToken)

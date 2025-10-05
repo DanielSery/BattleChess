@@ -147,7 +147,7 @@ public class EditorUnitsViewModel : ViewModelBase
     private void RefreshFigures()
     {
         var unlockedFigures = _playerService.LoggedInPlayer?.UnlockedFigures 
-                              ?? UnlockedFigures.DefaultUnlockedFigures;
+                              ?? UnlockedFigures.DefaultUnlockedFigures.ToArray();
         var unlockedFiguresBitArray = new BitArray(unlockedFigures);
         
         Figures = _figureTypeInfoGroup.FigureTypes

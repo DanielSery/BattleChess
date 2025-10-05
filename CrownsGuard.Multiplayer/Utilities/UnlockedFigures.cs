@@ -5,12 +5,12 @@ namespace CrownsGuard.Multiplayer.Utilities;
 
 public static class UnlockedFigures
 {
-    public static byte[] DefaultUnlockedFigures { get; }
+    public static IReadOnlyList<byte> DefaultUnlockedFigures { get; }
 
     static UnlockedFigures()
     {
-        DefaultUnlockedFigures = new byte[32];
-        var bitArray = new BitArray(DefaultUnlockedFigures)
+        var result = new byte[32];
+        var bitArray = new BitArray(result)
         {
             [(int)Figure.Empty] = true,
             [(int)Figure.Fire] = true,
@@ -24,6 +24,7 @@ public static class UnlockedFigures
             [(int)Figure.Queen] = true,
             [(int)Figure.King] = true,
         };
-        bitArray.CopyTo(DefaultUnlockedFigures, 0);
+        bitArray.CopyTo(result, 0);
+        DefaultUnlockedFigures = result;
     }
 }

@@ -41,7 +41,7 @@ public class MultiplayerPlayerServiceTest
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             Elo = elo,
-            UnlockedFigures = unlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures,
+            UnlockedFigures = unlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures.ToArray(),
             Map = map ?? new[] { 0, 1, 2, 3, 4 }
         };
     }

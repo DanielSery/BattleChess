@@ -134,7 +134,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
             EmailHash = emailHash,
             Elo = 1000,
             Map = mapData,
-            UnlockedFigures = UnlockedFigures.DefaultUnlockedFigures,
+            UnlockedFigures = UnlockedFigures.DefaultUnlockedFigures.ToArray(),
         };
         return await _players.InsertPlayerAsync(player, cancellationToken);
     }

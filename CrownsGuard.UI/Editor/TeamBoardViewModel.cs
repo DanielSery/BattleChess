@@ -16,8 +16,6 @@ namespace CrownsGuard.UI.Editor;
 
 public class TeamBoardViewModel : ViewModelBase
 {
-    private const int BasePoints = 84;
-    
     private readonly IBoardInfo _boardInfo;
 
     private bool _hasKing;
@@ -59,7 +57,7 @@ public class TeamBoardViewModel : ViewModelBase
     public TileInfoViewModel[] Tiles { get; }
 
     public bool PositivePoints => PointsLeft >= 0;
-    public int PointsLeft => BasePoints - TotalPoints;
+    public int PointsLeft => CrownsGuard.Multiplayer.Constants.MaxMapsPoints - TotalPoints;
 
     private int TotalPoints
     {
