@@ -8,6 +8,21 @@ namespace CrownsGuard.Multiplayer.Test.Utilities;
 public class BlueprintValidatorTests
 {
     [Fact]
+    public void IsValid_IfNullUnlockedFigures_UsesDefault()
+    {
+        // Arrange
+        var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
+        board[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
+        board[1] = Figure.LegionarySword | Figure.IsWhite;
+        
+        // Act
+        var result = board.IsValid(null);
+        
+        // Assert
+        Assert.True(result);
+    }
+    
+    [Fact]
     public void IsValid_IfNoBoard_ReturnsFalse()
     {
         // Arrange

@@ -6,8 +6,9 @@ namespace CrownsGuard.Multiplayer.Utilities;
 
 public static class BlueprintValidator
 {
-    public static bool IsValid(this Figure[] boardBlueprint, IReadOnlyList<byte> unlockedFigures)
+    public static bool IsValid(this Figure[] boardBlueprint, IReadOnlyList<byte>? unlockedFigures)
     {
+        unlockedFigures ??= UnlockedFigures.DefaultUnlockedFigures;
         var bitArray = new BitArray(unlockedFigures.ToArray());
         var kingCount = 0;
         var totalValue = 0;
