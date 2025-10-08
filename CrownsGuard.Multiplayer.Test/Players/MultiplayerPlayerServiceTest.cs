@@ -48,12 +48,12 @@ public class MultiplayerPlayerServiceTest
 
     private List<PublicPlayerData> CreateTestLeaderboard()
     {
-        return new List<PublicPlayerData>
-        {
-            new PublicPlayerData { Name = "Player1", Elo = 2000 },
-            new PublicPlayerData { Name = "Player2", Elo = 1800 },
-            new PublicPlayerData { Name = "Player3", Elo = 1600 }
-        };
+        return
+        [
+            new PublicPlayerData() { Name = "Player1", Elo = 2000 },
+            new PublicPlayerData() { Name = "Player2", Elo = 1800 },
+            new PublicPlayerData() { Name = "Player3", Elo = 1600 }
+        ];
     }
 
     private Figure[] CreateValidMap()
@@ -381,14 +381,21 @@ public class MultiplayerPlayerServiceTest
         var player = CreateTestPlayer();
         _service.TryLogin(player);
 
-        var invalidMap = new[] { Figure.King, Figure.King }; // Invalid - duplicate kings
+        var invalidMap = new[] { 
+            Figure.King | Figure.IsKing | Figure.IsWhite, 
+            Figure.King | Figure.IsKing | Figure.IsWhite,
+            Figure.Empty, Figure.Empty,
+            Figure.Empty, Figure.Empty, Figure.Empty, Figure.Empty,
+            Figure.Empty, Figure.Empty, Figure.Empty, Figure.Empty,
+            Figure.Empty, Figure.Empty, Figure.Empty, Figure.Empty,
+        }; // Invalid - duplicate kings
 
         // Act
         var result = await _service.UpdateCurrentPlayerMapAsync(invalidMap, CancellationToken.None);
 
         // Assert
         Assert.True(result.IsFailed);
-        Assert.Contains("Trying to save setup with not unlocked figures", result.Errors.First().Message);
+        Assert.Contains("Setup contains more than one king", result.Errors.First().Message);
         _mockPlayersHandler.Verify(h => h.UpdatePlayerSetupAsync(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<CancellationToken>(), It.IsAny<int>()), Times.Never);
     }
 

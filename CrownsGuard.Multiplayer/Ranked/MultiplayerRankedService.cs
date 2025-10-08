@@ -34,8 +34,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         }
 
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer!.UnlockedFigures;
-        if (!myMap.IsValid(unlockedFigures))
-            return Result.Fail<(bool, RankedGame, RankedGameJoin)>("Setup has units which weren't unlocked yet");
+        var setupValidation = myMap.ValidateResult(unlockedFigures);
+        if (setupValidation.IsFailed) return setupValidation;
 
         var random = new Random();
         var isHostStarting = random.Next(0, 1) == 1;
@@ -46,30 +46,30 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         var closestGameSearchResult = await _gameRequests.GetClosestGameSearchAsync(currentPlayer.Elo, cancellationToken);
         if (!closestGameSearchResult.TryGetValue(out var closestGameSearch)) closestGameSearch = null;
 
-        var closeGameResult = await TryJoinCloseGameAsync(cancellationToken, closestGameSearch, currentPlayer, eloDifference, myMapData);
+        var closeGameResult = await TryJoinCloseGameAsync(closestGameSearch, currentPlayer, eloDifference, myMapData, cancellationToken);
         if (closeGameResult.IsSuccess) return closeGameResult;
 
         var createdGameSearchResult = await CreateGameSearchAsync(myMapData, currentPlayer, isHostStarting, cancellationToken);
         if (!createdGameSearchResult.TryGetValue(out var createdGameSearch)) return createdGameSearchResult.ToResult();
         try
         {
-            return await IterativeGameSearchAsync(cancellationToken, createdGameSearch, currentPlayer, eloDifference, myMapData);
+            return await IterativeGameSearchAsync(createdGameSearch, currentPlayer.Id, currentPlayer.Elo, eloDifference, myMapData, cancellationToken);
         }
         finally
         {
             if (string.IsNullOrEmpty(createdGameSearch.JoinedId))
             {
-                await DeleteGameSearch(createdGameSearch);
+                await DeleteGameSearch(createdGameSearch.Id);
             }
         }
     }
 
-    private async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> IterativeGameSearchAsync(CancellationToken cancellationToken, RankedGame createdGameSearch,
-        RegisteredPlayer currentPlayer, int eloDifference, int[] myMapData)
+    private async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> IterativeGameSearchAsync(
+        RankedGame createdGameSearch, string currentPlayerId, short currentPlayerElo, int eloDifference, int[] myMapData, CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var (waitResult, foundSearch, foundSearchJoin) = await WaitForGameSearchOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
+            var (waitResult, foundSearch, foundSearchJoin) = await WaitForGameSearchOrJoinAsync(createdGameSearch.Id, currentPlayerElo, eloDifference, 20, cancellationToken);
             switch (waitResult)
             {
                 case WaitResult.GameJoin:
@@ -80,8 +80,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
                 }
                 case WaitResult.GameSearch:
                 {
-                    var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
-                    if (joinResult.IsSuccess) return Result.Ok((false, foundSearch!, joinResult.Value));
+                    var joinResult = await TryToJoinGameAsync(foundSearch!.Id, currentPlayerId, myMapData, cancellationToken);
+                    if (joinResult.IsSuccess) return Result.Ok((false, foundSearch, joinResult.Value));
                     break;
                 }
                 default:
@@ -102,12 +102,12 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return Result.Fail(CancelledError.Instance);
     }
 
-    private async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> TryJoinCloseGameAsync(CancellationToken cancellationToken, RankedGame? closestGameSearch,
-        RegisteredPlayer currentPlayer, int eloDifference, int[] myMapData)
+    private async Task<Result<(bool isHost, RankedGame gameSearch, RankedGameJoin gameSearchJoin)>> TryJoinCloseGameAsync(RankedGame? closestGameSearch,
+        RegisteredPlayer currentPlayer, int eloDifference, int[] myMapData, CancellationToken cancellationToken)
     {
         while (closestGameSearch is not null && Math.Abs(closestGameSearch.Elo - currentPlayer.Elo) <= eloDifference)
         {
-            var joinResult = await TryToJoinGameAsync(closestGameSearch, currentPlayer, myMapData, cancellationToken);
+            var joinResult = await TryToJoinGameAsync(closestGameSearch.Id, currentPlayer.Id, myMapData, cancellationToken);
             if (joinResult.IsSuccess)
             {
                 return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, closestGameSearch, joinResult.Value));
@@ -120,14 +120,8 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return Result.Fail("Did not find close game");
     }
 
-    private async Task DeleteGameSearch(RankedGame deletedGame)
-    {
-        await _gameRequests.DeleteGameSearchAsync(deletedGame.Id, CancellationToken.None);
-        await _gameJoins.DeleteGameJoinsAsync(deletedGame.Id, CancellationToken.None);
-    }
-
-    private enum WaitResult { Timeout, GameSearch, GameJoin }
-    private async Task<(WaitResult result, RankedGame? search, RankedGameJoin? searchJoin)> WaitForGameSearchOrJoinAsync(
+    internal enum WaitResult { Timeout, GameSearch, GameJoin }
+    internal async Task<(WaitResult result, RankedGame? search, RankedGameJoin? searchJoin)> WaitForGameSearchOrJoinAsync(
         string gameId,
         short targetElo,
         int eloDifference,
@@ -137,10 +131,13 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         var timeoutTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutTokenSource.Token);
 
-        var gameSearch = Task.Run(async () => await _gameRequests.FindGameForTargetEloAsync(gameId, targetElo, eloDifference, cancellationTokenSource.Token), cancellationTokenSource.Token);
-        var joinTask = Task.Run(async () => await _gameJoins.WaitForGameJoinAsync(gameId, cancellationTokenSource.Token), cancellationTokenSource.Token);
+        var gameSearch = _gameRequests.FindGameForTargetEloAsync(gameId, targetElo, eloDifference, cancellationTokenSource.Token);
+        var joinTask = _gameJoins.WaitForGameJoinAsync(gameId, cancellationTokenSource.Token);
 
-        var completedTask = await Task.WhenAny(gameSearch, joinTask, Task.Delay(TimeSpan.FromSeconds(timeoutSeconds), cancellationTokenSource.Token));
+        var completedTask = await Task.WhenAny(gameSearch, joinTask);
+        if (completedTask.IsCanceled || completedTask.IsFaulted)
+            return (WaitResult.Timeout, null, null);
+        
         if (completedTask == gameSearch && gameSearch.Result.IsSuccess)
         {
             await cancellationTokenSource.CancelAsync(); // stop the other watch
@@ -153,6 +150,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
             return (WaitResult.GameJoin, null, joinTask.Result.Value);
         }
 
+        await cancellationTokenSource.CancelAsync(); // stop the other watch
         return (WaitResult.Timeout, null, null);
     }
 
@@ -172,35 +170,43 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         return game;
     }
 
-    private async Task<Result<RankedGameJoin>> TryToJoinGameAsync(
-        RankedGame joinedGame, 
-        RegisteredPlayer currentPlayer, 
+    internal async Task<Result<RankedGameJoin>> TryToJoinGameAsync(
+        string joinedGameId, 
+        string playerId, 
         int[] myMapData,
         CancellationToken cancellationToken)
     {
         var gameJoin = new RankedGameJoin()
         {
-            GameId = joinedGame.Id,
-            PlayerId = currentPlayer.Id,
+            GameId = joinedGameId,
+            PlayerId = playerId,
             Map = myMapData,
         };
         var insertResult = await _gameJoins.InsertGameJoinAsync(gameJoin, cancellationToken);
         if (insertResult.IsFailed) return Result.Fail("Failed to insert game join");
 
-        var updatedJoinedGameResult = await _gameRequests.WaitForGameConfirmationAsync(joinedGame.Id, cancellationToken, 20);
-        if (!updatedJoinedGameResult.TryGetValue(out var updatedJoinedGame))
+        var confirmationResult = await _gameRequests.WaitForGameConfirmationAsync(joinedGameId, cancellationToken, 20);
+        if (!confirmationResult.TryGetValue(out var confirmedGame)) return confirmationResult.ToResult();
+
+        if (confirmedGame.JoinedId == null)
         {
-            await DeleteGameSearch(joinedGame);
-            return Result.Fail("Joining timed out");
+            await DeleteGameSearch(joinedGameId);
+            return Result.Fail("The ranked game was invalid");
         }
 
-        if (updatedJoinedGame.JoinedId == gameJoin.Id)
+        if (confirmedGame.JoinedId == gameJoin.Id)
         {
-            await DeleteGameSearch(updatedJoinedGame);
+            await DeleteGameSearch(joinedGameId);
             return Result.Ok(gameJoin);
         }
 
         return Result.Fail("The lobby is already full");
+    }
+
+    private async Task DeleteGameSearch(string gameId)
+    {
+        await _gameRequests.DeleteGameSearchAsync(gameId, CancellationToken.None);
+        await _gameJoins.DeleteGameJoinsAsync(gameId, CancellationToken.None);
     }
 
 }

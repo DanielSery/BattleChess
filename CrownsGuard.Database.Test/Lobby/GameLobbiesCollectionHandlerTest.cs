@@ -360,7 +360,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var result = await _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, CancellationToken.None, 30);
+        var result = await _handler.WaitForLobbyJoinConfirmationAsync(lobby.Id, CancellationToken.None, 30);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -379,7 +379,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var waitTask = _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, CancellationToken.None, 30);
+        var waitTask = _handler.WaitForLobbyJoinConfirmationAsync(lobby.Id, CancellationToken.None, 30);
 
         // Delete the lobby while waiting
         await _handler.DeleteGameLobbiesAsync(lobby.Id, CancellationToken.None, 30);
@@ -536,7 +536,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         await InsertTestGameLobbyAsync(lobby);
 
         // Act
-        var task = _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, CancellationToken.None, 30);
+        var task = _handler.WaitForLobbyJoinConfirmationAsync(lobby.Id, CancellationToken.None, 30);
         var updateResult = await _handler.ConfirmLobbyJoinAsync(lobby.Id, "507f1f77bcf86cd799439015", CancellationToken.None, 30);
         
         Assert.True(updateResult.IsSuccess);
@@ -554,7 +554,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var lobbyId = "507f1f77bcf86cd799439017";
 
         // Act
-        var result = await _handler.WaitForLobbyJoinCofirmationAsync(lobbyId, CancellationToken.None, 0);
+        var result = await _handler.WaitForLobbyJoinConfirmationAsync(lobbyId, CancellationToken.None, 0);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -570,7 +570,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         cancellationTokenSource.Cancel();
 
         // Act
-        var result = await _handler.WaitForLobbyJoinCofirmationAsync(lobbyId, cancellationTokenSource.Token, 30);
+        var result = await _handler.WaitForLobbyJoinConfirmationAsync(lobbyId, cancellationTokenSource.Token, 30);
 
         // Assert
         Assert.True(result.IsFailed);
@@ -866,7 +866,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         var task1 = _handler.DeleteGameLobbiesAsync(lobby.Id, CancellationToken.None, 30);
         var task2 = _handler.FindLobbyByIdAsync(lobby.Id, CancellationToken.None, 30);
         var task3 = _handler.FindLobbyByNameAsync(lobby.LobbyName, CancellationToken.None, 30);
-        var task4 = _handler.WaitForLobbyJoinCofirmationAsync(lobby.Id, cts.Token, 30);
+        var task4 = _handler.WaitForLobbyJoinConfirmationAsync(lobby.Id, cts.Token, 30);
 
         cts.Cancel();
         await Task.WhenAll(task1, task2, task3, task4);
@@ -949,7 +949,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
             {
                 lock (changeLock)
                 {
-                    receivedChanges.Add($"{change.OperationType}:{change.FullDocument?.Id}");
+                    receivedChanges.Add($"{change.Item1}:{change.Item2}");
                 }
                 return Task.CompletedTask;
             }, cts.Token);
@@ -1039,7 +1039,7 @@ public class GameLobbiesCollectionHandlerTest : IDisposable
         {
             lock (changes)
             {
-                changes.Add($"{change.OperationType}:{change.FullDocument?.Id}");
+                changes.Add($"{change.Item1}:{change.Item2}");
             }
             return Task.CompletedTask;
         }, cancellationToken);

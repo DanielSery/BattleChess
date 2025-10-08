@@ -69,8 +69,8 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (LoggedInPlayer is null)
             return Result.Fail("No logged in player");
         
-        if (!map.IsValid(LoggedInPlayer.UnlockedFigures))
-            return Result.Fail("Trying to save setup with not unlocked figures");
+        var setupValidation = map.ValidateResult(LoggedInPlayer.UnlockedFigures);
+        if (setupValidation.IsFailed) return setupValidation;
 
         var mapData = map.GetIntData();
         var result = await _players.UpdatePlayerSetupAsync(LoggedInPlayer.Id, mapData, cancellationToken);
@@ -122,7 +122,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (foundPlayerResult.IsFailed && !foundPlayerResult.HasError<NoResultsFoundError>()) 
             return foundPlayerResult.ToResult();
 
-        var mapData = myMap.IsValid(UnlockedFigures.DefaultUnlockedFigures)
+        var mapData = myMap.ValidateResult(UnlockedFigures.DefaultUnlockedFigures).IsSuccess
             ? myMap.GetIntData()
             : fallbackMap.GetIntData();
 

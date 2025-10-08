@@ -110,7 +110,7 @@ public class MultiplayerViewModel : ViewModelBase
         using var loadingOperation = _loadingService.StartLoadingOperation("Finding ranked game");
         var myMap = _teamBoardViewModel.GetMapBlueprint();
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
-        if (!myMap.Figures.IsValid(unlockedFigures))
+        if (myMap.Figures.ValidateResult(unlockedFigures).IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Setup has units which weren't unlocked yet");
             _soundService.PlaySoundEffect(SoundEffectType.Error);
@@ -164,7 +164,7 @@ public class MultiplayerViewModel : ViewModelBase
         using var loadingOperation = _loadingService.StartLoadingOperation("Creating lobby");
         var myMap = _teamBoardViewModel.GetMapBlueprint().Figures;
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
-        if (!myMap.IsValid(unlockedFigures))
+        if (myMap.ValidateResult(unlockedFigures).IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Setup has units which weren't unlocked yet");
             _soundService.PlaySoundEffect(SoundEffectType.Error);
@@ -174,7 +174,7 @@ public class MultiplayerViewModel : ViewModelBase
         _soundService.PlaySoundEffect(SoundEffectType.Button); 
         var jobbyResult = await _multiplayerLobbyService.CreateLobbyAsync(
             Name,
-            GetPassword(SecurePassword),
+            SecurePassword,
             myMap,
             loadingOperation.CancellationToken);
 
@@ -215,7 +215,7 @@ public class MultiplayerViewModel : ViewModelBase
         using var loadingOperation = _loadingService.StartLoadingOperation("Joining lobby");
         var myMap = _teamBoardViewModel.GetMapBlueprint().Figures;
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
-        if (!myMap.IsValid(unlockedFigures))
+        if (myMap.ValidateResult(unlockedFigures).IsFailed)
         {
             _notificationService.ShowMessage(ShownMessage.MessageType.Warning, "Setup has units which weren't unlocked yet");
             _soundService.PlaySoundEffect(SoundEffectType.Error);
@@ -225,7 +225,7 @@ public class MultiplayerViewModel : ViewModelBase
         _soundService.PlaySoundEffect(SoundEffectType.Button); 
         var lobbyResult = await _multiplayerLobbyService.JoinLobbyAsync(
             Name,
-            GetPassword(SecurePassword),
+            SecurePassword,
             myMap,
             loadingOperation.CancellationToken);
         if (lobbyResult.IsFailed)
@@ -248,22 +248,6 @@ public class MultiplayerViewModel : ViewModelBase
             MultiplayerGameType.Lobby, lobby.Id, 
             player1, player2,
             playedMap, false);
-    }
-
-    private static string GetPassword(SecureString secureString)
-    {
-        ArgumentNullException.ThrowIfNull(secureString);
-
-        var unmanagedString = IntPtr.Zero;
-        try
-        {
-            unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
-            return Marshal.PtrToStringUni(unmanagedString)!;
-        }
-        finally
-        {
-            Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString); // Clear memory
-        }
     }
 
     private static BoardBlueprint GetJoinedMapBlueprint(Figure[] myFigures, Figure[] hisFigures, bool amStarting)

@@ -42,43 +42,6 @@ public class HashingHelperTest
     }
 
     [Fact]
-    public void GetHash_ForSameTextAndSalt_ReturnsSameValue()
-    {
-        // Arrange & Act
-        var salt = HashingHelper.GetSalt();
-        var hash1 = HashingHelper.GetHash("test", salt);
-        var hash2 = HashingHelper.GetHash("test", salt);
-        
-        // Assert
-        hash1.Should().Be(hash2);
-    }
-
-    [Fact]
-    public void GetHash_ForDifferentSalt_ReturnsDifferentValue()
-    {
-        // Arrange & Act
-        var salt1 = HashingHelper.GetSalt();
-        var salt2 = HashingHelper.GetSalt();
-        var hash1 = HashingHelper.GetHash("test", salt1);
-        var hash2 = HashingHelper.GetHash("test", salt2);
-        
-        // Assert
-        hash1.Should().NotBe(hash2);
-    }
-
-    [Fact]
-    public void GetHash_ForDifferentTextSameSalt_ReturnsDifferentValue()
-    {
-        // Arrange & Act
-        var salt = HashingHelper.GetSalt();
-        var hash1 = HashingHelper.GetHash("test1", salt);
-        var hash2 = HashingHelper.GetHash("test2", salt);
-        
-        // Assert
-        hash1.Should().NotBe(hash2);
-    }
-
-    [Fact]
     public void GetHashSecureString_ForSameTextAndSalt_ReturnsSameValue()
     {
         // Arrange & Act

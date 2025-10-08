@@ -1,12 +1,13 @@
 ﻿using CrownsGuard.Core.Figures;
 using CrownsGuard.Core.Helpers;
 using System.Collections;
+using FluentResults;
 
 namespace CrownsGuard.Multiplayer.Utilities;
 
 public static class BlueprintValidator
 {
-    public static bool IsValid(this Figure[] boardBlueprint, IReadOnlyList<byte>? unlockedFigures)
+    public static Result ValidateResult(this Figure[] boardBlueprint, IReadOnlyList<byte>? unlockedFigures)
     {
         unlockedFigures ??= UnlockedFigures.DefaultUnlockedFigures;
         var bitArray = new BitArray(unlockedFigures.ToArray());
@@ -15,21 +16,22 @@ public static class BlueprintValidator
         
         foreach (var x in boardBlueprint)
         {
-            if (x.IsKing())
-            {
-                if (!x.IsWhite()) return false;
-                kingCount++;
-            }
+            var isNeutralFigure = x.IsNeutralFigure();
+            var figureColor = x.GetFigureColor();
             
-            if (x.IsNeutralFigure() && !x.IsNeutral()) return false;
-            if (!x.IsNeutralFigure() && x.GetFigureColor() != Figure.IsWhite) return false;
+            if (isNeutralFigure && figureColor != Figure.Empty) return Result.Fail("Setup contains neutral figure assigned to player");
+            if (!isNeutralFigure && figureColor == Figure.IsBlack) return Result.Fail("Setup contains black figure");
+            if (!isNeutralFigure && figureColor == Figure.Empty) return Result.Fail("Setup contains player figure without player assigned");
             
-            if (!bitArray[(int)x.GetFigureType()]) return false;
+            if (x.IsKing()) kingCount++;
+            if (!bitArray[(int)x.GetFigureType()]) return Result.Fail("Setup contains not unlocked figure");
             totalValue += x.GetFigureValue();
         }
 
-        return kingCount == 1 && 
-               boardBlueprint.Length == 16 &&
-               totalValue <= Constants.MaxMapsPoints;
+        if (boardBlueprint.Length != 16) return Result.Fail("Invalid number of figures in setup");
+        if (kingCount == 0) return Result.Fail("Setup does not contain king");
+        if (kingCount > 1) return Result.Fail("Setup contains more than one king");
+        if (totalValue > Constants.MaxMapsPoints) return Result.Fail("Setup total figures value is too high");
+        return Result.Ok();
     }
 }
