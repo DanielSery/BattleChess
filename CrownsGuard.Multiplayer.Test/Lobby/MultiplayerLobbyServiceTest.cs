@@ -18,40 +18,17 @@ public class MultiplayerLobbyServiceTest
 {
     private readonly Mock<IGameLobbiesCollectionHandler> _gameLobbies;
     private readonly Mock<IGameLobbyJoinsCollectionHandler> _lobbyJoins;
-    private readonly Mock<IMultiplayerPlayerService> _playerService;
 
     private readonly MultiplayerLobbyService _underTest;
 
     public MultiplayerLobbyServiceTest()
     {
-        _playerService = new Mock<IMultiplayerPlayerService>();
         _gameLobbies = new Mock<IGameLobbiesCollectionHandler>();
         _lobbyJoins = new Mock<IGameLobbyJoinsCollectionHandler>();
 
         _underTest = new MultiplayerLobbyService(
-            _playerService.Object,
             _gameLobbies.Object,
             _lobbyJoins.Object);
-    }
-
-    [Fact]
-    public async Task CreateLobbyAsync_WhenInvalidSetup_ReturnsError()
-    {
-        // Arrange
-        var setup = new Figure[16];
-        setup[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
-        setup[1] = Figure.King | Figure.IsWhite | Figure.IsKing;
-
-        // Act
-        var result = await _underTest.CreateLobbyAsync(
-            "name",
-            new SecureString(),
-            setup,
-            CancellationToken.None);
-
-        // Assert
-        Assert.True(result.IsFailed);
-        result.Errors[0].Message.Should().Be("Setup contains more than one king");
     }
 
     [Fact]
@@ -74,6 +51,7 @@ public class MultiplayerLobbyServiceTest
         var result = await _underTest.CreateLobbyAsync(
             "name",
             new SecureString(),
+            null, null,
             setup,
             CancellationToken.None);
 
@@ -98,6 +76,7 @@ public class MultiplayerLobbyServiceTest
         var result = await _underTest.CreateLobbyAsync(
             "name",
             new SecureString(),
+            null, null,
             setup,
             CancellationToken.None);
 
@@ -122,6 +101,7 @@ public class MultiplayerLobbyServiceTest
         var result = await _underTest.CreateLobbyAsync(
             "name",
             new SecureString(),
+            null, null,
             setup,
             CancellationToken.None);
 
@@ -225,26 +205,6 @@ public class MultiplayerLobbyServiceTest
     }
 
     [Fact]
-    public async Task JoinLobbyAsync_WhenInvalidSetup_ReturnsError()
-    {
-        // Arrange
-        var setup = new Figure[16];
-        setup[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
-        setup[1] = Figure.King | Figure.IsBlack;
-        
-        // Act
-        var result = await _underTest.JoinLobbyAsync(
-            "gameId",
-            new SecureString(),
-            setup,
-            CancellationToken.None);
-        
-        // Assert
-        Assert.True(result.IsFailed);
-        result.Errors[0].Message.Should().Be("Setup contains black figure");
-    }
-
-    [Fact]
     public async Task JoinLobbyAsync_WhenLobbyNotExists_ReturnsError()
     {
         // Arrange
@@ -258,6 +218,7 @@ public class MultiplayerLobbyServiceTest
         var result = await _underTest.JoinLobbyAsync(
             "lobbyName",
             new SecureString(),
+            null,
             setup,
             CancellationToken.None);
         
@@ -288,6 +249,7 @@ public class MultiplayerLobbyServiceTest
         var result = await _underTest.JoinLobbyAsync(
             "name",
             new SecureString(),
+            null,
             setup,
             CancellationToken.None);
         
@@ -313,7 +275,7 @@ public class MultiplayerLobbyServiceTest
             .Returns(Task.FromResult(Result.Fail("Database error")));
         
         // Act
-        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, setup, CancellationToken.None);
+        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, null, setup, CancellationToken.None);
         
         // Assert
         Assert.True(result.IsFailed);
@@ -338,7 +300,7 @@ public class MultiplayerLobbyServiceTest
             .Returns(Task.FromResult(Result.Fail<GameLobby>("Database error")));
         
         // Act
-        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, setup, CancellationToken.None);
+        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, null, setup, CancellationToken.None);
         
         // Assert
         Assert.True(result.IsFailed);
@@ -372,7 +334,7 @@ public class MultiplayerLobbyServiceTest
             )));
         
         // Act
-        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, setup, CancellationToken.None);
+        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, null, setup, CancellationToken.None);
         
         // Assert
         Assert.True(result.IsFailed);
@@ -408,7 +370,7 @@ public class MultiplayerLobbyServiceTest
             )));
         
         // Act
-        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, setup, CancellationToken.None);
+        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, null, setup, CancellationToken.None);
         
         // Assert
         Assert.True(result.IsFailed);
@@ -445,7 +407,7 @@ public class MultiplayerLobbyServiceTest
             )));
         
         // Act
-        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, setup, CancellationToken.None);
+        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, null, setup, CancellationToken.None);
         
         // Assert
          Assert.True(result.IsSuccess);
@@ -454,50 +416,18 @@ public class MultiplayerLobbyServiceTest
     }
 
     [Fact]
-    public async Task JoinLobbyAsync_WhenLoggedInUserHasLockedUnit_ReturnsError()
-    {
-        // Arrange
-        var setup = new Figure[16];
-        setup[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
-        var secureString = new SecureString();
-        secureString.AppendChar('p');
-        SetupValidLobby("lobbyId", "lobbyName", secureString);
-        
-        _lobbyJoins.Setup(x => x.InsertLobbyJoinAsync(It.IsAny<GameLobbyJoin>(), It.IsAny<CancellationToken>(), It.IsAny<int>()))
-            .Returns(Task.FromResult(Result.Ok()));
-
-        _playerService.Setup(x => x.LoggedInPlayer)
-            .Returns(new RegisteredPlayer
-            {
-                EmailHash = "mail",
-                PasswordHash = "password",
-                PasswordSalt = "salt",
-                UnlockedFigures = new byte[100],
-                Name = "name",
-                Map = []
-            });
-        
-        // Act
-        var result = await _underTest.JoinLobbyAsync("lobbyName", secureString, setup, CancellationToken.None);
-        
-        // Assert
-        Assert.True(result.IsFailed);
-        result.Errors[0].Message.Should().Be("Setup contains not unlocked figure");
-    }
-
-    [Fact]
     public async Task WatchLobbiesAsync_OnInsert()
     {
         // Arrange
         _gameLobbies.Setup(x => x.WatchChangesAsync(It.IsAny<Func<(ChangeStreamOperationType, string, GameLobby?), Task>>(), It.IsAny<CancellationToken>()))
-            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, _) => 
+            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, t) => 
                 func.Invoke((ChangeStreamOperationType.Insert, "added", new GameLobby
                 {
                     LobbyName = "lobbyName",
                     Map = [],
                     PasswordSalt = "salt",
                     PasswordHash = "hash"
-                })).Wait(_));
+                })).Wait(t));
             
         // Act
         var addedCalled = false;
@@ -516,8 +446,8 @@ public class MultiplayerLobbyServiceTest
     {
         // Arrange
         _gameLobbies.Setup(x => x.WatchChangesAsync(It.IsAny<Func<(ChangeStreamOperationType, string, GameLobby?), Task>>(), It.IsAny<CancellationToken>()))
-            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, _) => 
-                func.Invoke((ChangeStreamOperationType.Update, "updated", null)).Wait(_));
+            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, t) => 
+                func.Invoke((ChangeStreamOperationType.Update, "updated", null)).Wait(t));
 
         _gameLobbies.Setup(x => x.FindLobbyByIdAsync("updated", It.IsAny<CancellationToken>(), It.IsAny<int>()))
             .Returns(Task.FromResult(Result.Ok(new GameLobby
@@ -545,8 +475,8 @@ public class MultiplayerLobbyServiceTest
     {
         // Arrange
         _gameLobbies.Setup(x => x.WatchChangesAsync(It.IsAny<Func<(ChangeStreamOperationType, string, GameLobby?), Task>>(), It.IsAny<CancellationToken>()))
-            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, _) => 
-                func.Invoke((ChangeStreamOperationType.Update, "updated", null)).Wait(_));
+            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, t) => 
+                func.Invoke((ChangeStreamOperationType.Update, "updated", null)).Wait(t));
         
         _gameLobbies.Setup(x => x.FindLobbyByIdAsync("updated", It.IsAny<CancellationToken>(), It.IsAny<int>()))
             .Returns(Task.FromResult(Result.Fail<GameLobby>("Not found")));
@@ -568,8 +498,8 @@ public class MultiplayerLobbyServiceTest
     {
         // Arrange
         _gameLobbies.Setup(x => x.WatchChangesAsync(It.IsAny<Func<(ChangeStreamOperationType, string, GameLobby?), Task>>(), It.IsAny<CancellationToken>()))
-            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, _) => 
-                func.Invoke((ChangeStreamOperationType.Delete, "deleted", null)).Wait(_));
+            .Callback<Func<(ChangeStreamOperationType, string, GameLobby?), Task>, CancellationToken>((func, t) => 
+                func.Invoke((ChangeStreamOperationType.Delete, "deleted", null)).Wait(t));
         
         // Act
         var deleteCalled = false;

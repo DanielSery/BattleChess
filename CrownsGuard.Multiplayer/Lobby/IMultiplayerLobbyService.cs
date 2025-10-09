@@ -18,7 +18,9 @@ public interface IMultiplayerLobbyService
     public Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         SecureString password,
-        Figure[] myMap,
+        string? hostId,
+        short? hostElo,
+        Figure[] hostMap,
         CancellationToken cancellationToken);
     
     public Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(
@@ -28,6 +30,7 @@ public interface IMultiplayerLobbyService
     public Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
         SecureString password,
-        Figure[] myMap,
+        string? guestId,
+        Figure[] guestMap,
         CancellationToken cancellationToken);
 }

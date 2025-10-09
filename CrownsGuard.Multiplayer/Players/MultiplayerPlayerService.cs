@@ -69,7 +69,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (LoggedInPlayer is null)
             return Result.Fail("No logged in player");
         
-        var setupValidation = map.ValidateResult(LoggedInPlayer.UnlockedFigures);
+        var setupValidation = map.ValidateMap(LoggedInPlayer.UnlockedFigures);
         if (setupValidation.IsFailed) return setupValidation;
 
         var mapData = map.GetIntData();
@@ -122,7 +122,7 @@ internal class MultiplayerPlayerService : IMultiplayerPlayerService
         if (foundPlayerResult.IsFailed && !foundPlayerResult.HasError<NoResultsFoundError>()) 
             return foundPlayerResult.ToResult();
 
-        var mapData = myMap.ValidateResult(UnlockedFigures.DefaultUnlockedFigures).IsSuccess
+        var mapData = myMap.ValidateMap(UnlockedFigures.DefaultUnlockedFigures).IsSuccess
             ? myMap.GetIntData()
             : fallbackMap.GetIntData();
 

@@ -2,7 +2,6 @@
 using CrownsGuard.Core.Figures;
 using CrownsGuard.Database.Lobby;
 using CrownsGuard.Database.Utilities;
-using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Utilities;
 using FluentResults;
 using MongoDB.Driver;
@@ -11,16 +10,13 @@ namespace CrownsGuard.Multiplayer.Lobby;
 
 internal class MultiplayerLobbyService : IMultiplayerLobbyService
 {
-    private readonly IMultiplayerPlayerService _multiplayerPlayerService;
     private readonly IGameLobbiesCollectionHandler _gameLobbies;
     private readonly IGameLobbyJoinsCollectionHandler _lobbyJoins;
 
     public MultiplayerLobbyService(
-        IMultiplayerPlayerService multiplayerPlayerService,
         IGameLobbiesCollectionHandler gameLobbies,
         IGameLobbyJoinsCollectionHandler lobbyJoins)
     {
-        _multiplayerPlayerService = multiplayerPlayerService;
         _gameLobbies = gameLobbies;
         _lobbyJoins = lobbyJoins;
     }
@@ -79,17 +75,14 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public async Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
         SecureString password,
-        Figure[] myMap,
+        string? hostId,
+        short? hostElo,
+        Figure[] hostMap,
         CancellationToken cancellationToken)
     {
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures;
-        var setupValidation = myMap.ValidateResult(unlockedFigures);
-        if (setupValidation.IsFailed) return setupValidation;
-
         var foundLobby = await _gameLobbies.FindLobbyByNameAsync(lobbyName, cancellationToken);
         if (foundLobby.IsSuccess) return Result.Fail("Lobby already exists");
 
-        var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
         var salt = HashingHelper.GetSalt();
         var hash = HashingHelper.GetHash(password, salt);
 
@@ -100,9 +93,9 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             LobbyName = lobbyName,
             PasswordHash = hash,
             PasswordSalt = salt,
-            Map = myMap.GetIntData(),
-            PlayerId = currentPlayer?.Id ?? null,
-            Elo = currentPlayer?.Elo ?? null,
+            PlayerId = hostId,
+            Elo = hostElo,
+            Map = hostMap.GetIntData(),
             IsHostStarting = isHostStarting,
             Version = GameVersion.VersionId
         };
@@ -134,13 +127,10 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public async Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
         SecureString password,
-        Figure[] myMap,
+        string? guestId,
+        Figure[] guestMap,
         CancellationToken cancellationToken)
     {
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures;
-        var setupValidation = myMap.ValidateResult(unlockedFigures);
-        if (setupValidation.IsFailed) return setupValidation;
-
         var foundLobbyResult = await _gameLobbies.FindLobbyByNameAsync(lobbyName, cancellationToken: cancellationToken);
         if (!foundLobbyResult.TryGetValue(out var lobby)) return Result.Fail<GameLobby>("Lobby not found");
 
@@ -150,12 +140,11 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             return Result.Fail<GameLobby>("Password does not match");
         }
 
-        var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
         var gameJoin = new GameLobbyJoin
         {
             GameId = lobby.Id,
-            PlayerId = currentPlayer?.Id ?? null,
-            Map = myMap.GetIntData(),
+            PlayerId = guestId,
+            Map = guestMap.GetIntData(),
         };
         var gameJoinResult = await _lobbyJoins.InsertLobbyJoinAsync(gameJoin, cancellationToken);
         if (gameJoinResult.IsFailed) return Result.Fail<GameLobby>("Failed to request lobby join");
