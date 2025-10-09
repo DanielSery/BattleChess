@@ -1,5 +1,6 @@
 using System.Collections;
 using CrownsGuard.Core.Figures;
+using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Players;
 using CrownsGuard.Game.Players;
 using CrownsGuard.Multiplayer.Players;
@@ -515,7 +516,7 @@ public class MultiplayerPlayerServiceTest
         var emailHash = "new_email@example.com_hash";
         _mockPlayersHandler
             .Setup(h => h.HasPlayerWithEmailHashAsync(emailHash, It.IsAny<CancellationToken>(), It.IsAny<int>()))
-            .ReturnsAsync(Result.Fail<bool>("Email not found"));
+            .ReturnsAsync(Result.Ok(false));
 
         // Act
         var result = await _service.TryVerifyEmailAsync(emailHash, CancellationToken.None);
@@ -562,7 +563,7 @@ public class MultiplayerPlayerServiceTest
 
         _mockPlayersHandler
             .Setup(h => h.FindPlayerByNameAsync(name, It.IsAny<CancellationToken>(), It.IsAny<int>()))
-            .ReturnsAsync(Result.Fail<RegisteredPlayer>("User not found"));
+            .ReturnsAsync(Result.Fail<RegisteredPlayer>(NoResultsFoundError.Instance));
 
         _mockPlayersHandler
             .Setup(h => h.InsertPlayerAsync(It.IsAny<RegisteredPlayer>(), It.IsAny<CancellationToken>(), It.IsAny<int>()))
@@ -642,7 +643,7 @@ public class MultiplayerPlayerServiceTest
 
         _mockPlayersHandler
             .Setup(h => h.FindPlayerByNameAsync(name, It.IsAny<CancellationToken>(), It.IsAny<int>()))
-            .ReturnsAsync(Result.Fail<RegisteredPlayer>("User not found"));
+            .ReturnsAsync(Result.Fail<RegisteredPlayer>(NoResultsFoundError.Instance));
 
         _mockPlayersHandler
             .Setup(h => h.InsertPlayerAsync(It.IsAny<RegisteredPlayer>(), It.IsAny<CancellationToken>(), It.IsAny<int>()))
