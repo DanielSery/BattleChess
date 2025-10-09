@@ -70,30 +70,32 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         while (!cancellationToken.IsCancellationRequested)
         {
             var (waitResult, foundSearch, foundSearchJoin) = await WaitForGameSearchOrJoinAsync(createdGameSearch.Id, currentPlayer.Elo, eloDifference, 20, cancellationToken);
-            if (waitResult == WaitResult.GameJoin)
+            switch (waitResult)
             {
-                var confirmationResult = await _gameRequests.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
-                if (confirmationResult.IsSuccess)
+                case WaitResult.GameJoin:
                 {
-                    return Result.Ok((true, createdGameSearch, foundSearchJoin));
+                    var confirmationResult = await _gameRequests.ConfirmGameJoinAsync(createdGameSearch.Id, foundSearchJoin!.Id, cancellationToken);
+                    if (confirmationResult.IsSuccess) return Result.Ok((true, createdGameSearch, foundSearchJoin));
+                    break;
                 }
-            }
-            else if (waitResult == WaitResult.GameSearch)
-            {
-                var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
-                if (joinResult.IsSuccess)
+                case WaitResult.GameSearch:
                 {
-                    return Result.Ok<(bool, RankedGame, RankedGameJoin)>((false, foundSearch!, joinResult.Value));
+                    var joinResult = await TryToJoinGameAsync(foundSearch!, currentPlayer, myMapData, cancellationToken);
+                    if (joinResult.IsSuccess) return Result.Ok((false, foundSearch!, joinResult.Value));
+                    break;
                 }
-            }
-            else if (eloDifference < 300)
-            {
-                Console.WriteLine($"No game found with elo difference {eloDifference}, increasing to {eloDifference + 50}");
-                eloDifference += 50;
-            }
-            else
-            {
-                Console.WriteLine($"No game found with elo difference {eloDifference}, continuing search");
+                default:
+                {
+                    if (eloDifference < 300)
+                    {
+                        Console.WriteLine($"No game found with elo difference {eloDifference}, increasing to {eloDifference + 50}");
+                        eloDifference += 50;
+                        break;
+                    }
+
+                    Console.WriteLine($"No game found with elo difference {eloDifference}, continuing search");
+                    break;
+                }
             }
         }
 
@@ -124,13 +126,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         await _gameJoins.DeleteGameJoinsAsync(deletedGame.Id, CancellationToken.None);
     }
 
-    private enum WaitResult
-    {
-        Timeout,
-        GameSearch,
-        GameJoin
-    }
-    
+    private enum WaitResult { Timeout, GameSearch, GameJoin }
     private async Task<(WaitResult result, RankedGame? search, RankedGameJoin? searchJoin)> WaitForGameSearchOrJoinAsync(
         string gameId,
         short targetElo,

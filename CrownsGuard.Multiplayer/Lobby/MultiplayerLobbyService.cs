@@ -43,55 +43,22 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             {
                 case ChangeStreamOperationType.Insert:
                     if (change.FullDocument != null)
-                    {
-                        onLobbyAdded.Invoke(new PublicLobbyData
-                        {
-                            Id = change.FullDocument.Id,
-                            LobbyName = change.FullDocument.LobbyName,
-                            Elo = change.FullDocument.Elo,
-                            JoinedId = change.FullDocument.JoinedId,
-                            Locked = (change.FullDocument.PasswordHash.Length > 0) ? "True" : "False",
-                        });
-                    }
+                        onLobbyAdded.Invoke(GetNewLobby(change.FullDocument));
                     break;
-
+                
                 case ChangeStreamOperationType.Replace:
                 case ChangeStreamOperationType.Update:
-                    PublicLobbyData? lobby;
-                    if (change.FullDocument != null)
-                    {
-                        lobby = new PublicLobbyData
-                        {
-                            Id = change.FullDocument.Id,
-                            LobbyName = change.FullDocument.LobbyName,
-                            Elo = change.FullDocument.Elo,
-                            JoinedId = change.FullDocument.JoinedId,
-                            Locked = (change.FullDocument.PasswordHash.Length > 0) ? "True" : "False",
-                        };
-                    }
-                    else
+                    if (change.FullDocument == null)
                     {
                         var id = change.DocumentKey["_id"].AsObjectId.ToString();
                         var foundLobbyResult = await _gameLobbies.FindLobbyByIdAsync(id, cancellationToken);
                         if (foundLobbyResult.TryGetValue(out var foundLobby))
-                        {
-                            lobby = new PublicLobbyData
-                            {
-                                Id = id,
-                                LobbyName = foundLobby.LobbyName,
-                                Elo = foundLobby.Elo,
-                                JoinedId = foundLobby.JoinedId,
-                                Locked = (foundLobby.PasswordHash.Length > 0) ? "True" : "False",
-                            };
-                        }
-                        else
-                        {
-                            lobby = null;
-                        }
+                            onLobbyChanged.Invoke(GetExistingLobby(id, foundLobby));
+                        break;
                     }
-
-                    if (lobby is not null)
-                        onLobbyChanged.Invoke(lobby);
+                    
+                    if (change.FullDocument != null)
+                        onLobbyChanged.Invoke(GetNewLobby(change.FullDocument));
                     break;
 
                 case ChangeStreamOperationType.Delete:
@@ -99,6 +66,30 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
                     onLobbyRemoved.Invoke(removedId);
                     break;
             }
+        }
+
+        PublicLobbyData GetNewLobby(GameLobby lobby)
+        {
+            return new PublicLobbyData
+            {
+                Id = lobby.Id,
+                LobbyName = lobby.LobbyName,
+                Elo = lobby.Elo,
+                JoinedId = lobby.JoinedId,
+                Locked = (lobby.PasswordHash.Length > 0) ? "True" : "False",
+            };
+        }
+        
+        PublicLobbyData GetExistingLobby(string id, GameLobby foundLobby)
+        {
+            return new PublicLobbyData
+            {
+                Id = id,
+                LobbyName = foundLobby.LobbyName,
+                Elo = foundLobby.Elo,
+                JoinedId = foundLobby.JoinedId,
+                Locked = (foundLobby.PasswordHash.Length > 0) ? "True" : "False",
+            };
         }
     }
 
@@ -111,7 +102,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         var random = new Random();
         var isHostStarting = random.Next(0, 1) == 1;
 
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
             return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
 
@@ -160,7 +151,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         Figure[] myMap,
         CancellationToken cancellationToken)
     {
-        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures ?? UnlockedFigures.DefaultUnlockedFigures;
+        var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures;
         if (!myMap.IsValid(unlockedFigures))
             return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
 
