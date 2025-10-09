@@ -23,6 +23,13 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\CrownsGuard.Core\CrownsGuard.Core.csproj" />
+        <ProjectReference Include="..\CrownsGuard.Database\CrownsGuard.Database.csproj" />
+        <ProjectReference Include="..\CrownsGuard.Game\CrownsGuard.Game.csproj" />
+        <ProjectReference Include="..\CrownsGuard.Multiplayer\CrownsGuard.Multiplayer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Using Include="Xunit"/>
     </ItemGroup>
 
