@@ -8,7 +8,7 @@ namespace CrownsGuard.Multiplayer.Test.Utilities;
 public class BlueprintValidatorTests
 {
     [Fact]
-    public void ValidateResult_IfNullUnlockedFigures_UsesDefault()
+    public void ValidateMap_IfNullUnlockedFigures_UsesDefault()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -16,20 +16,20 @@ public class BlueprintValidatorTests
         board[1] = Figure.LegionarySword | Figure.IsWhite;
         
         // Act
-        var result = board.ValidateResult(null);
+        var result = board.ValidateMap(null);
         
         // Assert
         result.IsSuccess.Should().BeTrue();
     }
     
     [Fact]
-    public void ValidateResult_IfNoBoard_ReturnsFalse()
+    public void ValidateMap_IfNoBoard_ReturnsFalse()
     {
         // Arrange
         var figures = Array.Empty<Figure>();
         
         // Act
-        var result = figures.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = figures.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -38,13 +38,13 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_IfEmptyBoard_ReturnsFalse()
+    public void ValidateMap_IfEmptyBoard_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
 
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
 
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -53,35 +53,35 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_IfWhiteKing_ReturnsTrue()
+    public void ValidateMap_IfWhiteKing_ReturnsTrue()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
         board[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures); 
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures); 
         
         // Assert
         result.IsSuccess.Should().BeTrue(); 
     }
 
     [Fact]
-    public void ValidateResult_IfQueenIsKing_ReturnsTrue()
+    public void ValidateMap_IfQueenIsKing_ReturnsTrue()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
         board[0] = Figure.Queen | Figure.IsWhite | Figure.IsKing;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures); 
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures); 
         
         // Assert
         result.IsSuccess.Should().BeTrue();
     }
 
     [Fact]
-    public void ValidateResult_IfBlackFigure_ReturnsFalse()
+    public void ValidateMap_IfBlackFigure_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -89,7 +89,7 @@ public class BlueprintValidatorTests
         board[1] = Figure.King | Figure.IsBlack;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -98,7 +98,7 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_IfNeutralKing_ReturnsFalse()
+    public void ValidateMap_IfNeutralKing_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -106,7 +106,7 @@ public class BlueprintValidatorTests
         board[1] = Figure.Empty | Figure.IsKing;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -115,7 +115,7 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_IfLargeValue_ReturnsFalse()
+    public void ValidateMap_IfLargeValue_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -124,7 +124,7 @@ public class BlueprintValidatorTests
             board[i] = Figure.Queen | Figure.IsWhite;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -133,7 +133,7 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_IfTwoKings_ReturnsFalse()
+    public void ValidateMap_IfTwoKings_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -141,7 +141,7 @@ public class BlueprintValidatorTests
         board[1] = Figure.King | Figure.IsWhite | Figure.IsKing;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -150,7 +150,7 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_IfNonNeutralUnitIsNeutral_ReturnsFalse()
+    public void ValidateMap_IfNonNeutralUnitIsNeutral_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -158,7 +158,7 @@ public class BlueprintValidatorTests
         board[1] = Figure.Queen;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -167,7 +167,7 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_IfContainingNotUnlockedFigure_ReturnsFalse()
+    public void ValidateMap_IfContainingNotUnlockedFigure_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -175,7 +175,7 @@ public class BlueprintValidatorTests
         board[1] = Figure.LegionaryPike | Figure.IsWhite;
         
         // Act
-        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateMap(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
         result.IsFailed.Should().BeTrue();
@@ -184,7 +184,7 @@ public class BlueprintValidatorTests
     }
 
     [Fact]
-    public void ValidateResult_WhenUnlockedSpecialFigure_ReturnsTrue()
+    public void ValidateMap_WhenUnlockedSpecialFigure_ReturnsTrue()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -199,7 +199,7 @@ public class BlueprintValidatorTests
         bitArray.CopyTo(unlockedFigures, 0);
         
         // Act
-        var result = board.ValidateResult(unlockedFigures);
+        var result = board.ValidateMap(unlockedFigures);
         
         // Assert
         result.IsSuccess.Should().BeTrue();

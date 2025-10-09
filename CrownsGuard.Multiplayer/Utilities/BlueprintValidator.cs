@@ -7,7 +7,14 @@ namespace CrownsGuard.Multiplayer.Utilities;
 
 public static class BlueprintValidator
 {
-    public static Result ValidateResult(this Figure[] boardBlueprint, IReadOnlyList<byte>? unlockedFigures)
+    public static Result ValidateMap(this int[] boardBlueprint, IReadOnlyList<byte>? unlockedFigures)
+    {
+        return ValidateMap(
+            boardBlueprint.Select(x => (Figure)x).ToArray(), 
+            unlockedFigures);
+    }
+    
+    public static Result ValidateMap(this Figure[] boardBlueprint, IReadOnlyList<byte>? unlockedFigures)
     {
         unlockedFigures ??= UnlockedFigures.DefaultUnlockedFigures;
         var bitArray = new BitArray(unlockedFigures.ToArray());

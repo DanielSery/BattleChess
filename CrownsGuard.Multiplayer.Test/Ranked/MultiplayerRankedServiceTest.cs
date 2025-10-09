@@ -1,6 +1,5 @@
 ﻿using AwesomeAssertions;
 using CrownsGuard.Database.Ranked;
-using CrownsGuard.Multiplayer.Players;
 using CrownsGuard.Multiplayer.Ranked;
 using FluentResults;
 using JetBrains.Annotations;
@@ -11,24 +10,17 @@ namespace CrownsGuard.Multiplayer.Test.Ranked;
 [TestSubject(typeof(MultiplayerRankedService))]
 public class MultiplayerRankedServiceTest
 {
-    private readonly Mock<IMultiplayerPlayerService> _players;
     private readonly Mock<IRankedGameJoinsCollectionHandler> _gameJoins;
     private readonly Mock<IRankedGamesCollectionHandler> _gameRequests;
     
-    private readonly Mock<MultiplayerRankedService> _multiplayerService;
     private readonly MultiplayerRankedService _underTest;
 
     public MultiplayerRankedServiceTest()
     {
-        _players = new Mock<IMultiplayerPlayerService>();
         _gameJoins = new Mock<IRankedGameJoinsCollectionHandler>();
         _gameRequests = new Mock<IRankedGamesCollectionHandler>();
 
-        _multiplayerService = new Mock<MultiplayerRankedService>(_players.Object, _gameJoins.Object, _gameRequests.Object)
-            {
-                CallBase = true
-            };
-        _underTest = _multiplayerService.Object;
+        _underTest = new MultiplayerRankedService(_gameJoins.Object, _gameRequests.Object);
     }
     
     [Fact]
@@ -159,7 +151,7 @@ public class MultiplayerRankedServiceTest
             })));
         
         // Act
-        var result = await _underTest.WaitForGameSearchOrJoinAsync(
+        var result = await _underTest.WaitForGameFindOrJoinAsync(
             "gameId",
             1000,
             100,
@@ -167,7 +159,7 @@ public class MultiplayerRankedServiceTest
             CancellationToken.None);
         
         // Assert
-        result.result.Should().Be(MultiplayerRankedService.WaitResult.GameSearch);
+        result.result.Should().Be(IMultiplayerRankedService.WaitResult.GameSearch);
         result.search.Should().NotBe(null);
         result.searchJoin.Should().Be(null);
     }
@@ -190,7 +182,7 @@ public class MultiplayerRankedServiceTest
             });
         
         // Act
-        var result = await _underTest.WaitForGameSearchOrJoinAsync(
+        var result = await _underTest.WaitForGameFindOrJoinAsync(
             "gameId",
             1000,
             100,
@@ -198,7 +190,7 @@ public class MultiplayerRankedServiceTest
             CancellationToken.None);
         
         // Assert
-        result.result.Should().Be(MultiplayerRankedService.WaitResult.GameJoin);
+        result.result.Should().Be(IMultiplayerRankedService.WaitResult.GameJoin);
         result.search.Should().Be(null);
         result.searchJoin.Should().NotBe(null);
     }
@@ -221,7 +213,7 @@ public class MultiplayerRankedServiceTest
             });
         
         // Act
-        var result = await _underTest.WaitForGameSearchOrJoinAsync(
+        var result = await _underTest.WaitForGameFindOrJoinAsync(
             "gameId",
             1000,
             100,
@@ -229,7 +221,7 @@ public class MultiplayerRankedServiceTest
             CancellationToken.None);
         
         // Assert
-        result.result.Should().Be(MultiplayerRankedService.WaitResult.Timeout);
+        result.result.Should().Be(IMultiplayerRankedService.WaitResult.Timeout);
         result.search.Should().Be(null);
         result.searchJoin.Should().Be(null);
     }
@@ -254,7 +246,7 @@ public class MultiplayerRankedServiceTest
         // Act
         var tokenSource = new CancellationTokenSource();
         await tokenSource.CancelAsync();
-        var result = await _underTest.WaitForGameSearchOrJoinAsync(
+        var result = await _underTest.WaitForGameFindOrJoinAsync(
             "gameId",
             1000,
             100,
@@ -262,7 +254,7 @@ public class MultiplayerRankedServiceTest
             tokenSource.Token);
         
         // Assert
-        result.result.Should().Be(MultiplayerRankedService.WaitResult.Timeout);
+        result.result.Should().Be(IMultiplayerRankedService.WaitResult.Timeout);
         result.search.Should().Be(null);
         result.searchJoin.Should().Be(null);
     }

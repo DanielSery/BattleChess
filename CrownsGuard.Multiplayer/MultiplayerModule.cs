@@ -14,6 +14,9 @@ public static class MultiplayerModule
         builder.RegisterType<EmailClient>()
             .As<IEmailClient>()
             .SingleInstance();
+        builder.RegisterType<MatchMakingService>()
+            .As<IMatchmakingService>()
+            .SingleInstance();
         builder.RegisterType<MultiplayerRankedService>()
             .As<IMultiplayerRankedService>()
             .SingleInstance();

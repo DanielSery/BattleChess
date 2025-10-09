@@ -1,14 +1,19 @@
 ﻿using FluentResults;
+using Microsoft.Extensions.Logging;
 
 namespace CrownsGuard.Database.Database;
 
 internal class DatabaseTimeProvider : IDatabaseTimeProvider
 {
     private readonly IDatabaseClient _databaseClient;
+    private readonly ILogger<DatabaseTimeProvider> _logger;
 
-    public DatabaseTimeProvider(IDatabaseClient databaseClient)
+    public DatabaseTimeProvider(
+        IDatabaseClient databaseClient,
+        ILogger<DatabaseTimeProvider> logger)
     {
         _databaseClient = databaseClient;
+        _logger = logger;
     }
 
     /// <inheritdoc />
@@ -16,14 +21,14 @@ internal class DatabaseTimeProvider : IDatabaseTimeProvider
     {
         try
         {
-            Console.WriteLine("Getting server time");
+            _logger.LogInformation("Getting server time");
             var result = await _databaseClient.GetServerTimeAsync();
-            Console.WriteLine($"Current server time: {result}");
+            _logger.LogInformation("Current server time: {result}", result);
             return result;
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Failed to get server time: {e}");
+            _logger.LogError("Failed to get server time: {e}", e);
             return Result.Fail<DateTime>(e.Message);
         }
     }
