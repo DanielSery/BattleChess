@@ -58,7 +58,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         CancellationToken cancellationToken)
     {
         var random = new Random();
-        var isHostStarting = random.Next(0, 1) == 1;
+        var isHostStarting = random.Next(0, 2) == 1;
         
         var game = new RankedGame()
         {
