@@ -8,7 +8,7 @@ namespace CrownsGuard.Multiplayer.Test.Utilities;
 public class BlueprintValidatorTests
 {
     [Fact]
-    public void IsValid_IfNullUnlockedFigures_UsesDefault()
+    public void ValidateResult_IfNullUnlockedFigures_UsesDefault()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -16,68 +16,72 @@ public class BlueprintValidatorTests
         board[1] = Figure.LegionarySword | Figure.IsWhite;
         
         // Act
-        var result = board.IsValid(null);
+        var result = board.ValidateResult(null);
         
         // Assert
-        Assert.True(result);
+        result.IsSuccess.Should().BeTrue();
     }
     
     [Fact]
-    public void IsValid_IfNoBoard_ReturnsFalse()
+    public void ValidateResult_IfNoBoard_ReturnsFalse()
     {
         // Arrange
         var figures = Array.Empty<Figure>();
         
         // Act
-        var result = figures.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = figures.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
-        result.Should().BeFalse();
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Invalid number of figures in setup");   
     }
 
     [Fact]
-    public void IsValid_IfEmptyBoard_ReturnsFalse()
+    public void ValidateResult_IfEmptyBoard_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
 
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
 
         // Assert
-        Assert.False(result);
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Setup does not contain king");   
     }
 
     [Fact]
-    public void IsValid_IfWhiteKing_ReturnsTrue()
+    public void ValidateResult_IfWhiteKing_ReturnsTrue()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
         board[0] = Figure.King | Figure.IsWhite | Figure.IsKing;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures); 
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures); 
         
         // Assert
-        Assert.True(result);   
+        result.IsSuccess.Should().BeTrue(); 
     }
 
     [Fact]
-    public void IsValid_IfQueenIsKing_ReturnsTrue()
+    public void ValidateResult_IfQueenIsKing_ReturnsTrue()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
         board[0] = Figure.Queen | Figure.IsWhite | Figure.IsKing;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures); 
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures); 
         
         // Assert
-        Assert.True(result);  
+        result.IsSuccess.Should().BeTrue();
     }
 
     [Fact]
-    public void IsValid_IfBlackFigure_ReturnsFalse()
+    public void ValidateResult_IfBlackFigure_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -85,14 +89,16 @@ public class BlueprintValidatorTests
         board[1] = Figure.King | Figure.IsBlack;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
-        Assert.False(result);  
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Setup contains black figure");  
     }
 
     [Fact]
-    public void IsValid_IfNeutralKing_ReturnsFalse()
+    public void ValidateResult_IfNeutralKing_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -100,14 +106,16 @@ public class BlueprintValidatorTests
         board[1] = Figure.Empty | Figure.IsKing;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
-        Assert.False(result); 
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Setup contains player figure without player assigned"); 
     }
 
     [Fact]
-    public void IsValid_IfLargeValue_ReturnsFalse()
+    public void ValidateResult_IfLargeValue_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -116,14 +124,16 @@ public class BlueprintValidatorTests
             board[i] = Figure.Queen | Figure.IsWhite;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
-        Assert.False(result);
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Setup total figures value is too high");
     }
 
     [Fact]
-    public void IsValid_IfTwoKings_ReturnsFalse()
+    public void ValidateResult_IfTwoKings_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -131,14 +141,16 @@ public class BlueprintValidatorTests
         board[1] = Figure.King | Figure.IsWhite | Figure.IsKing;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
-        Assert.False(result);
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Setup contains more than one king");
     }
 
     [Fact]
-    public void IsValid_IfNonNeutralUnitIsNeutral_ReturnsFalse()
+    public void ValidateResult_IfNonNeutralUnitIsNeutral_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -146,14 +158,16 @@ public class BlueprintValidatorTests
         board[1] = Figure.Queen;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
-        Assert.False(result);
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Setup contains player figure without player assigned");
     }
 
     [Fact]
-    public void IsValid_IfContainingNotUnlockedFigure_ReturnsFalse()
+    public void ValidateResult_IfContainingNotUnlockedFigure_ReturnsFalse()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -161,14 +175,16 @@ public class BlueprintValidatorTests
         board[1] = Figure.LegionaryPike | Figure.IsWhite;
         
         // Act
-        var result = board.IsValid(UnlockedFigures.DefaultUnlockedFigures);
+        var result = board.ValidateResult(UnlockedFigures.DefaultUnlockedFigures);
         
         // Assert
-        Assert.False(result);
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Should().HaveCount(1);
+        result.Errors[0].Message.Should().Be("Setup contains not unlocked figure");
     }
 
     [Fact]
-    public void IsValid_WhenUnlockedSpecialFigure_ReturnsTrue()
+    public void ValidateResult_WhenUnlockedSpecialFigure_ReturnsTrue()
     {
         // Arrange
         var board = Enumerable.Repeat(Figure.Empty, 16).ToArray();
@@ -183,9 +199,9 @@ public class BlueprintValidatorTests
         bitArray.CopyTo(unlockedFigures, 0);
         
         // Act
-        var result = board.IsValid(unlockedFigures);
+        var result = board.ValidateResult(unlockedFigures);
         
         // Assert
-        Assert.True(result);
+        result.IsSuccess.Should().BeTrue();
     }
 }

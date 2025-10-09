@@ -1,4 +1,5 @@
-﻿using CrownsGuard.Core.Figures;
+﻿using System.Security;
+using CrownsGuard.Core.Figures;
 using CrownsGuard.Database.Lobby;
 using CrownsGuard.Database.Utilities;
 using CrownsGuard.Multiplayer.Players;
@@ -37,82 +38,63 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     {
         return _gameLobbies.WatchChangesAsync(ProcessLobbyChange, cancellationToken);
 
-        async Task ProcessLobbyChange(ChangeStreamDocument<GameLobby> change)
+        async Task ProcessLobbyChange((ChangeStreamOperationType operationType, string lobbyId, GameLobby? lobby) change)
         {
-            switch (change.OperationType)
+            switch (change.operationType)
             {
                 case ChangeStreamOperationType.Insert:
-                    if (change.FullDocument != null)
-                        onLobbyAdded.Invoke(GetNewLobby(change.FullDocument));
+                    onLobbyAdded.Invoke(new PublicLobbyData
+                    {
+                        Id = change.lobby!.Id,
+                        LobbyName = change.lobby.LobbyName,
+                        Elo = change.lobby.Elo,
+                        JoinedId = change.lobby.JoinedId,
+                        Locked = (change.lobby.PasswordHash.Length > 0) ? "True" : "False",
+                    });
                     break;
                 
                 case ChangeStreamOperationType.Replace:
                 case ChangeStreamOperationType.Update:
-                    if (change.FullDocument == null)
+                    var foundLobbyResult = await _gameLobbies.FindLobbyByIdAsync(change.lobbyId, cancellationToken);
+                    if (foundLobbyResult.TryGetValue(out var foundLobby))
                     {
-                        var id = change.DocumentKey["_id"].AsObjectId.ToString();
-                        var foundLobbyResult = await _gameLobbies.FindLobbyByIdAsync(id, cancellationToken);
-                        if (foundLobbyResult.TryGetValue(out var foundLobby))
-                            onLobbyChanged.Invoke(GetExistingLobby(id, foundLobby));
-                        break;
+                        onLobbyChanged.Invoke(new PublicLobbyData
+                        {
+                            Id = change.lobbyId,
+                            LobbyName = foundLobby.LobbyName,
+                            Elo = foundLobby.Elo,
+                            JoinedId = foundLobby.JoinedId,
+                            Locked = (foundLobby.PasswordHash.Length > 0) ? "True" : "False",
+                        });
                     }
-                    
-                    if (change.FullDocument != null)
-                        onLobbyChanged.Invoke(GetNewLobby(change.FullDocument));
                     break;
 
                 case ChangeStreamOperationType.Delete:
-                    var removedId = change.DocumentKey["_id"].AsObjectId.ToString();
-                    onLobbyRemoved.Invoke(removedId);
+                    onLobbyRemoved.Invoke(change.lobbyId);
                     break;
             }
-        }
-
-        PublicLobbyData GetNewLobby(GameLobby lobby)
-        {
-            return new PublicLobbyData
-            {
-                Id = lobby.Id,
-                LobbyName = lobby.LobbyName,
-                Elo = lobby.Elo,
-                JoinedId = lobby.JoinedId,
-                Locked = (lobby.PasswordHash.Length > 0) ? "True" : "False",
-            };
-        }
-        
-        PublicLobbyData GetExistingLobby(string id, GameLobby foundLobby)
-        {
-            return new PublicLobbyData
-            {
-                Id = id,
-                LobbyName = foundLobby.LobbyName,
-                Elo = foundLobby.Elo,
-                JoinedId = foundLobby.JoinedId,
-                Locked = (foundLobby.PasswordHash.Length > 0) ? "True" : "False",
-            };
         }
     }
 
     public async Task<Result<GameLobby>> CreateLobbyAsync(
         string lobbyName,
-        string password,
+        SecureString password,
         Figure[] myMap,
         CancellationToken cancellationToken)
     {
-        var random = new Random();
-        var isHostStarting = random.Next(0, 1) == 1;
-
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures;
-        if (!myMap.IsValid(unlockedFigures))
-            return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
+        var setupValidation = myMap.ValidateResult(unlockedFigures);
+        if (setupValidation.IsFailed) return setupValidation;
 
-        var foundLobby = _gameLobbies.FindLobbyByNameAsync(lobbyName, cancellationToken);
-        if (foundLobby.IsCompleted) return Result.Fail("Lobby already exists");
+        var foundLobby = await _gameLobbies.FindLobbyByNameAsync(lobbyName, cancellationToken);
+        if (foundLobby.IsSuccess) return Result.Fail("Lobby already exists");
 
         var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
         var salt = HashingHelper.GetSalt();
         var hash = HashingHelper.GetHash(password, salt);
 
+        var random = new Random();
+        var isHostStarting = random.Next(0, 2) == 1;
         var game = new GameLobby
         {
             LobbyName = lobbyName,
@@ -133,7 +115,11 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
     public async Task<Result<GameLobbyJoin>> WaitForLobbyPlayerAsync(GameLobby lobby, CancellationToken cancellationToken)
     {
         var joinResult = await _lobbyJoins.WaitForLobbyJoinAsync(lobby.Id, cancellationToken);
-        if (!joinResult.TryGetValue(out var join)) return joinResult;
+        if (!joinResult.TryGetValue(out var join))
+        {
+            await DeleteGameAsync(lobby.Id);
+            return joinResult;
+        }
 
         var updateResult = await _gameLobbies.ConfirmLobbyJoinAsync(lobby.Id, join.Id, cancellationToken);
         if (updateResult.IsFailed)
@@ -142,18 +128,18 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             return Result.Fail("Failed to update game confirmation");
         }
 
-        return Result.Ok(join);
+        return join;
     }
 
     public async Task<Result<GameLobby>> JoinLobbyAsync(
         string lobbyName,
-        string password,
+        SecureString password,
         Figure[] myMap,
         CancellationToken cancellationToken)
     {
         var unlockedFigures = _multiplayerPlayerService.LoggedInPlayer?.UnlockedFigures;
-        if (!myMap.IsValid(unlockedFigures))
-            return Result.Fail<GameLobby>("Setup has units which weren't unlocked yet");
+        var setupValidation = myMap.ValidateResult(unlockedFigures);
+        if (setupValidation.IsFailed) return setupValidation;
 
         var foundLobbyResult = await _gameLobbies.FindLobbyByNameAsync(lobbyName, cancellationToken: cancellationToken);
         if (!foundLobbyResult.TryGetValue(out var lobby)) return Result.Fail<GameLobby>("Lobby not found");
@@ -161,7 +147,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         var hash = HashingHelper.GetHash(password, lobby.PasswordSalt);
         if (hash != lobby.PasswordHash)
         {
-            return Result.Fail<GameLobby>("Password doesn't match");
+            return Result.Fail<GameLobby>("Password does not match");
         }
 
         var currentPlayer = _multiplayerPlayerService.LoggedInPlayer;
@@ -172,18 +158,24 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
             Map = myMap.GetIntData(),
         };
         var gameJoinResult = await _lobbyJoins.InsertLobbyJoinAsync(gameJoin, cancellationToken);
-        if (gameJoinResult.IsFailed) return Result.Fail<GameLobby>("Failed to join game");
+        if (gameJoinResult.IsFailed) return Result.Fail<GameLobby>("Failed to request lobby join");
 
-        var lobbyUpdateResult = await _gameLobbies.WaitForLobbyJoinCofirmationAsync(lobby.Id, cancellationToken);
+        var lobbyUpdateResult = await _gameLobbies.WaitForLobbyJoinConfirmationAsync(lobby.Id, cancellationToken);
         if (!lobbyUpdateResult.TryGetValue(out var lobbyUpdate)) return lobbyUpdateResult;
+        
         if (lobbyUpdate.JoinedId is null)
         {
             await DeleteGameAsync(lobby.Id);
             return Result.Fail("The lobby was invalid");
         }
 
+        if (lobbyUpdate.JoinedId != gameJoin.Id)
+        {
+            return Result.Fail("The lobby is already full");
+        }
+
         await DeleteGameAsync(lobby.Id);
-        return Result.Ok(lobby);
+        return lobby;
     }
 
     private async Task DeleteGameAsync(string gameId)

@@ -14,13 +14,8 @@ public static class HashingHelper
 
     public static string GetEmailHash(string email)
     {
-        return GetHash(email, Secrets.EmailSalt);
-    }
-
-    public static string GetHash(string str, string saltString)
-    {
-        var salt = Convert.FromBase64String(saltString);
-        var pbkdf2 = new Rfc2898DeriveBytes(str, salt, 100000, HashAlgorithmName.SHA256);
+        var salt = Convert.FromBase64String(Secrets.EmailSalt);
+        using var pbkdf2 = new Rfc2898DeriveBytes(email, salt, 100000, HashAlgorithmName.SHA256);
         var hash = pbkdf2.GetBytes(32); // 256-bit hash
         return Convert.ToBase64String(hash);
     }
@@ -35,7 +30,7 @@ public static class HashingHelper
             var salt = Convert.FromBase64String(saltString);
             unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
 
-            var pbkdf2 = new Rfc2898DeriveBytes(Marshal.PtrToStringUni(unmanagedString)!, salt, 100000, HashAlgorithmName.SHA256);
+            using var pbkdf2 = new Rfc2898DeriveBytes(Marshal.PtrToStringUni(unmanagedString)!, salt, 100000, HashAlgorithmName.SHA256);
             var hash = pbkdf2.GetBytes(32); // 256-bit hash
 
             return Convert.ToBase64String(hash);

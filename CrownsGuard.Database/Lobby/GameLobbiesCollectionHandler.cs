@@ -3,6 +3,7 @@ using CrownsGuard.Database.Errors;
 using CrownsGuard.Database.Utilities;
 using FluentResults;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace CrownsGuard.Database.Lobby;
@@ -61,7 +62,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
         });
     }
 
-    public async Task<Result<GameLobby>> WaitForLobbyJoinCofirmationAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
+    public async Task<Result<GameLobby>> WaitForLobbyJoinConfirmationAsync(string lobbyId, CancellationToken cancellationToken, int timeoutSeconds)
     {
         return await DatabaseHelper.ExecuteWithErrorHandling(_logger, cancellationToken, timeoutSeconds, async token =>
         {
@@ -118,7 +119,7 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
     }
 
     public Task WatchChangesAsync(
-        Func<ChangeStreamDocument<GameLobby>, Task> onLobbyChange,
+        Func<(ChangeStreamOperationType, string, GameLobby?), Task> onLobbyChange,
         CancellationToken cancellationToken)
     {
         return Task.Run(async () =>
@@ -138,7 +139,10 @@ internal class GameLobbiesCollectionHandler : IGameLobbiesCollectionHandler
 
                 foreach (var change in cursor.Current)
                 {
-                    await onLobbyChange.Invoke(change);
+                    await onLobbyChange.Invoke((
+                        change.OperationType,
+                        change.DocumentKey["_id"].AsObjectId.ToString(), 
+                        change.FullDocument));
                 }
             }
         }, cancellationToken);
