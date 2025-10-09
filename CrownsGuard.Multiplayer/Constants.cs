@@ -2,5 +2,5 @@
 
 public class Constants
 {
-    public static int MaxMapsPoints = 84;
+    public const int MaxMapsPoints = 84;
 }

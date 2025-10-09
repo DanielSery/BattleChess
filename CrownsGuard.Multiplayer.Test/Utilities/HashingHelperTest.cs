@@ -83,8 +83,8 @@ public class HashingHelperTest
     {
         // Arrange & Act
         var salt = HashingHelper.GetSalt();
-        var secureString1 = new SecureString();
-        var secureString2 = new SecureString();
+        using var secureString1 = new SecureString();
+        using var secureString2 = new SecureString();
         
         foreach (var c in "test")
         {
@@ -105,8 +105,8 @@ public class HashingHelperTest
         // Arrange & Act
         var salt1 = HashingHelper.GetSalt();
         var salt2 = HashingHelper.GetSalt();
-        var secureString1 = new SecureString();
-        var secureString2 = new SecureString();
+        using var secureString1 = new SecureString();
+        using var secureString2 = new SecureString();
         
         foreach (var c in "test")
         {
@@ -126,8 +126,8 @@ public class HashingHelperTest
     {
         // Arrange & Act
         var salt = HashingHelper.GetSalt();
-        var secureString1 = new SecureString();
-        var secureString2 = new SecureString();
+        using var secureString1 = new SecureString();
+        using var secureString2 = new SecureString();
         
         foreach (var c in "test1")
         {
