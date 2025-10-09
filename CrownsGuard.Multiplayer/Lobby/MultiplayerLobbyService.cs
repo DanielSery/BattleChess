@@ -94,7 +94,7 @@ internal class MultiplayerLobbyService : IMultiplayerLobbyService
         var hash = HashingHelper.GetHash(password, salt);
 
         var random = new Random();
-        var isHostStarting = random.Next(0, 1) == 1;
+        var isHostStarting = random.Next(0, 2) == 1;
         var game = new GameLobby
         {
             LobbyName = lobbyName,

@@ -38,7 +38,7 @@ internal class MultiplayerRankedService : IMultiplayerRankedService
         if (setupValidation.IsFailed) return setupValidation;
 
         var random = new Random();
-        var isHostStarting = random.Next(0, 1) == 1;
+        var isHostStarting = random.Next(0, 2) == 1;
 
         var myMapData = myMap.GetIntData();
         var eloDifference = 50;
