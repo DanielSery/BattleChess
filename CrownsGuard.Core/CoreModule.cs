@@ -11,7 +11,7 @@ public static class CoreModule
             {
                 return LoggerFactory.Create(b =>
                 {
-                    b.AddConsole();
+                    b.AddConsole();a
                 });
             })
             .As<ILoggerFactory>()
