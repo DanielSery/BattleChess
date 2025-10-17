@@ -20,7 +20,7 @@ public static class Alchemist
                 actions.Push(new FigureAction(FigureActionType.AlchemistMove, sourceIndex, targetIndex, sourceFigure));
             }
         }
-    }
+    }a
 
     public static void ExecuteMove(Span<Figure> board, FigureAction action, Action<BoardEvent, Span<Figure>> onEvent)
     {
